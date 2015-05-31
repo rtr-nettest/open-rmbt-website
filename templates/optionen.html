@@ -1,0 +1,50 @@
+{% extends basetemplate %}
+{% set title = Lang.options %}
+
+{% block headerscriptingExtended %}
+<script type="text/javascript" src="../js/Optionen.js"></script>
+{% endblock %}
+
+{% block content %}
+<h2 id="h2">{{ Lang.options }}</h2>
+<div id="youruuid">{{ Lang.options_content.your_uuid }}: </div>
+<!-- <div id="yourzip"><label for="RMBTzipID">Your postal code entered is: </label><input type="text" name="RMBTzip" id="RMBTzipID" value="" onchange="resetzip(this.value);" /><span class='error'></span></div> -->
+
+{% if target == "netztest" %}
+<h3>{{ Lang.options_content.preferred_test_type }}</h3>
+<form id="preferredTestForm">
+    <ul>
+        <li>
+            <label><input type="radio" name="preferredTest" value="websocket" /> {{ Lang.websocket }}</label>
+        </li>
+        <li>
+            <label><input type="radio" name="preferredTest" value="Java" /> {{ Lang.java_applet }}</label>
+            <ul class="submenu">
+                <li>
+                    <div id="yourndt"><input type="checkbox" name="RMBTndt" id="RMBTndtID" onclick="resetndt();" /><label for="RMBTndtID">{{ Lang.options_content.run_ndt }}</label></div>
+                </li>
+                <li>
+                    <label><input type="checkbox" name="qos" /> {{ Lang.quality_of_service }}</label>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</form>
+{% endif %}
+
+{% if target == "qostest" %}
+<div id="testserverForm">
+    <h3>{{ Lang.server }}</h3>
+    {{ Lang.options_content.choose_server_desc }}
+    <form id="serverlist" onsubmit="return saveFormValues()">
+        <ul>
+            <li><label><input type="radio" name="testserver" value="default" checked="checked" /> {{ Lang.default_server }}</label></li>
+        </ul>
+
+        <input style="margin-top: 10px;" type="submit" class="submit" value="{{ Lang.save }}" />
+        <p id="saveNotification" style="display:none">{{ Lang.options_content.config_saved }}</p>
+    </form>
+</div>
+{% endif %}
+
+{% endblock %}

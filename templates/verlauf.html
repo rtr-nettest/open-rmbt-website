@@ -1,0 +1,253 @@
+{% extends basetemplate %}
+{% set title = Lang.history %}
+
+{% block headerscriptingExtended %}
+<script type="text/javascript" src="../js/jquery.socialshareprivacy.min.js"></script>
+<script type="text/javascript" src="../js/jquery.flot.min.js"></script>
+<script src="https://maps.google.com/maps/api/js?v=3&amp;sensor=false"></script>
+<script src="../lib/OpenLayers/OpenLayers.js" type="text/javascript"></script>
+<script type="text/javascript" src="../js/Verlauf.js"></script>
+<script type="text/javascript" src="../js/Opentest.shared.js"></script>
+
+<style>
+    #verlauf-detailcontainer table th{
+        text-align: left;
+    }
+    .testdata {
+        margin-bottom: 20px;
+    }
+    .forumbanner, #data-prototype {
+        display:none;
+    }
+    .forumbanner input {
+        width: 100%;
+    }
+    div.olControlAttribution, div.olControlScaleLine {
+        bottom: 3px;
+    }
+    div.speed-curve-graph-upload, div.speed-curve-graph-download, div.signal-curve-graph {
+        cursor: pointer;
+    }
+    .speed-graph-table-download, .speed-graph-table-upload, .signal-graph-table {
+        display: none;
+    }
+    tr.highlight {
+        background-color: #eef2f4;
+    }
+    tr.header-highlight {
+        background-color: #bfd1d7;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>{{ Lang.history }}</h2>
+<div id="spinner"></div>
+<div id="popupform"></div>
+<div id="ndtprogress"></div>
+
+
+
+
+<div id="verlaufcontainer">
+    <table id="verlauf">
+        <colcroup>
+            <col />
+            <col />
+            <col />
+            <col />
+            <col />
+            <col />
+            </colgroup>
+            <tr>
+                <th scope="col">{{ Lang.device }}</th>
+                <th scope="col">{{ Lang.access }}</th>
+                <th scope="col">{{ Lang.date }}</th>
+                <th scope="col" class="right">{{ Lang.down }} ({{ Lang.mbps }})</th>
+                <th scope="col" class="right">{{ Lang.up }} ({{ Lang.mbps }})</th>
+                <th scope="col" class="right">{{ Lang.ping }} ({{ Lang.ms }})</th>
+            </tr>
+            <tbody id="verlauf_tbody">
+
+            </tbody>
+    </table>
+    <div id="code-eingabe">
+        <form class="eRTR_form">
+            <div id="code-anzeige-title"><p><a href="#" onclick="$('#code-anzeige').slideDown('medium');$('#code-anzeige-title').slideUp();return false;">{{ Lang.synchronization_code }}</a></p></div>
+            <div id="code-anzeige" style="display:none;">
+                <div id="code-anzeige">
+                    <p><a href="" onclick="requestBrowserData('RMBTsync'); return false;">{{ Lang.history_content.request_code }}</a></p>
+                    <p>{{ Lang.history_content.enter_code }}</p>
+                </div>
+
+                <div class="form_line" id="codeeingabe">
+                    <label for="speedttest-code">{{ Lang.code }}</label>
+                    <input id="speedttest-code" name="speedttest-code" type="text" />
+                    <input type="button" class="submit" value="{{ Lang.submit }}" onclick="requestBrowserData('RMBTsync','speedttest-code')" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<div id="verlauf-detailcontainer" style="display:none;">
+    <div id="fast-connection-warning"></div>
+    <table id="verlauf-detail">
+        <colcroup>
+            <col style="width: 180px"/>
+            <col width="20px" />
+            <col />
+            </colgroup>
+            <tbody></tbody>
+    </table>
+    <table class="testresult testresult-qos">
+        <colgroup>
+            <col style="width: 180px"/>
+            <col width="20px" />
+            <col />
+        </colgroup>
+        <thead>
+        <th colspan="3">{{ Lang.quality_of_service }}</th>
+        </thead>
+        <tbody class='prototype'>
+        <tr>
+            <td class='caption' style="width: 150px"></td>
+            <td class='classification'></td>
+            <td class='detail'></td>
+        </tr>
+        <tr class="description" style='display:none'>
+            <td></td>
+            <td class='description' colspan="2"></td>
+        </tr>
+        <tr class='qos-singletest qos-prototype' style='display:none'>
+            <td class=''></td>
+            <td class='qos-classification'></td>
+            <td class='qos-description'><p></p>
+                <div class='qos-detail-div' style='display:none'>
+                    <strong class='qos-success'></strong>
+                    <p class='qos-success'></p>
+                    <strong>{{ Lang.details }}</strong>
+                    <p class='qos-detail'></p>
+                </div></td>
+        </tr>
+        </tbody>
+    </table>
+    <table id="testresult-detail">
+        <colcroup>
+            <col style="width: 180px"/>
+            <col />
+            </colgroup>
+            <thead>
+            <th colspan="2">{{ Lang.detailed_results }}</th>
+            </thead>
+            <tbody></tbody>
+    </table>
+    <table class="test-map">
+        <tr>
+            <th>{{ Lang.position }}</th>
+        </tr>
+        <tr>
+            <td>
+                <div style="height: 200px;" id="tmpmap" class="test-map-container"></div>
+            </td>
+        </tr>
+    </table>
+    <table class="speed-curve">
+        <tr>
+            <th>{{ Lang.speed_curve }}</th>
+        </tr>
+        <tr>
+            <td>
+                <h3>{{ Lang.download }}</h3>
+                <div style="height: 200px;" class="speed-curve-graph-download"  onclick="$('.speed-graph-table-download').slideToggle('fast');"></div>
+            </td>
+        </tr>
+        <tr style="padding: 0">
+            <td style="padding: 0">
+                <div class="speed-graph-table-download">
+
+                    <table class="speed-curve-table-download speed-graph-table">
+                        <tr>
+                            <th>{{ Lang.time }}</th>
+                            <th>{{ Lang.speed }}</th>
+                            <th>{{ Lang.data_volume }}</th>
+                        </tr>
+                    </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h3>{{ Lang.upload }}</h3>
+                <div style="height: 200px;" class="speed-curve-graph-upload"  onclick="$('.speed-graph-table-upload').slideToggle('fast');"></div>
+            </td>
+        </tr>
+        <tr style="padding: 0">
+            <td style="padding: 0">
+                <div class="speed-graph-table-upload">
+                    <table class="speed-curve-table-upload ">
+                        <tr>
+                            <th>{{ Lang.time }}</th>
+                            <th>{{ Lang.speed }}</th>
+                            <th>{{ Lang.data_volume }}</th>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <table class="signal-curve">
+        <tr>
+            <th>{{ Lang.signal_strength }}</th>
+        </tr>
+        <tr>
+            <td>
+                <div style="height: 200px;" class="signal-curve-graph" onclick="$('.signal-graph-table').slideToggle('fast');"></div>
+            </td>
+        </tr>
+        <tr style="padding: 0">
+            <td style="padding: 0">
+                <div class="signal-graph-table">
+                    <table class="signal-curve-table">
+                        <tr>
+                            <th>{{ Lang.time }}</th>
+                            <th>{{ Lang.signal_strength }}</th>
+                            <th>{{ Lang.connection_technology }}</th>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <table class="share">
+        <tr>
+            <th>{{ Lang.share }}</th>
+        </tr>
+        <tr>
+            <td><div class="social"></div></td>
+        </tr>
+        <tr>
+            <td>
+                <a class="shareBanner" href="javascript:;">{{ Lang.get_forum_banner }}</a>,
+                <a class="shareMail" href="javascript:;">{{ Lang.send_email }}</a>,
+                <a class="shareLink" href="javascript:;">{{ Lang.open_data_entry }}</a>
+            </td>
+        </tr>
+        <!--<tr class="forumbanner forumlarge">
+            <td>
+                <p><img class="forumlarge" style="max-width:100%" src="" /></p>
+                <p>HTML: <input class="htmlinput" type="text" value="" onClick="this.select()" /></p>
+                <p>BBCode: <input class="bbcinput" type="text" value="" onClick="this.select()"/></p>
+            </td>
+        </tr>-->
+        <tr class="forumbanner forumsmall">
+            <td>
+                <p><img class="forumsmall" style="max-width: 100%" src="" /></p>
+                <p>HTML: <input class="htmlinput" type="text" value="" onClick="this.select()" /></p>
+                <p>BBCode: <input class="bbcinput" type="text" value="" onClick="this.select()"/></p>
+            </td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

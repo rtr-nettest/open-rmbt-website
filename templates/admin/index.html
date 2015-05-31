@@ -1,0 +1,48 @@
+{% extends basetemplate %}
+{% set title = Lang.admin %}
+
+{% block headerscriptingExtended %}
+<script>
+    $(document).ready(function(){
+        $.ajax({
+            url: controlProxy + "/" + wspath + "/version",
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $("#controlserver_version").html(data.version);
+            }});
+        $.ajax({
+            url: mapProxy + "/" + mappath + "/version",
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $("#mapserver_version").html(data.version);
+            }});
+
+        $.ajax({
+            url: mapProxy + "/" + statisticpath + "/version",
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $("#statisticserver_version").html(data.version);
+            }});
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+
+<ul>
+    <li><a href="Usage.html">Usage report</a></li>
+    <li><a href="/RMBTStatisticServer/admin/usage">Statistic server usage report</a></li>
+    <li><a href="/RMBTControlServer/admin/qosObjectives">QoS test defintions</a></li>
+</ul>
+
+<p>
+    Control Server version: <span id="controlserver_version"></span><br/>
+    Map Server version: <span id="mapserver_version"></span><br/>
+    Statistic Server version: <span id="statisticserver_version"></span><br/>
+</p>
+
+
+{% endblock %}

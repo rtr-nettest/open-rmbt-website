@@ -1,0 +1,229 @@
+{% extends basetemplate %}
+{% set title = Lang.statistics %}
+
+{% block headerscriptingExtended %}
+<script type="text/javascript" src="../js/Statistik.js"></script>
+<script type="text/javascript" src="../lib/tablesort/jquery.tablesorter.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<h2>{{ Lang.statistics }}</h2>
+<div id="spinner"></div>
+<div class="hinweis">
+    {{ Lang.statistics_content.teaser }}
+</div>
+
+
+<h3>{{ Lang.X_recent_tests | replace("%X%","5") }}</h3>
+<div class="testdata-content">
+    <table id="verlauf">
+        <thead>
+        <tr>
+            <th>{{ Lang.time }}</th>
+            <th class="test-platform">{{ Lang.operator }}/
+                <wbr>
+                {{ Lang.device }}
+            </th>
+            <th class="right">{{ Lang.up }} ({{ Lang.mbps }})</th>
+            <th class="right">{{ Lang.down }} ({{ Lang.mbps }})</th>
+            <th class="right">{{ Lang.ping }} ({{ Lang.ms }})</th>
+            <th class="right test-network-signal">{{ Lang.signal }} ({{ Lang.dBm }})</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+
+</div>
+
+<div class="opendata-info">
+    <p><a href="Opentests">{{ Lang.further_tests }}</a></p>
+</div>
+
+
+<div class="clear"><!-- --></div>
+
+<h3>{{ Lang.statistics_content.operators_from }}
+    <select id="country" onchange="requestBrowserData('RMBTstatistics');">
+        <option value="null">{{ Lang.austria }}</option>
+    </select>
+    <span class="help"><a href="https://www.netztest.at/redirect/{{ Lang.lang }}/help_result">?</a></span>
+</h3>
+
+<p>{{ Lang.statistics_content.disclaimer }}</p>
+<div class="statistik search_form">
+    <form>
+        <div class="form_line">
+            <label for="statistik_type">{{ Lang.type }}</label>
+            <select id="statistik_type" name="statistik_type" onchange="requestBrowserData('RMBTstatistics');">
+                <option value="mobile">{{ Lang.mobile }}</option>
+                <option value="wifi">{{ Lang.wifi_test }}</option>
+                <option value="browser">{{ Lang.browser }}</option>
+            </select>
+        </div>
+        <div class="form_line">
+            <label for="statistik_duration">{{ Lang.time_span }}</label>
+            <select id="statistik_duration" name="statistik_duration" onchange="requestBrowserData('RMBTstatistics');">
+                <option value="1">{{ Lang.1_day }}</option>
+                <option value="7">{{ Lang.1_week }}</option>
+                <option value="30">{{ Lang.1_month }}</option>
+                <option value="90" selected="selected">{{ Lang.X_months | replace("%X%","3") }}</option>
+                <option value="180">{{ Lang.X_months | replace("%X%","6") }}</option>
+                <option value="365">{{ Lang.1_year }}</option>
+                <option value="730">{{ Lang.X_years | replace("%X%","2") }}</option>
+            </select>
+        </div>
+        <div class="form_line" id="statistik_network_type_group_form_line">
+            <label for="statistik_network_type_group">{{ Lang.technology }}</label>
+            <select id="statistik_network_type_group" name="statistik_network_type_group"
+                    onchange="requestBrowserData('RMBTstatistics');">
+                <option value="all" selected="selected">{{ Lang.all }}</option>
+                <option value="2G">2G</option>
+                <option value="3G">3G</option>
+                <option value="4G">4G</option>
+                <option value="mixed">{{ Lang.mixed }}</option>
+            </select>
+        </div>
+        <div class="clear"></div>
+        <div class="form_line">
+            <label for="statistik_quantile">{{ Lang.quantile }}</label>
+            <select id="statistik_quantile" name="statistik_quantile" onchange="requestBrowserData('RMBTstatistics');">
+                <option value="0.2">20%</option>
+                <option value="0.5" selected="selected">50%</option>
+                <option value="0.8">80%</option>
+            </select>
+        </div>
+        <div class="form_line" id="statistik_location_accuracy_form_line">
+            <label for="statistik_location_accuracy">{{ Lang.location_accuracy }}</label>
+            <select id="statistik_location_accuracy" name="statistik_location_accuracy"
+                    onchange="requestBrowserData('RMBTstatistics');">
+                <option value="-1">{{ Lang.any }}</option>
+                <option value="10000">&lt; {{ Lang.X_km | replace("%X%","10") }}</option>
+                <option value="2000" selected="selected">&lt; {{ Lang.X_km | replace("%X%","2") }}</option>
+                <option value="100">&lt; {{ Lang.X_m | replace("%X%","100") }}</option>
+            </select>
+        </div>
+    </form>
+</div>
+
+<table id="statistik_provider" class="tablesorter">
+    <colgroup>
+        <col width="25%"/>
+        <col/>
+        <col/>
+        <col/>
+        <col/>
+        <col/>
+    </colgroup>
+    <thead>
+    <tr>
+        <th scope="col">{{ Lang.name }}</th>
+        <th scope="col" class="right">{{ Lang.down }}</th>
+        <th scope="col" class="right">{{ Lang.up }}</th>
+        <th scope="col" class="right">{{ Lang.ping }}</th>
+        <th scope="col" class="right">{{ Lang.signal }}</th>
+        <th scope="col" class="right">{{ Lang.quantity }}</th>
+    </tr>
+    </thead>
+    <tbody id="statistik_provider_body">
+
+    </tbody>
+
+    <tfoot id="statistik_provider_foot">
+
+    </tfoot>
+
+</table>
+
+
+<table id="statistik_provider_captions">
+    <colgroup>
+        <col/>
+        <col/>
+        <col/>
+        <col/>
+        <col/>
+    </colgroup>
+    <thead>
+    <tr>
+        <th scope="col" class="right">{{ Lang.down }}</th>
+        <th scope="col" class="right">{{ Lang.up }}</th>
+        <th scope="col" class="right">{{ Lang.ping }}</th>
+        <th scope="col" class="right">{{ Lang.signal }}</th>
+        <th scope="col" class="right">{{ Lang.quantity }}</th>
+    </tr>
+    </thead>
+    <tbody id="statistik_provider_captions_body">
+
+    </tbody>
+
+    <tfoot id="statistik_provider_captions_foot">
+
+    </tfoot>
+
+</table>
+
+<table id="statistik_provider_short" class="tablesorter">
+    <colgroup>
+        <col width="25%"/>
+        <col/>
+        <col/>
+        <col/>
+        <col/>
+        <col/>
+    </colgroup>
+    <thead>
+    <tr>
+        <th scope="col">{{ Lang.name }}</th>
+        <th scope="col" class="right">{{ Lang.down }}</th>
+        <th scope="col" class="right">{{ Lang.up }}</th>
+        <th scope="col" class="right">{{ Lang.ping }}</th>
+        <th scope="col" class="right">{{ Lang.signal }}</th>
+        <th scope="col" class="right">{{ Lang.quantity }}</th>
+    </tr>
+    </thead>
+    <tbody id="statistik_provider_short_body">
+
+    </tbody>
+
+    <tfoot id="statistik_provider_short_foot">
+
+    </tfoot>
+
+</table>
+
+
+<h3>{{ Lang.devices }}</h3>
+<table id="statistik_devices" class="tablesorter">
+    <colgroup>
+        <col width="25%"/>
+        <col/>
+        <col/>
+        <col/>
+        <col/>
+    </colgroup>
+    <thead>
+    <tr>
+        <th scope="col">{{ Lang.name }}</th>
+        <th>{{ Lang.down }}</th>
+        <th scope="col" class="right">{{ Lang.up }}</th>
+        <th scope="col" class="right">{{ Lang.ping }}</th>
+        <th scope="col" class="right">{{ Lang.quantity }}</th>
+    </tr>
+    </thead>
+    <tbody id="statistik_devices_body">
+
+    </tbody>
+
+    <tfoot id="statistik_devices_foot">
+
+    </tfoot>
+
+</table>
+
+<div class="opendata-info">
+    <p>{{ Lang.statistics_content.opendata_disclaimer }}</p>
+</div>
+{% endblock %}

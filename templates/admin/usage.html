@@ -1,0 +1,114 @@
+{% extends basetemplate %}
+{% set title = Lang.admin %}
+
+{% block headerscriptingExtended %}
+<script type="text/javascript" src="../en/Lang.js"></script>
+<script type="text/javascript" src="../js/jquery.flot.min.js"></script>
+<script type="text/javascript" src="../js/Usage.js"></script>
+<style>
+    .graph {
+        height: 300px;
+    }
+
+    div.table {
+        overflow-x: scroll;
+    }
+
+    .graph table {
+        min-width: 0px !important;
+    }
+
+    .table {
+        display:none;
+    }
+
+    table {
+        overflow-x: scroll;
+        width: auto !important;
+        min-width: 100%;
+    }
+
+    div.legend table{
+        max-height: 500px !important;
+        overflow: hidden !important;
+    }
+
+    .right {
+        text-align: right;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h2 id="h2">RTR-NetTest usage</h2>
+<div id="spinner"></div>
+
+<h3>Parameters</h3>
+<select id="year" onchange="loadUsageStatistics();">
+    <option selected="selected">year</option>
+    <option>2012</option>
+    <option>2013</option>
+    <option>2014</option>
+    <option>2015</option>
+</select>
+
+<select id="month" onchange="loadUsageStatistics();">
+    <option selected="selected">month</option>
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+    <option>5</option>
+    <option>6</option>
+    <option>7</option>
+    <option>8</option>
+    <option>9</option>
+    <option>10</option>
+    <option>11</option>
+    <option>12</option>
+</select>
+
+<h3>Usage</h3>
+<div id="usage">
+    <div class="graph"></div>
+    <div class="table"></div>
+</div>
+
+<h3>Platforms</h3>
+<div id="platforms">
+    <div class="graph"></div>
+    <div class="table"></div>
+</div>
+
+<h3>Network type</h3>
+<div id="network_name">
+    <div class="graph"></div>
+    <div class="table"></div>
+</div>
+
+<h3>Network technology</h3>
+<div id="network_type">
+    <div class="graph"></div>
+    <div class="table"></div>
+</div>
+
+<h3>Versions iOS</h3>
+<div id="versions_ios">
+    <div class="graph"></div>
+    <div class="table"></div>
+</div>
+
+<h3>Versions Android</h3>
+<div id="versions_android">
+    <div class="graph"></div>
+    <div class="table"></div>
+</div>
+
+<h3>Versions Applet</h3>
+<div id="versions_applet">
+    <div class="graph"></div>
+    <div class="table"></div>
+</div>
+
+{% endblock %}
