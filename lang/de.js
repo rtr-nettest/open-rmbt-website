@@ -23,6 +23,7 @@ exports.strings = {
             }
         },
         "apps_content": 'Laden Sie die RTR-Netztest App für Ihr <a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">iOS-</a> oder <a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android">Android-Gerät</a> herunter oder verwenden Sie einen der <a href="https://www.rtr.at/de/tk/rtrnetztest_tests">browserbasierten Tests</a>',
+        "apps_url" : "https://www.rtr.at/de/tk/rtrnetztest_tests",
         "apps" : {
             "netztest" : "RTR-Netztest Apps",
             "qostest" : "Netztest Apps"
@@ -38,9 +39,12 @@ exports.strings = {
                 "netztest" : "../img/rtr-netztest/rtr-netztest.png",
                 "qostest" : "../img/qostest/qostest-start.png"
             },
-            "start" : "Start"
+            "start" : "Starten"
         },
-        "statistics_alt" : "Statistik Teaserbild"
+        "statistics_alt" : "Statistik Teaserbild",
+        "map": "Kartenansicht",
+        "map_content" : "Karte mit Testergebnissen",
+        "help_content" : "Detaillierte Hintergrundinformation"
     },
 
     "map_content" : {
@@ -96,6 +100,16 @@ exports.strings = {
         "run_ndt" : "Ich möchte zusätzlich den optionalen, vertiefenden NDT-Test ausführen."
     },
 
+    "opendata_content" : {
+        "open_data_specification" : "Open-Data Schnittstellen-Definition",
+        "content_block" : 'Die Messergebnisse des RTR-Netztests sind unter Einhaltung der RTR-Netztest Datenschutzerkl&auml;rung als Open Data verf&uuml;gbar. Die <a href="/en/OpenDataSpecification.html"> Spezifikation ist als HTML abrufbar</a>. Diese Spezifikation beschreibt die als Open-Data abrufbaren Informationen. Diese sind &uuml;ber JSON wie auch als CSV-Datei (siehe unten) verf&uuml;gbar.',
+        "csv_interface" : 'CSV-Schnittstelle',
+        "recent_tests" : 'Die Ergebnisse der letzten 31 Tage sind unter <a href="/netztest-opendata.zip" class="external-link-new-window" title="RTR-Netztest Open Data-ZIP">netztest-opendata.zip</a> abrufbar.',
+        "further_results" : "Weitere Ergebnisse sind auf monatlicher Basis verfügbar:",
+        "note_timestamp" : "Bitte beachten Sie, dass die Zeitstempel in UTC (nicht in Lokalzeit) sind.",
+        "license_text" : 'Diese Daten stehen unter der <a rel="license" href="http://creativecommons.org/licenses/by/3.0/at/deed.de_AT" >Creative Commons Namensnennung 3.0 Österreich Lizenz</a>.'
+    },
+
     //Page titles and link descriptions
     "index" : "Home",
     "statistics" : "Statistik",
@@ -106,8 +120,13 @@ exports.strings = {
     "opentests" : "Open data-Testergebnisse",
     "opendata" : "Open data",
     "help" : "Hilfe",
+    "help_url" : "https://www.netztest.at/redirect/de/help",
+    "imprint" : "Impressum",
+    "imprint_url" : "https://www.rtr.at/de/rtr/impressum",
 
     //common words
+    "top" : "Seitenanfang",
+    "print" : "Drucken",
     "time": "Zeit",
     "operator": "Betreiber",
     "device": "Gerät",

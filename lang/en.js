@@ -22,6 +22,7 @@ exports.strings = {
             }
         },
         "apps_content": 'Download the NetTest for your <a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">iOS-</a> or <a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android">Android device</a> or use different <a href="https://www.rtr.at/en/tk/rtrnetztest_tests">web browser tests.</a>',
+        "apps_url" : "https://www.rtr.at/en/tk/rtrnetztest_tests",
         "apps" : {
             "netztest" : "RTR-NetTest Apps",
             "qostest" : "NetTest Apps"
@@ -40,7 +41,10 @@ exports.strings = {
             },
             "start" : "Start"
         },
-        "statistics_alt" : "Statistics teaser"
+        "statistics_alt" : "Statistics teaser",
+        "map": "Map view",
+        "map_content" : "Map view",
+        "help_content" : ""
     },
 
     "map_content" : {
@@ -96,6 +100,16 @@ exports.strings = {
         "run_ndt" : "I wish to run the optional NDT-Test."
     },
 
+    "opendata_content" : {
+        "open_data_specification" : "Open Data Interface Specification",
+        "content_block" : 'In compliance with the RTR-NetTest privacy policy the measurement results of the RTR-NetTest are available as Open Data. The <a href="/en/OpenDataSpecification.html">specification is available as HTML</a>. This specification describes the information which is available as Open Data. It is available as JSON and as CSV-file (see below).',
+        "csv_interface" : 'CSV interface',
+        "recent_tests" : 'The results of the last 31 days are available as zip-archive under <a href="/netztest-opendata.zip" title="RTR-Netztest Open Data" target="_blank" class="external-link-new-window">netztest-opendata.zip</a>.',
+        "further_results" : "Further results are available on a monthly basis:",
+        "note_timestamp" : "Please note that time stamps are in UTC (not in local time). ",
+        "license_text" : 'The data is published under the <a href="http://creativecommons.org/licenses/by/3.0/at/deed.en" target="_blank" class="external-link-new-window">Creative Commons Attribution 3.0 Austria (CC BY 3.0 AT)</a> license.'
+    },
+
     //Page titles and link descriptions
     "index": "Home",
     "statistics": "Statistics",
@@ -106,8 +120,13 @@ exports.strings = {
     "opentests": "Open data measurement results",
     "opendata": "Open data",
     "help": "Help",
+    "help_url": "https://www.rtr.at/en/tk/netztesthilfe",
+    "imprint" : "Publishing information",
+    "imprint_url" : "https://www.rtr.at/en/rtr/impressum",
 
     //common words
+    "top" : "Top",
+    "print" : "Print",
     "time": "Time",
     "operator": "Operator",
     "device": "Device",

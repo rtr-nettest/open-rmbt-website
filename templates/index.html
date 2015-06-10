@@ -45,11 +45,11 @@
     <div class="teaserzeile">
         <div class="teaser270 teaser480">
             <h2 class="RTR">
-                <a href="https://www.rtr.at/en/tk/rtrnetztest_tests">{{ Lang.index_content.select_version }}</a>
+                <a href="https://www.rtr.at/{{ Lang.lang }}/tk/rtrnetztest_tests">{{ Lang.index_content.select_version }}</a>
             </h2>
 
             <div class="image">
-                <a href="https://www.rtr.at/en/tk/rtrnetztest_tests">
+                <a href="{{ Lang.index_content.apps_url }}">
                     <img src="../img/qostest/app-logo.png" alt="{{ Lang.index_content.apps_alt }}"/>
                 </a>
             </div>
@@ -81,16 +81,16 @@
 
     <div class="teaserzeile">
         <div class="teaser270 teaser480">
-            <h2 class="RTR"><a href="/en/Karte">{{ Lang.map }}</a></h2>
+            <h2 class="RTR"><a href="/en/Karte">{{ Lang.index_content.map }}</a></h2>
 
             <div class="image">
                 <a href="/{{ Lang.lang }}/Karte"><img src="../img/qostest/karte.png"
                                          alt="Map teaser"/></a>
             </div>
             <div class="text">
-                <a href="/{{ Lang.lang }}/Karte"><h3 class="flash">{{ Lang.map }}</h3></a>
+                <a href="/{{ Lang.lang }}/Karte"><h3 class="flash">{{ Lang.index_content.map }}</h3></a>
 
-                <p>{{ Lang.map }}</p>
+                <p>{{ Lang.index_content.map_content }}</p>
             </div>
         </div>
         <div class="teaser270 teaser480">
@@ -99,14 +99,14 @@
             </h2>
 
             <div class="image">
-                <a href="https://www.netztest.at/redirect/en/help"><img
+                <a href="{{ Lang.help_url }}"><img
                         src="../img/qostest/hilfe.png" alt="Help teaser"/></a>
             </div>
             <div class="text">
-                <a href="https://www.netztest.at/redirect/en/help"><h3 class="flash">
+                <a href="{{ Lang.help_url}}"><h3 class="flash">
                     {{ Lang.help }}</h3></a>
 
-                <p></p>
+                <p>{{ Lang.index_content.help_content }}</p>
             </div>
         </div>
     </div>
