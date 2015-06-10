@@ -8,7 +8,8 @@
 
 
 var debug = require('debug')('nodeNetztest:server');
-var http = require('http');
+var request = require('request');
+var fs = require('fs');
 var path = require('path');
 
 
@@ -21,6 +22,8 @@ debug.enable();
 var langs = [];
 langs.push(require("./lang/en.js"));
 langs.push(require("./lang/de.js"));
+
+var remoteFiles = require("./conf/remoteFiles.js").remoteFiles;
 
 var target = null, targets = ["qostest","netztest"];
 var useWatch = false;
@@ -46,6 +49,7 @@ if (target === null ){
 
 //execute
 var metalsmith = Metalsmith(__dirname)
+    .use(fetchRemoteFiles(remoteFiles))
     .use(setConfig())
     .use(duplicateFile())
     .use(templates({
@@ -69,6 +73,22 @@ setTimeout(function() {
 }, 5000)
 
 
+
+/**
+ * Download the files given in the list and save them (+ override of they exist)
+ * @param fileList [{source, target}]
+ */
+function fetchRemoteFiles(fileList) {
+    return function(files, metalsmith, done) {
+        fileList.forEach(function(fileInfo) {
+            console.log("Downloading File: " + fileInfo.source + " -> " + fileInfo.target);
+            var file = fs.createWriteStream(fileInfo.target);
+            request(fileInfo.source).pipe(file);
+        });
+        done();
+    }
+}
+
 function setConfig() {
     return function (files, metalsmith, done) {
         //netztest or qostest?
@@ -80,7 +100,7 @@ function setConfig() {
         Object.keys(files).forEach(function (file) {
             targets.forEach(function(cTarget) {
                 //@TODO: Refine
-                console.log(file + " - " + cTarget + " --> " + (file.indexOf("." + cTarget)))
+                //console.log(file + " - " + cTarget + " --> " + (file.indexOf("." + cTarget)))
                 if (file.indexOf("." + cTarget) > 0) {
                     //rename if target, delete otherwise
                     if (cTarget === target) {
