@@ -2,3 +2,4 @@
 /.idea
 /node_modules
 /jstest.netztest/files
+/build.sh
