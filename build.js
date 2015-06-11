@@ -23,7 +23,7 @@ var langs = [];
 langs.push(require("./lang/en.js"));
 langs.push(require("./lang/de.js"));
 
-var remoteFiles = require("./conf/remoteFiles.js").remoteFiles;
+var remoteFiles = require("./conf/remoteFiles.json");
 
 var target = null, targets = ["qostest","netztest"];
 var useWatch = false;
