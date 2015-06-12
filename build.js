@@ -70,7 +70,7 @@ setTimeout(function() {
     if (!useWatch) {
         process.exit();
     }
-}, 5000)
+}, 15000)
 
 
 
@@ -79,13 +79,19 @@ setTimeout(function() {
  * @param fileList [{source, target}]
  */
 function fetchRemoteFiles(fileList) {
-    return function(files, metalsmith, done) {
-        fileList.forEach(function(fileInfo) {
-            console.log("Downloading File: " + fileInfo.source + " -> " + fileInfo.target);
+    return function (files, metalsmith, done) {
+        var downloaded = 0;
+        fileList.forEach(function (fileInfo) {
             var file = fs.createWriteStream(fileInfo.target);
-            request(fileInfo.source).pipe(file);
+            request(fileInfo.source).pipe(file).on('finish', function () {
+                console.log("Downloaded File: " + fileInfo.source + " -> " + fileInfo.target);
+                downloaded++;
+                if (downloaded === fileList.length) {
+                    done();
+                }
+            })
+            ;
         });
-        done();
     }
 }
 
