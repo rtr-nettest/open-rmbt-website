@@ -13,7 +13,8 @@ var useBasemapAT = true;
 var useBingMaps = false;
 var useRTRTiles = true;
 
-var URL_MAP_SERVER = 'https://c01.control.netztest.at/RMBTMapServer/tiles';
+//obsolete initialistation
+var URL_MAP_SERVER = 'https://c01.control.netztest.at/RMBTMapServer/tiles'; //overridden from control server settings
 //var URL_MAP_SERVER = 'https://develop.netztest.at/' + mappath + '/tiles';
 
 var heatmap, points, map, markers;
@@ -51,8 +52,28 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
 
 $(document).ready(function() {
         //requestBrowserData('RMBTsettings', 'viewmap');
+        //get url from settings request
+        var json_data = {
+                "type": test_type,
+                "name": test_name
+        };
+        $.ajax({
+                url: controlProxy + "/" + wspath + "/settings",
+                type: "post",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(json_data),
+                success: function (data) {
+                        URL_MAP_SERVER = data.settings[0].urls.url_map_server + "/tiles";
+                        mapProxy = data.settings[0].urls.url_map_server.replace(mappath,"");
+                        viewMap();
+                }
+        });
 
-        var caption_low, caption_high, caption_unit;
+});
+
+function viewMap() {
+       var caption_low, caption_high, caption_unit;
         legends = new Object();
 
 
@@ -251,7 +272,7 @@ $(document).ready(function() {
 
         panToLastUserTest();
         panToUserPosition();
-});
+};
 
 function convertLongLatToOpenLayersPoint(long,lat) {
     var pt = new OpenLayers.LonLat(long, lat);
