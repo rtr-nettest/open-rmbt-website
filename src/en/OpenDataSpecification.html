@@ -1,0 +1,3842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.2">
+<title>RTR-NetTest Open Data Interface Documentation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<link rel="stylesheet" href="https://cdn.rawgit.com/asciidocfx/AsciidocFX/master/src/main/resources/public/css/asciidoctor-default.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1><span class="image" style="float: right"><img src="./RTR_Logo.png" alt="image" width="100"></span> RTR-NetTest Open Data Interface Documentation</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#introduction-and-terms-of-use">1. Introduction and terms of use</a></li>
+<li><a href="#search-for-tests-by-open-data">2. Search for tests by open-data</a>
+<ul class="sectlevel2">
+<li><a href="#request">2.1. Request</a></li>
+<li><a href="#parameters">2.2. Parameters</a></li>
+<li><a href="#response">2.3. Response</a></li>
+<li><a href="#example">2.4. Example</a></li>
+</ul>
+</li>
+<li><a href="#open-data-for-one-specific-test">3. Open data for one specific test</a>
+<ul class="sectlevel2">
+<li><a href="#request-2">3.1. Request</a></li>
+<li><a href="#parameters-1">3.2. Parameters</a></li>
+<li><a href="#response-2">3.3. Response</a></li>
+<li><a href="#example-1">3.4. Example</a></li>
+</ul>
+</li>
+<li><a href="#csv-export">4. CSV-Export</a>
+<ul class="sectlevel2">
+<li><a href="#request-4">4.1. Request</a></li>
+<li><a href="#parameters-2">4.2. Parameters</a></li>
+<li><a href="#response-4">4.3. Response</a></li>
+<li><a href="#example-2">4.4. Example</a></li>
+</ul>
+</li>
+<li><a href="#shareimage-generation">5. ShareImage-Generation</a>
+<ul class="sectlevel2">
+<li><a href="#request-6">5.1. Request</a></li>
+<li><a href="#parameters-3">5.2. Parameters</a></li>
+<li><a href="#response-6">5.3. Response</a></li>
+<li><a href="#example-3">5.4. Example</a></li>
+</ul>
+</li>
+<li><a href="#quality-of-service">6. Quality of Service</a>
+<ul class="sectlevel2">
+<li><a href="#request-8">6.1. Request</a></li>
+<li><a href="#parameters-4">6.2. Parameters</a></li>
+<li><a href="#response-8">6.3. Response</a></li>
+<li><a href="#example-4">6.4. Example</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Version 2015-06-08</p>
+</div>
+<div class="paragraph">
+<p>Thomas Schreiber<br>
+Dubravko Jagar<br>
+RTR-NetTest team</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="introduction-and-terms-of-use"><a class="anchor" href="#introduction-and-terms-of-use"></a>1. Introduction and terms of use</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The present document specifies requests for Open Data collected by the
+RTR-NetTest and is available under <a href="https://www.netztest.at/en/Opendata" class="bare">https://www.netztest.at/en/Opendata</a>.
+Open Data can be obtained at the user’s discretion in two possible formats:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Zipped CSV files for data collected within the last 31 days or within
+a specified month (Content-Type: application/zip; cf. Chapter <a href="#csv-export">CSV-Export</a>) and</p>
+</li>
+<li>
+<p>JSON data for any requests, even for combinations of several criteria
+(Content-Type: application/json;charset=UTF-8).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>JSON data can be provided for two types of requests:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Search for tests by Open Data, i.e. data of all tests meeting some set
+of user-defined criteria (cf. Chapter <a href="#search-for-tests-by-open-data">Search for tests by open-data</a>) and</p>
+</li>
+<li>
+<p>Search data for one specific test (cf Chapter <a href="#open-data-for-one-specific-test">Open data for one specific test</a>).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Open Data interface is accessible via <a href="https://www.netztest.at/opendata" class="bare">https://www.netztest.at/opendata</a></p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Occurrences of INTERFACE in URLs in this document have to be
+replaced with the above link.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The services are specified by means of their attributes. Sample requests
+and responses are also provided. Names within angle brackets &lt;&gt; are mandatory,
+within curly brackets {} are optional and have to be replaced with actual values.
+Attributes in a query after ? are always defined as &lt;key&gt;=&lt;value&gt; parameter pairs.
+Multiple attributes are delimited with ampersand &amp;. The general format is hence:</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>GET INTERFACE&lt;path&gt;{?key-1=value-1}{&amp;key-2=value-2}&#8230;&#8203;{&amp;key-n=value-n}</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The parameter "sender" is optional for low-volume requests. For high-volume
+requests, please contact RTR (<a href="mailto:netztest@rtr.at">netztest@rtr.at</a>) for instructions
+regarding the parameter "sender".</p>
+</div>
+<div class="paragraph">
+<p>Data accessible via the Open Data Interface are made available under
+Creative Commons Attribution 3.0 Austria (CC BY 3.0). Regarding privacy
+policy and terms of use, please refer to
+<a href="https://www.rtr.at/en/tk/netztestterms" class="bare">https://www.rtr.at/en/tk/netztestterms</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="search-for-tests-by-open-data"><a class="anchor" href="#search-for-tests-by-open-data"></a>2. Search for tests by open-data</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="request"><a class="anchor" href="#request"></a>2.1. Request</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Method</th>
+<th class="tableblock halign-left valign-top">URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INTERFACE/opentests/search{?parameters}</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="parameters"><a class="anchor" href="#parameters"></a>2.2. Parameters</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">filter-criteria</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Optional. The criteria, which search-results have to meet. Possible
+criteria are:</p>
+</div>
+<div class="paragraph">
+<p>download_kbit: LONG</p>
+</div>
+<div class="paragraph">
+<p>download_kbit[]: LONG</p>
+</div>
+<div class="paragraph">
+<p>upload_kbit: LONG</p>
+</div>
+<div class="paragraph">
+<p>upload_kbit[]: LONG</p>
+</div>
+<div class="paragraph">
+<p>ping_ms: DOUBLE</p>
+</div>
+<div class="paragraph">
+<p>ping_ms[]: DOUBLE</p>
+</div>
+<div class="paragraph">
+<p>time: DATE</p>
+</div>
+<div class="paragraph">
+<p>time[]: DATE</p>
+</div>
+<div class="paragraph">
+<p>zip_code: LONG</p>
+</div>
+<div class="paragraph">
+<p>zip_code[]: LONG</p>
+</div>
+<div class="paragraph">
+<p>cat_technology: STRING</p>
+</div>
+<div class="paragraph">
+<p>cat_technology[]: STRING</p>
+</div>
+<div class="paragraph">
+<p>client_version: STRING</p>
+</div>
+<div class="paragraph">
+<p>client_version[]: STRING</p>
+</div>
+<div class="paragraph">
+<p>model: STRING</p>
+</div>
+<div class="paragraph">
+<p>model[]: STRING</p>
+</div>
+<div class="paragraph">
+<p>network_name: STRING</p>
+</div>
+<div class="paragraph">
+<p>network_name[]: STRING</p>
+</div>
+<div class="paragraph">
+<p>network_type: STRING</p>
+</div>
+<div class="paragraph">
+<p>network_type[]: STRING</p>
+</div>
+<div class="paragraph">
+<p>platform: STRING</p>
+</div>
+<div class="paragraph">
+<p>platform[]: STRING</p>
+</div>
+<div class="paragraph">
+<p>signal_strength: LONG</p>
+</div>
+<div class="paragraph">
+<p>signal_strength[]: LONG</p>
+</div>
+<div class="paragraph">
+<p>open_uuid: UUID</p>
+</div>
+<div class="paragraph">
+<p>long: DOUBLE</p>
+</div>
+<div class="paragraph">
+<p>long[]: DOUBLE</p>
+</div>
+<div class="paragraph">
+<p>lat: DOUBLE</p>
+</div>
+<div class="paragraph">
+<p>lat[]: DOUBLE</p>
+</div>
+<div class="paragraph">
+<p>mobile_provider_name: STRING</p>
+</div>
+<div class="paragraph">
+<p>mobile_provider_name[]: STRING</p>
+</div>
+<div class="paragraph">
+<p>provider_name: STRING</p>
+</div>
+<div class="paragraph">
+<p>provider_name[]: STRING</p>
+</div>
+<div class="paragraph">
+<p>sim_mcc_mnc: STRING</p>
+</div>
+<div class="paragraph">
+<p>sim_mcc_mnc[]: STRING</p>
+</div>
+<div class="paragraph">
+<p>sim_country: STRING</p>
+</div>
+<div class="paragraph">
+<p>sim_country[]: STRING</p>
+</div>
+<div class="paragraph">
+<p>asn: LONG</p>
+</div>
+<div class="paragraph">
+<p>asn[]: LONG</p>
+</div>
+<div class="paragraph">
+<p>network_country: STRING</p>
+</div>
+<div class="paragraph">
+<p>network_country[]: STRING</p>
+</div>
+<div class="paragraph">
+<p>country_geoip: STRING</p>
+</div>
+<div class="paragraph">
+<p>country_geoip[]: STRING</p>
+</div>
+<div class="paragraph">
+<p>loc_accuracy: LONG</p>
+</div>
+<div class="paragraph">
+<p>loc_accuracy[]: LONG</p>
+</div>
+<div class="paragraph">
+<p>public_ip_as_name: STRING</p>
+</div>
+<div class="paragraph">
+<p>Date fields have to be submitted as a number, representing the number of
+milliseconds that have elapsed since midnight, January 1<sup>st</sup>, 1970 or in
+the format “yyyy-MM-dd HH:mm:ss”. The time is given in UTC.</p>
+</div>
+<div class="paragraph">
+<p>Decimal point (Full Stop “.”) is always used to separate the integer
+part from the fractional part of a number written in decimal form. This
+is independent from the local or regional settings.</p>
+</div>
+<div class="paragraph">
+<p>Numeric fields also allow using the comparators ‘&gt;’ and ‘&lt;’ (meaning
+‘=&gt;’ and ‘=&lt;’ respectively). Dates have always to be queried as ranges
+by using these comparators.</p>
+</div>
+<div class="paragraph">
+<p>String fields allow using the wildcard ‘*’ for matching any literals and
+‘?’ for matching one arbitrary literal.</p>
+</div>
+<div class="paragraph">
+<p>It is possible, to begin each filter argument with an exclamation mark
+(!) to negate the filter. E.g. network_type=!LAN will yield all tests
+where the network type was not LAN.</p>
+</div>
+<div class="paragraph">
+<p>The criteria denoted with [] can be used more than once in a query. Data
+has to match all criteria. If an array for one criterion is given, the
+data has to match each entry.</p>
+</div>
+<div class="paragraph">
+<p>Generally a query on a parameter value ‘null’ is not possible, except
+for the parameter loc_accuracy, where the value -1 means ‘null’.
+Non-‘null’ values are queried with any single or multiple values.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sort_by, sort_order</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Optional. The field for which the data are sorted. Valid fields are:
+“download_kbit", "upload_kbit", "time", "signal_strength" and "ping_ms”.</p>
+</div>
+<div class="paragraph">
+<p>For this, the sort_by-Parameter specifies the field, the
+sort_order-Parameter specifies the direction (‘asc’ or ‘desc’).</p>
+</div>
+<div class="paragraph">
+<p>Per Default, the results are sorted by the time of the test in
+descending order (i.e. sort_by=time&amp;sort_order=desc).</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">max_results</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Optional. This is the page size, i.e. maximum number of result items
+that are returned per page.</p>
+</div>
+<div class="paragraph">
+<p>The default value is 100 items per page. The page size limit is 10000
+items, i.e. not more than 10000 results can be displayed in a page.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">cursor</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Optional. It is used for pagination if the query returns more than the
+number of items according to parameter max_results. The value to be used
+for the display of the next page is given by the previous response in
+returned parameter next_cursor.</p>
+</div>
+<div class="paragraph">
+<p>If the sort parameters are specified, the value of the cursor is a
+multiple of the parameter max_results, otherwise it is an arbitrary
+number.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">_, timestamp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional. Will be ignored and can be used to prevent caching
+of the response.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sender</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional. ID of the sender, for authentication.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="response"><a class="anchor" href="#response"></a>2.3. Response</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Status</th>
+<th class="tableblock halign-left valign-top">Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The resulting JSON, specified as following.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A JSON Error Message containing all fields with invalid values.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="returned-json"><a class="anchor" href="#returned-json"></a>2.3.1. Returned JSON</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">duration_ms</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">124</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">next_cursor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1455</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">results</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[{opendata-summary-item}]</p></td>
+</tr>
+</tbody>
+</table>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+duration_ms
+</td>
+<td class="hdlist2">
+<p>The time it took the server to search for tests matching
+all criteria in milliseconds.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+next_cursor
+</td>
+<td class="hdlist2">
+<p>Cursor for obtaining the next page, if the number of
+matched items exceeds the page size. ‘null’ if there are no more pages.
+Cf. search parameters max_results and cursor.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+results
+</td>
+<td class="hdlist2">
+<p>The array containing the summaries of all matching tests. It
+is empty, if no tests matched the criteria.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="opendata-summary-item"><a class="anchor" href="#opendata-summary-item"></a>2.3.2. Opendata-summary-item</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">platform</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“Android 4G”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">model</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"SM-N910F"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"2013-07-16 09:57:17"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">provider_name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Some Provider"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">download_kbit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">81180</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">upload_kbit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">77883</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ping_ms</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4.254356</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">signal_strength</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-67</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">lte_rsrp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-70</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">lat</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">48.1977655</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">16.349674</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">open_test_uuid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“Of7d6e88b-e883-467f-8435-ee6f6abc5080”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">open_uuid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"P9f2b7bb1-39ea-454e-aa97-538564d7f8f1"</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>For detailed explanation, please refer to chapter <a href="#open-data-for-one-specific-test">Open data for one specific test</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="example"><a class="anchor" href="#example"></a>2.4. Example</h3>
+<div class="sect3">
+<h4 id="request-1"><a class="anchor" href="#request-1"></a>2.4.1. Request</h4>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>GET INTERFACE/opentests/search?asn=1764&amp;sender=a1b2c3d4e5f6</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>This request searches for all conducted tests where the autonomous
+system number matches 1764 and displays the recent ones of them
+according to the default page size (cf. max_results). The sender ID
+is optionally supplied as well.</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>GET INTERFACE/opentests/search?download_kbit=&gt;10&amp;download_kbit=&lt;100&amp;platform=An*&amp;time=&lt;2014-06-01
+13:10:00&amp;sort_by=upload_kbit&amp;sort_order=asc&amp;max_results=1000&amp;cursor=2000</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>This request searches for all conducted tests where the download speed
+is between 10 and 100 kbps, were conducted before June 1<sup>st</sup>, 2014
+13:10:00 UTC and the platform starts with “An”. All results are then
+sorted by the upload-speed in ascending order. The cursor is set to 2000
+in order to display the 3<sup>rd</sup> page with 1000 items.</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>GET
+INTERFACE/opentests/search?lat&#8658;48.09&amp;lat=&lt;48.35&amp;long&#8658;16.14&amp;long=&lt;16.62&amp;loc_accuracy&#8658;0&amp;loc_accuracy=&lt;2000&amp;max_results=10000</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>This query searches for all conducted tests within the rectangular area
+around Vienna with a position accuracy of up to 2 km. The recent 10000
+tests are returned in one page.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="response-1"><a class="anchor" href="#response-1"></a>2.4.2. Response</h4>
+<div class="literalblock">
+<div class="content">
+<pre>{
+    "next_cursor": 866505,
+    "results": [
+    {
+        "platform": " LAN",
+        "model": "IE",
+        "long": 16.393557,
+        "open_test_uuid": "Od1e399e6-2a82-4801-a3e7-d125af88b55d",
+        "time": "2014-10-03 14:19:22",
+        "open_uuid": "P250081fe-a79e-4fbc-8b0b-76b901de2b4b",
+        "download_kbit": 42281,
+        "signal_strength": null,
+        "ping_ms": 4.000914,
+        "lte_rsrp": null,
+        "upload_kbit": 1124,
+        "lat": 48.233243,
+        "provider_name": "next layer"
+    },
+    ...
+    {
+        "platform": "Android WLAN",
+        "model": "LGE Nexus 5",
+        "long": 16.3497029,
+        "open_test_uuid": "Oa1f286be-3c91-4f7d-b3d3-29d0e143e20d",
+        "time": "2014-08-14 07:59:13",
+        "open_uuid": "Pf9b785d8-d0c4-45c0-abd6-b1d492e72fe2",
+        "download_kbit": 62864,
+        "signal_strength": -57,
+        "ping_ms": 2.769414,
+        "lte_rsrp": null,
+        "upload_kbit": 74528,
+        "lat": 48.1977398,
+        "provider_name": "next layer"
+    }
+    ],
+    "duration_ms": 424
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The reference interface implementation is available at
+<a href="https://www.netztest.at/en/Opentests" class="bare">https://www.netztest.at/en/Opentests</a> via the “Advanced search” input
+option. The GET-parameters on this site are exactly the same as the
+parameters of the Open Data interface.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="open-data-for-one-specific-test"><a class="anchor" href="#open-data-for-one-specific-test"></a>3. Open data for one specific test</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This call gets all the open-data for one specific test by its
+open-test-uuid. The response is a JSON-Object with the values or ‘null’,
+if a value is unknown.</p>
+</div>
+<div class="sect2">
+<h3 id="request-2"><a class="anchor" href="#request-2"></a>3.1. Request</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Method</th>
+<th class="tableblock halign-left valign-top">URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INTERFACE/opentests/&lt;open-test-uuid&gt;{?parameters}</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="parameters-1"><a class="anchor" href="#parameters-1"></a>3.2. Parameters</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">open-test-uuid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mandatory. The open-test-uuid of the test.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">verbose</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional. If &gt;0 the threadwise speed curve is additionally
+returned.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sender</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional. ID of the sender, for authentification.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="response-2"><a class="anchor" href="#response-2"></a>3.3. Response</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Status</th>
+<th class="tableblock halign-left valign-top">Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The resulting JSON, specified as following.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">404</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the UUID is invalid.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="returned-json-1"><a class="anchor" href="#returned-json-1"></a>3.3.1. Returned JSON</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">asn</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6830</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bytes_download</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">13653343</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bytes_upload</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3712431</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">cat_technology</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“3G”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">client_version</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“1.1”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">country_asn</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“AT”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">country_geoip</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“AT”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">country_location</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“AT”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">connection</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"nat_local_to_public_ipv4"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">distance</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">667.15</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">download_classification</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">download_kbit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6903</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">duration_download_ms</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7000.13</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">duration_upload_ms</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7000.12</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">implausible</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ip_anonym</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“80.108.108”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">lat</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">48.2029024</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">loc_src</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“network”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">loc_accuracy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5345</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">16.3967841</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">lte_rsrp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-6</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">lte_rsrq</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-81</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">model</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“Sony Xperia Tablet Z LTE”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">model_native</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“SGP321“</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ndt_download_kbit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1443</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ndt_upload_kbit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2334</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">network_country</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“DE”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">network_mcc_mnc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">232-05</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">network_name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“3 AT”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">network_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“WLAN”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num_threads</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num_threads_requested</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num_theads_ul</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">open_test_uuid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"O10b9e95c-d47a-4328-b2ff-82ef24c8e6fe"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">open_uuid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“Pa19046c3-cecf-437a-a3d0-062466c8a32c”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ping_classification</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ping_ms</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">16.178334</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">platform</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“Android”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">product</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“SGP321”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">provider_name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“Provider”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">public_ip_as_name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“AS32768 Provider“</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">roaming_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">server_name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“RTR-DEVELOP-SERVER”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">signal_classification</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">signal_strength</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-56</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sim_country</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“at”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sim_mcc_mnc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“232-05”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">speed_curve</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Speed-Curve-Item</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{speed-curve-item}</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">speed_curve_threadwise</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Speed-Curve-Threadwise</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{speed-curve-threadwise}</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test_if_bytes_download</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4991145</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test_if_bytes_upload</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1961967</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">testdl_if_bytes_download</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4580781</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">testdl_if_bytes_upload</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">107077</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">testul_if_bytes_download</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">57372</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">testul_if_bytes_upload</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1627790</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test_duration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"2013-07-15 01:55"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time_dl_ms</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3692.15</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time_dl_ms</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">13496.54</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">upload_classification</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">upload_kbit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">711</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wifi_link_speed</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7562</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">zip_code</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1030</p></td>
+</tr>
+</tbody>
+</table>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+<em>asn</em>
+</td>
+<td class="hdlist2">
+<p>Autonomous system number.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+bytes_download
+</td>
+<td class="hdlist2">
+<p>Total number of bytes downloaded during download
+test (excluding training-phase).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+bytes_upload
+</td>
+<td class="hdlist2">
+<p>Total number of bytes uploaded during upload test
+(excluding training-phase).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>cat_technology</em>
+</td>
+<td class="hdlist2">
+<p>Technology category of the network, e.g. “3G”, “4G”,
+“WLAN”.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>client_version</em>
+</td>
+<td class="hdlist2">
+<p>Software version number of the client.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+community
+</td>
+<td class="hdlist2">
+<p>Name of Austrian community (Gemeinde).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+connection/<em>nat_type</em>
+</td>
+<td class="hdlist2">
+<p>Type of connection in terms of NAT and
+IP-Version (e.g. behind NAT with local to public IP and IPv4).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+country_asn
+</td>
+<td class="hdlist2">
+<p>Country of AS of client IP.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+country_geoip
+</td>
+<td class="hdlist2">
+<p>Country according client IP address.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+country_location
+</td>
+<td class="hdlist2">
+<p>Country of geo-location.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+cov800cat
+</td>
+<td class="hdlist2">
+<p>Community category of Austrian 800 MHz coverage obligation
+derived from <em>gkz</em> (see <a href="https://www.rtr.at/en/tk/multibandauktionVersorgungsauflage800MHz" class="bare">https://www.rtr.at/en/tk/multibandauktionVersorgungsauflage800MHz</a>).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+distance
+</td>
+<td class="hdlist2">
+<p>The distance that the user moved in meters.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+district
+</td>
+<td class="hdlist2">
+<p>Name of Austrian district (Bezirk).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+download_classification
+</td>
+<td class="hdlist2">
+<p>Classification for the download speed in a
+traffic-light system.<br>
+0 = unknown, 1 = red, 2 = yellow, 3 = green.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>download_kbit</em>
+</td>
+<td class="hdlist2">
+<p>The download-speed in kilobit per second.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+duration_download_ms
+</td>
+<td class="hdlist2">
+<p>Duration of download test in ms.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+duration_upload_ms
+</td>
+<td class="hdlist2">
+<p>Duration of upload test in ms.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>gkz</em>
+</td>
+<td class="hdlist2">
+<p>Community ID (Gemeindekennzahl, see <a href="http://www.statistik.at/web_de/klassifikationen/regionale_gliederungen/gemeinden/index.html" class="bare">http://www.statistik.at/web_de/klassifikationen/regionale_gliederungen/gemeinden/index.html</a>).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>implausible</em>
+</td>
+<td class="hdlist2">
+<p>Identification of implausible test results.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>ip_anonym</em>
+</td>
+<td class="hdlist2">
+<p>The anonymized IP-Address of the client.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>lat</em>
+</td>
+<td class="hdlist2">
+<p>Latitude of the client position.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>loc_accuracy</em>
+</td>
+<td class="hdlist2">
+<p>Estimation of accuracy of client location.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>loc_src</em>
+</td>
+<td class="hdlist2">
+<p>Source for the geo location-data. Valuse: “gps”, “network”.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>long</em>
+</td>
+<td class="hdlist2">
+<p>Longitude of the client position.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>lte_rsrp</em>
+</td>
+<td class="hdlist2">
+<p>LTE signal strength in dBm.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>lte_rsrq</em>
+</td>
+<td class="hdlist2">
+<p>LTE signal quality in decibels.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>model</em>
+</td>
+<td class="hdlist2">
+<p>Name of the device used.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+model_native
+</td>
+<td class="hdlist2">
+<p>Name of the device used, raw device name.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>ndt_download_kbit</em>
+</td>
+<td class="hdlist2">
+<p>Download speed in the NDT-test in kilobit per second.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>ndt_upload_kbit</em>
+</td>
+<td class="hdlist2">
+<p>Upload speed in the NDT-test in kilobit per second.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+network_country
+</td>
+<td class="hdlist2">
+<p>Country of the network in ISO 3166.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>network_mcc_mnc</em>
+</td>
+<td class="hdlist2">
+<p>Network identification whereas the first three
+digits represent the country, the digits following the dash represent
+the mobile network provider within that country.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>network_name</em>
+</td>
+<td class="hdlist2">
+<p>Display name of the mobile network.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>network_type</em>
+</td>
+<td class="hdlist2">
+<p>Type of the network, e.g. MOBILE, LAN, WLAN.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>num_threads</em>
+</td>
+<td class="hdlist2">
+<p>Number of threads used for the downlink test.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+num_threads_requested
+</td>
+<td class="hdlist2">
+<p>Number of threads requested by the server.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+num_threads_ul
+</td>
+<td class="hdlist2">
+<p>Number of threads used for the uplink test.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>open_test_uuid</em>
+</td>
+<td class="hdlist2">
+<p>Open-Test-UUID: The UUID of the Test.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>open_uuid</em>
+</td>
+<td class="hdlist2">
+<p>Open-UUID: Identifies the client that conducted the test.
+The a new Open-UUID is assigned to the client on a regular basis.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+ping_classification
+</td>
+<td class="hdlist2">
+<p>Classification for the ping speed in a
+traffic-light system.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>ping_ms</em>
+</td>
+<td class="hdlist2">
+<p>Median ping (round-trip time) in milliseconds, measured on the server side.
+In previous versions (before June 3rd 2015) this was the minimum ping measured on the client side.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>platform</em>
+</td>
+<td class="hdlist2">
+<p>Platform on which the test has been conducted. E.g.<br></p>
+<div class="ulist">
+<ul>
+<li>
+<p>“Android” (= Google Android App),<br></p>
+</li>
+<li>
+<p>“iOS” (= Apple iOs App),<br></p>
+</li>
+<li>
+<p>Applet (= Java applet test within a browser),<br></p>
+</li>
+<li>
+<p>RMBTjs (= simple JavaScript test within a browser, without Java),<br></p>
+</li>
+<li>
+<p>RMBTws (= advanced JavaScript test using WebSockets within the
+browser).</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+product Product
+</td>
+<td class="hdlist2">
+<p>Name of the client device.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+provider_name
+</td>
+<td class="hdlist2">
+<p>Name of the internet service provider.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+province
+</td>
+<td class="hdlist2">
+<p>Name of Austrian province (Bundesland).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+public_ip_as_name
+</td>
+<td class="hdlist2">
+<p>Name of the AS of the clients public IP.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+roaming_type
+</td>
+<td class="hdlist2">
+<p>Integer representing the roaming status of the client:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>0: no roaming,<br></p>
+</li>
+<li>
+<p>1: national roaming,</p>
+</li>
+<li>
+<p>2: international roaming.</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>server_name</em>
+</td>
+<td class="hdlist2">
+<p>Name of the test-server.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+signal_classification
+</td>
+<td class="hdlist2">
+<p>Classification for the signal strength in a
+traffic-light system.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>signal_strength</em>
+</td>
+<td class="hdlist2">
+<p>Signal strength (RSSI) in dBm.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+sim_country
+</td>
+<td class="hdlist2">
+<p>Home country of the SIM card in ISO 3166.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>sim_mcc_mnc</em>
+</td>
+<td class="hdlist2">
+<p>Network identification of the SIM provider. The digits
+of MCC and MNC have the same meaning as described in “network_mcc_mnc”.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+speed_curve
+</td>
+<td class="hdlist2">
+<p>Aggregated history of transferred data bytes during a test.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+speed_curve_threadwise
+</td>
+<td class="hdlist2">
+<p>History of transferred data bytes per thread during
+a test. Returned only if verbose&gt;0.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>test_duration</em>
+</td>
+<td class="hdlist2">
+<p>Duration of the test per direction (up- or download)
+in seconds.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+test_if_bytes_download
+</td>
+<td class="hdlist2">
+<p>Data volume received on the interface during
+the test (including training phase).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+test_if_bytes_upload
+</td>
+<td class="hdlist2">
+<p>Data volume transmitted on the interface during
+the test (including training phase).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+testdl_if_bytes_download
+</td>
+<td class="hdlist2">
+<p>Data volume received on the interface during
+the download test.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+testdl_if_bytes_upload
+</td>
+<td class="hdlist2">
+<p>Data volume transmitted on the interface during
+the download test.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+testul_if_bytes_download
+</td>
+<td class="hdlist2">
+<p>Data volume received on the interface during
+the upload test.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>testul_if_bytes_upload</em>
+</td>
+<td class="hdlist2">
+<p>Data volume transmitted on the interface during
+the upload test.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+time/<em>time_utc</em>
+</td>
+<td class="hdlist2">
+<p>UTC date and time when test was started.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+time_dl_ms
+</td>
+<td class="hdlist2">
+<p>Relative start time of download in ms.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+time_ul_ms
+</td>
+<td class="hdlist2">
+<p>Relative start time of upload in ms.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+upload_classification
+</td>
+<td class="hdlist2">
+<p>Classification for the upload speed in a
+traffic-light system.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>upload_kbit</em>
+</td>
+<td class="hdlist2">
+<p>Upload speed in kilobit per second.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<em>zip_code</em>
+</td>
+<td class="hdlist2">
+<p>ZIP-Code of the clients location (if available).</p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Note: Only the <em>italic</em> marked items are included in the open data zipped
+csv file.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="speed-curve-item"><a class="anchor" href="#speed-curve-item"></a>3.3.2. Speed-curve-item</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">download</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[{measurement-item}]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">upload</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[{measurement-item}]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">signal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[{signal-item}]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">location</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[{location-item}]</p></td>
+</tr>
+</tbody>
+</table>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+download
+</td>
+<td class="hdlist2">
+<p>Measurements of downloaded bytes at various times during the
+test.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+upload
+</td>
+<td class="hdlist2">
+<p>Measurements of uploaded bytes at various times during the test.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+signal
+</td>
+<td class="hdlist2">
+<p>Measurements of signal strength and network type at various
+times during the test.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+location
+</td>
+<td class="hdlist2">
+<p>The client’s locations throughout the test.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="measurement-item"><a class="anchor" href="#measurement-item"></a>3.3.3. Measurement-item</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time_elapsed</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">55</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bytes_total</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4096</p></td>
+</tr>
+</tbody>
+</table>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+time_elapsed
+</td>
+<td class="hdlist2">
+<p>The time elapsed since the start of the test phase in
+milliseconds.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+bytes_total
+</td>
+<td class="hdlist2">
+<p>The sum of all bytes transferred since the start of the
+test phase.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="signal-item"><a class="anchor" href="#signal-item"></a>3.3.4. Signal-item</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time_elapsed</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">55</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">network_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“LTE”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">cat_technology</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“4G”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">signal_strength</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-85</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">lte_rsrq</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-6</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">lte_rsrp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-77</p></td>
+</tr>
+</tbody>
+</table>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+time_elapsed
+</td>
+<td class="hdlist2">
+<p>The time elapsed since the start of the test in
+milliseconds.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+network_type
+</td>
+<td class="hdlist2">
+<p>Type of the network, e.g. GSM, EDGE, UMTS, HSPA, LTE,
+LAN, WLAN…</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+cat_technology
+</td>
+<td class="hdlist2">
+<p>Technology category of the network, e.g. “3G”, “4G”,
+“WLAN”.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+signal_strength
+</td>
+<td class="hdlist2">
+<p>Signal strength (RSSI) in dBm.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+lte_rsrq
+</td>
+<td class="hdlist2">
+<p>LTE signal quality in decibels.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+lte_rsrp
+</td>
+<td class="hdlist2">
+<p>LTE signal strength in dBm.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="location-item"><a class="anchor" href="#location-item"></a>3.3.5. Location-item</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time_elapsed</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">55</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">loc_accuracy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">14.20882799</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">lat</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">47.76077786</p></td>
+</tr>
+</tbody>
+</table>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+time_elapsed
+</td>
+<td class="hdlist2">
+<p>The time elapsed since the start of the test in
+milliseconds.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+loc_accuracy
+</td>
+<td class="hdlist2">
+<p>Estimation of accuracy of client location.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+long
+</td>
+<td class="hdlist2">
+<p>Longitude of the client position.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+lat
+</td>
+<td class="hdlist2">
+<p>Latitude of the client position.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="speed-curve-threadwise"><a class="anchor" href="#speed-curve-threadwise"></a>3.3.6. Speed-curve-threadwise</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">download</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"2": [{measurement-threadwise}]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">upload</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"0": [{measurement-threadwise}]</p></td>
+</tr>
+</tbody>
+</table>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+download
+</td>
+<td class="hdlist2">
+<p>Measurements of downloaded bytes per thread at various times during the
+test. The download threads are named "0", "1", "2" etc.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+upload
+</td>
+<td class="hdlist2">
+<p>Measurements of uploaded bytes per thread at various times during the test.
+The upload threads are named "0", "1", "2" etc.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="measurement-threadwise"><a class="anchor" href="#measurement-threadwise"></a>3.3.7. Measurement-threadwise</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time_elapsed_ns</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">41183662</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bytes_total</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">319488</p></td>
+</tr>
+</tbody>
+</table>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+time_elapsed_ns
+</td>
+<td class="hdlist2">
+<p>The time elapsed since the start of the test phase for this thread, in
+nanoseconds.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+bytes_total
+</td>
+<td class="hdlist2">
+<p>The sum of all bytes transferred since the start of the
+test phase for this thread.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="example-1"><a class="anchor" href="#example-1"></a>3.4. Example</h3>
+<div class="sect3">
+<h4 id="request-3"><a class="anchor" href="#request-3"></a>3.4.1. Request</h4>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>GET INTERFACE/opentests/O211ec703-71db-4c32-b61a-77fc1bbf1705?sender=m7n8o9p10q11</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="response-3"><a class="anchor" href="#response-3"></a>3.4.2. Response</h4>
+<div class="literalblock">
+<div class="content">
+<pre>{
+    "testdl_if_bytes_download": null,
+    "testul_if_bytes_upload": null,
+    "time_dl_ms": null,
+    "model_native": "Firefox",
+    "implausible": false,
+    "ndt_download_kbit": null,
+    "download_classification": 3,
+    "testul_if_bytes_download": null,
+    "public_ip_as_name": "NEXTLAYER-AS next layer Telekommunikationsdienstleistungs- GmbH,AT",
+    "speed_curve": {
+        "location": [
+            {
+                "time_elapsed": 44488,
+                "loc_accuracy": 100,
+                "long": 16.3495225,
+                "lat": 48.1979063
+            }
+        ],
+        "signal": [ ],
+        "download": [
+            {
+                "time_elapsed": 41,
+                "bytes_total": 319488
+            },
+            ...
+            {
+                "time_elapsed": 7280,
+                "bytes_total": 76959744
+            }
+        ],
+        "upload": [
+            {
+                "time_elapsed": 107,
+                "bytes_total": 4096
+            },
+            ...
+            {
+                "time_elapsed": 7148,
+                "bytes_total": 78868480
+            }
+        ]
+    },
+    "long": 16.349527665317,
+    "open_test_uuid": "O211ec703-71db-4c32-b61a-77fc1bbf1705",
+    "time": "2014-10-01 14:46",
+    "testdl_if_bytes_upload": null,
+    "ping_classification": 3,
+    "open_uuid": "P7241cee2-7773-47cb-b398-dd047260db32",
+    "cat_technology": "LAN",
+    "test_duration": 7,
+    "ndt_upload_kbit": null,
+    "loc_accuracy": 100,
+    "num_threads_ul": 3,
+    "duration_upload_ms": 7126.321333,
+    "platform": null,
+    "country_asn": "EU",
+    "connection": null,
+    "time_ul_ms": null,
+    "roaming_type": null,
+    "wifi_link_speed": null,
+    "lte_rsrq": null,
+    "asn": 1764,
+    "lte_rsrp": null,
+    "country_geoip": "AT",
+    "num_threads_requested": 3,
+    "provider_name": "next layer Telekommunikationsdienstleistungs-GmbH",
+    "model": "Firefox",
+    "network_type": "LAN",
+    "zip_code": 1060,
+    "sim_mcc_mnc": null,
+    "test_if_bytes_download": null,
+    "server_name": "RTR Websocket",
+    "distance": null,
+    "sim_country": null,
+    "duration_download_ms": 7040.742745,
+    "loc_src": "rastered",
+    "download_kbit": 87445,
+    "network_mcc_mnc": null,
+    "country_location": "AT",
+    "network_country": null,
+    "lat": 48.19801980198,
+    "ip_anonym": "2a01:190:15fd::",
+    "bytes_download": 76959744,
+    "network_name": null,
+    "upload_classification": 3,
+    "test_if_bytes_upload": null,
+    "num_threads": 3,
+    "product": "Mozilla\/5.0 (Windows NT 6.1; WOW64; rv:32.0) Gecko\/20100101 Firefox\/32.0",
+    "signal_classification": null,
+    "signal_strength": null,
+    "ping_ms": 2.165636,
+    "bytes_upload": 78868480,
+    "upload_kbit": 88537,
+    "client_version": "0.3"
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="request-threadwise"><a class="anchor" href="#request-threadwise"></a>3.4.3. Request Threadwise</h4>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>GET INTERFACE/opentests/O211ec703-71db-4c32-b61a-77fc1bbf1705?verbose=1</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="response-threadwise"><a class="anchor" href="#response-threadwise"></a>3.4.4. Response Threadwise</h4>
+<div class="literalblock">
+<div class="content">
+<pre>{
+    "testdl_if_bytes_download": null,
+    "testul_if_bytes_upload": null,
+    "time_dl_ms": null,
+    "model_native": "Firefox",
+    "implausible": false,
+    "ndt_download_kbit": null,
+    "download_classification": 3,
+    "testul_if_bytes_download": null,
+    "public_ip_as_name": "NEXTLAYER-AS next layer Telekommunikationsdienstleistungs- GmbH,AT",
+    "speed_curve": {...}    //same as speed-curve-item
+    "long": 16.34952766531714,
+    "open_test_uuid": "O211ec703-71db-4c32-b61a-77fc1bbf1705",
+    "time": "2014-10-01 14:46:06",
+    "testdl_if_bytes_upload": null,
+    "ping_classification": 3,
+    "open_uuid": "P7241cee2-7773-47cb-b398-dd047260db32",
+    "cat_technology": "LAN",
+    "test_duration": 7,
+    "ndt_upload_kbit": null,
+    "loc_accuracy": 100,
+    "num_threads_ul": 3,
+    "duration_upload_ms": 7126.321333,
+    "platform": "RMBTws",
+    "country_asn": "EU",
+    "connection": null,
+    "time_ul_ms": null,
+    "roaming_type": null,
+    "speed_curve_threadwise": {
+        "download": {
+            "0": [
+                {
+                    "time_elapsed_ns": 41183662,
+                    "bytes_total": 319488
+                },
+                ...
+                {
+                    "time_elapsed_ns": 7280490842,
+                    "bytes_total": 17825792
+                }
+            ],
+            "1": [
+                {
+                    "time_elapsed_ns": 41273266,
+                    "bytes_total": 40960
+                },
+                ...
+                {
+                    "time_elapsed_ns": 7040742745,
+                    "bytes_total": 42909696
+                }
+            ],
+            "2": [
+                {
+                    "time_elapsed_ns": 41228267,
+                    "bytes_total": 49152
+                },
+                ...
+                {
+                    "time_elapsed_ns": 7240738087,
+                    "bytes_total": 16224256
+                }
+            ]
+        },
+        "upload": {...} //similar to download
+    },
+    "wifi_link_speed": null,
+    "lte_rsrq": null,
+    "asn": 1764,
+    "lte_rsrp": null,
+    "country_geoip": "AT",
+    "num_threads_requested": 3,
+    "provider_name": "next layer Telekommunikationsdienstleistungs-GmbH",
+    "model": "Firefox",
+    "network_type": "LAN",
+    "zip_code": 1060,
+    "sim_mcc_mnc": null,
+    "test_if_bytes_download": null,
+    "server_name": "RTR Websocket AT",
+    "distance": null,
+    "sim_country": null,
+    "duration_download_ms": 7040.742745,
+    "loc_src": "rastered",
+    "download_kbit": 87445,
+    "network_mcc_mnc": null,
+    "country_location": "AT",
+    "network_country": null,
+    "lat": 48.198019801980195,
+    "ip_anonym": "2a01:190:15fd::",
+    "bytes_download": 76959744,
+    "network_name": null,
+    "upload_classification": 3,
+    "test_if_bytes_upload": null,
+    "num_threads": 3,
+    "product": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:32.0) Gecko/20100101 Firefox/32.0",
+    "signal_classification": null,
+    "signal_strength": null,
+    "ping_ms": 2.165636,
+    "bytes_upload": 78868480,
+    "upload_kbit": 88537,
+    "client_version": "0.3"
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="csv-export"><a class="anchor" href="#csv-export"></a>4. CSV-Export</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="request-4"><a class="anchor" href="#request-4"></a>4.1. Request</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Method</th>
+<th class="tableblock halign-left valign-top">URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INTERFACE/export</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INTERFACE/export/netztest-opendata-&lt;year&gt;-&lt;month&gt;.zip</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="parameters-2"><a class="anchor" href="#parameters-2"></a>4.2. Parameters</h3>
+<div class="paragraph">
+<p>No parameters need to be sent in order to obtain the test results of the
+last 31 days. For the second type of request, it is necessary to replace
+&lt;year&gt; with a four-digit year number ≥ 2000 and &lt; 3000 and &lt;month&gt;
+with a two-digit month number ≥ 01 and ≤ 12).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="response-4"><a class="anchor" href="#response-4"></a>4.3. Response</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Status</th>
+<th class="tableblock halign-left valign-top">Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns a zip file containing a csv file. This file contains the
+test results of the given period from the open data database. Please
+refer to chapter <a href="#returned-json-1">Returned JSON</a> for the differences in included items compared to
+the JSON data.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="example-2"><a class="anchor" href="#example-2"></a>4.4. Example</h3>
+<div class="sect3">
+<h4 id="request-5"><a class="anchor" href="#request-5"></a>4.4.1. Request</h4>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>GET INTERFACE/export</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="response-5"><a class="anchor" href="#response-5"></a>4.4.2. Response</h4>
+<div class="literalblock">
+<div class="content">
+<pre>open_uuid,open_test_uuid,time,cat_technology,network_type,lat,long,loc_src,loc_accuracy,zip_code,download_kbit,upload_kbit,ping_ms,lte_rsrp,server_name,test_duration,num_threads,platform,model,client_version,network_mcc_mnc,network_name,sim_mcc_mnc,nat_type,asn,ip_anonym,ndt_download_kbit,ndt_upload_kbit,implausible,signal_strength
+
+P51bbdd95-8b47-493e-9e51-b752fdad8ef3,O2f5e300f-eedd-4865-920c-2c3aa7852e51,2014-08-25
+22:00,WLAN,WLAN,48.25202520252025,16.41025641025641,,65.0,1210,34821,4481,9.550473,,RTR-SERVER,7,3,iOS,iPhone
+5s,1.2.3,,,,nat_local_to_public_ipv4,6830,84.113.23,,,false,
+
+Pa5e8df81-298f-47e8-a389-ec6ca8ab7d8a,Ocd9d1c5e-4a04-4bb0-8b9e-6818d2acc2ed,2014-08-25
+22:00,3G,HSPA+,,,,,,23811,4256,19.720521,,RTR-SERVER,7,3,Android,Galaxy
+S5,1.5.4,232-01,A1,232-01,no_nat_ipv4,16305,46.206.119,,,false,-65
+
+P90a489fb-143a-4206-8687-bda2f00aaeef,O5b5f9cee-b551-47f3-8c01-32d672887349,2014-08-25
+22:01,WLAN,WLAN,48.317731773177314,16.58434547908232,,65.0,2232,230,874,202.222417,,RTR-SERVER,7,1,iOS,iPad
+mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
+
+...</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="shareimage-generation"><a class="anchor" href="#shareimage-generation"></a>5. ShareImage-Generation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This call generates images containing the results of a user’s speed
+test.</p>
+</div>
+<div class="sect2">
+<h3 id="request-6"><a class="anchor" href="#request-6"></a>5.1. Request</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Method</th>
+<th class="tableblock halign-left valign-top">URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INTERFACE/&lt;language&gt;/&lt;open-test-uuid&gt;/&lt;imagetype&gt;.png</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="parameters-3"><a class="anchor" href="#parameters-3"></a>5.2. Parameters</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">language</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The language of all text contained in the image. Can
+currently either be “de” or “en”.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“de”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">open-test-uuid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The Open-Test-UUID for the specific speed-test
+event. Can be obtained by calling /opentests.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">O10b9e95c-d47a-4328-b2ff-82ef24c8e6fe</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">imagetype</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The type of image that should be generated. Can
+currently either be “forumlarge”, “forumsmall” or “thumbnail”.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“forumlarge”</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="response-6"><a class="anchor" href="#response-6"></a>5.3. Response</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Status</th>
+<th class="tableblock halign-left valign-top">Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The generated image of mimetype image/png.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“invalid language”</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"invalid image type"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">404</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">“Invalid open-uuid”</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="example-3"><a class="anchor" href="#example-3"></a>5.4. Example</h3>
+<div class="sect3">
+<h4 id="request-7"><a class="anchor" href="#request-7"></a>5.4.1. Request</h4>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>GET INTERFACE/en/O211ec703-71db-4c32-b61a-77fc1bbf1705/forumsmall.png</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="response-7"><a class="anchor" href="#response-7"></a>5.4.2. Response</h4>
+<div class="paragraph">
+<p><span class="image"><img src="./Banner.png" alt="image"></span></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="quality-of-service"><a class="anchor" href="#quality-of-service"></a>6. Quality of Service</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="request-8"><a class="anchor" href="#request-8"></a>6.1. Request</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Method</th>
+<th class="tableblock halign-left valign-top">URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INTERFACE/qos/&lt;open-test-uuid&gt;</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="parameters-4"><a class="anchor" href="#parameters-4"></a>6.2. Parameters</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">open-test-uuid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mandatory. The open-test-uuid of the test.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="response-8"><a class="anchor" href="#response-8"></a>6.3. Response</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Status</th>
+<th class="tableblock halign-left valign-top">Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The resulting JSON, specified as following.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Test result could not be loaded.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="returned-json-2"><a class="anchor" href="#returned-json-2"></a>6.3.1. Returned JSON</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">error</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[{error-item}]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">testresultdetail_testdesc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[{testresultdetail-testdesc-item}]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">testresultdetail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[{testresultdetail-item}]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">testresultdetail_desc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[{testresultdetail-desc-item}]</p></td>
+</tr>
+</tbody>
+</table>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+error
+</td>
+<td class="hdlist2">
+<p>Error message(s).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+testresultdetail_testdesc
+</td>
+<td class="hdlist2">
+<p>Subtest descriptions containing description,
+name, and type of each subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+testresultdetail
+</td>
+<td class="hdlist2">
+<p>Detailed results of each subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+testresultdetail_desc
+</td>
+<td class="hdlist2">
+<p>Summaries of groups of subtest results.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="error-item"><a class="anchor" href="#error-item"></a>6.3.2. Error-item</h4>
+<div class="paragraph">
+<p>An array of strings, e.g. ["Test result could not be loaded."] if the
+open-test-uuid does not exist, and [] if no error has occurred.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="testresultdetail-testdesc-item"><a class="anchor" href="#testresultdetail-testdesc-item"></a>6.3.3. Testresultdetail-testdesc-item</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">desc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Bei diesem Test wird überprüft, ob die HTTP-Anfrage
+durch einen Proxy oder eine andere \"Middlebox\" verändert wird."</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Transparente Verbindung"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"NON_TRANSPARENT_PROXY"</p></td>
+</tr>
+</tbody>
+</table>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+desc
+</td>
+<td class="hdlist2">
+<p>Description of the subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+name
+</td>
+<td class="hdlist2">
+<p>Name of the subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+test_type
+</td>
+<td class="hdlist2">
+<p>Type of the subtest, i.e., WEBSITE, HTTP_PROXY,
+NON_TRANSPARENT_PROXY, DNS, TCP, or UDP.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="testresultdetail-item"><a class="anchor" href="#testresultdetail-item"></a>6.3.4. Testresultdetail-item</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">failure_count</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">uid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">432645</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">result</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSONObject</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{result-item}</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test_summary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"TCP Outgoing, Port: 585"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">success_count</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test_desc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"TCP Outgoing:\nEs wurde versucht, eine ausgehende
+Verbindung zum QoS-Testserver über den Port: 585 aufzubauen."</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"tcp"</p></td>
+</tr>
+</tbody>
+</table>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+failure_count
+</td>
+<td class="hdlist2">
+<p>Number of failures of this subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+uid
+</td>
+<td class="hdlist2">
+<p>Primary key of the subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+result
+</td>
+<td class="hdlist2">
+<p>Subtest results and objectives.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+test_summary
+</td>
+<td class="hdlist2">
+<p>Short description of subtest, e.g. protocol,
+incoming/outgoing, and port.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+success_count
+</td>
+<td class="hdlist2">
+<p>Number of successful test evaluations.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+test_desc
+</td>
+<td class="hdlist2">
+<p>Description of subtest type category.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+test_type
+</td>
+<td class="hdlist2">
+<p>Type of the test, i.e., website, http_proxy,
+non_transparent_proxy, dns, tcp, or udp.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="result-item"><a class="anchor" href="#result-item"></a>6.3.5. Result-item</h4>
+<div class="paragraph">
+<p>Values with name prefix dns_, http_, nontransproxy_, tcp_, udp_, and
+website_ are specific to the respective subtest types.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dns_objective_dns_record</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"A"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dns_objective_host</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"ebay.de",</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dns_objective_resolver</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Standard"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dns_objective_timeout</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"2000000000"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dns_result_duration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"47716302"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dns_result_entries</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"[\{\"dns_result_address\":\"66.135.211.132\",\"dns_result_ttl\":\"1884\"},\{\"dns_result_address\":\"66.135.215.61\",\"dns_result_ttl\":\"1884\"},\{\"dns_result_address\":\"66.211.181.235\",\"dns_result_ttl\":\"1884\"}]"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dns_result_entries_found</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"3"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dns_result_info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"OK"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dns_result_status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"NOERROR"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">duration_ns</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"614812708"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">http_objective_range</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"bytes=1000000-1004999"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">http_objective_url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://webtest.netztest.at/qostest/reference01.jpg" class="bare">http://webtest.netztest.at/qostest/reference01.jpg</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">http_result_hash</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"fc563e1e80b8cb964d712982fa2143c8"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">http_result_header</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Server: nginx\nDate: Fri, 03 Oct 2014
+16:43:36 GMT\nContent-Type: image/jpeg\nContent-Length:
+5000\nLast-Modified: Sat, 27 Sep 2014 14:07:37 GMT\nConnection:
+keep-alive\nContent-Range: bytes 1000000-1004999/9982005\n"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">http_result_length</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"5000"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">http_result_status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"206"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nontransproxy_objective_port</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"51182"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nontransproxy_objective_request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"GET / HTTR/7.9"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nontransproxy_objective_timeout</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"3000000000"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nontransproxy_result":</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"OK"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nontransproxy_result_response</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"GET / HTTR/7.9"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">start_time_ns</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"24429032022"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">start_time_ns</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"25759770876"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tcp_objective_out_port</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"585"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tcp_objective_timeout</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"2000000000"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tcp_result_out</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"OK"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tcp_result_out_response</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"PING"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"tcp"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">udp_objective_delay</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"300000000"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">udp_objective_out_num_packets</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"1"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">udp_objective_out_port</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"27015"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">udp_objective_timeout</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"2000000000"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">udp_result_out_num_packets</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"1"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">udp_result_out_packet_loss_rate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"0"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">udp_result_out_response_num_packets</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"1"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">website_objective_timeout</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"10000000000"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">website_objective_url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://webtest.netztest.at/kepler" class="bare">http://webtest.netztest.at/kepler</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">website_result_duration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"795957031"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">website_result_info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"OK"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">website_result_rx_bytes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"144439"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">website_result_status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"200"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">website_result_tx_bytes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"14900"</p></td>
+</tr>
+</tbody>
+</table>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+dns_objective_dns_record
+</td>
+<td class="hdlist2">
+<p>DNS record to request.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+dns_objective_host
+</td>
+<td class="hdlist2">
+<p>Target host of this subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+dns_objective_resolver
+</td>
+<td class="hdlist2">
+<p>DNS resolver to be used for this subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+dns_objective_timeout
+</td>
+<td class="hdlist2">
+<p>DNS query timeout in ns.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+dns_result_duration
+</td>
+<td class="hdlist2">
+<p>Time needed to complete the test.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+dns_result_entries
+</td>
+<td class="hdlist2">
+<p>Result of this test containing all dns entries that
+were found.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+dns_result_entries_found
+</td>
+<td class="hdlist2">
+<p>Number of entries found.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+dns_result_info
+</td>
+<td class="hdlist2">
+<p>Result status of this subtest (OK, TIMEOUT, or ERROR).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+dns_result_status
+</td>
+<td class="hdlist2">
+<p>Query status, e.g. NOERROR or NXDOMAIN.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+duration_ns
+</td>
+<td class="hdlist2">
+<p>Duration of the subtest in ns.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+http_objective_range
+</td>
+<td class="hdlist2">
+<p>String passed to the range request header.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+http_objective_url
+</td>
+<td class="hdlist2">
+<p>Target URL of this subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+http_result_hash
+</td>
+<td class="hdlist2">
+<p>Checksum of downloaded content or TIMEOUT or ERROR.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+http_result_header
+</td>
+<td class="hdlist2">
+<p>Header of HTTP response.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+http_result_length
+</td>
+<td class="hdlist2">
+<p>Length of downloaded content.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+http_result_status
+</td>
+<td class="hdlist2">
+<p>Status code in header of HTTP response (or -1 if no
+response).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+nontransproxy_objective_port
+</td>
+<td class="hdlist2">
+<p>Test port for non-transparent proxy
+subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+nontransproxy_objective_request
+</td>
+<td class="hdlist2">
+<p>Request string for this subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+nontransproxy_objective_timeout
+</td>
+<td class="hdlist2">
+<p>Timeout for this subtest in ns.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+nontransproxy_result
+</td>
+<td class="hdlist2">
+<p>Result status of this subtest (OK, TIMEOUT, or
+ERROR).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+nontransproxy_result_response
+</td>
+<td class="hdlist2">
+<p>Response (echo of the test server).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+start_time_ns
+</td>
+<td class="hdlist2">
+<p>Starting time of test in ns relative to beginning of RTR-
+NetTest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+tcp_objective_out_port
+</td>
+<td class="hdlist2">
+<p>Port number used for outgoing TCP subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+tcp_objective_timeout
+</td>
+<td class="hdlist2">
+<p>Timeout of this subtest in ns.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+tcp_result_out
+</td>
+<td class="hdlist2">
+<p>Result status of this subtest (OK or FAILED).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+tcp_result_out_response
+</td>
+<td class="hdlist2">
+<p>Response received by client after sending
+message to test server.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+test_type
+</td>
+<td class="hdlist2">
+<p>Type of subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+udp_objective_delay
+</td>
+<td class="hdlist2">
+<p>Delay between packets in ns.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+udp_objective_out_num_packets
+</td>
+<td class="hdlist2">
+<p>Number of packets sent by client.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+udp_objective_out_port
+</td>
+<td class="hdlist2">
+<p>Port number used for outgoing subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+udp_objective_timeout
+</td>
+<td class="hdlist2">
+<p>Timeout for this subtest in ns.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+udp_result_out_num_packets
+</td>
+<td class="hdlist2">
+<p>Number of packets received by test server.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+udp_result_out_packet_loss_rate
+</td>
+<td class="hdlist2">
+<p>Outgoing packet loss rate.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+udp_result_out_response_num_packets
+</td>
+<td class="hdlist2">
+<p>Responses to outgoing packets
+(used to determine packet loss rate).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+website_objective_timeout
+</td>
+<td class="hdlist2">
+<p>Timeout for website subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+website_objective_url
+</td>
+<td class="hdlist2">
+<p>Target URL of this subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+website_result_duration
+</td>
+<td class="hdlist2">
+<p>Time needed to download and render website in
+ns.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+website_result_info
+</td>
+<td class="hdlist2">
+<p>Result status of this subtest (OK, TIMEOUT, or
+ERROR).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+website_result_rx_bytes
+</td>
+<td class="hdlist2">
+<p>Bytes received during subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+website_result_status
+</td>
+<td class="hdlist2">
+<p>Status code in header of HTTP response (or -1 if
+no response).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+website_result_tx_bytes
+</td>
+<td class="hdlist2">
+<p>Bytes transmitted during subtest.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="testresultdetail-desc-item"><a class="anchor" href="#testresultdetail-desc-item"></a>6.3.6. Testresultdetail-desc-item</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">uid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[432659, 432660]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">desc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Der übertragene Inhalt entspricht exakt dem Original, er
+wurde nicht modifiziert."</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"HTTP_PROXY"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"ok"</p></td>
+</tr>
+</tbody>
+</table>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+uid
+</td>
+<td class="hdlist2">
+<p>Array of (numeric) primary keys of the subtest.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+desc
+</td>
+<td class="hdlist2">
+<p>Description of the subtest result.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+test
+</td>
+<td class="hdlist2">
+<p>Type of the subtest, i.e., WEBSITE, HTTP_PROXY,
+NON_TRANSPARENT_PROXY, DNS, TCP, or UDP.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+status
+</td>
+<td class="hdlist2">
+<p>Status of the subtest result.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="example-4"><a class="anchor" href="#example-4"></a>6.4. Example</h3>
+<div class="sect3">
+<h4 id="request-9"><a class="anchor" href="#request-9"></a>6.4.1. Request</h4>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>GET INTERFACE/qos/O56b5cc79-5669-4457-bce2-0aeaf3b7242f</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="response-9"><a class="anchor" href="#response-9"></a>6.4.2. Response</h4>
+<div class="literalblock">
+<div class="content">
+<pre>{
+
+    "error": [ ],
+    "testresultdetail_testdesc": [
+        {
+            "desc": "Beim Webseiten-Test wird eine Referenz-Webseite (mobile Kepler-Seite der ETSI) heruntergeladen. Es wird dabei überprüft, ob die Übertragung der Seite möglich ist, und wie lange die Übertragung der Seite dauert.",
+            "name": "Webseite",
+            "test_type": "WEBSITE"
+        },
+        {
+            "desc": "Bei diesem Test wird ein Test-Webobjekt (z.B. Bild) heruntergeladen und überprüft, ob es beim Transport verändert wurde.",
+            "name": "Unveränderter Inhalt",
+            "test_type": "HTTP_PROXY"
+        },
+        {
+            "desc": "Bei diesem Test wird überprüft, ob die HTTP-Anfrage durch einen Proxy oder eine andere \"Middlebox\" verändert wird.",
+            "name": "Transparente Verbindung",
+            "test_type": "NON_TRANSPARENT_PROXY"
+        },
+        {
+            "desc": "DNS ist ein fundamentaler Internetdienst. Er wird zur Übersetzung von Domain-Namen auf IP-Adressen verwendet. Es wird - je nach Test - getestet, ob der Dienst verfügbar ist, ob die Antworten korrekt sind und wie schnell der Server antwortet.",
+            "name": "DNS",
+            "test_type": "DNS"
+        },
+        {
+            "desc": "TCP ist ein wichtiges verbindungsloses Internetprotokoll. Es wird z.B. für die Übertragung von Webseiten und Mails verwendet.",
+            "name": "TCP Ports",
+            "test_type": "TCP"
+        },
+        {
+            "desc": "UDP ist ein wichtiges verbindungsorientiertes Internet-Protokoll, das für Echtzeitübertragungen (zB. VoIP, Video) verwendet wird.",
+            "name": "UDP Ports",
+            "test_type": "UDP"
+        }
+    ],
+    "testresultdetail": [
+        {
+            "failure_count": 0,
+            "uid": 432645,
+            "result": {
+                "tcp_objective_timeout": "2000000000",
+                "start_time_ns": "24429032022",
+                "tcp_result_out_response": "PING",
+                "tcp_result_out": "OK",
+                "tcp_objective_out_port": "585",
+                "duration_ns": "614812708"
+            },
+            "test_summary": "TCP Outgoing, Port: 585",
+            "success_count": 1,
+            "test_desc": "TCP Outgoing:\nEs wurde versucht, eine ausgehende Verbindung zum QoS-Testserver über den Port: 585 aufzubauen.",
+            "test_type": "tcp"
+        },
+        {
+            "failure_count": 0,
+            "uid": 432646,
+            "result": {
+                "start_time_ns": "24435081033",
+                "udp_objective_out_port": "27015",
+                "udp_result_out_response_num_packets": "1",
+                "udp_result_out_packet_loss_rate": "0",
+                "udp_objective_out_num_packets": "1",
+                "udp_result_out_num_packets": "1",
+                "udp_objective_timeout": "2000000000",
+                "udp_objective_delay": "300000000",
+                "duration_ns": "783956145"
+            },
+            "test_summary": "UDP Outgoing, Port: 27015, Anzahl Pakete: 1",
+            "success_count": 1,
+            "test_desc": "UDP Outgoing:\nAnzahl verschickter Pakete: 1, am Server angekommen: 1, am Client zurückgekommen: 1.\nPaketverlustrate: 0%",
+            "test_type": "udp"
+        },
+        ...,
+        {
+            "failure_count": 0,
+            "uid": 432657,
+            "result": {
+                "start_time_ns": "25296847907",
+                "nontransproxy_result": "OK",
+                "nontransproxy_result_response": "GET / HTTR/7.9",
+                "nontransproxy_objective_timeout": "3000000000",
+                "nontransproxy_objective_port": "51182",
+                "nontransproxy_objective_request": "GET / HTTR/7.9",
+                "duration_ns": "452739583"
+            },
+            "test_summary": "Port: 51182\nAnfrage: GET / HTTR/7.9",
+            "success_count": 1,
+            "test_desc": "Eine HTTP Anfrage mit dem Inhalt: 'GET / HTTR/7.9' wurde an den Testserver (Port: 51182) geschickt.\nDie Antwort war: 'GET / HTTR/7.9'",
+            "test_type": "non_transparent_proxy"
+        },
+        {
+            "failure_count": 0,
+            "uid": 432659,
+            "result": {
+                "http_objective_range": "bytes=1000000-1004999",
+                "start_time_ns": "25759770876",
+                "http_result_status": "206",
+                "http_result_length": "5000",
+                "http_result_header": "Server: nginx\nDate: Fri, 03 Oct 2014 16:43:36 GMT\nContent-Type: image/jpeg\nContent-Length: 5000\nLast-Modified: Sat, 27 Sep 2014 14:07:37 GMT\nConnection: keep-alive\nContent-Range: bytes 1000000-1004999/9982005\n",
+                "http_objective_url": "http://webtest.netztest.at/qostest/reference01.jpg",
+                "http_result_hash": "fc563e1e80b8cb964d712982fa2143c8",
+                "duration_ns": "225194896"
+            },
+            "test_summary": "Ziel: http://webtest.netztest.at/qostest/reference01.jpg",
+            "success_count": 1,
+            "test_desc": "Ziel: 'http://webtest.netztest.at/qostest/reference01.jpg'\nIntervall: bytes=1000000-1004999\nDauer: 0,2 s\nLänge: 5000\r\nStatus Code: 206\nHash: fc563e1e80b8cb964d712982fa2143c8\nHeader: \r\nServer: nginx\nDate: Fri, 03 Oct 2014 16:43:36 GMT\nContent-Type: image/jpeg\nContent-Length: 5000\nLast-Modified: Sat, 27 Sep 2014 14:07:37 GMT\nConnection: keep-alive\nContent-Range: bytes 1000000-1004999/9982005\n",
+            "test_type": "http_proxy"
+        },
+        ...,
+        {
+            "failure_count": 0,
+            "uid": 432661,
+            "result": {
+                "start_time_ns": "26652727959",
+                "website_result_tx_bytes": "14900",
+                "website_objective_url": "http://webtest.netztest.at/kepler",
+                "website_result_rx_bytes": "144439",
+                "website_result_info": "OK",
+                "website_result_duration": "795957031",
+                "website_objective_timeout": "10000000000",
+                "website_result_status": "200",
+                "duration_ns": "813012239"
+            },
+            "test_summary": "Ziel: http://webtest.netztest.at/kepler",
+            "success_count": 1,
+            "test_desc": "Die Übertragung von http://webtest.netztest.at/kepler dauerte 0,8 s.\r\n\nDatenvolumen Downlink: 144,4 kB\nDatenvolumen Uplink: 14,9 kB\nHTTP Status code: 200",
+            "test_type": "website"
+        },
+        {
+            "failure_count": 0,
+            "uid": 432662,
+            "result": {
+                "start_time_ns": "27471066031",
+                "dns_objective_timeout": "2000000000",
+                "dns_result_info": "OK",
+                "dns_result_entries_found": "3",
+                "dns_objective_resolver": "Standard",
+                "dns_result_duration": "34847865",
+                "dns_result_entries": "[{\"dns_result_address\":\"17.142.160.59\",\"dns_result_ttl\":\"3540\"},{\"dns_result_address\":\"17.178.96.59\",\"dns_result_ttl\":\"3540\"},{\"dns_result_address\":\"17.172.224.47\",\"dns_result_ttl\":\"3540\"}]",
+                "dns_result_status": "NOERROR",
+                "dns_objective_dns_record": "A",
+                "dns_objective_host": "apple.com",
+                "duration_ns": "34921927"
+            },
+            "test_summary": "Ziel: apple.com \nEintrag: A\nDNS-Auflöser: Standard",
+            "success_count": 1,
+            "test_desc": "DNS Anfrage für die Domain: apple.com\nAbgefragter Typ: A-Record.\n\nTestergebnis: \nDNS Status: NOERROR\nDNS-Einträge: [[address=17.172.224.47, ttl=3540], [address=17.178.96.59, ttl=3540], [address=17.142.160.59, ttl=3540]]\r\nDauer: 35 ms",
+            "test_type": "dns"
+        },
+        ...
+    ],
+    "testresultdetail_desc": [
+        {
+            "uid": [
+                432659,
+                432660
+            ],
+            "desc": "Der übertragene Inhalt entspricht exakt dem Original, er wurde nicht modifiziert.",
+            "test": "HTTP_PROXY",
+            "status": "ok"
+        },
+        {
+            "uid": [
+                432646,
+                ...,
+                432656
+            ],
+            "desc": "Der UDP-Test war erfolgreich. Alle Pakete sind angekommen.",
+            "test": "UDP",
+            "status": "ok"
+        },
+        {
+            "uid": [
+                432645,
+                ...,
+                432644
+            ],
+            "desc": "Der TCP-Test war erfolgreich. Es konnte eine Verbindung aufgebaut werden.",
+            "test": "TCP",
+            "status": "ok"
+        },
+        {
+            "uid": [
+                432701
+            ],
+            "desc": "DNS Abfrage erfolgreich (verwendeter DNS-Server: 8.8.8.8)",
+            "test": "DNS",
+            "status": "ok"
+        },
+        ...,
+        {
+            "uid": [
+                432667,
+                ...,
+                432703
+            ],
+            "desc": "Eine DNS-Anfrage für eine nicht existierende Domain war erfolgreich, es wurden keine Einträge gefunden.",
+            "test": "DNS",
+            "status": "ok"
+        },
+        {
+            "uid": [
+                432657,
+                432658
+            ],
+            "desc": "Die HTTP Anfrage an den QoS-Testserver wurde nicht verfälscht.",
+            "test": "NON_TRANSPARENT_PROXY",
+            "status": "ok"
+        },
+        {
+            "uid": [
+                432661
+            ],
+            "desc": "Die Webseite wurde erfolgreich übertragen.",
+            "test": "WEBSITE",
+            "status": "ok"
+        }
+    ]
+
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2015-06-08 11:55:58 MS
+</div>
+</div>
+</body>
+</html>
