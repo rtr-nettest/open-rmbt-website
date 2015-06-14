@@ -162,7 +162,7 @@ function viewMap() {
                                         crossOriginKeyword: null
                                 },
                                 transitionEffect: "resize",
-                                numZoomLevels: 17,
+                                numZoomLevels: 17
                         });
                 bases.push(base_rtr);
         }
@@ -260,7 +260,7 @@ function viewMap() {
         map.addControl(click);
         click.activate();
 
-        $(this).find("input:radio[name='check_layer']").click(function() {
+        $("#auswahl_selector").find("input:radio[name='check_layer']").click(function() {
                 setLayers();
         });
         
