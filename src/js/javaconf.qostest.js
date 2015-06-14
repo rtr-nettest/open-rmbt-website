@@ -3,7 +3,6 @@
 var controlProxy = "";
 var mapProxy = "";
 var wspath = "RMBTControlServer";
-var mappath = "RMBTMapServer";
 var statisticpath = "RMBTStatisticServer";
 
 var developerCode = 17031552; //otherwise: 0;

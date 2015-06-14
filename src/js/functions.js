@@ -166,7 +166,7 @@ function RMBTmapfilter(options) {
 
         
         $.ajax({
-                url: mapProxy+"/" + mappath + "/tiles/info",
+                url: mapProxy + "/tiles/info",
                 type: "post",
                 dataType: "json",
                 contentType: "application/json",

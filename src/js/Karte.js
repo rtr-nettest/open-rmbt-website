@@ -65,7 +65,7 @@ $(document).ready(function() {
                 data: JSON.stringify(json_data),
                 success: function (data) {
                         URL_MAP_SERVER = data.settings[0].urls.url_map_server + "/tiles";
-                        mapProxy = data.settings[0].urls.url_map_server.replace(mappath,"");
+                        mapProxy  = data.settings[0].urls.url_map_server;
                         viewMap();
                 }
         });
@@ -581,7 +581,7 @@ function loadMarker(lonlat) {
 
         $.ajax({
                 //url : "http://localhost:8080/RMBTMapServer/tiles/markers",
-                url: mapProxy + "/" + mappath + "/tiles/markers",
+                url: mapProxy + "/tiles/markers",
                 type: "post",
                 dataType: "json",
                 contentType: "application/json",

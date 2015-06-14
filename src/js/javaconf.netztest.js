@@ -1,9 +1,8 @@
 var controlProxy = "";
 var mapProxy = "";
 //var controlProxy = "https://develop.netztest.at";
-//var mapProxy = "https://www.netztest.at";
+//var mapProxy = "" - filled in dynamically
 var wspath = "RMBTControlServer";
-var mappath = "RMBTMapServer";
 var statisticpath = "RMBTStatisticServer";
 
 var developerCode = 0; //otherwise: 0;
