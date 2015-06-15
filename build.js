@@ -5,12 +5,15 @@
  */
 
     //https://github.com/segmentio/metalsmith/blob/master/examples/project-scaffolder/build.js
+var RTR_FILES_BASEURL = "https://develop2.netztest.at/tmp/";
+var RTR_LINKS_BASEURL = "https://www.rtr.at/";
 
 
 var debug = require('debug')('nodeNetztest:server');
 var request = require('request');
 var fs = require('fs');
 var path = require('path');
+var cheerio = require('cheerio');
 
 
 var Metalsmith = require('metalsmith');
@@ -50,6 +53,15 @@ if (target === null ){
 //execute
 var metalsmith = Metalsmith(__dirname)
     .use(fetchRemoteFiles(remoteFiles))
+    .use(fetchRemoteFiles(function() {
+        return transformRemoteNetztestJSONtoFetchableFiles(require('./conf/filelist_nettest.json'))
+    }))
+    .use(transformRTRUrls([
+        "./templates/parts/02_navigation_de.html",
+        "./templates/parts/02_navigation_en.html",
+        "./templates/parts/04_contentToFooter_de.html",
+        "./templates/parts/04_contentToFooter_en.html"
+    ]))
     .use(setConfig())
     .use(duplicateFile())
     .use(templates({
@@ -58,7 +70,7 @@ var metalsmith = Metalsmith(__dirname)
     .use((useWatch) ? (watch({
         paths: {
             "${source}/**/*": true,
-            "templates/**/*": "**/*.html",
+            "templates/**/*": "**/*.html"
         }
     })) : null)
     .build(function(err) {
@@ -70,8 +82,34 @@ setTimeout(function() {
     if (!useWatch) {
         process.exit();
     }
-}, 15000)
+}, 15000);
 
+
+
+/**
+ * Transform the filelist provided by alladin-it for RTR-dependencies
+ * to accomodate the fetchRemoteFiles-Metalsmith-Plugin
+ * @param json
+ */
+function transformRemoteNetztestJSONtoFetchableFiles(json) {
+    var filesArray = [];
+    json.forEach(function(arg) {
+        if (arg.dirAndFile.indexOf("/__nettest") === 0) {
+            var file = {
+                source : RTR_FILES_BASEURL + arg.dirAndFile,
+                target : "./templates/parts/" + arg.file
+            };
+        }
+        else {
+            var file = {
+                source : RTR_FILES_BASEURL + arg.dirAndFile,
+                target : "src/" + arg.dirAndFile.replace("fileadmin","fileadmin.netztest")
+            };
+        }
+        filesArray.push(file);
+    });
+    return filesArray;
+}
 
 
 /**
@@ -80,18 +118,69 @@ setTimeout(function() {
  */
 function fetchRemoteFiles(fileList) {
     return function (files, metalsmith, done) {
+        var filesArray;
+        if (typeof fileList == "function") {
+            filesArray = fileList();
+        }
+        else {
+            filesArray = fileList;
+        }
+
         var downloaded = 0;
-        fileList.forEach(function (fileInfo) {
+        filesArray.forEach(function (fileInfo) {
             var file = fs.createWriteStream(fileInfo.target);
-            request(fileInfo.source).pipe(file).on('finish', function () {
-                console.log("Downloaded File: " + fileInfo.source + " -> " + fileInfo.target);
+            request(fileInfo.source, {
+                pool: {
+                    maxSockets: 10
+                },
+                time: 100000
+            }).pipe(file).on('finish', function () {
                 downloaded++;
-                if (downloaded === fileList.length) {
+                console.log("Downloaded File: (" + downloaded + "/" + filesArray.length + ")" + fileInfo.source + " -> " + fileInfo.target);
+                if (downloaded === filesArray.length) {
                     done();
                 }
-            })
-            ;
+            });
         });
+    }
+}
+
+/**
+ * Replaces all URLS in the given files with URLS now redirecting
+ * to the RTR baseurl
+ *
+ * @param fileList
+ * @returns {Function}
+ */
+function transformRTRUrls(fileList) {
+    return function(files, metalsmith, done) {
+        var count = 0;
+        fileList.forEach(function(path) {
+            fs.readFile(path, function(err, data) {
+                var $ = cheerio.load(data);
+
+                $("a[href]").each(function(t) {
+                    var href = $(this).attr("href");
+
+                    //only replace relative URLs (no mailtos, tel, http, etc.)
+                    if (href.indexOf(":") === -1 || href.indexOf(":") > 6) {
+                        $(this).attr("href", RTR_LINKS_BASEURL + href);
+                    }
+                });
+
+                var html = $.html();
+
+                fs.writeFile(path, html, function(err) {
+                    count++;
+                    console.log("replaced relative urls in: "  + path)
+
+                    if (count === fileList.length) {
+                        done();
+                    }
+                });
+            })
+        });
+
     }
 }
 
@@ -106,7 +195,6 @@ function setConfig() {
         Object.keys(files).forEach(function (file) {
             targets.forEach(function(cTarget) {
                 //@TODO: Refine
-                //console.log(file + " - " + cTarget + " --> " + (file.indexOf("." + cTarget)))
                 if (file.indexOf("." + cTarget) > 0) {
                     //rename if target, delete otherwise
                     if (cTarget === target) {
@@ -142,7 +230,7 @@ function duplicateFile() {
                         });
                     }
                 }
-            }
+            };
 
             Object.keys(lang.strings).forEach(function(key) {
                 flattenTargetTree(lang.strings, key);

@@ -123,6 +123,7 @@ exports.strings = {
     "help_url" : "https://www.netztest.at/redirect/de/help",
     "imprint" : "Impressum",
     "imprint_url" : "https://www.rtr.at/de/rtr/impressum",
+    "menu" : "Menü",
 
     //common words
     "top" : "Seitenanfang",

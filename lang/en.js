@@ -123,6 +123,7 @@ exports.strings = {
     "help_url": "https://www.rtr.at/en/tk/netztesthilfe",
     "imprint" : "Publishing information",
     "imprint_url" : "https://www.rtr.at/en/rtr/impressum",
+    "menu" : "Menu",
 
     //common words
     "top" : "Top",

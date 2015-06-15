@@ -1,135 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html class="no-js">
 <head>
-    {% block headerscriptingBasic %}
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="generator" content="TYPO3 4.5 CMS" />
-    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="../css/rtr-screen.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="../css/rtr-print.css" media="print" />
+    <meta charset="utf-8">
 
-    <script type="text/javascript" src="../js/jquery-1.8.2.min.js"></script>
-    <script type="text/javascript" src="../js/menu.js"></script>
-    <script type="text/javascript" src="../js/jquery-ui-1.9.0.custom.min.js"></script>
-    <script type="text/javascript" src="../js/jquery.history.js"></script>
-    <script type="text/javascript" src="../js/javaconf.js"></script>
-    <script type="text/javascript" src="../js/functions.js"></script>
+    <base href="http://localhost">
 
-    <script type="text/javascript" src="Lang.js"></script>
-    <script type="text/javascript" src="../js/popupform.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="TYPO3 6.2 CMS">
+    <meta name="charset" content="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="keywords" content="RTR,Rundfunk,Telekom,Regulierung,Netztest,Rufnummernsuche,Senderkataster">
+    <meta name="description" content="Website der RTR-GmbH">
+    <meta name="copyright" content="2015 RTR-GmbH">
 
-
-    <link rel="stylesheet" type="text/css" href="../css/style.css" media="screen" />
-    <link rel='stylesheet' type="text/css" href='../css/senderkataster.css'>
-
-    <link rel="stylesheet" type="text/css" href="../css/jquery-ui-1.8.14.custom.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="../css/rtr-mobile.css" media="screen" />
-
-    {% endblock %}
+    <meta name="description" content="">
 
     {% block viewport %}
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     {% endblock %}
+
+    {% block headerscriptingBasic %}
+    <link rel="stylesheet" type="text/css" href="/fileadmin/template/rtr/css/normalize.min.css?1431519456" media="all">
+    <link rel="stylesheet" type="text/css" href="/fileadmin/template/rtr/css/main.css?1434116672" media="all">
+
+
+    <script src="/fileadmin/template/rtr/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js?1431519457"
+            type="text/javascript"></script>
+    <script src="/fileadmin/template/rtr/js/vendor/jquery-1.11.1.min.js?1431519457" type="text/javascript"></script>
+    <script src="/fileadmin/template/main/js/collapse.js?1433763327" type="text/javascript"></script>
+    {% endblock %}
+
 
     {% block headerscriptingExtended %}
     {% endblock %}
 
     <title>{{ Lang.title }}</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="apple-touch-icon-precomposed" href="/fileadmin/template/rtr/img/apple-touch-icon-precomposed.png"/>
+    <link rel="alternate" type="application/rss+xml" title="RSS-Feed RTR Aktuelles"
+          href="https://cms2015.alladin.at/de/rss/aktuelles"/>
+
 </head>
-<body class="content_site">
+<body class="task-telekom">
+<div class="container">
+    <div class="menu-trigger" aria-hidden="true">
+        <a href="#" id="trigger" class="toggle-menu" title="">{{ Lang.menu }}</a>
+    </div>
 
-<div class="wrapper">
-    <div class="hgwrapper">
-
-        <div class="hgtop">
-            <div id="site" class="TK">
-                <a name="top"></a>
-
-                <div id="header">
-                    <div class="header_left">
-
-                        <!-- grep - submenu_start -->
-                        {% if Lang.lang == "de" %}
-                            {% include "templates/parts/netztestMenu_de.html" %}
-                        {% else %}
-                            {% include "templates/parts/netztestMenu_en.html" %}
-                        {% endif %}
-                        <!--/Left -->
-                        <div class="content_text">
-                            <img src="/fileadmin/template/main/img/logo_RTR_print.gif" class="show_print"
-                                 alt="RTR - Rundfunk &amp; Telekom Regulierungs-GmbH"/>
-
-                            <div class="position">
-                                <ul>
-                                    <li><a href="https://www.rtr.at/" class="position_home">Home</a></li>
-                                    <li><a href="https://www.rtr.at/en/tk/Medien">Telekommunikation</a></li>
-                                    <li><a href="https://www.rtr.at/en/tk/KonsumentenService">Konsumentenservice</a>
-                                    </li>
-                                    <li><a href="https://develop.netztest.at/en/">{{ Lang.headline }}</a></li>
-                                </ul>
-                            </div>
-                            <h1 class="flash">{{ Lang.headline }}</h1>
-
-                            <div class="text100">
+    <div class="mp-pusher" id="mp-pusher">
 
 
-                                <!-- Content Begin -->
-                                <div id="popupform"></div>
+        {% if Lang.lang == "de" %}
+        {% include "templates/parts/02_navigation_de.html" %}
+        {% else %}
+        {% include "templates/parts/02_navigation_en.html" %}
+        {% endif %}
+
+        <div class="scroller"><!-- this is for emulating position fixed of the nav -->
+            <div class="scroller-inner">
+
+                {% if Lang.lang == "de" %}
+                {% include "templates/parts/03_navigationToContent_de.html" %}
+                {% else %}
+                {% include "templates/parts/03_navigationToContent_en.html" %}
+                {% endif %}
 
 
-                                {% block content %}
+                <div class="main-container" role="main">
+                    <div class="main wrapper clearfix">
 
+                        <!-- Page content goes here. -->
+                        <article class="main-article">
+                            <header class="clearfix">
+                                <h1 class="main-article-header">{{ title }}</h1>
+                            </header>
 
-                                {% endblock %}
-                                <!-- Content End -->
-                            </div>
-                            <div class="teaser">
+                            {% block content %}
 
-                            </div>
+                            {% endblock %}
+                        </article>
+                        <!-- .main-article -->
 
-                            <div class="site_function">
-                                <ul>
-                                    <li><a href="#top" class="top">{{ Lang.top }}</a></li>
-                                    <li><a href="javascript:window.print()" class="print">{{ Lang.print }}</a></li>
-                                </ul>
-                            </div>
+                        <aside class="main-aside" role="complementary">
+                            {% block sideContent %}
 
-                            <!-- grep - content_ende -->
-                        </div>
-
+                            {% endblock %}
+                        </aside>
+                        <!-- .main-aside -->
                     </div>
-
-                    <!-- Right -->
-                    <div id="right">
-
-                        <div class="sidebar">
-
-
-                        </div>
-
-                    </div>
-
-
+                    <!-- .main -->
                 </div>
+                <!-- .main-container -->
 
-
-                <div id="footer">
-                    <div class="left">Copyright &copy; Rundfunk und Telekom Regulierungs-GmbH (RTR-GmbH)</div>
-                    <div class="right"><a href="{{ Lang.imprint_url }}">{{ Lang.imprint }}</a></div>
-                    <div class="clear"></div>
-                </div>
+                {% if Lang.lang == "de" %}
+                {% include "templates/parts/04_contentToFooter_de.html" %}
+                {% else %}
+                {% include "templates/parts/04_contentToFooter_en.html" %}
+                {% endif %}
 
             </div>
-
-
-            <!--
-            <script language="javascript" type="text/javascript" src="fileadmin/template/main/js/flashtitle.js"></script>
-            -->
-            <div class="clear"></div>
+            <!-- .scroller-inner -->
         </div>
+        <!-- .scroller -->
     </div>
+    <!-- .pusher -->
 </div>
-<div class="bottomMargin"></div>
+<!-- .container -->
+
+{% include "templates/parts/05_footerScripts_de.html" %}
 
 
 </body>
