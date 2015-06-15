@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% block headerscriptingBasic %}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="generator" content="TYPO3 4.5 CMS" />
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="../css/rtr-screen.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../css/rtr-print.css" media="print" />
+
+    <script type="text/javascript" src="../js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="../js/menu.js"></script>
+    <script type="text/javascript" src="../js/jquery-ui-1.9.0.custom.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.history.js"></script>
+    <script type="text/javascript" src="../js/javaconf.js"></script>
+    <script type="text/javascript" src="../js/functions.js"></script>
+
+    <script type="text/javascript" src="Lang.js"></script>
+    <script type="text/javascript" src="../js/popupform.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css" media="screen" />
+    <link rel='stylesheet' type="text/css" href='../css/senderkataster.css'>
+
+    <link rel="stylesheet" type="text/css" href="../css/jquery-ui-1.8.14.custom.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../css/rtr-mobile.css" media="screen" />
+
+    {% endblock %}
+
+    {% block viewport %}
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    {% endblock %}
+
+    {% block headerscriptingExtended %}
+    {% endblock %}
+
+    <title>{{ Lang.title }}</title>
+</head>
+<body class="content_site">
+
+<div class="wrapper">
+    <div class="hgwrapper">
+
+        <div class="hgtop">
+            <div id="site" class="TK">
+                <a name="top"></a>
+
+                <div id="header">
+                    <div class="header_left">
+
+                        <!-- grep - submenu_start -->
+                        {% if Lang.lang == "de" %}
+                            {% include "templates/parts/netztestMenu_de.html" %}
+                        {% else %}
+                            {% include "templates/parts/netztestMenu_en.html" %}
+                        {% endif %}
+                        <!--/Left -->
+                        <div class="content_text">
+                            <img src="/fileadmin/template/main/img/logo_RTR_print.gif" class="show_print"
+                                 alt="RTR - Rundfunk &amp; Telekom Regulierungs-GmbH"/>
+
+                            <div class="position">
+                                <ul>
+                                    <li><a href="https://www.rtr.at/" class="position_home">Home</a></li>
+                                    <li><a href="https://www.rtr.at/en/tk/Medien">Telekommunikation</a></li>
+                                    <li><a href="https://www.rtr.at/en/tk/KonsumentenService">Konsumentenservice</a>
+                                    </li>
+                                    <li><a href="https://develop.netztest.at/en/">{{ Lang.headline }}</a></li>
+                                </ul>
+                            </div>
+                            <h1 class="flash">{{ Lang.headline }}</h1>
+
+                            <div class="text100">
+
+
+                                <!-- Content Begin -->
+                                <div id="popupform"></div>
+
+
+                                {% block content %}
+
+
+                                {% endblock %}
+                                <!-- Content End -->
+                            </div>
+                            <div class="teaser">
+
+                            </div>
+
+                            <div class="site_function">
+                                <ul>
+                                    <li><a href="#top" class="top">{{ Lang.top }}</a></li>
+                                    <li><a href="javascript:window.print()" class="print">{{ Lang.print }}</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- grep - content_ende -->
+                        </div>
+
+                    </div>
+
+                    <!-- Right -->
+                    <div id="right">
+
+                        <div class="sidebar">
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div id="footer">
+                    <div class="left">Copyright &copy; Rundfunk und Telekom Regulierungs-GmbH (RTR-GmbH)</div>
+                    <div class="right"><a href="{{ Lang.imprint_url }}">{{ Lang.imprint }}</a></div>
+                    <div class="clear"></div>
+                </div>
+
+            </div>
+
+
+            <!--
+            <script language="javascript" type="text/javascript" src="fileadmin/template/main/js/flashtitle.js"></script>
+            -->
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+<div class="bottomMargin"></div>
+
+
+</body>
+</html>
