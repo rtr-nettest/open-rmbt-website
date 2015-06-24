@@ -26,91 +26,106 @@
 
 {% endblock %}
 
+
+{% block sideContent %}
+	<h5 class="main-aside-header">XX_Weitere Links</h5>
+	<div class="main-aside-content-block">
+		<ul>
+		
+			<li><a href="/{{ Lang.lang }}/Verlauf">{{ Lang.index_content.select_version }}</a></li>
+			<li><a href="/{{ Lang.lang }}/Verlauf">{{ Lang.history }}</a></li>
+			<li><a href="/{{ Lang.lang }}/Karte">{{ Lang.map }}</a></li>
+			<li><a href="/{{ Lang.lang }}/Statistik">{{ Lang.statistics }}</a></li>
+			<li><a href="/{{ Lang.lang }}/Optionen">{{ Lang.options }}</a></li>
+			<li><a href="/{{ Lang.lang }}/Opendata">{{ Lang.opendata }}</a></li>
+			<li><a href="https://www.rtr.at/{{ Lang.lang }}/tk/netztesthilfe">{{ Lang.help }}</a></li>
+		</ul>
+	</div>
+	
+	<h5 class="main-aside-header">XX_RTR-Netztest Hilfe</h5>
+	<div class="main-aside-content-block">
+		<ul>
+		
+			<li><a href="https://www.rtr.at/{{ Lang.lang }}/tk/netztesthilfe">XX_Auf den folgenden Seiten finden Sie Antworten zu Fragen rund um den RTR-Netztest.</a></li>
+		</ul>
+	</div>
+	
+	
+	<h5 class="main-aside-header">XX_RTR-Netztest App</h5>
+	<div class="main-aside-content-block">
+		<ul>
+		
+			<li><a href="https://www.rtr.at/{{ Lang.lang }}/tk/rtrnetztest_tests">XX_Laden Sie die RTR-Netztest App für Ihr <a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">iOS-Gerät</a> oder <a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android">Android-Gerät</a> herunter oder verwenden Sie einen der <a href="https://www.rtr.at/de/tk/rtrnetztest_tests">browserbasierten Tests</a>.</li>
+		</ul>
+	</div>
+
+{% endblock %}
+                                
+                                
 {% block content %}
-<div class="teaser">
-    <div class="teaserzeile">
-        <div class="teaser270 fullwidth">
-            <h2 class="RTR"><a href="/{{ Lang.lang }}/Test">{{ Lang.index_content.test_section.heading }}</a></h2>
 
-            <div class="image">
-                <a href="/{{ Lang.lang }}/Test"><img src="{{ Lang.index_content.test_section.source }}"
-                                        alt="RTR-NetTest teaser"/></a>
-            </div>
-            <div class="text">
-                <a href="/{{ Lang.lang }}/Test"><h3 class="flash">{{ Lang.index_content.test_section.start }}</h3></a>
-            </div>
-        </div>
-    </div>
+ <section class="preface clearfix">
+ <p>
+        {{ Lang.index_content.service_description }}
+    </p>
+    <p>
+    	<a href="{{ Lang.index_content.tos.url }}">{{ Lang.index_content.tos.text }}</a>
+    </p>
+</section>
 
-    <div class="teaserzeile">
-        <div class="teaser270 teaser480">
-            <h2 class="RTR">
-                <a href="https://www.rtr.at/{{ Lang.lang }}/tk/rtrnetztest_tests">{{ Lang.index_content.select_version }}</a>
-            </h2>
 
-            <div class="image">
-                <a href="{{ Lang.index_content.apps_url }}">
-                    <img src="../img/qostest/app-logo.png" alt="{{ Lang.index_content.apps_alt }}"/>
-                </a>
-            </div>
-            <div class="text">
-                <h3 class="flash">
-                    <a href="https://www.rtr.at/en/tk/rtrnetztest_tests">{{ Lang.index_content.apps }}</a>
-                </h3>
 
-                <p>
-                    {{ Lang.index_content.apps_content }}
-                </p>
-            </div>
-        </div>
 
-        <div class="teaser270 teaser480">
-            <h2 class="RTR"><a href="/{{ Lang.lang }}/Statistik">{{ Lang.statistics }}</a></h2>
+		<section class="teaser-element clearfix">
+			<div class="teaser-button netztest not-mobile full-link">
+				<div class="teaser-button-inner not-mobile  clearfix">
+					<div class="teaser-icon" aria-hidden="true">W</div>
+					<h4 class="teaser-headline"><a href="/{{ Lang.lang }}/Test">{{ Lang.index_content.test_section.heading }}</a></h4>
+				</div>
+			
+			</div>
+		</section>
+		
+		<section class="teaser-element clearfix">
+			<div class="teaser-button netztest only-mobile full-link">
+				<div class="teaser-button-inner only-mobile clearfix">
+					<div class="teaser-icon " aria-hidden="true">Z</div>
+					<h4 class="teaser-headline"><a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">{{ Lang.index_content.apps }} iOS</a></h4>
+				</div>
+			</div>
+			
+			<div class="teaser-button netztest only-mobile full-link">
+				<div class="teaser-button-inner only-mobile clearfix">
+					<div class="teaser-icon " aria-hidden="true">Z</div>
+					<h4 class="teaser-headline"><a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android">{{ Lang.index_content.apps }} Android</a></h4>
+				</div>
+			</div>
+		</section>
+		
+		<section class="teaser-element clearfix not-mobile">
+			<div class="teaser-block full-link">
+				<div class="teaser-icon" aria-hidden="true">X</div>
+				<div class="teaser-text">
+					<h4 class="teaser-headline"><a href="/{{ Lang.lang }}/Statistik">{{ Lang.statistics }}</a></h4>
+					<p>{{ Lang.statistics }}</p>
+				</div>
+			</div>
+			
+			<div class="teaser-block full-link">
+				<div class="teaser-icon" aria-hidden="true">Y</div>
+				<div class="teaser-text">
+					<h4 class="teaser-headline"><a href="/{{ Lang.lang }}/Karte">{{ Lang.index_content.map }}</a></h4>
+					<p>{{ Lang.index_content.map_content }}</p>
+				</div>
+			</div>  
+		</section>
 
-            <div class="image">
-                <a href="/{{ Lang.lang }}/Statistik"><img src="../img/qostest/statistik.png"
-                                             alt="{{ Lang.index_content.statistics_alt }}"/></a>
-            </div>
-            <div class="text">
-                <a href="/{{ Lang.lang }}/Statistik"><h3 class="flash">{{ Lang.statistics }}</h3></a>
 
-                <p>{{ Lang.statistics }}</p>
-            </div>
-        </div>
-    </div>
 
-    <div class="teaserzeile">
-        <div class="teaser270 teaser480">
-            <h2 class="RTR"><a href="/en/Karte">{{ Lang.index_content.map }}</a></h2>
 
-            <div class="image">
-                <a href="/{{ Lang.lang }}/Karte"><img src="../img/qostest/karte.png"
-                                         alt="Map teaser"/></a>
-            </div>
-            <div class="text">
-                <a href="/{{ Lang.lang }}/Karte"><h3 class="flash">{{ Lang.index_content.map }}</h3></a>
 
-                <p>{{ Lang.index_content.map_content }}</p>
-            </div>
-        </div>
-        <div class="teaser270 teaser480">
-            <h2 class="RTR">
-                <a class="teaser" href="https://www.netztest.at/redirect/en/help">{{ Lang.help }}</a>
-            </h2>
 
-            <div class="image">
-                <a href="{{ Lang.help_url }}"><img
-                        src="../img/qostest/hilfe.png" alt="Help teaser"/></a>
-            </div>
-            <div class="text">
-                <a href="{{ Lang.help_url}}"><h3 class="flash">
-                    {{ Lang.help }}</h3></a>
 
-                <p>{{ Lang.index_content.help_content }}</p>
-            </div>
-        </div>
-    </div>
-</div>
 <br class="clear"/>
 
 {% if target == "qostest" %}
@@ -140,12 +155,5 @@
 </div>
 {% endif %}
 
-<div class="csc-default">
-    <p>
-        {{ Lang.index_content.service_description }}
-    </p>
-    <a href="{{ Lang.index_content.tos.url }}">{{ Lang.index_content.tos.text }}</a>
 
-
-</div>
 {% endblock %}
