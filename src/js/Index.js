@@ -6,7 +6,7 @@ $(document).ready(function() {
     if (mobile_client.match(/Android|Opera M(obi|ini)|Dolfin|Dolphin/g)) {
         //@TODO: Save links somewhere else
         var url = 'https://play.google.com/store/apps/details?id=at.alladin.rmbt.android';
-        $(".teaserzeile .teaser270.fullwidth .text a").attr("href",url);
+        $("#teaserlinkStart a").attr("href",url);
         $("#hint-jstest").show();
     }
 
@@ -14,7 +14,7 @@ $(document).ready(function() {
     if (mobile_client.match(/iP(hone|od|ad)/g)) {
         $("#iOSApp").show();
         var url = 'https://itunes.apple.com/at/app/rtr-netztest/id724321403';
-        $(".teaserzeile .teaser270.fullwidth .text a").attr("href",url);
+        $("#teaserlinkStart a").attr("href",url);
         $("#hint-jstest").show();
     } 
     
