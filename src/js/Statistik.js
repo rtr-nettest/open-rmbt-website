@@ -52,7 +52,10 @@ $(document).ready(function() {
 
 
 function adjustTablesToWindowSize() {
-    var device_width = $(".text100").width();
+    //var device_width = $(".text100").width();
+    var device_width = $(".main-article").width();
+    
+    
     //decide which table to display as follows:
     //if device-width is large enough => display normal table
     //if device-width is too small for that but large enough for short provider names => display table_short

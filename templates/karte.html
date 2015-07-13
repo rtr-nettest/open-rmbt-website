@@ -12,12 +12,14 @@
 
 {% block content %}
 {{ Lang.map_content.teaser }}
+<div id="nettestmap">
 <div id="spinner"></div>
 <form id="control">
 
-
+	<fieldset>
     <div id='auswahl_selector' class='search_form'>
-        <div class="form_line checkbox">
+    
+        <div class="form_line form-row checkbox">
             <p>
                 <input type="radio" name="check_layer" id="check_automatic" value="automatic" checked="checked" />
                 <label for="check_automatic">{{ Lang.automatic }}</label>
@@ -36,8 +38,13 @@
             </p>
         </div>
     </div>
+    
+    <div style="clear: both"></div>
 
     <div id='filter_selector' class='search_form'></div>
+    
+    </fieldset>
+    
 </form>
 <div class="clear"></div>
 
@@ -46,6 +53,7 @@
 </div>
 
 <form id="address_search">
+	<fieldset>
     <div>
         <div class="form_line">
             <p class="address_input">
@@ -61,12 +69,13 @@
             </p>
         </div>
     </div>
+    </fieldset>
 </form>
 <div class="clear"></div>
 
 <h3>{{ Lang.map_key }}</h3>
 <div id='map_key_heatmap'>
-    <table class="map_key_color">
+    <table class="map_key_color dont-stack">
         <tbody>
         <tr style="opacity: 1;" class="legend_tr">
         </tr>
@@ -92,7 +101,7 @@
         </tr>
         </tbody>
     </table>
-    <table class="map_key_caption">
+    <table class="map_key_caption dont-stack">
         <tbody>
         <tr id="heatmap_captions">
             <td class="caption" id="heatmap_caption_low"></td>
@@ -112,6 +121,7 @@
         <span class="red"></span>
     </div>
 
+    <div class="clear"></div>
     <div id="copyright">{{ Lang.sources }}:
         RTR,
         <a href="http://www.basemap.at">basemap.at</a>,
@@ -122,4 +132,5 @@
 </div>
 <div id="greatmap"></div>
 <input id="lightboxbutton" type="button" value="{{ Lang.map_content.large_view }}">
+</div> <!-- nettestmap -->
 {% endblock %}

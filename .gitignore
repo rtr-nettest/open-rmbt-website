@@ -3,3 +3,7 @@
 /node_modules
 /jstest.netztest/files
 /build.sh
+/src/fileadmin.netztest/
+*.marks
+/templates/parts/
+/src/fileadmin.netztest/

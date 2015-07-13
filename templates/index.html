@@ -1,6 +1,8 @@
 {% extends basetemplate %}
 {% set title = Lang.index %}
 
+
+
 {% block headerscriptingBasic_old %}
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="generator" content="TYPO3 4.5 CMS"/>
@@ -28,37 +30,7 @@
 
 
 {% block sideContent %}
-	<h5 class="main-aside-header">XX_Weitere Links</h5>
-	<div class="main-aside-content-block">
-		<ul>
-		
-			<li><a href="/{{ Lang.lang }}/Verlauf">{{ Lang.index_content.select_version }}</a></li>
-			<li><a href="/{{ Lang.lang }}/Verlauf">{{ Lang.history }}</a></li>
-			<li><a href="/{{ Lang.lang }}/Karte">{{ Lang.map }}</a></li>
-			<li><a href="/{{ Lang.lang }}/Statistik">{{ Lang.statistics }}</a></li>
-			<li><a href="/{{ Lang.lang }}/Optionen">{{ Lang.options }}</a></li>
-			<li><a href="/{{ Lang.lang }}/Opendata">{{ Lang.opendata }}</a></li>
-			<li><a href="https://www.rtr.at/{{ Lang.lang }}/tk/netztesthilfe">{{ Lang.help }}</a></li>
-		</ul>
-	</div>
 	
-	<h5 class="main-aside-header">XX_RTR-Netztest Hilfe</h5>
-	<div class="main-aside-content-block">
-		<ul>
-		
-			<li><a href="https://www.rtr.at/{{ Lang.lang }}/tk/netztesthilfe">XX_Auf den folgenden Seiten finden Sie Antworten zu Fragen rund um den RTR-Netztest.</a></li>
-		</ul>
-	</div>
-	
-	
-	<h5 class="main-aside-header">XX_RTR-Netztest App</h5>
-	<div class="main-aside-content-block">
-		<ul>
-		
-			<li><a href="https://www.rtr.at/{{ Lang.lang }}/tk/rtrnetztest_tests">XX_Laden Sie die RTR-Netztest App für Ihr <a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">iOS-Gerät</a> oder <a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android">Android-Gerät</a> herunter oder verwenden Sie einen der <a href="https://www.rtr.at/de/tk/rtrnetztest_tests">browserbasierten Tests</a>.</li>
-		</ul>
-	</div>
-
 {% endblock %}
                                 
                                 
@@ -77,8 +49,8 @@
 
 
 		<section class="teaser-element clearfix">
-			<div class="teaser-button netztest not-mobile full-link">
-				<div class="teaser-button-inner not-mobile  clearfix">
+			<div class="teaser-button netztest full-link">
+				<div class="teaser-button-inner clearfix">
 					<div class="teaser-icon" aria-hidden="true">W</div>
 					<h4 class="teaser-headline"><a href="/{{ Lang.lang }}/Test">{{ Lang.index_content.test_section.heading }}</a></h4>
 				</div>
@@ -87,22 +59,15 @@
 		</section>
 		
 		<section class="teaser-element clearfix">
-			<div class="teaser-button netztest only-mobile full-link">
-				<div class="teaser-button-inner only-mobile clearfix">
-					<div class="teaser-icon " aria-hidden="true">Z</div>
-					<h4 class="teaser-headline"><a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">{{ Lang.index_content.apps }} iOS</a></h4>
-				</div>
-			</div>
-			
-			<div class="teaser-button netztest only-mobile full-link">
-				<div class="teaser-button-inner only-mobile clearfix">
-					<div class="teaser-icon " aria-hidden="true">Z</div>
-					<h4 class="teaser-headline"><a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android">{{ Lang.index_content.apps }} Android</a></h4>
-				</div>
-			</div>
-		</section>
 		
-		<section class="teaser-element clearfix not-mobile">
+			<div class="teaser-block full-link">
+				<div class="teaser-icon" aria-hidden="true">z</div>
+				<div class="teaser-text">
+					<h4 class="teaser-headline"><a href="{{ Lang.index_content.apps_url }}">{{ Lang.apps }}</a></h4>
+					<p>{{ Lang.index_content.apps_content }}</p>
+				</div>
+			</div>
+		
 			<div class="teaser-block full-link">
 				<div class="teaser-icon" aria-hidden="true">X</div>
 				<div class="teaser-text">
@@ -111,6 +76,11 @@
 				</div>
 			</div>
 			
+			
+		</section>
+		
+		
+			<section class="teaser-element clearfix">
 			<div class="teaser-block full-link">
 				<div class="teaser-icon" aria-hidden="true">Y</div>
 				<div class="teaser-text">
@@ -118,9 +88,16 @@
 					<p>{{ Lang.index_content.map_content }}</p>
 				</div>
 			</div>  
+			
+			<div class="teaser-block full-link">
+				<div class="teaser-icon" aria-hidden="true">?</div>
+				<div class="teaser-text">
+					<h4 class="teaser-headline"><a href="{{ Lang.help_url }}">{{ Lang.help }}</a></h4>
+					<p>{{ Lang.index_content.help_content }}</p>
+				</div>
+			</div>  
 		</section>
-
-
+		
 
 
 

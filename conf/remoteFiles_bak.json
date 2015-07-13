@@ -1,6 +1,6 @@
 [
   {
-    "source": "https://www.rtr.at/fileadmin/template/main/grep/temp/result_temp/__nettest/filelist_nettest.js",
+    "source": "https://develop2.netztest.at/tmp/__nettest/filelist_nettest.js",
     "target": "conf/filelist_nettest.json"
   },
   {

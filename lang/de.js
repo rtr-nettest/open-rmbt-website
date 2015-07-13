@@ -30,7 +30,7 @@ exports.strings = {
         },
         "select_version" : "Version auswählen",
         "test_section" : {
-            "heading" : "Test",
+            "heading" : "Test starten",
             "alt" : {
                 "netztest" : "RTR-Netztest Teaserbild",
                 "qostest" : "qostest.eu Teaserbild"

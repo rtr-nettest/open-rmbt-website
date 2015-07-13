@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
 
-    <!-- base href="https://develop.netztest.at/de" -->
+    <base href="https://develop.netztest.at/de">
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="generator" content="TYPO3 6.2 CMS">
@@ -22,41 +22,36 @@
 
     {% block headerscriptingBasic %}
     
-   
-      
+    <!-- link rel="stylesheet" type="text/css" href="/fileadmin/template/rtr/css/normalize.min.css?1431519456" media="all" -->
+    <!-- link rel="stylesheet" type="text/css" href="/fileadmin/template/rtr/css/main.css?1434116672" media="all" -->
+
+
+    <!-- script src="/fileadmin/template/rtr/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js?1431519457" type="text/javascript"></script -->
+    <!-- script src="/fileadmin/template/rtr/js/vendor/jquery-1.11.1.min.js?1431519457" type="text/javascript"></script -->
+    <!-- script src="/fileadmin/template/main/js/collapse.js?1433763327" type="text/javascript"></script -->
     
-    <!-- link rel="stylesheet" type="text/css" href="../css/rtr-screen.css" media="screen" / -->
-    <!-- link rel="stylesheet" type="text/css" href="../css/rtr-print.css" media="print" / -->
+    
+    
+  <link rel="stylesheet" type="text/css" href="../css/rtr-screen.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../css/rtr-print.css" media="print" />
 
     <script type="text/javascript" src="../js/jquery-1.8.2.min.js"></script>
-    <script src="/fileadmin/template/rtr/js/mlpushmenu.js?1431519457" type="text/javascript"></script>
     <script type="text/javascript" src="../js/menu.js"></script>
     <script type="text/javascript" src="../js/jquery-ui-1.9.0.custom.min.js"></script>
     <script type="text/javascript" src="../js/jquery.history.js"></script>
     <script type="text/javascript" src="../js/javaconf.js"></script>
     <script type="text/javascript" src="../js/functions.js"></script>
 
-    <script type="text/javascript" src="Lang.js"></script>
+    <script type="text/javascript" src="../de/Lang.js"></script>
     <script type="text/javascript" src="../js/popupform.js"></script>
 
 
     <link rel="stylesheet" type="text/css" href="../css/style.css" media="screen" />
-    <link rel='stylesheet' type="text/css" href='../css/senderkataster.css' />
+    <link rel='stylesheet' type="text/css" href='../css/senderkataster.css'>
 
-    <link rel="stylesheet" type="text/css" href="../css/jquery-ui-1.8.14.custom.css" media="screen" / >
+    <link rel="stylesheet" type="text/css" href="../css/jquery-ui-1.8.14.custom.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="../css/rtr-mobile.css" media="screen" />
     
-    
-    <link rel="stylesheet" type="text/css" href="/fileadmin/template/rtr/css/normalize.min.css?1431519456" media="all">
-    <link rel="stylesheet" type="text/css" href="/fileadmin/template/rtr/css/main.css?1434116672" media="all">
-
-
-    <script src="/fileadmin/template/rtr/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js?1431519457" type="text/javascript"></script>
-    <!-- script src="/fileadmin/template/rtr/js/vendor/jquery-1.11.1.min.js?1431519457" type="text/javascript"></script -->
-    <!-- script src="/fileadmin/template/rtr/js/collapse.js?1433763327" type="text/javascript"></script -->
-    
-    
-  
     {% endblock %}
 
 
@@ -67,7 +62,7 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
     <link rel="apple-touch-icon-precomposed" href="/fileadmin/template/rtr/img/apple-touch-icon-precomposed.png"/>
     <link rel="alternate" type="application/rss+xml" title="RSS-Feed RTR Aktuelles"
-          href="https://www.rtr.at/de/rss/aktuelles"/>
+          href="https://cms2015.alladin.at/de/rss/aktuelles"/>
 
 </head>
 <body class="task-telekom">
@@ -101,34 +96,12 @@
                         <!-- Page content goes here. -->
                         <article class="main-article">
                             <header class="clearfix">
-                                <h1 class="main-article-header">{{ Lang.headline }}</h1>
-                                <!-- h1 class="main-article-header">RTR-Netztest{{ title }}</h1 -->
+                                <h1 class="main-article-header">{{ title }}</h1>
                             </header>
 
                             {% block content %}
 
                             {% endblock %}
-                            
-                         <div class="clear"></div>   
-                            <h5>Navi (nur Entwicklung)</h5>
-		<ul>
-		
-			<li><a href="/{{ Lang.lang }}/">Startseite</a></li>
-			<li><a href="/{{ Lang.lang }}/Verlauf">{{ Lang.history }}</a></li>
-			<li><a href="/{{ Lang.lang }}/Karte">{{ Lang.map }}</a></li>
-			<li><a href="/{{ Lang.lang }}/Statistik">{{ Lang.statistics }}</a></li>
-			<li><a href="/{{ Lang.lang }}/Optionen">{{ Lang.options }}</a></li>
-			<li><a href="/{{ Lang.lang }}/Opendata">{{ Lang.opendata }}</a></li>
-			<li><a href="https://www.rtr.at/{{ Lang.lang }}/tk/netztesthilfe">{{ Lang.help }}</a></li>
-			<li><a href="https://www.rtr.at/{{ Lang.lang }}/tk/rtrnetztest_tests">{{ Lang.index_content.select_version }}</a></li>
-		</ul>
-	
-                            
-                            
-                            
-                            
-                            
-                            
                         </article>
                         <!-- .main-article -->
 
@@ -158,7 +131,7 @@
 </div>
 <!-- .container -->
 
-{% include "templates/parts/05_footerScripts_no_mlpushmenu_de.html" %}
+{% include "templates/parts/05_footerScripts_de.html" %}
 
 
 </body>

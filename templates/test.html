@@ -22,7 +22,7 @@
 <style>
     @media only screen and  (max-width: 960px)  {
         .hgwrapper {
-            width: 595px !important;
+            width: 560px !important;
         }
     }
 </style>
@@ -33,13 +33,14 @@
 {% endblock %}
 
 {% block content %}
+<div id="test_container">
 <div id="noJavaWarning"></div>
 <div id="androidApp"></div>
 <div id="iOSApp"></div>
 <div id="dashboard" style="display:none;">
     <div id="gauge">
         <div id="result-table">
-            <table>
+            <table class="dont-stack">
                 <colgroup>
                     <col class="table-label" />
                     <col />
@@ -71,7 +72,7 @@
         <canvas id="canvas-downup" width="300" height="300"></canvas>
 
         <div id="info-table">
-            <table>
+            <table class="dont-stack">
                 <colgroup>
                     <col class="table-label" />
                     <col class="table-value" />
@@ -104,7 +105,7 @@
 </div>
 <div id="dashboard_easy" style="display:none">
     <div id="result-table">
-        <table>
+        <table class="dont-stack">
             <colgroup>
                 <col class="table-label" />
                 <col />
@@ -175,7 +176,7 @@
 <!--
 <div id="chart">Chart</div>
 -->
-
+</div> <!-- test_container -->
 <!-- Site or application content end -->
 
 <!-- S<script src="../js/jquery-1.8.2.min.js"></script>

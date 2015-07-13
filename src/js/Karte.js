@@ -69,7 +69,10 @@ $(document).ready(function() {
                         viewMap();
                 }
         });
-
+        
+        $('.toggle-menu').on('click', function () {
+        		 map.updateSize();
+        });
 });
 
 function viewMap() {
@@ -411,7 +414,7 @@ function panToUserPosition() {
                         if (coords.accuracy < 100) {
                                 zoomLevel = 17;
                         }
-                        else if (accuracy < 1000) {
+                        else if (coords.accuracy < 1000) {
                                 coords.zoomLevel = 13;
                         }
                 }
@@ -1045,7 +1048,7 @@ function switchToLargeMap() {
         var leftOffsetBefore = $(mapId).offset().left;
         
         $(mapStateButtonId).hide();
-        $(mapId).css("left","0px");
+        $(mapId).css("left","-59px");
         
         var leftOffset = $(mapId).offset().left;
         $(mapId).css("left",(leftOffsetBefore-leftOffset) + "px");
@@ -1074,7 +1077,7 @@ function switchToLargeMap() {
                 },
                 complete: function() {
                         //reset width since we now have a scrollbar
-                        var newWidth = $(window).width();
+                        var newWidth = $(window).width()-75;
                         $(mapId).css("width",newWidth);
                         
                         var newLeftOffset = $(mapId).offset().left;
@@ -1083,7 +1086,7 @@ function switchToLargeMap() {
                         }
 
                         map.updateSize();
-                        $(mapStateButtonId).css("left", (windowWidth - leftOffset) - 150 + "px")
+                        $(mapStateButtonId).css("left", (windowWidth - leftOffset) - 200 + "px")
                         $(mapStateButtonId).show();
                         $(mapStateButtonId).val(Lang.getString("smallView"));
                 }

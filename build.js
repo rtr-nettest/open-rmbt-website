@@ -5,7 +5,7 @@
  */
 
     //https://github.com/segmentio/metalsmith/blob/master/examples/project-scaffolder/build.js
-var RTR_FILES_BASEURL = "https://develop2.netztest.at/tmp/";
+var RTR_FILES_BASEURL = "https://www.rtr.at/fileadmin/template/main/grep/temp/result_temp";
 var RTR_LINKS_BASEURL = "https://www.rtr.at/";
 
 

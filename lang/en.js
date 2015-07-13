@@ -30,7 +30,7 @@ exports.strings = {
         "apps_alt" : "RTR-NetTest app",
         "select_version" : "Select version",
         "test_section" : {
-            "heading" : "Test",
+            "heading" : "Start Test",
             "alt" : {
                 "netztest" : "RTR-NetTest teaser",
                 "qostest" : "qostest teaser"

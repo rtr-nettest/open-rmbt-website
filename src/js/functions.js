@@ -453,7 +453,7 @@ function RMBTtestresult(testUUID) {
                                 var tmp = Lang.getString('MeasurementResultFrom')
                                 $('#verlauf-detail tbody').append(
                                         '<tr>' +
-                                        '<th scope="col" colspan="3">'+tmp+' '+data.testresult[0].time_string+'<span class="right"><a href="https://www.netztest.at/redirect/' + selectedLanguage + '/help_result" target="_blank">&nbsp;?&nbsp;</a></span></th>' +
+                                        '<th scope="col" colspan="3">'+tmp+' '+data.testresult[0].time_string+'<span class="align-right"><a href="https://www.netztest.at/redirect/' + selectedLanguage + '/help_result" target="_blank">&nbsp;?&nbsp;</a></span></th>' +
                                         '</tr>'
                                 );
                                   
@@ -660,9 +660,9 @@ function RMBThistory() {
                                         '<td onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+model+'</td>' +
                                         '<td onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+network_type+'</td>'+
                                         '<td onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+time_string+'</td>' +
-                                        '<td class="right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+speed_download+'</td>' +
-                                        '<td class="right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+speed_upload+'</td>' +
-                                        '<td class="right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+ping+'</td>' +
+                                        '<td class="align-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+speed_download+'</td>' +
+                                        '<td class="align-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+speed_upload+'</td>' +
+                                        '<td class="align-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+ping+'</td>' +
                                         '</tr>'
                                   );
                                 });
@@ -879,7 +879,7 @@ function RMBTstatistics() {
                                 $('#statistik_provider_body').append(
                                         '<tr>'+
                                         '<td>' +row.name+ '</td>'+
-                                        '<td class="right quantile"><div>'+quantile_down+' ' + Lang.getString('Mbps')+
+                                        '<td class="align-right quantile"><div>'+quantile_down+' ' + Lang.getString('Mbps')+
                                         '<div id="'+key+'_down" class="quantile_details">'+
                                         row.name+'<br />'+
                                         'Down: '+quantile_down+' ' + Lang.getString('Mbps') + '<br />'+
@@ -888,7 +888,7 @@ function RMBTstatistics() {
                                         '<span class="red">'+down_red+'%</span>'+
                                         '</div>'+
                                         '</div></td>'+
-                                        '<td class="right quantile"><div>'+quantile_up+' ' + Lang.getString('Mbps')+
+                                        '<td class="align-right quantile"><div>'+quantile_up+' ' + Lang.getString('Mbps')+
                                         '<div id="'+key+'_up" class="quantile_details">'+
                                         row.name+'<br />'+
                                         'Up: '+quantile_up+' ' + Lang.getString('Mbps') + '<br />'+
@@ -897,7 +897,7 @@ function RMBTstatistics() {
                                         '<span class="red">'+up_red+'%</span>'+
                                         '</div>'+
                                         '</div></td>'+
-                                        '<td class="right quantile"><div>'+quantile_ping+' ms'+
+                                        '<td class="align-right quantile"><div>'+quantile_ping+' ms'+
                                         '<div id="'+key+'_ping" class="quantile_details">'+
                                         row.name+'<br />'+
                                         'Ping: '+quantile_ping+' ms<br />'+
@@ -906,10 +906,10 @@ function RMBTstatistics() {
                                         '<span class="red">'+ping_red+'%</span>'+
                                         '</div>'+
                                         '</div></td>'+
-                                        '<td class="right quantile"><div>'+quantile_signal+
+                                        '<td class="align-right quantile"><div>'+quantile_signal+
                                         signalDetailDiv+
                                         '</div></td>'+
-                                        '<td class="right"><a href="Opentests?' + opentests_provider_query +opendata+'">'+(row.count.formatNumber(0))+'</a></td>'+
+                                        '<td class="align-right"><a href="Opentests?' + opentests_provider_query +opendata+'">'+(row.count.formatNumber(0))+'</a></td>'+
                                         '</tr>'
                                 );
 
@@ -918,7 +918,7 @@ function RMBTstatistics() {
                                         '<td colspan="5" class="provider-name">' + row.name + '</td>' +
                                         '</tr>' +
                                         '<tr>' +
-                                        '<td class="right quantile"><div>' + quantile_down + ' ' + Lang.getString('Mbps') +
+                                        '<td class="align-right quantile"><div>' + quantile_down + ' ' + Lang.getString('Mbps') +
                                         '<div id="' + key + '_down" class="quantile_details">' +
                                         row.name + '<br />' +
                                         'Down: ' + quantile_down + ' ' + Lang.getString('Mbps') + '<br />' +
@@ -927,7 +927,7 @@ function RMBTstatistics() {
                                         '<span class="red">' + down_red + '%</span>' +
                                         '</div>' +
                                         '</div></td>' +
-                                        '<td class="right quantile"><div>' + quantile_up + ' ' + Lang.getString('Mbps') +
+                                        '<td class="align-right quantile"><div>' + quantile_up + ' ' + Lang.getString('Mbps') +
                                         '<div id="' + key + '_up" class="quantile_details">' +
                                         row.name + '<br />' +
                                         'Up: ' + quantile_up + ' ' + Lang.getString('Mbps') + '<br />' +
@@ -936,7 +936,7 @@ function RMBTstatistics() {
                                         '<span class="red">' + up_red + '%</span>' +
                                         '</div>' +
                                         '</div></td>' +
-                                        '<td class="right quantile"><div>' + quantile_ping + ' ms' +
+                                        '<td class="align-right quantile"><div>' + quantile_ping + ' ms' +
                                         '<div id="' + key + '_ping" class="quantile_details">' +
                                         row.name + '<br />' +
                                         'Ping: ' + quantile_ping + ' ms<br />' +
@@ -945,10 +945,10 @@ function RMBTstatistics() {
                                         '<span class="red">' + ping_red + '%</span>' +
                                         '</div>' +
                                         '</div></td>' +
-                                        '<td class="right quantile"><div>' + quantile_signal +
+                                        '<td class="align-right quantile"><div>' + quantile_signal +
                                         signalDetailDiv +
                                         '</div></td>' +
-                                        '<td class="right"><a href="Opentests?' + opentests_provider_query + opendata + '">' + row.count.formatNumber() + '</a></td>' +
+                                        '<td class="align-right"><a href="Opentests?' + opentests_provider_query + opendata + '">' + row.count.formatNumber() + '</a></td>' +
                                         '</tr>'
                                         );
 
@@ -956,7 +956,7 @@ function RMBTstatistics() {
                                 $('#statistik_provider_short_body').append(
                                         '<tr>' +
                                         '<td>' + row.shortname + '</td>' +
-                                        '<td class="right quantile"><div>' + quantile_down + ' ' + Lang.getString('Mbps') +
+                                        '<td class="align-right quantile"><div>' + quantile_down + ' ' + Lang.getString('Mbps') +
                                         '<div id="' + key + '_down" class="quantile_details">' +
                                         row.name + '<br />' +
                                         'Down: ' + quantile_down + ' ' + Lang.getString('Mbps') + '<br />' +
@@ -965,7 +965,7 @@ function RMBTstatistics() {
                                         '<span class="red">' + down_red + '%</span>' +
                                         '</div>' +
                                         '</div></td>' +
-                                        '<td class="right quantile"><div>' + quantile_up + ' ' + Lang.getString('Mbps') +
+                                        '<td class="align-right quantile"><div>' + quantile_up + ' ' + Lang.getString('Mbps') +
                                         '<div id="' + key + '_up" class="quantile_details">' +
                                         row.name + '<br />' +
                                         'Up: ' + quantile_up + ' ' + Lang.getString('Mbps') + '<br />' +
@@ -974,7 +974,7 @@ function RMBTstatistics() {
                                         '<span class="red">' + up_red + '%</span>' +
                                         '</div>' +
                                         '</div></td>' +
-                                        '<td class="right quantile"><div>' + quantile_ping + ' ms' +
+                                        '<td class="align-right quantile"><div>' + quantile_ping + ' ms' +
                                         '<div id="' + key + '_ping" class="quantile_details">' +
                                         row.name + '<br />' +
                                         'Ping: ' + quantile_ping + ' ms<br />' +
@@ -983,10 +983,10 @@ function RMBTstatistics() {
                                         '<span class="red">' + ping_red + '%</span>' +
                                         '</div>' +
                                         '</div></td>' +
-                                        '<td class="right quantile"><div>' + quantile_signal +
+                                        '<td class="align-right quantile"><div>' + quantile_signal +
                                         signalDetailDiv +
                                         '</div></td>' +
-                                        '<td class="right"><a href="Opentests?' + opentests_provider_query + opendata + '">' + row.count.formatNumber() + '</a></td>' +
+                                        '<td class="align-right"><a href="Opentests?' + opentests_provider_query + opendata + '">' + row.count.formatNumber() + '</a></td>' +
                                         '</tr>'
                                         );                                
                         });
@@ -1050,7 +1050,7 @@ function RMBTstatistics() {
                         $('#statistik_provider_foot').append(
                            '<tr>'+
                            '<th scope="col"> </th>'+
-                           '<th class="right quantile"><div>'+sum_down+' ' + Lang.getString('Mbps')+
+                           '<th class="align-right quantile"><div>'+sum_down+' ' + Lang.getString('Mbps')+
                                 '<div id="sum_down" class="quantile_details">'+
                                 label_all_operators + '<br />'+
                                 'Down: '+sum_down+' ' + Lang.getString('Mbps') + '<br />'+
@@ -1059,7 +1059,7 @@ function RMBTstatistics() {
                                 '<span class="red">'+down_red+'%</span>'+
                                 '</div>'+
                            '</div></th>'+
-                           '<th class="right quantile"><div>'+sum_up+' ' + Lang.getString('Mbps')+
+                           '<th class="align-right quantile"><div>'+sum_up+' ' + Lang.getString('Mbps')+
                                 '<div id="sum_up" class="quantile_details">'+
                                 label_all_operators + '<br />'+
                                 'Down: '+sum_up+' ' + Lang.getString('Mbps') + '<br />'+
@@ -1068,7 +1068,7 @@ function RMBTstatistics() {
                                 '<span class="red">'+up_red+'%</span>'+
                                 '</div>'+
                            '</div></th>'+
-                           '<th class="right quantile"><div>'+sum_ping+' ms'+
+                           '<th class="align-right quantile"><div>'+sum_ping+' ms'+
                                 '<div id="sum_ping" class="quantile_details">'+
                                 label_all_operators + '<br />'+
                                 'Down: '+sum_ping+' ' + Lang.getString('Mbps') + '<br />'+
@@ -1077,7 +1077,7 @@ function RMBTstatistics() {
                                 '<span class="red">'+ping_red+'%</span>'+
                                 '</div>'+
                            '</div></th>'+
-                           '<th class="right quantile"><div>'+sum_signal+
+                           '<th class="align-right quantile"><div>'+sum_signal+
                                 '<div id="sum_signal" class="quantile_details">'+
                                 label_all_operators + '<br />'+
                                 'Down: '+sum_signal+'<br />'+
@@ -1086,14 +1086,14 @@ function RMBTstatistics() {
                                 '<span class="red">'+signal_red+'%</span>'+
                                 '</div>'+
                            '</div></th>'+
-                           '<th scope="col" class="right">'+sum_count.formatNumber() +'</th>'+
+                           '<th scope="col" class="align-right">'+sum_count.formatNumber() +'</th>'+
                            '</tr>'
                            );
                                
                            $('#statistik_provider_short_foot').append(
                            '<tr>'+
                            '<th scope="col"> </th>'+
-                           '<th class="right quantile"><div>'+sum_down+' ' + Lang.getString('Mbps')+
+                           '<th class="align-right quantile"><div>'+sum_down+' ' + Lang.getString('Mbps')+
                                 '<div id="sum_down" class="quantile_details">'+
                                 label_all_operators + '<br />'+
                                 'Down: '+sum_down+' ' + Lang.getString('Mbps') + '<br />'+
@@ -1102,7 +1102,7 @@ function RMBTstatistics() {
                                 '<span class="red">'+down_red+'%</span>'+
                                 '</div>'+
                            '</div></th>'+
-                           '<th class="right quantile"><div>'+sum_up+' ' + Lang.getString('Mbps')+
+                           '<th class="align-right quantile"><div>'+sum_up+' ' + Lang.getString('Mbps')+
                                 '<div id="sum_up" class="quantile_details">'+
                                 label_all_operators + '<br />'+
                                 'Down: '+sum_up+' ' + Lang.getString('Mbps') + '<br />'+
@@ -1111,7 +1111,7 @@ function RMBTstatistics() {
                                 '<span class="red">'+up_red+'%</span>'+
                                 '</div>'+
                            '</div></th>'+
-                           '<th class="right quantile"><div>'+sum_ping+' ms'+
+                           '<th class="align-right quantile"><div>'+sum_ping+' ms'+
                                 '<div id="sum_ping" class="quantile_details">'+
                                 label_all_operators + '<br />'+
                                 'Down: '+sum_ping+' ' + Lang.getString('Mbps') + '<br />'+
@@ -1120,7 +1120,7 @@ function RMBTstatistics() {
                                 '<span class="red">'+ping_red+'%</span>'+
                                 '</div>'+
                            '</div></th>'+
-                           '<th class="right quantile"><div>'+sum_signal+
+                           '<th class="align-right quantile"><div>'+sum_signal+
                                 '<div id="sum_signal" class="quantile_details">'+
                                 label_all_operators + '<br />'+
                                 'Down: '+sum_signal+'<br />'+
@@ -1129,13 +1129,13 @@ function RMBTstatistics() {
                                 '<span class="red">'+signal_red+'%</span>'+
                                 '</div>'+
                            '</div></th>'+
-                           '<th scope="col" class="right">'+sum_count+'</th>'+
+                           '<th scope="col" class="align-right">'+sum_count+'</th>'+
                            '</tr>'
                            );
                                
                                                           $('#statistik_provider_captions_foot').append(
                            '<tr>'+
-                           '<th class="right quantile"><div>'+sum_down+' ' + Lang.getString('Mbps')+
+                           '<th class="align-right quantile"><div>'+sum_down+' ' + Lang.getString('Mbps')+
                                 '<div id="sum_down" class="quantile_details">'+
                                 label_all_operators + '<br />'+
                                 'Down: '+sum_down+' ' + Lang.getString('Mbps') + '<br />'+
@@ -1144,7 +1144,7 @@ function RMBTstatistics() {
                                 '<span class="red">'+down_red+'%</span>'+
                                 '</div>'+
                            '</div></th>'+
-                           '<th class="right quantile"><div>'+sum_up+' ' + Lang.getString('Mbps')+
+                           '<th class="align-right quantile"><div>'+sum_up+' ' + Lang.getString('Mbps')+
                                 '<div id="sum_up" class="quantile_details">'+
                                 label_all_operators + '<br />'+
                                 'Down: '+sum_up+' ' + Lang.getString('Mbps') + '<br />'+
@@ -1153,7 +1153,7 @@ function RMBTstatistics() {
                                 '<span class="red">'+up_red+'%</span>'+
                                 '</div>'+
                            '</div></th>'+
-                           '<th class="right quantile"><div>'+sum_ping+' ms'+
+                           '<th class="align-right quantile"><div>'+sum_ping+' ms'+
                                 '<div id="sum_ping" class="quantile_details">'+
                                 label_all_operators + '<br />'+
                                 'Down: '+sum_ping+' ' + Lang.getString('Mbps') + '<br />'+
@@ -1162,7 +1162,7 @@ function RMBTstatistics() {
                                 '<span class="red">'+ping_red+'%</span>'+
                                 '</div>'+
                            '</div></th>'+
-                           '<th class="right quantile"><div>'+sum_signal+
+                           '<th class="align-right quantile"><div>'+sum_signal+
                                 '<div id="sum_signal" class="quantile_details">'+
                                 label_all_operators + '<br />'+
                                 'Down: '+sum_signal+'<br />'+
@@ -1171,7 +1171,7 @@ function RMBTstatistics() {
                                 '<span class="red">'+signal_red+'%</span>'+
                                 '</div>'+
                            '</div></th>'+
-                           '<th scope="col" class="right">'+sum_count+'</th>'+
+                           '<th scope="col" class="align-right">'+sum_count+'</th>'+
                            '</tr>'
                            );
                                                    
@@ -1261,13 +1261,13 @@ function RMBTstatistics() {
                                 $('#statistik_devices_body').append(
                                         '<tr' + ((current_device_count > break_devices_after)?' style="display:none;"' : '') + '>'+
                                         '<td>'+model+'</td>'+ //link to open-data
-                                        '<td class="right quantile"><div>'+quantile_down+' ' + Lang.getString('Mbps')+
+                                        '<td class="align-right quantile"><div>'+quantile_down+' ' + Lang.getString('Mbps')+
                                         '</div></td>'+
-                                        '<td class="right quantile"><div>'+quantile_up+' ' + Lang.getString('Mbps')+
+                                        '<td class="align-right quantile"><div>'+quantile_up+' ' + Lang.getString('Mbps')+
                                         '</div></td>'+
-                                        '<td class="right quantile"><div>'+quantile_ping+' ms'+
+                                        '<td class="align-right quantile"><div>'+quantile_ping+' ms'+
                                         '</div></td>'+
-                                        '<td class="right"><a href="Opentests?' + opentests_query_country_provider + '&model='+model+opendata+'">'+row.count.formatNumber()+'</a></td>'+
+                                        '<td class="align-right"><a href="Opentests?' + opentests_query_country_provider + '&model='+model+opendata+'">'+row.count.formatNumber()+'</a></td>'+
                                         '</tr>'
                                     );
                                         
@@ -1295,10 +1295,10 @@ function RMBTstatistics() {
                         //$('#statistik_devices_foot').append(
                         //   '<tr>'+
                         //   '<th scope="col"> </th>'+
-                        //   '<th scope="col" class="right">'+sum_down.toPrecision(2)+' ' + Lang.getString('Mbps') + '</th>'+
-                        //   '<th scope="col" class="right">'+sum_up.toPrecision(2)+' ' + Lang.getString('Mbps') + '</th>'+
-                        //   '<th scope="col" class="right">'+sum_ping+' ms</th>'+
-                        //   '<th scope="col" class="right">'+sum_count+'</th>'+
+                        //   '<th scope="col" class="align-right">'+sum_down.toPrecision(2)+' ' + Lang.getString('Mbps') + '</th>'+
+                        //   '<th scope="col" class="align-right">'+sum_up.toPrecision(2)+' ' + Lang.getString('Mbps') + '</th>'+
+                        //   '<th scope="col" class="align-right">'+sum_ping+' ms</th>'+
+                        //   '<th scope="col" class="align-right">'+sum_count+'</th>'+
                         //   '</tr>'
                         //   );
                         //--------------Devices End
@@ -1369,7 +1369,7 @@ function start_jstest() {
  * Called, if the browser does not support the canvas-element
  */
 function start_jstest_easy() {
-	$(".text100").prepend('<p>' + Lang.getString('BrowserOutdated') + '</p>');
+	$(".main-article").prepend('<p>' + Lang.getString('BrowserOutdated') + '</p>');
 	setCookie("RMBTndt", '0', 365 * 20 * 24 * 3600);
 	requestBrowserData('RMBTsettings','jstest_easy');
 }
@@ -1677,30 +1677,30 @@ function getOpenDataRow(testdata, showUnits) {
     row += "<td class='test-platform'>" + link +  infoFormatter(testdata.model, testdata.platform, testdata.provider_name) + "</a></td>";
     
     //down
-    row += "<td class='test-download right'>" + link + (testdata.download_kbit / 1000).formatNumber(getSignificantDigits(testdata.download_kbit / 1000)) + (showUnits ? '&nbsp;' + Lang.getString('Mbps') : '') + "</a></td>";
+    row += "<td class='test-download align-right'>" + link + (testdata.download_kbit / 1000).formatNumber(getSignificantDigits(testdata.download_kbit / 1000)) + (showUnits ? '&nbsp;' + Lang.getString('Mbps') : '') + "</a></td>";
     
     //up
-    row += "<td class='test-upload right'>" + link + (testdata.upload_kbit / 1000).formatNumber(getSignificantDigits(testdata.upload_kbit / 1000))+ (showUnits ? '&nbsp;' + Lang.getString('Mbps') : '') + "</a></td>";
+    row += "<td class='test-upload align-right'>" + link + (testdata.upload_kbit / 1000).formatNumber(getSignificantDigits(testdata.upload_kbit / 1000))+ (showUnits ? '&nbsp;' + Lang.getString('Mbps') : '') + "</a></td>";
     
     //ping
     if (testdata.ping_ms >= 0 && testdata.ping_ms !== null) {
-        row += "<td class='test-ping right'>" + link + (testdata.ping_ms).formatNumber(getSignificantDigits(testdata.ping_ms))+ (showUnits ? '&nbsp;' + Lang.getString('ms') : '') + "</a></td>";
+        row += "<td class='test-ping align-right'>" + link + (testdata.ping_ms).formatNumber(getSignificantDigits(testdata.ping_ms))+ (showUnits ? '&nbsp;' + Lang.getString('ms') : '') + "</a></td>";
     }
     else {
-        row += "<td class='test-ping right'>" + link + "-</a></td>";
+        row += "<td class='test-ping align-right'>" + link + "-</a></td>";
     }
     
     //signal
     var val_dbm = testdata.signal_strength;
     var val_lte = testdata.lte_rsrp;
     if (val_dbm !== null) {
-        row += "<td class='test-network-signal right'>" + link + Math.round(val_dbm)+ (showUnits ? '&nbsp;' + Lang.getString('dBm') : '') + "</a></td>";    
+        row += "<td class='test-network-signal align-right'>" + link + Math.round(val_dbm)+ (showUnits ? '&nbsp;' + Lang.getString('dBm') : '') + "</a></td>";    
     }
     else if (val_lte !== null) {
-        row += "<td class='test-network-signal right'>" + link + "<abbr class='lte-rsrp' title='" + Lang.getString('lte_rsrp') + "'>" + Math.round(val_lte)+ (showUnits ? ' ' + Lang.getString('dB') : '') + "</a></abbr></td>";        
+        row += "<td class='test-network-signal align-right'>" + link + "<abbr class='lte-rsrp' title='" + Lang.getString('lte_rsrp') + "'>" + Math.round(val_lte)+ (showUnits ? ' ' + Lang.getString('dB') : '') + "</a></abbr></td>";        
     }
     else {
-        row += "<td class='test-network-signal right'>" + link + "-</a></td>";
+        row += "<td class='test-network-signal align-right'>" + link + "-</a></td>";
     }        
     
     
