@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html class="no-js">
+<!--[if lt IE 7 ]><html class="no-js ie6 oldie"><![endif]-->
+<!--[if IE 7 ]><html class="no-js ie7 oldie"><![endif]-->
+<!--[if IE 8 ]><html class="no-js ie8 oldie"><![endif]-->
+<!--[if IE 9 ]><html class="no-js ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
 <head>
     <meta charset="utf-8">
 
@@ -24,11 +28,12 @@
     
    
       
-    
     <!-- link rel="stylesheet" type="text/css" href="../css/rtr-screen.css" media="screen" / -->
     <!-- link rel="stylesheet" type="text/css" href="../css/rtr-print.css" media="print" / -->
 
     <script type="text/javascript" src="../js/jquery-1.8.2.min.js"></script>
+    <!-- script type="text/javascript" src="../js/jquery-1.9.1.js"></script -->
+    
     <script src="/fileadmin/template/rtr/js/mlpushmenu.js?1431519457" type="text/javascript"></script>
     <script type="text/javascript" src="../js/menu.js"></script>
     <script type="text/javascript" src="../js/jquery-ui-1.9.0.custom.min.js"></script>
@@ -43,7 +48,7 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css" media="screen" />
     <link rel='stylesheet' type="text/css" href='../css/senderkataster.css' />
 
-    <link rel="stylesheet" type="text/css" href="../css/jquery-ui-1.8.14.custom.css" media="screen" / >
+    <link rel="stylesheet" type="text/css" href="../css/jquery-ui-1.8.14.custom.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="../css/rtr-mobile.css" media="screen" />
     
     
@@ -79,7 +84,8 @@
         <a href="#" id="trigger" class="toggle-menu" title="">{{ Lang.menu }}</a>
     </div>
 
-    <div class="mp-pusher" id="mp-pusher">
+    <!-- div class="mp-pusher mp-pushed" id="mp-pusher" -->
+     <div class="mp-pusher" id="mp-pusher">
 
 
         {% if Lang.lang == "de" %}
@@ -131,7 +137,9 @@
                  -->           
                             
                             
-                            
+                           <div id="popuperror"></div>
+										<div id="popupform"></div>
+ 
                             
                         </article>
                         <!-- .main-article -->

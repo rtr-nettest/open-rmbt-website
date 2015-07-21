@@ -8,6 +8,10 @@
 var RTR_FILES_BASEURL = "https://www.rtr.at/fileadmin/template/main/grep/temp/result_temp";
 var RTR_LINKS_BASEURL = "https://www.rtr.at";
 
+//var RTR_FILES_BASEURL = "https://rtr2015.alladin.at/fileadmin/template/main/grep/temp/result_temp";
+//var RTR_LINKS_BASEURL = "https://rtr2015.alladin.at";
+
+
 
 var debug = require('debug')('nodeNetztest:server');
 var request = require('request');

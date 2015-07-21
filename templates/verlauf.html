@@ -40,12 +40,16 @@
         background-color: #bfd1d7;
     }
     
-      img {
+    img {
     	max-width: none !important;
     }
     
     table td {
 	padding: 0px !important;
+}
+
+table#testresult-detail td {
+	word-break: break-all;
 }
 </style>
 {% endblock %}
@@ -53,7 +57,6 @@
 {% block content %}
 <h2>{{ Lang.history }}</h2>
 <div id="spinner"></div>
-<div id="popupform"></div>
 <div id="ndtprogress"></div>
 
 

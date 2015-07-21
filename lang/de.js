@@ -58,7 +58,7 @@ exports.strings = {
 
     "statistics_content" : {
         "teaser" : {
-            "netztest" : 'Diese Statistik stellt die Ergebnisse der bisherigen RTR-Netztests dar. Weitere Informationen zur Interpretation der Ergebnisse finden Sie <a href="https://www.rtr.at/en/rtr/netztestfaq_testergebnis#c26545">here</a>.',
+            "netztest" : 'Diese Statistik stellt die Ergebnisse der bisherigen RTR-Netztests dar. Weitere Informationen zur Interpretation der Ergebnisse finden Sie <a href="https://www.rtr.at/de/rtr/netztestfaq_testergebnis#c26545">hier</a>.',
             "qostest" : 'Diese Statistik stellt die Ergebnisse der bisherigen Tests auf qostest.eu dar. Weitere Informationen zur Interpretation der Ergebnisse finden Sie <a href="https://www.rtr.at/en/rtr/netztestfaq_testergebnis#c26545">here</a>.'
         },
         "operators_from" : "Betreiber aus",
