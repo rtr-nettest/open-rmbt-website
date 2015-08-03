@@ -44,6 +44,7 @@ $(document).ready(function() {
         return;
     }
     
+
     //add trigger
     $("header #netztestmenu").after('<div class="menu-trigger"><a href="#netztestmenu"></a></div>');
     
@@ -56,7 +57,7 @@ $(document).ready(function() {
         clone: true,
         selectedClass: 'selected'
     });
-    
+
     //add link to homepage
     //$("#mm-netztestmenu ul").prepend("<li><a href='/'><strong>" + $("#netztestmenu").parent().children("a").first().html() + "</strong></a></li>");
 });                    

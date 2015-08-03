@@ -34,6 +34,7 @@ var remoteFiles = require("./conf/remoteFiles.json");
 
 var target = null, targets = ["qostest","netztest"];
 var useWatch = false;
+var downloadedOnce = false;
 
 //check command line to find which target should be built
 process.argv.forEach(function(val, index, array) {
@@ -58,6 +59,7 @@ if (target === null ){
 var metalsmith = Metalsmith(__dirname)
     .use(fetchRemoteFiles(remoteFiles))
     .use(fetchRemoteFiles(function() {
+        downloadedOnce = true;
         return transformRemoteNetztestJSONtoFetchableFiles(require('./conf/filelist_nettest.json'))
     }))
     .use(transformRTRUrls([
@@ -122,6 +124,11 @@ function transformRemoteNetztestJSONtoFetchableFiles(json) {
  */
 function fetchRemoteFiles(fileList) {
     return function (files, metalsmith, done) {
+        if (downloadedOnce) {
+            done();
+            return;
+        }
+
         var filesArray;
         if (typeof fileList == "function") {
             filesArray = fileList();
@@ -158,6 +165,11 @@ function fetchRemoteFiles(fileList) {
  */
 function transformRTRUrls(fileList) {
     return function(files, metalsmith, done) {
+        if (downloadedOnce) {
+            done();
+            return;
+        }
+
         var count = 0;
         fileList.forEach(function(path) {
             fs.readFile(path, function(err, data) {
