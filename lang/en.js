@@ -202,6 +202,10 @@ exports.strings = {
 
     "measurement_result" : "Measurement result",
     "detailed_measurements" : "Detailed measurements",
+    "measurements" : "Measurements",
+	"measurement": "Measurement",
+    "moreInfo" : "More Info",
+	"net": "Net",
 
     "websocket" : "WebSocket",
     "java_applet" : "Java-Applet",

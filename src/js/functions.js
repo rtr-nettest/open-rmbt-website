@@ -247,7 +247,7 @@ function RMBTmapfilter(options) {
                         form_auswahl += '</div>';
                         $('#auswahl_selector').prepend(form_auswahl);
                         redrawLegend(default_cardtyp);
-                        defaultMapFilter();
+                        defaultMapFilterV3();
                         
                 },
                 error: function() {

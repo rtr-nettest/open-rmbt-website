@@ -10,7 +10,7 @@
 var cloudmade = false;
 var useGoogle = true;
 var useBasemapAT = true;
-var useBingMaps = false;
+var useBingMaps = true;
 var useRTRTiles = true;
 
 //obsolete initialistation
@@ -25,11 +25,17 @@ var curMapOptionObj = {};
 var curFilterObj = {};
 var click;
 var points_heatmap_switch_level = 12;
+var legends = new Object();
+var marker; //current marker object
+
+var allowClicking = false; //true, if clicking for popups is allowed at this zoom level
+
+
 
 /*
  *
  * Click Handler for popup
- */
+ *
 OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
         defaultHandlerOptions: {
                 'single': true,
@@ -49,6 +55,7 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
                 loadMarker(map.getLonLatFromPixel(e.xy));
         }
 });
+*/
 
 $(document).ready(function() {
         //requestBrowserData('RMBTsettings', 'viewmap');
@@ -66,225 +73,197 @@ $(document).ready(function() {
                 success: function (data) {
                         URL_MAP_SERVER = data.settings[0].urls.url_map_server + "/tiles";
                         mapProxy  = data.settings[0].urls.url_map_server;
-                        viewMap();
+                        viewMapV3();
                 }
         });
         
         $('.toggle-menu').on('click', function () {
         		 map.updateSize();
         });
+
+
+    //for developing :)
+    /*window.setTimeout(function() {
+        loadMarker([1811686.3731147042, 6136656.527460036]);
+    },2000);*/
+
 });
 
-function viewMap() {
-       var caption_low, caption_high, caption_unit;
-        legends = new Object();
+function viewMapV3() {
+    var gg = ol.proj.get('EPSG:4326');
+    var sm = ol.proj.get('EPSG:3857');
 
+    var bases = new Array();
 
-        // pink tile avoidance
-        OpenLayers.IMAGE_RELOAD_ATTEMPTS = 5;
-        // make OL compute scale according to WMS spec
-        OpenLayers.DOTS_PER_INCH = 25.4 / 0.28;
-
-        // Values for colored scale
-        var interval_values = "5,30,70";
-        var interval_colors = "#00ff00,#ffff00,#ff0000";
-
-        var bases = new Array();
-        var base_google;
-        var base_basemap;
-        var base_bing;
-        var base_rtr;
-        if (cloudmade)
-        {
-                base = new OpenLayers.Layer.CloudMade("CloudMade", {
-                        key: '7baca6b0602643118b11e425f8618552',
-                        isBaseLayer: true,
-                        styleId: 998, //alternative: 1
-                        numZoomLevels: 18,
-                        transitionEffect: "resize"
-                });
-        }
-        
-
-        if (useBingMaps) {
-            
-            base_bing = new OpenLayers.Layer.Bing({
-                name: " Bing Maps",
+    if (useBingMaps) {
+        bases.push(
+            new ol.layer.Tile({
+            visible: false,
+            preload: Infinity,
+            title: 'Bing Maps',
+            type: 'base',
+            source: new ol.source.BingMaps({
                 key: bing_api_key,
-                type: "Road",
-                protocol: "https:"
-            });
-            bases.push(base_bing);
-        }
+                imagerySet: 'Road'
+                // use maxZoom 19 to see stretched tiles instead of the BingMaps
+                // "no photos at this zoom level" tiles
+                // maxZoom: 19
+            })
+        }));
+    }
 
-        if (useGoogle) {
-                base_google = new OpenLayers.Layer.Google(
-                        " Google Maps", // the default
-                        {numZoomLevels: 18}
-                );
-                bases.push(base_google);
-        }
+    if (useBasemapAT) {
+        // basemap.at
+        //taken from http://www.basemap.at/application/js/mobile-base3.js
+        var templatepng =
+            '{Layer}/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png';
+        var urlsbmappng = [
+            '//maps1.wien.gv.at/basemap/' + templatepng,
+            '//maps2.wien.gv.at/basemap/' + templatepng,
+            '//maps3.wien.gv.at/basemap/' + templatepng,
+            '//maps4.wien.gv.at/basemap/' + templatepng
+        ];
+        var IS_CROSS_ORIGIN = 'anonymous';
 
-        if (useBasemapAT) {
-                var extent = new OpenLayers.Bounds(1030000, 5800000, 1930000, 6330000);
-                base_basemap = new OpenLayers.Layer.WMTS(
-                        {
-                                //url templates only allowed with single urls according to documentation
-                                url: "https://maps.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
-                                //"http://maps2.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg",
-                                //"http://maps3.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg",
-                                //"http://maps4.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg"
-                                //,
-                                name: " Basemap.at",
-                                isBaseLayer: true,
-                                layer: "geolandbasemap",
-                                style: "normal",
-                                buffer: 0,
-                                transitionEffect: "resize",
-                                requestEncoding: "REST",
-                                matrixSet: "google3857",
-                                tileFullExtent: extent,
-                                numZoomLevels: 18,
-                                attribution: "<a href='http://www.basemap.at' target='_new'>Basemap.at</a>"
-                        });
-                base_basemap.metadata = {
-                        link: "http://www.basemap.at/"
-                };
-                bases.push(base_basemap);
-        }
+        var tilegrid = new ol.tilegrid.WMTS({
+            origin: [-20037508.3428, 20037508.3428],
+            extent: [977650, 5838030, 1913530, 6281290],
+            resolutions: [
+                156543.03392811998, 78271.51696419998,
+                39135.758481959994, 19567.879241008,
+                9783.939620504, 4891.969810252,
+                2445.984905126, 1222.9924525644,
+                611.4962262807999, 305.74811314039994,
+                152.87405657047998, 76.43702828523999,
+                38.21851414248, 19.109257071295996,
+                9.554628535647998, 4.777314267823999,
+                2.3886571339119995, 1.1943285669559998,
+                0.5971642834779999, 0.29858214174039993
+            ],
+            matrixIds: [
+                '0', '1', '2', '3', '4', '5',
+                '6', '7', '8', '9', '10',
+                '11', '12', '13', '14', '15',
+                '16', '17', '18', '19'
+            ]
+        });
 
+
+        var bmap = new ol.source.WMTS({
+            tilePixelRatio: 1,
+            projection: sm,
+            layer: 'geolandbasemap',
+            /*layer: hiDPI ? 'bmaphidpi' : 'geolandbasemap',*/
+            style: 'normal',
+            matrixSet: 'google3857',
+            urls: urlsbmappng,
+            visible: true,
+            //crossOrigin: IS_CROSS_ORIGIN,
+            requestEncoding: /** @type {ol.source.WMTSRequestEncoding} */ ('REST'),
+            tileGrid: tilegrid,
+            attributions: [
+                new ol.Attribution({
+                    html: 'Tiles &copy; <a href="//www.basemap.at/">' +
+                    'basemap.at</a> (STANDARD).'
+                })
+            ]
+        });
+
+        bases.push(new ol.layer.Tile({
+            visible: true,
+            preload: Infinity,
+            source: bmap,
+            title: 'Basemap.at',
+            type: 'base'
+        }));
+    }
+
+    if (useRTRTiles) {
+        bases.push(
+            new ol.layer.Tile({
+                source: new ol.source.OSM(),
+                title: 'OpenStreetMap',
+                type: 'base',
+                visible: false
+            })
+        );
+    }
+
+    //Create the map object
+    map = new ol.Map({
+        layers: bases,
+        controls: ol.control.defaults({
+            attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
+                collapsible: false
+            })
+        }),
+        target: 'speedtestmap',
+        view: new ol.View({
+            center: [0, 0],
+            zoom: 2,
+            maxZoom : 19
+        })
+    });
+    
+    
+    /*var myControl = new ol.control.Control({
+        element: $("#mycontrol")[0]
+    });
+    map.addControl(myControl);*/
+    
+    var layerSwitcher = new ol.control.LayerSwitcher({
+        tipLabel: 'Kartenquelle' // Optional label for button
+    });
+    map.addControl(layerSwitcher);
+    
+    markers = new ol.Overlay.Popup();
+    map.addOverlay(markers);
+
+    //bind click event
+    map.on('singleclick', function(event) {
+        //remove old overlay
+        onFeatureUnselect();
         
+        //load new overlay
+        loadMarker(event.coordinate);
+    });
+    
+    //bind on zoom event
+    map.on('moveend', function(event) {
+        displayZoom();
+    })
 
-        if (useRTRTiles)
-        {
-                base_rtr = new OpenLayers.Layer.OSM(" OpenStreetMap",
-                        //"http://a.tile.openstreetmap.de/tiles/osmde/${z}/${x}/${y}.png",
-                        "https://tile.rtr.at/osmde/${z}/${x}/${y}.png", {
-                                isBaseLayer: true,
-                                tileOptions: {
-                                        crossOriginKeyword: null
-                                },
-                                transitionEffect: "resize",
-                                numZoomLevels: 17
-                        });
-                bases.push(base_rtr);
-        }
+    //Fit to Austrian bounds
+    //https://stackoverflow.com/questions/22206570/how-do-bounds-work-in-openlayers-3
+    var textent = [1252344.27125, 5846515.498922221, 1907596.397450879, 6284446.2299491335];
+    map.getView().fit(textent, map.getSize());
 
-        markers = new OpenLayers.Layer.Vector("Markers", {
-            displayInLayerSwitcher: false
-        });
 
-        selectStop = new OpenLayers.Control.SelectFeature(markers, {
-                onSelect: onFeatureSelect,
-                onUnselect: onFeatureUnselect
-        });
 
-        markers.events.on({
-                "featureselected": onFeatureSelect,
-                "featureunselected": onFeatureUnselect
-        });
-
-        //var bounds = new OpenLayers.Bounds(1805891.0815372001, 6126605.126178115, 1843404.7925869129, 6158586.596166264);
-        var bounds = new OpenLayers.Bounds();
-        //bounds.extend(new OpenLayers.LonLat(1805891.0815372001, 6126605.126178115));
-        //bounds.extend(new OpenLayers.LonLat(1843404.7925869129, 6158586.596166264));
-        //bounds.extend(new OpenLayers.LonLat(1805891.0815372001, 6126605.126178115)); //Google-Koordinaten meiner letzten Messung.
-
-        bounds.extend(new OpenLayers.LonLat(1252344.27125, 5846515.498922221)); //South West
-        bounds.extend(new OpenLayers.LonLat(1907596.397450879, 6284446.2299491335)); //Nord East
-
-        map = new OpenLayers.Map({
-                div: "speedtestmap",
-                controls: [
-                        new OpenLayers.Control.Attribution(),
-                        new OpenLayers.Control.Navigation({dragPanOptions: {enableKinetic: true}})
-        ],
-                //maxExtent : bounds,
-                projection: (useBasemapAT || useGoogle || useBingMaps) ? "EPSG:4326" : "EPSG:900913",
-                maxResolution: (useBasemapAT ||useGoogle || useBingMaps) ? 156543 : 146.53793378794035, //,
-                units: "m"
+    //start async process to get select values
+    requestBrowserData('RMBTmapfilter');
+    
+    
+    $("#auswahl_selector").find("input:radio[name='check_layer']").click(function () {
+        setLayersV3();
     });
 
-        var customToolBar = new OpenLayers.Control.Panel({});
-        customToolBar.addControls([new OpenLayers.Control.Pan("North", {
-                        title: "North",
-                        displayClass: "panNorth"
-                }), new OpenLayers.Control.Pan("East", {
-                        title: "East",
-                        displayClass: "panEast"
-                }), new OpenLayers.Control.Pan("West", {
-                        title: "West",
-                        displayClass: "panWest"
-                }), new OpenLayers.Control.Pan("South", {
-                        title: "South",
-                        displayClass: "panSouth"
-                }), new OpenLayers.Control.ZoomIn({
-                        title: "Zoom In",
-                        displayClass: "zoomIn"
-                }), new OpenLayers.Control.ZoomOut({
-                        title: "Zoom Out",
-                        displayClass: "zoomOut"
-                }), new OpenLayers.Control.ScaleLine()]);
-        map.addControl(customToolBar);
+    //initialize geocoder, set form trigger for address search form
+    geocoder_google = new google.maps.Geocoder();
+    $("#address_search").submit(function () {
+        searchAndPositionOnAddress();
+        return false;
+    })
 
-        //map.addLayers([base, heatmap, points, markers, shapes]);
-        map.addLayers(bases);
-        
-        var layerSwitcher = new OpenLayers.Control.LayerSwitcher({
-            ascending: true
-        });
-        //layerSwitcher.baseLbl.innerText;
-        //layerSwitcher.baseLayers = [base_google, base_basemap, base_bing];
-        map.addControl(layerSwitcher);
-        $("#speedtestmap .baseLbl").html(Lang.getString('baseLayer'));
+    //Pan to Test or User Position
+    panToLastUserTest();
+    panToUserPosition();
+}
 
-        requestBrowserData('RMBTmapfilter');
-
-
-
-        //map.addControl(new OpenLayers.Control.LayerSwitcher());
-        map.zoomToExtent(bounds);
-        //map.zoomToMaxExtent();
-
-        // Stop zoom at certain levels
-        /*
-         map.newMoveTo = map.moveTo;
-         map.moveTo = function(lonlat, zoom, options) {
-         return (zoom >= 1 && zoom <= 18) ? map.newMoveTo(lonlat, zoom, options) : false;
-         };
-         */
-
-        map.addControl(selectStop);
-        map.events.register('zoomend', null, displayZoom);
-        selectStop.activate();
-
-        //activate click handler for popups
-        click = new OpenLayers.Control.Click();
-        map.addControl(click);
-        click.activate();
-
-        $("#auswahl_selector").find("input:radio[name='check_layer']").click(function() {
-                setLayers();
-        });
-        
-        geocoder_google = new google.maps.Geocoder();
-        $("#address_search").submit(function() {
-                searchAndPositionOnAddress();
-                return false;
-        })
-
-        panToLastUserTest();
-        panToUserPosition();
-};
 
 function convertLongLatToOpenLayersPoint(long,lat) {
-    var pt = new OpenLayers.LonLat(long, lat);
-    pt.transform(
-            // degrees are degrees
-            new OpenLayers.Projection('EPSG:4326'),
-            // but your map is in meters (probably)
-            new OpenLayers.Projection('EPSG:900913'));
-    return pt;
+    return ol.proj.transform([long, lat], 
+                'EPSG:4326', 'EPSG:3857');
 }
 
 var geocoder_google;
@@ -308,10 +287,17 @@ function searchAndPositionOnAddress() {
 
                             $("#address_search #address_search_input").val(results[i].formatted_address);
 
-                            var bounds = new OpenLayers.Bounds();
-                            bounds.extend(convertLongLatToOpenLayersPoint(results[i].geometry.viewport.getNorthEast().lng(), results[i].geometry.viewport.getNorthEast().lat())); //North East
-                            bounds.extend(convertLongLatToOpenLayersPoint(results[i].geometry.viewport.getSouthWest().lng(), results[i].geometry.viewport.getSouthWest().lat())); //South West
-                            map.zoomToExtent(bounds);
+                            var ne = convertLongLatToOpenLayersPoint(results[i].geometry.viewport.getNorthEast().lng(), results[i].geometry.viewport.getNorthEast().lat()); //North East
+                            var sw = convertLongLatToOpenLayersPoint(results[i].geometry.viewport.getSouthWest().lng(), results[i].geometry.viewport.getSouthWest().lat()); //South West
+                            
+                            //http://openlayers.org/en/v3.7.0/apidoc/ol.html#Extent
+                            //[minx, miny, maxx, maxy]
+                            var extent=[
+                                ne[0], ne[1],
+                                sw[0], sw[1]
+                            ];
+                            
+                            map.getView().fit(extent, map.getSize());
                         };
                 
                         if (results.length > 1) {
@@ -354,26 +340,23 @@ function panToLastUserTest() {
                 //console.log(tmpcoords);
         }
         if (coords && coords['lat'] > 0 && coords['long'] > 0) {
-                var lat = coords['lat'];
-                var long = coords['long'];
-                //alert(lat + ", " + long);
+            var lat = coords['lat'];
+            var long = coords['long'];
+            //alert(lat + ", " + long);
 
-                var pt = new OpenLayers.LonLat(long, lat);
-                pt.transform(
-                        // degrees are degrees
-                        new OpenLayers.Projection('EPSG:4326'),
-                        // but your map is in meters (probably)
-                        new OpenLayers.Projection('EPSG:900913'));
-                var zoomLevel = 11;
-                if (coords['accuracy'] !== null) {
-                        if (coords['accuracy'] < 100) {
-                                zoomLevel = 17;
-                        }
-                        else if (coords['accuracy'] < 1000) {
-                                zoomLevel = 13;
-                        }
+            map.getView().setCenter(convertLongLatToOpenLayersPoint(long, lat));
+
+            var zoomLevel = 11;
+            if (coords.accuracy !== null) {
+                if (coords.accuracy < 100) {
+                    zoomLevel = 17;
                 }
-                map.setCenter(pt, zoomLevel);
+                else if (coords.accuracy < 1000) {
+                    coords.zoomLevel = 13;
+                }
+            }
+
+            map.getView().setZoom(zoomLevel);
         }
 }
 
@@ -403,22 +386,19 @@ function panToUserPosition() {
                 var lat = coords.lat;
                 var long = coords.long;
 
-                var pt = new OpenLayers.LonLat(long, lat);
-                pt.transform(
-                        // degrees are degrees
-                        new OpenLayers.Projection('EPSG:4326'),
-                        // but your map is in meters (probably)
-                        new OpenLayers.Projection('EPSG:900913'));
+                map.getView().setCenter(convertLongLatToOpenLayersPoint(long, lat));
+
                 var zoomLevel = 11;
                 if (coords.accuracy !== null) {
-                        if (coords.accuracy < 100) {
-                                zoomLevel = 17;
-                        }
-                        else if (coords.accuracy < 1000) {
-                                coords.zoomLevel = 13;
-                        }
+                    if (coords.accuracy < 100) {
+                        zoomLevel = 17;
+                    }
+                    else if (coords.accuracy < 1000) {
+                        coords.zoomLevel = 13;
+                    }
                 }
-                map.setCenter(pt, zoomLevel);
+                
+            map.getView().setZoom(zoomLevel);
         };
         var geolocation_error = function(error) {
                 console.log("error retrieving user position")
@@ -448,73 +428,67 @@ function panToUserPosition() {
         }
 }
 
+
 /**
  * Get the layers from user input
  * and update the map accordingly
  * e.g. only heatmap, only points
  */
-function setLayers() {
+function setLayersV3() {
 
-        var cardtyp = $("#map_options").val();
-        var tmp = cardtyp.split('/');
-        var typ = tmp[0];
-        $("select[name=statistical_method]").removeAttr("disabled");
-        //console.log($("input:radio:checked[name='check_layer']").val());
-        if ($("input:radio:checked[name='check_layer']").val() == 'shapes') {
-                points.setVisibility(false);
-                heatmap.setVisibility(false);
-                shapes.setVisibility(true);
-                onFeatureUnselect();
-                markers.setVisibility(false);
-                click.deactivate();
-        }
-        else if ($("input:radio:checked[name='check_layer']").val() == 'heatmap') {
-                points.setVisibility(false);
-                heatmap.setVisibility(true);
-                shapes.setVisibility(false);
-                onFeatureUnselect();
-                markers.setVisibility(false);
-                click.deactivate();
-        }
-        else if ($("input:radio:checked[name='check_layer']").val() == 'points') {
-                points.setVisibility(true);
-                heatmap.setVisibility(false);
-                shapes.setVisibility(false);
-                shapes.setVisibility(false);
-                markers.setVisibility(true);
-                $("select[name=statistical_method]").attr("disabled","disabled");
-                click.activate();
-        }
-        else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getZoom() < points_heatmap_switch_level && typ == 'browser') {
-                points.setVisibility(false);
-                heatmap.setVisibility(false);
-                shapes.setVisibility(true);
-                onFeatureUnselect();
-                markers.setVisibility(false);
-                click.deactivate();
-        }
-        else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getZoom() < points_heatmap_switch_level) {
-                points.setVisibility(false);
-                heatmap.setVisibility(true);
-                shapes.setVisibility(false);
-                onFeatureUnselect();
-                markers.setVisibility(false);
-                click.deactivate();
-        }
-        else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getZoom() >= points_heatmap_switch_level && typ == 'browser') {
-                points.setVisibility(true);
-                heatmap.setVisibility(false);
-                shapes.setVisibility(true);
-                markers.setVisibility(true);
-                click.activate();
-        }
-        else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getZoom() >= points_heatmap_switch_level) {
-                points.setVisibility(true);
-                heatmap.setVisibility(true);
-                markers.setVisibility(true);
-                click.activate();
-        }
+    var cardtyp = $("#map_options").val();
+    var tmp = cardtyp.split('/');
+    var typ = tmp[0];
+    $("select[name=statistical_method]").removeAttr("disabled");
+    //console.log($("input:radio:checked[name='check_layer']").val());
+    if ($("input:radio:checked[name='check_layer']").val() == 'shapes') {
+        points.setVisible(false);
+        heatmap.setVisible(false);
+        shapes.setVisible(true);
+        onFeatureUnselect();
+        allowClicking = false;
+    }
+    else if ($("input:radio:checked[name='check_layer']").val() == 'heatmap') {
+        points.setVisible(false);
+        heatmap.setVisible(true);
+        shapes.setVisible(false);
+        onFeatureUnselect();
+        allowClicking = false;
+    }
+    else if ($("input:radio:checked[name='check_layer']").val() == 'points') {
+        points.setVisible(true);
+        heatmap.setVisible(false);
+        shapes.setVisible(false);
+        $("select[name=statistical_method]").attr("disabled","disabled");
+        allowClicking = true;
+    }
+    else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() < points_heatmap_switch_level && typ == 'browser') {
+        points.setVisible(false);
+        heatmap.setVisible(false);
+        shapes.setVisible(true);
+        onFeatureUnselect();
+        allowClicking = false;
+    }
+    else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() < points_heatmap_switch_level) {
+        points.setVisible(false);
+        heatmap.setVisible(true);
+        shapes.setVisible(false);
+        onFeatureUnselect();
+        allowClicking = false;
+    }
+    else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() >= points_heatmap_switch_level && typ == 'browser') {
+        points.setVisible(true);
+        heatmap.setVisible(false);
+        shapes.setVisible(true);
+        allowClicking = true;
+    }
+    else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() >= points_heatmap_switch_level) {
+        points.setVisible(true);
+        heatmap.setVisible(true);
+        allowClicking = true;
+    }
 }
+
 
 function displayZoom() {
         //console.log(map.getZoom()+' - '+$("input:radio:checked[name='check_layer']").val());
@@ -524,167 +498,109 @@ function displayZoom() {
         }
         var tmp = cardtyp.split('/');
         var typ = tmp[0];
-        if (map.getZoom() >= 17) {
+        if (map.getView().getZoom() >= 17) {
                 $('.zoomInItemInactive').css('display', 'none');
         }
         else {
                 $('.zoomInItemInactive').css('display', 'block');
         }
-        if (map.getZoom() <= 2) {
+        if (map.getView().getZoom() <= 2) {
                 $('.zoomOutItemInactive').css('display', 'none');
         }
         else {
                 $('.zoomOutItemInactive').css('display', 'block');
         }
-        if (typ != 'browser' && $("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getZoom() < points_heatmap_switch_level) {
-                points.setVisibility(false);
-                heatmap.setVisibility(true);
-                shapes.setVisibility(false);
-                onFeatureUnselect();
-                markers.setVisibility(false);
-                click.deactivate();
+        if (typ != 'browser' && $("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() < points_heatmap_switch_level) {
+                points.setVisible(false);
+                heatmap.setVisible(true);
+                shapes.setVisible(false);
+                //onFeatureUnselect();
+                allowClicking = false;
         }
-        else if (typ != 'browser' && $("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getZoom() >= points_heatmap_switch_level) {
-                points.setVisibility(true);
-                heatmap.setVisibility(true);
-                shapes.setVisibility(false);
-                markers.setVisibility(true);
-                click.activate();
+        else if (typ != 'browser' && $("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() >= points_heatmap_switch_level) {
+                points.setVisible(true);
+                heatmap.setVisible(true);
+                shapes.setVisible(false);
+                allowClicking = true;
         }
-        else if (typ == 'browser' && $("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getZoom() < points_heatmap_switch_level) {
-                points.setVisibility(false);
-                heatmap.setVisibility(false);
-                shapes.setVisibility(true);
-                onFeatureUnselect();
-                markers.setVisibility(false);
-                click.deactivate();
+        else if (typ == 'browser' && $("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() < points_heatmap_switch_level) {
+                points.setVisible(false);
+                heatmap.setVisible(false);
+                shapes.setVisible(true);
+                allowClicking = false;
         }
-        else if (typ == 'browser' && $("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getZoom() >= points_heatmap_switch_level) {
-                points.setVisibility(true);
-                heatmap.setVisibility(false);
-                shapes.setVisibility(true);
-                markers.setVisibility(true);
-                click.activate();
+        else if (typ == 'browser' && $("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() >= points_heatmap_switch_level) {
+                points.setVisible(true);
+                heatmap.setVisible(false);
+                shapes.setVisible(true);
+                allowClicking = true;
         }
 
 }
 
 function loadMarker(lonlat) {
-        curFilterObj["highlight"] = getCookie("RMBTuuid");
-        var json_data = {
-                "language": selectedLanguage,
-                coords: {
-                        "x": lonlat.lon,
-                        "y": lonlat.lat,
-                        "z": map.zoom
-                },
-                filter: curFilterObj,
-                options: curMapOptionObj
-        };
+    if (!allowClicking) {
+        return;
+    }
 
-        $.ajax({
-                //url : "http://localhost:8080/RMBTMapServer/tiles/markers",
-                url: mapProxy + "/tiles/markers",
-                type: "post",
-                dataType: "json",
-                contentType: "application/json",
-                data: JSON.stringify(json_data),
-                success: function(data, textStatus, jqXHR) {
-                        if (data.measurements && data.measurements[0]) {
-                                addMarker(data.measurements[0].lat, data.measurements[0].lon, data.measurements);
-                                selectStop.select(lastfeature);
-                        }
-                },
-                error: function(xhr, ajaxOptions, thrownError) {
-                        alert("Error beim settings-Abruf " + xhr.status + " " + thrownError + " " + ajaxOptions);
-                }
-        });
-}
+    curFilterObj["highlight"] = getCookie("RMBTuuid");
+    var json_data = {
+        "language": selectedLanguage,
+        coords: {
+            "x": lonlat[0],
+            "y": lonlat[1],
+            "z": map.getView().getZoom()
+        },
+        filter: curFilterObj,
+        options: curMapOptionObj
+    };
 
-function onFeatureSelect(event) {
+    $.ajax({
+        //url : "http://localhost:8080/RMBTMapServer/tiles/markers",
+        url: mapProxy + "/tiles/markers",
+        type: "post",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(json_data),
+        success: function (data, textStatus, jqXHR) {
+            if (data.measurements && data.measurements[0]) {
+                addMarkerV3(data.measurements[0].lat, data.measurements[0].lon, data.measurements);
 
+                //@TODO v3
+                //selectStop.select(lastfeature);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert("Error beim settings-Abruf " + xhr.status + " " + thrownError + " " + ajaxOptions);
+        }
+    });
 }
 
 function onFeatureUnselect(event) {
-        var feature = lastfeature;
+    markers.hide();
+    /*var feature = lastfeature;
+        
         if (feature && feature.popup) {
                 map.removePopup(feature.popup);
                 feature.destroyPopup();
                 delete feature.popup;
                 markers.removeAllFeatures();
-        }
+        }*/
 }
 
-function addMarker(lat, lon, data) {
+function addMarkerV3(lat, lon, data) {
+    var coordinate = [lat, lon];
+    markers.setPosition(coordinate);
 
-        var lonlat = new OpenLayers.LonLat(lat, lon);
+    var template = Handlebars.compile($("#markerTemplate").html());
+    var html = template({
+        data: data
+    });
 
-        feature = new OpenLayers.Feature(markers, lonlat);
+    
+    markers.show(coordinate, html);
 
-        feature.closeBox = true;
-
-        feature.popupClass = OpenLayers.Class(OpenLayers.Popup.FramedCloud, {
-                size: new OpenLayers.Size(270, 50),
-                minSize: new OpenLayers.Size(270, 50),
-                maxSize: new OpenLayers.Size(270, 300),
-                autoSize: true,
-                panMapIfOutOfView: true
-        });
-        feature.data.popupContentHTML = (selectedLanguage == 'de') ? "<h1>MESSUNGEN</h1>" : "<h1>Measurements</h1>";
-        feature.data.popupContentHTML += "<div class='infoWrap'>";
-        feature.data.popupContentHTML += "<hr/>";
-        $.each(data, function(i, item) {
-
-
-                if (item.highlight == true) {
-                        feature.data.popupContentHTML += "<h2 class='highlight'>";
-                } else {
-                        feature.data.popupContentHTML += "<h2>";
-                }
-                feature.data.popupContentHTML += item.time_string;
-                feature.data.popupContentHTML += "<input type='button' style='float:right;' class='submit' onClick=\"window.open('/" + selectedLanguage + "/Opentest?" + item.open_test_uuid  + "')\" value='" + Lang.getString('moreInfo') + "' />";
-                feature.data.popupContentHTML += "</h2>";
-                feature.data.popupContentHTML += "<h3>" + Lang.getString("Measurement") + ":</h3>";
-                $.each(item.measurement, function(j, elem) {
-                        feature.data.popupContentHTML += "<div class='row'>";
-                        feature.data.popupContentHTML += "<div class='rowlabel'>" + elem.title + "</div>";
-                        feature.data.popupContentHTML += "<a href='https://www.rtr.at/" + selectedLanguage + "/rtr/netztestfaq_testergebnis#c25826' target='_blank'><div class='rowclassification classification" + elem.classification + "'>" + elem.classification + "</div></a>";
-                        feature.data.popupContentHTML += "<div class='rowitem'>" + elem.value + "</div>";
-                        feature.data.popupContentHTML += "</div>";
-                });
-                feature.data.popupContentHTML += "<h3>" + Lang.getString("Net") + ":</h3>";
-                $.each(item.net, function(j, elem) {
-                        feature.data.popupContentHTML += "<div class='row'>";
-                        feature.data.popupContentHTML += "<div class='rowlabel'>" + elem.title + "</div>";
-                        feature.data.popupContentHTML += "<div class='rowitem'>" + elem.value + "</div>";
-                        feature.data.popupContentHTML += "</div>";
-                });
-                //feature.data.popupContentHTML += (selectedLanguage == 'de') ? "<div class='row'><a href=\"/de/Opentest?" + item.open_test_uuid + "\">Opendata-Eintrag</a></div>" : "<div class='row'><a href=\"/en/Opentest?" + item.open_test_uuid + "\">open data-entry</a></div>";
-                feature.data.popupContentHTML += "<hr/>";
-        });
-        feature.data.popupContentHTML += "</div>";
-        feature.data.overflow = "auto";
-
-        var attributes
-        var vectorStyle = {
-                fillColor: "#3DFFFF",
-                fillOpacity: 0.2,
-                strokeColor: "#3DFFFF",
-                strokeOpacity: 0.8,
-                strokeDashstyleArray: "solid",
-                strokeWidth: 1,
-                pointRadius: 5
-        }
-
-        var marker = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat), attributes, vectorStyle);
-        marker.feature = feature;
-
-        markers.addFeatures([marker]);
-
-        feature.popup = feature.createPopup(feature.closeBox);
-        map.addPopup(feature.popup);
-
-        lastfeature = feature;
+    //$(marker).html(html);
 }
 
 function redrawLegend(cardtyp) {
@@ -766,61 +682,61 @@ function redrawOverlay() {
 
                         if ($("input:radio:checked[name='check_layer']").val() == 'heatmap' && typ == 'browser') {
 
-                                points.setVisibility(false);
-                                heatmap.setVisibility(false);
-                                markers.setVisibility(false);
-                                shapes.setVisibility(true);
+                                points.setVisible(false);
+                                heatmap.setVisible(false);
+                                //markers.setVisible(false);
+                                shapes.setVisible(true);
+                                allowClicking = false;
 
                         }
                         else if ($("input:radio:checked[name='check_layer']").val() == 'heatmap' && typ != 'browser') {
-                                points.setVisibility(false);
-                                heatmap.setVisibility(true);
-                                shapes.setVisibility(false);
-                                onFeatureUnselect();
-                                markers.setVisibility(false);
-                                click.deactivate();
+                                points.setVisible(false);
+                                heatmap.setVisible(true);
+                                shapes.setVisible(false);
+                                allowClicking = false;
+                                //markers.setVisible(false);
+                                //allowClicking = false;
 
                         }
                         else if ($("input:radio:checked[name='check_layer']").val() == 'points') {
-                                points.setVisibility(true);
-                                heatmap.setVisibility(false);
-                                shapes.setVisibility(false);
-                                markers.setVisibility(true);
-                                click.activate();
+                                points.setVisible(true);
+                                heatmap.setVisible(false);
+                                shapes.setVisible(false);
+                                //markers.setVisible(true);
+                                //click.activate();
+                                allowClicking = true;
 
                         }
-                        else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getZoom() < points_heatmap_switch_level && typ == 'browser') {
-                                points.setVisibility(false);
-                                heatmap.setVisibility(false);
-                                shapes.setVisibility(true);
+                        else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() < points_heatmap_switch_level && typ == 'browser') {
+                                points.setVisible(false);
+                                heatmap.setVisible(false);
+                                shapes.setVisible(true);
+                                allowClicking = false;            
+                                //markers.setVisible(false);                                
+
+                        }
+                        else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() < points_heatmap_switch_level && typ != 'browser') {
+                                points.setVisible(false);
+                                heatmap.setVisible(true);
+                                shapes.setVisible(false);
                                 onFeatureUnselect();
-                                markers.setVisibility(false);
-                                click.deactivate();
+                                //markers.setVisible(false);
+                                allowClicking = false;
 
                         }
-                        else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getZoom() < points_heatmap_switch_level && typ != 'browser') {
-                                points.setVisibility(false);
-                                heatmap.setVisibility(true);
-                                shapes.setVisibility(false);
-                                onFeatureUnselect();
-                                markers.setVisibility(false);
-                                click.deactivate();
+                        else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() >= points_heatmap_switch_level && typ == 'browser') {
+                                points.setVisible(true);
+                                heatmap.setVisible(false);
+                                shapes.setVisible(false);
+                                allowClicking = true;
+                                //click.activate();
 
                         }
-                        else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getZoom() >= points_heatmap_switch_level && typ == 'browser') {
-                                points.setVisibility(true);
-                                heatmap.setVisibility(false);
-                                markers.setVisibility(true);
-                                shapes.setVisibility(true);
-                                click.activate();
-
-                        }
-                        else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getZoom() >= points_heatmap_switch_level && typ != 'browser') {
-                                points.setVisibility(true);
-                                heatmap.setVisibility(true);
-                                markers.setVisibility(true);
-                                shapes.setVisibility(false);
-                                click.activate();
+                        else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() >= points_heatmap_switch_level && typ != 'browser') {
+                                points.setVisible(true);
+                                heatmap.setVisible(true);
+                                shapes.setVisible(false);
+                                //click.activate();
 
                         }
                         //}
@@ -848,116 +764,105 @@ function redrawOverlay() {
             curFilterObj['developer_code'] = developerCode;
         }
 
-        var points_url = URL_MAP_SERVER + '/points/${z}/${x}/${y}.png' + filter + auswahl;
-        points.url = points_url;
-        points.redraw(true);
+        //set tile urls to new filter selection
+        var points_url = URL_MAP_SERVER + '/points/{z}/{x}/{y}.png' + filter + auswahl;
+        points.getSource().setUrl(points_url);
+        //points.redraw(true);
 
-        var heatmap_url = URL_MAP_SERVER + '/heatmap/${z}/${x}/${y}.png' + filter + auswahl;
-        heatmap.url = heatmap_url;
-        heatmap.redraw(true);
+        var heatmap_url = URL_MAP_SERVER + '/heatmap/{z}/{x}/{y}.png' + filter + auswahl;
+        heatmap.getSource().setUrl(heatmap_url);
+        //heatmap.redraw(true);
 
-        var shapes_url = URL_MAP_SERVER + '/shapes/${z}/${x}/${y}.png' + filter + auswahl;
-        shapes.url = shapes_url;
-        shapes.redraw(true);
+        var shapes_url = URL_MAP_SERVER + '/shapes/{z}/{x}/{y}.png' + filter + auswahl;
+        shapes.getSource().setUrl(shapes_url);
+        //shapes.redraw(true);
 
         // Remove open Popups
-        onFeatureUnselect(null);
+        onFeatureUnselect();
 
         redrawLegend(cardtyp);
 
 
 }
 
-function defaultMapFilter() {
-        var as = $('#auswahl_selector select');
-        var auswahl = '';
-        var tmp, typ, cardtyp, background_value;
-        curMapOptionObj = {};
-        $.each(as, function(key, row) {
+function defaultMapFilterV3() {
+    var as = $('#auswahl_selector select');
+    var auswahl = '';
+    var tmp, typ, cardtyp, background_value;
+    curMapOptionObj = {};
+    $.each(as, function(key, row) {
 
-                if ($(row).val().length > 0) {
-                        var tmp = $(row).attr("name");
-                        auswahl += '&' + $(row).attr("name") + '=' + $(row).val();
-                        curMapOptionObj[$(row).attr("name")] = $(row).val();
-                        cardtyp = $(row).val()
-                        tmp = cardtyp.split('/');
-                        typ = tmp[0];
-                        $('#filter_selector>div').css("display", "none");
-                        $('#filter_' + typ).css("display", "block");
+        if ($(row).val().length > 0) {
+            var tmp = $(row).attr("name");
+            auswahl += '&' + $(row).attr("name") + '=' + $(row).val();
+            curMapOptionObj[$(row).attr("name")] = $(row).val();
+            cardtyp = $(row).val()
+            tmp = cardtyp.split('/');
+            typ = tmp[0];
+            $('#filter_selector>div').css("display", "none");
+            $('#filter_' + typ).css("display", "block");
 
-                }
-
-        });
-
-        var es = $('#filter_' + typ + ' select');
-        //quick hack to disable test-highlighting and thus make caching effective
-        var filter = '?null'; //'?highlight=' + getCookie("RMBTuuid");
-        curFilterObj = {};
-        $.each(es, function(key, row) {
-                if ($(row).val().length > 0) {
-                        var tmp = $(row).attr("name");
-                        filter += '&' + $(row).attr("name") + '=' + $(row).val();
-                        curFilterObj[$(row).attr("name")] = $(row).val();
-                }
-
-        });
-                       
-        //if qostest -> add source parameter
-        if (developerCode > 0) {
-            filter += "&developer_code=" + developerCode;
-            curFilterObj['developer_code'] = developerCode;
         }
-        
-        points_url = URL_MAP_SERVER + '/points/${z}/${x}/${y}.png' + filter + auswahl;
 
-        heatmap_url = URL_MAP_SERVER + '/heatmap/${z}/${x}/${y}.png' + filter + auswahl;
+    });
 
-        shapes_url = URL_MAP_SERVER + '/shapes/${z}/${x}/${y}.png' + filter + auswahl;
+    var es = $('#filter_' + typ + ' select');
+    //quick hack to disable test-highlighting and thus make caching effective
+    var filter = '?null'; //'?highlight=' + getCookie("RMBTuuid");
+    curFilterObj = {};
+    $.each(es, function(key, row) {
+        if ($(row).val().length > 0) {
+            var tmp = $(row).attr("name");
+            filter += '&' + $(row).attr("name") + '=' + $(row).val();
+            curFilterObj[$(row).attr("name")] = $(row).val();
+        }
 
-        heatmap = new OpenLayers.Layer.XYZ("Heatmap",
-                //         	        "http://localhost:8080/RMBTMapServer/tiles/heatmap/${z}/${x}/${y}.png",
-                heatmap_url,
-                {
-                        isBaseLayer: false,
-                        sphericalMercator: true,
-                        transparent: "true",
-                        format: "image/png",
-                        displayInLayerSwitcher: false
-                });
+    });
 
-        shapes = new OpenLayers.Layer.XYZ("Shapes",
-                //         	        "http://localhost:8080/RMBTMapServer/tiles/heatmap/${z}/${x}/${y}.png",
-                shapes_url,
-                {
-                        isBaseLayer: false,
-                        sphericalMercator: true,
-                        transparent: "true",
-                        format: "image/png",
-                        displayInLayerSwitcher: false
-                });
+    //if qostest -> add source parameter
+    if (developerCode > 0) {
+        filter += "&developer_code=" + developerCode;
+        curFilterObj['developer_code'] = developerCode;
+    }
 
-        points = new OpenLayers.Layer.XYZ("Points",
-                //             	        "http://localhost:8080/RMBTMapServer/tiles/points/${z}/${x}/${y}.png",
-                points_url,
-                {
-                        isBaseLayer: false,
-                        sphericalMercator: true,
-                        transparent: "true",
-                        format: "image/png",
-                        displayInLayerSwitcher: false
-                });
-                
-        map.addLayers([heatmap, points, markers, shapes]);
+    var points_url = URL_MAP_SERVER + '/points/{z}/{x}/{y}.png' + filter + auswahl;
 
-        points.setVisibility(false);
-        markers.setVisibility(false);
-        shapes.setVisibility(false);
+    var heatmap_url = URL_MAP_SERVER + '/heatmap/{z}/{x}/{y}.png' + filter + auswahl;
 
-        //also update the layers in case
-        //that the user's browser did some
-        //local form caching
-        setLayers();
+    var shapes_url = URL_MAP_SERVER + '/shapes/{z}/{x}/{y}.png' + filter + auswahl;
+
+    heatmap = new ol.layer.Tile({
+        source: new ol.source.XYZ({
+            url: heatmap_url,
+            visible: true
+        })
+    });
+    map.addLayer(heatmap);
+
+    shapes = new ol.layer.Tile({
+        source: new ol.source.XYZ({
+            url: shapes_url,
+            visible: true
+        })
+    });
+    map.addLayer(shapes);
+
+    points = new ol.layer.Tile({
+        source: new ol.source.XYZ({
+            url: points_url,
+            visible: true
+        })
+    });
+    map.addLayer(points);
+
+
+
+    //also update the layers in case
+    //that the user's browser did some
+    //local form caching
+    setLayersV3();
 }
+
 
 // "Lightbox":
 $("#lightboxbutton").live("click", function() {
@@ -1006,9 +911,10 @@ function switchToSmallMap() {
         
         //animate back
         $(mapId).animate({
-                left: (mapStateSmallOrig.leftOffsetBefore - mapStateSmallOrig.leftOffset) + "px",
+                left: mapStateSmallOrig.left + "px",
+                top: mapStateSmallOrig.top + "px",
                 width: mapStateSmallOrig.width,
-                height: mapStateSmallOrig.height
+                height: mapStateSmallOrig.height,
                         //height: windowHeight
         }, {
                 duration: 400,
@@ -1021,7 +927,9 @@ function switchToSmallMap() {
                         $(mapStateButtonId).show();
                         $(mapStateButtonId).val(Lang.getString("largeView"));
                         
-                        //now, reset everything
+                        //now, put back, reset styling
+                        $(mapId).prependTo("#speedtestmapcontainer")
+                        $(mapStateButtonId).prependTo("#greatmap")
                         $(mapId).removeAttr("style");
                 }});
         
@@ -1030,70 +938,75 @@ function switchToSmallMap() {
         
 }
 
-/**
- * switch to the large map state
- */
 function switchToLargeMap() {
-        var mapId = "#speedtestmap";
-        var mapStateButtonId = "#lightboxbutton";
-        
-        
-        
-        //get screen size
-        var windowHeight = $(window).height();
-        var windowWidth = $(window).width();
-        
-        $(mapId).css("position","absolute");
-        
-        var leftOffsetBefore = $(mapId).offset().left;
-        
-        $(mapStateButtonId).hide();
-        $(mapId).css("left","-59px");
-        
-        var leftOffset = $(mapId).offset().left;
-        $(mapId).css("left",(leftOffsetBefore-leftOffset) + "px");
-        
-        var filterTopOffset = $("#auswahl_selector").offset().top;
-        
-        //save original positions
-        mapStateSmallOrig = {
-                leftOffsetBefore: leftOffsetBefore,
-                leftOffset: leftOffset,
-                height: $(mapId).height(),
-                width: $(mapId).width(),
-                mapStateButtonLeft: $(mapStateButtonId).position().left
+    var mapId = "#speedtestmap";
+    var mapStateButtonId = "#lightboxbutton";
 
-        };
-        
+    //get screen size and old offsets
+    var windowHeight = $(window).height();
+    var windowWidth = $(window).width();
 
-        $(mapId).animate({
-                left: -leftOffset + "px",
-                width: windowWidth,
-                height: windowHeight
-        }, {
-                duration: 400,
-                progress: function(animation, progress, remainingMs) {
-                        map.updateSize();
-                },
-                complete: function() {
-                        //reset width since we now have a scrollbar
-                        var newWidth = $(window).width()-75;
-                        $(mapId).css("width",newWidth);
-                        
-                        var newLeftOffset = $(mapId).offset().left;
-                        if (newLeftOffset<0) {
-                                $(mapId).css("left",(-leftOffset - newLeftOffset));
-                        }
+    var leftOffset = $(mapId).offset().left;
 
-                        map.updateSize();
-                        $(mapStateButtonId).css("left", (windowWidth - leftOffset) - 200 + "px")
-                        $(mapStateButtonId).show();
-                        $(mapStateButtonId).val(Lang.getString("smallView"));
-                }
-        });
-        
-        //scroll to the map
-        $('html, body').animate({ scrollTop: filterTopOffset }, 'slow');
-        
-        mapState = "large";
+    var filterTopOffset = $("#auswahl_selector").offset().top;
+    var topOffset = $(mapId).offset().top;
+    
+    //save original positions
+    mapStateSmallOrig = {
+        left: leftOffset,
+        top: topOffset,
+        height: $(mapId).height(),
+        width: $(mapId).width(),
+        mapStateButtonLeft: $(mapStateButtonId).position().left
+
+    };
+    
+    //move, hide button during transition
+    $(mapId).prependTo("body");
+    $(mapStateButtonId).prependTo("body");
+    $(mapStateButtonId).hide();
+    
+    //set absolute position
+    $(mapId).css("position", "absolute");
+    $(mapId).css("left",leftOffset + "px");
+    $(mapId).css("top",topOffset + "px");
+    $(mapId).css("z-index",101); //menu trigger is 100
+
+    //anmiate the map
+    $(mapId).animate({
+        left: -leftOffset + "px",
+        width: windowWidth + "px",
+        height: windowHeight
+    }, {
+        duration: 400,
+        progress: function (animation, progress, remainingMs) {
+            map.updateSize();
+        },
+        complete: function () {
+            //reset width since we now have a scrollbar
+            var newWidth = $(window).width() - 75;
+            $(mapId).css("width", newWidth);
+
+            /*var newLeftOffset = $(mapId).offset().left;
+            if (newLeftOffset < 0) {
+                $(mapId).css("left", (-leftOffset - newLeftOffset));
+            }*/
+            
+            $(mapId).css("left", "0px");
+            $(mapId).css("width", "100%");
+
+            map.updateSize();
+            $(mapStateButtonId).css("right", "100px");
+            $(mapStateButtonId).css("left", "inherit");
+            $(mapStateButtonId).show();
+            $(mapStateButtonId).val(Lang.getString("smallView"));
+        }
+    });
+    
+
+
+    //scroll to the map
+    $('html, body').animate({scrollTop: filterTopOffset}, 'slow');
+
+    mapState = "large";
 }
