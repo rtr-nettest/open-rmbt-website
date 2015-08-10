@@ -163,10 +163,6 @@ var requirejs, require, define;
      * @returns {Error}
      */
     function makeError(id, msg, err, requireModules) {
-    	consule.debug(id);
-    		consule.debug(msg);
-    			consule.debug(err);
-    				consule.debug(requireModules);
         var e = new Error(msg + '\nhttp://requirejs.org/docs/errors.html#' + id);
         e.requireType = id;
         e.requireModules = requireModules;
