@@ -157,7 +157,7 @@ function viewMapV3() {
             style: 'normal',
             matrixSet: 'google3857',
             urls: urlsbmappng,
-            visible: true,
+            visible: false,
             //crossOrigin: IS_CROSS_ORIGIN,
             requestEncoding: /** @type {ol.source.WMTSRequestEncoding} */ ('REST'),
             tileGrid: tilegrid,
@@ -184,7 +184,7 @@ function viewMapV3() {
                 source: new ol.source.OSM(),
                 title: 'OpenStreetMap',
                 type: 'base',
-                visible: false
+                visible: true
             })
         );
     }
