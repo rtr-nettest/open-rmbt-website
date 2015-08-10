@@ -888,13 +888,11 @@ $(window).resize(function() {
         var windowWidth = $(window).width();
         
         $(mapId).css("left","0px");
-        var leftOffset = $(mapId).offset().left;
+        //var leftOffset = $(mapId).offset().left;
         
         $(mapId).css("width", windowWidth + "px");
         $(mapId).css("height", windowHeight + "px");
-        $(mapId).css("left", -leftOffset + "px");
-        
-        $(mapStateButtonId).css("left", (windowWidth - leftOffset) - 150 + "px")
+        //$(mapId).css("left", -leftOffset + "px");
         
     }
 });
@@ -929,7 +927,7 @@ function switchToSmallMap() {
                         
                         //now, put back, reset styling
                         $(mapId).prependTo("#speedtestmapcontainer")
-                        $(mapStateButtonId).prependTo("#greatmap")
+                        $(mapStateButtonId).prependTo("#speedtestmapcontainer")
                         $(mapId).removeAttr("style");
                 }});
         
@@ -974,7 +972,7 @@ function switchToLargeMap() {
 
     //anmiate the map
     $(mapId).animate({
-        left: -leftOffset + "px",
+        left: "0px",
         width: windowWidth + "px",
         height: windowHeight
     }, {
@@ -996,8 +994,7 @@ function switchToLargeMap() {
             $(mapId).css("width", "100%");
 
             map.updateSize();
-            $(mapStateButtonId).css("right", "100px");
-            $(mapStateButtonId).css("left", "inherit");
+            $(mapStateButtonId).css("top",topOffset + "px");
             $(mapStateButtonId).show();
             $(mapStateButtonId).val(Lang.getString("smallView"));
         }
