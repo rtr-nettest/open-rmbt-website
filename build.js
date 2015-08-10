@@ -59,7 +59,6 @@ if (target === null ){
 var metalsmith = Metalsmith(__dirname)
     .use(fetchRemoteFiles(remoteFiles))
     .use(fetchRemoteFiles(function() {
-        downloadedOnce = true;
         return transformRemoteNetztestJSONtoFetchableFiles(require('./conf/filelist_nettest.json'))
     }))
     .use(transformRTRUrls([
@@ -169,6 +168,7 @@ function transformRTRUrls(fileList) {
             done();
             return;
         }
+        downloadedOnce = true;
 
         var count = 0;
         fileList.forEach(function(path) {
