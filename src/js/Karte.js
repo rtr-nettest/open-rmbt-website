@@ -98,7 +98,7 @@ function viewMapV3() {
     if (useBingMaps) {
         bases.push(
             new ol.layer.Tile({
-            visible: false,
+            visible: true,
             preload: Infinity,
             title: 'Bing Maps',
             type: 'base',
@@ -157,7 +157,7 @@ function viewMapV3() {
             style: 'normal',
             matrixSet: 'google3857',
             urls: urlsbmappng,
-            visible: false,
+            visible: true,
             //crossOrigin: IS_CROSS_ORIGIN,
             requestEncoding: /** @type {ol.source.WMTSRequestEncoding} */ ('REST'),
             tileGrid: tilegrid,
@@ -170,7 +170,7 @@ function viewMapV3() {
         });
 
         bases.push(new ol.layer.Tile({
-            visible: true,
+            visible: false,
             preload: Infinity,
             source: bmap,
             title: 'Basemap.at',
@@ -184,7 +184,7 @@ function viewMapV3() {
                 source: new ol.source.OSM(),
                 title: 'OpenStreetMap',
                 type: 'base',
-                visible: true
+                visible: false
             })
         );
     }
