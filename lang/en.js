@@ -222,5 +222,8 @@ exports.strings = {
     "software_version" : "Software version",
     "asn" : "AS number",
     "apply_filters" : "Apply filters",
-    "reset" : "Reset"
+    "reset" : "Reset",
+
+    "coordinates": "Coordinates",
+    "provider" : "Provider"
 }

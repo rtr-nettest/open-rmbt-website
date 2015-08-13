@@ -222,5 +222,8 @@ exports.strings = {
     "software_version" : "Software-Version",
     "asn" : "AS-Nummer",
     "apply_filters" : "Filter anwenden",
-    "reset" : "Leeren"
+    "reset" : "Leeren",
+
+    "coordinates": "Standort",
+    "provider" : "Betreiber"
 }
