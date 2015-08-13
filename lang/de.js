@@ -145,6 +145,7 @@ exports.strings = {
     "heatmap" : "Heatmap",
     "points" : "Punkte",
     "shapes" : "PLZ",
+    "communities" : "Gemeinden",
     "sources" : "Quellen",
 
     "please_select" : "Bitte auswählen",
