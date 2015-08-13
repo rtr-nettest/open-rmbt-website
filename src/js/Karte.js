@@ -231,7 +231,7 @@ function viewMapV3() {
     //bind on zoom event
     map.on('moveend', function(event) {
         displayZoom();
-    })
+    });
 
     //Fit to Austrian bounds
     //https://stackoverflow.com/questions/22206570/how-do-bounds-work-in-openlayers-3
@@ -253,7 +253,7 @@ function viewMapV3() {
     $("#address_search").submit(function () {
         searchAndPositionOnAddress();
         return false;
-    })
+    });
 
     //Pan to Test or User Position
     panToLastUserTest();
