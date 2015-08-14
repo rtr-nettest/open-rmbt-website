@@ -1018,13 +1018,13 @@ ol.Overlay.Popup.prototype.show = function(coord, html) {
 ol.Overlay.Popup.prototype.panIntoView_ = function(coord) {
 
     var popSize = {
-            width: this.getElement().clientWidth + 20,
-            height: this.getElement().clientHeight + 20
+            width: this.getElement().clientWidth + 60,
+            height: this.getElement().clientHeight + 40
         },
         mapSize = this.getMap().getSize();
 
     var tailHeight = 20,
-        tailOffsetLeft = 60,
+        tailOffsetLeft = 100,
         tailOffsetRight = popSize.width - tailOffsetLeft,
         popOffset = this.getOffset(),
         popPx = this.getMap().getPixelFromCoordinate(coord);

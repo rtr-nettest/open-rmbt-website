@@ -24,7 +24,7 @@ exports.strings = {
         "apps_content": 'Download the NetTest for your <a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">iOS-</a> or <a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android">Android device</a> or use different <a href="https://www.rtr.at/en/tk/rtrnetztest_tests">web browser tests.</a>',
         "apps_url" : "https://www.rtr.at/en/tk/rtrnetztest_tests",
         "apps" : {
-            "netztest" : "RTR-NetTest Apps",
+            "netztest" : "Apps and Browser test",
             "qostest" : "NetTest Apps"
         },
         "apps_alt" : "RTR-NetTest app",

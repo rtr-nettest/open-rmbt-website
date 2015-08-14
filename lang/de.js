@@ -22,10 +22,10 @@ exports.strings = {
                 "qostest": "https://www.netztest.at/redirect/de/terms"
             }
         },
-        "apps_content": 'Laden Sie die RTR-Netztest App für Ihr <a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">iOS-</a> oder <a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android">Android-Gerät</a> herunter oder verwenden Sie einen der <a href="https://www.rtr.at/de/tk/rtrnetztest_tests">browserbasierten Tests</a>',
+        "apps_content": '<a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">iOS-</a> oder <a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android">Android-App</a> herunterladen bzw. <a href="https://www.rtr.at/de/tk/rtrnetztest_tests">Browser-Test</a> durchführen',
         "apps_url" : "https://www.rtr.at/de/tk/rtrnetztest_tests",
         "apps" : {
-            "netztest" : "RTR-Netztest Apps",
+            "netztest" : "App und Browser-Test",
             "qostest" : "Netztest Apps"
         },
         "select_version" : "Version auswählen",
