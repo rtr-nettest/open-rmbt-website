@@ -5,7 +5,8 @@ var oldjava = true;
 var cookieEnabled = true;
 
 
-var APPLET_HOST = 'develop.netztest.at';
+//var APPLET_HOST = 'develop.netztest.at';
+var APPLET_HOST = 'c01.control.netztest.at';
 var APPLET_PATH = '/';
 
 var javaTurnOff = getParam('nojava');

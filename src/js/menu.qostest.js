@@ -2,6 +2,7 @@
  * copy of https://www.rtr.at/fileadmin/template/main/js/menu.js
  */
 
+/*
 sfHover = function() {
 	var sfEls = document.getElementById("nav").getElementsByTagName("LI");
 	for (var i=0; i<sfEls.length; i++) {
@@ -14,7 +15,7 @@ sfHover = function() {
 	}
 }
 if (window.attachEvent) window.attachEvent("onload", sfHover);
-
+*/
 
 /*	
  * jQuery mmenu v4.1.9
