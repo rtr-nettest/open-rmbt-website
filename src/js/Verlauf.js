@@ -45,96 +45,148 @@ var map_baselayer_google;
  * also allow dragging the pointer
  */
 function makeMap() {
-    var bounds = new OpenLayers.Bounds();
-    bounds.extend(new OpenLayers.LonLat(1252344.27125, 5846515.498922221)); //South West
-    bounds.extend(new OpenLayers.LonLat(1907596.397450879, 6284446.2299491335)); //Nord East
     
-    var customToolBar = new OpenLayers.Control.Panel({});
-    customToolBar.addControls([new OpenLayers.Control.ZoomIn({
-            title: "Zoom In",
-            displayClass: "zoomIn"
-        }), new OpenLayers.Control.ZoomOut({
-            title: "Zoom Out",
-            displayClass: "zoomOut"
-        })]);
     
-    var extent = new OpenLayers.Bounds(1030000, 5800000, 1930000, 6330000);
-    map_baselayer_basemap = new OpenLayers.Layer.WMTS(
-            {
-                //url templates only allowed with single urls according to documentation
-                url: "https://maps.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
-                //"http://maps2.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg",
-                //"http://maps3.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg",
-                //"http://maps4.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg"
-                //,
-                name: " Basemap.at",
-                isBaseLayer: true,
-                layer: "geolandbasemap",
-                style: "normal",
-                buffer: 0,
-                transitionEffect: "resize",
-                requestEncoding: "REST",
-                matrixSet: "google3857",
-                tileFullExtent: extent,
-                numZoomLevels: 18,
-                attribution: "<a href='http://www.basemap.at' target='_new'>Basemap.at</a>"
-            });
-    map_baselayer_basemap.metadata = {
-        link: "http://www.basemap.at/"
-    };
-    
-    map_baselayer_google = new OpenLayers.Layer.Google(
-                        "Google Streets", // the default
-                        {numZoomLevels: 18}
-                );
-    
-    map_geoposition = new OpenLayers.Map({
-                div: "map1",
-                controls: [
-                        new OpenLayers.Control.Attribution(),
-                        new OpenLayers.Control.Navigation({dragPanOptions: {enableKinetic: true}}),
-                        customToolBar
-        ],
-                //maxExtent : bounds,
-                projection: "EPSG:3857",
-                maxResolution: 156543, //,
-                units: "m"
+    map_baselayer_bing = new ol.layer.Tile({
+        visible: false,
+        preload: Infinity,
+        title: 'Bing Maps',
+        type: 'base',
+        source: new ol.source.BingMaps({
+            key: bing_api_key,
+            imagerySet: 'Road'
+            // use maxZoom 19 to see stretched tiles instead of the BingMaps
+            // "no photos at this zoom level" tiles
+            // maxZoom: 19
+        })
     });
-    map_geoposition.addLayers([map_baselayer_basemap, map_baselayer_google]);
-    map_geoposition.zoomToExtent(bounds);
-    
+
+    map_baselayer_basemap = (function() {
+        // basemap.at
+        //taken from http://www.basemap.at/application/js/mobile-base3.js
+        var gg = ol.proj.get('EPSG:4326');
+        var sm = ol.proj.get('EPSG:3857');
+
+        var templatepng =
+            '{Layer}/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png';
+        var urlsbmappng = [
+            '//maps1.wien.gv.at/basemap/' + templatepng,
+            '//maps2.wien.gv.at/basemap/' + templatepng,
+            '//maps3.wien.gv.at/basemap/' + templatepng,
+            '//maps4.wien.gv.at/basemap/' + templatepng
+        ];
+        var IS_CROSS_ORIGIN = 'anonymous';
+
+        var tilegrid = new ol.tilegrid.WMTS({
+            origin: [-20037508.3428, 20037508.3428],
+            extent: [977650, 5838030, 1913530, 6281290],
+            resolutions: [
+                156543.03392811998, 78271.51696419998,
+                39135.758481959994, 19567.879241008,
+                9783.939620504, 4891.969810252,
+                2445.984905126, 1222.9924525644,
+                611.4962262807999, 305.74811314039994,
+                152.87405657047998, 76.43702828523999,
+                38.21851414248, 19.109257071295996,
+                9.554628535647998, 4.777314267823999,
+                2.3886571339119995, 1.1943285669559998,
+                0.5971642834779999, 0.29858214174039993
+            ],
+            matrixIds: [
+                '0', '1', '2', '3', '4', '5',
+                '6', '7', '8', '9', '10',
+                '11', '12', '13', '14', '15',
+                '16', '17', '18', '19'
+            ]
+        });
+
+
+        var bmap = new ol.source.WMTS({
+            tilePixelRatio: 1,
+            projection: sm,
+            layer: 'geolandbasemap',
+            /*layer: hiDPI ? 'bmaphidpi' : 'geolandbasemap',*/
+            style: 'normal',
+            matrixSet: 'google3857',
+            urls: urlsbmappng,
+            visible: true,
+            //crossOrigin: IS_CROSS_ORIGIN,
+            requestEncoding: /** @type {ol.source.WMTSRequestEncoding} */ ('REST'),
+            tileGrid: tilegrid,
+            attributions: [
+                new ol.Attribution({
+                    html: 'Tiles &copy; <a href="//www.basemap.at/">' +
+                    'basemap.at</a> (STANDARD).'
+                })
+            ]
+        });
+
+        return new ol.layer.Tile({
+            visible: true,
+            preload: Infinity,
+            source: bmap,
+            title: 'Basemap.at',
+            type: 'base'
+        });
+    })();
+
+    map_geoposition = new ol.Map({
+        layers: [map_baselayer_basemap, map_baselayer_bing],
+        controls: ol.control.defaults({
+            attributionOptions: ({
+                collapsible: false
+            })
+        }),
+        target: 'map1',
+        view: new ol.View({
+            center: [0, 0],
+            zoom: 2,
+            maxZoom : 19
+        })
+    });
+
+    var textent = [1252344.27125, 5846515.498922221, 1907596.397450879, 6284446.2299491335];
+    map_geoposition.getView().fit(textent, map_geoposition.getSize());
+
+
     //add marker with test position
-    var markers = new OpenLayers.Layer.Vector( "Overlay" );
+    var iconStyle = new ol.style.Style({
+        image: new ol.style.Icon({
+            src: '../img/speedtest/marker.png'
+        })
+    });
 
-    map_geoposition_pointer = new OpenLayers.Feature.Vector(
-            new OpenLayers.Geometry.Point(0, 0),
-            {description:'This is the value of<br>the description attribute'} ,
-            {externalGraphic: '../img/qostest/marker.png', 
-                graphicHeight: 25, 
-                graphicWidth: 21, 
-                graphicXOffset:-12, 
-                graphicYOffset:-18  }
-        );
-    markers.addFeatures(map_geoposition_pointer);
+    map_geoposition_pointer = new ol.Feature({
+        geometry: new ol.geom.Point([0,0]),
+    });
+    map_geoposition_pointer.setStyle(iconStyle);
 
-    map_geoposition.addLayer(markers);
+    var vectorSource = new ol.source.Vector({
+        features: [map_geoposition_pointer]
+    });
+
+    var vectorLayer = new ol.layer.Vector({
+        source: vectorSource
+    });
+
+
+    map_geoposition.addLayer(vectorLayer);
     
-    var dragControl = new OpenLayers.Control.DragFeature(markers, {'onComplete' : function() {
-            geocoder_provider = "manual";
-            geocoder_accuracy = 10;
-    }});    
-    map_geoposition.addControl(dragControl);
-    dragControl.activate();
+    var modify = new ol.interaction.Modify({
+        features: new ol.Collection([map_geoposition_pointer])
+    });
+    
+    map_geoposition_pointer.on('change',function(){
+        geocoder_provider = "manual";
+        geocoder_accuracy = 10;
+    },map_geoposition_pointer);
+    
+    map_geoposition.addInteraction(modify);
 }
 
 function convertLongLatToOpenLayersPoint(long,lat) {
-    var pt = new OpenLayers.LonLat(long, lat);
-    pt.transform(
-            // degrees are degrees
-            new OpenLayers.Projection('EPSG:4326'),
-            // but your map is in meters (probably)
-            new OpenLayers.Projection('EPSG:900913'));
-    return pt;
+    return ol.proj.transform([long, lat], 
+                'EPSG:4326', 'EPSG:3857');
 }
 
 /**
@@ -180,16 +232,40 @@ function searchAndPositionOnAddress(callback) {
                             $("#address_search .selection").hide();
 
                             $("#address_search #address_search_input").val(results[i].formatted_address);
-
-                            var bounds = new OpenLayers.Bounds();
-                            bounds.extend(convertLongLatToOpenLayersPoint(results[i].geometry.viewport.getNorthEast().lng(), results[i].geometry.viewport.getNorthEast().lat())); //North East
-                            bounds.extend(convertLongLatToOpenLayersPoint(results[i].geometry.viewport.getSouthWest().lng(), results[i].geometry.viewport.getSouthWest().lat())); //South West
-                            var center = convertLongLatToOpenLayersPoint(results[i].geometry.location.lng(), results[i].geometry.location.lat());
-                            map_geoposition_pointer.move(center);
-                            map_geoposition.zoomToExtent(bounds);
-                            //zoom a bit more to allow user precisely moving the marker
-                            map_geoposition.setCenter(center, map_geoposition.getZoom() + 2);
                             
+                            var ne = convertLongLatToOpenLayersPoint(results[i].geometry.viewport.getNorthEast().lng(), results[i].geometry.viewport.getNorthEast().lat()); //North East
+                            var sw = convertLongLatToOpenLayersPoint(results[i].geometry.viewport.getSouthWest().lng(), results[i].geometry.viewport.getSouthWest().lat()); //South West
+                            var center = convertLongLatToOpenLayersPoint(results[i].geometry.location.lng(), results[i].geometry.location.lat());
+                           
+                            //http://openlayers.org/en/v3.7.0/apidoc/ol.html#Extent
+                            //[minx, miny, maxx, maxy]
+                            var extent=[
+                                ne[0], ne[1],
+                                sw[0], sw[1]
+                            ];
+                            
+                            map_geoposition.getView().fit(extent, map_geoposition.getSize());
+                            map_geoposition.getView().setZoom(map_geoposition.getView().getZoom()+2);
+                            map_geoposition.getView().setCenter(center);
+                            
+                            map_geoposition_pointer.getGeometry().setCoordinates(center);//(new ol.geom.Point(center));
+                            
+                            //re-add modify-event in olv3 for some reason
+                            var modify = new ol.interaction.Modify({
+                                features: new ol.Collection([map_geoposition_pointer])
+                            });
+
+                            map_geoposition_pointer.on('change', function () {
+                                geocoder_provider = "manual";
+                                geocoder_accuracy = 10;
+                            }, map_geoposition_pointer);
+
+                            map_geoposition.addInteraction(modify);
+                            
+                            //reset provider
+                            geocoder_provider = "geocoder";
+
+
                             //address components
                             $.each(results[i].address_components, function(j,component) {
                                 if (zip === "" && component.types.indexOf('postal_code') >= 0) {
@@ -203,10 +279,12 @@ function searchAndPositionOnAddress(callback) {
                                    
                                    //set map layer
                                    if (component.short_name.toLowerCase() === 'at') {
-                                       map_geoposition.setBaseLayer(map_baselayer_basemap);
+                                       map_baselayer_basemap.setVisible(true);
+                                       map_baselayer_bing.setVisible(false);
                                    }
                                    else {
-                                       map_geoposition.setBaseLayer(map_baselayer_google);
+                                       map_baselayer_bing.setVisible(true);
+                                       map_baselayer_basemap.setVisible(false);
                                    }
                                 }
                             });
@@ -352,7 +430,7 @@ function show_addressPopup(testID) {
         
         
         $("#popupform").append(
-                '<form action="javascript:void(0);return false;" style="height:100%">' +
+                '<form action="javascript:void(0);return false;" style="height:280px;margin-bottom:0px">' +
                 ((useAddressPopup)?addressForm:zipForm) +
                 
                 '<div class="clear" />' + 
@@ -411,9 +489,10 @@ function show_addressPopup(testID) {
                                 return;
                             }
                             //new: get lat/long from marker
-                            var point = map_geoposition_pointer.geometry.transform(map_geoposition.getProjectionObject(), new OpenLayers.Projection("EPSG:4326"));
-                            var lat = point.y;
-                            var long = point.x;
+                            var point = map_geoposition_pointer.getGeometry().getCoordinates();
+                            point = ol.proj.transform(point, 'EPSG:3857', 'EPSG:4326');
+                            var lat = point[1];
+                            var long = point[0];
                             var accuracy = geocoder_accuracy;
                             var provider = geocoder_provider;
 
@@ -444,7 +523,7 @@ function show_addressPopup(testID) {
 		minHeight : 200,
 		minWidth : 350,
 		width : 600,
-		height : (useAddressPopup)?315:220,
+		height : (useAddressPopup)?430:220,
 		buttons : dialog_buttons,
 		close : function() {
 			$(this).dialog("close");

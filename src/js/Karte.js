@@ -90,10 +90,7 @@ $(document).ready(function() {
 });
 
 function viewMapV3() {
-    var gg = ol.proj.get('EPSG:4326');
-    var sm = ol.proj.get('EPSG:3857');
-
-    var bases = new Array();
+   var bases = new Array();
 
     if (useBingMaps) {
         bases.push(
@@ -115,6 +112,9 @@ function viewMapV3() {
     if (useBasemapAT) {
         // basemap.at
         //taken from http://www.basemap.at/application/js/mobile-base3.js
+        var gg = ol.proj.get('EPSG:4326');
+        var sm = ol.proj.get('EPSG:3857');
+
         var templatepng =
             '{Layer}/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png';
         var urlsbmappng = [
