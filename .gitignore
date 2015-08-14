@@ -5,6 +5,6 @@
 /build.sh
 /src/fileadmin.netztest/
 *.marks
-/templates/parts/*
-/src/fileadmin.netztest/
+templates/parts/
+
 
