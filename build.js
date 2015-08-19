@@ -18,6 +18,7 @@ var request = require('request');
 var fs = require('fs');
 var path = require('path');
 var cheerio = require('cheerio');
+var randomstring = require('randomstring');
 
 
 var Metalsmith = require('metalsmith');
@@ -57,6 +58,7 @@ if (target === null ){
 
 //execute
 var metalsmith = Metalsmith(__dirname)
+    .use(generateRandomJSTestFilesIfMissing())
     .use(fetchRemoteFiles(remoteFiles))
     .use(fetchRemoteFiles(function() {
         return transformRemoteNetztestJSONtoFetchableFiles(require('./conf/filelist_nettest.json'))
@@ -90,6 +92,43 @@ setTimeout(function() {
 }, 15000);
 
 
+/**
+ * Check if all files required for the jstest are existing
+ * if not, generate them
+ */
+function generateRandomJSTestFilesIfMissing() {
+    return function (files, metalsmith, done) {
+        var fileArray = Object.keys(files);
+        var createdFiles = false;
+        for (var i=0;i<=102400;i=Math.max(100,i*2)) {
+            //check if file exists
+            var filePath = "jstest.netztest%PS%files%PS%".replace(/%PS%/g,path.sep) + ("000000"+i).slice(-6);
+            if (fileArray.indexOf(filePath) < 0) {
+                //generate
+                //var fileStream = fs.openSync(filePath,"w");
+                filePath = "src" + path.sep + filePath;
+                console.log("generating random file: " + filePath);
+                if (i===0) {
+                    var fd = fs.openSync(filePath,"w");
+                    fs.closeSync(fd);
+                }
+
+                for (var j=0;j<i;j=j+100) {
+                    var string = randomstring.generate(100*1024);
+                    fs.appendFileSync(filePath, string);
+                }
+
+                createdFiles = true;
+            }
+        }
+        if (!createdFiles) {
+            done();
+        }
+        else {
+            console.log("random files for the jstest have been created, please run the build again!");
+        }
+    }
+}
 
 /**
  * Transform the filelist provided by alladin-it for RTR-dependencies

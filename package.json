@@ -13,6 +13,7 @@
     "metalsmith-watch" : "1.0.1",
     "nunjucks": "^1.3.0",
     "request" : "^2.57",
-	"cheerio" : "^0.18.0"
+	"cheerio" : "^0.18.0",
+    "randomstring" : "^1.0.7"
   }
 }
