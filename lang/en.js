@@ -21,10 +21,10 @@ exports.strings = {
                 "qostest": "https://www.netztest.at/redirect/en/terms"
             }
         },
-        "apps_content": 'Download the NetTest for your <a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">iOS-</a> or <a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android">Android device</a> or use different <a href="https://www.rtr.at/en/tk/rtrnetztest_tests">web browser tests.</a>',
+        "apps_content": 'Download <a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">iOS</a> or <a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android">Android </a> App or conduct the <a href="https://www.rtr.at/en/tk/rtrnetztest_tests">browser test</a>.',
         "apps_url" : "https://www.rtr.at/en/tk/rtrnetztest_tests",
         "apps" : {
-            "netztest" : "Apps and Browser test",
+            "netztest" : "App and Browser Test",
             "qostest" : "NetTest Apps"
         },
         "apps_alt" : "RTR-NetTest app",
@@ -43,8 +43,9 @@ exports.strings = {
         },
         "statistics_alt" : "Statistics teaser",
         "map": "Map view",
-        "map_content" : "Map view",
-        "help_content" : ""
+        "map_content" : "Map with test results",
+        "help_content" : "Detailled background information",
+        "statistics_content" : "Statistics on the test results"
     },
 
     "map_content" : {

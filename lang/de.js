@@ -44,7 +44,8 @@ exports.strings = {
         "statistics_alt" : "Statistik Teaserbild",
         "map": "Kartenansicht",
         "map_content" : "Karte mit Testergebnissen",
-        "help_content" : "Detaillierte Hintergrundinformation"
+        "help_content" : "Detaillierte Hintergrundinformation",
+        "statistics_content" : "Statistiken zu den Testergebnissen"
     },
 
     "map_content" : {
