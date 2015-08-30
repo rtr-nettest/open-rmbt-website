@@ -98,6 +98,12 @@ setTimeout(function() {
  */
 function generateRandomJSTestFilesIfMissing() {
     return function (files, metalsmith, done) {
+        //only if on first run
+        if (downloadedOnce) {
+            done();
+            return;
+        }
+
         var fileArray = Object.keys(files);
         var createdFiles = false;
         for (var i=0;i<=102400;i=Math.max(100,i*2)) {
