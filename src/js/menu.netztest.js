@@ -13,6 +13,7 @@ $(document).ready(function() {
     }
 
 
+    linkLanguageSwitcherToCurrentPage();
 
     //add link to homepage
     //$("#mm-netztestmenu ul").prepend("<li><a href='/'><strong>" + $("#netztestmenu").parent().children("a").first().html() + "</strong></a></li>");
@@ -32,4 +33,15 @@ function hideMenu() {
     $("div.wrapper").css("margin-left","5%");
     $("div.wrapper").css("margin-right","5%");
     $("div.wrapper").css("width","90%");
+}
+
+/**
+ * Set the correct link to the current page for the
+ * language dropdown
+ */
+function linkLanguageSwitcherToCurrentPage() {
+    var cPage = window.location.pathname + window.location.search + window.location.hash;
+    cPage = cPage.substr(4);
+    $(".language-select option[data-lang-name='en']").attr("data-href","/en/" + cPage);
+    $(".language-select option[data-lang-name='de']").attr("data-href","/de/" + cPage);
 }
