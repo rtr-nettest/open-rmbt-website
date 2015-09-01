@@ -451,7 +451,7 @@ function RMBTtestresult(testUUID) {
                                 var ampel;
                                 $('#verlauf-detail tbody').empty();
                                 var tmp = Lang.getString('MeasurementResultFrom')
-                                $('#verlauf-detail tbody').append(
+                                $('#verlauf-detail thead').append(
                                         '<tr>' +
                                         '<th scope="col" colspan="3">'+tmp+' '+data.testresult[0].time_string+'<span class="align-right"><a href="https://www.netztest.at/redirect/' + selectedLanguage + '/help_result" target="_blank">&nbsp;?&nbsp;</a></span></th>' +
                                         '</tr>'
