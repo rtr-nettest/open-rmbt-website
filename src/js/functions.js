@@ -450,6 +450,7 @@ function RMBTtestresult(testUUID) {
                                 $('#code-eingabe').hide();
                                 var ampel;
                                 $('#verlauf-detail tbody').empty();
+                                $('#verlauf-detail thead').empty();
                                 var tmp = Lang.getString('MeasurementResultFrom')
                                 $('#verlauf-detail thead').append(
                                         '<tr>' +
