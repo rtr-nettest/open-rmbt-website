@@ -5,6 +5,17 @@
 {% block headerscriptingExtended %}
 <script type="text/javascript" src="../js/Statistik.js"></script>
 <script type="text/javascript" src="../lib/tablesort/jquery.tablesorter.min.js"></script>
+
+<style>
+    .search_form {
+        padding: 0%;
+    }
+
+    .form-inline .form-group {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -72,92 +83,85 @@
 <div class="clear"><!-- --></div>
 
 <h3>{{ Lang.statistics_content.operators_from }}
-	<form> <fieldset>
+	<form class="form-inline"> <fieldset>
 		<div class="form_line">
-		<select id="country" onchange="requestBrowserData('RMBTstatistics');">
+		<select class="form-control" id="country" onchange="requestBrowserData('RMBTstatistics');">
 			<option value="null">{{ Lang.austria }}</option>
 		</select>
-		<span class="help"><a href="https://www.netztest.at/redirect/{{ Lang.lang }}/help_result">?</a></span>
+		<a href="https://www.netztest.at/redirect/{{ Lang.lang }}/help_result" class="btn btn-default">?</a>
 		</div>
 	</fieldset></form>
 </h3>
 
 <p>{{ Lang.statistics_content.disclaimer }}</p>
-<div class="statistik search_form">
-    <form> <fieldset>
-			 <div class="form_line">
-				<label for="statistik_type">{{ Lang.type }}</label>
-				<select id="statistik_type" name="statistik_type" onchange="requestBrowserData('RMBTstatistics');">
-					<option value="mobile">{{ Lang.mobile }}</option>
-					<option value="wifi">{{ Lang.wifi_test }}</option>
-					<option value="browser">{{ Lang.browser }}</option>
-				</select>
-				</div>
-				
-				<div class="form_line">
-				<label for="statistik_duration">{{ Lang.time_span }}</label>
-				<select id="statistik_duration" name="statistik_duration" onchange="requestBrowserData('RMBTstatistics');">
-					<option value="1">{{ Lang.1_day }}</option>
-					<option value="7">{{ Lang.1_week }}</option>
-					<option value="30">{{ Lang.1_month }}</option>
-					<option value="90" selected="selected">{{ Lang.X_months | replace("%X%","3") }}</option>
-					<option value="180">{{ Lang.X_months | replace("%X%","6") }}</option>
-					<option value="365">{{ Lang.1_year }}</option>
-					<option value="730">{{ Lang.X_years | replace("%X%","2") }}</option>
-				</select>
-			</div>
-        
-			<div id="statistik_network_type_group_form_line" class="form_line">
-				<label for="statistik_network_type_group">{{ Lang.technology }}</label>
-				<select id="statistik_network_type_group" name="statistik_network_type_group"
-						onchange="requestBrowserData('RMBTstatistics');">
-					<option value="all" selected="selected">{{ Lang.all }}</option>
-					<option value="2G">2G</option>
-					<option value="3G">3G</option>
-					<option value="4G">4G</option>
-					<option value="mixed">{{ Lang.mixed }}</option>
-				</select>
-			</div>
-       
-		<div class="form_line">
-			
-				<label for="statistik_quantile">{{ Lang.quantile }}</label>
-				<select id="statistik_quantile" name="statistik_quantile" onchange="requestBrowserData('RMBTstatistics');">
-					<option value="0.2">20%</option>
-					<option value="0.5" selected="selected">50%</option>
-					<option value="0.8">80%</option>
-				</select>
-			</div>
-			<div id="statistik_location_accuracy_form_line" class="form_line">
-				<label for="statistik_location_accuracy">{{ Lang.location_accuracy }}</label>
-				<select id="statistik_location_accuracy" name="statistik_location_accuracy"
-						onchange="requestBrowserData('RMBTstatistics');">
-					<option value="-1">{{ Lang.any }}</option>
-					<option value="10000">&lt; {{ Lang.X_km | replace("%X%","10") }}</option>
-					<option value="2000" selected="selected">&lt; {{ Lang.X_km | replace("%X%","2") }}</option>
-					<option value="100">&lt; {{ Lang.X_m | replace("%X%","100") }}</option>
-				</select>
-			</div>
-        
-    </fieldset>
-    
+
+    <form class="form-inline">
+        <div class="statistik search_form">
+        <fieldset>
+            <div class="form-group">
+                <label for="statistik_type">{{ Lang.type }}</label>
+                <select class="form-control" id="statistik_type" name="statistik_type"
+                        onchange="requestBrowserData('RMBTstatistics');">
+                    <option value="mobile">{{ Lang.mobile }}</option>
+                    <option value="wifi">{{ Lang.wifi_test }}</option>
+                    <option value="browser">{{ Lang.browser }}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="statistik_duration">{{ Lang.time_span }}</label>
+                <select  class="form-control"  id="statistik_duration" name="statistik_duration"
+                        onchange="requestBrowserData('RMBTstatistics');">
+                    <option value="1">{{ Lang.1_day }}</option>
+                    <option value="7">{{ Lang.1_week }}</option>
+                    <option value="30">{{ Lang.1_month }}</option>
+                    <option value="90" selected="selected">{{ Lang.X_months | replace("%X%","3") }}</option>
+                    <option value="180">{{ Lang.X_months | replace("%X%","6") }}</option>
+                    <option value="365">{{ Lang.1_year }}</option>
+                    <option value="730">{{ Lang.X_years | replace("%X%","2") }}</option>
+                </select>
+            </div>
+
+            <div id="statistik_network_type_group_form_line" class="form-group">
+                <label for="statistik_network_type_group">{{ Lang.technology }}</label>
+                <select class="form-control"  id="statistik_network_type_group" name="statistik_network_type_group"
+                        onchange="requestBrowserData('RMBTstatistics');">
+                    <option value="all" selected="selected">{{ Lang.all }}</option>
+                    <option value="2G">2G</option>
+                    <option value="3G">3G</option>
+                    <option value="4G">4G</option>
+                    <option value="mixed">{{ Lang.mixed }}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+
+                <label for="statistik_quantile">{{ Lang.quantile }}</label>
+                <select class="form-control"  id="statistik_quantile" name="statistik_quantile"
+                        onchange="requestBrowserData('RMBTstatistics');">
+                    <option value="0.2">20%</option>
+                    <option value="0.5" selected="selected">50%</option>
+                    <option value="0.8">80%</option>
+                </select>
+            </div>
+            <div id="statistik_location_accuracy_form_line" class="form-group">
+                <label for="statistik_location_accuracy">{{ Lang.location_accuracy }}</label>
+                <select class="form-control"  id="statistik_location_accuracy" name="statistik_location_accuracy"
+                        onchange="requestBrowserData('RMBTstatistics');">
+                    <option value="-1">{{ Lang.any }}</option>
+                    <option value="10000">&lt; {{ Lang.X_km | replace("%X%","10") }}</option>
+                    <option value="2000" selected="selected">&lt; {{ Lang.X_km | replace("%X%","2") }}</option>
+                    <option value="100">&lt; {{ Lang.X_m | replace("%X%","100") }}</option>
+                </select>
+            </div>
+
+        </fieldset>
+</div>
     </form>
     
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</div>
+
+
+
 
 <table id="statistik_provider" class="tablesorter dont-stack">
     <colgroup>
