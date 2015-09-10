@@ -185,7 +185,7 @@ function RMBTmapfilter(options) {
                                      });
                                      form_filter += '<div class="form_line">';
                                      //form_filter += '<label for="'+filtername+'">'+row.title+'</label>';
-                                     form_filter += '<select name="'+filtername+'" id="'+filtername+'" onchange="redrawOverlay();">';
+                                     form_filter += '<select name="'+filtername+'" id="'+filtername+'" onchange="redrawOverlay();" class="form-control input-sm">';
                                      $.each(row.options,function(key1,row1){
                                              form_filter += '<option value="'+eval('row1.'+filtername)+'"';
                                              //console.log(row1.title+': '+row1.default);
@@ -209,9 +209,9 @@ function RMBTmapfilter(options) {
                         
                         
                         var form_auswahl = '';
-                        form_auswahl += '<div class="form_line">';
+                        form_auswahl += '<div class="form-group">';
                         //form_auswahl += '<label for="map_options">' + ((selectedLanguage=='de')?map_de:map_en)+ '</label>';
-                        form_auswahl += '<select name="map_options" id="map_options" onchange="redrawOverlay();">';
+                        form_auswahl += '<select name="map_options" id="map_options" onchange="redrawOverlay();" class="form-control input-sm">';
                         var default_cardtyp;
                         $.each(data.mapfilter.mapTypes, function(key,row){
                              var auswahlname = '';

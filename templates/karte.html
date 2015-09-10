@@ -49,7 +49,16 @@
     .olPopup-closer:after {
         content: "✖";
     }*/
-    
+
+    #control {
+        margin: 0px;
+        margin-top: 1em;
+    }
+
+    #control fieldset {
+        padding: 0px;
+    }
+
     
     .ol-popup {
         display: none;
@@ -183,34 +192,40 @@
 {{ Lang.map_content.teaser }}
 <div id="nettestmap">
 <div id="spinner"></div>
-<form id="control">
+<form id="control" class="form-inline">
 
 	<fieldset>
     <div id='auswahl_selector' class='search_form'>
-    
-        <div class="form_line form-row checkbox">
-            <p>
-                <input type="radio" name="check_layer" id="check_automatic" value="automatic" checked="checked" />
-                <label for="check_automatic">{{ Lang.automatic }}</label>
-            </p>
-            <p>
-                <input type="radio" name="check_layer" id="check_heatmap" value="heatmap" />
-                <label for="check_heatmap">{{ Lang.heatmap }}</label>
-            </p>
-            <p>
-                <input type="radio" name="check_layer" id="check_points" value="points" />
-                <label for="check_points">{{ Lang.points }}</label>
-            </p>
-            <p>
-                <input type="radio" name="check_layer" id="check_shapes" value="shapes" />
-                <label for="check_shapes">{{ Lang.communities }}</label>
-            </p>
+
+        <div class="form-group">
+            <label for="check_automatic" class="radio-inline">
+                <input type="radio" name="check_layer" id="check_automatic" value="automatic" checked="checked"/>
+                {{ Lang.automatic }}
+            </label>
+
+            <label for="check_heatmap" class="radio-inline">
+                <input type="radio" name="check_layer" id="check_heatmap" value="heatmap"/>
+                {{ Lang.heatmap }}
+            </label>
+
+            <label for="check_points" class="radio-inline">
+                <input type="radio" name="check_layer" id="check_points" value="points"/>
+                {{ Lang.points }}
+            </label>
+
+            <label for="check_shapes" class="radio-inline">
+            <input type="radio" name="check_layer" id="check_shapes" value="shapes"/>
+            {{ Lang.communities }}
+            </label>
+
         </div>
     </div>
     
     <div style="clear: both"></div>
 
-    <div id='filter_selector' class='search_form'></div>
+    <div id='filter_selector' class='search_form'>
+
+    </div>
     
     </fieldset>
     
