@@ -523,7 +523,7 @@ function show_addressPopup(testID) {
 		minHeight : 200,
 		minWidth : 350,
 		width : 600,
-		height : (useAddressPopup)?430:220,
+		height : (useAddressPopup)?440:220,
 		buttons : dialog_buttons,
 		close : function() {
 			$(this).dialog("close");
