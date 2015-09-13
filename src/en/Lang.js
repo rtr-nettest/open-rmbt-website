@@ -167,6 +167,7 @@ Lang.setStrings({
     //Test
     'Locating': 'Locating',
     'Initializing' : 'Initializing',
+    'WaitForSlot' : 'Waiting for test slot',
     'Init_Upload' : 'Init Upload',
     'Ping' : 'Ping',
     'Download' : 'Download',

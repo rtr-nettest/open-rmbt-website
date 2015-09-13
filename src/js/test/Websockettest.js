@@ -129,9 +129,11 @@ var RMBTTest = (function() {
 
             var continuation = function() {
                 debug("got geolocation, obtaining token and websocket address");
+                setState(TestState.WAIT);
 
                 //wait if we have to
                 window.setTimeout(function() {
+                    setState(TestState.INIT);
                     _rmbtTestResult.beginTime = (Date().now);
                     //n threads
                     for (var i = 0; i < _numThreads; i++) {
@@ -157,7 +159,7 @@ var RMBTTest = (function() {
 
                         _threads.push(thread);
                     }
-                }, response.test_wait);
+                }, response.test_wait*1000);
             };
 
             var wsGeoTracker;
@@ -193,6 +195,7 @@ var RMBTTest = (function() {
                 break;
 
             case TestState.INIT:
+            case TestState.WAIT:
             case TestState.INIT_DOWN:
             case TestState.INIT_UP:
                 _intermediateResult.progress = diffTime / _statesInfo.durationInitMs;

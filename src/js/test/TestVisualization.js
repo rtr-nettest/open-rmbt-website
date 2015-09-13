@@ -489,6 +489,9 @@ var TestVisualization = (function() {
             case TestState.INIT:
                 _infostatus.innerHTML = Lang.getString('Initializing');
                 break;
+            case TestState.WAIT:
+                _infostatus.innerHTML = Lang.getString('WaitForSlot');
+                break;
             case TestState.INIT_UP:
                 _infostatus.innerHTML = Lang.getString('Init_Upload');
                 break;
