@@ -60,24 +60,27 @@
                             <tr>
                                 <th scope="col">{{ Lang.time }}</th>
                                 <th scope="col">{{ Lang.operator }}/<wbr>{{ Lang.device }}</th>
-                                <th scope="col" class="align-right">{{ Lang.down }} ({{ Lang.mbps }})</th>
-                                <th scope="col" class="align-right">{{ Lang.up }} ({{ Lang.mbps }})</th>
-                                <th scope="col" class="align-right">{{ Lang.ping }} ({{ Lang.ms }})</th>
-                                <th scope="col" class="align-right">{{ Lang.signal }} ({{ Lang.dBm }})</th>
+                                <th scope="col" class="right">{{ Lang.down }} ({{ Lang.mbps }})</th>
+                                <th scope="col" class="right">{{ Lang.up }} ({{ Lang.mbps }})</th>
+                                <th scope="col" class="right">{{ Lang.ping }} ({{ Lang.ms }})</th>
+                                <th scope="col" class="right">{{ Lang.signal }} ({{ Lang.dBm }})</th>
                             </tr>
                         </thead>
                         <tbody>
                           
                         </tbody>
+                        <tfoot>
+                        <tr><td colspan="6">
+                            <a href="Opentests">{{ Lang.further_tests }}</a>
+                        </td>
+                        </tr>
+                        </tfoot>
                     </table>
     
     
 
 </div>
 
-<div class="opendata-info">
-    <p><a href="Opentests">{{ Lang.further_tests }}</a></p>
-</div>
 
 
 <div class="clear"><!-- --></div>
