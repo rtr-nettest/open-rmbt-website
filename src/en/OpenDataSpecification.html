@@ -60,6 +60,7 @@
 <li><a href="#example-4">6.4. Example</a></li>
 </ul>
 </li>
+<li><a href="#change-history">7. Change history</a></li>
 </ul>
 </div>
 </div>
@@ -67,7 +68,7 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Version 2015-06-08</p>
+<p>Version 2015-09-14</p>
 </div>
 <div class="paragraph">
 <p>Thomas Schreiber<br>
@@ -143,7 +144,8 @@ Multiple attributes are delimited with ampersand &amp;. The general format is he
 <div class="paragraph">
 <p>The parameter "sender" is optional for low-volume requests. For high-volume
 requests, please contact RTR (<a href="mailto:netztest@rtr.at">netztest@rtr.at</a>) for instructions
-regarding the parameter "sender".</p>
+regarding the parameter "sender". Users with a registered sender ID can be
+informed in case of major interface changes.</p>
 </div>
 <div class="paragraph">
 <p>Data accessible via the Open Data Interface are made available under
@@ -1208,7 +1210,7 @@ country_geoip
 </tr>
 <tr>
 <td class="hdlist1">
-country_location
+<em>country_location</em>
 </td>
 <td class="hdlist2">
 <p>Country of geo-location.</p>
@@ -1716,6 +1718,14 @@ traffic-light system.</p>
 </tr>
 <tr>
 <td class="hdlist1">
+wifi_link_speed
+</td>
+<td class="hdlist2">
+<p>WLAN link speed according to the Android API.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
 <em>zip_code</em>
 </td>
 <td class="hdlist2">
@@ -2086,6 +2096,11 @@ The upload threads are named "0", "1", "2" etc.</p>
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>Note: If there is no data transmitted in a thread, this thread is not reported at all.
+The threads may also differ in duration and number of speed curve measurement items.
+The time gaps between single items are variable as well.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2851,7 +2866,7 @@ NON_TRANSPARENT_PROXY, DNS, TCP, or UDP.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">test_summary</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">"TCP Outgoing, Port: 585"</p></td>
 </tr>
 <tr>
@@ -3054,7 +3069,7 @@ keep-alive\nContent-Range: bytes 1000000-1004999/9982005\n"</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">"3000000000"</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">nontransproxy_result":</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nontransproxy_result</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">"OK"</p></td>
 </tr>
@@ -3067,11 +3082,6 @@ keep-alive\nContent-Range: bytes 1000000-1004999/9982005\n"</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">start_time_ns</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">"24429032022"</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">start_time_ns</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">"25759770876"</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">tcp_objective_out_port</p></td>
@@ -3832,10 +3842,41 @@ status
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="change-history"><a class="anchor" href="#change-history"></a>7. Change history</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: %;">
+<col style="width: %;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Date</th>
+<th class="tableblock halign-left valign-top">Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2015-09-14</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Introduction of the change history.</p>
+</div>
+<div class="paragraph">
+<p>Correction of various typos.</p>
+</div>
+<div class="paragraph">
+<p>Hints for sender ID and threadwise speed curve added.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-06-08 11:55:58 MS
+Last updated 2015-09-14 11:29:08 MS
 </div>
 </div>
 </body>
