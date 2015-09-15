@@ -84,17 +84,16 @@
 
 
 <div class="clear"><!-- --></div>
-
-<h3>{{ Lang.statistics_content.operators_from }}
 	<form class="form-inline"> <fieldset>
 		<div class="form_line">
+            <label for="country">{{ Lang.statistics_content.operators_from }} </label>
 		<select class="form-control" id="country" onchange="requestBrowserData('RMBTstatistics');">
 			<option value="null">{{ Lang.austria }}</option>
 		</select>
 		<a href="https://www.netztest.at/redirect/{{ Lang.lang }}/help_result" class="btn btn-default">?</a>
 		</div>
 	</fieldset></form>
-</h3>
+
 
 <p>{{ Lang.statistics_content.disclaimer }}</p>
 
