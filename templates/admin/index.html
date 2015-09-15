@@ -11,16 +11,34 @@
             success: function(data) {
                 $("#controlserver_version").html(data.version);
             }});
+
+        var json_data = {
+            "type": test_type,
+            "name": test_name
+        };
         $.ajax({
-            url: mapProxy + "/" + mappath + "/version",
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                $("#mapserver_version").html(data.version);
-            }});
+            url: controlProxy + "/" + wspath + "/settings",
+            type: "post",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(json_data),
+            success: function (data) {
+                URL_MAP_SERVER = data.settings[0].urls.url_map_server;
+
+                $.ajax({
+                    url: URL_MAP_SERVER + "/version",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $("#mapserver_version").html(data.version);
+                    }});
+            }
+        });
+
+
 
         $.ajax({
-            url: mapProxy + "/" + statisticpath + "/version",
+            url: controlProxy + "/" + statisticpath + "/version",
             type: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -42,6 +60,7 @@
     Control Server version: <span id="controlserver_version"></span><br/>
     Map Server version: <span id="mapserver_version"></span><br/>
     Statistic Server version: <span id="statisticserver_version"></span><br/>
+    Website version: {{ gitDescribe }}<br />
 </p>
 
 

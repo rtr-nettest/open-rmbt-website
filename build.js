@@ -19,6 +19,7 @@ var fs = require('fs');
 var path = require('path');
 var cheerio = require('cheerio');
 var randomstring = require('randomstring');
+var gitDescribe = require('git-describe');
 
 
 var Metalsmith = require('metalsmith');
@@ -251,6 +252,11 @@ function setConfig() {
         var metadata = metalsmith.metadata();
         metadata['target'] = target;
         metadata['basetemplate'] = (target === "qostest")?"templates/qosPage.html":"templates/netztestPage.html";
+        try {
+            metadata['gitDescribe'] = gitDescribe();
+        } catch(e) {
+            console.log("not a valid git directory");
+        }
 
         //delete duplicate files from build
         Object.keys(files).forEach(function (file) {
