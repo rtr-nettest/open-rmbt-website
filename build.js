@@ -255,7 +255,7 @@ function setConfig() {
         try {
             metadata['gitDescribe'] = gitDescribe();
         } catch(e) {
-            console.log("not a valid git directory");
+            console.log("not a valid git directory: " + e.message);
         }
 
         //delete duplicate files from build

@@ -1675,7 +1675,12 @@ function getOpenDataRow(testdata, showUnits) {
     row += "<td class='time'>" + link + formatOpenDataDateToLocalTime(testdata.time) + "</a></td>";
         
     //environment info
-    row += "<td class='test-platform'>" + link +  infoFormatter(testdata.model, testdata.platform, testdata.provider_name) + "</a></td>";
+    //position marker
+    var position_marker = "";
+    if (testdata.long !== null) {
+        position_marker = '<img src="/images/marker_fa.png" class="position-marker" /> '
+    }
+    row += "<td class='test-platform'>" + link +  position_marker + infoFormatter(testdata.model, testdata.platform, testdata.provider_name) + "</a></td>";
     
     //down
     row += "<td class='test-download align-right'>" + link + (testdata.download_kbit / 1000).formatNumber(getSignificantDigits(testdata.download_kbit / 1000)) + (showUnits ? '&nbsp;' + Lang.getString('Mbps') : '') + "</a></td>";
