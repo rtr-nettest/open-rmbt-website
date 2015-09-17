@@ -67,7 +67,17 @@ exports.strings = {
             "netztest" : 'Wir weisen darauf hin, dass Nutzer den RTR-Netztest wiederholt durchführen können und auch diese Tests in die Statistik einfließen.',
             "qostest" : 'Wir weisen darauf hin, dass Nutzer den Test auf qostest.eu wiederholt durchführen können und auch diese Tests in die Statistik einfließen.'
         },
-        "opendata_disclaimer" : 'Hinweis: <a href="Opendata.html">Rohdaten als Opendata</a> verfügbar'
+        "opendata_disclaimer" : 'Hinweis: <a href="Opendata.html">Rohdaten als Opendata</a> verfügbar',
+        "burgenland" : 'Burgenland',
+        "carinthia" : 'Kärnten',
+        "lower_austria" : 'Niederösterreich',
+        "upper_austria" : 'Oberösterreich',
+        "salzburg" : 'Salzburg',
+        "styria" : "Steiermark",
+        "tyrol" : "Tirol",
+        "vorarlberg" : "Vorarlberg",
+        "vienna" : "Wien",
+        "all_states" : "Alle Bundesländer"
 
     },
 
@@ -90,7 +100,8 @@ exports.strings = {
         "software_version" : "Software-Version",
         "next_page" : "Nächste Seite",
         "results" : "Ergebnisse",
-        "network_country" : "Land"
+        "network_country" : "Land",
+        "gkz" : "Gemeindekennzahl"
     },
 
     "options_content" : {

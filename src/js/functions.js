@@ -721,7 +721,10 @@ function RMBTstatistics() {
         if (!country) {
             country = $("#country").val();
         }
-        
+
+        var province = parseInt($("#province").val());
+        (province === 'null') ? province = null : '';
+
         if (country !== previousStatisticsCountry && country !== 'null' && country !== 'AT') {
             previousStatisticsCountry = country;
             //Standard values
@@ -729,13 +732,21 @@ function RMBTstatistics() {
             $('#statistik_quantile').val(0.5);
             $('#statistik_location_accuracy').val(-1);
             $('#statistik_network_type_group').val("all");
+
+            //hide provinces
+            $("#province").hide();
+            province = null;
         }
+        //Austrian values
         else if (country !== previousStatisticsCountry && (country === 'null' || country === 'AT')) {
             previousStatisticsCountry = country;    
             $('#statistik_duration').val(90);
             $('#statistik_quantile').val(0.5);
             $('#statistik_location_accuracy').val(2000);
             $('#statistik_network_type_group').val("all");
+
+            //show provinces
+            $("#province").show();
         }
         
         var json_data = {
@@ -748,7 +759,8 @@ function RMBTstatistics() {
                 network_type_group: $('#statistik_network_type_group').val(),
                 max_devices: 100,
                 location_accuracy: $('#statistik_location_accuracy').val(),
-                country: (country?country:null)
+                country: (country?country:null),
+                province: province
         };
         if (developerCode>0) {
             json_data['developer_code'] = developerCode;
@@ -775,6 +787,9 @@ function RMBTstatistics() {
                         
                         if ($('#statistik_location_accuracy').val() > 0) {
                             opendata += "&loc_accuracy[]=>0&loc_accuracy[]=<" + $('#statistik_location_accuracy').val();
+                        }
+                        if (province !== null) {
+                            opendata += "&gkz[]=>" + province*10000 + "&gkz[]=<" + (((province+1)*10000)-1);
                         }
                         
                         opendata += "&time=>" + ((new Date()).getTime()-$('#statistik_duration').val()*(1000*60*60*24));

@@ -90,12 +90,24 @@
 		<select class="form-control" id="country" onchange="requestBrowserData('RMBTstatistics');">
 			<option value="null">{{ Lang.austria }}</option>
 		</select>
+        <select class="form-control" id="province" onchange="requestBrowserData('RMBTstatistics');">
+            <option value="null">{{ Lang.statistics_content.all_states }}</option>
+            <option value="1">{{ Lang.statistics_content.burgenland }}</option>
+            <option value="2">{{ Lang.statistics_content.carinthia }}</option>
+            <option value="3">{{ Lang.statistics_content.lower_austria }}</option>
+            <option value="4">{{ Lang.statistics_content.upper_austria }}</option>
+            <option value="5">{{ Lang.statistics_content.salzburg }}</option>
+            <option value="6">{{ Lang.statistics_content.styria }}</option>
+            <option value="7">{{ Lang.statistics_content.tyrol }}</option>
+            <option value="8">{{ Lang.statistics_content.vorarlberg }}</option>
+            <option value="9">{{ Lang.statistics_content.vienna }}</option>
+        </select>
 		<a href="https://www.netztest.at/redirect/{{ Lang.lang }}/help_result" class="btn btn-default">?</a>
 		</div>
 	</fieldset></form>
 
 
-<p>{{ Lang.statistics_content.disclaimer }}</p>
+
 
     <form class="form-inline">
         <div class="statistik search_form">
@@ -250,7 +262,7 @@
     </tfoot>
 
 </table>
-
+<p>{{ Lang.statistics_content.disclaimer }}</p>
 
 <h3>{{ Lang.devices }}</h3>
 <table id="statistik_devices" class="tablesorter dont-stack">

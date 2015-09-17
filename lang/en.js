@@ -67,8 +67,17 @@ exports.strings = {
             "netztest" : 'It should be emphasized that each user can repeatedly perform the RTR-NetTest. These tests are also reflected in the statistics.',
             "qostest" : 'It should be emphasized that each user can repeatedly perform qostest.eu. These tests are also reflected in the statistics.'
         },
-        "opendata_disclaimer" : 'Please note: <a href="Opendata.html">raw data available</a> as open data'
-
+        "opendata_disclaimer" : 'Please note: <a href="Opendata.html">raw data available</a> as open data',
+        "burgenland" : 'Burgenland',
+        "carinthia" : 'Carinthia',
+        "lower_austria" : 'Lower Austria',
+        "upper_austria" : 'Upper Austria',
+        "salzburg" : 'Salzburg',
+        "styria" : "Styria",
+        "tyrol" : "Tyrol",
+        "vorarlberg" : "Vorarlberg",
+        "vienna" : "Vienna",
+        "all_states" : "All provinces"
     },
 
     "history_content" : {
@@ -90,7 +99,8 @@ exports.strings = {
         "software_version" : "Software version",
         "next_page" : "Next page",
         "results" : "results",
-        "network_country" : "Country"
+        "network_country" : "Country",
+        "gkz" : "Austrian community ID"
     },
 
     "options_content" : {
