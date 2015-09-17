@@ -722,8 +722,8 @@ function RMBTstatistics() {
             country = $("#country").val();
         }
 
-        var province = parseInt($("#province").val());
-        (province === 'null') ? province = null : '';
+        var province = ($("#province").val());
+        (province === 'null') ? province = null : province = parseInt(province);
 
         if (country !== previousStatisticsCountry && country !== 'null' && country !== 'AT') {
             previousStatisticsCountry = country;

@@ -78,7 +78,6 @@ exports.strings = {
         "vorarlberg" : "Vorarlberg",
         "vienna" : "Wien",
         "all_states" : "Alle Bundesländer"
-
     },
 
     "history_content" : {
