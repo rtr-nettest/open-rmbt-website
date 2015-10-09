@@ -6,7 +6,7 @@ var cookieEnabled = true;
 
 
 //var APPLET_HOST = 'develop.netztest.at';
-var APPLET_HOST = 'c01.control.netztest.at';
+var APPLET_HOST = 'c01.netztest.at';
 var APPLET_PATH = '/';
 
 var javaTurnOff = getParam('nojava');
@@ -19,6 +19,9 @@ if (getParam("Java")) {
 }
 if (getParam("websocket")) {
     preferredTest = TestTypes.Websocket;
+}
+if (getParam("jstest")) {
+    preferredTest = TestTypes.JavaScript;
 }
 if (preferredTest !== TestTypes.Java) {
         noJava = true;
