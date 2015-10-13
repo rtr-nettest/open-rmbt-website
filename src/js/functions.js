@@ -1078,7 +1078,7 @@ function RMBTstatistics() {
                            '<th class="align-right quantile"><div>'+sum_up+' ' + Lang.getString('Mbps')+
                                 '<div id="sum_up" class="quantile_details">'+
                                 label_all_operators + '<br />'+
-                                'Down: '+sum_up+' ' + Lang.getString('Mbps') + '<br />'+
+                                'Up: '+sum_up+' ' + Lang.getString('Mbps') + '<br />'+
                                 '<span class="green">'+up_green+'%</span>'+
                                 '<span class="yellow">'+up_yellow+'%</span>'+
                                 '<span class="red">'+up_red+'%</span>'+
@@ -1087,7 +1087,7 @@ function RMBTstatistics() {
                            '<th class="align-right quantile"><div>'+sum_ping+' ms'+
                                 '<div id="sum_ping" class="quantile_details">'+
                                 label_all_operators + '<br />'+
-                                'Down: '+sum_ping+' ' + Lang.getString('Mbps') + '<br />'+
+                                'Ping: '+sum_ping+' ' + Lang.getString('ms') + '<br />'+
                                 '<span class="green">'+ping_green+'%</span>'+
                                 '<span class="yellow">'+ping_yellow+'%</span>'+
                                 '<span class="red">'+ping_red+'%</span>'+
@@ -1096,7 +1096,7 @@ function RMBTstatistics() {
                            '<th class="align-right quantile"><div>'+sum_signal+
                                 '<div id="sum_signal" class="quantile_details">'+
                                 label_all_operators + '<br />'+
-                                'Down: '+sum_signal+'<br />'+
+                                'Signal: '+sum_signal+'<br />'+
                                 '<span class="green">'+signal_green+'%</span>'+
                                 '<span class="yellow">'+signal_yellow+'%</span>'+
                                 '<span class="red">'+signal_red+'%</span>'+
