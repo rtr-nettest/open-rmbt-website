@@ -2,6 +2,7 @@
 //var mapProxy = "https://www.netztest.at";
 var controlProxy = "";
 var mapProxy = "";
+var statisticProxy = "";
 var wspath = "RMBTControlServer";
 var statisticpath = "RMBTStatisticServer";
 

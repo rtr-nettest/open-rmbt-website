@@ -32,7 +32,7 @@ function loadUsageStatistics() {
     }
     
     $.ajax({
-        url: controlProxy + "/" + statisticpath + "/admin/usageJSON?" + params,
+        url: statisticProxy + "/" + statisticpath + "/admin/usageJSON?" + params,
         type: 'GET',
         dataType: 'json',
         statusCode: {

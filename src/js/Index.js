@@ -17,8 +17,10 @@ $(document).ready(function() {
         $("#teaserlinkStart a").attr("href",url);
         $("#hint-jstest").show();
     } 
-    
-    getLastOpenDataResults();
+
+    if (developerCode > 0) {
+        getLastOpenDataResults();
+    }
 });
 
 /**
@@ -31,7 +33,7 @@ function getLastOpenDataResults() {
         data = "&developer_code=" + developerCode;
     }
     $.ajax({
-        url: controlProxy + "/" + statisticpath + "/opentests/search?max_results=" + most_recent_tests + data,
+        url: statisticProxy + "/" + statisticpath + "/opentests/search?max_results=" + most_recent_tests + data,
         type: 'GET',
         dataType: 'json',
         cache: false,

@@ -1,5 +1,6 @@
 var controlProxy = "";
-var mapProxy = "";
+var statisticProxy = "";
+var statisticProxy = "https://www.netztest.at";
 //var controlProxy = "https://develop.netztest.at";
 //var mapProxy = "" - filled in dynamically
 var wspath = "RMBTControlServer";

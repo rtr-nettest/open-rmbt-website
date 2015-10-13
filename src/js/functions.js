@@ -768,7 +768,7 @@ function RMBTstatistics() {
         
         $('#spinner').spin('modal');
         $.ajax({
-                url: controlProxy+"/"+statisticpath+"/statistics",
+                url: statisticProxy+"/"+statisticpath+"/statistics",
                 type: "post",
                 dataType: "json",
                 contentType: "application/json",
