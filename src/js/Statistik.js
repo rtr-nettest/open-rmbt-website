@@ -1,4 +1,5 @@
 var most_recent_tests = 5;
+var bootstrap_datepicker_path = '/lib/bootstrap-datepicker/';
 
 $(document).ready(function() {
         //$.support.cors = true;
@@ -6,21 +7,52 @@ $(document).ready(function() {
         getLastOpenDataResults();
         //refresh every 30s
         setInterval(getLastOpenDataResults, 30000);
-        
+
+        //set up enddate field
+        Modernizr.load({
+            test: Modernizr.inputtypes.date,
+            nope: [bootstrap_datepicker_path + 'bootstrap-datepicker.min.js',
+                bootstrap_datepicker_path + 'bootstrap-datepicker.de.min.js',
+                bootstrap_datepicker_path + 'bootstrap-datepicker3.standalone.min.css'],
+            yep: function() {
+                //disable jquery ui datepicker
+                $('#statistik_enddate').datepicker('disable');
+            },
+            complete: function () {
+                //enable bootstrap datepicker
+                $('#statistik_enddate').datepicker({
+                    language: selectedLanguage,
+                    format: "yyyy-mm-dd",
+                    todayHighlight: true,
+                    autoclose: true
+                });
+            }
+        });
+
+        //set up "show more"-Button
+        $("#show_more_button").click(function() {
+            //switch label
+            var tmp = $("#show_more_button").text();
+            $("#show_more_button").text($("#show_more_button").attr("data-alternate"));
+            $("#show_more_button").attr("data-alternate",tmp);
+            $("div.additional-fields").slideToggle();
+        });
+
+
         $.tablesorter.addParser({
-		id: 'own',
-		is: function(s) {
-			// return false so this parser is not auto detected
-			return false;
-		},	
-		format: function(s, table, cell, cellIndex) {
-			// format your data for normalization
-			return s.toLowerCase()
-			.replace(/\D/,"")
-			.replace(/\./,"");		
-		},
-		type: 'numeric'
-	});
+            id: 'own',
+            is: function (s) {
+                // return false so this parser is not auto detected
+                return false;
+            },
+            format: function (s, table, cell, cellIndex) {
+                // format your data for normalization
+                return s.toLowerCase()
+                    .replace(/\D/, "")
+                    .replace(/\./, "");
+            },
+            type: 'numeric'
+        });
         
         $("#statistik_provider").tablesorter({
                 headers:

@@ -748,6 +748,23 @@ function RMBTstatistics() {
             //show provinces
             $("#province").show();
         }
+
+        //end date field
+        var end_date = $("#statistik_enddate").val();
+        var end_date_string = null;
+        if (end_date !== undefined && end_date !== null && end_date !== "") {
+            end_date = new Date(end_date);
+            end_date.setHours(23);
+            end_date.setMinutes(59);
+            end_date.setSeconds(59);
+            end_date.setMilliseconds(999);
+
+            end_date_string = end_date.getUTCFullYear() + "-" + pad(end_date.getUTCMonth()+1,2) + "-" + pad(end_date.getUTCDate(),2)
+                + " " + pad(end_date.getUTCHours(),2) + ":" + pad(end_date.getUTCMinutes(),2) + ":" + pad(end_date.getUTCSeconds(),2);
+        }
+        else {
+            end_date = null;
+        }
         
         var json_data = {
                 uuid: cookie_uuid,
@@ -760,7 +777,8 @@ function RMBTstatistics() {
                 max_devices: 100,
                 location_accuracy: $('#statistik_location_accuracy').val(),
                 country: (country?country:null),
-                province: province
+                province: province,
+                end_date: end_date_string
         };
         if (developerCode>0) {
             json_data['developer_code'] = developerCode;
@@ -791,8 +809,14 @@ function RMBTstatistics() {
                         if (province !== null) {
                             opendata += "&gkz[]=>" + province*10000 + "&gkz[]=<" + (((province+1)*10000)-1);
                         }
-                        
-                        opendata += "&time=>" + ((new Date()).getTime()-$('#statistik_duration').val()*(1000*60*60*24));
+                        if (end_date === null) {
+                            opendata += "&time=>" + ((new Date()).getTime() - $('#statistik_duration').val() * (1000 * 60 * 60 * 24));
+                        } else {
+                            //adjust begin date to match
+                            var begin_date = ((new Date()).getTime() - $('#statistik_duration').val() * (1000 * 60 * 60 * 24));
+                            begin_date = begin_date - ((new Date()).getTime() - end_date.getTime());
+                            opendata += "&time[]=>" + begin_date + "&time[]=<" + end_date.getTime();
+                        }
                     
                         //console.log(data);
                         var down_green, down_yellow, down_red, up_green, up_yellow, up_red, ping_green, ping_yellow, ping_red, signal_green, signal_yellow, signal_red, sum_count, sum_down, sum_up, sum_ping, signalDetailDiv, model;

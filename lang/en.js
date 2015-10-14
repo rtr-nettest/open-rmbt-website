@@ -77,7 +77,8 @@ exports.strings = {
         "tyrol" : "Tyrol",
         "vorarlberg" : "Vorarlberg",
         "vienna" : "Vienna",
-        "all_states" : "All provinces"
+        "all_states" : "All provinces",
+        "enddate" : "End date"
     },
 
     "history_content" : {
@@ -151,6 +152,8 @@ exports.strings = {
     'dBm': 'dBm',
     'dB': 'dB',
     'X_recent_tests': "%X% recent tests",
+    'more' : "more",
+    'less' : "less",
 
     "automatic" : "Automatic",
     "heatmap" : "Heatmap",

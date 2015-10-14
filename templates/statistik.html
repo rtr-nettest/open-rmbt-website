@@ -15,6 +15,10 @@
         padding-top: 5px;
         padding-bottom: 5px;
     }
+
+    input[type=date] {
+        background-color: white;
+    }
 </style>
 {% endblock %}
 
@@ -136,37 +140,47 @@
                 </select>
             </div>
 
-            <div id="statistik_network_type_group_form_line" class="form-group">
-                <label for="statistik_network_type_group">{{ Lang.technology }}</label>
-                <select class="form-control"  id="statistik_network_type_group" name="statistik_network_type_group"
-                        onchange="requestBrowserData('RMBTstatistics');">
-                    <option value="all" selected="selected">{{ Lang.all }}</option>
-                    <option value="2G">2G</option>
-                    <option value="3G">3G</option>
-                    <option value="4G">4G</option>
-                    <option value="mixed">{{ Lang.mixed }}</option>
-                </select>
-            </div>
 
-            <div class="form-group">
 
-                <label for="statistik_quantile">{{ Lang.quantile }}</label>
-                <select class="form-control"  id="statistik_quantile" name="statistik_quantile"
-                        onchange="requestBrowserData('RMBTstatistics');">
-                    <option value="0.2">20%</option>
-                    <option value="0.5" selected="selected">50%</option>
-                    <option value="0.8">80%</option>
-                </select>
-            </div>
-            <div id="statistik_location_accuracy_form_line" class="form-group">
-                <label for="statistik_location_accuracy">{{ Lang.location_accuracy }}</label>
-                <select class="form-control"  id="statistik_location_accuracy" name="statistik_location_accuracy"
-                        onchange="requestBrowserData('RMBTstatistics');">
-                    <option value="-1">{{ Lang.any }}</option>
-                    <option value="10000">&lt; {{ Lang.X_km | replace("%X%","10") }}</option>
-                    <option value="2000" selected="selected">&lt; {{ Lang.X_km | replace("%X%","2") }}</option>
-                    <option value="100">&lt; {{ Lang.X_m | replace("%X%","100") }}</option>
-                </select>
+            <a href="#" id="show_more_button" class="btn btn-default" data-alternate="{{ Lang.less }} &#x25b2;">{{ Lang.more }} &#x25bc;</a>
+
+            <div class="additional-fields" style="display:none;">
+                <div id="statistik_network_type_group_form_line" class="form-group">
+                    <label for="statistik_network_type_group">{{ Lang.technology }}</label>
+                    <select class="form-control"  id="statistik_network_type_group" name="statistik_network_type_group"
+                            onchange="requestBrowserData('RMBTstatistics');">
+                        <option value="all" selected="selected">{{ Lang.all }}</option>
+                        <option value="2G">2G</option>
+                        <option value="3G">3G</option>
+                        <option value="4G">4G</option>
+                        <option value="mixed">{{ Lang.mixed }}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+
+                    <label for="statistik_quantile">{{ Lang.quantile }}</label>
+                    <select class="form-control"  id="statistik_quantile" name="statistik_quantile"
+                            onchange="requestBrowserData('RMBTstatistics');">
+                        <option value="0.2">20%</option>
+                        <option value="0.5" selected="selected">50%</option>
+                        <option value="0.8">80%</option>
+                    </select>
+                </div>
+                <div id="statistik_location_accuracy_form_line" class="form-group">
+                    <label for="statistik_location_accuracy">{{ Lang.location_accuracy }}</label>
+                    <select class="form-control"  id="statistik_location_accuracy" name="statistik_location_accuracy"
+                            onchange="requestBrowserData('RMBTstatistics');">
+                        <option value="-1">{{ Lang.any }}</option>
+                        <option value="10000">&lt; {{ Lang.X_km | replace("%X%","10") }}</option>
+                        <option value="2000" selected="selected">&lt; {{ Lang.X_km | replace("%X%","2") }}</option>
+                        <option value="100">&lt; {{ Lang.X_m | replace("%X%","100") }}</option>
+                    </select>
+                </div>
+
+                <div id="statistik_enddate_form_line" class="form-group">
+                    <label for="statistik_enddate">{{ Lang.statistics_content.enddate }}</label>
+                        <input type="date" class="form-control" id="statistik_enddate" placeholder="2015-01-01" onchange="requestBrowserData('RMBTstatistics');"/>
+                </div>
             </div>
 
         </fieldset>
