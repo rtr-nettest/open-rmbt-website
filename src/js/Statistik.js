@@ -36,6 +36,7 @@ $(document).ready(function() {
             $("#show_more_button").text($("#show_more_button").attr("data-alternate"));
             $("#show_more_button").attr("data-alternate",tmp);
             $("div.additional-fields").slideToggle();
+            return false;
         });
 
 

@@ -1,0 +1,152 @@
+{% extends basetemplate %}
+{% set title = Lang.admin %}
+
+{% block headerscriptingExtended %}
+<script type="text/javascript" src="../en/Lang.js"></script>
+
+<style>
+    input {
+        background-color: white !important;
+    }
+
+    fieldset {
+        background-color: transparent !important;
+    }
+
+    .form-group .help-block {
+        display:none;
+    }
+
+    .form-group.has-error .help-block {
+        display: inline;
+    }
+
+    #log {
+        display: none;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#uuid").change(function() {
+            var val = $("#uuid").val();
+            $("#helper-radios input").removeAttr("checked");
+            $("#uuid-group").removeClass("has-error");
+            if (val.length > 0) {
+                var fC = val.charAt(0);
+                $("#helper-radios #uuid" + fC).attr("checked", "checked");
+                if ($("input[name=inlineRadioOptions]:checked").length === 0) {
+                    $("#uuid-group").addClass("has-error");
+                }
+            }
+        })
+    });
+
+    function sendForm() {
+        var hasError = false;
+        if ($("input[name=inlineRadioOptions]:checked").length === 0) {
+            $("#uuid-group").addClass("has-error");
+            hasError = true;
+        }
+        var comment = $("#comment").val();
+        if (comment == "") {
+            $("#comment-group").addClass("has-error");
+            hasError = true;
+            return false;
+        }
+
+        $("#uuid-group").removeClass("has-error");
+        $("#comment-group").removeClass("has-error");
+        $("#submitButton").attr("disabled","disabled");
+
+        var uuid = $("#uuid").val();
+        var implausible = $("input[name=implausible]:checked").val();
+        implausible = (implausible==="true")?true:false;
+
+        var json_data = {
+            "uuid": uuid,
+            "comment": comment,
+            "implausible" : implausible
+        };
+        $.ajax({
+            url: controlProxy + "/" + wspath + "/admin/setImplausible",
+            type: "post",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(json_data),
+            success: function (data) {
+                if (data.hasOwnProperty("error")) {
+                    alert("Fehler: " + data.error);
+                }
+                else {
+                    alert("Status: " + data.status + ". \nAffected rows: " + data.affected_rows);
+                    $("#implausibleForm").trigger("reset");
+
+                    $("#log").show();
+                    $("#log ul").append("<li>" + uuid + "</li>")
+                }
+                $("#submitButton").removeAttr("disabled");
+            }
+        });
+
+        return false;
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+
+<h2 id="h2">RTR-NetTest implausibility helper</h2>
+<div id="spinner"></div>
+
+<form onsubmit="return sendForm();" id="implausibleForm">
+    <div class="form-group" id="uuid-group">
+        <label for="uuid">UUID</label>
+        <input type="text" class="form-control" id="uuid" placeholder="[U,P,T,O]3533e914-f6e4-482b-8d19-9f1fcdcafa65">
+        <span id="helpBlock2" class="help-block">Please use a valid UUID prefix</span>
+    </div>
+
+    <div class="form-group" id="helper-radios">
+        <fieldset disabled="disabled">
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions" id="uuidU" value="option1"> User-UUID
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions" id="uuidP" value="option2"> Open-User-UUID
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions" id="uuidT" value="option3"> Test-UUID
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions" id="uuidO" value="option3"> Open-Test-UUID
+            </label>
+        </fieldset>
+    </div>
+    <div class="radio">
+    <label>
+        <input type="radio" name="implausible" id="implausibleT" value="true" checked>
+        Set test(s) to implausible
+    </label>
+</div>
+    <div class="radio">
+        <label>
+            <input type="radio" name="implausible" id="implausibleF" value="false">
+            Set test(s) to plausible
+        </label>
+    </div>
+    <div class="form-group" id="comment-group">
+        <label for="uuid">Comment</label>
+        <input type="text" class="form-control" id="comment" placeholder="">
+        <span class="help-block">Please enter a comment</span>
+    </div>
+    <button type="submit" id="submitButton" class="btn btn-default">Submit</button>
+</form>
+
+<div id="log">
+    Already set:
+    <ul>
+
+    </ul>
+</div>
+
+{% endblock %}
