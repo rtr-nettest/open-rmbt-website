@@ -20,6 +20,7 @@ var path = require('path');
 var cheerio = require('cheerio');
 var randomstring = require('randomstring');
 var gitDescribe = require('git-describe');
+var mkdirp = require('mkdirp');
 
 
 var Metalsmith = require('metalsmith');
@@ -184,6 +185,8 @@ function fetchRemoteFiles(fileList) {
 
         var downloaded = 0;
         filesArray.forEach(function (fileInfo) {
+            var folder = path.dirname(fileInfo.target);
+            mkdirp.sync(folder);
             var file = fs.createWriteStream(fileInfo.target);
             request(fileInfo.source, {
                 pool: {
