@@ -58,6 +58,10 @@ Lang.setStrings({
     'largeView' : 'große Ansicht',
     'baseLayer' : 'Kartentyp',
     'Skip' : 'Überspringen',
+    'basemap_bmapgrau' : 'Basemap.at - Grau',
+    'basemap_geolandbasemap' : 'Basemap.at - Standard',
+    'basemap_bmaphidpi' : 'Basemap.at - High DPI',
+    'basemap_bmaporthofoto30cm' : 'Basemap.at - Luftbild',
 
     //fields from controlserver-resource
     'time': 'Testzeitpunkt',

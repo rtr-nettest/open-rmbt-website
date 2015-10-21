@@ -110,11 +110,6 @@ function viewMapV3() {
     }
 
     if (useBasemapAT) {
-        // basemap.at
-        //taken from http://www.basemap.at/application/js/mobile-base3.js
-        var gg = ol.proj.get('EPSG:4326');
-        var sm = ol.proj.get('EPSG:3857');
-
         var templatepng =
             '{Layer}/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png';
         var urlsbmappng = [
@@ -123,59 +118,112 @@ function viewMapV3() {
             '//maps3.wien.gv.at/basemap/' + templatepng,
             '//maps4.wien.gv.at/basemap/' + templatepng
         ];
-        var IS_CROSS_ORIGIN = 'anonymous';
 
-        var tilegrid = new ol.tilegrid.WMTS({
-            origin: [-20037508.3428, 20037508.3428],
-            extent: [977650, 5838030, 1913530, 6281290],
-            resolutions: [
-                156543.03392811998, 78271.51696419998,
-                39135.758481959994, 19567.879241008,
-                9783.939620504, 4891.969810252,
-                2445.984905126, 1222.9924525644,
-                611.4962262807999, 305.74811314039994,
-                152.87405657047998, 76.43702828523999,
-                38.21851414248, 19.109257071295996,
-                9.554628535647998, 4.777314267823999,
-                2.3886571339119995, 1.1943285669559998,
-                0.5971642834779999, 0.29858214174039993
-            ],
-            matrixIds: [
-                '0', '1', '2', '3', '4', '5',
-                '6', '7', '8', '9', '10',
-                '11', '12', '13', '14', '15',
-                '16', '17', '18', '19'
-            ]
-        });
+        var templatejpeg =
+            '{Layer}/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg';
+        var urlsbmapjpeg = [
+            '//maps1.wien.gv.at/basemap/' + templatejpeg,
+            '//maps2.wien.gv.at/basemap/' + templatejpeg,
+            '//maps3.wien.gv.at/basemap/' + templatejpeg,
+            '//maps4.wien.gv.at/basemap/' + templatejpeg
+        ];
+
+        var LayerTypes = {
+            BMAPGREY:  {
+                label: Lang.getString("basemap_bmapgrau"),
+                layer: "bmapgrau",
+                tilePixelRatio : 1,
+                urls: urlsbmappng
+            },
+            BASEMAP:  {
+                label: Lang.getString("basemap_geolandbasemap"),
+                layer: "geolandbasemap",
+                tilePixelRatio : 1,
+                urls: urlsbmappng
+            },
+            BMAPHIDPI:  {
+                label: Lang.getString("basemap_bmaphidpi"),
+                layer: "bmaphidpi",
+                tilePixelRatio : 2,
+                urls: urlsbmapjpeg
+            },
+            BMAPORTHO:  {
+                label: Lang.getString("basemap_bmaporthofoto30cm"),
+                layer: "bmaporthofoto30cm",
+                tilePixelRatio : 1,
+                urls: urlsbmapjpeg
+            }
+        };
+
+        var addBasemapLayer = function(layerType) {
+            // basemap.at
+            //taken from http://www.basemap.at/application/js/mobile-base3.js
+            var gg = ol.proj.get('EPSG:4326');
+            var sm = ol.proj.get('EPSG:3857');
 
 
-        var bmap = new ol.source.WMTS({
-            tilePixelRatio: 1,
-            projection: sm,
-            layer: 'geolandbasemap',
-            /*layer: hiDPI ? 'bmaphidpi' : 'geolandbasemap',*/
-            style: 'normal',
-            matrixSet: 'google3857',
-            urls: urlsbmappng,
-            visible: true,
-            //crossOrigin: IS_CROSS_ORIGIN,
-            requestEncoding: /** @type {ol.source.WMTSRequestEncoding} */ ('REST'),
-            tileGrid: tilegrid,
-            attributions: [
-                new ol.Attribution({
-                    html: 'Tiles &copy; <a href="//www.basemap.at/">' +
-                    'basemap.at</a> (STANDARD).'
-                })
-            ]
-        });
+            var IS_CROSS_ORIGIN = 'anonymous';
 
-        bases.push(new ol.layer.Tile({
-            visible: false,
-            preload: Infinity,
-            source: bmap,
-            title: 'Basemap.at',
-            type: 'base'
-        }));
+            var tilegrid = new ol.tilegrid.WMTS({
+                origin: [-20037508.3428, 20037508.3428],
+                extent: [977650, 5838030, 1913530, 6281290],
+                resolutions: [
+                    156543.03392811998, 78271.51696419998,
+                    39135.758481959994, 19567.879241008,
+                    9783.939620504, 4891.969810252,
+                    2445.984905126, 1222.9924525644,
+                    611.4962262807999, 305.74811314039994,
+                    152.87405657047998, 76.43702828523999,
+                    38.21851414248, 19.109257071295996,
+                    9.554628535647998, 4.777314267823999,
+                    2.3886571339119995, 1.1943285669559998,
+                    0.5971642834779999, 0.29858214174039993
+                ],
+                matrixIds: [
+                    '0', '1', '2', '3', '4', '5',
+                    '6', '7', '8', '9', '10',
+                    '11', '12', '13', '14', '15',
+                    '16', '17', '18', '19'
+                ]
+            });
+
+
+            var bmap = new ol.source.WMTS({
+                tilePixelRatio: layerType.tilePixelRatio,
+                projection: sm,
+                layer: layerType.layer, //'geolandbasemap',
+                /*layer: hiDPI ? 'bmaphidpi' : 'geolandbasemap',*/
+                style: 'normal',
+                matrixSet: 'google3857',
+                urls: layerType.urls,
+                visible: true,
+                //crossOrigin: IS_CROSS_ORIGIN,
+                requestEncoding: /** @type {ol.source.WMTSRequestEncoding} */ ('REST'),
+                tileGrid: tilegrid,
+                attributions: [
+                    new ol.Attribution({
+                        html: 'Tiles &copy; <a href="//www.basemap.at/">' +
+                        'basemap.at</a> (STANDARD).'
+                    })
+                ]
+            });
+
+            bases.push(new ol.layer.Tile({
+                visible: false,
+                preload: Infinity,
+                source: bmap,
+                title: layerType.label,
+                type: 'base'
+            }));
+        };
+
+        //add in reverse order
+        addBasemapLayer(LayerTypes.BMAPORTHO);
+        addBasemapLayer(LayerTypes.BMAPGREY);
+        addBasemapLayer(LayerTypes.BMAPHIDPI);
+        addBasemapLayer(LayerTypes.BASEMAP);
+
+
     }
 
     if (useRTRTiles) {

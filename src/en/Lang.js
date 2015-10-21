@@ -58,7 +58,11 @@ Lang.setStrings({
    'largeView': 'large view',
    'baseLayer' : 'Base layer',
    'Skip' : 'Skip',
-   
+   'basemap_bmapgrau': 'Basemap.at - grey',
+   'basemap_geolandbasemap': 'Basemap.at - standard',
+   'basemap_bmaphidpi': 'Basemap.at - high dpi',
+   'basemap_bmaporthofoto30cm': 'Basemap.at - satellite',
+
    //fields from controlserver-resource
    'time': 'Test time',
    'timezone': 'Timezone',
