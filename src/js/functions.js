@@ -1311,7 +1311,7 @@ function RMBTstatistics() {
                                         
                                 //link for showing more devices if they are hidden
                                 if (current_device_count === break_devices_after) {
-                                    $('#statistik_devices_body').append('<tr id="showMoreDevices"><td colspan="5">' +
+                                    $('#statistik_devices_foot').append('<tr id="showMoreDevices"><td colspan="5">' +
                                             '<a href="#" onclick="$(\'#statistik_devices_body tr\').show();$(\'#showMoreDevices\').hide();return false;">' + Lang.getString('showMoreDevices') + '</a>' +
                                             '</td></tr>');
                                 }
