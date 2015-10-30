@@ -6,8 +6,7 @@ var tc_agree_en = 'I agree with RTR’s Privacy Policy and Terms of Use for the 
 var ndt_short_de = 'Der NDT-Test der Forschungsplattform M-Lab ist ein optionaler, vertiefender Test, der weitere technische Parameter misst – allerdings auch die Messdauer und das übertragene Datenvolumen deutlich erhöht. Im Rahmen dieses vertiefenden Tests werden Daten, ua. die IP-Adresse, auch ins Ausland au&szlig;erhalb der EU an die Forschungsplattform M-Lab übermittelt, dh. diese Daten werden durch M-Lab dauerhaft gespeichert, veröffentlicht und der Allgemeinheit zur Information, Nutzung, Weiterverbreitung und Weiterverwendung unter M-Lab-Open Data frei zug&auml;nglich gemacht. Aufgrund der Verarbeitung und der Übermittlung der IP-Adresse ins Ausland au&szlig;erhalb der EU könnte gegebenenfalls die Identität des Nutzers bestimmt werden oder bestimmbar sein und somit könnte ein Personenbezug hergestellt werden.<br /><br />Durch Anklicken des Zurück-Button wird der Datenschutztext wieder aufgerufen. Dort finden sich unter <b>1.3</b> die ausführlichen Informationen zum NDT-Test.';
 var ndt_short_en = 'The NDT-Test of the research platform M-Lab is an optional, but more comprehensive test, which measures additional technical parameters. Please note that this test increases the time duration of the measurement and the transmitted data volume considerably. As part of the more comprehensive test, data – such as IP-addresses – are transferred, which means that these data are permanently stored and published by M-Lab and are made freely accessable to the general public for information, use, dissemination and other applications under M-Lab Open Data. Given the processing and transfer of IP-addresses to non-EU countries, it is possible that a user’s identity may be determined or become determinable and that personal identification is possible.<br /><br />Click the return button to access RTR’s Privacy Policy for the RTR-NetTest.'
 
-var map_de = 'Karte';
-var map_en = 'Map';
+var min_accuracy_for_showing_map = 2000;
 
 function is_array(input){
     return typeof(input)=='object'&&(input instanceof Array);
@@ -210,7 +209,6 @@ function RMBTmapfilter(options) {
                         
                         var form_auswahl = '';
                         form_auswahl += '<div class="form-group">';
-                        //form_auswahl += '<label for="map_options">' + ((selectedLanguage=='de')?map_de:map_en)+ '</label>';
                         form_auswahl += '<select name="map_options" id="map_options" onchange="redrawOverlay();" class="form-control input-sm">';
                         var default_cardtyp;
                         $.each(data.mapfilter.mapTypes, function(key,row){
@@ -1717,7 +1715,8 @@ function getOpenDataRow(testdata, showUnits) {
     //position marker
     var position_marker = "";
     if (testdata.long !== null) {
-        position_marker = '<img src="/images/marker_fa.png" class="position-marker" /> '
+        var image = (testdata.loc_accuracy<=min_accuracy_for_showing_map)?"marker_fa.png":"marker_fa_o.png";
+        position_marker = '<img src="/images/' + image + '" class="position-marker" /> '
     }
     row += "<td class='test-platform'>" + link +  position_marker + infoFormatter(testdata.model, testdata.platform, testdata.provider_name) + "</a></td>";
     
