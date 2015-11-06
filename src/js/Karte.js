@@ -303,9 +303,19 @@ function viewMapV3() {
         return false;
     });
 
-    //Pan to Test or User Position
-    panToLastUserTest();
-    panToUserPosition();
+    if (getParam("lat") && getParam("long") && getParam("accuracy") &&
+            !isNaN(getParam("lat")) && !isNaN(getParam("long")) && !isNaN(getParam("accuracy"))) {
+        //If there are coords given as parameters, center the map there
+        //(--> User was in /Opentest and clicked on the map there)
+        panToLatLong(parseFloat(getParam("lat")),
+                parseFloat(getParam("long")),
+                parseFloat(getParam("accuracy")));
+    }
+    else {
+        //Pan to Test or User Position   
+        panToLastUserTest();
+        panToUserPosition();
+    }
 }
 
 
@@ -379,6 +389,10 @@ function searchAndPositionOnAddress() {
         
 }
 
+/**
+ * Center the map on the position of the last test conducted by the
+ * user (as given in the cookie 'coords'
+ */
 function panToLastUserTest() {
     //copied from geolocation, cannot directly use due to side effects
         var coords = getCookie('coords');
@@ -392,19 +406,7 @@ function panToLastUserTest() {
             var long = coords['long'];
             //alert(lat + ", " + long);
 
-            map.getView().setCenter(convertLongLatToOpenLayersPoint(long, lat));
-
-            var zoomLevel = 11;
-            if (coords.accuracy !== null) {
-                if (coords.accuracy < 100) {
-                    zoomLevel = 17;
-                }
-                else if (coords.accuracy < 1000) {
-                    coords.zoomLevel = 13;
-                }
-            }
-
-            map.getView().setZoom(zoomLevel);
+            panToLatLong(lat, long, coords.accuracy);
         }
 }
 
@@ -431,22 +433,9 @@ function panToUserPosition() {
                         //console.log("tmpcoords: "+tmpcoords);
                         setCookie('coords', tmpcoords, 3600);
                 }
-                var lat = coords.lat;
-                var long = coords.long;
 
-                map.getView().setCenter(convertLongLatToOpenLayersPoint(long, lat));
+                panToLatLong(coords.lat, coords.long, coords.accuracy);
 
-                var zoomLevel = 11;
-                if (coords.accuracy !== null) {
-                    if (coords.accuracy < 100) {
-                        zoomLevel = 17;
-                    }
-                    else if (coords.accuracy < 1000) {
-                        coords.zoomLevel = 13;
-                    }
-                }
-                
-            map.getView().setZoom(zoomLevel);
         };
         var geolocation_error = function(error) {
                 console.log("error retrieving user position")
@@ -476,6 +465,27 @@ function panToUserPosition() {
         }
 }
 
+/**
+ * Center the map at the given point
+ * with a zoom level suitable to the given accuracy
+ * @param {float} lat
+ * @param {float} long
+ * @param {float} accuracy
+ */
+
+function panToLatLong(lat, long, accuracy) {
+    map.getView().setCenter(convertLongLatToOpenLayersPoint(long, lat));
+
+    var zoomLevel = 11;
+    if (accuracy !== null) {
+        if (accuracy < 100) {
+            zoomLevel = 17;
+        } else if (accuracy < 1000) {
+            zoomLevel = 13;
+        }
+    }
+    map.getView().setZoom(zoomLevel);
+}
 
 /**
  * Get the layers from user input
