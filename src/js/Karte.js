@@ -287,9 +287,9 @@ function viewMapV3() {
     map.getView().fit(textent, map.getSize());
 
 
-
+    var displayed_open_test_uuid = (getParam("open_test_uuid"))?getParam("open_test_uuid"):null;
     //start async process to get select values
-    requestBrowserData('RMBTmapfilter');
+    requestBrowserData('RMBTmapfilter', { open_test_uuid: displayed_open_test_uuid });
     
     
     $("#auswahl_selector").find("input:radio[name='check_layer']").click(function () {

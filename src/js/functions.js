@@ -133,7 +133,7 @@ function requestBrowserData(callback, options) {
                         else if (callback == 'RMBTstatistics')
                                 RMBTstatistics();
                         else if (callback == 'RMBTmapfilter')
-                                RMBTmapfilter();
+                                RMBTmapfilter(options);
                         
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
@@ -156,7 +156,8 @@ function RMBTmapfilter(options) {
                 type: test_type,
                 version_code: test_version_code,
                 name: test_name,
-                terms_and_conditions_accepted: terms_accepted
+                terms_and_conditions_accepted: terms_accepted,
+                open_test_uuid: options.open_test_uuid
         };
         
         /*if (window.console && console.log) {
@@ -222,7 +223,17 @@ function RMBTmapfilter(options) {
                              $.each(row.options,function(key1,row1){
                                      //form_auswahl += '<option value="'+eval('row1.'+auswahlname)+'"';
                                      form_auswahl += '<option value="'+row1.map_options+'"';
-                                     if (key==0 && key1==0) {
+                                     
+                                     //if the user opens the map coming from /Opentest, select 'all' by default
+                                     if (options.open_test_uuid !== null) {
+                                         if (key===3 && key1==0)  {
+                                             form_auswahl += 'selected="selected"';
+                                             default_cardtyp = row1.map_options;
+                                         }
+                                         
+                                     }
+                                     //by default, select first option 
+                                     else if (key==0 && key1==0) {
                                              form_auswahl += 'selected="selected"';
                                              default_cardtyp = row1.map_options;
                                      }
