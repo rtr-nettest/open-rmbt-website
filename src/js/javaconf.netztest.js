@@ -1,7 +1,7 @@
+// Configuration www.netztest.at
+
 var controlProxy = "";
-var statisticProxy = "";
-var statisticProxy = "https://www.netztest.at";
-//var controlProxy = "https://develop.netztest.at";
+var statisticProxy = "https://m-cloud.netztest.at";
 //var mapProxy = "" - filled in dynamically
 var wspath = "RMBTControlServer";
 var statisticpath = "RMBTStatisticServer";
