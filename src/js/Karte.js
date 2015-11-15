@@ -14,9 +14,7 @@ var useBingMaps = true;
 var useRTRTiles = true;
 
 //obsolete initialistation
-var URL_MAP_SERVER = 'https://c01.control.netztest.at/RMBTMapServer/tiles'; //overridden from control server settings
-//var URL_MAP_SERVER = 'https://develop.netztest.at/' + mappath + '/tiles';
-
+var URL_MAP_SERVER = 'https://c01.netztest.at/RMBTMapServer/tiles'; //overridden from control server settings
 var heatmap, points, map, markers;
 
 var lastfeature;
