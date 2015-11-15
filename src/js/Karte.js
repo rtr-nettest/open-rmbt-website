@@ -644,6 +644,13 @@ function onFeatureUnselect(event) {
         }*/
 }
 
+
+//add datetime helper
+Handlebars.registerHelper('formatDate', function (timestamp) {
+    var d = new Date(timestamp);
+    return moment(d).format(Lang.getString('map_dateformat'));
+});
+
 function addMarkerV3(lat, lon, data) {
     var coordinate = [lat, lon];
     markers.setPosition(coordinate);
