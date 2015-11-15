@@ -24,7 +24,7 @@ var mkdirp = require('mkdirp');
 
 
 var Metalsmith = require('metalsmith');
-var templates = require('metalsmith-templates');
+var layouts = require('metalsmith-layouts');
 var watch = require('metalsmith-watch');
 var debug = require('debug');
 debug.enable();
@@ -73,8 +73,9 @@ var metalsmith = Metalsmith(__dirname)
     ]))
     .use(setConfig())
     .use(duplicateFile())
-    .use(templates({
-       engine: 'nunjucks'
+    .use(layouts({
+        engine: 'nunjucks',
+        directory: 'templates'
     }))
     .use((useWatch) ? (watch({
         paths: {
@@ -258,7 +259,7 @@ function setConfig() {
         try {
             metadata['gitDescribe'] = gitDescribe();
         } catch(e) {
-            console.log("not a valid git directory: " + e.message);
+            console.log("not a valid git directory, cannot include build info in /admin page, message: " + e.message);
         }
 
         //delete duplicate files from build
