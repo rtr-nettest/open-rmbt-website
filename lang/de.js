@@ -116,6 +116,7 @@ exports.strings = {
         "open_data_specification" : "Open-Data Schnittstellen-Definition",
         "content_block" : 'Die Messergebnisse des RTR-Netztests sind unter Einhaltung der RTR-Netztest Datenschutzerkl&auml;rung als Open Data verf&uuml;gbar. Die <a href="/en/OpenDataSpecification.html"> Spezifikation ist als HTML abrufbar</a>. Diese Spezifikation beschreibt die als Open-Data abrufbaren Informationen. Diese sind &uuml;ber JSON wie auch als CSV-Datei (siehe unten) verf&uuml;gbar.',
         "csv_interface" : 'CSV-Schnittstelle',
+        "recent_tests_hours" : 'Die Ergebnisse der letzten 48 Stunden sind unter <a href="/RMBTStatisticServer/export/netztest-opendata_hours-048.zip" class="external-link-new-window" title="RTR-Netztest Open Data-ZIP 48h">netztest-opendata_hours-048.zip</a> abrufbar.',
         "recent_tests" : 'Die Ergebnisse der letzten 31 Tage sind unter <a href="/netztest-opendata.zip" class="external-link-new-window" title="RTR-Netztest Open Data-ZIP">netztest-opendata.zip</a> abrufbar.',
         "further_results" : "Weitere Ergebnisse sind auf monatlicher Basis verfügbar:",
         "note_timestamp" : "Bitte beachten Sie, dass die Zeitstempel in UTC (nicht in Lokalzeit) sind.",
