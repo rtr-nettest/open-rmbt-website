@@ -213,6 +213,16 @@ function fetchRemoteFiles(fileList) {
  * @returns {Function}
  */
 function transformRTRUrls(fileList) {
+    //transformation for RTR Nettest 301 URLs
+    var specialNetTestUrls = {
+        "/tk/netzteststarten": "Test",
+        "/tk/netztestkarte": "Karte",
+        "/tk/rtrnetzteststatistik": "Statistik",
+        "/tk/netztestopendata": "Opendata",
+        "/tk/netztestverlauf": "Verlauf",
+        "/tk/rtrnetztestoptionen": "Optionen"
+    }
+    
     return function(files, metalsmith, done) {
         if (downloadedOnce) {
             done();
@@ -231,7 +241,17 @@ function transformRTRUrls(fileList) {
                     //only replace relative URLs (no mailtos, tel, http, etc.)
                     if (href.indexOf(":") === -1 || href.indexOf(":") > 6) {
                         $(this).attr("href", RTR_LINKS_BASEURL + href);
+                        
+                        //maybe it's even a special nettest url that needs to be relative?
+                        if (href.indexOf('netztest') !== -1) {
+                            for(var key in specialNetTestUrls) {
+                                if (href.indexOf(key) !== -1) {
+                                    $(this).attr("href", specialNetTestUrls[key]);
+                                }
+                            }
+                        }
                     }
+                    
                 });
 
                 var html = $.html();
