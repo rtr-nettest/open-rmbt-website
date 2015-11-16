@@ -22,6 +22,8 @@ var randomstring = require('randomstring');
 var gitDescribe = require('git-describe');
 var mkdirp = require('mkdirp');
 
+var nunjucks = require('nunjucks');
+nunjucks.configure({ autoescape: false });
 
 var Metalsmith = require('metalsmith');
 var layouts = require('metalsmith-layouts');
@@ -86,13 +88,6 @@ var metalsmith = Metalsmith(__dirname)
     .build(function(err) {
             if (err) throw err;
         });
-
-//exit since nunjucks does not quit
-setTimeout(function() {
-    if (!useWatch) {
-        process.exit();
-    }
-}, 15000);
 
 
 /**
