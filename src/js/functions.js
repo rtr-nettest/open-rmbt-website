@@ -419,7 +419,7 @@ function RMBTtestresult(testUUID) {
                 type: "post",
                 dataType: "json",
                 contentType: "application/json",
-                data: JSON.stringify(json_data),
+                data: JSON.stringify(addCapabilities(json_data)),
                 success: function(data) {
                         //error received from control server
                         if (data.error.length > 0) {
@@ -476,6 +476,8 @@ function RMBTtestresult(testUUID) {
                                                 ampel = 'traffic_lights_yellow.png';
                                         else if (row.classification == 3)
                                                 ampel = 'traffic_lights_green.png';
+                                        else if (row.classification == 4)
+                                        		ampel = 'traffic_lights_ultra_green.png';
                                         else ampel = 'traffic_lights_transparent.png';
                                         $('#verlauf-detail').append(
                                                 '<tr>' +
@@ -1810,7 +1812,32 @@ function infoFormatter(model, platform, provider) {
     return modelString;
 }
 
+/**
+ * adds additional API parameters
+ * @param {Object} request the object that will get additional API parameters
+ */
+function addCapabilities(request) {
+	request["capabilities"] = getCapabilities();
+	return request;
+}
 
+/**
+ * additional API parameters as query parameter
+ */
+function getCapabilitiesAsQueryParam() {
+    return "capabilities=" + JSON.stringify(getCapabilities());
+}
+
+/** 
+ * additional API parameters
+ */
+function getCapabilities() {
+	return {
+		"classification": {
+			"count": 4
+		}
+	};
+}
 
 //i18n class
 var Lang = new Object();
