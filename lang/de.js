@@ -153,6 +153,7 @@ exports.strings = {
     'dBm': 'dBm',
     'dB': 'dB',
     'X_recent_tests': "%X% aktuellste Tests",
+    'recent_tests': "Aktuelle Tests",
     'more' : "mehr",
     'less' : "weniger",
 
