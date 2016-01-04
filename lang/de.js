@@ -239,6 +239,7 @@ exports.strings = {
     "asn" : "AS-Nummer",
     "apply_filters" : "Filter anwenden",
     "reset" : "Leeren",
+    "histogram" : "Histogramm",
 
     "coordinates": "Standort",
     "provider" : "Betreiber"
