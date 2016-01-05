@@ -194,6 +194,7 @@ exports.strings = {
     "name" : "Name",
     "all" : "Alle",
     "devices" : "Geräte",
+    'open_uuid' : 'Open-User-UUID',
 
     "access" : "Zugang",
     "date" : "Datum",
