@@ -326,12 +326,16 @@ $(document).ready(function() {
 		History.Adapter.bind(window,'statechange',function(e){
                         //if there is a parameter in the URL - show test results
 			if (e.target.location.href.indexOf('?')>=0) {
+                //adjust view to 2/3 of screen width
+                $("div.container").removeClass("full-width");
 				$('#verlaufcontainer').css('display','none');
 				$('#code-eingabe').css('display','none');
 				$('#verlauf-detailcontainer').css('display','block');
 				$('#h1').html(Lang.getString('TestResult'));
 			}
 			else {
+                //adjust view to 2/3 of screen width
+                $("div.container").addClass("full-width");
 				$('#verlaufcontainer').css('display','block');
 				$('#code-eingabe').css('display','block');
 				$('#verlauf-detailcontainer').css('display','none');
@@ -363,7 +367,9 @@ $(document).ready(function() {
                 if (window.location.search.length > 0) {
                         //if the user visits /Verlauf?test-uuid -> show the test result
                         testID = window.location.search.substr(1);
-                        show_agbform(false, 'RMBTtestresult',testID);       
+                        show_agbform(false, 'RMBTtestresult', testID);
+                        //adjust view to 2/3 of screen width
+                        $("div.container").removeClass("full-width");
                 }
                 else {
                         //if the user visits /Verlauf, show the /Verlauf-page
