@@ -33,7 +33,26 @@ $(document).ready(function() {
 
 var map;
 var vectorLayer;
+var mapProxy;
+var markers;
 function loadLastOpenDataResultsMap() {
+    //get map proxy url
+    var json_data = {
+        "type": test_type,
+        "name": test_name
+    };
+    $.ajax({
+        url: controlProxy + "/" + wspath + "/settings",
+        type: "post",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(json_data),
+        success: function (data) {
+            mapProxy = data.settings[0].urls.url_map_server;
+        }
+    });
+    
+    
     var bases = new Array();
     bases.push(
             new ol.layer.Tile({
@@ -98,6 +117,9 @@ function loadLastOpenDataResultsMap() {
 
     
     map.addLayer(vectorLayer);
+    
+    markers = new ol.Overlay.Popup();
+    map.addOverlay(markers);
 
     map.on('click', function (evt) {
         var feature = map.forEachFeatureAtPixel(evt.pixel,
@@ -112,10 +134,12 @@ function loadLastOpenDataResultsMap() {
             var uuid = test.open_test_uuid;
             
             //Open Popup?
-            window.location = "Opentest?" + uuid;
+            //window.location = "Opentest?" + uuid;
+            loadMarker(uuid);
         } else {
             //$(element).popover('destroy');
             //remove popup
+            markers.hide();
         }
     });
     
@@ -241,6 +265,33 @@ function loadLastOpenDataResultsMap() {
     })
 }
 
+
+function loadMarker(openTestUUID) {
+    var json_data = {
+        language: selectedLanguage,
+        open_test_uuid: openTestUUID.substring(1)
+    };
+    json_data = addCapabilities(json_data);
+
+    $.ajax({
+        //url : "http://localhost:8080/RMBTMapServer/tiles/markers",
+        url: mapProxy + "/tiles/markers",
+        type: "post",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(json_data),
+        success: function (data, textStatus, jqXHR) {
+            if (data.measurements && data.measurements[0]) {
+                addMarkerV3(data.measurements[0].lat, data.measurements[0].lon, data.measurements);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert("Error beim settings-Abruf " + xhr.status + " " + thrownError + " " + ajaxOptions);
+        }
+    });
+}
+
+
 function convertLongLatToOpenLayersPoint(long,lat) {
     return ol.proj.transform([long, lat], 
                 'EPSG:4326', 'EPSG:3857');
@@ -295,7 +346,7 @@ function getLastOpenDataResults() {
 //add datetime helper
 Handlebars.registerHelper('formatDate', function (timestamp) {
     var d = new Date(timestamp);
-    return moment(d).format(Lang.getString('map_dateformat'));
+    return moment(d).format(Lang.getString('map_index_dateformat'));
 });
 
 function addMarkerV3(lat, lon, data) {
@@ -309,6 +360,4 @@ function addMarkerV3(lat, lon, data) {
 
     
     markers.show(coordinate, html);
-
-    //$(marker).html(html);
 }

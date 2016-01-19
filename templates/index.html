@@ -14,13 +14,62 @@
     <link rel="stylesheet" type="text/css" href="../lib/olv3/ol.css" media="screen" />
 
     <script src="../lib/date-de-AT.js" type="text/javascript"></script>
+    
+    <style>
+        .olPopup div.infoWrap {
+            width: 175px !important;
+        }
+    </style>
 {% endblock %}
 
 {% block sideContent %}
 	<div id="new-tests-map-container">
         <div id="newtestsmap" class="olMap" style="height:900px;"></div>
-        {{ Lang.recent_tests }} - <a href="Opentests">{{ Lang.further_tests }}</a>
-        
+        {{ Lang.recent_tests }} - <a href="Opentests">{{ Lang.further_tests }}</a> - <a href="Opentests?max_results=5&loc_accuracy=<2000#map-accordion">{{ Lang.index_content.enlarge_map }}</a> 
+        <div id="markerTemplate" style="display:none">
+            <div class="olPopup">
+
+            <h1>{{Lang.measurements}}</h1>
+            <div class="infoWrap">
+                <hr/>
+                {% raw %}
+                {{#each data}}
+
+                    <h2 class="
+                        {{#if highlight}}
+                    highlight
+                        {{/if}}
+                        ">{{ formatDate time }}
+                        <input type='button' style='float:right;' class='submit'
+                               onClick="window.open('/{% endraw %}{{ Lang.lang }}{% raw %}/Opentest?{{open_test_uuid}}')" value='{% endraw %}{{ Lang.moreInfo }}{% raw %}'/>
+                    </h2>
+
+                    <h3>{% endraw %}{{ Lang.measurement }}{% raw %}</h3>
+
+                    {{#each measurement}}
+                        <div class="row">
+                            <div class="rowlabel">{{ title }}</div>
+                            <a href='https://www.rtr.at/{% endraw %}{{ Lang.lang }}{% raw %}/rtr/netztestfaq_testergebnis#c25826'
+                               target='_blank'>
+                                <div class='rowclassification classification{{ classification }}'>{{classification}}</div>
+                            </a>
+
+                            <div class="rowitem">{{ value }}</div>
+                        </div>
+                    {{/each}}
+                    <h3>{% endraw %}{{ Lang.net }}{% raw %}</h3>
+                    {{#each net}}
+                        <div class="row">
+                            <div class="rowlabel">{{ title }}</div>
+                            <div class="rowitem">{{ value }}</div>
+                        </div>
+                    {{/each}}
+                    <hr/>
+                {{/each}}
+                {% endraw %}
+            </div>
+            </div>
+        </div>
     </div>
 
 
