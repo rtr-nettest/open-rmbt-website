@@ -63,6 +63,7 @@ Lang.setStrings({
    'basemap_bmaphidpi': 'Basemap.at - high dpi',
    'basemap_bmaporthofoto30cm': 'Basemap.at - satellite',
    'map_dateformat' : 'MMM Do YYYY, hh:mm:ss A', //http://momentjs.com/docs/#/displaying/
+   'map_index_dateformat' : 'hh:mm:ss A',
 
    //fields from controlserver-resource
    'time': 'Test time',
