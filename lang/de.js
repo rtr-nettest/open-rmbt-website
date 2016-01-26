@@ -216,7 +216,7 @@ exports.strings = {
     "connection_technology" : "Verbindungstechnologie",
     "share" : "Ergebnis mitteilen",
     "get_forum_banner" : "Forenbanner einbinden",
-    "send_email" : "als E-Mail versenden",
+    "send_email" : "Als E-Mail versenden",
     "open_data_entry" : "Opendata-Eintrag",
 
     "measurement_result" : "Testergebnis",

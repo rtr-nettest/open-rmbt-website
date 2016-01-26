@@ -216,7 +216,7 @@ exports.strings = {
     "connection_technology" : "Connection Technology",
     "share" : "Share",
     "get_forum_banner" : "Get forum banner",
-    "send_email" : "send email",
+    "send_email" : "Send email",
     "open_data_entry" : "Open data entry",
 
     "measurement_result" : "Measurement result",

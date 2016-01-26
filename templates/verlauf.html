@@ -265,16 +265,23 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td><div class="social"></div></td>
-        </tr>
-        <tr>
-            <td>
-                <a class="shareBanner" href="javascript:;">{{ Lang.get_forum_banner }}</a>,
-                <a class="shareMail" href="javascript:;">{{ Lang.send_email }}</a>,
-                <a class="shareLink" href="javascript:;">{{ Lang.open_data_entry }}</a>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    <a class="shareMail" href="javascript:;">{{ Lang.send_email }}</a>,
+                    <a class="shareBanner" href="javascript:;">{{ Lang.get_forum_banner }}</a>,
+                    <a class="shareLink" href="javascript:;">{{ Lang.open_data_entry }}</a>
+                </td>
+            </tr>
+            <tr class="forumbanner forumsmall">
+                <td>
+                    <p><img class="forumsmall" style="max-width: 100%" src="" /></p>
+                    <p>HTML: <input class="htmlinput" type="text" value="" onClick="this.select()" /></p>
+                    <p>BBCode: <input class="bbcinput" type="text" value="" onClick="this.select()"/></p>
+                </td>
+            </tr>
+            <tr>
+                <td><div class="social"></div></td>
+            </tr>
         <!--<tr class="forumbanner forumlarge">
             <td>
                 <p><img class="forumlarge" style="max-width:100%" src="" /></p>
@@ -282,13 +289,6 @@
                 <p>BBCode: <input class="bbcinput" type="text" value="" onClick="this.select()"/></p>
             </td>
         </tr>-->
-        <tr class="forumbanner forumsmall">
-            <td>
-                <p><img class="forumsmall" style="max-width: 100%" src="" /></p>
-                <p>HTML: <input class="htmlinput" type="text" value="" onClick="this.select()" /></p>
-                <p>BBCode: <input class="bbcinput" type="text" value="" onClick="this.select()"/></p>
-            </td>
-        </tr>
         </tbody>
     </table>
 </div>
