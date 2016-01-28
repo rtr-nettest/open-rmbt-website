@@ -72,7 +72,7 @@ function show_agbform(run_Test, callback, options) {
 	
 	
 	var bValid = false;
-	var terms_accepted = getCookie("RMBTTermsV3");
+	var terms_accepted = getCookie("RMBTTermsV4");
 	var tmp_title = (selectedLanguage=='de')?'Datenschutzerklärung und Nutzungsbedingungen':'Privacy Policy and Terms of Use';
 	var tmp_decline = (selectedLanguage=='de')?'Abbruch':'Decline';
 	var tmp_agree = (selectedLanguage=='de')?'Zustimmung':'Agree';
@@ -94,7 +94,7 @@ function show_agbform(run_Test, callback, options) {
 	dialog_buttons[tmp_agree] = function() {
 	        bValid = true;
                 if(terms_accepted == null || terms_accepted == "false") {
-                        //setCookie("RMBTTermsV3", true, 365 * 20 * 24 * 3600);
+                        //setCookie("RMBTTermsV4", true, 365 * 20 * 24 * 3600);
                         terms_accepted = true;
                         $(this).dialog("close");
                         /*
@@ -107,7 +107,7 @@ function show_agbform(run_Test, callback, options) {
                         	bValid = true;
 				//console.log(terms_accepted);
 				if(terms_accepted != null && terms_accepted == true) {
-					setCookie("RMBTTermsV3", true, 365 * 20 * 24 * 3600);
+					setCookie("RMBTTermsV4", true, 365 * 20 * 24 * 3600);
 					//console.log("cookie set!");
 				}
 				if (run_Test){
@@ -233,7 +233,7 @@ function show_ndtform(run_Test, callback, options, terms_accepted) {
 	        bValid = true;
 	        //console.log(terms_accepted);
                 if(terms_accepted != null && terms_accepted == true) {
-                        setCookie("RMBTTermsV3", true, 365 * 20 * 24 * 3600);
+                        setCookie("RMBTTermsV4", true, 365 * 20 * 24 * 3600);
                         //console.log("cookie set!");
                 }
                         
@@ -339,7 +339,7 @@ function show_zipform(run_Test, callback, options) {
 	var allFields = $([]);
 	var bValid = false;
 	form_tips = $(".validateTips");
-	var terms_accepted = getCookie("RMBTTermsV3");
+	var terms_accepted = getCookie("RMBTTermsV4");
 	popup_title = (selectedLanguage=='de')?'Postleitzahl':'Post code';
 	allFields.add(zip);
 	
