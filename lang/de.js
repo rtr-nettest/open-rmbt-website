@@ -120,7 +120,7 @@ exports.strings = {
         "recent_tests_hours" : 'Die Ergebnisse der letzten 48 Stunden sind unter <a href="/RMBTStatisticServer/export/netztest-opendata_hours-048.zip" class="external-link-new-window" title="RTR-Netztest Open Data-ZIP 48h">netztest-opendata_hours-048.zip</a> abrufbar.',
         "recent_tests" : 'Die Ergebnisse der letzten 31 Tage sind unter <a href="/netztest-opendata.zip" class="external-link-new-window" title="RTR-Netztest Open Data-ZIP">netztest-opendata.zip</a> abrufbar.',
         "further_results" : "Weitere Ergebnisse sind auf monatlicher Basis verfügbar:",
-        "note_timestamp" : "Bitte beachten Sie, dass die Zeitstempel in UTC (nicht in Lokalzeit) sind.",
+        "note_timestamp" : "Bitte beachten Sie, dass die Zeitstempel in UTC (nicht in Lokalzeit) sind. Um die Richtigkeit der Ergebnisse sicher zu stellen, kann die RTR-GmbH unplausible und/oder offensichtlich missbr&auml;uchliche Messungen mit dem Flag 'implausible' kennzeichnen.  ",
         "license_text" : 'Diese Daten stehen unter der <a rel="license" href="http://creativecommons.org/licenses/by/3.0/at/deed.de_AT" >Creative Commons Namensnennung 3.0 Österreich Lizenz</a>.'
     },
 
