@@ -64,10 +64,7 @@ exports.strings = {
             "qostest" : 'Diese Statistik stellt die Ergebnisse der bisherigen Tests auf qostest.eu dar. Weitere Informationen zur Interpretation der Ergebnisse finden Sie <a href="https://www.rtr.at/en/rtr/netztestfaq_testergebnis#c26545">here</a>.'
         },
         "operators_from" : "Betreiber aus",
-        "disclaimer" : {
-            "netztest" : 'Wir weisen darauf hin, dass Nutzer den RTR-Netztest wiederholt durchführen können und auch diese Tests in die Statistik einfließen.',
-            "qostest" : 'Wir weisen darauf hin, dass Nutzer den Test auf qostest.eu wiederholt durchführen können und auch diese Tests in die Statistik einfließen.'
-        },
+        "disclaimer" : 'Bei der Erstellung der Statistik sind wiederholt durchgeführte Tests gefiltert.',
         "opendata_disclaimer" : 'Hinweis: <a href="Opendata.html">Rohdaten als Opendata</a> verfügbar',
         "burgenland" : 'Burgenland',
         "carinthia" : 'Kärnten',
@@ -196,6 +193,8 @@ exports.strings = {
     "all" : "Alle",
     "devices" : "Geräte",
     'open_uuid' : 'Open-User-UUID',
+    "begin" : "Beginn",
+    "end" : "Ende",
 
     "access" : "Zugang",
     "date" : "Datum",

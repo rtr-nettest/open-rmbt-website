@@ -64,10 +64,7 @@ exports.strings = {
             "qostest" : 'The values listed here represent the qostest.eu results.     Additional information can be found <a href="https://www.rtr.at/en/rtr/netztestfaq_testergebnis#c26545">here</a>.'
         },
         "operators_from" : "Operators from",
-        "disclaimer" : {
-            "netztest" : 'It should be emphasized that each user can repeatedly perform the RTR-NetTest. These tests are also reflected in the statistics.',
-            "qostest" : 'It should be emphasized that each user can repeatedly perform qostest.eu. These tests are also reflected in the statistics.'
-        },
+        "disclaimer" : 'Repeated tests are filtered for the compilation of statistics.',
         "opendata_disclaimer" : 'Please note: <a href="Opendata.html">raw data available</a> as open data',
         "burgenland" : 'Burgenland',
         "carinthia" : 'Carinthia',
@@ -196,6 +193,8 @@ exports.strings = {
     "all" : "All",
     "devices" : "Devices",
     'open_uuid': 'Open-User-UUID',
+    "begin" : "begin",
+    "end" : "end",
 
     "access" : "Access",
     "date" : "Date",
