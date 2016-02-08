@@ -420,7 +420,7 @@ function RMBTtestresult(testUUID) {
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify(addCapabilities(json_data)),
-                success: function(data) {
+                success: function(data) {                    
                         //error received from control server
                         if (data.error.length > 0) {
                                 $('#code-eingabe').show();
@@ -820,14 +820,18 @@ function RMBTstatistics() {
                         if (province !== null) {
                             opendata += "&gkz[]=>" + province*10000 + "&gkz[]=<" + (((province+1)*10000)-1);
                         }
+                        
                         if (end_date === null) {
                             opendata += "&time=>" + ((new Date()).getTime() - $('#statistik_duration').val() * (1000 * 60 * 60 * 24));
-                        } else {
+                        } 
+                        else {
                             //adjust begin date to match
                             var begin_date = ((new Date()).getTime() - $('#statistik_duration').val() * (1000 * 60 * 60 * 24));
                             begin_date = begin_date - ((new Date()).getTime() - end_date.getTime());
                             opendata += "&time[]=>" + begin_date + "&time[]=<" + end_date.getTime();
                         }
+                        
+                        opendata += "&pinned=true";
                     
                         //console.log(data);
                         var down_green, down_yellow, down_red, up_green, up_yellow, up_red, ping_green, ping_yellow, ping_red, signal_green, signal_yellow, signal_red, sum_count, sum_down, sum_up, sum_ping, signalDetailDiv, model;
