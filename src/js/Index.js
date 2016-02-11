@@ -1,6 +1,13 @@
 var most_recent_tests = 5;
 
+$(window).bind("load", function() {
+    $(".teaser-icon").css("visibility","visible");
+});
+
 $(document).ready(function() {
+    //hide custom font objects until the font is loaded
+    $(".teaser-icon").css("visibility","hidden");
+    
     var mobile_client = navigator.userAgent;
     
     //is it windows phone?
