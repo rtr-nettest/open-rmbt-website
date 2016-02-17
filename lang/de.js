@@ -99,7 +99,9 @@ exports.strings = {
         "next_page" : "Nächste Seite",
         "results" : "Ergebnisse",
         "network_country" : "Land",
-        "gkz" : "Gemeindekennzahl"
+        "gkz" : "Gemeindekennzahl",
+        "pinned_true" : "Für Statistik relevant",
+        "pinned_false" : "Für Statistik nicht relevant"
     },
 
     "options_content" : {
@@ -195,6 +197,7 @@ exports.strings = {
     'open_uuid' : 'Open-User-UUID',
     "begin" : "Beginn",
     "end" : "Ende",
+    "pinned" : "Pinned",
 
     "access" : "Zugang",
     "date" : "Datum",

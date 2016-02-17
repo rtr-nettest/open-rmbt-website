@@ -99,7 +99,9 @@ exports.strings = {
         "next_page" : "Next page",
         "results" : "results",
         "network_country" : "Country",
-        "gkz" : "Austrian community ID"
+        "gkz" : "Austrian community ID",
+        "pinned_true" : "Included in statistics",
+        "pinned_false" : "Not included in statistics"
     },
 
     "options_content" : {
@@ -195,6 +197,7 @@ exports.strings = {
     'open_uuid': 'Open-User-UUID',
     "begin" : "begin",
     "end" : "end",
+    "pinned" : "Pinned",
 
     "access" : "Access",
     "date" : "Date",

@@ -6,7 +6,7 @@
     "@gray": "lighten(@gray-base, 33.5%)",
     "@gray-light": "lighten(@gray-base, 46.7%)",
     "@gray-lighter": "lighten(@gray-base, 93.5%)",
-    "@brand-primary": "darken(#428bca, 6.5%)",
+    "@brand-primary": "#59B200",
     "@brand-success": "#5cb85c",
     "@brand-info": "#5bc0de",
     "@brand-warning": "#f0ad4e",
@@ -88,7 +88,7 @@
     "@input-bg": "#fff",
     "@input-bg-disabled": "@gray-lighter",
     "@input-color": "@gray",
-    "@input-border": "#ccc",
+    "@input-border": "#a2a2a2",
     "@input-border-radius": "@border-radius-base",
     "@input-border-radius-large": "@border-radius-large",
     "@input-border-radius-small": "@border-radius-small",
@@ -378,13 +378,16 @@
     "@blockquote-border-color": "@gray-lighter",
     "@page-header-border-color": "@gray-lighter",
     "@dl-horizontal-offset": "@component-offset-horizontal",
+    "@dl-horizontal-breakpoint": "@grid-float-breakpoint",
     "@hr-border": "@gray-lighter"
   },
   "css": [
+    "grid.less",
     "tables.less",
     "forms.less",
-    "buttons.less"
+    "buttons.less",
+    "input-groups.less"
   ],
   "js": [],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=07cfd5393305aa91d912"
+  "customizerUrl": "https://getbootstrap.com/customize/?id=f7e68bc40e2bc9477d54"
 }
