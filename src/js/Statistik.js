@@ -1,3 +1,5 @@
+"use strict"
+
 var most_recent_tests = 5;
 var bootstrap_datepicker_path = '/lib/bootstrap-datepicker/';
 
@@ -80,9 +82,33 @@ $(document).ready(function() {
         $(window).resize(function() {
             adjustTablesToWindowSize();
         });
+        
+        adjustTimePeriods();
 }); 
 
 
+/**
+ * Adjust time periods to represent calendar dates (e.g. 1 month should be 28-31 days)
+ */
+function adjustTimePeriods() {
+    $("#statistik_duration option").each(function (i, option) {
+        var val = $(option).attr("value");
+        $.each([{
+                count: 30,
+                unit: "months"
+            },
+            {
+                count: 365,
+                unit: "years"
+            }], function (i, timespan) {
+            if (val % timespan.count === 0) {
+                var units = val/timespan.count;
+                var then = moment().subtract(units,timespan.unit);
+                $(option).attr("value",moment().diff(then,"days"));
+            }
+        })
+    })
+}
 
 function adjustTablesToWindowSize() {
     //var device_width = $(".text100").width();
