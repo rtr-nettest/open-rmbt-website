@@ -739,7 +739,7 @@ function RMBTstatistics() {
         if (country !== previousStatisticsCountry && country !== 'null' && country !== 'AT') {
             previousStatisticsCountry = country;
             //Standard values
-            $('#statistik_duration').val(730);
+            $('#statistik_duration').val($("#statistik_duration_default_world").val());
             $('#statistik_quantile').val(0.5);
             $('#statistik_location_accuracy').val(-1);
             $('#statistik_network_type_group').val("all");
@@ -751,7 +751,7 @@ function RMBTstatistics() {
         //Austrian values
         else if (country !== previousStatisticsCountry && (country === 'null' || country === 'AT')) {
             previousStatisticsCountry = country;    
-            $('#statistik_duration').val(90);
+            $('#statistik_duration').val($("#statistik_duration_default_at").val());
             $('#statistik_quantile').val(0.5);
             $('#statistik_location_accuracy').val(2000);
             $('#statistik_network_type_group').val("all");
@@ -764,14 +764,8 @@ function RMBTstatistics() {
         var end_date = $("#statistik_enddate").val();
         var end_date_string = null;
         if (end_date !== undefined && end_date !== null && end_date !== "") {
-            end_date = new Date(end_date);
-            end_date.setHours(23);
-            end_date.setMinutes(59);
-            end_date.setSeconds(59);
-            end_date.setMilliseconds(999);
-
-            end_date_string = end_date.getUTCFullYear() + "-" + pad(end_date.getUTCMonth()+1,2) + "-" + pad(end_date.getUTCDate(),2)
-                + " " + pad(end_date.getUTCHours(),2) + ":" + pad(end_date.getUTCMinutes(),2) + ":" + pad(end_date.getUTCSeconds(),2);
+            end_date = moment(end_date).endOf("day").utc();
+            end_date_string = end_date.format("YYYY-MM-DD HH:mm:ss");
         }
         else {
             end_date = null;
@@ -822,13 +816,14 @@ function RMBTstatistics() {
                         }
                         
                         if (end_date === null) {
-                            opendata += "&time=>" + ((new Date()).getTime() - $('#statistik_duration').val() * (1000 * 60 * 60 * 24));
+                            var nowUTC = moment().endOf("day").utc();
+                            opendata += "&time[]=>" + moment(nowUTC).subtract($('#statistik_duration').val(),"days").add(1,"milliseconds").format("YYYY-MM-DD HH:mm:ss") + 
+                                    "&time[]=<" + nowUTC.format("YYYY-MM-DD HH:mm:ss");
                         } 
                         else {
                             //adjust begin date to match
-                            var begin_date = ((new Date()).getTime() - $('#statistik_duration').val() * (1000 * 60 * 60 * 24));
-                            begin_date = begin_date - ((new Date()).getTime() - end_date.getTime());
-                            opendata += "&time[]=>" + begin_date + "&time[]=<" + end_date.getTime();
+                            var begin_date =  moment(end_date.toDate()).subtract($('#statistik_duration').val(),"days").add(1,"milliseconds").utc();
+                            opendata += "&time[]=>" + begin_date.format("YYYY-MM-DD HH:mm:ss") + "&time[]=<" + end_date.format("YYYY-MM-DD HH:mm:ss");
                         }
                         
                         opendata += "&pinned=true";

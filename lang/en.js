@@ -178,6 +178,9 @@ exports.strings = {
     "X_months" : "%X% months",
     "1_year" : "1 year",
     "X_years" : "%X% years",
+    "days" : "Days",
+    "months" : "Months",
+    "years" : "Years",
     "type" : "Type",
     "mobile" : "Mobile",
     "wifi_test" : "WLAN (App)",
@@ -197,6 +200,7 @@ exports.strings = {
     'open_uuid': 'Open-User-UUID',
     "begin" : "begin",
     "end" : "end",
+    "timespan" : "Timespan",
     "pinned" : "Pinned",
 
     "access" : "Access",
