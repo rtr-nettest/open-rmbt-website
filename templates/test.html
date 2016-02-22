@@ -3,21 +3,21 @@
 {% set containerclass = "full-width" %}
 
 {% block headerscriptingExtended %}
-<link rel="stylesheet" href="../css/test.css">
+<link rel="stylesheet" href="../{{ fingerprint["css/test.css"] }}">
 
-<script src="../js/vendor/modernizr-2.6.1.min.js"></script>
+<script src="../{{ fingerprint["js/vendor/modernizr-2.6.1.min.js"] }}"></script>
 
 <script type="text/javascript">
     if (preferredTest === TestTypes.Java || getParam("Java"))
-        document.writeln('<script type="text/javascript" src="../lib/deployJava.js"><\/script>');
+        document.writeln('<script type="text/javascript" src="../{{ fingerprint["lib/deployJava.js"] }}"><\/script>');
 </script>
-<script type="text/javascript" src="../js/test/geolocation.js"></script>
-<script type="text/javascript" src="../js/test/TestVisualization.js"></script>
-<script type="text/javascript" src="../js/Test.js"></script>
-<script type="text/javascript" src="../js/test/TestDatastructures.js"></script>
-<script type="text/javascript" src="../js/test/WebsockettestDatastructures.js"></script>
-<script type="text/javascript" src="../js/test/WebsockettestHelpers.js"></script>
-<script type="text/javascript" src="../js/test/Websockettest.js"></script>
+<script type="text/javascript" src="../{{ fingerprint["js/test/geolocation.js"] }}"></script>
+<script type="text/javascript" src="../{{ fingerprint["js/test/TestVisualization.js"] }}"></script>
+<script type="text/javascript" src="../{{ fingerprint["js/Test.js"] }}"></script>
+<script type="text/javascript" src="../{{ fingerprint["js/test/TestDatastructures.js"] }}"></script>
+<script type="text/javascript" src="../{{ fingerprint["js/test/WebsockettestDatastructures.js"] }}"></script>
+<script type="text/javascript" src="../{{ fingerprint["js/test/WebsockettestHelpers.js"] }}"></script>
+<script type="text/javascript" src="../{{ fingerprint["js/test/Websockettest.js"] }}"></script>
 
 
 <style>
@@ -178,9 +178,9 @@
 </div> <!-- test_container -->
 <!-- Site or application content end -->
 
-<!-- S<script src="../js/jquery-1.8.2.min.js"></script>
+<!-- S<script src="../{{ fingerprint["js/jquery-1.8.2.min.js"] }}"></script>
 <script>
-window.jQuery || document.write('<script src="../js/jquery-1.8.2.min.js"><\/script>')
+window.jQuery || document.write('<script src="../{{ fingerprint["js/jquery-1.8.2.min.js"] }}"><\/script>')
 </script>-->
-<script src="../js/plugins.js"></script>
+<script src="../{{ fingerprint["js/plugins.js"] }}"></script>
 {% endblock %}

@@ -28,6 +28,7 @@ nunjucks.configure({ autoescape: false });
 var Metalsmith = require('metalsmith');
 var layouts = require('metalsmith-layouts');
 var watch = require('metalsmith-watch');
+var fingerprint = require('metalsmith-fingerprint-ignore');
 var debug = require('debug');
 debug.enable();
 
@@ -75,6 +76,17 @@ var metalsmith = Metalsmith(__dirname)
     ]))
     .use(setConfig())
     .use(duplicateFile())
+    .use(fingerprint({
+        pattern: ['css/*.css', 'js/**/*.js',
+                '!template/**/*.'],
+        deactivate: useWatch,
+        keep: false
+    }))
+    .use(fingerprint({
+        pattern: ['lib/**/*.js', 'lib/**/*.css',],
+        deactivate: useWatch,
+        keep: true //for loading polyfills in JS
+    }))
     .use(layouts({
         engine: 'nunjucks',
         directory: 'templates'

@@ -3,8 +3,8 @@
 
 {% block headerscriptingExtended %}
 <script type="text/javascript" src="../en/Lang.js"></script>
-<script type="text/javascript" src="../js/jquery.flot.min.js"></script>
-<script type="text/javascript" src="../js/Usage.js"></script>
+<script type="text/javascript" src="../{{ fingerprint["js/jquery.flot.min.js"] }}"></script>
+<script type="text/javascript" src="../{{ fingerprint["js/Usage.js"] }}"></script>
 <style>
     .graph {
         height: 300px;

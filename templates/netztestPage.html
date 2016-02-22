@@ -26,31 +26,31 @@
 
     {% block headerscriptingBasic %}
 
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../{{ fingerprint["css/bootstrap.css"] }}" media="screen">
       
-    <!-- link rel="stylesheet" type="text/css" href="../css/rtr-screen.css" media="screen" / -->
-    <!-- link rel="stylesheet" type="text/css" href="../css/rtr-print.css" media="print" / -->
+    <!-- link rel="stylesheet" type="text/css" href="../{{ fingerprint["css/rtr-screen.css"] }}" media="screen" / -->
+    <!-- link rel="stylesheet" type="text/css" href="../{{ fingerprint["css/rtr-print.css"] }}" media="print" / -->
 
-    <script type="text/javascript" src="../js/jquery-1.8.2.min.js"></script>
-    <!-- script type="text/javascript" src="../js/jquery-1.9.1.js"></script -->
+    <script type="text/javascript" src="../{{ fingerprint["js/jquery-1.8.2.min.js"] }}"></script>
+    <!-- script type="text/javascript" src="../{{ fingerprint["js/jquery-1.9.1.js"] }}"></script -->
     
     <script src="/fileadmin/template/rtr/js/mlpushmenu.js?1431519457" type="text/javascript"></script>
-    <script type="text/javascript" src="../js/menu.js"></script>
-    <script type="text/javascript" src="../lib/jquery_ui/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="../js/jquery.history.js"></script>
-    <script type="text/javascript" src="../js/javaconf.js"></script>
-    <script type="text/javascript" src="../js/functions.js"></script>
+    <script type="text/javascript" src="../{{ fingerprint["js/menu.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["lib/jquery_ui/jquery-ui.min.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["js/jquery.history.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["js/javaconf.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["js/functions.js"] }}"></script>
 
     <script type="text/javascript" src="Lang.js"></script>
-    <script type="text/javascript" src="../js/popupform.js"></script>
+    <script type="text/javascript" src="../{{ fingerprint["js/popupform.js"] }}"></script>
 
 
-    <link rel="stylesheet" type="text/css" href="../css/style.css" media="screen" />
-    <link rel='stylesheet' type="text/css" href='../css/senderkataster.css' />
+    <link rel="stylesheet" type="text/css" href="../{{ fingerprint["css/style.css"] }}" media="screen" />
+    <link rel='stylesheet' type="text/css" href="../{{ fingerprint["css/senderkataster.css"] }}" />
 
-    <link rel="stylesheet" type="text/css" href="../lib/jquery_ui/jquery-ui.min.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../{{ fingerprint["lib/jquery_ui/jquery-ui.min.css"] }}" media="screen" />
 
-    <link rel="stylesheet" type="text/css" href="../css/rtr-mobile.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../{{ fingerprint["css/rtr-mobile.css"] }}" media="screen" />
     
     
     <link rel="stylesheet" type="text/css" href="/fileadmin/template/rtr/css/normalize.min.css?1431519456" media="all">

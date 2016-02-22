@@ -11,6 +11,7 @@
     "metalsmith-layouts": "^1.4.2",
     "metalsmith-permalinks": "^0.1.0",
     "metalsmith-watch" : "1.0.1",
+    "metalsmith-fingerprint-ignore" : "cproof/metalsmith-fingerprint-ignore",
     "nunjucks": "^2.0.0",
     "request" : "^2.57",
 	"cheerio" : "^0.18.0",
