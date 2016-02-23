@@ -501,7 +501,7 @@ function RMBTtestresult(testUUID) {
                                                         $('#testresult-detail tbody').append(
                                                                 '<tr>' +
                                                                 '<td>'+detail.title+'</td>' +
-                                                                '<td>'+nl2br(detail.value,true)+'</td>' +
+                                                                '<td data-label="' + detail.title + '"><span>'+nl2br(detail.value,true)+'</span></td>' +
                                                                 '</tr>'
                                                         );
                                                 });
