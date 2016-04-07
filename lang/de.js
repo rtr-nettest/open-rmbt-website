@@ -172,6 +172,7 @@ exports.strings = {
     "further_tests" : "Weitere Tests",
     "austria" : "Österreich",
 
+    "24_hours" : "24 Stunden",
     "1_day" : "1 Tag",
     "1_week" : "1 Woche",
     "1_month" : "1 Monat",

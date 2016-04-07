@@ -84,13 +84,25 @@ $(document).ready(function() {
         });
         
         adjustTimePeriods();
+        $("#statistik_enddate").change(function() {
+            var end_date = $("#statistik_enddate").val();
+            if (end_date !== undefined && end_date !== null && end_date !== "") {
+                adjustTimePeriods(end_date);
+            }
+        })
 }); 
 
 
 /**
  * Adjust time periods to represent calendar dates (e.g. 1 month should be 28-31 days)
  */
-function adjustTimePeriods() {
+function adjustTimePeriods(enddate) {
+    if (enddate === undefined) {
+        enddate = moment();
+    }
+    else {
+        enddate = moment(enddate);
+    }
     $("#statistik_duration option").each(function (i, option) {
         var val = $(option).attr("value");
         $.each([{
@@ -101,10 +113,10 @@ function adjustTimePeriods() {
                 count: 365,
                 unit: "years"
             }], function (i, timespan) {
-            if (val % timespan.count === 0) {
-                var units = val/timespan.count;
-                var then = moment().subtract(units,timespan.unit);
-                $(option).attr("value",moment().diff(then,"days"));
+            if (val > 7 && (val % timespan.count <= 6)) {
+                var units = Math.round(val/timespan.count);
+                var then = moment(enddate).subtract(units,timespan.unit);
+                $(option).attr("value",moment(enddate).diff(then,"days"));
             }
         })
     })

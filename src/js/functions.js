@@ -816,9 +816,10 @@ function RMBTstatistics() {
                         }
                         
                         if (end_date === null) {
-                            var nowUTC = moment().endOf("day").utc();
-                            opendata += "&time[]=>" + moment(nowUTC).subtract($('#statistik_duration').val(),"days").add(1,"milliseconds").format("YYYY-MM-DD HH:mm:ss") + 
-                                    "&time[]=<" + nowUTC.format("YYYY-MM-DD HH:mm:ss");
+                            var now = moment();
+                            var then =  moment(now).subtract($('#statistik_duration').val(),"days").add(1,"milliseconds");
+                            opendata += "&time[]=>" + then.utc().format("YYYY-MM-DD HH:mm:ss") + 
+                                    "&time[]=<" + now.utc().format("YYYY-MM-DD HH:mm:ss");
                         } 
                         else {
                             //adjust begin date to match
