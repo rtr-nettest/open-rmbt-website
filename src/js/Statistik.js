@@ -116,6 +116,13 @@ function adjustTimePeriods(enddate) {
             if (val > 7 && (val % timespan.count <= 6)) {
                 var units = Math.round(val/timespan.count);
                 var then = moment(enddate).subtract(units,timespan.unit);
+                
+                //if the end of a month is selected - then should also be the end of a month!
+                if (timespan.unit==="months" && 
+                        moment(enddate).format("YYYY-MM-DD") === moment(enddate).endOf("month").beginOf("day").format("YYYY-MM-DD")) {
+                    then = then.endOf("month");
+                }
+                
                 $(option).attr("value",moment(enddate).diff(then,"days"));
             }
         })
