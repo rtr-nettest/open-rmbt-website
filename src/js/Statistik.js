@@ -119,8 +119,8 @@ function adjustTimePeriods(enddate) {
                 
                 //if the end of a month is selected - then should also be the end of a month!
                 if (timespan.unit==="months" && 
-                        moment(enddate).format("YYYY-MM-DD") === moment(enddate).endOf("month").beginOf("day").format("YYYY-MM-DD")) {
-                    then = then.endOf("month");
+                        moment(enddate).format("YYYY-MM-DD") === moment(enddate).endOf("month").format("YYYY-MM-DD")) {
+                    then = then.endOf("month").startOf("day");
                 }
                 
                 $(option).attr("value",moment(enddate).diff(then,"days"));
