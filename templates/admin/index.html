@@ -44,6 +44,19 @@
             success: function(data) {
                 $("#statisticserver_version").html(data.version);
             }});
+        
+        
+        $.ajax({
+            url: statisticProxy + "/" + statisticpath + "/opentests/statistics",
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $("#usageStatistics li").each(function(i,elem) {
+                    var id = $(elem).attr("id");
+                    var duration = id.substr(5);
+                    $(elem).prepend(data[duration].toLocaleString());
+                })
+            }});
     });
 </script>
 {% endblock %}
@@ -63,6 +76,16 @@
     Statistic Server version: <span id="statisticserver_version"></span><br/>
     Website version: {{ gitDescribe }}<br />
 </p>
+
+
+<ul id="usageStatistics">
+    <li id="usage30min"> tests in the last 30 min</li>
+    <li id="usage60min"> tests in the last 60 min</li>
+    <li id="usage12h"> tests in the last 12 h</li>
+    <li id="usage24h"> tests in the last 24 h</li>
+    <li id="usage7d"> tests in the last 7 days</li>
+</ul>
+
 
 
 {% endblock %}
