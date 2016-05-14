@@ -6,7 +6,7 @@ var statisticProxy = "";
 var wspath = "RMBTControlServer";
 var statisticpath = "RMBTStatisticServer";
 
-var developerCode = 17031552; //otherwise: 0;
+var userServerSelection = TRUE; //otherwise: 0 (FALSE);
 
 var crossDomain = false;
 

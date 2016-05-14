@@ -822,9 +822,9 @@ function redrawOverlay() {
         });
         
         //if qostest -> add source parameter
-        if (developerCode > 0) {
-            filter += "&developer_code=" + developerCode;
-            curFilterObj['developer_code'] = developerCode;
+        if (userServerSelection > 0) {
+            filter += "&user_server_selection=" + userServerSelection;
+            curFilterObj['user_server_selection'] = userServerSelection;
         }
 
         //set tile urls to new filter selection
@@ -883,9 +883,9 @@ function defaultMapFilterV3() {
     });
 
     //if qostest -> add source parameter
-    if (developerCode > 0) {
-        filter += "&developer_code=" + developerCode;
-        curFilterObj['developer_code'] = developerCode;
+    if (userServerSelection > 0) {
+        filter += "&user_server_selection=" + userServerSelection;
+        curFilterObj['user_server_selection'] = userServerSelection;
     }
 
     var points_url = URL_MAP_SERVER + '/points/{z}/{x}/{y}.png' + filter + auswahl;

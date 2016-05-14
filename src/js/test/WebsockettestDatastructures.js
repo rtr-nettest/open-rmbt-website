@@ -24,7 +24,7 @@ RMBTTestConfig.prototype.fallbackChunksDownload = 12; //12*4 = 48 KBytes in 2 Se
 RMBTTestConfig.prototype.fallbackChunksUpload = 12; //
 RMBTTestConfig.prototype.numPings = 10; //do 10 pings
 RMBTTestConfig.prototype.limitUploadThreads = (getParam !== undefined && getParam("allowUploadThreads") !== false)?false:true;
-RMBTTestConfig.prototype.developerCode = developerCode; //for QoSTest
+RMBTTestConfig.prototype.userServerSelection = userServerSelection; //for QoSTest
 
 
 var RMBTControlServerRegistrationResponse = (function() {

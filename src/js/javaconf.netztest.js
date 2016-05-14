@@ -6,7 +6,7 @@ var statisticProxy = "https://m-cloud.netztest.at";
 var wspath = "RMBTControlServer";
 var statisticpath = "RMBTStatisticServer";
 
-var developerCode = 0; //otherwise: 0;
+var userServerSelection = 0; // FALSE - otherwise TRUE;
 
 var crossDomain = false;
 

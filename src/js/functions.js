@@ -785,8 +785,8 @@ function RMBTstatistics() {
                 province: province,
                 end_date: end_date_string
         };
-        if (developerCode>0) {
-            json_data['developer_code'] = developerCode;
+        if (userServerSelection>0) {
+            json_data['user_server_selection'] = userServerSelection;
         }
         
         $('#spinner').spin('modal');
