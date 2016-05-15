@@ -166,8 +166,8 @@ function adjustTablesToWindowSize() {
  */
 function getLastOpenDataResults() {
     var data = "";
-    if (developerCode > 0) {
-        data = "&developer_code=" + developerCode;
+    if (userServerSelection > 0) {
+        data = "&user_server_selection=" + userServerSelection;
     }
     $.ajax({
         url: statisticProxy + "/" + statisticpath + "/opentests/search?max_results=" + most_recent_tests + data,

@@ -287,7 +287,7 @@ function loadServerList() {
         "uuid": "8aadf45b-0b6c-415c-bf1f-37e285a6de05",
         "version_code": "1",
         "version_name": "0.1",
-        "developer_code" : developerCode
+        "user_server_selection" : userServerSelection
     };
     
      $.ajax({

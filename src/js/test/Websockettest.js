@@ -920,10 +920,10 @@ var RMBTTest = (function() {
             time: new Date().getTime()
         };
         
-        if (typeof developerCode !== "undefined" && developerCode > 0 
+        if (typeof userServerSelection !== "undefined" && userServerSelection > 0 
                 && typeof UserConf !== "undefined" && UserConf.preferredServer !== undefined && UserConf.preferredServer !== "default") {
             json_data['prefer_server'] = UserConf.preferredServer;
-            json_data['developer_code'] = developerCode;
+            json_data['user_server_selection'] = userServerSelection;
         }
 
         $.ajax({
@@ -998,7 +998,7 @@ var RMBTTest = (function() {
             type: "DESKTOP",
             version_code: "1",
             speed_detail: _rmbtTestResult.speedItems,
-            developer_code: _rmbtTestConfig.developerCode
+            user_server_selection: _rmbtTestConfig.userServerSelection
         };
         var json = JSON.stringify(json_data);
         debug("Submit size: " + json.length);
