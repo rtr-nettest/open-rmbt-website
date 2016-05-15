@@ -26,11 +26,19 @@
                 URL_MAP_SERVER = data.settings[0].urls.url_map_server;
 
                 $.ajax({
-                    url: URL_MAP_SERVER + "/version",
+                    url: URL_MAP_SERVER.replace("m-cloud","m02") + "/version",
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
-                        $("#mapserver_version").html(data.version);
+                        $("#mapserver_m02_version").html(data.version);
+                    }});
+                
+                $.ajax({
+                    url: URL_MAP_SERVER.replace("m-cloud","m03") + "/version",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $("#mapserver_m03_version").html(data.version);
                     }});
             }
         });
@@ -80,7 +88,8 @@
 
 <p>
     Control Server version: <span id="controlserver_version"></span><br/>
-    Map Server version: <span id="mapserver_version"></span><br/>
+    Map Server version m02: <span id="mapserver_m02_version"></span><br/>
+    Map Server version m03: <span id="mapserver_m03_version"></span><br/>
     Statistic Server version m02: <span id="statisticserver_m02_version"></span><br/>
     Statistic Server version m03: <span id="statisticserver_m03_version"></span><br/>
     Website version: {{ gitDescribe }}<br />
