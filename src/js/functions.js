@@ -269,6 +269,7 @@ function RMBTmapfilter(options) {
 function RMBTsettings(options) {
         cookie_uuid = getCookie("RMBTuuid");
         var terms_accepted = getCookie("RMBTTermsV4");
+        var terms_and_conditions_accepted_version = (terms_accepted)?terms_version:null;
         
         var json_data = {
                 version_name: test_version_name,
@@ -277,7 +278,8 @@ function RMBTsettings(options) {
                 type: test_type,
                 version_code: test_version_code,
                 name: test_name,
-                terms_and_conditions_accepted: terms_accepted
+                terms_and_conditions_accepted: terms_accepted,
+                terms_and_conditions_accepted_version : terms_and_conditions_accepted_version
         };
         /*
         if (window.console && console.log) {
