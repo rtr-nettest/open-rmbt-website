@@ -133,11 +133,11 @@
                         onchange="requestBrowserData('RMBTstatistics');">
                     <option value="1">{{ Lang.24_hours }}</option>
                     <option value="7">{{ Lang.1_week }}</option>
-                    <option value="30">{{ Lang.1_month }}</option>
+                    <option value="30" id="statistik_duration_default_world">{{ Lang.1_month }}</option>
                     <option value="90" id="statistik_duration_default_at" selected="selected">{{ Lang.X_months | replace("%X%","3") }}</option>
                     <option value="180">{{ Lang.X_months | replace("%X%","6") }}</option>
                     <option value="365">{{ Lang.1_year }}</option>
-                    <option value="730" id="statistik_duration_default_world">{{ Lang.X_years | replace("%X%","2") }}</option>
+                    <option value="730">{{ Lang.X_years | replace("%X%","2") }}</option>
                 </select>
             </div>
 
