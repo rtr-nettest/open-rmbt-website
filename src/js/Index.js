@@ -38,6 +38,7 @@ $(document).ready(function() {
     }
 });
 
+var fullscreenMap = getParam("fullscreenMap");
 var map;
 var vectorLayer;
 var mapProxy;
@@ -178,6 +179,13 @@ function loadLastOpenDataResultsMap() {
             var removed = currentFeatures.shift();
             vectorSource.removeFeature(removed);
         }
+        
+        //if fullscreen - open popup
+        if (fullscreenMap) {
+            window.setTimeout(function() {
+                loadMarker(result.open_test_uuid);
+            }, 2000)
+        }
     }
 
     var animateMapToShowTests = function () {
@@ -270,6 +278,17 @@ function loadLastOpenDataResultsMap() {
             map.updateSize();
         },500); 
     })
+    
+    if (fullscreenMap) {
+        //change map location, resize, delete the rest
+        (function() {
+            var tmpMap = $("#new-tests-map-container").detach();
+            tmpMap.find("#newtestsmap").attr("style","width:100%;height:100%;position:fixed");
+            $("body").empty();
+            $("body").append(tmpMap);
+            $("body").addClass("fullscreenMap")
+        })();
+    }
 }
 
 
