@@ -610,6 +610,7 @@ function loadMarker(lonlat) {
         filter: curFilterObj,
         options: curMapOptionObj
     };
+    json_data = addCapabilities(json_data);
 
     $.ajax({
         //url : "http://localhost:8080/RMBTMapServer/tiles/markers",
