@@ -191,6 +191,13 @@ function loadLastOpenDataResultsMap() {
     var animateMapToShowTests = function () {
         window.setTimeout(function () {
             var extent = vectorLayer.getSource().getExtent();
+            
+            var extentSize = ol.extent.getSize(extent);
+            extent[0] -= extentSize[0]*.2
+            extent[1] -= extentSize[1]*.2
+            extent[2] += extentSize[0]*.2
+            extent[3] += extentSize[1]*.2
+            
             var zoom = ol.animation.zoom({
                 resolution: map.getView().getResolution(),
                 duration: 2000
