@@ -288,14 +288,34 @@ function loadLastOpenDataResultsMap() {
     
     if (fullscreenMap) {
         //change map location, resize, delete the rest
-        (function() {
-            var tmpMap = $("#new-tests-map-container").detach();
-            tmpMap.find("#newtestsmap").attr("style","width:100%;height:100%;position:fixed");
-            $("body").empty();
-            $("body").append(tmpMap);
-            $("body").addClass("fullscreenMap")
-        })();
+        switchToFullscreenMap();
     }
+}
+
+var originalMapStyle=null;
+function switchToFullscreenMap() {
+    var mapElem = $("#newtestsmap");
+    
+    fullscreenMap = true;
+    if (screenfull.enabled) {
+        if (originalMapStyle === null) {
+            originalMapStyle = mapElem.attr("style");
+        }
+        mapElem.attr("style", "width:100%;height:100%;position:fixed");
+        $("body").addClass("fullscreenMap");
+        screenfull.request(mapElem[0]);
+
+        //reset css/style when leaving fullscreen
+        $(document).keyup(function (e) {
+            if (e.keyCode == 27) {
+                mapElem.attr("style", originalMapStyle);
+                $("body").removeClass("fullscreenMap")
+                map.updateSize();
+                fullscreenMap = false;
+            }
+        });
+    }
+
 }
 
 

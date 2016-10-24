@@ -46,7 +46,8 @@ exports.strings = {
         "map_content" : "Karte mit Testergebnissen",
         "help_content" : "Detaillierte Hintergrundinformation",
         "statistics_content" : "Statistiken zu den Testergebnissen",
-        "enlarge_map" : "Karte vergrößern"
+        "enlarge_map" : "Karte vergrößern",
+        "fullscreen" : "Vollbild"
     },
 
     "map_content" : {

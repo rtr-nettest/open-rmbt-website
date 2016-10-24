@@ -46,7 +46,8 @@ exports.strings = {
         "map_content" : "Map with test results",
         "help_content" : "Detailled background information",
         "statistics_content" : "Statistics on the test results",
-        "enlarge_map" : "Enlarge map"
+        "enlarge_map" : "Enlarge map",
+        "fullscreen" : "Full screen"
     },
 
     "map_content" : {
