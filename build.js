@@ -78,7 +78,7 @@ var metalsmith = Metalsmith(__dirname)
     .use(duplicateFile())
     .use(fingerprint({
         pattern: ['css/*.css', 'js/**/*.js',
-                '!template/**/*.'],
+                '!template/**/*.', '!js/test/jstest.js'],
         deactivate: useWatch,
         keep: false
     }))
