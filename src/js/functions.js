@@ -1320,7 +1320,7 @@ function RMBTstatistics() {
                                         '</div></td>'+
                                         '<td class="align-right quantile"><div>'+quantile_ping+' ms'+
                                         '</div></td>'+
-                                        '<td class="align-right"><a href="Opentests?' + opentests_query_country_provider + '&model='+model+opendata+'">'+row.count.formatNumber()+'</a></td>'+
+                                        '<td class="align-right"><a href="Opentests?' + opentests_query_country_provider + '&model='+ encodeURI(model + opendata)+'">'+row.count.formatNumber()+'</a></td>'+
                                         '</tr>'
                                     );
                                         
