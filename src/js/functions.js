@@ -1827,7 +1827,7 @@ function addCapabilities(request) {
  * additional API parameters as query parameter
  */
 function getCapabilitiesAsQueryParam() {
-    return "capabilities=" + JSON.stringify(getCapabilities());
+    return "capabilities=" + encodeURIComponent(JSON.stringify(getCapabilities()));
 }
 
 /** 
