@@ -197,5 +197,6 @@ Lang.setStrings({
     'NoOperatorsFound' : 'Keine Provider verfügbar in der aktuellen Filterung',
     'NoDevicesFound' : 'Keine Geräte verfügbar in der aktuellen Filterung',
     'QosTest' : 'Quality of Service',
-    'FastConnectionWarning' : 'Aufgrund des verwendeten Testtyps kann es bei Ihrer schnellen Internetanbindung zu technisch bedingten Messschwankungen kommen. Vermuten Sie, dass die Ergebnisse nicht die tatsächliche Leistung widerspiegeln, führen Sie bitte einen <a href="/de/Test?Java=t">Java-basierten Test</a> durch.'
+    'FastConnectionWarning' : 'Aufgrund des verwendeten Testtyps kann es bei Ihrer schnellen Internetanbindung zu technisch bedingten Messschwankungen kommen. Vermuten Sie, dass die Ergebnisse nicht die tatsächliche Leistung widerspiegeln, führen Sie bitte einen <a href="/de/Test?Java=t">Java-basierten Test</a> durch.',
+    'CheckConnection': "Bitte überprüfen Sie ihre Internetverbindung"
 });

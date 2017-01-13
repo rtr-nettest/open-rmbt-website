@@ -200,5 +200,6 @@ Lang.setStrings({
     'NoOperatorsFound' : 'No operators found for the current selection',
     'NoDevicesFound' : 'No devices found for the current selection',
     'QosTest' : 'Quality of Service',
-    'FastConnectionWarning' : 'Due to technical limitations of the used test type, deviations are possible. If you suspect that the results are inaccurate, please conduct a <a href="/en/Test?Java=t">Java-based Test</a>.'
+    'FastConnectionWarning' : 'Due to technical limitations of the used test type, deviations are possible. If you suspect that the results are inaccurate, please conduct a <a href="/en/Test?Java=t">Java-based Test</a>.',
+    'CheckConnection': "Please check your internet connection"
 });

@@ -339,7 +339,7 @@ function loadMarker(openTestUUID) {
             }
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert("Error beim settings-Abruf " + xhr.status + " " + thrownError + " " + ajaxOptions);
+            alert(Lang.getString("Error") + ": " + Lang.getString("CheckConnection") + ". \n(" + xhr.status + " " + thrownError + " " + ajaxOptions + ")");
         }
     });
 }
