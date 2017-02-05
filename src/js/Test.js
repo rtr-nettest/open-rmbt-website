@@ -163,6 +163,7 @@ function start_test() {
 }
 
 $(document).ready(function() {
+    return;
     
         TestEnvironment.init();
         

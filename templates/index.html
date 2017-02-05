@@ -24,6 +24,17 @@
         .fullscreenMap .olPopup div.infoWrap {
             width: 250px !important;
         }
+        
+        #fullscreenTestStatistics {
+            padding: 10px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 250px;
+            text-align: center;
+            background-color: white;
+            z-index: 10;
+        }
     </style>
 {% endblock %}
 
@@ -31,6 +42,14 @@
 	<div id="new-tests-map-container">
         <div id="newtestsmap" class="olMap" style="height:900px;"></div>
         {{ Lang.recent_tests }} - <a href="Opentests">{{ Lang.further_tests }}</a> &middot; <a href="Opentests?max_results=5&loc_accuracy=<2000#map-accordion">{{ Lang.index_content.enlarge_map }}</a> &middot; <a href="#" onclick="switchToFullscreenMap();">{{ Lang.index_content.fullscreen }}</a>
+
+        <div style="display:none" id="fullscreenTestStatistics">
+            {% raw %}
+            <div class="current-time">{{ formatDate currentTime }}</div>
+            <div class="tests-30-min">{{ tests30min }} {{ Lang30min }}</div>
+            <div class="tests-24h">{{ tests24h }} {{ Lang24h }}</div>
+            {% endraw %}
+        </div>
         <div id="markerTemplate" style="display:none">
             <div class="olPopup">
 

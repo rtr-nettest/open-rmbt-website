@@ -63,7 +63,7 @@ Lang.setStrings({
     'basemap_bmaphidpi' : 'Basemap.at - High DPI',
     'basemap_bmaporthofoto30cm' : 'Basemap.at - Luftbild',
     'map_dateformat' : 'DD.MM.YYYY HH:mm:ss', //http://momentjs.com/docs/#/displaying/
-    'map_index_dateformat' : 'hh:mm:ss',
+    'map_index_dateformat' : 'HH:mm:ss',
     'all' : 'Alle',
 
     //fields from controlserver-resource
@@ -198,5 +198,7 @@ Lang.setStrings({
     'NoDevicesFound' : 'Keine Geräte verfügbar in der aktuellen Filterung',
     'QosTest' : 'Quality of Service',
     'FastConnectionWarning' : 'Aufgrund des verwendeten Testtyps kann es bei Ihrer schnellen Internetanbindung zu technisch bedingten Messschwankungen kommen. Vermuten Sie, dass die Ergebnisse nicht die tatsächliche Leistung widerspiegeln, führen Sie bitte einen <a href="/de/Test?Java=t">Java-basierten Test</a> durch.',
-    'CheckConnection': "Bitte überprüfen Sie ihre Internetverbindung"
+    'CheckConnection': "Bitte überprüfen Sie ihre Internetverbindung",
+    'TestsInTheLastXHours' : 'Tests in den letzten % Stunden',
+    'TestsInTheLastXMinutes' : 'Tests in den letzten % Minuten'
 });
