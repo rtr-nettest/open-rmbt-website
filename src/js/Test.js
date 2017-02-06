@@ -1,4 +1,5 @@
 
+var loadRMBTApplet = true;
 var noJava = false;
 var oldjava = true;
 var cookieEnabled = true;
