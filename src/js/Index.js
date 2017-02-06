@@ -295,7 +295,7 @@ function loadLastOpenDataResultsMap() {
 var originalMapStyle=null;
 function switchToFullscreenMap() {
     var mapElem = $("#newtestsmap");
-    
+
     fullscreenMap = true;
     if (screenfull.enabled) {
         if (originalMapStyle === null) {
@@ -304,18 +304,76 @@ function switchToFullscreenMap() {
         mapElem.attr("style", "width:100%;height:100%;position:fixed");
         $("body").addClass("fullscreenMap");
         screenfull.request(mapElem[0]);
+        addCurrentTestStatistics();
 
         //reset css/style when leaving fullscreen
-        $(document).keyup(function (e) {
-            if (e.keyCode == 27) {
+        //https://stackoverflow.com/questions/10706070/how-to-detect-when-a-page-exits-fullscreen
+        var onFullScreenChange = function () {
+            var fullscreenElement = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
+            if (!fullscreenElement) {
                 mapElem.attr("style", originalMapStyle);
                 $("body").removeClass("fullscreenMap")
                 map.updateSize();
                 fullscreenMap = false;
+                
+                document.removeEventListener("fullscreenchange", onFullScreenChange, false);
+                document.removeEventListener("webkitfullscreenchange", onFullScreenChange, false);
+                document.removeEventListener("mozfullscreenchange", onFullScreenChange, false);
             }
-        });
+        };
+
+        document.addEventListener("fullscreenchange", onFullScreenChange, false);
+        document.addEventListener("webkitfullscreenchange", onFullScreenChange, false);
+        document.addEventListener("mozfullscreenchange", onFullScreenChange, false);
+
     }
 
+
+}
+
+/**
+ * Add current test statistics to the map container, but only once!
+ */
+var currentTestStatisticsAdded = false;
+function addCurrentTestStatistics() {
+    if (currentTestStatisticsAdded) {
+        return;
+    }
+    currentTestStatisticsAdded = true;
+    
+    //add div to display
+    $("#fullscreenTestStatistics").prependTo("#newtestsmap");
+    $("#fullscreenTestStatistics").show();
+    
+    var template = Handlebars.compile($("#fullscreenTestStatistics").html());
+
+    var currentStatistics={};
+    var refreshDisplay = function () {
+        var data = {
+            tests30min: currentStatistics["30min"],
+            tests24h: currentStatistics["24h"],
+            Lang30min: Lang.getString("TestsInTheLastXMinutes").replace("%", "30"),
+            Lang24h: Lang.getString("TestsInTheLastXHours").replace("%", "24"),
+            currentTime: Date.now()
+        };
+
+        var html = template(data);
+        $("#fullscreenTestStatistics").html(html);
+    }
+    var refreshStatistics = function () {
+        $.getJSON(statisticProxy + "/" + statisticpath + "/opentests/statistics",
+                function (data) {
+                    currentStatistics = data;
+                }
+        );
+    };
+    
+    window.setInterval(refreshDisplay, 1000);
+    window.setInterval(refreshStatistics, 3000);
+    refreshDisplay();
+    refreshStatistics();
+    
+        
 }
 
 
