@@ -1,4 +1,5 @@
 var most_recent_tests = 5;
+var fullscreenMap = getParam("fullscreenMap");
 
 $(window).bind("load", function() {
     $(".teaser-icon").css("visibility","visible");
@@ -34,11 +35,17 @@ $(document).ready(function() {
     }
     
     if (!(userServerSelection > 0)) {
+        //if fullscreen map parameter set - map is only page content!
+        if (fullscreenMap) {
+            var mapContainer = $("#new-tests-map-container");
+            $("body").empty()
+            $("body").append(mapContainer);
+        }
+        
         loadLastOpenDataResultsMap();
     }
 });
 
-var fullscreenMap = getParam("fullscreenMap");
 var map;
 var vectorLayer;
 var mapProxy;
