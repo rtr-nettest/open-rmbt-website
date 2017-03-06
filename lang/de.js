@@ -12,7 +12,7 @@ exports.strings = {
 
     "index_content": {
         "service_description": {
-            "netztest": "Der RTR-Netztest stellt Nutzern Informationen über die aktuelle Dienstequalität (ua. Upload, Download, Ping, Signalstärke) ihres Internetzugangs zur Verfügung. Darüber hinaus sind eine Kartendarstellung sowie Statistiken der bisherigen Tests abrufbar.",
+            "netztest": "Der RTR-Netztest stellt Nutzerinnen und Nutzern Informationen über die aktuelle Dienstequalität (ua. Upload, Download, Ping, Signalstärke) ihres Internetzugangs zur Verfügung. Darüber hinaus sind eine Kartendarstellung sowie Statistiken der bisherigen Tests abrufbar.",
             "qostest": "qostest.eu stellt Nutzern Informationen über die aktuelle Dienstequalität (ua. Upload, Download, Ping, Signalstärke) ihres Internetzugangs zur Verfügung. Darüber hinaus sind eine Kartendarstellung sowie Statistiken der bisherigen Tests abrufbar."
         },
         "tos": {
