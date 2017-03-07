@@ -47,8 +47,8 @@
         <div style="display:none" id="fullscreenTestStatistics">
             {% raw %}
             <div class="current-time">{{ formatDate currentTime }}</div>
-            <div class="tests-30-min">{{ tests30min }} {{ Lang30min }}</div>
-            <div class="tests-24h">{{ tests24h }} {{ Lang24h }}</div>
+            <div class="tests-30-min">{{ formatNumber 0 tests30min }} {{ Lang30min }}</div>
+            <div class="tests-24h">{{ formatNumber 0 tests24h }} {{ Lang24h }}</div>
             {% endraw %}
         </div>
         <div id="markerTemplate" style="display:none">

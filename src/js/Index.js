@@ -467,6 +467,12 @@ Handlebars.registerHelper('formatDate', function (timestamp) {
     return moment(d).format(Lang.getString('map_index_dateformat'));
 });
 
+//add formatting helper
+Handlebars.registerHelper('formatNumber', function (decimals, number) {
+    if (typeof number !== 'undefined')
+        return number.formatNumber(decimals);
+});
+
 function addMarkerV3(lat, lon, data) {
     var coordinate = [lat, lon];
     markers.setPosition(coordinate);
