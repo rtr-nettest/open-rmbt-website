@@ -1,4 +1,5 @@
-var most_recent_tests = 5;
+var most_recent_tests = 20; //show on map
+var pan_on_most_recent_tests = 5; //take into account when zooming/panning on new tests
 var fullscreenMap = getParam("fullscreenMap");
 
 $(window).bind("load", function() {
@@ -47,7 +48,7 @@ $(document).ready(function() {
 });
 
 var map;
-var vectorLayer;
+var vectorLayer, vectorLayerPan;
 var mapProxy;
 var markers;
 function loadLastOpenDataResultsMap() {
@@ -85,7 +86,9 @@ function loadLastOpenDataResultsMap() {
             }));
     
     var vectorSource = new ol.source.Vector({});
+    var vectorSourcePan = new ol.source.Vector({});
     var currentFeatures = [];
+    var currentFeaturesPan = [];
     
     var colors = [
         'rgba(128, 128, 128, 0.9)', //undefined - 0
@@ -108,12 +111,17 @@ function loadLastOpenDataResultsMap() {
                 radius: (currentFeatures.indexOf(feature) === 0 && currentFeatures.length === most_recent_tests)?4:(currentFeatures.indexOf(feature) === currentFeatures.length-1)?8:6
             })
         })];
-    }
+    };
     
     vectorLayer = new ol.layer.Vector({
         source: vectorSource,
         style: stylingFct
-    })
+    });
+
+    vectorLayerPan = new ol.layer.Vector({
+        source: vectorSourcePan,
+        style: stylingFct
+    });
     
     map = new ol.Map({
         layers: bases,
@@ -130,7 +138,7 @@ function loadLastOpenDataResultsMap() {
         })
     });
 
-    
+    map.addLayer(vectorLayerPan);
     map.addLayer(vectorLayer);
     
     markers = new ol.Overlay.Popup();
@@ -179,9 +187,14 @@ function loadLastOpenDataResultsMap() {
                     result: result
                 });
         vectorSource.addFeature(feature);
+        vectorSourcePan.addFeature(feature);
         currentFeatures.push(feature);
         
-        //remove first feature if more than 5
+        //remove first feature if more than N
+        if (currentFeatures.length > pan_on_most_recent_tests) {
+            var removed = currentFeatures[currentFeatures.length - pan_on_most_recent_tests];
+            vectorSourcePan.removeFeature(removed);
+        }
         if (currentFeatures.length > most_recent_tests) {
             var removed = currentFeatures.shift();
             vectorSource.removeFeature(removed);
@@ -193,11 +206,11 @@ function loadLastOpenDataResultsMap() {
                 loadMarker(result.open_test_uuid);
             }, 2000)
         }
-    }
+    };
 
     var animateMapToShowTests = function () {
         window.setTimeout(function () {
-            var extent = vectorLayer.getSource().getExtent();
+            var extent = vectorLayerPan.getSource().getExtent();
             
             var extentSize = ol.extent.getSize(extent);
             extent[0] -= extentSize[0]*.2
