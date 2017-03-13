@@ -8,9 +8,6 @@
 var RTR_FILES_BASEURL = "https://www.rtr.at/fileadmin/template/main/grep/temp/result_temp";
 var RTR_LINKS_BASEURL = "https://www.rtr.at";
 
-//var RTR_FILES_BASEURL = "https://rtr2015.alladin.at/fileadmin/template/main/grep/temp/result_temp";
-//var RTR_LINKS_BASEURL = "https://rtr2015.alladin.at";
-
 
 
 var debug = require('debug')('nodeNetztest:server');
@@ -71,6 +68,8 @@ var metalsmith = Metalsmith(__dirname)
     .use(transformRTRUrls([
         "./templates/parts/02_navigation_de.html",
         "./templates/parts/02_navigation_en.html",
+        "./templates/parts/03_navigationToContent_en.html",
+        "./templates/parts/03_navigationToContent_de.html",
         "./templates/parts/04_contentToFooter_de.html",
         "./templates/parts/04_contentToFooter_en.html"
     ]))
@@ -83,7 +82,7 @@ var metalsmith = Metalsmith(__dirname)
         keep: false
     }))
     .use(fingerprint({
-        pattern: ['lib/**/*.js', 'lib/**/*.css',],
+        pattern: ['lib/**/*.js', 'lib/**/*.css'],
         deactivate: useWatch,
         keep: true //for loading polyfills in JS
     }))
@@ -228,7 +227,13 @@ function transformRTRUrls(fileList) {
         "/tk/netztestopendata": "Opendata",
         "/tk/netztestverlauf": "Verlauf",
         "/tk/rtrnetztestoptionen": "Optionen"
-    }
+    };
+    var replaceDirectives = [
+        function($, path){
+            var language = (path.indexOf("_de")>0)?"de":"en";
+            $(".header-logo a").attr("href","/" + language);
+        }
+    ];
     
     return function(files, metalsmith, done) {
         if (downloadedOnce) {
@@ -258,7 +263,10 @@ function transformRTRUrls(fileList) {
                             }
                         }
                     }
-                    
+
+                    replaceDirectives.forEach(function(t) {
+                        t($, path);
+                    });
                 });
 
                 var html = $.html();

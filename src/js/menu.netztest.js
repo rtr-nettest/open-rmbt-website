@@ -33,6 +33,9 @@ function hideMenu() {
     $("div.wrapper").css("margin-left","5%");
     $("div.wrapper").css("margin-right","5%");
     $("div.wrapper").css("width","90%");
+    $("div.header-container").hide();
+    $("div.banner-container").hide();
+    $("h1.main-article-header").hide();
 }
 
 /**
