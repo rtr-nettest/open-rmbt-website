@@ -6,11 +6,16 @@
 {% endblock %}
 
 {% block content %}
-<h2 id="h2">{{ Lang.options }}</h2>
+<h2 id="h2">{{ Lang.options_content.client_uuid }}</h2>
 <div id="youruuid">{{ Lang.options_content.your_uuid }}: </div>
+
+<h2> {{ Lang.options }} </h2>
+{{ Lang.options_content.options_apps_text }}
+
 <!-- <div id="yourzip"><label for="RMBTzipID">Your postal code entered is: </label><input type="text" name="RMBTzip" id="RMBTzipID" value="" onchange="resetzip(this.value);" /><span class='error'></span></div> -->
 
 {% if target == "netztest" %}
+<!--
 <h3>{{ Lang.options_content.preferred_test_type }}</h3>
 <form id="preferredTestForm">
     <ul>
@@ -30,6 +35,7 @@
         </li>
     </ul>
 </form>
+    -->
 {% endif %}
 
 {% if target == "qostest" %}
