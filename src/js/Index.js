@@ -192,7 +192,7 @@ function loadLastOpenDataResultsMap() {
         
         //remove first feature if more than N
         if (currentFeatures.length > pan_on_most_recent_tests) {
-            var removed = currentFeatures[currentFeatures.length - pan_on_most_recent_tests];
+            var removed = currentFeatures[currentFeatures.length - pan_on_most_recent_tests - 1];
             vectorSourcePan.removeFeature(removed);
         }
         if (currentFeatures.length > most_recent_tests) {
