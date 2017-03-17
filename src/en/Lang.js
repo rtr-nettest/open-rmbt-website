@@ -200,7 +200,7 @@ Lang.setStrings({
     'NoOperatorsFound' : 'No operators found for the current selection',
     'NoDevicesFound' : 'No devices found for the current selection',
     'QosTest' : 'Quality of Service',
-    'FastConnectionWarning' : 'Due to technical limitations of the used test type, deviations are possible. If you suspect that the results are inaccurate, please conduct a <a href="/en/Test?Java=t">Java-based Test</a>.',
+    'FastConnectionWarning' : 'Due to technical limitations of the used test type, deviations are possible. If you suspect that the results are inaccurate, please conduct a test using the <a href="https://www.rtr.at/en/tk/rtrnetztest_tests">Android/iOS-App</a>.',
     'CheckConnection': "Please check your internet connection",
     'TestsInTheLastXHours' : 'tests in the last % hours',
     'TestsInTheLastXMinutes' : 'tests in the last % minutes'
