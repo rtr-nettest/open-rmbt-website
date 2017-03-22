@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% extends basetemplate %}
+        {% set title = Lang.admin %}
+
+        {% block headerscriptingExtended %}
+        <script type="text/javascript" src="../en/Lang.js"></script>
+
+        <style>
+            input {
+                background-color: white !important;
+            }
+
+            fieldset {
+                background-color: transparent !important;
+            }
+
+            .form-group .help-block {
+                display:none;
+            }
+
+            .form-group.has-error .help-block {
+                display: inline;
+            }
+
+            #log {
+                display: none;
+            }
+        </style>
+
+        <script>
+            function saveAndRedirect() {
+                //Validate uuid
+                var uuid = $("#uuid").val();
+                if (uuid.substr(0,1) !== "U") {
+                    $("#helpBlock2").show();
+                    return false;
+                }
+                $("#helpBlock2").hide();
+
+                //save to local storage
+                window.sessionStorage.setItem("opentests_query","client_uuid=" + uuid);
+
+                //redirect to opentests
+                window.location = "/de/Opentests";
+                return false;
+            }
+        </script>
+
+        {% endblock %}
+
+        {% block content %}
+
+        <h2 id="h2">RTR-Netztest Streitschlichtungs-Interface</h2>
+        <div id="spinner"></div>
+
+        <form action="" onsubmit="return saveAndRedirect()" method="post" id="schlichtungsForm">
+            <div class="form-group" id="uuid-group">
+                <label for="uuid">Bitte geben Sie hier die übermittelte Client-UUID ein:</label>
+                <input type="text" class="form-control" id="uuid" placeholder="U3533e914-f6e4-482b-8d19-9f1fcdcafa65">
+                <span id="helpBlock2" class="help-block">Die Client-UUID muss mit "U" beginnen</span>
+            </div>
+
+            <button type="submit" id="submitButton" class="btn btn-default">Abfragen</button>
+        </form>
+
+        <div id="log">
+            Already set:
+            <ul>
+
+            </ul>
+        </div>
+
+        {% endblock %}</title>
+</head>
+<body>
+
+</body>
+</html>

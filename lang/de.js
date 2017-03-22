@@ -102,7 +102,8 @@ exports.strings = {
         "network_country" : "Land",
         "gkz" : "Gemeindekennzahl",
         "pinned_true" : "Für Statistik relevant",
-        "pinned_false" : "Für Statistik nicht relevant"
+        "pinned_false" : "Für Statistik nicht relevant",
+        "show_open_test_uuid" : "Open-Test-UUID einblenden"
     },
 
     "options_content" : {
@@ -202,6 +203,7 @@ exports.strings = {
     "all" : "Alle",
     "devices" : "Geräte",
     'open_uuid' : 'Open-User-UUID',
+    "client_uuid" : "Client-UUID",
     "begin" : "Beginn",
     "end" : "Ende",
     "timespan" : "Zeitraum",

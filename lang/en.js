@@ -102,7 +102,8 @@ exports.strings = {
         "network_country" : "Country",
         "gkz" : "Austrian community ID",
         "pinned_true" : "Included in statistics",
-        "pinned_false" : "Not included in statistics"
+        "pinned_false" : "Not included in statistics",
+        "show_open_test_uuid" : "Show Open-Test-UUID"
     },
 
     "options_content" : {
@@ -202,6 +203,7 @@ exports.strings = {
     "all" : "All",
     "devices" : "Devices",
     'open_uuid': 'Open-User-UUID',
+    "client_uuid" : "Client-UUID",
     "begin" : "begin",
     "end" : "end",
     "timespan" : "Timespan",
