@@ -1764,8 +1764,10 @@ function getOpenDataRow(testdata, showUnits) {
     
     
     row += "</tr>\n";
+    var rowObj = $(row);
+    rowObj.data(testdata);
     
-    return row;
+    return rowObj;
 }
 
 /**
