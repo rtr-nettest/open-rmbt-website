@@ -24,8 +24,8 @@ function debug_without_newline(text) {
     $("#debug").append(text);
 }
 
-//var server_override = "ws://localhost:12345";
-//var server_override = "wss://217.develop.netztest.at:443";
+var server_override = "wss://developv4-rmbtws.netztest.at:19002";
+//server_override = "wss://developv4-rmbtws.netztest.at:19002";
 
 
 //structure from: http://www.typescriptlang.org/Playground 
@@ -405,7 +405,7 @@ var RMBTTest = (function() {
             return;
         }
         
-        thread.socket.binaryType = "blob";
+        thread.socket.binaryType = "arraybuffer";
         thread.socket.onerror = errorHandler;
         
         thread.socket.onmessage = function(event) {
@@ -487,27 +487,24 @@ var RMBTTest = (function() {
 
             //var lastByte;
             //console.log("received chunk with " + line.length + " bytes");
-            totalRead = totalRead + event.data.size;
-            //while (read > 0 && lastByte != (byte) 0xff);
-
-            //socket.onmessage = prevListener;
-            if (event.data.size === 1) {
-                //for some reason, the last byte is send alone
+            totalRead = totalRead + event.data.byteLength;
+            
+            //in previous versions, the last byte was sent as a single websocket frame,
+            //so we have to maintain compatibility at this time
+            if (event.data.byteLength === _chunkSize || event.data.byteLength === 1) {
                 remainingChunks--;
             }
-
-            //zero junks remain - get time
-
-             
-           if (remainingChunks === 0) {
-               //get info
-               socket.onmessage = function(line) {
+            
+            //zero junks remain - get time             
+            if (remainingChunks === 0) {
+                //get info
+                socket.onmessage = function (line) {
                     var infomsg = line.data;
                     onsuccess(infomsg);
-               };
-               
-               socket.send("OK\n");
-           }
+                };
+
+                socket.send("OK\n");
+            }
         };
         socket.onmessage = downloadChunkListener;
         debug(thread.id + ": downloading " + total + " chunks, " + (expectBytes/1000) + " KB");
@@ -612,51 +609,46 @@ var RMBTTest = (function() {
             
             var now = nowNs();
             debug(thread.id + ": " + lastRead + "|" + _rmbtTestConfig.measurementPointsTimespan + "|" + now + "|" + readChunks);
-            var lastByte = lastChunk.slice(_chunkSize - 1, _chunkSize);
-            var buf = lastChunk;
-            lastChunk = null;
             
-            var reader = new FileReader();
+            var lastByte = new Uint8Array(lastChunk, lastChunk.byteLength - 1, 1);
             
-            reader.onload = function() {                
-                //add result
-                var now = nowNs();
-                var duration = now-start;
-                thread.result.down.push({duration: duration,
-                    bytes: totalRead});
-                
-                //var now = nowNs();
-                lastRead = now;
-                
-                var lastByte = reader.result.charCodeAt(0);
-                if(lastByte >= 0xFF) {
-                    debug(thread.id + ": received end chunk");
-                    window.clearInterval(interval);
-                    
-                    //last chunk received - get time
-                    thread.socket.onmessage = function(event) {
-                        //TIME
-                        debug(event.data);
-                        thread.socket.onmessage = previousListener;
-                    };
-                    thread.socket.send("OK\n");
-                    _endblob = buf;
-                    
-                    //saveAs(_endblob,"endblob");
+            //add result
+            var now = nowNs();
+            var duration = now - start;
+            thread.result.down.push({
+                duration: duration,
+                bytes: totalRead
+            });
+
+            //var now = nowNs();
+            lastRead = now;
+
+            if (lastByte[0] >= 0xFF) {
+                debug(thread.id + ": received end chunk");
+                window.clearInterval(interval);
+
+                //last chunk received - get time
+                thread.socket.onmessage = function (event) {
+                    //TIME
+                    debug(event.data);
+                    thread.socket.onmessage = previousListener;
+                };
+                thread.socket.send("OK\n");
+                _endblob = lastChunk;
+
+                //saveAs(_endblob,"endblob");
+            } 
+            else {
+                if (_blobs.length < 10) {
+                    _blobs.push(lastChunk);
                 }
-                else {
-                    if (_blobs.length < 100) {
-                        _blobs.push(buf);
-                    }
-                }
-            };
+            }
             
-            reader.readAsText(lastByte);
         }, _rmbtTestConfig.measurementPointsTimespan);
         
         var downloadListener = function(event) {
             readChunks++;
-            totalRead += event.data.size; //blob
+            totalRead += event.data.byteLength; //arrayBuffer
             //var currentRead = totalRead; //concurrency?
             //var now = nowNs();
             lastChunk = event.data;
