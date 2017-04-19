@@ -1436,15 +1436,21 @@ function RMBTWebsocketTest(uuid) {
     config.uuid = uuid;
     var websocketTest = new RMBTTest(config);
 
+
+    websocketTest.onError(function () {
         if (fallbackOnJS === true) {
-                websocketTest.onError(function () {
-                        //something failed
-                        start_jstest();
-                });
+            //something failed
+            start_jstest();
         }
-        TestEnvironment.getTestVisualization().setRMBTTest(websocketTest);
-        TestEnvironment.getTestVisualization().startTest();
-        websocketTest.startTest();
+        else {
+            TestEnvironment.getTestVisualization().setStatus(TestState.ERROR);
+            //popup is handled by Test Vizualization
+        }
+    });
+
+    TestEnvironment.getTestVisualization().setRMBTTest(websocketTest);
+    TestEnvironment.getTestVisualization().startTest();
+    websocketTest.startTest();
 }
 
 function RMBTjstest(options) {
