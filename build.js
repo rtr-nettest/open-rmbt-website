@@ -68,8 +68,8 @@ var metalsmith = Metalsmith(__dirname)
     .use(transformRTRUrls([
         "./templates/parts/02_navigation_de.html",
         "./templates/parts/02_navigation_en.html",
-        "./templates/parts/03_navigationToContent_en.html",
-        "./templates/parts/03_navigationToContent_de.html",
+//      "./templates/parts/03_navigationToContent_en.html",
+//      "./templates/parts/03_navigationToContent_de.html",
         "./templates/parts/04_contentToFooter_de.html",
         "./templates/parts/04_contentToFooter_en.html"
     ]))
