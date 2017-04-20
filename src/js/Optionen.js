@@ -331,6 +331,9 @@ $(document).ready(function() {
                 //var tmp = (selectedLanguage=='de')?'Ihre UUID lautet: ':'Your UUID is: ';
                 $('#youruuid').append(' U'+cookie_uuid);
         }
+        else {
+            $('#youruuid').append(Lang.getString("NoUUID") + ".");
+        }
         
         //deprecated
         /* var cookie_zip = getCookie('RMBTzip');

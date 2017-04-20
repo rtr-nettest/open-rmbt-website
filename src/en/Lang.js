@@ -203,5 +203,6 @@ Lang.setStrings({
     'FastConnectionWarning' : 'Due to technical limitations of the used test type, deviations are possible. If you suspect that the results are inaccurate, please conduct a test using the <a href="https://www.rtr.at/en/tk/rtrnetztest_tests">Android/iOS-App</a>.',
     'CheckConnection': "Please check your internet connection",
     'TestsInTheLastXHours' : 'tests in the last % hours',
-    'TestsInTheLastXMinutes' : 'tests in the last % minutes'
+    'TestsInTheLastXMinutes' : 'tests in the last % minutes',
+    'NoUUID' : 'You do not have an UUID'
 });
