@@ -416,6 +416,11 @@ var RMBTTest = (function() {
                 _chunkSize = parseInt(event.data.substring(10));
                 debug(thread.id + "Chunksize: " + _chunkSize);
             }
+            else if (event.data.indexOf("RMBTv") === 0) {
+                //get server version
+                var version = event.data.substring(5).trim();
+                _rmbtTestConfig.client_version = version;
+            }
             else if (event.data === "ACCEPT TOKEN QUIT\n")
             {
                 thread.socket.send("TOKEN " + token + "\n");
@@ -427,7 +432,7 @@ var RMBTTest = (function() {
                 errorHandler();
                 debug("got error msg");
             }
-            else if (event.data === "ACCEPT GETCHUNKS GETTIME PUT PUTNORESULT PING QUIT\n") {
+            else if (event.data.indexOf("ACCEPT GETCHUNKS") === 0) {
                 thread.triggerNextState();
             }
             
