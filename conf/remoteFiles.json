@@ -7,6 +7,10 @@
   {
     "source": "https://code.jquery.com/jquery-1.8.2.min.js",
     "target": "src/js/jquery-1.8.2.min.js"
+  },
+  {
+    "source": "https://raw.githubusercontent.com/rtr-nettest/rmbtws/master/dist/rmbtws.min.js",
+    "target" : "src/lib/rmbtws.min.js"
   }
 ]
 
