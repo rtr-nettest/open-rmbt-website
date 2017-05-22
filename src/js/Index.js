@@ -316,6 +316,9 @@ var originalMapStyle=null;
 function switchToFullscreenMap() {
     var mapElem = $("#newtestsmap");
 
+    //override window.alert -> don't show any error messages
+    window.alert = function() {};
+
     fullscreenMap = true;
     if (screenfull.enabled) {
         if (originalMapStyle === null) {
