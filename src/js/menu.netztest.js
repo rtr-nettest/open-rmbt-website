@@ -36,6 +36,7 @@ function hideMenu() {
     $("div.header-container").hide();
     $("div.banner-container").hide();
     $("h1.main-article-header").hide();
+    $(".footer-container").hide();
 }
 
 /**
