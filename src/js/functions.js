@@ -774,7 +774,6 @@ function RMBTstatistics() {
         }
         
         var json_data = {
-                uuid: cookie_uuid,
                 language: selectedLanguage,
                 timezone: test_timezone,
                 type: $('#statistik_type').val(),
