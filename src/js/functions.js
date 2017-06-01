@@ -122,7 +122,7 @@ function requestBrowserData(callback, options) {
                             //due to a previous bug in the WebKit library
                             // -> inform the user
                             //https://bugs.webkit.org/show_bug.cgi?id=170463
-                            if (browser_agent.match(/Safari.*Version\/10\.1/)) {
+                            if (browser_agent.match(/Version\/10\.1.*Safari/)) {
                                 $("#popuperror").append(Lang.getString("SafariBroken"));
                                 show_errorPopup();
                                 return;
