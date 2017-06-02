@@ -201,5 +201,6 @@ Lang.setStrings({
     'CheckConnection': "Bitte überprüfen Sie ihre Internetverbindung",
     'TestsInTheLastXHours' : 'Tests in den letzten % Stunden',
     'TestsInTheLastXMinutes' : 'Tests in den letzten % Minuten',
-    'NoUUID' : 'Keine UUID vorhanden'
+    'NoUUID' : 'Keine UUID vorhanden',
+    'SafariBroken' : 'Bitte verwenden Sie für die Durchführung des Netztests <a href="https://www.mozilla.org/de/firefox/new/">Mozilla Firefox</a> oder <a href="https://www.google.de/chrome/browser/desktop/">Google Chrome</a>. Weitere Informationen dazu finden Sie <a href="https://www.rtr.at/de/tk/netztestfaq_web_100">in den FAQ</a>.'
 });

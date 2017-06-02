@@ -103,22 +103,32 @@ function requestBrowserData(callback, options) {
                         var mobile_client_found = browser_agent.match(/Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/g);
 
                         if (callback == 'RMBTsettings') {
-                                //jstest
-                                if (mobile_client_found) {
-                                    $("#noJavaWarning").hide();
-                                    
+                            //jstest
+                            if (mobile_client_found) {
+                                $("#noJavaWarning").hide();
+
                                 //is it android?
                                 if (browser_agent.match(/Android|Opera M(obi|ini)|Dolfin|Dolphin/g)) {
                                     $("#androidApp").show();
                                 }
-                                
+
                                 //is it iOS?
                                 else if (browser_agent.match(/iP(hone|od|ad)/g)) {
                                     $("#iOSApp").show();
-                                } 
                                 }
+                            }
+
+                            //Safari 10.1 and 10.1.1 won't let user's execute tests
+                            //due to a previous bug in the WebKit library
+                            // -> inform the user
+                            //https://bugs.webkit.org/show_bug.cgi?id=170463
+                            if (browser_agent.match(/Version\/10\.1.*Safari/)) {
+                                $("#popuperror").append(Lang.getString("SafariBroken"));
+                                show_errorPopup();
+                                return;
+                            }
                                 
-                                RMBTsettings(options); 
+                            RMBTsettings(options);
                         }
                         else if (callback == 'RMBTsync')
                                 RMBTsync(options);
