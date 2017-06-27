@@ -1443,7 +1443,8 @@ function start_websocket() {
 function RMBTWebsocketTest(uuid) {
     var config = new RMBTTestConfig();
     config.uuid = uuid;
-    var websocketTest = new RMBTTest(config);
+    var controlServerConnection = new RMBTControlServerCommunication(config);
+    var websocketTest = new RMBTTest(config, controlServerConnection);
 
 
     websocketTest.onError(function () {
