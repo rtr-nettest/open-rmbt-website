@@ -1,0 +1,154 @@
+{% extends basetemplate %}
+{% set title = Lang.test %}
+
+{% block headerscriptingExtended %}
+    <link rel="stylesheet" href="../{{ fingerprint["css/test.css"] }}">
+
+    <script src="../{{ fingerprint["js/vendor/modernizr-2.6.1.min.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["lib/rmbtws.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["js/Loop.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["lib/moment.min.js"] }}"></script>
+
+    <style>
+        input.form-control {
+            background-color: white;
+        }
+
+        .loader {
+            border: 2px solid #c3c3c3;
+            border-top: 2px solid #59b200;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            animation: loader-spin 2s linear infinite;
+            float: left;
+            margin-right: 10px;
+            margin-top: 3px;
+            display: none;
+        }
+
+        @keyframes loader-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .progress-bar.inactive {
+            background-color: #545454;
+        }
+    </style>
+
+{% endblock %}
+
+{% block viewport %}
+<meta name="viewport" content="width=595" />
+{% endblock %}
+
+{% block content %}
+    <h2 id="h2">Wiederholungsmodus</h2>
+    <div style="display:none">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Wiederholungen</label>
+                <div class="col-sm-8">
+                    <input type="number" class="form-control" min="1" max="100" value="10"/>
+                    <span class="help-block">Anzahl der durchzuführenden Tests</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Wartezeit</label>
+                <div class="col-sm-8">
+                    <input type="number" class="form-control" min="15" max="30" value="1440"/>
+                    <span class="help-block">Wartezeit (in Minuten) zwischen zwei Tests im Wiederholungsmodus</span>
+                </div>
+            </div>
+            <div class="form-group ">
+                <div class="col-sm-7 col-sm-offset-3">
+                    <button type="submit" class="btn btn-primary">Wiederholungstest starten</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div>
+        <h3>Aktuelle Messung</h3>
+        <p>
+            Test <span id="testcount">0</span>/<span id="teststotal">0</span>
+        </p>
+
+        <div class="progress">
+            <div id="testprogress" class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"
+                 style="min-width: 3em;width: 0%">
+                80%
+            </div>
+        </div>
+        <div id="infocurrent">
+            <p>
+            <div class="row">
+                <div class="col-sm-3">Status</div>
+                <div class="col-sm-9" id="infostatus">-</div>
+            </div>
+            </p>
+            <p>
+            <div class="row inforow">
+                <div class="col-sm-3">Ping</div>
+                <div class="col-sm-9" id="infoping"><div class="loader"></div> <span>-</span></div>
+            </div>
+            <div class="row inforow">
+                <div class="col-sm-3">Download</div>
+                <div class="col-sm-9" id="infodown"><div class="loader"></div> <span>-</span></div>
+            </div>
+            <div class="row inforow">
+                <div class="col-sm-3">Upload</div>
+                <div class="col-sm-9" id="infoup"><div class="loader"></div> <span>-</span></div>
+            </div>
+            </p>
+            <p>
+            <div class="row">
+                <div class="col-sm-3">Standort</div>
+                <div class="col-sm-9" id="infogeo">-</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">Testserver</div>
+                <div class="col-sm-9" id="infoserver">-</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">IP</div>
+                <div class="col-sm-9" id="infoip">-</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">Betreiber</div>
+                <div class="col-sm-9" id="infoprovider">-</div>
+            </div>
+            </p>
+
+
+        </div>
+
+        <h3>Bisherige Messungen</h3>
+        <table class="dont-stack">
+            <colgroup>
+                <col/>
+                <col/>
+                <col/>
+                <col/>
+            </colgroup>
+            <thead>
+            <tr>
+                <th scope="col">Zeitpunkt</th>
+                <th scope="col" class="align-right">{{ Lang.down }} ({{ Lang.mbps }})</th>
+                <th scope="col" class="align-right">{{ Lang.up }} ({{ Lang.mbps }})</th>
+                <th scope="col" class="align-right">{{ Lang.ping }} ({{ Lang.ms }})</th>
+            </tr>
+            </thead>
+            <tbody id="verlauf_tbody">
+
+            </tbody>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
