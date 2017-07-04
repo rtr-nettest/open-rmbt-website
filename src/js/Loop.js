@@ -1,7 +1,7 @@
 "use strict";
 
 var repetitions = 5;
-var waitingTime = 600;
+var waitingTime = 10;
 
 var LoopTestVisualization = (function () {
     var _rmbtTest;
@@ -305,6 +305,7 @@ function getSignificantDigits (number) {
     }
 };
 
+var results=[];
 $(document).ready(function () {
     var tests = 0;
     var lastTestStart = moment();
@@ -315,6 +316,11 @@ $(document).ready(function () {
         var down = result.downBitPerSec / 1e6;
         var up = result.upBitPerSec / 1e6;
         var ping = result.pingNano / 1e6;
+        results.push({
+            down: down,
+            up: up,
+            ping: ping
+        });
 
         //add result to table
         $("#verlauf_tbody").prepend("<tr>" +
@@ -323,6 +329,18 @@ $(document).ready(function () {
             "<td class=\"align-right\">" + up.formatNumber(getSignificantDigits(up)) + "</td>" +
             "<td class=\"align-right\">" + ping.formatNumber(getSignificantDigits(ping)) + "</td>" +
             "</tr>");
+
+        //calculate median
+        var calculateMedian = function(field) {
+            var tArr = [];
+            $.each(results, function(i, result) {
+                tArr.push(result[field]);
+            });
+            return Math.median(tArr);
+        };
+        $("#mediandown").text(calculateMedian("down").formatNumber(getSignificantDigits(calculateMedian("down"))));
+        $("#medianup").text(calculateMedian("up").formatNumber(getSignificantDigits(calculateMedian("up"))));
+        $("#medianping").text(calculateMedian("ping").formatNumber(getSignificantDigits(calculateMedian("ping"))));
 
         testFinished();
     };
