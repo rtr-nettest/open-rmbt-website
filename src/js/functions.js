@@ -7,6 +7,7 @@ var ndt_short_de = 'Der NDT-Test der Forschungsplattform M-Lab ist ein optionale
 var ndt_short_en = 'The NDT-Test of the research platform M-Lab is an optional, but more comprehensive test, which measures additional technical parameters. Please note that this test increases the time duration of the measurement and the transmitted data volume considerably. As part of the more comprehensive test, data – such as IP-addresses – are transferred, which means that these data are permanently stored and published by M-Lab and are made freely accessable to the general public for information, use, dissemination and other applications under M-Lab Open Data. Given the processing and transfer of IP-addresses to non-EU countries, it is possible that a user’s identity may be determined or become determinable and that personal identification is possible.<br /><br />Click the return button to access RTR’s Privacy Policy for the RTR-NetTest.'
 
 var min_accuracy_for_showing_map = 2000;
+var exdays = 365*24*60*60;
 
 function is_array(input){
     return typeof(input)=='object'&&(input instanceof Array);
@@ -325,6 +326,9 @@ function RMBTsettings(options) {
                         }
                         else if (options === 'websocket') {
                                 RMBTWebsocketTest(uuid);
+                        }
+                        else if (options === 'loop') {
+                                RMBTLoopTest(uuid);
                         }
                         else if (options !== 'verlauf') {
                             var testStartFunction = function() {

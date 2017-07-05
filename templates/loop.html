@@ -45,7 +45,7 @@
             font-weight: bold;
         }
 
-        #loop-mode {
+        #loop-mode, #loop-mode-form-container {
             display: none;
         }
     </style>
@@ -58,6 +58,10 @@
 
 {% block content %}
     <h2 id="h2">Wiederholungsmodus</h2>
+    <div id="loading-placeholder">
+        <h2>Test framework is loading...</h2>
+    </div>
+
     <div id="loop-mode-form-container" >
         <form id="loop-mode-form" class="form-horizontal">
             <div class="form-group">

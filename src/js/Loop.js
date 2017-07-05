@@ -309,22 +309,52 @@ function getSignificantDigits (number) {
 
 $(document).ready(function () {
     //1. check TOC
-
-
-    //2. bind to form submit -> then start test
-    $("#loop-mode-form").submit(function(event) {
-        event.preventDefault();
-
-        repetitions = $("#loop-mode-repetitions").val();
-        waitingTime = $("#loop-mode-waiting-time").val() * 60;
-
-        //animations
-        $("#loop-mode-form-container").slideUp();
-        $("#loop-mode").slideDown();
-
-        conductTests();
-    })
+    //this will callback to RMBTLoopTest
+    //via popupform ->
+    show_agbform(false, 'RMBTsettings', 'loop');
 });
+
+var clientUUID;
+function RMBTLoopTest(uuid){
+    var onError = function() {
+        window.location = "/" + selectedLanguage;
+    };
+    clientUUID = uuid;
+
+    //2. show loop mode info 1
+    show_agb_popup(function () {
+            //3. show loop mode info 2
+            show_agb_popup(function () {
+                //looking forward to using Promises in the future :-))
+                $("#loading-placeholder").remove();
+                $("#loop-mode-form-container").show();
+
+                //4. bind to form submit -> then start test
+                $("#loop-mode-form").submit(function (event) {
+                    event.preventDefault();
+
+                    repetitions = $("#loop-mode-repetitions").val();
+                    waitingTime = $("#loop-mode-waiting-time").val() * 60;
+
+                    //animations
+                    $("#loop-mode-form-container").slideUp();
+                    $("#loop-mode").slideDown();
+
+                    conductTests();
+                })
+
+
+            }, onError, {
+                tocFile: "loop_mode_info2.html",
+                title: Lang.getString("LoopMode")
+            })
+
+        }, onError, {
+            tocFile: "loop_mode_info.html",
+            title: Lang.getString("LoopMode")
+        }
+    )
+}
 
 var results=[];
 
@@ -428,7 +458,7 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
     TestEnvironment.init(new LoopTestVisualization(testSuccessCallback, testErrorCallback), null);
     var config = new RMBTTestConfig();
     var ctrl = new RMBTControlServerCommunication(config);
-    config.uuid = "d105ee81-59c4-4850-abf7-d38f82c27345";
+    config.uuid = clientUUID;
     var websocketTest = new RMBTTest(config, ctrl);
 
     TestEnvironment.getTestVisualization().setRMBTTest(websocketTest);

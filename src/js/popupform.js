@@ -79,8 +79,12 @@ function show_agbform(run_Test, callback, options) {
     };
 
     show_agb_popup(successFunc, closeFunc, {
-    	cookieIdentifier: "RMBTTermsV4"
-	});
+        cookieIdentifier: "RMBTTermsV4",
+        title: (selectedLanguage === 'de') ? 'Datenschutzerklärung und Nutzungsbedingungen' : 'Privacy Policy and Terms of Use',
+        tocFile: "tc.html",
+        toc: (selectedLanguage === 'de') ? tc_short_de : tc_short_en,
+        bottomText: (selectedLanguage == 'de') ? tc_agree_de : tc_agree_en
+    });
 
 }
 
@@ -94,10 +98,10 @@ function show_agbform(run_Test, callback, options) {
 function show_agb_popup(onAccept, onDecline, options) {
     options = options || {};
 	var cookieIdentifier = options.cookieIdentifier || null;
-	var title = options.title || (selectedLanguage === 'de') ? 'Datenschutzerklärung und Nutzungsbedingungen' : 'Privacy Policy and Terms of Use';
-	var tocFile = options.tocFile || "tc.html";
-	var toc = options.toc || (selectedLanguage==='de')?tc_short_de:tc_short_en;
-	var bottomText = options.bottomText || (selectedLanguage=='de')?tc_agree_de:tc_agree_en;
+	var title = options.title || "";
+	var tocFile = options.tocFile || null;
+	var toc = options.toc || "";
+	var bottomText = options.bottomText || "";
 
 	if (cookieIdentifier) {
         var alreadyAccepted = getCookie(cookieIdentifier);
@@ -149,6 +153,7 @@ function show_agb_popup(onAccept, onDecline, options) {
 
     $.get(tocFile ,function(data) {
         data=data.replace(/^[\s\S]+<h1>1/,"<h1>1");
+        data=data.replace(/<style>[\s\S]*<\/style>/,"");
         data=data.replace(/<\/body><\/html>/,"");
         $("#popupform .longtext").append(data);
 
