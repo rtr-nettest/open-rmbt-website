@@ -1,5 +1,5 @@
 {% extends basetemplate %}
-{% set title = Lang.test %}
+{% set title = Lang.loop_mode %}
 
 {% block headerscriptingExtended %}
     <link rel="stylesheet" href="../{{ fingerprint["css/test.css"] }}">
@@ -50,10 +50,6 @@
         }
     </style>
 
-{% endblock %}
-
-{% block viewport %}
-<meta name="viewport" content="width=595" />
 {% endblock %}
 
 {% block content %}
