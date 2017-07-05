@@ -57,7 +57,7 @@
 {% endblock %}
 
 {% block content %}
-    <h2 id="h2">Wiederholungsmodus</h2>
+    <h2 id="h2">{{ Lang.loop_mode }}</h2>
     <div id="loading-placeholder">
         <h2>Test framework is loading...</h2>
     </div>
@@ -65,22 +65,22 @@
     <div id="loop-mode-form-container" >
         <form id="loop-mode-form" class="form-horizontal">
             <div class="form-group">
-                <label class="col-sm-3 control-label">Wiederholungen</label>
+                <label class="col-sm-3 control-label">{{ Lang.loop_mode_content.tests }}</label>
                 <div class="col-sm-8">
                     <input id="loop-mode-repetitions" type="number" class="form-control" min="1" max="100" value="10"/>
-                    <span class="help-block">Anzahl der durchzuführenden Tests</span>
+                    <span class="help-block">{{ Lang.loop_mode_content.tests_sum }}</span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">Wartezeit</label>
+                <label class="col-sm-3 control-label">{{ Lang.loop_mode_content.waiting_time }}</label>
                 <div class="col-sm-8">
                     <input id="loop-mode-waiting-time" type="number" class="form-control" min="15" max="1440" value="30"/>
-                    <span class="help-block">Wartezeit (in Minuten) zwischen zwei Tests im Wiederholungsmodus</span>
+                    <span class="help-block">{{ Lang.loop_mode_content.waiting_time_desc }}</span>
                 </div>
             </div>
             <div class="form-group ">
                 <div class="col-sm-7 col-sm-offset-3">
-                    <button type="submit" class="btn btn-primary">Wiederholungstest starten</button>
+                    <button type="submit" class="btn btn-primary">{{ Lang.loop_mode_content.start }}</button>
                 </div>
             </div>
 
@@ -88,7 +88,7 @@
     </div>
 
     <div id="loop-mode">
-        <h3>Aktuelle Messung</h3>
+        <h3>{{ Lang.loop_mode_content.current_test }}</h3>
         <p>
             Test <span id="testcount">0</span>/<span id="teststotal">0</span>
         </p>
@@ -102,39 +102,39 @@
         <div id="infocurrent">
             <p>
             <div class="row">
-                <div class="col-sm-3">Status</div>
+                <div class="col-sm-3">{{ Lang.state }}</div>
                 <div class="col-sm-9" id="infostatus">-</div>
             </div>
             </p>
             <p>
             <div class="row inforow">
-                <div class="col-sm-3">Ping</div>
+                <div class="col-sm-3">{{ Lang.ping }}</div>
                 <div class="col-sm-9" id="infoping"><div class="loader"></div> <span>-</span></div>
             </div>
             <div class="row inforow">
-                <div class="col-sm-3">Download</div>
+                <div class="col-sm-3">{{ Lang.download }}</div>
                 <div class="col-sm-9" id="infodown"><div class="loader"></div> <span>-</span></div>
             </div>
             <div class="row inforow">
-                <div class="col-sm-3">Upload</div>
+                <div class="col-sm-3">{{ Lang.upload }}</div>
                 <div class="col-sm-9" id="infoup"><div class="loader"></div> <span>-</span></div>
             </div>
             </p>
             <p>
             <div class="row">
-                <div class="col-sm-3">Standort</div>
+                <div class="col-sm-3">{{ Lang.coordinates }}</div>
                 <div class="col-sm-9" id="infogeo">-</div>
             </div>
             <div class="row">
-                <div class="col-sm-3">Testserver</div>
+                <div class="col-sm-3">{{ Lang.test_server }}</div>
                 <div class="col-sm-9" id="infoserver">-</div>
             </div>
             <div class="row">
-                <div class="col-sm-3">IP</div>
+                <div class="col-sm-3">{{ Lang.ip }}</div>
                 <div class="col-sm-9" id="infoip">-</div>
             </div>
             <div class="row">
-                <div class="col-sm-3">Betreiber</div>
+                <div class="col-sm-3">{{ Lang.operator }}</div>
                 <div class="col-sm-9" id="infoprovider">-</div>
             </div>
             </p>
@@ -142,7 +142,7 @@
 
         </div>
 
-        <h3>Bisherige Messungen</h3>
+        <h3>{{ Lang.loop_mode_content.measurements }}</h3>
         <table class="dont-stack">
             <colgroup>
                 <col/>
@@ -152,7 +152,7 @@
             </colgroup>
             <thead>
             <tr>
-                <th scope="col">Zeitpunkt</th>
+                <th scope="col">{{ Lang.time }}</th>
                 <th scope="col" class="align-right">{{ Lang.down }} ({{ Lang.mbps }})</th>
                 <th scope="col" class="align-right">{{ Lang.up }} ({{ Lang.mbps }})</th>
                 <th scope="col" class="align-right">{{ Lang.ping }} ({{ Lang.ms }})</th>
@@ -173,7 +173,7 @@
                 {{#if error }}
                 <tr class="test-result-error">
                     <td>{{ formatDate time }}</td>
-                    <td colspan="3">Fehler während des Tests</td>
+                    <td colspan="3">{% endraw %}{{ Lang.loop_mode_content.error_during_test }}{% raw %}</td>
                 </tr>
                 {{ else }}
                 <tr class="test-result">

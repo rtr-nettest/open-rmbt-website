@@ -127,6 +127,17 @@ exports.strings = {
         "license_text" : 'Diese Daten stehen unter der <a rel="license" href="http://creativecommons.org/licenses/by/3.0/at/deed.de_AT" >Creative Commons Namensnennung 3.0 Österreich Lizenz</a>.'
     },
 
+    "loop_mode_content" : {
+        "tests" : "Anzahl",
+        "tests_sum" : "Anzahl von Tests im Wiederholungsmodus",
+        "waiting_time" : "Wartezeit",
+        "waiting_time_desc" : "Wartezeit (in Minuten) zwischen zwei Tests im Wiederholungsmodus",
+        "start": "Wiederholungsmodus starten",
+        "measurements" : "Letzte Messungen",
+        "error_during_test" : "Messung konnte nicht erfolgreich abgeschlossen werden.",
+        "current_test": "Aktuelle Messung"
+    },
+
     //Page titles and link descriptions
     "index" : "Home",
     "statistics" : "Statistik",
@@ -141,6 +152,7 @@ exports.strings = {
     "imprint" : "Impressum",
     "imprint_url" : "https://www.rtr.at/de/rtr/impressum",
     "menu" : "Menü",
+    "loop_mode" : "Wiederholungsmodus",
 
     //common words
     "top" : "Seitenanfang",
@@ -208,6 +220,9 @@ exports.strings = {
     "end" : "Ende",
     "timespan" : "Zeitraum",
     "pinned" : "Pinned",
+    "test_server" : "Testserver",
+    "ip": "IP",
+    "state": "Status",
 
     "access" : "Zugang",
     "date" : "Datum",

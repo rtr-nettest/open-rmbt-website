@@ -411,7 +411,7 @@ function conductTests() {
         repetitions = Math.min(repetitions, 100);
         repetitions = Math.max(repetitions, 1);
 
-        $("#infostatus").text("Warte auf Zeitablauf");
+        $("#infostatus").text(Lang.getString("WaitingForStart"));
         $("#testcount").text(tests);
         $("#teststotal").text(repetitions);
         $(".progress-bar").addClass("inactive");
@@ -426,8 +426,8 @@ function conductTests() {
             });
         }
         else {
-            $("#infostatus").text("Alle Tests durchgeführt");
-            $("#testprogress").text("Serie beendet");
+            $("#infostatus").text(Lang.getString("LoopModeTestsFinished"));
+            $("#testprogress").text(Lang.getString("LoopModeFinished"));
             $("#testprogress").css("width", "100%");
         }
     };

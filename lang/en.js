@@ -127,6 +127,17 @@ exports.strings = {
         "license_text" : 'The data is published under the <a href="http://creativecommons.org/licenses/by/3.0/at/deed.en" target="_blank" class="external-link-new-window">Creative Commons Attribution 3.0 Austria (CC BY 3.0 AT)</a> license.'
     },
 
+    "loop_mode_content" : {
+        "tests" : "Number of tests",
+        "tests_sum" : "Number of tests in loop mode",
+        "waiting_time" : "Waiting time",
+        "waiting_time_desc" : "Waiting time (in minutes) between two tests in loop mode",
+        "start": "Start loop mode",
+        "measurements" : "Last measurements",
+        "error_during_test" : "An error occurred during the measurement.",
+        "current_test": "Current measurement"
+    },
+
     //Page titles and link descriptions
     "index": "Home",
     "statistics": "Statistics",
@@ -141,6 +152,7 @@ exports.strings = {
     "imprint" : "Publishing information",
     "imprint_url" : "https://www.rtr.at/en/rtr/impressum",
     "menu" : "Menu",
+    "loop_mode" : "Loop mode",
 
     //common words
     "top" : "Top",
@@ -208,6 +220,9 @@ exports.strings = {
     "end" : "end",
     "timespan" : "Timespan",
     "pinned" : "Pinned",
+    "test_server" : "Testserver",
+    "ip": "IP",
+    "state": "Status",
 
     "access" : "Access",
     "date" : "Date",
