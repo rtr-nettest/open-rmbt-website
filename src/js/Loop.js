@@ -1,7 +1,7 @@
 "use strict";
 
 var repetitions = 5;
-var waitingTime = 10;
+var waitingTime = 15*60;
 
 var LoopTestVisualization = (function () {
     var _rmbtTest;
@@ -269,6 +269,7 @@ var LoopTestVisualization = (function () {
             if (_successCallback !== null) {
                 var t = _successCallback;
                 _successCallback = null;
+                result["testUUID"] = _testUUID;
                 t(result);
             }
         }
@@ -305,57 +306,80 @@ function getSignificantDigits (number) {
     }
 };
 
-var results=[];
+
 $(document).ready(function () {
+    //1. check TOC
+
+
+    //2. bind to form submit -> then start test
+    $("#loop-mode-form").submit(function(event) {
+        event.preventDefault();
+
+        repetitions = $("#loop-mode-repetitions").val();
+        waitingTime = $("#loop-mode-waiting-time").val() * 60;
+
+        //animations
+        $("#loop-mode-form-container").slideUp();
+        $("#loop-mode").slideDown();
+
+        conductTests();
+    })
+});
+
+var results=[];
+
+function conductTests() {
+    var resultTemplate = Handlebars.compile($("#resultTemplate").html());
+
     var tests = 0;
     var lastTestStart = moment();
     $("#testcount").text(tests);
     $("#teststotal").text(repetitions);
 
     var testSuccessCallback = function (result) {
-        var down = result.downBitPerSec / 1e6;
-        var up = result.upBitPerSec / 1e6;
-        var ping = result.pingNano / 1e6;
-        results.push({
-            down: down,
-            up: up,
-            ping: ping
-        });
+        result.down = result.downBitPerSec / 1e6;
+        result.up = result.upBitPerSec / 1e6;
+        result.ping = result.pingNano / 1e6;
+        result.time = lastTestStart.toDate();
+        results.push(result);
 
         //add result to table
-        $("#verlauf_tbody").prepend("<tr>" +
-            "<td>" + lastTestStart.format("HH:mm:ss") +  "</td>" +
-            "<td class=\"align-right\">" + down.formatNumber(getSignificantDigits(down)) + "</td>" +
-            "<td class=\"align-right\">" + up.formatNumber(getSignificantDigits(up)) + "</td>" +
-            "<td class=\"align-right\">" + ping.formatNumber(getSignificantDigits(ping)) + "</td>" +
-            "</tr>");
+        $("#verlauf_tbody").prepend(resultTemplate(result));
 
         //calculate median
-        var calculateMedian = function(field) {
+        var calculateAndFormatMedian = function(field) {
             var tArr = [];
             $.each(results, function(i, result) {
                 tArr.push(result[field]);
             });
-            return Math.median(tArr);
+            var median = Math.median(tArr);
+            return median.formatNumber(getSignificantDigits(median));
         };
-        $("#mediandown").text(calculateMedian("down").formatNumber(getSignificantDigits(calculateMedian("down"))));
-        $("#medianup").text(calculateMedian("up").formatNumber(getSignificantDigits(calculateMedian("up"))));
-        $("#medianping").text(calculateMedian("ping").formatNumber(getSignificantDigits(calculateMedian("ping"))));
+        $("#mediandown").text(calculateAndFormatMedian("down"));
+        $("#medianup").text(calculateAndFormatMedian("up"));
+        $("#medianping").text(calculateAndFormatMedian("ping"));
 
         testFinished();
     };
     var testErrorCallback = function (result) {
+        var result = {
+            time: lastTestStart.toDate(),
+            error: true
+        };
         //add error to table
-        $("#verlauf_tbody").prepend("<tr>" +
-            "<td>" + lastTestStart.format("HH:mm:ss") +  "</td>" +
-            "<td class=\"align-center\" colspan=\"3\">Fehler während des Tests</td>" +
-            "</tr>");
+        $("#verlauf_tbody").prepend(resultTemplate(result));
 
         testFinished();
     };
 
     var testFinished = function (result) {
         tests++;
+
+        //once again, check boundaries
+        waitingTime = Math.min(waitingTime, 60*60*48);
+        waitingTime = Math.max(waitingTime, 60*15);
+        repetitions = Math.min(repetitions, 100);
+        repetitions = Math.max(repetitions, 1);
 
         $("#infostatus").text("Warte auf Zeitablauf");
         $("#testcount").text(tests);
@@ -368,7 +392,7 @@ $(document).ready(function () {
             waitForNextTest(tests, waitingTime, function () {
                 startSingleTest(tests, testSuccessCallback, testErrorCallback);
                 lastTestStart = moment();
-                $("progress-bar").removeClass("inactive");
+                $(".progress-bar").removeClass("inactive");
             });
         }
         else {
@@ -378,9 +402,7 @@ $(document).ready(function () {
         }
     };
     startSingleTest(tests, testSuccessCallback, testErrorCallback);
-    //testFinishedCallback();
-
-});
+}
 
 function waitForNextTest(i, waitingTimeS, callback) {
     var targetTime = moment().add(waitingTimeS, 'seconds');
@@ -414,3 +436,20 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
 
     websocketTest.startTest();
 }
+
+
+/* From Karte.js */
+
+//add datetime helper
+Handlebars.registerHelper('formatDate', function (timestamp) {
+    var d = new Date(timestamp);
+    return moment(d).format(Lang.getString('map_index_dateformat'));
+});
+
+//add formatting helper
+Handlebars.registerHelper('formatNumberSignificant', function (number) {
+    if (typeof number === 'number') {
+        var decimals = getSignificantDigits(number);
+        return number.formatNumber(decimals);
+    }
+});

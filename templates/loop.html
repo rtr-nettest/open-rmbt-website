@@ -6,8 +6,9 @@
 
     <script src="../{{ fingerprint["js/vendor/modernizr-2.6.1.min.js"] }}"></script>
     <script type="text/javascript" src="../{{ fingerprint["lib/rmbtws.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["js/Loop.js"] }}"></script>
     <script type="text/javascript" src="../{{ fingerprint["lib/moment.min.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["lib/handlebars.min.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["js/Loop.js"] }}"></script>
 
     <style>
         input.form-control {
@@ -39,6 +40,14 @@
         .progress-bar.inactive {
             background-color: #545454;
         }
+
+        tr.median {
+            font-weight: bold;
+        }
+
+        #loop-mode {
+            display: none;
+        }
     </style>
 
 {% endblock %}
@@ -49,19 +58,19 @@
 
 {% block content %}
     <h2 id="h2">Wiederholungsmodus</h2>
-    <div style="display:none">
-        <form class="form-horizontal">
+    <div id="loop-mode-form-container" >
+        <form id="loop-mode-form" class="form-horizontal">
             <div class="form-group">
                 <label class="col-sm-3 control-label">Wiederholungen</label>
                 <div class="col-sm-8">
-                    <input type="number" class="form-control" min="1" max="100" value="10"/>
+                    <input id="loop-mode-repetitions" type="number" class="form-control" min="1" max="100" value="10"/>
                     <span class="help-block">Anzahl der durchzuführenden Tests</span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">Wartezeit</label>
                 <div class="col-sm-8">
-                    <input type="number" class="form-control" min="15" max="30" value="1440"/>
+                    <input id="loop-mode-waiting-time" type="number" class="form-control" min="15" max="1440" value="30"/>
                     <span class="help-block">Wartezeit (in Minuten) zwischen zwei Tests im Wiederholungsmodus</span>
                 </div>
             </div>
@@ -74,7 +83,7 @@
         </form>
     </div>
 
-    <div>
+    <div id="loop-mode">
         <h3>Aktuelle Messung</h3>
         <p>
             Test <span id="testcount">0</span>/<span id="teststotal">0</span>
@@ -83,7 +92,7 @@
         <div class="progress">
             <div id="testprogress" class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"
                  style="min-width: 3em;width: 0%">
-                80%
+                0%
             </div>
         </div>
         <div id="infocurrent">
@@ -155,5 +164,24 @@
             </tr>
             </tbody>
         </table>
+        {%  raw %}
+            <script id="resultTemplate" type="text/x-handlebars-template">
+                {{#if error }}
+                <tr class="test-result-error">
+                    <td>{{ formatDate time }}</td>
+                    <td colspan="3">Fehler während des Tests</td>
+                </tr>
+                {{ else }}
+                <tr class="test-result">
+                    <td>
+                        <a href="Verlauf#{{ testUUID }}" target="_blank">{{ formatDate time }}</a>
+                    </td>
+                    <td class="align-right">{{ formatNumberSignificant down }}</td>
+                    <td class="align-right">{{ formatNumberSignificant up }}</td>
+                    <td class="align-right">{{ formatNumberSignificant ping }}</td>
+                </tr>
+                {{/if }}
+            </script>
+        {%  endraw %}
     </div>
 {% endblock %}
