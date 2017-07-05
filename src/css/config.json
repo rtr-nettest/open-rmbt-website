@@ -386,8 +386,9 @@
     "tables.less",
     "forms.less",
     "buttons.less",
-    "input-groups.less"
+    "input-groups.less",
+    "progress-bars.less"
   ],
   "js": [],
-  "customizerUrl": "https://getbootstrap.com/customize/?id=f7e68bc40e2bc9477d54"
+  "customizerUrl": "https://getbootstrap.com/customize/?id=003b504f63e074780045ae8a940c8286"
 }
