@@ -363,6 +363,7 @@ function conductTests() {
 
     var tests = 0;
     var lastTestStart = moment();
+    var firstTestStart = moment();
     $("#testcount").text(tests);
     $("#teststotal").text(repetitions);
 
@@ -411,13 +412,16 @@ function conductTests() {
         repetitions = Math.min(repetitions, 100);
         repetitions = Math.max(repetitions, 1);
 
+        //check for hard cutoff after two days
+        var cutoffReached = (moment().diff(firstTestStart,'days') >= 2);
+
         $("#infostatus").text(Lang.getString("WaitingForStart"));
         $("#testcount").text(tests);
         $("#teststotal").text(repetitions);
         $(".progress-bar").addClass("inactive");
 
 
-        if (tests < repetitions) {
+        if (tests < repetitions && !cutoffReached) {
             //wait
             waitForNextTest(tests, waitingTime, function () {
                 startSingleTest(tests, testSuccessCallback, testErrorCallback);
@@ -439,7 +443,7 @@ function waitForNextTest(i, waitingTimeS, callback) {
     var timeoutFunction = function () {
         var currentTime = moment();
         var diff = moment(targetTime.diff(currentTime));
-        var secondsLeft = diff.get().unix();
+        var secondsLeft = diff.unix();
         var display = diff.format("mm:ss");
         if (diff < 0) {
             callback();
