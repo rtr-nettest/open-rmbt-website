@@ -463,6 +463,12 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
     var config = new RMBTTestConfig();
     var ctrl = new RMBTControlServerCommunication(config);
     config.uuid = clientUUID;
+    config.additionalRegistrationParameters["loopmode_info"] = {
+        max_delay: (waitingTime/60),
+        test_counter: (i+1),
+        text_counter: (i+1), //@TODO: Remove, as soon as the ControlServer is fixed...
+        max_tests: repetitions
+    };
     var websocketTest = new RMBTTest(config, ctrl);
 
     TestEnvironment.getTestVisualization().setRMBTTest(websocketTest);
