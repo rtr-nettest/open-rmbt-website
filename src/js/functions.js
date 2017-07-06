@@ -85,6 +85,7 @@ function requestBrowserData(callback, options) {
                 url: controlProxy+"/"+wspath+"/requestDataCollector",
                 type: "GET",
                 dataType: "json",
+                cache: false,
                 crossDomain: crossDomain,
                 success: function(data) {
                         //getLanguageFromURL();
