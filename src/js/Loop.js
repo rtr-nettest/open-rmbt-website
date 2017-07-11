@@ -346,12 +346,16 @@ function RMBTLoopTest(uuid){
 
             }, onError, {
                 tocFile: "loop_mode_info2.html",
-                title: Lang.getString("LoopMode")
+                title: Lang.getString("LoopMode"),
+                cookieIdentifier: "loopMode2",
+                cookieExpiresSeconds: 24 * 60 * 60 //one day
             })
 
         }, onError, {
             tocFile: "loop_mode_info.html",
-            title: Lang.getString("LoopMode")
+            title: Lang.getString("LoopMode"),
+            cookieIdentifier: "loopMode1",
+            cookieExpiresSeconds: 24 * 60 * 60 //one day
         }
     )
 }
@@ -363,7 +367,7 @@ function conductTests() {
 
     var tests = 0;
     var lastTestStart = moment();
-    var firstTestStart = moment();
+    var firstTestStart = moment().startOf('second');
     $("#testcount").text(tests);
     $("#teststotal").text(repetitions);
 
@@ -403,6 +407,8 @@ function conductTests() {
         testFinished();
     };
 
+    var lastTimeslotCounter = 0;
+
     var testFinished = function (result) {
         tests++;
 
@@ -422,12 +428,24 @@ function conductTests() {
 
 
         if (tests < repetitions && !cutoffReached) {
-            //wait
-            waitForNextTest(tests, waitingTime, function () {
-                startSingleTest(tests, testSuccessCallback, testErrorCallback);
+            //calculate the next possible timeslot for a test based on the set interval
+            var timeslotCounter = Math.floor(moment().diff(firstTestStart, 'seconds') / waitingTime);
+
+            lastTimeslotCounter = timeslotCounter;
+            var nextTestStart = firstTestStart.add((timeslotCounter + 1) * waitingTime, 'seconds');
+            waitForNextTest(tests, nextTestStart, function () {
                 lastTestStart = moment();
+                startSingleTest(tests, testSuccessCallback, testErrorCallback);
                 $(".progress-bar").removeClass("inactive");
             });
+
+
+            //was the client in standby, skipping tests?
+            while (nextTestStart.diff(moment()) < 0) {
+                nextTestStart = nextTestStart.add(waitingTime, 'seconds');
+            }
+
+
         }
         else {
             $("#infostatus").text(Lang.getString("LoopModeTestsFinished"));
@@ -438,21 +456,21 @@ function conductTests() {
     startSingleTest(tests, testSuccessCallback, testErrorCallback);
 }
 
-function waitForNextTest(i, waitingTimeS, callback) {
-    var targetTime = moment().add(waitingTimeS, 'seconds');
+function waitForNextTest(i, targetTime, callback) {
+    var waitingTimeS = targetTime.diff(moment(),"seconds");
     var timeoutFunction = function () {
         var currentTime = moment();
         var diff = moment(targetTime.diff(currentTime));
         var secondsLeft = diff.unix();
         var display = diff.format("mm:ss");
-        if (diff < 0) {
+        if (diff <= 0) {
             callback();
         }
         else {
             var percent = secondsLeft / waitingTimeS;
             $("#testprogress").text(display);
             $("#testprogress").css("width", (percent * 100) + "%");
-            window.setTimeout(timeoutFunction, 1000);
+            window.setTimeout(timeoutFunction, 250);
         }
     };
     timeoutFunction();

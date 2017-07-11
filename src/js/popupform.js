@@ -98,6 +98,7 @@ function show_agbform(run_Test, callback, options) {
 function show_agb_popup(onAccept, onDecline, options) {
     options = options || {};
 	var cookieIdentifier = options.cookieIdentifier || null;
+    var cookieExpiresSeconds = options.cookieExpiresSeconds || (20 * 365 * 24 * 60 * 60); //20 years
 	var title = options.title || "";
 	var tocFile = options.tocFile || null;
 	var toc = options.toc || "";
@@ -133,7 +134,7 @@ function show_agb_popup(onAccept, onDecline, options) {
         text: (selectedLanguage === 'de') ? 'Zustimmung' : 'Agree',
         click: function () {
         	if (cookieIdentifier) {
-                setCookie(cookieIdentifier, true, 365 * 20 * 24 * 3600);
+                setCookie(cookieIdentifier, true, cookieExpiresSeconds);
             }
             closeHandled = true;
             $(this).dialog("close");
@@ -144,7 +145,7 @@ function show_agb_popup(onAccept, onDecline, options) {
 
     //load and add text
     $("#popupform").append(
-        '<div id="terms_check" style="margin-top:20px;">' +
+        '<div id="terms_check">' +
         '<div class="longtext">' +
         '<p>'+toc +'</p>' +
 		'</div>' +
@@ -168,7 +169,7 @@ function show_agb_popup(onAccept, onDecline, options) {
         minHeight: 200,
         minWidth: 350,
         width: 780,
-        height: 500,
+        height: (window.innerHeight*0.9),
         close: function() {
         	if (!closeHandled) {
         		onDecline();
