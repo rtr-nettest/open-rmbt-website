@@ -364,8 +364,10 @@ var results=[];
 
 function conductTests() {
     var resultTemplate = Handlebars.compile($("#resultTemplate").html());
+    var titleText = "# " + document.title;
 
     var tests = 0;
+    var newTests = 0;
     var lastTestStart = moment();
     var firstTestStart = moment().startOf('second');
     $("#testcount").text(tests);
@@ -426,6 +428,11 @@ function conductTests() {
         $("#teststotal").text(repetitions);
         $(".progress-bar").addClass("inactive");
 
+        //update title text if in background (= notify the user - new test)
+        if (document.hidden) {
+            newTests++;
+            document.title = titleText.replace("#", "(" + newTests + ")");
+        }
 
         if (tests < repetitions && !cutoffReached) {
             //calculate the next possible timeslot for a test based on the set interval
@@ -453,6 +460,15 @@ function conductTests() {
             $("#testprogress").css("width", "100%");
         }
     };
+
+    //reset title text if tab becomes visible again
+    document.addEventListener("visibilitychange", function() {
+        if (!document.hidden) {
+            newTests = 0;
+            document.title = titleText.replace("# ","");
+        }
+    });
+
     startSingleTest(tests, testSuccessCallback, testErrorCallback);
 }
 
