@@ -103,7 +103,9 @@ exports.strings = {
         "gkz" : "Gemeindekennzahl",
         "pinned_true" : "Für Statistik relevant",
         "pinned_false" : "Für Statistik nicht relevant",
-        "show_open_test_uuid" : "Open-Test-UUID einblenden"
+        "show_open_test_uuid" : "Open-Test-UUID einblenden",
+        'radio_band': 'Frequenzband',
+        'channel_number': 'Frequenzkanal'
     },
 
     "options_content" : {

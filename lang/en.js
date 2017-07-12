@@ -103,7 +103,9 @@ exports.strings = {
         "gkz" : "Austrian community ID",
         "pinned_true" : "Included in statistics",
         "pinned_false" : "Not included in statistics",
-        "show_open_test_uuid" : "Show Open-Test-UUID"
+        "show_open_test_uuid" : "Show Open-Test-UUID",
+        'radio_band': 'Radio band',
+        'channel_number': 'Frequency channel'
     },
 
     "options_content" : {

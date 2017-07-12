@@ -206,5 +206,7 @@ Lang.setStrings({
     'LoopMode' : 'Wiederholungsmodus',
     'LoopModeTestsFinished' : 'Alle Tests abgeschlossen',
     'LoopModeFinished' : 'Serie beendet',
-    'WaitingForStart' : 'Warte auf Zeitablauf'
+    'WaitingForStart' : 'Warte auf Zeitablauf',
+    'radio_band': 'Frequenzband',
+    'channel_number': 'Frequenzkanal'
 });
