@@ -504,6 +504,7 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
         max_tests: repetitions
     };
     var websocketTest = new RMBTTest(config, ctrl);
+    $("#testcount").text((i + 1));
 
     TestEnvironment.getTestVisualization().setRMBTTest(websocketTest);
     TestEnvironment.getTestVisualization().startTest();
