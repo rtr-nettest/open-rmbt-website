@@ -493,7 +493,20 @@ function waitForNextTest(i, targetTime, callback) {
 }
 
 function startSingleTest(i, testSuccessCallback, testErrorCallback) {
-    TestEnvironment.init(new LoopTestVisualization(testSuccessCallback, testErrorCallback), null);
+    var fallbackTimer = null;
+
+    TestEnvironment.init(new LoopTestVisualization(function (result) {
+        //only do callback, if fallbackTimer has not fired yet
+        if (fallbackTimer !== null) {
+            self.clearTimeout(fallbackTimer);
+            testSuccessCallback(result);
+        }
+    }, function (result) {
+        if (fallbackTimer !== null) {
+            self.clearTimeout(fallbackTimer);
+            testErrorCallback(result);
+        }
+    }), null);
     var config = new RMBTTestConfig();
     var ctrl = new RMBTControlServerCommunication(config);
     config.uuid = clientUUID;
@@ -510,6 +523,12 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
     TestEnvironment.getTestVisualization().startTest();
 
     websocketTest.startTest();
+
+    //After 3 mins, a test has to be finished. Otherwise, treat it as an error
+    fallbackTimer = self.setTimeout(function() {
+        fallbackTimer = null;
+        testErrorCallback();
+    }, 3*60*1000);
 }
 
 
