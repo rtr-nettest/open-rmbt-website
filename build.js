@@ -292,7 +292,9 @@ function setConfig() {
         metadata['target'] = target;
         metadata['basetemplate'] = (target === "qostest")?"templates/qosPage.html":"templates/netztestPage.html";
         try {
-            metadata['gitDescribe'] = gitDescribe();
+            metadata['gitDescribe'] = gitDescribe({
+                match: false
+            });
         } catch(e) {
             console.log("not a valid git directory, cannot include build info in /admin page, message: " + e.message);
         }
