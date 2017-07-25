@@ -507,7 +507,7 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
             testErrorCallback(result);
         }
     }), null);
-    var config = new RMBTTestConfig();
+    var config = new RMBTTestConfig(selectedLanguage, controlProxy, wspath);
     var ctrl = new RMBTControlServerCommunication(config);
     config.uuid = clientUUID;
     config.additionalRegistrationParameters["loopmode_info"] = {

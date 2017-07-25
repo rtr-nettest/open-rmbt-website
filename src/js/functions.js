@@ -1446,7 +1446,7 @@ function start_websocket() {
 }
 
 function RMBTWebsocketTest(uuid) {
-    var config = new RMBTTestConfig();
+    var config = new RMBTTestConfig(selectedLanguage, controlProxy, wspath);
     config.uuid = uuid;
     var controlServerConnection = new RMBTControlServerCommunication(config);
     var websocketTest = new RMBTTest(config, controlServerConnection);
