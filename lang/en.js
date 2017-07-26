@@ -47,7 +47,9 @@ exports.strings = {
         "help_content" : "Detailled background information",
         "statistics_content" : "Statistics on the test results",
         "enlarge_map" : "Enlarge map",
-        "fullscreen" : "Full screen"
+        "fullscreen" : "Full screen",
+        "loop_mode_content": "Conduct repeated measurements",
+        "opendata_content": "Explore open data test results"
     },
 
     "map_content" : {

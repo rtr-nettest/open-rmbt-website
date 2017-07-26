@@ -36,6 +36,10 @@
             z-index: 10;
             font-size: 18px;
         }
+
+        .teaser-netztest {
+            font-family: 'Netztest';
+        }
     </style>
 {% endblock %}
 
@@ -136,36 +140,58 @@
 					<p>{{ Lang.index_content.apps_content }}</p>
 				</div>
 			</div>
-		
-			<div class="teaser-block full-link">
-				<div class="teaser-icon" aria-hidden="true">X</div>
-				<div class="teaser-text">
-					<h4 class="teaser-headline"><a href="/{{ Lang.lang }}/Statistik">{{ Lang.statistics }}</a></h4>
-					<p>{{ Lang.index_content.statistics_content }}</p>
-				</div>
-			</div>
-			
+
+            <div class="teaser-block full-link">
+                <div class="teaser-icon teaser-netztest" aria-hidden="true">A</div>
+                <div class="teaser-text">
+                    <h4 class="teaser-headline"><a href="/{{ Lang.lang }}/Loop">{{ Lang.loop_mode }}</a></h4>
+                    <p>{{ Lang.index_content.loop_mode_content}}</p>
+                </div>
+            </div>
 			
 		</section>
 		
 		
 			<section class="teaser-element clearfix">
-			<div class="teaser-block full-link">
+                <div class="teaser-block full-link">
+                    <div class="teaser-icon" aria-hidden="true">X</div>
+                    <div class="teaser-text">
+                        <h4 class="teaser-headline"><a href="/{{ Lang.lang }}/Statistik">{{ Lang.statistics }}</a></h4>
+                        <p>{{ Lang.index_content.statistics_content }}</p>
+                    </div>
+                </div>
+
+
+                <div class="teaser-block full-link">
 				<div class="teaser-icon" aria-hidden="true">Y</div>
 				<div class="teaser-text">
 					<h4 class="teaser-headline"><a href="/{{ Lang.lang }}/Karte">{{ Lang.index_content.map }}</a></h4>
 					<p>{{ Lang.index_content.map_content }}</p>
 				</div>
-			</div>  
-			
+			</div>
+
+            </section>
+
+
+    <section class="teaser-element clearfix">
 			<div class="teaser-block full-link">
 				<div class="teaser-icon" aria-hidden="true">?</div>
 				<div class="teaser-text">
 					<h4 class="teaser-headline"><a href="{{ Lang.help_url }}">{{ Lang.help }}</a></h4>
 					<p>{{ Lang.index_content.help_content }}</p>
 				</div>
-			</div>  
-		</section>
+			</div>
+
+        <div class="teaser-block full-link">
+            <div class="teaser-icon teaser-netztest" aria-hidden="true">B</div>
+            <div class="teaser-text">
+                <h4 class="teaser-headline"><a href="/{{ Lang.lang }}/Opentests">{{ Lang.opendata }}</a></h4>
+                <p>{{ Lang.index_content.opendata_content }}</p>
+            </div>
+        </div>
+
+        </div>
+    </section>
 		
 
 

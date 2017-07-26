@@ -47,7 +47,9 @@ exports.strings = {
         "help_content" : "Detaillierte Hintergrundinformation",
         "statistics_content" : "Statistiken zu den Testergebnissen",
         "enlarge_map" : "Karte vergrößern",
-        "fullscreen" : "Vollbild"
+        "fullscreen" : "Vollbild",
+        "loop_mode_content": "Sich automatisch wiederholende Tests durchführen",
+        "opendata_content": "Testergebnisse als Open Data einsehen"
     },
 
     "map_content" : {
