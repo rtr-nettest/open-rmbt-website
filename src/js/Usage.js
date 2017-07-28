@@ -54,6 +54,7 @@ function loadUsageStatistics() {
             //put results in there
             fillArea("#usage",data.usage,plotLastRow);
             fillArea("#platforms",data.platforms,plotLastRow);
+            fillArea("#platforms_loopmode",data.platforms_loopmode,plotLastRow);
             fillArea("#versions_ios",data.versions_ios,plotLastRow);
             fillArea("#versions_android",data.versions_android,plotLastRow);
             fillArea("#versions_applet",data.versions_applet,plotLastRow);
