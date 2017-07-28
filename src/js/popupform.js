@@ -99,10 +99,12 @@ function show_agb_popup(onAccept, onDecline, options) {
     options = options || {};
 	var cookieIdentifier = options.cookieIdentifier || null;
     var cookieExpiresSeconds = options.cookieExpiresSeconds || (20 * 365 * 24 * 60 * 60); //20 years
+    var cookieExpiresSecondsWithCheckbox = options.cookieExpiresSecondsWithCheckbox || (20 * 365 * 24 * 60 * 60); //20 years
 	var title = options.title || "";
 	var tocFile = options.tocFile || null;
 	var toc = options.toc || "";
 	var bottomText = options.bottomText || "";
+	var showCheckbox = options.showCheckbox || false;
 
 	if (cookieIdentifier) {
         var alreadyAccepted = getCookie(cookieIdentifier);
@@ -134,7 +136,12 @@ function show_agb_popup(onAccept, onDecline, options) {
         text: (selectedLanguage === 'de') ? 'Zustimmung' : 'Agree',
         click: function () {
         	if (cookieIdentifier) {
-                setCookie(cookieIdentifier, true, cookieExpiresSeconds);
+                if (showCheckbox && $("#popupformCheckbox").is(":checked")) {
+                    setCookie(cookieIdentifier, true, cookieExpiresSecondsWithCheckbox);
+                }
+                else {
+                    setCookie(cookieIdentifier, true, cookieExpiresSeconds);
+				}
             }
             closeHandled = true;
             $(this).dialog("close");
@@ -178,9 +185,15 @@ function show_agb_popup(onAccept, onDecline, options) {
         buttons: dialogButtons
     });
 
-    //add some additional text in the status bar next to the "agree"-button
-	//add the custom text in front of the button pane
-    $(".ui-dialog-buttonpane").prepend('<p class="iwill">' + bottomText + '</p>');
+    if (bottomText) {
+        //add some additional text in the status bar next to the "agree"-button
+        //add the custom text in front of the button pane
+        $(".ui-dialog-buttonpane").prepend('<p class="iwill">' + bottomText + '</p>');
+    }
+
+    if (showCheckbox) {
+        $(".ui-dialog-buttonpane").prepend('<div class="checkbox iwill"><label><input type="checkbox" id="popupformCheckbox"> ' + Lang.getString("DontAskAgain") + '</label></div>');
+	}
 
     //show the popup
     $("#popupform").dialog("open");

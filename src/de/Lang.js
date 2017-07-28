@@ -208,5 +208,6 @@ Lang.setStrings({
     'LoopModeFinished' : 'Serie beendet',
     'WaitingForStart' : 'Warte auf Zeitablauf',
     'radio_band': 'Frequenzband',
-    'channel_number': 'Frequenzkanal'
+    'channel_number': 'Frequenzkanal',
+    'DontAskAgain': 'Nicht erneut nachfragen'
 });

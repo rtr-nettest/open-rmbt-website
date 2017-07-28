@@ -211,5 +211,6 @@ Lang.setStrings({
     'LoopModeFinished' : 'Measurements complete',
     'WaitingForStart' : 'Waiting',
     'radio_band': 'Radio band',
-    'channel_number': 'Frequency channel'
+    'channel_number': 'Frequency channel',
+    'DontAskAgain': 'Don\'t ask again'
 });

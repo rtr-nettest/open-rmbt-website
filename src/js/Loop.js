@@ -348,14 +348,18 @@ function RMBTLoopTest(uuid){
                 tocFile: "loop_mode_info2.html",
                 title: Lang.getString("LoopMode"),
                 cookieIdentifier: "loopMode2",
-                cookieExpiresSeconds: 24 * 60 * 60 //one day
+                cookieExpiresSeconds: 24 * 60 * 60, //one day
+                cookieExpiresSecondsWithCheckbox: 24 * 60 * 60 * 183, //half a year
+                showCheckbox: true
             })
 
         }, onError, {
             tocFile: "loop_mode_info.html",
             title: Lang.getString("LoopMode"),
             cookieIdentifier: "loopMode1",
-            cookieExpiresSeconds: 24 * 60 * 60 //one day
+            cookieExpiresSeconds: 24 * 60 * 60, //one day
+            cookieExpiresSecondsWithCheckbox: 24 * 60 * 60 * 183, //half a year
+            showCheckbox: true
         }
     )
 }
