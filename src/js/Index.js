@@ -160,6 +160,11 @@ function loadLastOpenDataResultsMap() {
             //window.location = "Opentest?" + uuid;
             loadMarker(uuid);
         } else {
+            //if no openlayers popup container is visible -> nagivate to /Karte (#915)
+            if ($(".ol-popup:visible").length === 0) {
+                window.location.href = "/" + selectedLanguage + "/Karte";
+            }
+
             //$(element).popover('destroy');
             //remove popup
             markers.hide();
