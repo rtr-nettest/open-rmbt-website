@@ -13,6 +13,8 @@ function loadUsageStatistics() {
     //reset
     $("#usage .graph").html("");
     $("#platforms .graph").html("");
+    $("#platforms_loopmode .graph").html("");
+    $("#platforms_qos .graph").html("");
     $("#versions_ios .graph").html("");
     $("#versions_android .graph").html("");
     $("#versions_applet .graph").html("");
@@ -55,6 +57,7 @@ function loadUsageStatistics() {
             fillArea("#usage",data.usage,plotLastRow);
             fillArea("#platforms",data.platforms,plotLastRow);
             fillArea("#platforms_loopmode",data.platforms_loopmode,plotLastRow);
+            fillArea("#platforms_qos",data.platforms_qos,plotLastRow);
             fillArea("#versions_ios",data.versions_ios,plotLastRow);
             fillArea("#versions_android",data.versions_android,plotLastRow);
             fillArea("#versions_applet",data.versions_applet,plotLastRow);

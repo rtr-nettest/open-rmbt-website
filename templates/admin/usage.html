@@ -1,5 +1,5 @@
 {% extends basetemplate %}
-{% set title = Lang.admin %}
+{% set title = "Usage report" %}
 
 {% block headerscriptingExtended %}
 <script type="text/javascript" src="../en/Lang.js"></script>
@@ -85,6 +85,12 @@
 
 <h3>Platforms Loopmode</h3>
 <div id="platforms_loopmode">
+    <div class="graph"></div>
+    <div class="table"></div>
+</div>
+
+<h3>Platforms QoS</h3>
+<div id="platforms_qos">
     <div class="graph"></div>
     <div class="table"></div>
 </div>
