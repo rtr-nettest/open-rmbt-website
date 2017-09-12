@@ -107,7 +107,8 @@ exports.strings = {
         "pinned_false" : "Für Statistik nicht relevant",
         "show_open_test_uuid" : "Open-Test-UUID einblenden",
         'radio_band': 'Frequenzband',
-        'channel_number': 'Frequenzkanal'
+        'channel_number': 'Frequenzkanal',
+        "additional_filters" : "Weitere Filter"
     },
 
     "options_content" : {
