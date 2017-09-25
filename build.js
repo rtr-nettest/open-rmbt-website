@@ -60,7 +60,7 @@ if (target === null ){
 
 //execute
 var metalsmith = Metalsmith(__dirname)
-    .use(generateRandomJSTestFilesIfMissing())
+    //.use(generateRandomJSTestFilesIfMissing())
     .use(fetchRemoteFiles(remoteFiles))
     .use(fetchRemoteFiles(function() {
         return transformRemoteNetztestJSONtoFetchableFiles(require('./conf/filelist_nettest.json'))
