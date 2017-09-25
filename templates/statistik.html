@@ -20,6 +20,12 @@
     input[type=date] {
         background-color: white;
     }
+
+    #statistics_failure {
+        background: #ffffff;
+        padding: .666em 2%;
+        display: none;
+    }
 </style>
 {% endblock %}
 
@@ -76,7 +82,7 @@
                         </tbody>
                         <tfoot>
                         <tr><td colspan="6">
-                            <a href="Opentests">{{ Lang.further_tests }}</a>
+                            <strong><a href="Opentests">{{ Lang.further_tests }}</a></strong>
                         </td>
                         </tr>
                         </tfoot>
@@ -89,6 +95,9 @@
 
 
 <div class="clear"><!-- --></div>
+    <div id="statistics_failure">
+        {{ Lang.statistics_content.failure }}
+    </div>
     <div id="statistics_container">
         <form class="form-inline">
             <fieldset>

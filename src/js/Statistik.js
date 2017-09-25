@@ -90,6 +90,13 @@ $(document).ready(function() {
                 adjustTimePeriods(end_date);
             }
         })
+
+        $("#statistics_failure a").click(function(e) {
+            e.preventDefault();
+            $("#statistics_container").show();
+            $("#statistics_failure").hide();
+            requestBrowserData('RMBTstatistics');
+        });
 }); 
 
 

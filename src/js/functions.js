@@ -1416,7 +1416,8 @@ function RMBTstatistics() {
                 },
                 error: function() {
                         $('#statistics_container').spin();
-                        alert("Error beim statistics-Abruf");
+                        $("#statistics_container").hide();
+                        $("#statistics_failure").slideDown();
                 }
         });       
 }
