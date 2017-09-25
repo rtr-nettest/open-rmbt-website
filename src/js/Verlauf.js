@@ -2,8 +2,8 @@ var useAddressPopup = true;
 
 var fastConnectionWarningConfig = {
     test_types : ["RMBTws", "RMBTjs"],
-    min_download_kbit : 100*1000,
-    min_upload_kbit : 30*1000
+    min_download_kbit : 200*1000,
+    min_upload_kbit : 100*1000
 };
 
 var exdays = 365*24*60*60;
