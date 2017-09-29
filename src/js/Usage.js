@@ -73,7 +73,11 @@ function loadUsageStatistics() {
  * @param {json} data from controlserver/usageJSON
  * @param {boolean} plotLastRow
  */
-function fillArea(target, data, plotLastRow) {    
+function fillArea(target, data, plotLastRow) {
+    if (typeof data === 'undefined') {
+        return;
+    }
+
     //set width for flot
     $(target + " .graph").css("width",$(target + " .graph").width() + "px");
     
