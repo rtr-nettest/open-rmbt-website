@@ -483,6 +483,9 @@ function waitForNextTest(i, targetTime, callback) {
         var diff = moment(targetTime.diff(currentTime));
         var secondsLeft = diff.unix();
         var display = diff.format("mm:ss");
+        if (secondsLeft >= (60*60)) {
+            display = display = Math.floor(secondsLeft/60.0/60.0) + ":" + display;
+        }
         if (diff <= 0) {
             callback();
         }
