@@ -862,6 +862,13 @@ var SvgTestVisualization = (function () {
             } else {
                 bar.style.strokeDasharray =
                     bar.getTotalLength() * (percents) + ",9999";
+
+                //IE11 fix (otherwise, the segment will disappear when scrolling - but why does this work???)
+                //(IE detection: https://stackoverflow.com/a/21825207)
+                if (!!window.MSInputMethodContext && !!document.documentMode) {
+                    var current = parseFloat($(barSelector).css('stroke-width'));
+                    $(barSelector).css('stroke-width',(current+0.001)+"px");
+                }
             }
         }
 
@@ -982,7 +989,7 @@ var SvgTestVisualization = (function () {
         forwardUrl += "#";
         forwardUrl += _testUUID;
         setTimeout(function() {
-            //window.location.href = forwardUrl;
+            window.location.href = forwardUrl;
         }, 2000);
     }
 
