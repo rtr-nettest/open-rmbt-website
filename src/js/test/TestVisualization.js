@@ -765,7 +765,7 @@ var SvgTestVisualization = (function () {
             $("#infocurrent").find("div.row  .loader").hide();
         }
 
-        $("#status").text(text);
+        $("#infostatus").text(text);
     }
 
     SvgTestVisualization.prototype.setStatus = function (status) {
@@ -856,12 +856,12 @@ var SvgTestVisualization = (function () {
         }
 
         function setBarPercentage(barSelector, percents) {
-            var bar = $(barSelector);
+            var bar = document.querySelector(barSelector);
             if (!bar) {
                 console.error("Element not found: " + barSelector + ".");
             } else {
-                bar[0].style.strokeDasharray =
-                    bar[0].getTotalLength() * (percents) + ",9999";
+                bar.style.strokeDasharray =
+                    bar.getTotalLength() * (percents) + ",9999";
             }
         }
 
@@ -872,7 +872,7 @@ var SvgTestVisualization = (function () {
             var directionSymbol = null;
             var fullProgress = Math.round(progress_segment(status, progress) * 100);
             var active = false;
-            $("#percents").html(fullProgress + "&thinsp;%");
+            $("#percents").text(fullProgress + "\u2009%");
             switch(status) {
                 case TestState.INIT:
                     barSelector = "#init";
@@ -891,7 +891,7 @@ var SvgTestVisualization = (function () {
                     setBarPercentage("#ping", 1);
                     barSelector = "#download";
                     speedMbit = down / 1e6;
-                    directionSymbol = "&#8615;";
+                    directionSymbol = "\u21a7";
                     break;
                 case TestState.INIT_UP:
                     setBarPercentage("#download", 1);
@@ -904,7 +904,7 @@ var SvgTestVisualization = (function () {
                     barSelector = "#upload";
                     progress = Math.min(0.95, progress * .9 + .1);
                     speedMbit = up / 1e6;
-                    directionSymbol = "&#8613;";
+                    directionSymbol = "\u21a5";
                     break;
                 case TestState.END:
                     barSelector = "#upload";
@@ -914,14 +914,14 @@ var SvgTestVisualization = (function () {
             if (barSelector !== null) {
                 setBarPercentage(barSelector, progress);
             }
-            if (speedMbit !== null) {
+            if (speedMbit !== null && speedMbit > 0) {
                 //logarithmic to 1Gbit, but [0,1]
                 var speedLog = (2+Math.log10(speedMbit))/5;
                 speedLog = Math.max(speedLog,0);
                 speedLog = Math.min(1, speedLog);
                 setBarPercentage("#speed",speedLog);
-                $("#speedtext").html(directionSymbol + "&thinsp;" + speedMbit.formatNumber(getSignificantDigits(speedMbit)));
-                $("#speedunit").html(Lang.getString('Mbps'));
+                $("#speedtext").text(directionSymbol + "\u2009" + speedMbit.formatNumber(getSignificantDigits(speedMbit)));
+                $("#speedunit").text(Lang.getString('Mbps'));
                 setTimeout(function() {
                     $("#speed").attr("class","gauge speed active");
                 },500);
@@ -960,6 +960,7 @@ var SvgTestVisualization = (function () {
                 result["testUUID"] = _testUUID;
                 t(result);
             }
+            redirectToTestResult();
         }
     }
 
@@ -972,6 +973,18 @@ var SvgTestVisualization = (function () {
         //first draw, then the timeout should kick in
         draw();
     };
+
+    function redirectToTestResult() {
+        var forwardUrl = "/" + selectedLanguage + "/Verlauf";
+        if (preferredTest === TestTypes.Java || getParam("Java")) {
+            forwardUrl += "?Java=True"
+        }
+        forwardUrl += "#";
+        forwardUrl += _testUUID;
+        setTimeout(function() {
+            //window.location.href = forwardUrl;
+        }, 2000);
+    }
 
     return SvgTestVisualization;
 })();

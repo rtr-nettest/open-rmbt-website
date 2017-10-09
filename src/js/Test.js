@@ -164,8 +164,8 @@ function start_test() {
 
 $(document).ready(function() {
     
-        TestEnvironment.init();
-        
+        TestEnvironment.init(new SvgTestVisualization());
+
     
                
         if (cookieEnabled && !((preferredTest === TestTypes.Java) && (!loadRMBTApplet || !rmbtApplet))) {
