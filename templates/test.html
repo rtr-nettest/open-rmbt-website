@@ -81,6 +81,23 @@
         }
     }
 
+    /* responsive layout */
+    @media (min-width: 1275px) {
+        .testcontainer {
+            display: flex;
+            flex-direction: row;
+        }
+
+        #infocurrent {
+            align-self: flex-end;
+            min-width: 350px;
+        }
+
+        #infocurrent p:last-of-type {
+            margin-bottom: 0px;
+        }
+    }
+
 </style>
 {% endblock %}
 
@@ -231,6 +248,9 @@
 </div> <!-- test_container -->
 
 
+    <div class="testcontainer">
+
+
 
     <div class="gauge">
         <!-- <button class="start-test" disabled="true">{{ STRINGS[DEFAULT_LANG]["start_test"] }}</button> -->
@@ -249,47 +269,54 @@
 
     </div>
 
-    <div id="infocurrent" style="margin-top:3em;">
-        <!-- <p>
+        <div id="infocurrent" style="margin-top:3em;">
+            <!-- <p>
         <div class="row">
             <div class="col-sm-3">{{ Lang.state }}</div>
             <div class="col-sm-9" id="infostatus">-</div>
         </div>
         </p> -->
-        <p>
-        <div class="row inforow">
-            <div class="col-sm-3">{{ Lang.ping }}</div>
-            <div class="col-sm-9" id="infoping"><div class="loader"></div> <span>-</span></div>
-        </div>
-        <div class="row inforow">
-            <div class="col-sm-3">{{ Lang.download }}</div>
-            <div class="col-sm-9" id="infodown"><div class="loader"></div> <span>-</span></div>
-        </div>
-        <div class="row inforow">
-            <div class="col-sm-3">{{ Lang.upload }}</div>
-            <div class="col-sm-9" id="infoup"><div class="loader"></div> <span>-</span></div>
-        </div>
-        </p>
-        <p>
-        <div class="row">
-            <div class="col-sm-3">{{ Lang.coordinates }}</div>
-            <div class="col-sm-9" id="infogeo">-</div>
-        </div>
-        <div class="row">
-            <div class="col-sm-3">{{ Lang.test_server }}</div>
-            <div class="col-sm-9" id="infoserver">-</div>
-        </div>
-        <div class="row">
-            <div class="col-sm-3">{{ Lang.ip }}</div>
-            <div class="col-sm-9" id="infoip">-</div>
-        </div>
-        <div class="row">
-            <div class="col-sm-3">{{ Lang.operator }}</div>
-            <div class="col-sm-9" id="infoprovider">-</div>
-        </div>
-        </p>
+            <p>
+            <div class="row inforow">
+                <div class="col-sm-3">{{ Lang.ping }}</div>
+                <div class="col-sm-9" id="infoping">
+                    <div class="loader"></div>
+                    <span>-</span></div>
+            </div>
+            <div class="row inforow">
+                <div class="col-sm-3">{{ Lang.download }}</div>
+                <div class="col-sm-9" id="infodown">
+                    <div class="loader"></div>
+                    <span>-</span></div>
+            </div>
+            <div class="row inforow">
+                <div class="col-sm-3">{{ Lang.upload }}</div>
+                <div class="col-sm-9" id="infoup">
+                    <div class="loader"></div>
+                    <span>-</span></div>
+            </div>
+            </p>
+            <p>
+            <div class="row inforow">
+                <div class="col-sm-3">{{ Lang.coordinates }}</div>
+                <div class="col-sm-9" id="infogeo">-</div>
+            </div>
+            <div class="row inforow">
+                <div class="col-sm-3">{{ Lang.test_server }}</div>
+                <div class="col-sm-9" id="infoserver">-</div>
+            </div>
+            <div class="row inforow">
+                <div class="col-sm-3">{{ Lang.ip }}</div>
+                <div class="col-sm-9" id="infoip">-</div>
+            </div>
+            <div class="row inforow">
+                <div class="col-sm-3">{{ Lang.operator }}</div>
+                <div class="col-sm-9" id="infoprovider">-</div>
+            </div>
+            </p>
 
 
+        </div>
     </div>
 
 <!-- Site or application content end -->
