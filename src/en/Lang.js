@@ -16,7 +16,7 @@ Lang.setStrings({
    'AndroidAppAvailable' : 'In your mobile browser, only a simple JavaScript based test is carried out. If you would like to use the test to the full extent, please use our <a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android&hl=en">Android-App</a>.',
    'IOSAppAvailable' : 'In your mobile browser, only a simple JavaScript based test is carried out. If you would like to use the test to the full extent, please use our <a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">iOS-App</a>.',
    'NoJavaAvailable' : 'A simple JavaScript test is carried out.',
-   'BrowserOutdated' : 'Your browser version is outdated and does not support all features necessary. Please use a newer browser version.',
+   'BrowserOutdated' : 'Your browser version is outdated and does not support all necessary features. Please use a newer browser version.',
    'YourPostalCode' : 'Your postal code',
    'PostalCode' : 'Post code',
    'PleaseEnterPostalCode' : 'For optimum results please enter your post code.',
