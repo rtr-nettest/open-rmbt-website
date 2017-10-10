@@ -16,89 +16,6 @@
 <script type="text/javascript" src="../{{ fingerprint["js/Test.js"] }}"></script>
 <script type="text/javascript" src="../{{ fingerprint["js/test/TestVisualization.js"] }}"></script>
 
-
-<style>
-
-    .gauge {
-        width: 100%;
-        max-width: 500px;
-        height: auto;
-        background: url("../images/gauge.svg");
-        background-repeat: repeat;
-        background-position-x: 0%;
-        background-position-y: 0%;
-        background-repeat: no-repeat;
-        background-position: 0 0;
-        margin: 0 0;
-        position: relative;
-    }
-
-
-    svg .gauge {
-        stroke-width: 26px;
-        stroke-dasharray: 0,9999;
-        fill: transparent;
-    }
-
-    svg .gauge.active  {
-        transition: stroke-dasharray 0.4s linear;
-    }
-
-    svg #speed.gauge.active {
-        transition: stroke-dasharray 0.4s ease;
-    }
-
-    svg .init,
-    svg .ping,
-    svg .download,
-    svg .upload {
-        stroke: rgb(0, 94, 174);
-    }
-
-    svg .speed {
-        stroke: rgb(89, 178, 0);
-    }
-
-    .loader {
-        border: 2px solid #c3c3c3;
-        border-top: 2px solid #59b200;
-        border-radius: 50%;
-        width: 15px;
-        height: 15px;
-        animation: loader-spin 2s linear infinite;
-        float: left;
-        margin-right: 10px;
-        margin-top: 3px;
-        display: none;
-    }
-
-    @keyframes loader-spin {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-
-    /* responsive layout */
-    @media (min-width: 1275px) {
-        #inner-test-container {
-            display: flex;
-            flex-direction: row;
-        }
-
-        #infocurrent {
-            align-self: flex-end;
-            min-width: 350px;
-        }
-
-        #infocurrent p:last-of-type {
-            margin-bottom: 0px;
-        }
-    }
-
-</style>
 {% endblock %}
 
 
@@ -123,7 +40,8 @@
 
 
         <div class="gauge">
-            <!-- <button class="start-test" disabled="true">{{ STRINGS[DEFAULT_LANG]["start_test"] }}</button> -->
+            <!-- This code is based on the great Open Source code by nic.cz -->
+            <!-- You can find their repository here: https://gitlab.labs.nic.cz/websites/netmetr.cz -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <path id="init" class="gauge active init" d="m216.4 87.5c12.638-25.427 33.09-46.28 58.22-59.42"></path>
                 <path id="ping" class="gauge active ping" d="m285.5 22.996c15.803-6.531 33.12-10.135 51.29-10.135 5.249 0 10.428.301 15.521.887"></path>
@@ -131,7 +49,7 @@
                 <path id="upload" class="gauge active upload" d="m459.93 201.02c-20.747 47.42-68.08 80.55-123.15 80.55-28.353 0-54.655-8.783-76.33-23.776"></path>
                 <path id="speed" class="gauge speed" d="m299.35 352.53c.001.155.001.311.001.466 0 74.2-60.15 134.35-134.35 134.35-74.2 0-134.35-60.15-134.35-134.35 0-74.2 60.15-134.35 134.35-134.35 26.83 0 51.823 7.864 72.799 21.413"></path>
                 <text x="343.5" y="161.56" font-size="40" text-anchor="middle" id="percents"></text>
-                <!-- <text x="343.5" y="186" font-size="14" text-anchor="middle" id="status"></text> -->
+
                 <text x="163.93"y="367.56" text-anchor="middle" font-size="40" id="speedtext"></text>
                 <text x="163.93"y="392" text-anchor="middle" font-size="14" id="speedunit"></text>
 
@@ -140,12 +58,6 @@
         </div>
 
         <div id="infocurrent" style="margin-top:3em;">
-            <!-- <p>
-        <div class="row">
-            <div class="col-sm-3">{{ Lang.state }}</div>
-            <div class="col-sm-9" id="infostatus">-</div>
-        </div>
-        </p> -->
             <p>
             <div class="row inforow">
                 <div class="col-sm-3">{{ Lang.ping }}</div>
