@@ -762,6 +762,7 @@ var SvgTestVisualization = (function () {
                 break;
             case TestState.ERROR:
                 text = Lang.getString('Error');
+                callErrorCallback();
                 elem = "not-here";
                 break;
             case TestState.ABORTED:
@@ -984,11 +985,7 @@ var SvgTestVisualization = (function () {
             _redraw_loop = setTimeout(draw, 250);
             //Draw a new chart
         } else if (status === "ERROR" || status === "ABORTED") {
-            if (_successCallback !== null) {
-                var t = _errorCallback;
-                _errorCallback = null;
-                t(result);
-            }
+            callErrorCallback(result);
         } else if (status === "END") {
             // call callback that the test is finished
             if (_successCallback !== null) {
@@ -998,6 +995,14 @@ var SvgTestVisualization = (function () {
                 t(result);
             }
             redirectToTestResult();
+        }
+    }
+
+    function callErrorCallback(result) {
+        if (_errorCallback !== null) {
+            var t = _errorCallback;
+            _errorCallback = null;
+            t(result);
         }
     }
 

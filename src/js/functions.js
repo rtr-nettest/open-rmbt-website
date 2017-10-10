@@ -112,11 +112,14 @@ function requestBrowserData(callback, options) {
                                 //is it android?
                                 if (browser_agent.match(/Android|Opera M(obi|ini)|Dolfin|Dolphin/g)) {
                                     $("#androidApp").show();
+                                    //also display links to phone stores (if available)
+                                    $("#androidApp").html('<p>' + Lang.getString('AndroidAppAvailable') + '</p>');
                                 }
 
                                 //is it iOS?
                                 else if (browser_agent.match(/iP(hone|od|ad)/g)) {
                                     $("#iOSApp").show();
+                                    $("#iOSApp").html('<p>' + Lang.getString('IOSAppAvailable') + '</p>');
                                 }
                             }
 
@@ -1425,10 +1428,7 @@ function RMBTstatistics() {
 function start_jstest() {
 	$("#noJavaWarning").html('<p>' + Lang.getString('NoJavaAvailable') + '</p>');
         
-        //also display links to phone stores (if available)
-        $("#androidApp").html('<p>' + Lang.getString('AndroidAppAvailable') + '</p>');
-        
-        $("#iOSApp").html('<p>' + Lang.getString('IOSAppAvailable') + '</p>');
+
         
 	setCookie("RMBTndt", '0', 365 * 20 * 24 * 3600);
 	requestBrowserData('RMBTsettings','jstest');
@@ -1454,13 +1454,20 @@ function RMBTWebsocketTest(uuid) {
     var websocketTest = new RMBTTest(config, controlServerConnection);
 
 
-    websocketTest.onError(function () {
+    websocketTest.onError(function (msg) {
         if (fallbackOnJS === true) {
             //something failed
             start_jstest();
         }
         else {
-            TestEnvironment.getTestVisualization().setStatus(TestState.ERROR);
+            if (msg === RMBTError.NOT_SUPPORTED) {
+                $("#popuperror").empty();
+                $("#popuperror").append('<p>' + Lang.getString('BrowserOutdated') + '</p>');
+                show_errorPopup();
+            }
+            else {
+                TestEnvironment.getTestVisualization().setStatus(TestState.ERROR);
+            }
             //popup is handled by Test Vizualization
         }
     });

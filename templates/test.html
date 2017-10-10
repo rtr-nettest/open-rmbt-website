@@ -83,7 +83,7 @@
 
     /* responsive layout */
     @media (min-width: 1275px) {
-        .testcontainer {
+        #inner-test-container {
             display: flex;
             flex-direction: row;
         }
@@ -107,167 +107,37 @@
 <div id="noJavaWarning"></div>
 <div id="androidApp"></div>
 <div id="iOSApp"></div>
-<!-- <div id="dashboard" style="display:none;">
-    <div id="gauge">
-        <div id="result-table">
-            <table class="dont-stack">
-                <colgroup>
-                    <col class="table-label" />
-                    <col />
-                </colgroup>
-                <tr>
-                    <td>Status:</td>
-                    <td>
-                        <div id="infostatus">
-                            -
-                        </div><div id="activity-indicator"></div></td>
-                </tr>
-                <tr>
-                    <td>Ping:</td>
-                    <td id="showPing">-</td>
-                </tr>
-                <tr>
-                    <td>Down:</td>
-                    <td id="showDown">-</td>
-                </tr>
-                <tr class="last-line">
-                    <td>Up:</td>
-                    <td id="showUp">-</td>
-                </tr>
 
-            </table>
-        </div>
-        <div id="overlay"></div>
-        <canvas id="canvas-progress" width="300" height="300"></canvas>
-        <canvas id="canvas-downup" width="300" height="300"></canvas>
-
-        <div id="info-table">
-            <table class="dont-stack">
-                <colgroup>
-                    <col class="table-label" />
-                    <col class="table-value" />
-                </colgroup>
-                <tr>
-                    <td>{{ Lang.coordinates }}:</td>
-                    <td class="val" id="infogeo">-
-                        <br/>
-                        &nbsp;</td>
-                </tr>
-                <tr>
-                    <td>Testserver:</td>
-                    <td class="val" id="infoserver">-
-                        <br/>
-                        &nbsp;</td>
-                </tr>
-                <tr>
-                    <td>IP:</td>
-                    <td class="val" id="infoip">-</td>
-                </tr>
-                <tr class="last-line">
-                    <td>{{ Lang.provider }}:</td>
-                    <td class="val" id="infoprovider">-</td>
-                </tr>
-            </table>
-        </div>
-
-    </div>
-
-</div>
-<div id="dashboard_easy" style="display:none">
-    <div id="result-table">
-        <table class="dont-stack">
-            <colgroup>
-                <col class="table-label" />
-                <col />
-            </colgroup>
-            <tr>
-                <td>Progress:</td>
-                <td><div id="progbar" style="width: 1px; height: 10px;"></div></td>
-            </tr>
-            <tr>
-                <td>Download speed:</td>
-                <td><div id="dlbar" style="width: 1px; height: 10px;"></div></td>
-            </tr>
-            <tr>
-                <td>Upload speed:</td>
-                <td><div id="ulbar" style="width: 1px; height: 10px;"></div></td>
-            </tr>
-            <tr>
-                <td>Status:</td>
-                <td>
-                    <div id="infostatus">
-                        -
-                    </div><div id="activity-indicator"></div></td>
-            </tr>
-            <tr>
-                <td>Ping:</td>
-                <td id="showPing">-</td>
-            </tr>
-            <tr>
-                <td>Down:</td>
-                <td id="showDown">-</td>
-            </tr>
-            <tr>
-                <td>Up:</td>
-                <td id="showUp">-</td>
-            </tr>
-            <tr>
-                <td>{{ Lang.coordinates }}:</td>
-                <td class="val" id="infogeo">-</td>
-            </tr>
-            <tr>
-                <td>Testserver:</td>
-                <td class="val" id="infoserver">-</td>
-            </tr>
-            <tr>
-                <td>IP:</td>
-                <td class="val" id="infoip">-</td>
-            </tr>
-            <tr>
-                <td>{{ Lang.provider }}:</td>
-                <td class="val" id="infoprovider">-</td>
-            </tr>
-
-        </table>
-
-    </div>
-</div>
 <div id="loading-placeholder">
     <h2>Test framework is loading...</h2>
-</div>-->
+</div>
 <noscript>
-    <div id="error_placeholder">
+    <div id="error-placeholder">
         <h2>The qostest.eu could not be loaded</h2>
         Please activate JavaScript!
     </div>
 </noscript>
 
-<!--
-<div id="chart">Chart</div>
--->
-</div> <!-- test_container -->
-
-
-    <div class="testcontainer">
+    <div id="inner-test-container" style="display: none">
 
 
 
-    <div class="gauge">
-        <!-- <button class="start-test" disabled="true">{{ STRINGS[DEFAULT_LANG]["start_test"] }}</button> -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <path id="init" class="gauge active init" d="m216.4 87.5c12.638-25.427 33.09-46.28 58.22-59.42"></path>
-            <path id="ping" class="gauge active ping" d="m285.5 22.996c15.803-6.531 33.12-10.135 51.29-10.135 5.249 0 10.428.301 15.521.887"></path>
-            <path id="download" class="gauge active download" d="m364 15.617c61.16 12.578 107.15 66.72 107.15 131.6 0 15.07-2.48 29.555-7.05 43.08"></path>
-            <path id="upload" class="gauge active upload" d="m459.93 201.02c-20.747 47.42-68.08 80.55-123.15 80.55-28.353 0-54.655-8.783-76.33-23.776"></path>
-            <path id="speed" class="gauge speed" d="m299.35 352.53c.001.155.001.311.001.466 0 74.2-60.15 134.35-134.35 134.35-74.2 0-134.35-60.15-134.35-134.35 0-74.2 60.15-134.35 134.35-134.35 26.83 0 51.823 7.864 72.799 21.413"></path>
-            <text x="343.5" y="161.56" font-size="40" text-anchor="middle" id="percents"></text>
-            <!-- <text x="343.5" y="186" font-size="14" text-anchor="middle" id="status"></text> -->
-            <text x="163.93"y="367.56" text-anchor="middle" font-size="40" id="speedtext"></text>
-            <text x="163.93"y="392" text-anchor="middle" font-size="14" id="speedunit"></text>
+        <div class="gauge">
+            <!-- <button class="start-test" disabled="true">{{ STRINGS[DEFAULT_LANG]["start_test"] }}</button> -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path id="init" class="gauge active init" d="m216.4 87.5c12.638-25.427 33.09-46.28 58.22-59.42"></path>
+                <path id="ping" class="gauge active ping" d="m285.5 22.996c15.803-6.531 33.12-10.135 51.29-10.135 5.249 0 10.428.301 15.521.887"></path>
+                <path id="download" class="gauge active download" d="m364 15.617c61.16 12.578 107.15 66.72 107.15 131.6 0 15.07-2.48 29.555-7.05 43.08"></path>
+                <path id="upload" class="gauge active upload" d="m459.93 201.02c-20.747 47.42-68.08 80.55-123.15 80.55-28.353 0-54.655-8.783-76.33-23.776"></path>
+                <path id="speed" class="gauge speed" d="m299.35 352.53c.001.155.001.311.001.466 0 74.2-60.15 134.35-134.35 134.35-74.2 0-134.35-60.15-134.35-134.35 0-74.2 60.15-134.35 134.35-134.35 26.83 0 51.823 7.864 72.799 21.413"></path>
+                <text x="343.5" y="161.56" font-size="40" text-anchor="middle" id="percents"></text>
+                <!-- <text x="343.5" y="186" font-size="14" text-anchor="middle" id="status"></text> -->
+                <text x="163.93"y="367.56" text-anchor="middle" font-size="40" id="speedtext"></text>
+                <text x="163.93"y="392" text-anchor="middle" font-size="14" id="speedunit"></text>
 
-        </svg>
+            </svg>
 
-    </div>
+        </div>
 
         <div id="infocurrent" style="margin-top:3em;">
             <!-- <p>
@@ -318,6 +188,12 @@
 
         </div>
     </div>
+
+<!--
+<div id="chart">Chart</div>
+-->
+</div> <!-- test_container -->
+
 
 <!-- Site or application content end -->
 

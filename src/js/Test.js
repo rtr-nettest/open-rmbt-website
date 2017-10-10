@@ -177,7 +177,7 @@ $(document).ready(function() {
         }, function(result) {
             //error callback
             $("#popuperror").empty();
-            $("#popuperror").append('<p>' + Lang.getString('PrematureEnd') + '</p>');
+            $("#popuperror").append('<p>' + Lang.getString('ErrorOccuredDuringTest') + '</p>');
             show_errorPopup();
         }));
 
@@ -219,10 +219,9 @@ $(document).ready(function() {
                 
                 else if (!Modernizr.canvas) {
                 	var errormessage = (selectedLanguage=='de')?'<p>Ihr Browser ist zu alt und unterstützt nicht alle Funktionen, die zur Durchführung des Tests notwendig wären. Bitte verwenden Sie einen neueren oder anderen Browser.</p>':'<p>Your browser version is outdated and does not support all features necessary. Please use a newer browser version.<p>';
-                	$("#error_placeholder").hide();
-                	$("#dashboard").detach();
-                	$("#dashboard_easy").show();
-                            setTimeout(function(){show_agbform(true, 'jstest_easy');},2000);
+                    $("#popuperror").empty();
+                    $("#popuperror").append(errormessage);
+                    show_errorPopup();
                         }
                 else if (noJava) {
                 	var errormessage = (selectedLanguage=='de')?'<p>Um den RTR-Netztest nutzen zu können, muss die aktuelle Java Version installiert und aktiviert sein.</p><p>Sie können Java auf <a href="http://www.java.com/de/download/">dieser Seite</a> herunter laden.</p>':'<p>To use the RTR-NetTest you need to install and activate the latest java version.</p><p>Download the latest java version here:<br /><a href="http://www.java.com/de/download/">http://www.java.com/de/download/</a></p>';
