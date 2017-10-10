@@ -965,6 +965,8 @@ var SvgTestVisualization = (function () {
             else if (directionSymbol !== null) {
                 //again set .text and .html for Internet Explorer
                 $("#speedtext").text(directionSymbol);
+                $("#speed").attr("class","gauge speed");
+                setBarPercentage("#speed",0);
                 $("#speedtext").html("<tspan style=\"fill:#59b200\">" + directionSymbol + "</tspan>");
             }
             //if no speed is available - clear fields, but without any animations

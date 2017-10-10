@@ -217,7 +217,7 @@ $(document).ready(function() {
                 	show_errorPopup();	
                 }
                 
-                else if (!Modernizr.canvas) {
+                else if (!Modernizr.canvas || navigator.appVersion.indexOf("MSIE 10") !== -1) {
                 	var errormessage = (selectedLanguage=='de')?'<p>Ihr Browser ist zu alt und unterstützt nicht alle Funktionen, die zur Durchführung des Tests notwendig wären. Bitte verwenden Sie einen neueren oder anderen Browser.</p>':'<p>Your browser version is outdated and does not support all features necessary. Please use a newer browser version.<p>';
                     $("#popuperror").empty();
                     $("#popuperror").append(errormessage);
