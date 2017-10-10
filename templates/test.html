@@ -1,5 +1,6 @@
 {% extends basetemplate %}
 {% set title = Lang.test %}
+{% set containerclass = "full-width" %}
 
 {% block headerscriptingExtended %}
 <link rel="stylesheet" href="../{{ fingerprint["css/test.css"] }}">
@@ -17,15 +18,11 @@
 
 
 <style>
-    @media only screen and  (max-width: 960px)  {
-        .hgwrapper {
-            width: 560px !important;
-        }
-    }
 
     .gauge {
-        width: 500px;
-        height: 500px;
+        width: 100%;
+        max-width: 500px;
+        height: auto;
         background: url("../images/gauge.svg");
         background-repeat: repeat;
         background-position-x: 0%;
@@ -87,9 +84,6 @@
 </style>
 {% endblock %}
 
-{% block viewport %}
-<meta name="viewport" content="width=595" />
-{% endblock %}
 
 {% block content %}
 <div id="test_container">
@@ -240,7 +234,7 @@
 
     <div class="gauge">
         <!-- <button class="start-test" disabled="true">{{ STRINGS[DEFAULT_LANG]["start_test"] }}</button> -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" xmlns:xlink="http://www.w3.org/1999/xlink">
             <path id="init" class="gauge active init" d="m216.4 87.5c12.638-25.427 33.09-46.28 58.22-59.42"></path>
             <path id="ping" class="gauge active ping" d="m285.5 22.996c15.803-6.531 33.12-10.135 51.29-10.135 5.249 0 10.428.301 15.521.887"></path>
             <path id="download" class="gauge active download" d="m364 15.617c61.16 12.578 107.15 66.72 107.15 131.6 0 15.07-2.48 29.555-7.05 43.08"></path>

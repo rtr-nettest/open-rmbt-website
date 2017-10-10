@@ -645,6 +645,13 @@ var SvgTestVisualization = (function () {
         $("#infoping span").text("-");
         $("#infodown span").text("-");
         $("#infoup span").text("-");
+
+        //IE11 fix
+        //(IE detection: https://stackoverflow.com/a/21825207)
+        if (!!window.MSInputMethodContext && !!document.documentMode) {
+            $(".gauge").css("height","500px");
+            $(".gauge").css("width","500px");
+        }
     }
 
     function progress_segment(status, progress) {
