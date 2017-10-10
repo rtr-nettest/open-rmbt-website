@@ -631,6 +631,10 @@ var SvgTestVisualization = (function () {
             _errorCallback = errorCallback;
         }
 
+        $("#loading-placeholder").remove();
+        $("#error-placeholder").remove();
+        $("#inner-test-container").show();
+
         _infogeo = document.getElementById("infogeo");
         _infoserver = document.getElementById("infoserver");
         _infoip = document.getElementById("infoip");
@@ -656,30 +660,32 @@ var SvgTestVisualization = (function () {
 
     function progress_segment(status, progress) {
         var ProgressSegmentsTotal = 96;
-        var ProgressSegmentsInit = 14;
+        var ProgressSegmentsInit = 1;
+        var ProgressSegmentsInitDown = 13;
         var ProgressSegmentsPing = 15;
         var ProgressSegmentsDown = 34;
-        var ProgressSegmentsUp = 33;
+        var ProgressSegmentsInitUp = 4;
+        var ProgressSegmentsUp = 29;
         var progressValue = 0;
         var progressSegments = 0;
         switch (status) {
             case "INIT":
-                progressSegments = 0;
+                progressSegments = + Math.round(ProgressSegmentsInit * progress);
                 break;
             case "INIT_DOWN":
-                progressSegments = Math.round(ProgressSegmentsInit * progress);
+                progressSegments = ProgressSegmentsInit + Math.round(ProgressSegmentsInitDown * progress);
                 break;
             case "PING":
-                progressSegments = ProgressSegmentsInit + Math.round(ProgressSegmentsPing * progress);
+                progressSegments = ProgressSegmentsInit + ProgressSegmentsInitDown + Math.round(ProgressSegmentsPing * progress);
                 break;
             case "DOWN":
-                progressSegments = ProgressSegmentsInit + ProgressSegmentsPing + Math.round(ProgressSegmentsDown * progress);
+                progressSegments = ProgressSegmentsInit + ProgressSegmentsInitDown + ProgressSegmentsPing + Math.round(ProgressSegmentsDown * progress);
                 break;
             case "INIT_UP":
-                progressSegments = ProgressSegmentsInit + ProgressSegmentsPing + ProgressSegmentsDown;
+                progressSegments = ProgressSegmentsInit + ProgressSegmentsInitDown + ProgressSegmentsPing + ProgressSegmentsDown + Math.round(ProgressSegmentsInitUp * progress);
                 break;
             case "UP":
-                progressSegments = ProgressSegmentsInit + ProgressSegmentsPing + ProgressSegmentsDown + Math.round(ProgressSegmentsUp * progress);
+                progressSegments = ProgressSegmentsInit + ProgressSegmentsInitDown + ProgressSegmentsPing + ProgressSegmentsDown + ProgressSegmentsInitUp + Math.round(ProgressSegmentsUp * progress);
                 progressSegments = Math.min(95, progressSegments);
                 break;
             case "END":
@@ -767,6 +773,7 @@ var SvgTestVisualization = (function () {
         if (elem !== null) {
             $("#infocurrent").find("div.row").not(":has(#" + elem + ")").find(".loader").hide();
             $("#infocurrent").find("div.row #" + elem + " .loader").show();
+            $("#infocurrent").find("div.row #" + elem + " span").text(" ");
         }
         else {
             $("#infocurrent").find("div.row  .loader").hide();
@@ -886,7 +893,8 @@ var SvgTestVisualization = (function () {
             var directionSymbol = null;
             var fullProgress = Math.round(progress_segment(status, progress) * 100);
             var active = false;
-            $("#percents").text(fullProgress + "\u2009%");
+            //\u200a = Unicode Hairspace (since thin space is not thin enough)
+            $("#percents").text(fullProgress + "\u200a%");
             switch(status) {
                 case TestState.INIT:
                     barSelector = "#init";
@@ -905,20 +913,22 @@ var SvgTestVisualization = (function () {
                     setBarPercentage("#ping", 1);
                     barSelector = "#download";
                     speedMbit = down / 1e6;
-                    directionSymbol = "\u21a7";
+                    //set symbol as unicode, since IE won't handle html entities
+                    directionSymbol = "\u21a7"; //↧
                     break;
                 case TestState.INIT_UP:
                     setBarPercentage("#download", 1);
                     barSelector = "#upload";
                     progress = Math.min(0.95, progress * .1);
                     active=false;
+                    directionSymbol = "\u21a5"; //↥
                     break;
                 case TestState.UP:
                     active=true;
                     barSelector = "#upload";
                     progress = Math.min(0.95, progress * .9 + .1);
                     speedMbit = up / 1e6;
-                    directionSymbol = "\u21a5";
+                    directionSymbol = "\u21a5"; //↥
                     break;
                 case TestState.END:
                     barSelector = "#upload";
@@ -928,29 +938,42 @@ var SvgTestVisualization = (function () {
             if (barSelector !== null) {
                 setBarPercentage(barSelector, progress);
             }
+
+            //if speed information is available - set text
             if (speedMbit !== null && speedMbit > 0) {
-                //logarithmic to 1Gbit, but [0,1]
+                //logarithmic to 1Gbit
                 var speedLog = (2+Math.log10(speedMbit))/5;
+                //but cap at [0,1]
                 speedLog = Math.max(speedLog,0);
                 speedLog = Math.min(1, speedLog);
                 setBarPercentage("#speed",speedLog);
+
+                //set .text and .html, since .html is not ignored by Internet Explorer
+                //\u2009 = unicode "hair space"
                 $("#speedtext").text(directionSymbol + "\u2009" + speedMbit.formatNumber(getSignificantDigits(speedMbit)));
+                $("#speedtext").html("<tspan style=\"fill:#59b200\">" + directionSymbol + "</tspan>\u200a" + speedMbit.formatNumber(getSignificantDigits(speedMbit)));
                 $("#speedunit").text(Lang.getString('Mbps'));
+
+                //enable smoothing animations on speed gauge, as soon as initial speed value is set
+                //as not to visualize a gradually increase of speed
                 setTimeout(function() {
                     $("#speed").attr("class","gauge speed active");
                 },500);
-            }else {
+            }
+            //if only direction symbol is set - display this (init upload phase)
+            else if (directionSymbol !== null) {
+                //again set .text and .html for Internet Explorer
+                $("#speedtext").text(directionSymbol);
+                $("#speedtext").html("<tspan style=\"fill:#59b200\">" + directionSymbol + "</tspan>");
+            }
+            //if no speed is available - clear fields, but without any animations
+            else {
                 $("#speed").attr("class","gauge speed");
                 setBarPercentage("#speed",0);
-                //$("#speedtext").text("");
-                //$("#speedunit").text("");
+                $("#speedtext").text("");
+                $("#speedunit").text("");
             }
 
-
-
-            //var fullProgress = Math.round(progress_segment(status, progress) * 100);
-            //$("#testprogress").css("width", fullProgress + "%");
-            //$("#testprogress").text(fullProgress + " %");
         };
 
         drawLoop();
@@ -989,15 +1012,7 @@ var SvgTestVisualization = (function () {
     };
 
     function redirectToTestResult() {
-        var forwardUrl = "/" + selectedLanguage + "/Verlauf";
-        if (preferredTest === TestTypes.Java || getParam("Java")) {
-            forwardUrl += "?Java=True"
-        }
-        forwardUrl += "#";
-        forwardUrl += _testUUID;
-        setTimeout(function() {
-            window.location.href = forwardUrl;
-        }, 2000);
+
     }
 
     return SvgTestVisualization;

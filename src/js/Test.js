@@ -164,7 +164,22 @@ function start_test() {
 
 $(document).ready(function() {
     
-        TestEnvironment.init(new SvgTestVisualization());
+        TestEnvironment.init(new SvgTestVisualization(function(result) {
+            //success callback
+            //redirect to result
+            var forwardUrl = "/" + selectedLanguage + "/Verlauf";
+            forwardUrl += "#";
+            forwardUrl += result["testUUID"];
+            setTimeout(function() {
+                window.location.href = forwardUrl;
+            }, 2000);
+
+        }, function(result) {
+            //error callback
+            $("#popuperror").empty();
+            $("#popuperror").append('<p>' + Lang.getString('PrematureEnd') + '</p>');
+            show_errorPopup();
+        }));
 
     
                
