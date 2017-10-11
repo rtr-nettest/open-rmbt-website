@@ -227,7 +227,7 @@ function transformRTRUrls(fileList) {
         "/tk/netztestopendata": "Opendata",
         "/tk/netztestverlauf": "Verlauf",
         "/tk/rtrnetztestoptionen": "Optionen",
-        "/tk/netztest" : ""
+        "/tk/netztest" : "/"
     };
     var replaceDirectives = [
         function($, path){
