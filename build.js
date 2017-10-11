@@ -226,7 +226,8 @@ function transformRTRUrls(fileList) {
         "/tk/rtrnetzteststatistik": "Statistik",
         "/tk/netztestopendata": "Opendata",
         "/tk/netztestverlauf": "Verlauf",
-        "/tk/rtrnetztestoptionen": "Optionen"
+        "/tk/rtrnetztestoptionen": "Optionen",
+        "/tk/netztest" : ""
     };
     var replaceDirectives = [
         function($, path){
@@ -257,7 +258,7 @@ function transformRTRUrls(fileList) {
                         //maybe it's even a special nettest url that needs to be relative?
                         if (href.indexOf('netztest') !== -1) {
                             for(var key in specialNetTestUrls) {
-                                if (href.indexOf(key) !== -1) {
+                                if (href.endsWith(key) === true) {
                                     $(this).attr("href", specialNetTestUrls[key]);
                                 }
                             }
