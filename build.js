@@ -71,7 +71,9 @@ var metalsmith = Metalsmith(__dirname)
 //      "./templates/parts/03_navigationToContent_en.html",
 //      "./templates/parts/03_navigationToContent_de.html",
         "./templates/parts/04_contentToFooter_de.html",
-        "./templates/parts/04_contentToFooter_en.html"
+        "./templates/parts/04_contentToFooter_en.html",
+        "./templates/parts/05_footerScripts_no_mlpushmenu_de.html",
+        "./templates/parts/05_footerScripts_no_mlpushmenu_en.html"
     ]))
     .use(setConfig())
     .use(duplicateFile())
@@ -262,6 +264,9 @@ function transformRTRUrls(fileList) {
                 });
 
                 var html = $.html();
+
+                //remove piwik
+                html = html.replace(/piwik\.rtr\.at/g,"www.netztest.at/piwik");
 
                 fs.writeFile(path, html, function(err) {
                     count++;
