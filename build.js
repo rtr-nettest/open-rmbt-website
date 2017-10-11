@@ -227,15 +227,9 @@ function transformRTRUrls(fileList) {
         "/tk/netztestopendata": "Opendata",
         "/tk/netztestverlauf": "Verlauf",
         "/tk/rtrnetztestoptionen": "Optionen",
-        "/tk/netztest" : "/"
+        "/tk/netztest" : ""
     };
-    var replaceDirectives = [
-        function($, path){
-            var language = (path.indexOf("_de")>0)?"de":"en";
-            $(".header-logo a").attr("href","/" + language);
-        }
-    ];
-    
+
     return function(files, metalsmith, done) {
         if (downloadedOnce) {
             done();
@@ -245,6 +239,7 @@ function transformRTRUrls(fileList) {
 
         var count = 0;
         fileList.forEach(function(path) {
+            var language = (path.indexOf("_de")>0)?"de":"en";
             fs.readFile(path, function(err, data) {
                 var $ = cheerio.load(data);
 
@@ -259,15 +254,11 @@ function transformRTRUrls(fileList) {
                         if (href.indexOf('netztest') !== -1) {
                             for(var key in specialNetTestUrls) {
                                 if (href.endsWith(key) === true) {
-                                    $(this).attr("href", specialNetTestUrls[key]);
+                                    $(this).attr("href", "/" + language + "/" + specialNetTestUrls[key]);
                                 }
                             }
                         }
                     }
-
-                    replaceDirectives.forEach(function(t) {
-                        t($, path);
-                    });
                 });
 
                 var html = $.html();
