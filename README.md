@@ -33,7 +33,7 @@ Building and running the Website
 
     Use the `build`-directory as the root directory for your
 	webserver, e.g.	in conjunction with the `http-server` 
-	node module (`npm install http-server`)
+	node module (`npm install http-server -g`)
 	
 	```bash
 	http-server build -p 8081
