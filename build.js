@@ -71,7 +71,9 @@ var metalsmith = Metalsmith(__dirname)
 //      "./templates/parts/03_navigationToContent_en.html",
 //      "./templates/parts/03_navigationToContent_de.html",
         "./templates/parts/04_contentToFooter_de.html",
-        "./templates/parts/04_contentToFooter_en.html"
+        "./templates/parts/04_contentToFooter_en.html",
+        "./templates/parts/05_footerScripts_no_mlpushmenu_de.html",
+        "./templates/parts/05_footerScripts_no_mlpushmenu_en.html"
     ]))
     .use(setConfig())
     .use(duplicateFile())
@@ -226,15 +228,10 @@ function transformRTRUrls(fileList) {
         "/tk/rtrnetzteststatistik": "Statistik",
         "/tk/netztestopendata": "Opendata",
         "/tk/netztestverlauf": "Verlauf",
-        "/tk/rtrnetztestoptionen": "Optionen"
+        "/tk/rtrnetztestoptionen": "Optionen",
+        "/tk/netztest" : ""
     };
-    var replaceDirectives = [
-        function($, path){
-            var language = (path.indexOf("_de")>0)?"de":"en";
-            $(".header-logo a").attr("href","/" + language);
-        }
-    ];
-    
+
     return function(files, metalsmith, done) {
         if (downloadedOnce) {
             done();
@@ -244,6 +241,7 @@ function transformRTRUrls(fileList) {
 
         var count = 0;
         fileList.forEach(function(path) {
+            var language = (path.indexOf("_de")>0)?"de":"en";
             fs.readFile(path, function(err, data) {
                 var $ = cheerio.load(data);
 
@@ -257,19 +255,18 @@ function transformRTRUrls(fileList) {
                         //maybe it's even a special nettest url that needs to be relative?
                         if (href.indexOf('netztest') !== -1) {
                             for(var key in specialNetTestUrls) {
-                                if (href.indexOf(key) !== -1) {
-                                    $(this).attr("href", specialNetTestUrls[key]);
+                                if (href.endsWith(key) === true) {
+                                    $(this).attr("href", "/" + language + "/" + specialNetTestUrls[key]);
                                 }
                             }
                         }
                     }
-
-                    replaceDirectives.forEach(function(t) {
-                        t($, path);
-                    });
                 });
 
                 var html = $.html();
+
+                //remove piwik
+                html = html.replace(/piwik\.rtr\.at/g,"www.netztest.at/piwik");
 
                 fs.writeFile(path, html, function(err) {
                     count++;
