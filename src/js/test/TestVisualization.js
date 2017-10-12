@@ -8,8 +8,12 @@
  *  The status can be set directly via setStatus or in the intermediateResult
  *  Information (provider, ip, uuid, etc.) has to be set via updateInformation
  *  As soon as the test reaches the "End"-State, the result page is called
+ *
+ * ------------------------------------------------------------------------------------
+ *
+ * Parts of this test visualization are based on the great Open Source code from CZ.NIC
+ * You can find their repository here: https://gitlab.labs.nic.cz/websites/netmetr.cz
  */
-
 var SvgTestVisualization = (function () {
     var _rmbtTest;
 

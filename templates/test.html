@@ -30,7 +30,7 @@
 </div>
 <noscript>
     <div id="error-placeholder">
-        <h2>The qostest.eu could not be loaded</h2>
+        <h2>The test could not be loaded</h2>
         Please activate JavaScript!
     </div>
 </noscript>
@@ -40,7 +40,8 @@
 
 
         <div class="gauge">
-            <!-- This code is based on the great Open Source code by nic.cz -->
+
+            <!-- This code is based on the great Open Source code by CZ.NIC -->
             <!-- You can find their repository here: https://gitlab.labs.nic.cz/websites/netmetr.cz -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <path id="init" class="gauge active init" d="m216.4 87.5c12.638-25.427 33.09-46.28 58.22-59.42"></path>
@@ -49,15 +50,13 @@
                 <path id="upload" class="gauge active upload" d="m459.93 201.02c-20.747 47.42-68.08 80.55-123.15 80.55-28.353 0-54.655-8.783-76.33-23.776"></path>
                 <path id="speed" class="gauge speed" d="m299.35 352.53c.001.155.001.311.001.466 0 74.2-60.15 134.35-134.35 134.35-74.2 0-134.35-60.15-134.35-134.35 0-74.2 60.15-134.35 134.35-134.35 26.83 0 51.823 7.864 72.799 21.413"></path>
                 <text x="343.5" y="161.56" font-size="40" text-anchor="middle" id="percents"></text>
-
-                <text x="163.93"y="367.56" text-anchor="middle" font-size="40" id="speedtext"></text>
-                <text x="163.93"y="392" text-anchor="middle" font-size="14" id="speedunit"></text>
-
+                <text x="163.93" y="367.56" text-anchor="middle" font-size="40" id="speedtext"></text>
+                <text x="163.93" y="392" text-anchor="middle" font-size="14" id="speedunit"></text>
             </svg>
 
         </div>
 
-        <div id="infocurrent" style="margin-top:3em;">
+        <div id="infocurrent">
             <p>
             <div class="row inforow">
                 <div class="col-sm-3">{{ Lang.ping }}</div>
@@ -101,17 +100,7 @@
         </div>
     </div>
 
-<!--
-<div id="chart">Chart</div>
--->
+
 </div> <!-- test_container -->
 
-
-<!-- Site or application content end -->
-
-<!-- S<script src="../{{ fingerprint["js/jquery-1.8.2.min.js"] }}"></script>
-<script>
-window.jQuery || document.write('<script src="../{{ fingerprint["js/jquery-1.8.2.min.js"] }}"><\/script>')
-</script>-->
-<script src="../{{ fingerprint["js/plugins.js"] }}"></script>
 {% endblock %}
