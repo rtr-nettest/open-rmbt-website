@@ -44,30 +44,32 @@ var LoopTestVisualization = (function () {
 
     function progress_segment(status, progress) {
         var ProgressSegmentsTotal = 96;
-        var ProgressSegmentsInit = 14;
+        var ProgressSegmentsInit = 1;
+        var ProgressSegmentsInitDown = 13;
         var ProgressSegmentsPing = 15;
         var ProgressSegmentsDown = 34;
-        var ProgressSegmentsUp = 33;
+        var ProgressSegmentsInitUp = 4;
+        var ProgressSegmentsUp = 29;
         var progressValue = 0;
         var progressSegments = 0;
         switch (status) {
             case "INIT":
-                progressSegments = 0;
+                progressSegments = + Math.round(ProgressSegmentsInit * progress);
                 break;
             case "INIT_DOWN":
-                progressSegments = Math.round(ProgressSegmentsInit * progress);
+                progressSegments = ProgressSegmentsInit + Math.round(ProgressSegmentsInitDown * progress);
                 break;
             case "PING":
-                progressSegments = ProgressSegmentsInit + Math.round(ProgressSegmentsPing * progress);
+                progressSegments = ProgressSegmentsInit + ProgressSegmentsInitDown + Math.round(ProgressSegmentsPing * progress);
                 break;
             case "DOWN":
-                progressSegments = ProgressSegmentsInit + ProgressSegmentsPing + Math.round(ProgressSegmentsDown * progress);
+                progressSegments = ProgressSegmentsInit + ProgressSegmentsInitDown + ProgressSegmentsPing + Math.round(ProgressSegmentsDown * progress);
                 break;
             case "INIT_UP":
-                progressSegments = ProgressSegmentsInit + ProgressSegmentsPing + ProgressSegmentsDown;
+                progressSegments = ProgressSegmentsInit + ProgressSegmentsInitDown + ProgressSegmentsPing + ProgressSegmentsDown + Math.round(ProgressSegmentsInitUp * progress);
                 break;
             case "UP":
-                progressSegments = ProgressSegmentsInit + ProgressSegmentsPing + ProgressSegmentsDown + Math.round(ProgressSegmentsUp * progress);
+                progressSegments = ProgressSegmentsInit + ProgressSegmentsInitDown + ProgressSegmentsPing + ProgressSegmentsDown + ProgressSegmentsInitUp + Math.round(ProgressSegmentsUp * progress);
                 progressSegments = Math.min(95, progressSegments);
                 break;
             case "END":
