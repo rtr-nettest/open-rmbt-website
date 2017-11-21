@@ -1,40 +1,4 @@
 
-//deprecated
-/* function resetzip(newzip) {
-        $('#yourzip .error').html('');
-        if (newzip.length == 0) {
-                setCookie('RMBTzip', '0000', null);
-                bValid = false;
-        }
-        else if (newzip.length == 4) {
-                var regexp = /^([0-9])+$/;
-                if (!regexp.test(newzip)) {
-                        var tmp = (selectedLanguage=='de')?'Die Posleitzahl darf nur aus Zahlen von 0 - 9 bestehen.':'The post code can only contain numbers 0 - 9.';
-                        $('#yourzip .error').html(tmp);
-                        $('#yourzip input').css('background-color','#DC0000');
-                        $('#yourzip input').css('color','#FFFFFF');
-                        setTimeout(function(){$('#yourzip input').css('background-color','transparent');$('#yourzip input').css('color','#00000');},2000)
-                }
-                else {
-                        setCookie('RMBTzip', newzip, null);
-                        $('#yourzip input').val(newzip);
-                        $('#yourzip input').css('background-color','#3CC828');
-                        $('#yourzip input').css('color','#FFFFFF');
-                        var tmp = (selectedLanguage=='de')?'gespeichert':'saved';
-                        $('#yourzip .error').html(tmp);
-                        setTimeout(function(){$('#yourzip input').css('background-color','transparent');$('#yourzip input').css('color','#00000');$('#yourzip .error').html('');},2000)
-                        
-                }
-        }
-        else {
-                var tmp = (selectedLanguage=='de')?'Die Postleitzahl muss 4-stellig sein.':'The postal code must be 4 digits.';
-                $('#yourzip .error').html(tmp);     
-                $('#yourzip input').css('background-color','#DC0000');
-                $('#yourzip input').css('color','#FFFFFF');
-                setTimeout(function(){$('#yourzip input').css('background-color','transparent');$('#yourzip input').css('color','#00000');},2000)
-        }
-} */
-
 function resetndt() {
         //console.log(value);
         //console.log($('#RMBTndtID').attr("checked"));
@@ -287,7 +251,7 @@ function loadServerList() {
         "uuid": "8aadf45b-0b6c-415c-bf1f-37e285a6de05",
         "version_code": "1",
         "version_name": "0.1",
-        "user_server_selection" : userServerSelection
+        "user_server_selection" : true
     };
     
      $.ajax({
