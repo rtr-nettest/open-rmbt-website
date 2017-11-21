@@ -38,8 +38,8 @@
     -->
 {% endif %}
 
-{% if target == "qostest" %}
-<div id="testserverForm">
+
+<div id="testserverForm" {% if target == "netztest" %}style="display:none"{% endif %}>
     <h3>{{ Lang.server }}</h3>
     {{ Lang.options_content.choose_server_desc }}
     <form id="serverlist" onsubmit="return saveFormValues()">
@@ -51,6 +51,6 @@
         <p id="saveNotification" style="display:none">{{ Lang.options_content.config_saved }}</p>
     </form>
 </div>
-{% endif %}
+
 
 {% endblock %}

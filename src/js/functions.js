@@ -1450,6 +1450,12 @@ function start_websocket() {
 function RMBTWebsocketTest(uuid) {
     var config = new RMBTTestConfig(selectedLanguage, controlProxy, wspath);
     config.uuid = uuid;
+
+    //override userServiceSelection if server was selected to just affect the test itself
+    if (UserConf.preferredServer !== "default") {
+        userServerSelection = true;
+    }
+
     var controlServerConnection = new RMBTControlServerCommunication(config);
     var websocketTest = new RMBTTest(config, controlServerConnection);
 
