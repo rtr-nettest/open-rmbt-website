@@ -82,8 +82,10 @@ function fillArea(target, data, plotLastRow) {
     $(target + " .graph").css("width",$(target + " .graph").width() + "px");
 
     //make container for legend
+    $(target + " .legend").remove();
     var legend = $("<div/>");
     $(target + " .graph").after(legend);
+    legend.addClass("legend");
     
     var plots = new Object();
 
