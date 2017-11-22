@@ -80,6 +80,10 @@ function fillArea(target, data, plotLastRow) {
 
     //set width for flot
     $(target + " .graph").css("width",$(target + " .graph").width() + "px");
+
+    //make container for legend
+    var legend = $("<div/>");
+    $(target + " .graph").after(legend);
     
     var plots = new Object();
 
@@ -122,6 +126,10 @@ function fillArea(target, data, plotLastRow) {
             mode: "time",
             minTickSize: [1, "day"],
             timeformat: "%d.%m."
+        },
+        legend: {
+            noColumns: Math.min(5,flotPlots.length),
+            container: legend
         }
     }); 
     
