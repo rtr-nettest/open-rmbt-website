@@ -79,7 +79,9 @@ exports.strings = {
         "vorarlberg" : "Vorarlberg",
         "vienna" : "Vienna",
         "all_states" : "All provinces",
-        "enddate" : "End date"
+        "enddate" : "End date",
+        "all_operators" : "All operators",
+        "no_operators": "No operators found for the current selection"
     },
 
     "history_content" : {

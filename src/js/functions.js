@@ -817,6 +817,30 @@ function RMBTstatistics() {
                 contentType: "application/json",
                 data: JSON.stringify(json_data),
                 success: function(data) {
+                        $('#statistics_container').spin();
+
+                        //countries
+                        //only once!
+                        if ($("#country option").length === 1) {
+                            data.countries.sort(function(a,b) {
+                                if (Lang.getString("countries")[a.toLowerCase()] < Lang.getString("countries")[b.toLowerCase()]) {
+                                    return -1;
+                                }
+                                else {
+                                    return 1;
+                                }
+                            });
+                            $.each(data.countries, function(index, value) {
+                                if (value === 'AT') return;
+                                $("#country").append('<option value="' + value + '">' + Lang.getString("countries")[value.toLowerCase()] + "</option>");
+                            });
+
+                            if (browser_country_geoip.toUpperCase() !== 'AT' &&     data.countries.indexOf(browser_country_geoip.toUpperCase()) >= 0) {
+                                $("#country").val(browser_country_geoip.toUpperCase());
+                                RMBTstatistics();
+                            }
+                        }
+
                         //calculate open-data-search-parameters
                         var opendata = "";
                         if ($('#statistik_network_type_group').val() === "2G" || $('#statistik_network_type_group').val() === "3G" || $('#statistik_network_type_group').val() === "4G")
@@ -857,414 +881,46 @@ function RMBTstatistics() {
                         $('#statistik_provider_short_foot').empty();
                         $('#statistik_provider_captions_body').empty();
                         $('#statistik_provider_captions_foot').empty();
-                        
-                        
-                        //$('#statistik').append('<tbody>');
-                        $.each(data.providers, function(key,row){
-                                var opentests_provider_query;
-                                if (row.asn !== undefined) {
-                                    opentests_provider_query = "asn=" + row.asn + "&public_ip_as_name=" + row.name + "&country_geoip=" + country.toLowerCase();
-                                }
-                                else if (row.sim_mcc_mnc !== undefined) {
-                                    opentests_provider_query = "sim_mcc_mnc=" + row.sim_mcc_mnc;
-                                }
-                                else if ($("#statistik_type").val() === 'mobile') {
-                                    opentests_provider_query = "mobile_provider_name=" + row.name;
-                                }
-                                else {
-                                    opentests_provider_query = "provider_name=" + row.name;
-                                }
-                            
-                                down_green = row.down_green*100;
-                                if (down_green < 99.5)
-                                        down_green = down_green.toPrecision(2);
-                                else down_green = Math.round(down_green);
-                                down_yellow = row.down_yellow*100;
-                                if (down_yellow < 99.5)
-                                        down_yellow = down_yellow.toPrecision(2);
-                                else down_yellow = Math.round(down_yellow);
-                                down_red = row.down_red*100;
-                                if (down_red < 99.5)
-                                        down_red = down_red.toPrecision(2);
-                                else down_red = Math.round(down_red);
-                                up_green = row.up_green*100;
-                                if (up_green < 100)
-                                        up_green = up_green.toPrecision(2);
-                                up_yellow = row.up_yellow*100;
-                                if (up_yellow < 100)
-                                        up_yellow = up_yellow.toPrecision(2);
-                                up_red = row.up_red*100;
-                                if (up_red < 100)
-                                        up_red = up_red.toPrecision(2);
-                                ping_green = row.ping_green*100;
-                                if (ping_green < 100)
-                                        ping_green = ping_green.toPrecision(2);
-                                ping_yellow = row.ping_yellow*100;
-                                if (ping_yellow < 100)
-                                        ping_yellow = ping_yellow.toPrecision(2);
-                                ping_red = row.ping_red*100;
-                                if (ping_red < 100)
-                                        ping_red = ping_red.toPrecision(2);
-                                
-                                signal_green = row.signal_green*100;
-                                if (signal_green < 100)
-                                        signal_green = signal_green.toPrecision(2);
-                                signal_yellow = row.signal_yellow*100;
-                                if (signal_yellow < 100)
-                                        signal_yellow = signal_yellow.toPrecision(2);
-                                signal_red = row.signal_red*100;
-                                if (signal_red < 100)
-                                        signal_red = signal_red.toPrecision(2);
-                                
-                                quantile_down = row.quantile_down/1000;
-                                if (quantile_down < 100)
-                                        quantile_down = quantile_down.toPrecision(2);
-                                else quantile_down = Math.round(quantile_down);
-                                quantile_up = row.quantile_up/1000;
-                                if (quantile_up < 100)
-                                        quantile_up = quantile_up.toPrecision(2);
-                                else quantile_up = Math.round(quantile_up);
-                                quantile_ping = Math.round(row.quantile_ping/1000000);
-                                
-                                if (row.quantile_signal < 0)
-                                        quantile_signal = row.quantile_signal+' dBm';
-                                else 
-                                        quantile_signal = '-';
-                                
-                                if ($("#statistik_type").val()!='browser') {
-                                        signalDetailDiv =
-                                                '<div id="'+key+'_signal" class="quantile_details signal_details">'+
-                                                row.name+'<br />'+
-                                                'Signal: '+quantile_signal+'<br />'+
-                                                '<span class="green">'+signal_green+'%</span>'+
-                                                '<span class="yellow">'+signal_yellow+'%</span>'+
-                                                '<span class="red">'+signal_red+'%</span>'+
-                                                '</div>';
-                                }
-                                else {
-                                        signalDetailDiv = '';       
-                                }
-                                
-                                
-                                
-                                $('#statistik_provider_body').append(
-                                        '<tr>'+
-                                        '<td>' +row.name+ '</td>'+
-                                        '<td class="align-right quantile"><div>'+quantile_down+' ' + Lang.getString('Mbps')+
-                                        '<div id="'+key+'_down" class="quantile_details">'+
-                                        row.name+'<br />'+
-                                        'Down: '+quantile_down+' ' + Lang.getString('Mbps') + '<br />'+
-                                        '<span class="green">'+down_green+'%</span>'+
-                                        '<span class="yellow">'+down_yellow+'%</span>'+
-                                        '<span class="red">'+down_red+'%</span>'+
-                                        '</div>'+
-                                        '</div></td>'+
-                                        '<td class="align-right quantile"><div>'+quantile_up+' ' + Lang.getString('Mbps')+
-                                        '<div id="'+key+'_up" class="quantile_details">'+
-                                        row.name+'<br />'+
-                                        'Up: '+quantile_up+' ' + Lang.getString('Mbps') + '<br />'+
-                                        '<span class="green">'+up_green+'%</span>'+
-                                        '<span class="yellow">'+up_yellow+'%</span>'+
-                                        '<span class="red">'+up_red+'%</span>'+
-                                        '</div>'+
-                                        '</div></td>'+
-                                        '<td class="align-right quantile"><div>'+quantile_ping+' ms'+
-                                        '<div id="'+key+'_ping" class="quantile_details">'+
-                                        row.name+'<br />'+
-                                        'Ping: '+quantile_ping+' ms<br />'+
-                                        '<span class="green">'+ping_green+'%</span>'+
-                                        '<span class="yellow">'+ping_yellow+'%</span>'+
-                                        '<span class="red">'+ping_red+'%</span>'+
-                                        '</div>'+
-                                        '</div></td>'+
-                                        '<td class="align-right quantile"><div>'+quantile_signal+
-                                        signalDetailDiv+
-                                        '</div></td>'+
-                                        '<td class="align-right"><a href="Opentests?' + opentests_provider_query +opendata+'">'+(row.count.formatNumber(0))+'</a></td>'+
-                                        '</tr>'
-                                );
 
-                                $('#statistik_provider_captions_body').append(
-                                        '<tr>' +
-                                        '<td colspan="5" class="provider-name">' + row.name + '</td>' +
-                                        '</tr>' +
-                                        '<tr>' +
-                                        '<td class="align-right quantile"><div>' + quantile_down + ' ' + Lang.getString('Mbps') +
-                                        '<div id="' + key + '_down" class="quantile_details">' +
-                                        row.name + '<br />' +
-                                        'Down: ' + quantile_down + ' ' + Lang.getString('Mbps') + '<br />' +
-                                        '<span class="green">' + down_green + '%</span>' +
-                                        '<span class="yellow">' + down_yellow + '%</span>' +
-                                        '<span class="red">' + down_red + '%</span>' +
-                                        '</div>' +
-                                        '</div></td>' +
-                                        '<td class="align-right quantile"><div>' + quantile_up + ' ' + Lang.getString('Mbps') +
-                                        '<div id="' + key + '_up" class="quantile_details">' +
-                                        row.name + '<br />' +
-                                        'Up: ' + quantile_up + ' ' + Lang.getString('Mbps') + '<br />' +
-                                        '<span class="green">' + up_green + '%</span>' +
-                                        '<span class="yellow">' + up_yellow + '%</span>' +
-                                        '<span class="red">' + up_red + '%</span>' +
-                                        '</div>' +
-                                        '</div></td>' +
-                                        '<td class="align-right quantile"><div>' + quantile_ping + ' ms' +
-                                        '<div id="' + key + '_ping" class="quantile_details">' +
-                                        row.name + '<br />' +
-                                        'Ping: ' + quantile_ping + ' ms<br />' +
-                                        '<span class="green">' + ping_green + '%</span>' +
-                                        '<span class="yellow">' + ping_yellow + '%</span>' +
-                                        '<span class="red">' + ping_red + '%</span>' +
-                                        '</div>' +
-                                        '</div></td>' +
-                                        '<td class="align-right quantile"><div>' + quantile_signal +
-                                        signalDetailDiv +
-                                        '</div></td>' +
-                                        '<td class="align-right"><a href="Opentests?' + opentests_provider_query + opendata + '">' + row.count.formatNumber() + '</a></td>' +
-                                        '</tr>'
-                                        );
-
-
-                                $('#statistik_provider_short_body').append(
-                                        '<tr>' +
-                                        '<td>' + row.shortname + '</td>' +
-                                        '<td class="align-right quantile"><div>' + quantile_down + ' ' + Lang.getString('Mbps') +
-                                        '<div id="' + key + '_down" class="quantile_details">' +
-                                        row.name + '<br />' +
-                                        'Down: ' + quantile_down + ' ' + Lang.getString('Mbps') + '<br />' +
-                                        '<span class="green">' + down_green + '%</span>' +
-                                        '<span class="yellow">' + down_yellow + '%</span>' +
-                                        '<span class="red">' + down_red + '%</span>' +
-                                        '</div>' +
-                                        '</div></td>' +
-                                        '<td class="align-right quantile"><div>' + quantile_up + ' ' + Lang.getString('Mbps') +
-                                        '<div id="' + key + '_up" class="quantile_details">' +
-                                        row.name + '<br />' +
-                                        'Up: ' + quantile_up + ' ' + Lang.getString('Mbps') + '<br />' +
-                                        '<span class="green">' + up_green + '%</span>' +
-                                        '<span class="yellow">' + up_yellow + '%</span>' +
-                                        '<span class="red">' + up_red + '%</span>' +
-                                        '</div>' +
-                                        '</div></td>' +
-                                        '<td class="align-right quantile"><div>' + quantile_ping + ' ms' +
-                                        '<div id="' + key + '_ping" class="quantile_details">' +
-                                        row.name + '<br />' +
-                                        'Ping: ' + quantile_ping + ' ms<br />' +
-                                        '<span class="green">' + ping_green + '%</span>' +
-                                        '<span class="yellow">' + ping_yellow + '%</span>' +
-                                        '<span class="red">' + ping_red + '%</span>' +
-                                        '</div>' +
-                                        '</div></td>' +
-                                        '<td class="align-right quantile"><div>' + quantile_signal +
-                                        signalDetailDiv +
-                                        '</div></td>' +
-                                        '<td class="align-right"><a href="Opentests?' + opentests_provider_query + opendata + '">' + row.count.formatNumber() + '</a></td>' +
-                                        '</tr>'
-                                        );                                
+                        //generate open data links
+                        $.each(data.providers, function(key, row) {
+                            var opentests_provider_query;
+                            if (row.asn !== undefined) {
+                                opentests_provider_query = "asn=" + row.asn + "&public_ip_as_name=" + row.name + "&country_geoip=" + country.toLowerCase();
+                            }
+                            else if (row.sim_mcc_mnc !== undefined) {
+                                opentests_provider_query = "sim_mcc_mnc=" + row.sim_mcc_mnc;
+                            }
+                            else if ($("#statistik_type").val() === 'mobile') {
+                                opentests_provider_query = "mobile_provider_name=" + row.name;
+                            }
+                            else {
+                                opentests_provider_query = "provider_name=" + row.name;
+                            }
+                            row.query_opendata = opentests_provider_query + opendata;
                         });
-                        sum_count = data.providers_sums.count;
-                        sum_down = data.providers_sums.quantile_down/1000;
-                        if (sum_down < 100)
-				sum_down = sum_down.toPrecision(2);
-			else sum_down = Math.round(sum_down);
-                                
-                        sum_up = data.providers_sums.quantile_up/1000;
-                        if (sum_up < 100)
-				sum_up = sum_up.toPrecision(2);
-			else sum_up = Math.round(sum_up);
-                        
-                        sum_ping = Math.round(data.providers_sums.quantile_ping/1000000);
-                        
-                        if (data.providers_sums.quantile_signal < 0)
-                                sum_signal = data.providers_sums.quantile_signal+' dBm';
-                        else    
-                                sum_signal = '-';
-                        down_green = data.providers_sums.down_green*100;
-                        if (down_green < 100)
-                                down_green = down_green.toPrecision(2);
-                        down_yellow = data.providers_sums.down_yellow*100;
-                        if (down_yellow < 100)
-                                down_yellow = down_yellow.toPrecision(2);
-                        down_red = data.providers_sums.down_red*100;
-                        if (down_red < 100)
-                                down_red = down_red.toPrecision(2);
-                        up_green = data.providers_sums.up_green*100;
-                        if (up_green < 100)
-                                up_green = up_green.toPrecision(2);
-                        up_yellow = data.providers_sums.up_yellow*100;
-                        if (up_yellow < 100)
-                                up_yellow = up_yellow.toPrecision(2);
-                        up_red = data.providers_sums.up_red*100;
-                        if (up_red < 100)
-                                up_red = up_red.toPrecision(2);
-                        ping_green = data.providers_sums.ping_green*100;
-                        if (ping_green < 100)
-                                ping_green = ping_green.toPrecision(2);
-                        ping_yellow = data.providers_sums.ping_yellow*100;
-                        if (ping_yellow < 100)
-                                ping_yellow = ping_yellow.toPrecision(2);
-                        ping_red = data.providers_sums.ping_red*100;
-                        if (ping_red < 100)
-                                ping_red = ping_red.toPrecision(2);
-                        signal_green = data.providers_sums.signal_green*100;
-                        if (signal_green < 100)
-                                signal_green = signal_green.toPrecision(2);
-                        signal_yellow = data.providers_sums.signal_yellow*100;
-                        if (signal_yellow < 100)
-                                signal_yellow = signal_yellow.toPrecision(2);
-                        signal_red = data.providers_sums.signal_red*100;
-                        if (signal_red < 100)
-                                signal_red = signal_red.toPrecision(2);
-                        
-                        var label_all_operators = Lang.getString('allOperators');
-                        
-                        if (data.providers.length > 0) {
-                        $('#statistik_provider_foot').append(
-                           '<tr>'+
-                           '<th scope="col"> </th>'+
-                           '<th class="align-right quantile"><div>'+sum_down+' ' + Lang.getString('Mbps')+
-                                '<div id="sum_down" class="quantile_details">'+
-                                label_all_operators + '<br />'+
-                                'Down: '+sum_down+' ' + Lang.getString('Mbps') + '<br />'+
-                                '<span class="green">'+down_green+'%</span>'+
-                                '<span class="yellow">'+down_yellow+'%</span>'+
-                                '<span class="red">'+down_red+'%</span>'+
-                                '</div>'+
-                           '</div></th>'+
-                           '<th class="align-right quantile"><div>'+sum_up+' ' + Lang.getString('Mbps')+
-                                '<div id="sum_up" class="quantile_details">'+
-                                label_all_operators + '<br />'+
-                                'Up: '+sum_up+' ' + Lang.getString('Mbps') + '<br />'+
-                                '<span class="green">'+up_green+'%</span>'+
-                                '<span class="yellow">'+up_yellow+'%</span>'+
-                                '<span class="red">'+up_red+'%</span>'+
-                                '</div>'+
-                           '</div></th>'+
-                           '<th class="align-right quantile"><div>'+sum_ping+' ms'+
-                                '<div id="sum_ping" class="quantile_details">'+
-                                label_all_operators + '<br />'+
-                                'Ping: '+sum_ping+' ' + Lang.getString('ms') + '<br />'+
-                                '<span class="green">'+ping_green+'%</span>'+
-                                '<span class="yellow">'+ping_yellow+'%</span>'+
-                                '<span class="red">'+ping_red+'%</span>'+
-                                '</div>'+
-                           '</div></th>'+
-                           '<th class="align-right quantile"><div>'+sum_signal+
-                                '<div id="sum_signal" class="quantile_details">'+
-                                label_all_operators + '<br />'+
-                                'Signal: '+sum_signal+'<br />'+
-                                '<span class="green">'+signal_green+'%</span>'+
-                                '<span class="yellow">'+signal_yellow+'%</span>'+
-                                '<span class="red">'+signal_red+'%</span>'+
-                                '</div>'+
-                           '</div></th>'+
-                           '<th scope="col" class="align-right">'+sum_count.formatNumber() +'</th>'+
-                           '</tr>'
-                           );
-                               
-                           $('#statistik_provider_short_foot').append(
-                           '<tr>'+
-                           '<th scope="col"> </th>'+
-                           '<th class="align-right quantile"><div>'+sum_down+' ' + Lang.getString('Mbps')+
-                                '<div id="sum_down" class="quantile_details">'+
-                                label_all_operators + '<br />'+
-                                'Down: '+sum_down+' ' + Lang.getString('Mbps') + '<br />'+
-                                '<span class="green">'+down_green+'%</span>'+
-                                '<span class="yellow">'+down_yellow+'%</span>'+
-                                '<span class="red">'+down_red+'%</span>'+
-                                '</div>'+
-                           '</div></th>'+
-                           '<th class="align-right quantile"><div>'+sum_up+' ' + Lang.getString('Mbps')+
-                                '<div id="sum_up" class="quantile_details">'+
-                                label_all_operators + '<br />'+
-                                'Down: '+sum_up+' ' + Lang.getString('Mbps') + '<br />'+
-                                '<span class="green">'+up_green+'%</span>'+
-                                '<span class="yellow">'+up_yellow+'%</span>'+
-                                '<span class="red">'+up_red+'%</span>'+
-                                '</div>'+
-                           '</div></th>'+
-                           '<th class="align-right quantile"><div>'+sum_ping+' ms'+
-                                '<div id="sum_ping" class="quantile_details">'+
-                                label_all_operators + '<br />'+
-                                'Down: '+sum_ping+' ' + Lang.getString('Mbps') + '<br />'+
-                                '<span class="green">'+ping_green+'%</span>'+
-                                '<span class="yellow">'+ping_yellow+'%</span>'+
-                                '<span class="red">'+ping_red+'%</span>'+
-                                '</div>'+
-                           '</div></th>'+
-                           '<th class="align-right quantile"><div>'+sum_signal+
-                                '<div id="sum_signal" class="quantile_details">'+
-                                label_all_operators + '<br />'+
-                                'Down: '+sum_signal+'<br />'+
-                                '<span class="green">'+signal_green+'%</span>'+
-                                '<span class="yellow">'+signal_yellow+'%</span>'+
-                                '<span class="red">'+signal_red+'%</span>'+
-                                '</div>'+
-                           '</div></th>'+
-                           '<th scope="col" class="align-right">'+sum_count+'</th>'+
-                           '</tr>'
-                           );
-                               
-                                                          $('#statistik_provider_captions_foot').append(
-                           '<tr>'+
-                           '<th class="align-right quantile"><div>'+sum_down+' ' + Lang.getString('Mbps')+
-                                '<div id="sum_down" class="quantile_details">'+
-                                label_all_operators + '<br />'+
-                                'Down: '+sum_down+' ' + Lang.getString('Mbps') + '<br />'+
-                                '<span class="green">'+down_green+'%</span>'+
-                                '<span class="yellow">'+down_yellow+'%</span>'+
-                                '<span class="red">'+down_red+'%</span>'+
-                                '</div>'+
-                           '</div></th>'+
-                           '<th class="align-right quantile"><div>'+sum_up+' ' + Lang.getString('Mbps')+
-                                '<div id="sum_up" class="quantile_details">'+
-                                label_all_operators + '<br />'+
-                                'Down: '+sum_up+' ' + Lang.getString('Mbps') + '<br />'+
-                                '<span class="green">'+up_green+'%</span>'+
-                                '<span class="yellow">'+up_yellow+'%</span>'+
-                                '<span class="red">'+up_red+'%</span>'+
-                                '</div>'+
-                           '</div></th>'+
-                           '<th class="align-right quantile"><div>'+sum_ping+' ms'+
-                                '<div id="sum_ping" class="quantile_details">'+
-                                label_all_operators + '<br />'+
-                                'Down: '+sum_ping+' ' + Lang.getString('Mbps') + '<br />'+
-                                '<span class="green">'+ping_green+'%</span>'+
-                                '<span class="yellow">'+ping_yellow+'%</span>'+
-                                '<span class="red">'+ping_red+'%</span>'+
-                                '</div>'+
-                           '</div></th>'+
-                           '<th class="align-right quantile"><div>'+sum_signal+
-                                '<div id="sum_signal" class="quantile_details">'+
-                                label_all_operators + '<br />'+
-                                'Down: '+sum_signal+'<br />'+
-                                '<span class="green">'+signal_green+'%</span>'+
-                                '<span class="yellow">'+signal_yellow+'%</span>'+
-                                '<span class="red">'+signal_red+'%</span>'+
-                                '</div>'+
-                           '</div></th>'+
-                           '<th scope="col" class="align-right">'+sum_count+'</th>'+
-                           '</tr>'
-                           );
-                                                   
-                        }
-                        else {
-                            //no providers found for the current selection
-                            $('#statistik_provider_foot').append(
-                                 '<tr>' +
-                                 '<th colspan="6">' + Lang.getString('NoOperatorsFound') + '</th>' +
-                                 '</tr>');
-                            $('#statistik_provider_captions_foot').append(
-                                    '<tr>' +
-                                    '<th colspan="5">' + Lang.getString('NoOperatorsFound') + '</th>' +
-                                    '</tr>');
-                            $('#statistik_provider_short_foot').append(
-                                    '<tr>' +
-                                    '<th colspan="6">' + Lang.getString('NoOperatorsFound') + '</th>' +
-                                    '</tr>');
-                        }
 
-                        adjustTablesToWindowSize();     
-                        
+                        var resultTemplate = Handlebars.compile($("#statisticsTemplate").html());
+
+                        //generate tables
+                        var generatedHtml = resultTemplate($.extend(data, {
+                            id:"statistik_provider"
+                        }));
+                        $("#statistik_provider_container").html(generatedHtml);
+
+                        generatedHtml = resultTemplate($.extend(data, {
+                            id: "statistik_provider_short",
+                            useShortNames: true
+                        }));
+                        $("#statistik_provider_short_container").html(generatedHtml);
+
+                        generatedHtml = resultTemplate($.extend(data, {
+                            id:"statistik_provider_captions",
+                            onlyCaptions: true
+                        }));
+                        $("#statistik_provider_captions_container").html(generatedHtml);
+
+                        adjustTablesToWindowSize();
                         
                         //---------------Devices Start
                         var break_devices_after = 10;
@@ -1358,26 +1014,36 @@ function RMBTstatistics() {
                                     '<th colspan="5">' + Lang.getString('NoDevicesFound') + '</th>' +
                                     '</tr>');
                         }
-                        
-                        sum_count = data.devices_sums.count;
-                        sum_down = data.devices_sums.quantile_down/1000;
-                        sum_up = data.devices_sums.quantile_up/1000;
-                        sum_ping = Math.round(data.devices_sums.quantile_ping/1000000);
-                        //$('#statistik_devices_foot').append(
-                        //   '<tr>'+
-                        //   '<th scope="col"> </th>'+
-                        //   '<th scope="col" class="align-right">'+sum_down.toPrecision(2)+' ' + Lang.getString('Mbps') + '</th>'+
-                        //   '<th scope="col" class="align-right">'+sum_up.toPrecision(2)+' ' + Lang.getString('Mbps') + '</th>'+
-                        //   '<th scope="col" class="align-right">'+sum_ping+' ms</th>'+
-                        //   '<th scope="col" class="align-right">'+sum_count+'</th>'+
-                        //   '</tr>'
-                        //   );
+
                         //--------------Devices End
                         
                         
                         
                         //$('#statistik').append('</tbody>');
-                         
+
+                        $("#statistik_provider").tablesorter({
+                            headers:
+                                {
+                                    0 : {sorter: 'text'},
+                                    1 : {sorter: 'digit' },
+                                    2 : {sorter: 'digit' },
+                                    3 : {sorter: 'digit' },
+                                    4 : {sorter: 'digit' },
+                                    5 : {sorter: 'own' }
+
+                                }
+                        });
+                        $("#statistik_devices").tablesorter({
+                            headers:
+                                {
+                                    0 : {sorter: 'text'},
+                                    1 : {sorter: 'digit' },
+                                    2 : {sorter: 'digit' },
+                                    3 : {sorter: 'digit' },
+                                    4 : {sorter: 'own' }
+                                }
+                        });
+
                         $("table").trigger("update"); 
                         $(".quantile").hover(
                                 function(){
@@ -1390,31 +1056,10 @@ function RMBTstatistics() {
                                 }
                         );
                 
-                        //countries
-                        //only once!
-                        if ($("#country option").length === 1) {
-                                data.countries.sort(function(a,b) {
-                                    if (Lang.getString("countries")[a.toLowerCase()] < Lang.getString("countries")[b.toLowerCase()]) {
-                                        return -1;
-                                    }
-                                    else {
-                                        return 1;
-                                    }
-                                });
-                                $.each(data.countries, function(index, value) {
-                                        if (value === 'AT') return;
-                                        $("#country").append('<option value="' + value + '">' + Lang.getString("countries")[value.toLowerCase()] + "</option>");
-                                });
-                                
-                                if (browser_country_geoip.toUpperCase() !== 'AT' &&     data.countries.indexOf(browser_country_geoip.toUpperCase()) >= 0) {
-                                    $("#country").val(browser_country_geoip.toUpperCase());
-                                    RMBTstatistics();
-                                }
-                        }
+
                         
                         $('.headerSortUp').removeClass('headerSortUp');
                         $('.headerSortDown').removeClass('headerSortDown');
-                        $('#statistics_container').spin();
                         
                 },
                 error: function() {

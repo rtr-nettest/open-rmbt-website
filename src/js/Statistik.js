@@ -57,28 +57,7 @@ $(document).ready(function() {
             type: 'numeric'
         });
         
-        $("#statistik_provider").tablesorter({
-                headers:
-                {
-                        0 : {sorter: 'text'},
-                        1 : {sorter: 'digit' },
-                        2 : {sorter: 'digit' },
-                        3 : {sorter: 'digit' },
-                        4 : {sorter: 'digit' },
-                        5 : {sorter: 'own' }
-                        
-                }
-        });
-        $("#statistik_devices").tablesorter({
-                headers:
-                {
-                        0 : {sorter: 'text'},
-                        1 : {sorter: 'digit' },
-                        2 : {sorter: 'digit' },
-                        3 : {sorter: 'digit' },
-                        4 : {sorter: 'own' }
-                }
-        });
+
         $(window).resize(function() {
             adjustTablesToWindowSize();
         });
@@ -209,3 +188,45 @@ function getLastOpenDataResults() {
         }
     });
 }
+
+function getSignificantDigits (number) {
+    if (number > 100) {
+        return -1;
+    }
+    else if (number >= 10) {
+        return 0;
+    }
+    else if (number >= 1) {
+        return 1;
+    }
+    else if (number >= 0.1) {
+        return 2;
+    }
+    else {
+        return 3;
+    }
+};
+
+//add formatting helper
+Handlebars.registerHelper('percent', function (number) {
+    if (typeof number === 'number') {
+        return Math.round(number*100) + " %";
+    } else {
+        return "NaN!";
+    }
+});
+
+//add formatting helper
+Handlebars.registerHelper('formatNumberSignificant', function (number) {
+    if (typeof number === 'number') {
+        var decimals = getSignificantDigits(number);
+        return number.formatNumber(decimals);
+    }
+});
+
+//add formatting helper
+Handlebars.registerHelper('divideBy', function (number, divisor) {
+    if (typeof number === 'number') {
+        return number / divisor;
+    }
+});

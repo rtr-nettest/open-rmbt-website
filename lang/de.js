@@ -79,7 +79,9 @@ exports.strings = {
         "vorarlberg" : "Vorarlberg",
         "vienna" : "Wien",
         "all_states" : "Alle Bundesländer",
-        "enddate" : "Enddatum"
+        "enddate" : "Enddatum",
+        "all_operators" : "Alle Betreiber",
+        "no_operators": "Keine Betreiber verfügbar in der aktuellen Filterung"
     },
 
     "history_content" : {
