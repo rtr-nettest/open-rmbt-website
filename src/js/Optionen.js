@@ -331,4 +331,9 @@ $(document).ready(function() {
         loadFormValues();
         
         loadServerList();
+
+        //show, if a server is set
+        if (UserConf.preferredServer && UserConf.preferredServer !== "default") {
+            $("#testserverForm").show();
+        }
 });
