@@ -220,6 +220,7 @@
                             <div id="key_down" class="quantile_details">
                                 {{#if ../shortNames }}{{ shortname }}{{ else }}{{ name }}{{/if }}<br/>
                                 {{ formatNumberSignificant (divideBy quantile_down 1000) }} {% endraw %}{{ Lang.mbps }}{% raw %} <br/>
+                                <span class="ultragreen">{{ percent down_ultragreen }}</span>
                                 <span class="green">{{ percent down_green }}</span>
                                 <span class="yellow">{{ percent down_yellow }}</span>
                                 <span class="red">{{ percent down_red }}</span>
@@ -231,6 +232,7 @@
                             <div id="key_up" class="quantile_details">
                                 {{ name }}<br/>
                                 Up: {{ formatNumberSignificant (divideBy quantile_up 1000) }} {% endraw %}{{ Lang.mbps }}{% raw %} <br/>
+                                <span class="ultragreen">{{ percent up_ultragreen }}</span>
                                 <span class="green">{{ percent up_green }}</span>
                                 <span class="yellow">{{ percent up_yellow }}</span>
                                 <span class="red">{{ percent up_red }}</span>
@@ -242,6 +244,7 @@
                             <div id="key_ping" class="quantile_details">
                                 {{ name }}<br/>
                                 Ping: {{ formatNumberSignificant (divideBy quantile_ping 1000000) }} {% endraw %}{{ Lang.mbps }}{% raw %} <br/>
+                                <span class="ultragreen">{{ percent ping_ultragreen }}</span>
                                 <span class="green">{{ percent ping_green }}</span>
                                 <span class="yellow">{{ percent ping_yellow }}</span>
                                 <span class="red">{{ percent ping_red }}</span>
@@ -250,14 +253,15 @@
                     </td>
                     <td class="align-right quantile test-network-signal">
                         {{#if  quantile_signal}}
-                        <div>{{ formatNumberSignificant quantile_signal }}
+                        <div>{{ quantile_signal }} {% endraw %}{{ Lang.dBm }}{% raw %}
                             <div id="key_signal" class="quantile_details signal_details">
                                 {{ name }}<br />
-                                Signal: {{ formatNumberSignificant quantile_signal }}<br />
+                                Signal: {{ quantile_signal }}  {% endraw %}{{ Lang.dBm }}{% raw %}<br />
+                                <span class="ultragreen">{{ percent signal_ultragreen }}</span>
                                 <span class="green">{{ percent signal_green }}</span>
                                 <span class="yellow">{{ percent signal_green }}</span>
                                 <span class="red">{{ percent signal_green }}</span>
-                                </div>;
+                                </div>
                             </div>
                         {{ else }}
                         -
@@ -277,9 +281,10 @@
                             <div id="sum_down" class="quantile_details">
                                 {% endraw %}{{ Lang.statistics_content.all_operators }}{% raw %} <br/>
                                 Down: {{ formatNumberSignificant (divideBy providers_sums.quantile_down 1000) }} {% endraw %}{{ Lang.mbps }}{% raw %} <br/>
+                                <span class="ultragreen">{{ percent providers_sums.down_ultragreen }}</span>
                                 <span class="green">{{ percent providers_sums.down_green }}</span>
                                 <span class="yellow">{{ percent providers_sums.down_yellow }}</span>
-                                <span class="red">{{ providers_sums.down_red }}</span>
+                                <span class="red">{{ percent providers_sums.down_red }}</span>
                             </div>
                         </div>
                     </th>
@@ -288,9 +293,10 @@
                             <div id="sum_up" class="quantile_details">
                                 {% endraw %}{{ Lang.statistics_content.all_operators }}{% raw %} <br/>
                                 Up: {{ formatNumberSignificant (divideBy providers_sums.quantile_up 1000)}} {% endraw %}{{ Lang.mbps }}{% raw %} <br/>
+                                <span class="ultragreen">{{ percent providers_sums.up_ultragreen }}</span>
                                 <span class="green">{{ percent providers_sums.up_green }}</span>
                                 <span class="yellow">{{ percent providers_sums.up_yellow }}</span>
-                                <span class="red">{{ providers_sums.up_red }}</span>
+                                <span class="red">{{ percent providers_sums.up_red }}</span>
                             </div>
                         </div>
                     </th>
@@ -299,6 +305,7 @@
                             <div id="sum_ping" class="quantile_details">
                                 {% endraw %}{{ Lang.statistics_content.all_operators }}{% raw %}  <br/>
                                 Ping: {{ formatNumberSignificant (divideBy providers_sums.quantile_ping 1000000) }} {% endraw %}{{ Lang.ms }}{% raw %} <br/>
+                                <span class="ultragreen">{{ percent providers_sums.ping_ultragreen }}</span>
                                 <span class="green">{{ percent providers_sums.ping_green }}</span>
                                 <span class="yellow">{{ percent providers_sums.ping_yellow }}</span>
                                 <span class="red">{{ percent providers_sums.ping_red }}</span>
@@ -307,13 +314,14 @@
                     </th>
                     <th class="align-right quantile test-network-signal">
                         <div>{{#if providers_sums.quantile_signal}}
-                            {{ providers_sums.quantile_signal }}
+                            {{ providers_sums.quantile_signal }} {% endraw %}{{ Lang.dBm }}{% raw %}
                             <div id="sum_signal" class="quantile_details">
                                 {% endraw %}{{ Lang.statistics_content.all_operators }}{% raw %}  <br/>
                                 Signal: {{ providers_sums.quantile_signal }}<br/>
+                                <span class="ultragreen">{{ percent providers_sums.signal_ultragreen }}</span>
                                 <span class="green">{{ percent providers_sums.signal_green }}</span>
                                 <span class="yellow">{{ percent providers_sums.signal_yellow }}</span>
-                                <span class="red">{{ providers_sums.signal_red }}</span>
+                                <span class="red">{{ percent providers_sums.signal_red }}</span>
                             </div>
                             {{ else }}
                             -

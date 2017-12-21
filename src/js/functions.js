@@ -815,7 +815,7 @@ function RMBTstatistics() {
                 type: "post",
                 dataType: "json",
                 contentType: "application/json",
-                data: JSON.stringify(json_data),
+                data: JSON.stringify(addCapabilities(json_data)),
                 success: function(data) {
                         $('#statistics_container').spin();
 
