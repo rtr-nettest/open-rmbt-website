@@ -27,6 +27,15 @@
         padding: .666em 2%;
         display: none;
     }
+
+    /* Visualization of statistics distribution, as seen with CZ.NIC NetMetr */
+    .distribution {
+        width: 100%;
+        height: 5px;
+        position: relative;
+        padding: 0;
+        border: 1px solid white
+    }
 </style>
 {% endblock %}
 
@@ -217,6 +226,12 @@
                     {{/unless }}
                     <td class="align-right quantile">
                         <div>{{ formatNumberSignificant (divideBy quantile_down 1000) }} {% endraw %}{{ Lang.mbps }}{% raw %}
+                            <div class="distribution">
+                                <div style="width:{{ multiplyBy down_ultragreen 100 }}%;background-color:#359314;height:100%;float:left"></div>
+                                <div style="width:{{ multiplyBy down_green 100 }}%;background-color:#45c317;height:100%;float:left"></div>
+                                <div style="width:{{ multiplyBy down_yellow 100 }}%;background-color:#f2ff26;height:100%;float:left"></div>
+                                <div style="width:{{ multiplyBy down_red 100 }}%;background-color:#ec411f;height:100%;float:left"></div>
+                            </div>
                             <div id="key_down" class="quantile_details">
                                 {{#if ../shortNames }}{{ shortname }}{{ else }}{{ name }}{{/if }}<br/>
                                 {{ formatNumberSignificant (divideBy quantile_down 1000) }} {% endraw %}{{ Lang.mbps }}{% raw %} <br/>
@@ -229,6 +244,12 @@
                     </td>
                     <td class="align-right quantile">
                         <div>{{ formatNumberSignificant (divideBy quantile_up 1000) }} {% endraw %}{{ Lang.mbps }}{% raw %}
+                            <div class="distribution">
+                                <div style="width:{{ multiplyBy up_ultragreen 100 }}%;background-color:#359314;height:100%;float:left"></div>
+                                <div style="width:{{ multiplyBy up_green 100 }}%;background-color:#45c317;height:100%;float:left"></div>
+                                <div style="width:{{ multiplyBy up_yellow 100 }}%;background-color:#f2ff26;height:100%;float:left"></div>
+                                <div style="width:{{ multiplyBy up_red 100 }}%;background-color:#ec411f;height:100%;float:left"></div>
+                            </div>
                             <div id="key_up" class="quantile_details">
                                 {{ name }}<br/>
                                 Up: {{ formatNumberSignificant (divideBy quantile_up 1000) }} {% endraw %}{{ Lang.mbps }}{% raw %} <br/>
@@ -241,6 +262,12 @@
                     </td>
                     <td class="align-right quantile">
                         <div>{{ formatNumberSignificant (divideBy quantile_ping 1000000) }} {% endraw %}{{ Lang.ms }}{% raw %}
+                            <div class="distribution">
+                                <div style="width:{{ multiplyBy ping_ultragreen 100 }}%;background-color:#359314;height:100%;float:left"></div>
+                                <div style="width:{{ multiplyBy ping_green 100 }}%;background-color:#45c317;height:100%;float:left"></div>
+                                <div style="width:{{ multiplyBy ping_yellow 100 }}%;background-color:#f2ff26;height:100%;float:left"></div>
+                                <div style="width:{{ multiplyBy ping_red 100 }}%;background-color:#ec411f;height:100%;float:left"></div>
+                            </div>
                             <div id="key_ping" class="quantile_details">
                                 {{ name }}<br/>
                                 Ping: {{ formatNumberSignificant (divideBy quantile_ping 1000000) }} {% endraw %}{{ Lang.mbps }}{% raw %} <br/>
@@ -254,6 +281,12 @@
                     <td class="align-right quantile test-network-signal">
                         {{#if  quantile_signal}}
                         <div>{{ quantile_signal }} {% endraw %}{{ Lang.dBm }}{% raw %}
+                            <div class="distribution">
+                                <div style="width:{{ multiplyBy signal_ultragreen 100 }}%;background-color:#359314;height:100%;float:left"></div>
+                                <div style="width:{{ multiplyBy signal_green 100 }}%;background-color:#45c317;height:100%;float:left"></div>
+                                <div style="width:{{ multiplyBy signal_yellow 100 }}%;background-color:#f2ff26;height:100%;float:left"></div>
+                                <div style="width:{{ multiplyBy signal_red 100 }}%;background-color:#ec411f;height:100%;float:left"></div>
+                            </div>
                             <div id="key_signal" class="quantile_details signal_details">
                                 {{ name }}<br />
                                 Signal: {{ quantile_signal }}  {% endraw %}{{ Lang.dBm }}{% raw %}<br />

@@ -230,3 +230,10 @@ Handlebars.registerHelper('divideBy', function (number, divisor) {
         return number / divisor;
     }
 });
+
+//add formatting helper
+Handlebars.registerHelper('multiplyBy', function (number, multiplier) {
+    if (typeof number === 'number') {
+        return number * multiplier;
+    }
+});
