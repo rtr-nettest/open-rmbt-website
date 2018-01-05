@@ -81,7 +81,8 @@ exports.strings = {
         "all_states" : "All provinces",
         "enddate" : "End date",
         "all_operators" : "All operators",
-        "no_operators": "No operators found for the current selection"
+        "no_operators": "No operators found for the current selection",
+        "failure": "Currently, there is no statistics available."
     },
 
     "history_content" : {

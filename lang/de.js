@@ -81,7 +81,8 @@ exports.strings = {
         "all_states" : "Alle Bundesländer",
         "enddate" : "Enddatum",
         "all_operators" : "Alle Betreiber",
-        "no_operators": "Keine Betreiber verfügbar in der aktuellen Filterung"
+        "no_operators": "Keine Betreiber verfügbar in der aktuellen Filterung",
+        "failure": "Derzeit ist keine Statistik verfügbar."
     },
 
     "history_content" : {
