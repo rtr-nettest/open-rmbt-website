@@ -1124,7 +1124,7 @@ function RMBTWebsocketTest(uuid) {
     });
 
     TestEnvironment.getTestVisualization().setRMBTTest(websocketTest);
-    TestEnvironment.getTestVisualization().startTest();
+    TestEnvironment.getTestVisualization().startTest(uuid);
     websocketTest.startTest();
 }
 

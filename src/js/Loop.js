@@ -104,6 +104,7 @@ var LoopTestVisualization = (function () {
         _remoteIp = remoteIp;
         _providerName = providerName;
         _testUUID = testUUID;
+        currentTestUUID = testUUID;
     };
 
     /**
@@ -317,11 +318,17 @@ $(document).ready(function () {
 });
 
 var clientUUID;
+var currentTestUUID;
 function RMBTLoopTest(uuid){
     var onError = function() {
         window.location = "/" + selectedLanguage;
     };
     clientUUID = uuid;
+
+    //override userServiceSelection if server was selected to just affect the test itself
+    if (UserConf.preferredServer !== "default") {
+        userServerSelection = true;
+    }
 
     //2. show loop mode info 1
     show_agb_popup(function () {
@@ -503,14 +510,33 @@ function waitForNextTest(i, targetTime, callback) {
 
 function startSingleTest(i, testSuccessCallback, testErrorCallback) {
     var fallbackTimer = null;
+    var beforeUnloadEventListener = function (e) {
+        var confirmationMessage = Lang.getString('CancelTest');
+
+        e.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
+        return confirmationMessage;              // Gecko, WebKit, Chrome <34
+    };
+    var unloadEventListener = function () {
+        navigator.sendBeacon(controlProxy + "/" + wspath + "/resultUpdate", JSON.stringify({
+            uuid: clientUUID,
+            test_uuid: currentTestUUID,
+            aborted: true
+        }));
+    };
 
     TestEnvironment.init(new LoopTestVisualization(function (result) {
+        //window.removeEventListener("beforeunload", beforeUnloadEventListener);
+        window.removeEventListener("unload", unloadEventListener,false);
+
         //only do callback, if fallbackTimer has not fired yet
         if (fallbackTimer !== null) {
             self.clearTimeout(fallbackTimer);
             testSuccessCallback(result);
         }
     }, function (result) {
+        //window.removeEventListener("beforeunload", beforeUnloadEventListener);
+        window.removeEventListener("unload", unloadEventListener,false);
+
         if (fallbackTimer !== null) {
             self.clearTimeout(fallbackTimer);
             testErrorCallback(result);
@@ -532,6 +558,11 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
     TestEnvironment.getTestVisualization().startTest();
 
     websocketTest.startTest();
+
+    //if a user wants to leave - ask the user if test should really be cancelled
+    //no - since all communication is seized by the Browser, if the user is asked
+    //window.addEventListener("beforeunload", beforeUnloadEventListener);
+    window.addEventListener("unload", unloadEventListener,false);
 
     //After 3 mins, a test has to be finished. Otherwise, treat it as an error
     fallbackTimer = self.setTimeout(function() {

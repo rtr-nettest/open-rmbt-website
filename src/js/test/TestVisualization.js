@@ -26,6 +26,10 @@ var SvgTestVisualization = (function () {
     var _remoteIp = null;
     var _providerName = null;
     var _testUUID = '';
+    var _clientUUID = '';
+
+    var _beforeUnloadEventListener;
+    var _unloadEventListener;
 
     var _redraw_loop = null;
     var _successCallback = null;
@@ -62,6 +66,29 @@ var SvgTestVisualization = (function () {
             $(".gauge").css("height","500px");
             $(".gauge").css("width","500px");
         }
+
+        //set to 0 %
+        set_status(TestState.INIT);
+
+        //add event listeners
+        _beforeUnloadEventListener = function (e) {
+            var confirmationMessage = Lang.getString('CancelTest');
+
+            e.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
+            return confirmationMessage;              // Gecko, WebKit, Chrome <34
+        };
+        _unloadEventListener = function () {
+            navigator.sendBeacon(controlProxy + "/" + wspath + "/resultUpdate", JSON.stringify({
+                uuid: _clientUUID,
+                test_uuid: _testUUID,
+                aborted: true
+            }));
+        };
+
+        //if a user wants to leave - ask the user if test should really be cancelled
+        //no - since all communication is seized by the Browser, if the user is asked
+        //window.addEventListener("beforeunload", _beforeUnloadEventListener);
+        window.addEventListener("unload", _unloadEventListener,false);
     }
 
     function progress_segment(status, progress) {
@@ -392,17 +419,23 @@ var SvgTestVisualization = (function () {
         if (status !== "END" && status !== "ERROR" && status !== "ABORTED") {
             _redraw_loop = setTimeout(draw, 250);
             //Draw a new chart
-        } else if (status === "ERROR" || status === "ABORTED") {
-            callErrorCallback(result);
-        } else if (status === "END") {
-            // call callback that the test is finished
-            if (_successCallback !== null) {
-                var t = _successCallback;
-                _successCallback = null;
-                result["testUUID"] = _testUUID;
-                t(result);
+        } else  {
+            //user can navigate
+            //window.removeEventListener("beforeunload", _beforeUnloadEventListener);
+            window.removeEventListener("unload", _unloadEventListener,false);
+
+            if (status === "ERROR" || status === "ABORTED") {
+                callErrorCallback(result);
+            } else if (status === "END") {
+                // call callback that the test is finished
+                if (_successCallback !== null) {
+                    var t = _successCallback;
+                    _successCallback = null;
+                    result["testUUID"] = _testUUID;
+                    t(result);
+                }
+                redirectToTestResult();
             }
-            redirectToTestResult();
         }
     }
 
@@ -419,9 +452,11 @@ var SvgTestVisualization = (function () {
      * and relies on .getIntermediateResult() therefore
      *  (function previously known as draw())
      */
-    SvgTestVisualization.prototype.startTest = function () {
+    SvgTestVisualization.prototype.startTest = function (clientUUID) {
         //first draw, then the timeout should kick in
         draw();
+
+        _clientUUID = clientUUID;
     };
 
     return SvgTestVisualization;

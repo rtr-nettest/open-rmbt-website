@@ -212,5 +212,6 @@ Lang.setStrings({
     'WaitingForStart' : 'Waiting',
     'radio_band': 'Radio band',
     'channel_number': 'Frequency channel',
-    'DontAskAgain': 'Don\'t ask again'
+    'DontAskAgain': 'Don\'t ask again',
+    'CancelTest': 'Cancel currently running measurement?'
 });

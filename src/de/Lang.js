@@ -209,5 +209,6 @@ Lang.setStrings({
     'WaitingForStart' : 'Warte auf Zeitablauf',
     'radio_band': 'Frequenzband',
     'channel_number': 'Frequenzkanal',
-    'DontAskAgain': 'Nicht erneut nachfragen'
+    'DontAskAgain': 'Nicht erneut nachfragen',
+    'CancelTest': 'Laufenden Test abbrechen?'
 });
