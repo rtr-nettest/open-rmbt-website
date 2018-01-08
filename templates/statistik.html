@@ -300,7 +300,7 @@
                         -
                         {{/if }}
                     </td>
-                    <td class="align-right"><a href="Opentests?{{ query_opendata }}">{{ count }}</a></td>
+                    <td class="align-right"><a href="Opentests?{{ query_opendata }}">{{ formatNumber count }}</a></td>
                     </tr>
                 {{/each }}
                 </tbody>
@@ -361,7 +361,7 @@
                             {{/if }}
                         </div>
                     </th>
-                    <th scope="col" class="align-right">{{ providers_sums.count }}</th>
+                    <th scope="col" class="align-right">{{ formatNumber providers_sums.count }}</th>
                 </tr>
                 {{else}}
                 <tr>

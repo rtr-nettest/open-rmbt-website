@@ -217,6 +217,16 @@ Handlebars.registerHelper('percent', function (number) {
 });
 
 //add formatting helper
+Handlebars.registerHelper('formatNumber', function (number, decimals) {
+    if (typeof number === 'number') {
+        if (typeof decimals === 'number') {
+            return number.formatNumber(decimals);
+        }
+        return number.formatNumber();
+    }
+});
+
+//add formatting helper
 Handlebars.registerHelper('formatNumberSignificant', function (number) {
     if (typeof number === 'number') {
         var decimals = getSignificantDigits(number);

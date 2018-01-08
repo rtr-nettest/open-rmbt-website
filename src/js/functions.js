@@ -969,15 +969,11 @@ function RMBTstatistics() {
                                 ping_red = row.ping_red*100;
                                 if (ping_red < 100)
                                         ping_red = ping_red.toPrecision(2);
-                                quantile_down = row.quantile_down/1000;
-                                if (quantile_down < 100)
-					quantile_down = quantile_down.toPrecision(2);
-				else quantile_down = Math.round(quantile_down);                                
+                                quantile_down = (row.quantile_down/1000);
+                                quantile_down = quantile_down.formatNumber(getSignificantDigits(quantile_down));
                                 
                                 quantile_up = row.quantile_up/1000;
-                                if (quantile_up < 100)
-					quantile_up = quantile_up.toPrecision(2);
-				else quantile_up = Math.round(quantile_up);
+                                quantile_up = quantile_up.formatNumber(getSignificantDigits(quantile_up));
                                 
                                 quantile_ping = Math.round(row.quantile_ping/1000000);
                                 if (typeof row.model == 'undefined')
