@@ -40,14 +40,8 @@
 {% endblock %}
 
 {% block content %}
-<h2>{{ Lang.statistics }}</h2>
-<div id="spinner"></div>
-<div class="hinweis">
-    {{ Lang.statistics_content.teaser }}
-</div>
 
-
-<h3>{{ Lang.X_recent_tests | replace("%X%","5") }}</h3>
+<h3>{{ Lang.recent_tests }}</h3>
 <div class="testdata-content">
 
      <table id="verlauf" class="dont-stack">
@@ -67,7 +61,7 @@
                         </tbody>
                         <tfoot>
                         <tr><td colspan="6">
-                            <strong><a href="Opentests">{{ Lang.further_tests }}</a></strong>
+                            <a class="btn btn-default" href="Opentests">{{ Lang.further_tests }}</a>
                         </td>
                         </tr>
                         </tfoot>
@@ -84,6 +78,12 @@
         {{ Lang.statistics_content.failure }}
     </div>
     <div id="statistics_container">
+        <h2>{{ Lang.statistics }}</h2>
+        <div id="spinner"></div>
+        <div class="hinweis">
+            <p>{{ Lang.statistics_content.teaser }}</p>
+        </div>
+
         <form class="form-inline">
             <fieldset>
                 <div class="form_line">

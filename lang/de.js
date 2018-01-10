@@ -231,6 +231,7 @@ exports.strings = {
     "test_server" : "Testserver",
     "ip": "IP",
     "state": "Status",
+    "api": "API",
 
     "access" : "Zugang",
     "date" : "Datum",
