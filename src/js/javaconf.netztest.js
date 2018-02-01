@@ -11,7 +11,7 @@ var statisticpath = "RMBTStatisticServer";
 
 var userServerSelection = 0; // FALSE - otherwise TRUE;
 
-var crossDomain = false;
+var crossDomain = true;
 
 var TestTypes = {
     Websocket : "websocket",
@@ -27,7 +27,9 @@ var UserConf = {
     qosSsl: true,
     runNdt: false,
     preferredTest: preferredTest,
-    preferredServer: "default"
+    preferredServer: "default",
+    overrideControlServer: false,
+    ipVersion: "default"
 };
 
 var test_version_name = "0.1";
