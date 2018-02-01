@@ -95,6 +95,12 @@ function fillArea(target, data, plotLastRow) {
         plots[field] = new Object();
         plots[field]["label"] = field;
         plots[field]["data"] = new Array();
+        plots[field]["lines"] = {
+            show: true
+        }
+        plots[field]["points"] = {
+            show:true
+        }
     }
     
     //fill with data
@@ -122,6 +128,11 @@ function fillArea(target, data, plotLastRow) {
     for (var key in plots) {
         flotPlots.push(plots[key]);
     }
+
+    //sort the array by the value of the last element
+    flotPlots = flotPlots.sort(function(arr1, arr2) {
+        return arr2.data[arr2.data.length-1][1] - arr1.data[arr1.data.length-1][1];
+    });
     
     $.plot(graphDiv, flotPlots, {
         xaxis: {
