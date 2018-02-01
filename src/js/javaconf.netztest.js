@@ -1,9 +1,10 @@
 // Configuration www.netztest.at
 
-var controlProxy = "";
+var controlProxy = "https://c01.netztest.at";
 var statisticProxy = "https://m-cloud.netztest.at";
 if (window.location.href.indexOf("https://www.netztest.at") !== 0) {
     statisticProxy = "";
+    controlProxy = "";
 }
 //var mapProxy = "" - filled in dynamically
 var wspath = "RMBTControlServer";
