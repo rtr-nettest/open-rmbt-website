@@ -1,197 +1,27 @@
-
-function resetndt() {
-        //console.log(value);
-        //console.log($('#RMBTndtID').attr("checked"));
-        
-        if ($("#RMBTndtID").attr("checked") == 'checked') {
-                show_ndtpopup();
-                //setCookie('RMBTndt', '1', 365 * 20);
-        }
-        else {
-                setCookie('RMBTndt', '0', 365 * 20);
-                saveFormValues();
-        }
-}
-
-function show_second_ndtpopup() {
-        document.getElementById("popupform").innerHTML = "";
-        $(".iwill").detach();
-	var longtext;
-	
-	var tmp = (selectedLanguage=='de')?ndt_short_de:ndt_short_en;
-	var tmp2 = (selectedLanguage=='de')?'Ich möchte zusätzlich den optionalen, vertiefenden NDT-Test ausführen.':'I wish to run the optional NDT-Test.';
-	
-	
-	$("#popupform").append(
-		'<div id="terms_check" style="margin-top:20px;">' +
-			'<div class="longtext">' +
-				'<p>'+tmp+'</p>' +
-				'<p>' +
-					'<form action="javascript:void(0);" class="ndtform">' +
-						'<input type="checkbox" name="form_ndt" id="form_ndt" class="text ui-widget-content ui-corner-all" />' +
-						'<label for="form_ndt">&nbsp;'+tmp2+'</label>' +
-					'</form>' +
-				'<p>' +
-			'</div>' +
-		'</div>'
-		);
-	
-	
-	
-
-	
-        var bValid = false;
-	var tmp_title = (selectedLanguage=='de')?'NDT-Test':'NDT-Test';
-	var tmp_decline = (selectedLanguage=='de')?'Abbruch':'Decline';
-	var tmp_agree = (selectedLanguage=='de')?'Weiter':'Continue';
-	var zipcookie = '';
-	
-	closeFunc = function() {
-		if (!bValid) {
-			var tmp = (selectedLanguage=='de')?'/de':'/en';
-			window.location.href= tmp;
-        	}
-	}
-	
-	var dialog_buttons = {}; 
-	dialog_buttons[tmp_decline] = function() {
-		bValid = true;
-        setCookie("RMBTndt", '0', 365 * 20 * 24 * 3600);
-        $('#RMBTndtID').attr('checked',false);
-        saveFormValues();
-		$(this).dialog("close");
-		//show_ndtpopup()
-            
-	};
-	dialog_buttons[tmp_agree] = function() {
-	        bValid = true;
-	        //console.log(terms_accepted);
-        
-                
-                if ($('#form_ndt').attr('checked')) {
-                        setCookie("RMBTndt", '1', 365 * 20 * 24 * 3600);
-                        saveFormValues();
-                }
-                else {
-                        setCookie("RMBTndt", '0', 365 * 20 * 24 * 3600);
-                        $('#RMBTndtID').attr('checked',false);
-                        saveFormValues();
-                }
-                $(this).dialog("close");
-	};
-	
-    $("#form_ndt").unbind('change');
-    $("#form_ndt").change(function() {
-        if ($('#form_ndt').attr('checked')) {
-            $("button:contains('" + tmp_agree + "')").button("enable");
-        }
-        else {
-            $("button:contains('" + tmp_agree + "')").button("disable");
-        }
-    })
-	
-	
-	$("#popupform").dialog({
-		autoOpen : false,
-		title : tmp_title,
-		modal : true,
-		draggable : false,
-		resize : false,
-		minHeight : 200,
-		minWidth : 350,
-		width : 780,
-		height : 510,
-		close : closeFunc,
-		buttons : dialog_buttons
-	});
-    $("button:contains('" + tmp_agree + "')").button("disable");
-    
-        //setCookie('RMBTndt', '1', 365 * 20);
-        //$(this).dialog("close");
-}
-
-function show_ndtpopup() {
-	document.getElementById("popupform").innerHTML = "";
-	var longtext;
-	
-	var tmp = (selectedLanguage=='de')?tc_short_de:tc_short_en;
-	
-	$("#popupform").append(
-		'<div id="terms_check" style="margin-top:20px;">' +
-			'<div class="longtext">' +
-			'<p>'+tmp+'</p>'
-			);
-	
-	$.get('../'+selectedLanguage+'/tc.html',function(data) {
-	                data=data.replace(/^[\s\S]+<h1>1/,"<h1>1");
-	                data=data.replace(/<\/body><\/html>/,"");
-	                $("#popupform .longtext").append(data);
-	                
-	});
-	
-	
-	
-	var tmp_title = (selectedLanguage=='de')?'Datenschutzpraxis und Nutzungsbedingungen':'Privacy Policy and Terms of Use';
-	var tmp_decline = (selectedLanguage=='de')?'Abbruch':'Decline';
-	var tmp_agree = (selectedLanguage=='de')?'Zustimmung':'Agree';
-	var dialog_buttons = {}; 
-	/*
-	dialog_buttons[tmp_decline] = function() {
-	        setCookie('RMBTndt', '0', 365 * 20);
-	        $('#RMBTndtID').attr('checked',false);
-	        $(this).dialog("close");
-	};
-	*/
-	dialog_buttons[tmp_agree] = function() {
-	        show_second_ndtpopup();
-	        
-	};
-	
-	closeFunc = function() {
-		$('#RMBTndtID').attr('checked',false);
-		$(this).dialog("close");
-	}
-	
-	$("#popupform").dialog({
-		autoOpen : false,
-
-		title : tmp_title,
-
-		modal : true,
-		draggable : false,
-		resize : false,
-
-		minHeight : 200,
-		minWidth : 350,
-
-		width : 780,
-		height : 510,
-		close : closeFunc,
-		buttons : dialog_buttons
-		
-	});
-	tmp = (selectedLanguage=='de')?tc_agree_de:tc_agree_en;
-	//$("#popupform").append('<p class="iwill">'+tmp+'</p>');
-	$(".iwill").detach();
-	$(".ui-dialog-buttonpane").append('<p class="iwill">'+tmp+'</p>');
-	$("#popupform").dialog("open");
-}
+var urls = {
+    control_ipv4_only: null,
+    control_ipv6_only: null,
+    url_ipv4_check: null,
+    url_ipv6_check: null
+};
 
 function loadFormValues() {
     loadUserConfiguration();
     
     var checkOrUncheckInput = function(input, check) {
         if (check)
-            $("#preferredTestForm input[name=" + input + "]").attr("checked","checked");
+            $("#optionsForm input[name=" + input + "]").attr("checked","checked");
         else
-            $("#preferredTestForm input[name=" + input + "]").removeAttr("checked","checked");
+            $("#optionsForm input[name=" + input + "]").removeAttr("checked","checked");
     }
     
     checkOrUncheckInput("qos", UserConf.runQos);
     checkOrUncheckInput("preferredTest][value=websocket", UserConf.preferredTest === TestTypes.Websocket);
     checkOrUncheckInput("preferredTest][value=Java", UserConf.preferredTest === TestTypes.Java);
     checkOrUncheckInput("RMBTndt", UserConf.runNdt);
-    
+
+    $("#optionsForm input[name='ipversion']").filter("[value='" + UserConf.ipVersion + "']").attr("checked","checked");
+
     updateForm();
 }
 
@@ -223,6 +53,20 @@ function saveFormValues() {
     
     //preferred test server
     UserConf.preferredServer = $("#testserverForm input[name=testserver]:checked").val();
+
+	//preferred IP version
+    UserConf.ipVersion = $("#ipversionForm input[name=ipversion]:checked").val();
+    switch (UserConf.ipVersion) {
+        case "default":
+            UserConf.overrideControlServer = false;
+            break;
+        case "ipv4":
+            UserConf.overrideControlServer = "https://" + urls.control_ipv4_only;
+            break;
+        case "ipv6":
+            UserConf.overrideControlServer = "https://" + urls.control_ipv6_only;
+            break;
+    }
     
     setCookie("RMBTOptions", JSON.stringify(UserConf), 365 * 20 * 24 * 3600);
     
@@ -241,8 +85,7 @@ function updateForm() {
 
 }
 
-
-function loadServerList() {
+function loadServerValues() {
     var json = {
         "language": "en",
         "name": "RTR-Netztest",
@@ -261,10 +104,14 @@ function loadServerList() {
         contentType: "application/json",
         data: JSON.stringify(json),
         success: function (data) {
+            //ipv4, ipv6
+            urls = data.settings[0].urls;
+
+            //server list
             $.each(data.settings[0].servers_ws,function(i,val) {
-                var listElem = $("<li></li>");
+                var listElem = $("<div class='radio'></div>");
                 var label = $("<label></label>");
-                var radio = $("<input />")
+                var radio = $("<input />");
                 radio.attr("type","radio");
                 radio.attr("name","testserver");
                 radio.attr("value",val.uuid);                
@@ -276,17 +123,45 @@ function loadServerList() {
                 label.append(radio);
                 label.append(" " + val.name);
                 listElem.append(label);
-                $("#testserverForm ul").append(listElem);
+                $("#testserverForm #serverList").append(listElem);
             });
             
             //attach change handler
-            $("#testserverForm input").change(function () {
+            $("#optionsForm input").change(function () {
                 //saveFormValues();
                 //updateForm();
                 $("#saveNotification").hide();
             })
+
+            checkIPConnectivity();
         }
     });
+}
+
+/**
+ * Check, if connections over both IPv4 and IPv6 are possible
+ */
+function checkIPConnectivity () {
+    var checkVersion = function(version, url) {
+        $.ajax({
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: JSON.stringify({
+                language: selectedLanguage
+            }),
+            contentType: "application/json",
+            success: function(data) {
+                console.log("success" + version);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#optionsForm input[name='ipversion']").filter("[value='" + version + "']").attr("disabled","disabled")
+                console.log("error" + version);
+            }
+        })
+    };
+    checkVersion("ipv4", urls.url_ipv4_check);
+    checkVersion("ipv6", urls.url_ipv6_check);
 }
 
 $(document).ready(function() {
@@ -330,7 +205,7 @@ $(document).ready(function() {
         
         loadFormValues();
         
-        loadServerList();
+        loadServerValues();
 
         //show, if a server is set
         if (UserConf.preferredServer && UserConf.preferredServer !== "default") {

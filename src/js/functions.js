@@ -283,6 +283,11 @@ function RMBTmapfilter(options) {
 
 
 function RMBTsettings(options) {
+        //override control server url, if given
+        if (UserConf.overrideControlServer) {
+            controlProxy = UserConf.overrideControlServer;
+        }
+
         cookie_uuid = getCookie("RMBTuuid");
         var terms_accepted = getCookie("RMBTTermsV4");
         var terms_and_conditions_accepted_version = (terms_accepted)?terms_version:null;
@@ -404,6 +409,13 @@ function RMBTsettings(options) {
                 },
                 error: function() {
                         //alert("Error beim settings-Abruf");
+                    //maybe, connectivity problem
+                    if (UserConf.overrideControlServer) {
+                        UserConf.overrideControlServer = false;
+                        UserConf.ipVersion = "default";
+                        console.log("resetting preferred IP version");
+                        setCookie("RMBTOptions", JSON.stringify(UserConf), 365 * 20 * 24 * 3600);
+                    }
                 }
         });      
 }
