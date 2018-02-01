@@ -152,10 +152,10 @@ function checkIPConnectivity () {
             }),
             contentType: "application/json",
             success: function(data) {
+                $("#optionsForm input[name='ipversion']").filter("[value='" + version + "']").removeAttr("disabled");
                 console.log("success" + version);
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                $("#optionsForm input[name='ipversion']").filter("[value='" + version + "']").attr("disabled","disabled")
                 console.log("error" + version);
             }
         })
