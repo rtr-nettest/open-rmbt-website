@@ -68,7 +68,7 @@ exports.strings = {
         },
         "operators_from" : "Operators from",
         "disclaimer" : 'Repeated tests are filtered for the compilation of statistics.',
-        "opendata_disclaimer" : 'Please note: <a href="Opendata.html">raw data available</a> as open data',
+        "opendata_disclaimer" : 'Please note: <a href="Opendata.html">measurement data available</a> as open data',
         "burgenland" : 'Burgenland',
         "carinthia" : 'Carinthia',
         "lower_austria" : 'Lower Austria',

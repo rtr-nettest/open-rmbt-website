@@ -68,7 +68,7 @@ exports.strings = {
         },
         "operators_from" : "Betreiber aus",
         "disclaimer" : 'Bei der Erstellung der Statistik sind wiederholt durchgeführte Tests gefiltert.',
-        "opendata_disclaimer" : 'Hinweis: <a href="Opendata.html">Rohdaten als Opendata</a> verfügbar',
+        "opendata_disclaimer" : 'Hinweis: <a href="Opendata.html">Testergebnisse als Opendata</a> verfügbar',
         "burgenland" : 'Burgenland',
         "carinthia" : 'Kärnten',
         "lower_austria" : 'Niederösterreich',
