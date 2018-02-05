@@ -226,7 +226,7 @@ function transformRTRUrls(fileList) {
         "/tk/netzteststarten": "Test",
         "/tk/netztestkarte": "Karte",
         "/tk/rtrnetzteststatistik": "Statistik",
-        "/tk/netztestopendata": "Opendata",
+        "/tk/netztestopendata": "Opentests",
         "/tk/netztestverlauf": "Verlauf",
         "/tk/rtrnetztestoptionen": "Optionen",
         "/tk/netztest" : ""
