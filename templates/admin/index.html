@@ -12,6 +12,14 @@
                 $("#controlserver_version").html(data.version);
             }});
 
+        $.ajax({
+            url: controlProxy.replace("c01","c02") + "/" + wspath + "/version",
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $("#controlserver_c02_version").html(data.version);
+            }});
+
         var json_data = {
             "type": test_type,
             "name": test_name
@@ -87,7 +95,8 @@
 </ul>
 
 <p>
-    Control Server version: <span id="controlserver_version"></span><br/>
+    Control Server c01 version: <span id="controlserver_version"></span><br/>
+    Control Server c02 version: <span id="controlserver_c02_version"></span><br/>
     Map Server version m02: <span id="mapserver_m02_version"></span><br/>
     Map Server version m03: <span id="mapserver_m03_version"></span><br/>
     Statistic Server version m02: <span id="statisticserver_m02_version"></span><br/>
