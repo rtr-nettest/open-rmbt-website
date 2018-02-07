@@ -1104,6 +1104,11 @@ function RMBTWebsocketTest(uuid) {
     var config = new RMBTTestConfig(selectedLanguage, controlProxy, wspath);
     config.uuid = uuid;
 
+    //explicit ip version
+    if (UserConf.ipVersion === "ipv4" || UserConf.ipVersion === "ipv6") {
+        config.additionalRegistrationParameters["protocol_version"] = UserConf.ipVersion;
+    }
+
     //override userServiceSelection if server was selected to just affect the test itself
     if (UserConf.preferredServer !== "default") {
         userServerSelection = true;
