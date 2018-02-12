@@ -131,7 +131,10 @@ function fillArea(target, data, plotLastRow) {
 
     //sort the array by the value of the last element
     flotPlots = flotPlots.sort(function(arr1, arr2) {
-        return arr2.data[arr2.data.length-1][1] - arr1.data[arr1.data.length-1][1];
+        if (arr2.data.length > 0 && arr1.data.length > 0) {
+            return arr2.data[arr2.data.length - 1][1] - arr1.data[arr1.data.length - 1][1];
+        }
+        return 1;
     });
     
     $.plot(graphDiv, flotPlots, {
