@@ -712,6 +712,24 @@ function RMBThistory() {
                                   );
                                 });
                                 $('#h2').html(Lang.getString('History'));
+
+
+                            //bind csv link - http://stackoverflow.com/a/27208677
+                            $("#csv-link").click(function (e) {
+                                $("#csv-link-form input").remove();
+                                var allTestUuids=[];
+                                $(data.history).each(function(i, obj) {
+                                    allTestUuids.push("T" + obj.test_uuid);
+                                });
+
+                                $("#csv-link-form").append('<input type="hidden" name="test_uuid" value="' + decodeURIComponent(allTestUuids.join(",")) + '" />');
+                                $("#csv-link-form").append("<input type='hidden' name='format' value='csv' />");
+                                $("#csv-link-form").append("<input type='hidden' name='max_results' value='" + Math.min(10000,data.history.length) + "' />");
+                                $("#csv-link-form").attr("action", statisticProxy + "/" + statisticpath + "/opentests/search");
+                                $("#csv-link-form").submit();
+                                e.preventDefault();
+                                return false;
+                            });
                                 
                         }
                         if (cookie_uuid != null && cookie_uuid != '') {

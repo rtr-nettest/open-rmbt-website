@@ -87,7 +87,8 @@ exports.strings = {
 
     "history_content" : {
         "request_code" : "Synchronisations-Code anfordern",
-        "enter_code" : "Oder geben Sie einen bereits bekannten Synchronisations-Code im unten stehenden Eingabefeld ein und bestätigen Sie Ihre Eingabe mit einem Klick auf „abschicken“."
+        "enter_code" : "Oder geben Sie einen bereits bekannten Synchronisations-Code im unten stehenden Eingabefeld ein und bestätigen Sie Ihre Eingabe mit einem Klick auf „abschicken“.",
+        "download": "Download (CSV)"
     },
 
     "opentest_content" : {
