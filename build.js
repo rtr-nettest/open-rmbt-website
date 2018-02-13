@@ -223,12 +223,12 @@ function fetchRemoteFiles(fileList) {
 function transformRTRUrls(fileList) {
     //transformation for RTR Nettest 301 URLs
     var specialNetTestUrls = {
-        "/tk/netzteststarten": "Test",
-        "/tk/netztestkarte": "Karte",
-        "/tk/rtrnetzteststatistik": "Statistik",
-        "/tk/netztestopendata": "Opentests",
-        "/tk/netztestverlauf": "Verlauf",
-        "/tk/rtrnetztestoptionen": "Optionen",
+        "/Test": "Test",
+        "/Karte": "Karte",
+        "/Statistik": "Statistik",
+        "/Opentests": "Opentests",
+        "/Verlauf": "Verlauf",
+        "/Optionen": "Optionen",
         "/tk/netztest" : ""
     };
 
@@ -249,7 +249,7 @@ function transformRTRUrls(fileList) {
                     var href = $(this).attr("href");
 
                     //only replace relative URLs (no mailtos, tel, http, etc.)
-                    if (href.indexOf(":") === -1 || href.indexOf(":") > 6) {
+                    if (href.indexOf(":") === -1 || href.indexOf(":") > 6 || href.indexOf('netztest') !== -1) {
                         $(this).attr("href", RTR_LINKS_BASEURL + href);
                         
                         //maybe it's even a special nettest url that needs to be relative?
