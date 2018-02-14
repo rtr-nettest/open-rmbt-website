@@ -420,7 +420,7 @@ function loadMarker(openTestUUID) {
         contentType: "application/json",
         data: JSON.stringify(json_data),
         success: function (data, textStatus, jqXHR) {
-            if (data.measurements && data.measurements[0]) {
+            if (data.measurements && data.measurements[0] && data.measurements[0].lat !== null && data.measurements[0].lat !== 0) {
                 addMarkerV3(data.measurements[0].lat, data.measurements[0].lon, data.measurements);
             }
         },
