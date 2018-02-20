@@ -181,9 +181,10 @@ $(document).ready(function() {
             show_errorPopup();
         }));
 
+        var isWithinApp = (navigator.userAgent && navigator.userAgent.indexOf("RTR-NetTest") !== -1);
     
                
-        if (cookieEnabled && !((preferredTest === TestTypes.Java) && (!loadRMBTApplet || !rmbtApplet))) {
+        if (cookieEnabled && !((preferredTest === TestTypes.Java) && (!loadRMBTApplet || !rmbtApplet)) && !isWithinApp) {
             
                 var argument;
                 switch(preferredTest) {
@@ -216,7 +217,13 @@ $(document).ready(function() {
                 	$("#popuperror").append(errormessage);
                 	show_errorPopup();	
                 }
-                
+                else if (isWithinApp){
+                    //no tests possible from within the app
+                    var errormessage = (selectedLanguage=='de')?'<p>Bitte nutzen Sie die App zur Durchführung von Messungen.</p>':'<p>Please use the app to conduct measurements.<p>';
+                    $("#popuperror").empty();
+                    $("#popuperror").append(errormessage);
+                    show_errorPopup();
+                }
                 else if (!Modernizr.canvas || navigator.appVersion.indexOf("MSIE 10") !== -1) {
                 	var errormessage = (selectedLanguage=='de')?'<p>Ihr Browser ist zu alt und unterstützt nicht alle Funktionen, die zur Durchführung des Tests notwendig wären. Bitte verwenden Sie einen neueren oder anderen Browser.</p>':'<p>Your browser version is outdated and does not support all features necessary. Please use a newer browser version.<p>';
                     $("#popuperror").empty();
