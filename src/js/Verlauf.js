@@ -1,4 +1,5 @@
 var useAddressPopup = true;
+var min_accuracy_for_showing_address_popup = 2000;
 
 var fastConnectionWarningConfig = {
     test_types : ["RMBTws", "RMBTjs"],
@@ -648,6 +649,10 @@ function loadOpenTestData(openTestUUID, testUUIDForZipPopup) {
                     requestPopup = false;
                 }
                 if (requestPopup && testdata.country_location !== null && testdata.country_location.toLowerCase() !== 'at') {
+                    requestPopup = false;
+                }
+                //don't request if accurate enough
+                if (testdata.loc_accuracy && testdata.loc_accuracy <= min_accuracy_for_showing_address_popup) {
                     requestPopup = false;
                 }
                 if (requestPopup) {
