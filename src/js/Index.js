@@ -238,53 +238,59 @@ function loadLastOpenDataResultsMap() {
     }
     
     var refreshOpenTests = function(initial) {
-        $.getJSON(statisticProxy + "/" + statisticpath + "/opentests/search?max_results=" + most_recent_tests + "&loc_accuracy=<2000&additional_info=download_classification",
-                function (data) {
-                    //add points to map
-                    var newPoints = 0;
-                    var newTests = [];
-                    $.each(data.results, function (i, result) {
-                        if (result.open_test_uuid === currentFirstTestUUID) {
-                            return false;
-                        }
-                        newPoints++;
-                        newTests.push(result);
-                        
-                        //if initial - don't yet
-                        if (!initial) {
-                            addTestToMap(result);
-                        }
-                        
-                    })
+        $.ajax({
+            url: statisticProxy + "/" + statisticpath + "/opentests/search?max_results=" + most_recent_tests + "&loc_accuracy=<2000&additional_info=download_classification",
+            type: 'GET',
+            dataType: 'json',
+            cache: false,
 
-                    currentFirstTestUUID = data.results[0].open_test_uuid;
-                    if (newPoints === 0) {
-                        return;
+            success: function (data) {
+                //add points to map
+                var newPoints = 0;
+                var newTests = [];
+                $.each(data.results, function (i, result) {
+                    if (result.open_test_uuid === currentFirstTestUUID) {
+                        return false;
+                    }
+                    newPoints++;
+                    newTests.push(result);
+
+                    //if initial - don't yet
+                    if (!initial) {
+                        addTestToMap(result);
                     }
 
-                    //if initial - add leave out three tests, animate them afterwards
-                    if (initial) {
-                        for (var i=most_recent_tests;i>3;i--) {
-                            addTestToMap(newTests[i-1]);
-                        }
-                        window.setTimeout(function() {
-                            addTestToMap(newTests[2]);
-                            animateMapToShowTests();
-                        },4000);
-                        window.setTimeout(function() {
-                            addTestToMap(newTests[1]);
-                            animateMapToShowTests();
-                        },7000);
-                        window.setTimeout(function() {
-                            addTestToMap(newTests[0]);
-                            animateMapToShowTests();
-                        },10000);
+                })
+
+                currentFirstTestUUID = data.results[0].open_test_uuid;
+                if (newPoints === 0) {
+                    return;
+                }
+
+                //if initial - add leave out three tests, animate them afterwards
+                if (initial) {
+                    for (var i = most_recent_tests; i > 3; i--) {
+                        addTestToMap(newTests[i - 1]);
                     }
+                    window.setTimeout(function () {
+                        addTestToMap(newTests[2]);
+                        animateMapToShowTests();
+                    }, 4000);
+                    window.setTimeout(function () {
+                        addTestToMap(newTests[1]);
+                        animateMapToShowTests();
+                    }, 7000);
+                    window.setTimeout(function () {
+                        addTestToMap(newTests[0]);
+                        animateMapToShowTests();
+                    }, 10000);
+                }
 
-                    animateMapToShowTests();
+                animateMapToShowTests();
 
-                    //map.updateSize();
-                });
+                //map.updateSize();
+            }
+        });
     }
     window.setTimeout(function () {
         window.setInterval(function() {refreshOpenTests(false);}, 3000);
