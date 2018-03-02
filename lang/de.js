@@ -284,5 +284,6 @@ exports.strings = {
     "histogram" : "Histogramm",
 
     "coordinates": "Standort",
-    "provider" : "Betreiber"
+    "provider" : "Betreiber",
+    "surrounding_tests": "Tests in der Umgebung als Open Data"
 }
