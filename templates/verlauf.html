@@ -104,24 +104,32 @@
     <div class="clear"></div>
     
     <div id="code-eingabe">
-        <form class="eRTR_form">
-		 <fieldset>
-		 	<div class="form-row clearfix">
-            <div id="code-anzeige-title"><p><a href="#" onclick="$('#code-anzeige').slideDown('medium');$('#code-anzeige-title').slideUp();return false;">{{ Lang.synchronization_code }}</a></p></div>
+
+        <div class="form-row clearfix">
+            <div id="code-anzeige-title"><p><a href="#" onclick="$('#code-anzeige').slideDown('medium');$('#code-anzeige-title').slideUp();return false;">{{ Lang.synchronization_code }}</a>
+                </p></div>
             <div id="code-anzeige" style="display:none;">
-                <div id="code-anzeige">
-                    <p><a href="" onclick="requestBrowserData('RMBTsync'); return false;">{{ Lang.history_content.request_code }}</a></p>
-                    <p>{{ Lang.history_content.enter_code }}</p>
-                </div>
-              </div>
-                <div class="form_line form-row clearfix" id="codeeingabe">
-                    <label for="speedttest-code">{{ Lang.code }}</label>
-                    <input id="speedttest-code" name="speedttest-code" type="text" />
-                    <input type="button" class="submit" value="{{ Lang.submit }}" onclick="requestBrowserData('RMBTsync','speedttest-code')" />
-                </div>
+                <form class="form-inline" id="sync-code-form"
+                      onsubmit="requestBrowserData('RMBTsync','speedttest-code');return false;">
+                    <fieldset>
+                        <div>
+                            <p><a href=""
+                                  onclick="requestBrowserData('RMBTsync'); return false;">{{ Lang.history_content.request_code }}</a>
+                            </p>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form_line form-row clearfix" id="codeeingabe">
+                            <p>{{ Lang.history_content.enter_code }}</p>
+                            <label for="speedttest-code">{{ Lang.code }}</label>
+                            <input id="speedttest-code" name="speedttest-code" type="text" class="form-control"/>
+                            <input type="submit" class="submit btn btn-submit" value="{{ Lang.submit }}"/>
+                        </div>
+                    </fieldset>
+                </form>
             </div>
-            </fieldset>
-        </form>
+        </div>
+
     </div>
     <div class="clear"></div>
 </div>
