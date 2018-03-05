@@ -285,5 +285,6 @@ exports.strings = {
 
     "coordinates": "Standort",
     "provider" : "Betreiber",
-    "surrounding_tests": "Tests in der Umgebung als Open Data"
+    "surrounding_tests": "Tests in der Umgebung als Open Data",
+    "land_cover": "Bodenbedeckung"
 }
