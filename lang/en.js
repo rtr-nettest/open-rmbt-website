@@ -111,6 +111,8 @@ exports.strings = {
         "pinned_false" : "Not included in statistics",
         "show_open_test_uuid" : "Show Open-Test-UUID",
         'radio_band': 'Radio band',
+        'cell_area_code': 'Cell area code',
+        'cell_location_id': 'Cell location id',
         'channel_number': 'Frequency channel',
         "additional_filters" : "Further filters"
     },

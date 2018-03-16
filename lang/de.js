@@ -112,6 +112,8 @@ exports.strings = {
         "show_open_test_uuid" : "Open-Test-UUID einblenden",
         'radio_band': 'Frequenzband',
         'channel_number': 'Frequenzkanal',
+        'cell_area_code': 'Sender-Gebiet',
+        'cell_location_id': 'Sender-Kennung',
         "additional_filters" : "Weitere Filter"
     },
 
