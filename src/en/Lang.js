@@ -30,6 +30,7 @@ Lang.setStrings({
    'AustrianPostalCode' : 'Austrian postcode',
    'gkz': 'Austrian community ID',
    'community': 'Community',
+   'locality': 'Cadastral community',
    'district': 'District',
    'province': 'Province',
    'Cancel' : 'Cancel',

@@ -30,6 +30,7 @@ Lang.setStrings({
     'AustrianPostalCode' : 'Österr. Postleitzahl',
     'gkz' : 'Gemeindekennzahl',
     'community': 'Gemeinde',
+    'locality': 'Katastralgemeinde',
     'district' : 'Bezirk',
     'province' : 'Bundesland',
     'Cancel' : 'Abbrechen',
