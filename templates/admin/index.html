@@ -34,6 +34,14 @@
                 URL_MAP_SERVER = data.settings[0].urls.url_map_server;
 
                 $.ajax({
+                    url: URL_MAP_SERVER.replace("m-cloud","m01") + "/version",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $("#mapserver_m01_version").html(data.version);
+                    }});
+
+                $.ajax({
                     url: URL_MAP_SERVER.replace("m-cloud","m02") + "/version",
                     type: 'GET',
                     dataType: 'json',
@@ -48,10 +56,25 @@
                     success: function(data) {
                         $("#mapserver_m03_version").html(data.version);
                     }});
+
+                $.ajax({
+                    url: URL_MAP_SERVER.replace("m-cloud","m04") + "/version",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $("#mapserver_m04_version").html(data.version);
+                    }});
+
             }
         });
 
-
+        $.ajax({
+            url: statisticProxy.replace("m-cloud","m01") + "/" + statisticpath + "/version",
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $("#statisticserver_m01_version").html(data.version);
+            }});
 
         $.ajax({
             url: statisticProxy.replace("m-cloud","m02") + "/" + statisticpath + "/version",
@@ -67,6 +90,14 @@
             dataType: 'json',
             success: function(data) {
                 $("#statisticserver_m03_version").html(data.version);
+            }});
+
+        $.ajax({
+            url: statisticProxy.replace("m-cloud","m04") + "/" + statisticpath + "/version",
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $("#statisticserver_m04_version").html(data.version);
             }});
         
         
@@ -97,10 +128,14 @@
 <p>
     Control Server c01 version: <span id="controlserver_version"></span><br/>
     Control Server c02 version: <span id="controlserver_c02_version"></span><br/>
+    Map Server version m01: <span id="mapserver_m01_version"></span><br/>
     Map Server version m02: <span id="mapserver_m02_version"></span><br/>
     Map Server version m03: <span id="mapserver_m03_version"></span><br/>
+    Map Server version m04: <span id="mapserver_m04_version"></span><br/>
+    Statistic Server version m01: <span id="statisticserver_m01_version"></span><br/>
     Statistic Server version m02: <span id="statisticserver_m02_version"></span><br/>
     Statistic Server version m03: <span id="statisticserver_m03_version"></span><br/>
+    Statistic Server version m04: <span id="statisticserver_m04_version"></span><br/>
     Website version: {{ gitDescribe }}<br />
 </p>
 
