@@ -191,7 +191,7 @@ exports.strings = {
     "heatmap" : "Heatmap",
     "points" : "Points",
     "shapes" : "Shapes",
-    "communities" : "Communities",
+    "communities" : "Cadastral communities",
     "sources" : "Sources",
 
     "please_select" : "Please select",
