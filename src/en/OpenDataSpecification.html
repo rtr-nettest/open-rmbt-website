@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Asciidoctor 1.5.5.dev">
+    <meta name="generator" content="Asciidoctor 1.5.6.2">
     <title>RTR-NetTest Open Data Interface Documentation</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
     <style>
@@ -17,7 +17,6 @@
         [hidden],template{display:none}
         script{display:none!important}
         html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
-        body{margin:0}
         a{background:transparent}
         a:focus{outline:thin dotted}
         a:active,a:hover{outline:0}
@@ -52,7 +51,7 @@
         table{border-collapse:collapse;border-spacing:0}
         *,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
         html,body{font-size:100%}
-        body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
+        body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
         a:hover{cursor:pointer}
         img,object,embed{max-width:100%;height:auto}
         object,embed{height:100%}
@@ -64,7 +63,6 @@
         .text-center{text-align:center!important}
         .text-justify{text-align:justify!important}
         .hide{display:none}
-        body{-webkit-font-smoothing:antialiased}
         img,object,svg{display:inline-block;vertical-align:middle}
         textarea{height:auto;min-height:50px}
         select{width:100%}
@@ -91,13 +89,12 @@
         small{font-size:60%;line-height:inherit}
         code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
         ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
-        ul,ol,ul.no-bullet,ol.no-bullet{margin-left:1.5em}
+        ul,ol{margin-left:1.5em}
         ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
         ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
         ul.square{list-style-type:square}
         ul.circle{list-style-type:circle}
         ul.disc{list-style-type:disc}
-        ul.no-bullet{list-style:none}
         ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
         dl dt{margin-bottom:.3125em;font-weight:bold}
         dl dd{margin-bottom:1.25em}
@@ -119,18 +116,25 @@
         table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
         table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
         table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
-        body{tab-size:4}
         h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
         h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
         .clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
         .clearfix:after,.float-group:after{clear:both}
-        *:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+        *:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
+        *:not(pre)>code.nobreak{word-wrap:normal}
+        *:not(pre)>code.nowrap{white-space:nowrap}
         pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
+        em em{font-style:normal}
+        strong strong{font-weight:400}
         .keyseq{color:rgba(51,51,51,.8)}
         kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
         .keyseq kbd:first-child{margin-left:0}
         .keyseq kbd:last-child{margin-right:0}
-        .menuseq,.menu{color:rgba(0,0,0,.8)}
+        .menuseq,.menuref{color:#000}
+        .menuseq b:not(.caret),.menuref{font-weight:inherit}
+        .menuseq{word-spacing:-.02em}
+        .menuseq b.caret{font-size:1.25em;line-height:.8}
+        .menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
         b.button:before,b.button:after{position:relative;top:-1px;font-weight:400}
         b.button:before{content:"[";padding:0 3px 0 2px}
         b.button:after{content:"]";padding:0 2px 0 3px}
@@ -197,7 +201,7 @@
         table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inherit}
         .admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
         .admonitionblock>table td.icon{text-align:center;width:80px}
-        .admonitionblock>table td.icon img{max-width:none}
+        .admonitionblock>table td.icon img{max-width:initial}
         .admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
         .admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #ddddd8;color:rgba(0,0,0,.6)}
         .admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
@@ -253,13 +257,13 @@
         table.tableblock{max-width:100%;border-collapse:separate}
         table.tableblock td>.paragraph:last-child p>p:last-child,table.tableblock th>p:last-child,table.tableblock td>p:last-child{margin-bottom:0}
         table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
-        table.grid-all th.tableblock,table.grid-all td.tableblock{border-width:0 1px 1px 0}
-        table.grid-all tfoot>tr>th.tableblock,table.grid-all tfoot>tr>td.tableblock{border-width:1px 1px 0 0}
-        table.grid-cols th.tableblock,table.grid-cols td.tableblock{border-width:0 1px 0 0}
-        table.grid-all *>tr>.tableblock:last-child,table.grid-cols *>tr>.tableblock:last-child{border-right-width:0}
-        table.grid-rows th.tableblock,table.grid-rows td.tableblock{border-width:0 0 1px 0}
-        table.grid-all tbody>tr:last-child>th.tableblock,table.grid-all tbody>tr:last-child>td.tableblock,table.grid-all thead:last-child>tr>th.tableblock,table.grid-rows tbody>tr:last-child>th.tableblock,table.grid-rows tbody>tr:last-child>td.tableblock,table.grid-rows thead:last-child>tr>th.tableblock{border-bottom-width:0}
-        table.grid-rows tfoot>tr>th.tableblock,table.grid-rows tfoot>tr>td.tableblock{border-width:1px 0 0 0}
+        table.grid-all>thead>tr>.tableblock,table.grid-all>tbody>tr>.tableblock{border-width:0 1px 1px 0}
+        table.grid-all>tfoot>tr>.tableblock{border-width:1px 1px 0 0}
+        table.grid-cols>*>tr>.tableblock{border-width:0 1px 0 0}
+        table.grid-rows>thead>tr>.tableblock,table.grid-rows>tbody>tr>.tableblock{border-width:0 0 1px 0}
+        table.grid-rows>tfoot>tr>.tableblock{border-width:1px 0 0 0}
+        table.grid-all>*>tr>.tableblock:last-child,table.grid-cols>*>tr>.tableblock:last-child{border-right-width:0}
+        table.grid-all>tbody>tr:last-child>.tableblock,table.grid-all>thead:last-child>tr>.tableblock,table.grid-rows>tbody>tr:last-child>.tableblock,table.grid-rows>thead:last-child>tr>.tableblock{border-bottom-width:0}
         table.frame-all{border-width:1px}
         table.frame-sides{border-width:0 1px}
         table.frame-topbot{border-width:1px 0}
@@ -280,10 +284,12 @@
         dl dd{margin-left:1.125em}
         dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
         ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
-        ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
-        ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
-        ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
-        ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
+        ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+        ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+        ul.unstyled,ol.unstyled{margin-left:0}
+        ul.checklist{margin-left:.625em}
+        ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+        ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
         ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
         ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
         ul.inline>li>*{display:block}
@@ -300,7 +306,8 @@
         td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
         td.hdlist1{font-weight:bold;padding-bottom:1.25em}
         .literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
-        .colist>table tr>td:first-of-type{padding:0 .75em;line-height:1}
+        .colist>table tr>td:first-of-type{padding:.4em .75em 0 .75em;line-height:1;vertical-align:top}
+        .colist>table tr>td:first-of-type img{max-width:initial}
         .colist>table tr>td:last-of-type{padding:.25em 0}
         .thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
         .imageblock.left,.imageblock[style*="float: left"]{margin:.25em .625em 1.25em 0}
@@ -363,6 +370,7 @@
         .yellow{color:#bfbf00}
         .yellow-background{background-color:#fafa00}
         span.icon>.fa{cursor:default}
+        a span.icon>.fa{cursor:inherit}
         .admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
         .admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
         .admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
@@ -416,7 +424,6 @@
             .hide-for-print{display:none!important}
             .show-for-print{display:inherit!important}}
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
@@ -473,7 +480,7 @@
     <div id="preamble">
         <div class="sectionbody">
             <div class="paragraph">
-                <p>Version 2017-03-22</p>
+                <p>Version 2018-03-29</p>
             </div>
             <div class="paragraph">
                 <p>Thomas Schreiber<br>
@@ -483,7 +490,7 @@
         </div>
     </div>
     <div class="sect1">
-        <h2 id="introduction-and-terms-of-use"><a class="anchor" href="#introduction-and-terms-of-use"></a>1. Introduction and terms of use</h2>
+        <h2 id="introduction-and-terms-of-use">1. Introduction and terms of use</h2>
         <div class="sectionbody">
             <div class="paragraph">
                 <p>The present document specifies requests for Open Data collected by the
@@ -523,7 +530,7 @@
                 <table>
                     <tr>
                         <td class="icon">
-                            <i class="fa icon-important" title="Important"></i>
+                            <div class="title">Important</div>
                         </td>
                         <td class="content">
                             Occurrences of INTERFACE in URLs in this document have to be
@@ -561,10 +568,10 @@
         </div>
     </div>
     <div class="sect1">
-        <h2 id="search-for-tests-by-open-data"><a class="anchor" href="#search-for-tests-by-open-data"></a>2. Search for tests by open-data</h2>
+        <h2 id="search-for-tests-by-open-data">2. Search for tests by open-data</h2>
         <div class="sectionbody">
             <div class="sect2">
-                <h3 id="request"><a class="anchor" href="#request"></a>2.1. Request</h3>
+                <h3 id="request">2.1. Request</h3>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 50%;">
@@ -585,7 +592,7 @@
                 </table>
             </div>
             <div class="sect2">
-                <h3 id="parameters"><a class="anchor" href="#parameters"></a>2.2. Parameters</h3>
+                <h3 id="parameters">2.2. Parameters</h3>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 33.3333%;">
@@ -852,7 +859,7 @@
                 </table>
             </div>
             <div class="sect2">
-                <h3 id="response"><a class="anchor" href="#response"></a>2.3. Response</h3>
+                <h3 id="response">2.3. Response</h3>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 50%;">
@@ -876,7 +883,7 @@
                     </tbody>
                 </table>
                 <div class="sect3">
-                    <h4 id="returned-json"><a class="anchor" href="#returned-json"></a>2.3.1. Returned JSON</h4>
+                    <h4 id="returned-json">2.3.1. Returned JSON</h4>
                     <table class="tableblock frame-all grid-all spread">
                         <colgroup>
                             <col style="width: 33.3333%;">
@@ -942,7 +949,7 @@
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="opendata-summary-item"><a class="anchor" href="#opendata-summary-item"></a>2.3.2. Opendata-summary-item</h4>
+                    <h4 id="opendata-summary-item">2.3.2. Opendata-summary-item</h4>
                     <table class="tableblock frame-all grid-all spread">
                         <colgroup>
                             <col style="width: 33.3333%;">
@@ -1030,9 +1037,9 @@
                 </div>
             </div>
             <div class="sect2">
-                <h3 id="example"><a class="anchor" href="#example"></a>2.4. Example</h3>
+                <h3 id="example">2.4. Example</h3>
                 <div class="sect3">
-                    <h4 id="request-1"><a class="anchor" href="#request-1"></a>2.4.1. Request</h4>
+                    <h4 id="request-1">2.4.1. Request</h4>
                     <div class="exampleblock">
                         <div class="content">
                             <div class="paragraph">
@@ -1076,7 +1083,7 @@
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="response-1"><a class="anchor" href="#response-1"></a>2.4.2. Response</h4>
+                    <h4 id="response-1">2.4.2. Response</h4>
                     <div class="literalblock">
                         <div class="content">
 <pre>{
@@ -1129,7 +1136,7 @@
         </div>
     </div>
     <div class="sect1">
-        <h2 id="open-data-for-one-specific-test"><a class="anchor" href="#open-data-for-one-specific-test"></a>3. Open data for one specific test</h2>
+        <h2 id="open-data-for-one-specific-test">3. Open data for one specific test</h2>
         <div class="sectionbody">
             <div class="paragraph">
                 <p>This call gets all the open-data for one specific test by its
@@ -1137,7 +1144,7 @@
                     if a value is unknown.</p>
             </div>
             <div class="sect2">
-                <h3 id="request-2"><a class="anchor" href="#request-2"></a>3.1. Request</h3>
+                <h3 id="request-2">3.1. Request</h3>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 50%;">
@@ -1158,7 +1165,7 @@
                 </table>
             </div>
             <div class="sect2">
-                <h3 id="parameters-1"><a class="anchor" href="#parameters-1"></a>3.2. Parameters</h3>
+                <h3 id="parameters-1">3.2. Parameters</h3>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 33.3333%;">
@@ -1193,7 +1200,7 @@
                 </table>
             </div>
             <div class="sect2">
-                <h3 id="response-2"><a class="anchor" href="#response-2"></a>3.3. Response</h3>
+                <h3 id="response-2">3.3. Response</h3>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 50%;">
@@ -1217,7 +1224,7 @@
                     </tbody>
                 </table>
                 <div class="sect3">
-                    <h4 id="returned-json-1"><a class="anchor" href="#returned-json-1"></a>3.3.1. Returned JSON</h4>
+                    <h4 id="returned-json-1">3.3.1. Returned JSON</h4>
                     <table class="tableblock frame-all grid-all spread">
                         <colgroup>
                             <col style="width: 33.3333%;">
@@ -1253,9 +1260,29 @@
                             <td class="tableblock halign-left valign-top"><p class="tableblock">“3G”</p></td>
                         </tr>
                         <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">cell_area_code</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">10156</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">cell_location_id</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">28708964</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">channel_number</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">397</p></td>
+                        </tr>
+                        <tr>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">client_version</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">“1.1”</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">community</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">“Wien”</p></td>
                         </tr>
                         <tr>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">country_asn</p></td>
@@ -1283,6 +1310,11 @@
                             <td class="tableblock halign-left valign-top"><p class="tableblock">667.15</p></td>
                         </tr>
                         <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">district</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">“Mistelbach”</p></td>
+                        </tr>
+                        <tr>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">download_classification</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
@@ -1303,6 +1335,16 @@
                             <td class="tableblock halign-left valign-top"><p class="tableblock">7000.12</p></td>
                         </tr>
                         <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">gkz</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">90001</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">gkz_sa</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">90601</p></td>
+                        </tr>
+                        <tr>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">implausible</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
@@ -1311,6 +1353,16 @@
                             <td class="tableblock halign-left valign-top"><p class="tableblock">ip_anonym</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">“80.108.108”</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">kg_nr</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numberic</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">1009</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">land_cover</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
                         </tr>
                         <tr>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">lat</p></td>
@@ -1331,6 +1383,11 @@
                             <td class="tableblock halign-left valign-top"><p class="tableblock">long</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">16.3967841</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">locality</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">“Mariahilf”</p></td>
                         </tr>
                         <tr>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">lte_rsrp</p></td>
@@ -1418,6 +1475,11 @@
                             <td class="tableblock halign-left valign-top"><p class="tableblock">16.178334</p></td>
                         </tr>
                         <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">pinned</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+                        </tr>
+                        <tr>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">platform</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">“Android”</p></td>
@@ -1433,9 +1495,19 @@
                             <td class="tableblock halign-left valign-top"><p class="tableblock">“Provider”</p></td>
                         </tr>
                         <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">province</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">“Wien”</p></td>
+                        </tr>
+                        <tr>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">public_ip_as_name</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">“AS32768 Provider“</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">radio_band</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numberic</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
                         </tr>
                         <tr>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">roaming_type</p></td>
@@ -1588,6 +1660,33 @@
                             </tr>
                             <tr>
                                 <td class="hdlist1">
+                                    <em>cell_area_code</em>
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Number describing the coarse location of a cell. E.g. the Tracking Area Code (TAC) in case of
+                                        4G or the Location Area Code (LAC) in case of 2G or 3G</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    <em>cell_location_id</em>
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Number identifying the location of a cell. E.g. the 28-bit Cell Identity (CI) in case of 4G,
+                                        the 28-bit UMTS Cell Identity (CID) in case of UMTS or the 16-bit GSM Cell Identity (CID) in case of GSM.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    channel_number
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Channel number of the radio channel used during a measurement. E.g. the 18-bit Absolute RF Channel
+                                        Number (EARFCN) in case of 4G or the 16-bit UMTS Absolute RF Channel Number (UARFCN) in case of 3G.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
                                     <em>client_version</em>
                                 </td>
                                 <td class="hdlist2">
@@ -1699,7 +1798,15 @@
                                     <em>gkz</em>
                                 </td>
                                 <td class="hdlist2">
-                                    <p>Community ID (Gemeindekennzahl, see <a href="http://www.statistik.at/web_de/klassifikationen/regionale_gliederungen/gemeinden/index.html" class="bare">http://www.statistik.at/web_de/klassifikationen/regionale_gliederungen/gemeinden/index.html</a>).</p>
+                                    <p>Community ID (Gemeindekennzahl, see <a href="http://www.bev.gv.at/portal/page?_pageid=713,2601287&amp;_dad=portal&amp;_schema=PORTAL" class="bare">http://www.bev.gv.at/portal/page?_pageid=713,2601287&amp;_dad=portal&amp;_schema=PORTAL</a>).</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    <em>gkz_sa</em>
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Community ID (Gemeindekennzahl, see <a href="http://www.statistik.at/web_de/klassifikationen/regionale_gliederungen/gemeinden/index.html" class="bare">http://www.statistik.at/web_de/klassifikationen/regionale_gliederungen/gemeinden/index.html</a>)</p>
                                 </td>
                             </tr>
                             <tr>
@@ -1716,6 +1823,24 @@
                                 </td>
                                 <td class="hdlist2">
                                     <p>The anonymized IP-Address of the client.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    kg_nr
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Number of the cadastral community, see <a href="http://www.bev.gv.at/portal/page?_pageid=713,2601287&amp;_dad=portal&amp;_schema=PORTAL" class="bare">http://www.bev.gv.at/portal/page?_pageid=713,2601287&amp;_dad=portal&amp;_schema=PORTAL</a></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    <em>land_cover</em>
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Classification of the land cover within austria, see
+                                        <a href="http://www.umweltbundesamt.at/fileadmin/site/umweltthemen/raumplanung/1_flaechennutzung/corine/CORINE_Nomenklatur.pdf" class="bare">http://www.umweltbundesamt.at/fileadmin/site/umweltthemen/raumplanung/1_flaechennutzung/corine/CORINE_Nomenklatur.pdf</a>
+                                        and <a href="https://www.eea.europa.eu/data-and-maps/data/clc-2006-vector-4" class="bare">https://www.eea.europa.eu/data-and-maps/data/clc-2006-vector-4</a></p>
                                 </td>
                             </tr>
                             <tr>
@@ -1740,6 +1865,14 @@
                                 </td>
                                 <td class="hdlist2">
                                     <p>Source for the geo location-data. Valuse: “gps”, “network”.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    locality
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Name of the cadastral community, see: <a href="http://www.bev.gv.at/portal/page?_pageid=713,2601287&amp;_dad=portal&amp;_schema=PORTAL" class="bare">http://www.bev.gv.at/portal/page?_pageid=713,2601287&amp;_dad=portal&amp;_schema=PORTAL</a></p>
                                 </td>
                             </tr>
                             <tr>
@@ -1893,6 +2026,14 @@
                             </tr>
                             <tr>
                                 <td class="hdlist1">
+                                    <em>pinned</em>
+                                </td>
+                                <td class="hdlist2">
+                                    <p><em>True</em>, if if the test is relevant for generating the statistics (e.g. not part of a series)</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
                                     <em>platform</em>
                                 </td>
                                 <td class="hdlist2">
@@ -1949,6 +2090,14 @@
                                 </td>
                                 <td class="hdlist2">
                                     <p>Name of the AS of the clients public IP.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    radio_band
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Radio band used when conducting the test.</p>
                                 </td>
                             </tr>
                             <tr>
@@ -2148,7 +2297,7 @@
                                     <em>zip_code</em>
                                 </td>
                                 <td class="hdlist2">
-                                    <p>ZIP-Code of the clients location (if available).</p>
+                                    <p>obsolete, will be removed in future versions</p>
                                 </td>
                             </tr>
                         </table>
@@ -2159,7 +2308,7 @@
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="speed-curve-item"><a class="anchor" href="#speed-curve-item"></a>3.3.2. Speed-curve-item</h4>
+                    <h4 id="speed-curve-item">3.3.2. Speed-curve-item</h4>
                     <table class="tableblock frame-all grid-all spread">
                         <colgroup>
                             <col style="width: 33.3333%;">
@@ -2236,7 +2385,7 @@
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="measurement-item"><a class="anchor" href="#measurement-item"></a>3.3.3. Measurement-item</h4>
+                    <h4 id="measurement-item">3.3.3. Measurement-item</h4>
                     <table class="tableblock frame-all grid-all spread">
                         <colgroup>
                             <col style="width: 33.3333%;">
@@ -2287,7 +2436,7 @@
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="signal-item"><a class="anchor" href="#signal-item"></a>3.3.4. Signal-item</h4>
+                    <h4 id="signal-item">3.3.4. Signal-item</h4>
                     <table class="tableblock frame-all grid-all spread">
                         <colgroup>
                             <col style="width: 33.3333%;">
@@ -2331,6 +2480,21 @@
                             <td class="tableblock halign-left valign-top"><p class="tableblock">lte_rsrp</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">-77</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">cell_info_2G</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">[{Cell Info 2G-Item}]</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">cell_info_3G</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">[{Cell Info 3G-Item}]</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">cell_info_4G</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">[{Cell Info 4G-Item}]</p></td>
                         </tr>
                         </tbody>
                     </table>
@@ -2387,11 +2551,338 @@
                                     <p>LTE signal strength in dBm.</p>
                                 </td>
                             </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    cell_info_2G
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Additional information about the used 2G radio cell</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    cell_info_3G
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Additional information about the used 3G radio cell</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    cell_info_4G
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Additional information about the used 4G radio cell</p>
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="location-item"><a class="anchor" href="#location-item"></a>3.3.5. Location-item</h4>
+                    <h4 id="cell_info_2g">3.3.5. Cell Info 2G-Item</h4>
+                    <table class="tableblock frame-all grid-all spread">
+                        <colgroup>
+                            <col style="width: 33.3333%;">
+                            <col style="width: 33.3333%;">
+                            <col style="width: 33.3334%;">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th class="tableblock halign-left valign-top">Value</th>
+                            <th class="tableblock halign-left valign-top">Type</th>
+                            <th class="tableblock halign-left valign-top">Example</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">arfcn</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">1021</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">band</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">bsic</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">58</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">cid</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">18804</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">frequency_dl</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">934.4</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">lac</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">47170</p></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="hdlist">
+                        <table>
+                            <tr>
+                                <td class="hdlist1">
+                                    arfcn
+                                </td>
+                                <td class="hdlist2">
+                                    <p>16-bit GSM Absolute RF Channel Number</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    band
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Band</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    bsic
+                                </td>
+                                <td class="hdlist2">
+                                    <p>6-bit Base Station Identity Code</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    cid
+                                </td>
+                                <td class="hdlist2">
+                                    <p>16-bit GSM Cell Identity described in TS 27.007, 0..65535</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    frequency_dl
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Frequency of the downlink in MHz</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    lac
+                                </td>
+                                <td class="hdlist2">
+                                    <p>16-bit Location Area Code, 0..65535</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="sect3">
+                    <h4 id="cell_info_3g">3.3.6. Cell Info 3G-Item</h4>
+                    <table class="tableblock frame-all grid-all spread">
+                        <colgroup>
+                            <col style="width: 33.3333%;">
+                            <col style="width: 33.3333%;">
+                            <col style="width: 33.3334%;">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th class="tableblock halign-left valign-top">Value</th>
+                            <th class="tableblock halign-left valign-top">Type</th>
+                            <th class="tableblock halign-left valign-top">Example</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">band</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">cid</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">9908484</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">frequency_dl</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">2137.4</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">lac</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">2510</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">psc</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">27</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">uarfcn</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">10687</p></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="hdlist">
+                        <table>
+                            <tr>
+                                <td class="hdlist1">
+                                    band
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Band</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    cid
+                                </td>
+                                <td class="hdlist2">
+                                    <p>CID 28-bit UMTS Cell Identity described in TS 25.331, 0..268435455</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    frequency_dl
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Frequency of the downlink in MHz</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    lac
+                                </td>
+                                <td class="hdlist2">
+                                    <p>16-bit Location Area Code, 0..65535</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    psc
+                                </td>
+                                <td class="hdlist2">
+                                    <p>9-bit UMTS Primary Scrambling Code described in TS 25.331, 0..511</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    uarfcn
+                                </td>
+                                <td class="hdlist2">
+                                    <p>16-bit UMTS Absolute RF Channel Number</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="sect3">
+                    <h4 id="cell_info_4g">3.3.7. Cell Info 4G-Item</h4>
+                    <table class="tableblock frame-all grid-all spread">
+                        <colgroup>
+                            <col style="width: 33.3333%;">
+                            <col style="width: 33.3333%;">
+                            <col style="width: 33.3334%;">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th class="tableblock halign-left valign-top">Value</th>
+                            <th class="tableblock halign-left valign-top">Type</th>
+                            <th class="tableblock halign-left valign-top">Example</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">band</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">ci</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">189954</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">earfcn</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">2850</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">frequency_dl</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">2630</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">pci</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">35</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">tac</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">6710</p></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="hdlist">
+                        <table>
+                            <tr>
+                                <td class="hdlist1">
+                                    band
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Band</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    ci
+                                </td>
+                                <td class="hdlist2">
+                                    <p>28-bit Cell Identity</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    earfcn
+                                </td>
+                                <td class="hdlist2">
+                                    <p>18-bit Absolute RF Channel Number</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    frequency_dl
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Frequency of the downlink in MHz</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    pci
+                                </td>
+                                <td class="hdlist2">
+                                    <p>Physical Cell Id 0..503</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hdlist1">
+                                    tac
+                                </td>
+                                <td class="hdlist2">
+                                    <p>16-bit Tracking Area Code</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="sect3">
+                    <h4 id="location-item">3.3.8. Location-item</h4>
                     <table class="tableblock frame-all grid-all spread">
                         <colgroup>
                             <col style="width: 33.3333%;">
@@ -2467,7 +2958,7 @@
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="speed-curve-threadwise"><a class="anchor" href="#speed-curve-threadwise"></a>3.3.6. Speed-curve-threadwise</h4>
+                    <h4 id="speed-curve-threadwise">3.3.9. Speed-curve-threadwise</h4>
                     <table class="tableblock frame-all grid-all spread">
                         <colgroup>
                             <col style="width: 33.3333%;">
@@ -2491,6 +2982,16 @@
                             <td class="tableblock halign-left valign-top"><p class="tableblock">upload</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
                             <td class="tableblock halign-left valign-top"><p class="tableblock">"0": [{measurement-threadwise}]</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">signal</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">[{signal-item}]</p></td>
+                        </tr>
+                        <tr>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">location</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">JSONArray</p></td>
+                            <td class="tableblock halign-left valign-top"><p class="tableblock">[{location-item}]</p></td>
                         </tr>
                         </tbody>
                     </table>
@@ -2523,7 +3024,7 @@
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="measurement-threadwise"><a class="anchor" href="#measurement-threadwise"></a>3.3.7. Measurement-threadwise</h4>
+                    <h4 id="measurement-threadwise">3.3.10. Measurement-threadwise</h4>
                     <table class="tableblock frame-all grid-all spread">
                         <colgroup>
                             <col style="width: 33.3333%;">
@@ -2575,9 +3076,9 @@
                 </div>
             </div>
             <div class="sect2">
-                <h3 id="example-1"><a class="anchor" href="#example-1"></a>3.4. Example</h3>
+                <h3 id="example-1">3.4. Example</h3>
                 <div class="sect3">
-                    <h4 id="request-3"><a class="anchor" href="#request-3"></a>3.4.1. Request</h4>
+                    <h4 id="request-3">3.4.1. Request</h4>
                     <div class="exampleblock">
                         <div class="content">
                             <div class="paragraph">
@@ -2587,110 +3088,128 @@
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="response-3"><a class="anchor" href="#response-3"></a>3.4.2. Response</h4>
+                    <h4 id="response-3">3.4.2. Response</h4>
                     <div class="literalblock">
                         <div class="content">
 <pre>{
-    "testdl_if_bytes_download": null,
-    "testul_if_bytes_upload": null,
-    "time_dl_ms": null,
-    "model_native": "Firefox",
-    "implausible": false,
-    "ndt_download_kbit": null,
+    "asn": 1764,
+    "bytes_download": 76959744,
+    "bytes_upload": 78868480,
+    "cat_technology": "LAN",
+    "cell_area_code": null,
+    "cell_location_id": null,
+    "channel_number": null,
+    "client_version": "0.3",
+    "community": "Wien",
+    "connection": null,
+    "country_asn": "EU",
+    "country_geoip": "AT",
+    "country_location": "AT",
+    "distance": null,
+    "district": "Wien(Stadt)",
     "download_classification": 3,
-    "testul_if_bytes_download": null,
+    "download_kbit": 87445,
+    "duration_download_ms": 7040.742745,
+    "duration_upload_ms": 7126.321333,
+    "gkz": 90001,
+    "gkz_sa": 90601,
+    "implausible": false,
+    "ip_anonym": "2a01:190:15fd::",
+    "kg_nr": 1009,
+    "land_cover": null,
+    "lat": 48.198019801980195,
+    "loc_accuracy": 100,
+    "loc_src": "rastered",
+    "locality": "Mariahilf",
+    "long": 16.34952766531714,
+    "lte_rsrp": null,
+    "lte_rsrq": null,
+    "model": "Firefox",
+    "model_native": "Firefox",
+    "ndt_download_kbit": null,
+    "ndt_upload_kbit": null,
+    "network_country": null,
+    "network_mcc_mnc": null,
+    "network_name": null,
+    "network_type": "LAN",
+    "num_threads": 3,
+    "num_threads_requested": 3,
+    "num_threads_ul": 3,
+    "open_test_uuid": "O211ec703-71db-4c32-b61a-77fc1bbf1705",
+    "open_uuid": "P7241cee2-7773-47cb-b398-dd047260db32",
+    "ping_classification": 3,
+    "ping_ms": 2.165636,
+    "pinned": true,
+    "platform": "RMBTws",
+    "product": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:32.0) Gecko/20100101 Firefox/32.0",
+    "provider_name": "next layer Telekommunikationsdienstleistungs-GmbH",
+    "province": "Wien",
     "public_ip_as_name": "NEXTLAYER-AS next layer Telekommunikationsdienstleistungs- GmbH,AT",
+    "radio_band": null,
+    "roaming_type": null,
+    "server_name": "RTR https 1G AT",
+    "signal_classification": null,
+    "signal_strength": null,
+    "sim_country": null,
+    "sim_mcc_mnc": null,
     "speed_curve": {
-        "location": [
-            {
-                "time_elapsed": 44488,
-                "loc_accuracy": 100,
-                "long": 16.3495225,
-                "lat": 48.1979063
-            }
-        ],
-        "signal": [ ],
         "download": [
             {
-                "time_elapsed": 41,
-                "bytes_total": 319488
-            },
-            ...
+                "bytes_total": 319488,
+                "time_elapsed": 41
+            }, ...,
             {
-                "time_elapsed": 7280,
-                "bytes_total": 76959744
+                "bytes_total": 76959744,
+                "time_elapsed": 7280
             }
         ],
+        "location": [
+            {
+                "lat": 48.20817400000001,
+                "loc_accuracy": 140000,
+                "long": 16.373819,
+                "time_elapsed": 574
+            }, ...,
+            {
+                "lat": 48.197906299999985,
+                "loc_accuracy": 100,
+                "long": 16.3495225,
+                "time_elapsed": 44488
+            }
+        ],
+        "signal": [],
         "upload": [
             {
-                "time_elapsed": 107,
-                "bytes_total": 4096
-            },
-            ...
+                "bytes_total": 4096,
+                "time_elapsed": 107
+            }, ...,
             {
-                "time_elapsed": 7148,
-                "bytes_total": 78868480
+                "bytes_total": 78868480,
+                "time_elapsed": 7148
             }
         ]
     },
-    "long": 16.349527665317,
-    "open_test_uuid": "O211ec703-71db-4c32-b61a-77fc1bbf1705",
-    "time": "2014-10-01 14:46",
-    "testdl_if_bytes_upload": null,
-    "ping_classification": 3,
-    "open_uuid": "P7241cee2-7773-47cb-b398-dd047260db32",
-    "cat_technology": "LAN",
     "test_duration": 7,
-    "ndt_upload_kbit": null,
-    "loc_accuracy": 100,
-    "num_threads_ul": 3,
-    "duration_upload_ms": 7126.321333,
-    "platform": null,
-    "country_asn": "EU",
-    "connection": null,
-    "time_ul_ms": null,
-    "roaming_type": null,
-    "wifi_link_speed": null,
-    "lte_rsrq": null,
-    "asn": 1764,
-    "lte_rsrp": null,
-    "country_geoip": "AT",
-    "num_threads_requested": 3,
-    "provider_name": "next layer Telekommunikationsdienstleistungs-GmbH",
-    "model": "Firefox",
-    "network_type": "LAN",
-    "zip_code": 1060,
-    "sim_mcc_mnc": null,
     "test_if_bytes_download": null,
-    "server_name": "RTR Websocket",
-    "distance": null,
-    "sim_country": null,
-    "duration_download_ms": 7040.742745,
-    "loc_src": "rastered",
-    "download_kbit": 87445,
-    "network_mcc_mnc": null,
-    "country_location": "AT",
-    "network_country": null,
-    "lat": 48.19801980198,
-    "ip_anonym": "2a01:190:15fd::",
-    "bytes_download": 76959744,
-    "network_name": null,
-    "upload_classification": 3,
     "test_if_bytes_upload": null,
-    "num_threads": 3,
-    "product": "Mozilla\/5.0 (Windows NT 6.1; WOW64; rv:32.0) Gecko\/20100101 Firefox\/32.0",
-    "signal_classification": null,
-    "signal_strength": null,
-    "ping_ms": 2.165636,
-    "bytes_upload": 78868480,
+    "testdl_if_bytes_download": null,
+    "testdl_if_bytes_upload": null,
+    "testul_if_bytes_download": null,
+    "testul_if_bytes_upload": null,
+    "time": "2014-10-01 14:46:06",
+    "time_dl_ms": null,
+    "time_ul_ms": null,
+    "upload_classification": 3,
     "upload_kbit": 88537,
-    "client_version": "0.3"
+    "wifi_link_speed": null,
+    "zip_code": null
+}
 }</pre>
                         </div>
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="request-threadwise"><a class="anchor" href="#request-threadwise"></a>3.4.3. Request Threadwise</h4>
+                    <h4 id="request-threadwise">3.4.3. Request Threadwise</h4>
                     <div class="exampleblock">
                         <div class="content">
                             <div class="paragraph">
@@ -2700,37 +3219,17 @@
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="response-threadwise"><a class="anchor" href="#response-threadwise"></a>3.4.4. Response Threadwise</h4>
+                    <h4 id="response-threadwise">3.4.4. Response Threadwise</h4>
                     <div class="literalblock">
                         <div class="content">
 <pre>{
-    "testdl_if_bytes_download": null,
-    "testul_if_bytes_upload": null,
-    "time_dl_ms": null,
-    "model_native": "Firefox",
-    "implausible": false,
-    "ndt_download_kbit": null,
-    "download_classification": 3,
-    "testul_if_bytes_download": null,
-    "public_ip_as_name": "NEXTLAYER-AS next layer Telekommunikationsdienstleistungs- GmbH,AT",
-    "speed_curve": {...}    //same as speed-curve-item
-    "long": 16.34952766531714,
     "open_test_uuid": "O211ec703-71db-4c32-b61a-77fc1bbf1705",
-    "time": "2014-10-01 14:46:06",
-    "testdl_if_bytes_upload": null,
-    "ping_classification": 3,
     "open_uuid": "P7241cee2-7773-47cb-b398-dd047260db32",
-    "cat_technology": "LAN",
-    "test_duration": 7,
-    "ndt_upload_kbit": null,
-    "loc_accuracy": 100,
-    "num_threads_ul": 3,
-    "duration_upload_ms": 7126.321333,
-    "platform": "RMBTws",
-    "country_asn": "EU",
-    "connection": null,
-    "time_ul_ms": null,
-    "roaming_type": null,
+    "speed_curve": {...} ,   //same as speed-curve-item
+    "long": 16.34952766531714,
+    "lat": 48.198019801980195,
+    "time": "2014-10-01 14:46:06",
+    ..., //same as above
     "speed_curve_threadwise": {
         "download": {
             "0": [
@@ -2768,42 +3267,7 @@
             ]
         },
         "upload": {...} //similar to download
-    },
-    "wifi_link_speed": null,
-    "lte_rsrq": null,
-    "asn": 1764,
-    "lte_rsrp": null,
-    "country_geoip": "AT",
-    "num_threads_requested": 3,
-    "provider_name": "next layer Telekommunikationsdienstleistungs-GmbH",
-    "model": "Firefox",
-    "network_type": "LAN",
-    "zip_code": 1060,
-    "sim_mcc_mnc": null,
-    "test_if_bytes_download": null,
-    "server_name": "RTR Websocket AT",
-    "distance": null,
-    "sim_country": null,
-    "duration_download_ms": 7040.742745,
-    "loc_src": "rastered",
-    "download_kbit": 87445,
-    "network_mcc_mnc": null,
-    "country_location": "AT",
-    "network_country": null,
-    "lat": 48.198019801980195,
-    "ip_anonym": "2a01:190:15fd::",
-    "bytes_download": 76959744,
-    "network_name": null,
-    "upload_classification": 3,
-    "test_if_bytes_upload": null,
-    "num_threads": 3,
-    "product": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:32.0) Gecko/20100101 Firefox/32.0",
-    "signal_classification": null,
-    "signal_strength": null,
-    "ping_ms": 2.165636,
-    "bytes_upload": 78868480,
-    "upload_kbit": 88537,
-    "client_version": "0.3"
+    }
 }</pre>
                         </div>
                     </div>
@@ -2812,10 +3276,10 @@
         </div>
     </div>
     <div class="sect1">
-        <h2 id="csv-export"><a class="anchor" href="#csv-export"></a>4. CSV-Export</h2>
+        <h2 id="csv-export">4. CSV-Export</h2>
         <div class="sectionbody">
             <div class="sect2">
-                <h3 id="request-4"><a class="anchor" href="#request-4"></a>4.1. Request</h3>
+                <h3 id="request-4">4.1. Request</h3>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 50%;">
@@ -2840,7 +3304,7 @@
                 </table>
             </div>
             <div class="sect2">
-                <h3 id="parameters-2"><a class="anchor" href="#parameters-2"></a>4.2. Parameters</h3>
+                <h3 id="parameters-2">4.2. Parameters</h3>
                 <div class="paragraph">
                     <p>No parameters need to be sent in order to obtain the test results of the
                         last 31 days. For the second type of request, it is necessary to replace
@@ -2849,7 +3313,7 @@
                 </div>
             </div>
             <div class="sect2">
-                <h3 id="response-4"><a class="anchor" href="#response-4"></a>4.3. Response</h3>
+                <h3 id="response-4">4.3. Response</h3>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 50%;">
@@ -2873,9 +3337,9 @@
                 </table>
             </div>
             <div class="sect2">
-                <h3 id="example-2"><a class="anchor" href="#example-2"></a>4.4. Example</h3>
+                <h3 id="example-2">4.4. Example</h3>
                 <div class="sect3">
-                    <h4 id="request-5"><a class="anchor" href="#request-5"></a>4.4.1. Request</h4>
+                    <h4 id="request-5">4.4.1. Request</h4>
                     <div class="exampleblock">
                         <div class="content">
                             <div class="paragraph">
@@ -2885,23 +3349,13 @@
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="response-5"><a class="anchor" href="#response-5"></a>4.4.2. Response</h4>
+                    <h4 id="response-5">4.4.2. Response</h4>
                     <div class="literalblock">
                         <div class="content">
-<pre>open_uuid,open_test_uuid,time,cat_technology,network_type,lat,long,loc_src,loc_accuracy,zip_code,download_kbit,upload_kbit,ping_ms,lte_rsrp,server_name,test_duration,num_threads,platform,model,client_version,network_mcc_mnc,network_name,sim_mcc_mnc,nat_type,asn,ip_anonym,ndt_download_kbit,ndt_upload_kbit,implausible,signal_strength
-
-P51bbdd95-8b47-493e-9e51-b752fdad8ef3,O2f5e300f-eedd-4865-920c-2c3aa7852e51,2014-08-25
-22:00,WLAN,WLAN,48.25202520252025,16.41025641025641,,65.0,1210,34821,4481,9.550473,,RTR-SERVER,7,3,iOS,iPhone
-5s,1.2.3,,,,nat_local_to_public_ipv4,6830,84.113.23,,,false,
-
-Pa5e8df81-298f-47e8-a389-ec6ca8ab7d8a,Ocd9d1c5e-4a04-4bb0-8b9e-6818d2acc2ed,2014-08-25
-22:00,3G,HSPA+,,,,,,23811,4256,19.720521,,RTR-SERVER,7,3,Android,Galaxy
-S5,1.5.4,232-01,A1,232-01,no_nat_ipv4,16305,46.206.119,,,false,-65
-
-P90a489fb-143a-4206-8687-bda2f00aaeef,O5b5f9cee-b551-47f3-8c01-32d672887349,2014-08-25
-22:01,WLAN,WLAN,48.317731773177314,16.58434547908232,,65.0,2232,230,874,202.222417,,RTR-SERVER,7,1,iOS,iPad
-mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
-
+<pre>open_uuid,open_test_uuid,time_utc,cat_technology,network_type,lat,long,loc_src,loc_accuracy,gkz,zip_code,country_location,download_kbit,upload_kbit,ping_ms,lte_rsrp,lte_rsrq,server_name,test_duration,num_threads,platform,model,client_version,network_mcc_mnc,network_name,sim_mcc_mnc,nat_type,asn,ip_anonym,ndt_download_kbit,ndt_upload_kbit,implausible,signal_strength,pinned,kg_nr,gkz_sa,land_cover,cell_area_code,cell_location_id
+P83d85a1e-e940-492d-8345-13a1a4c53d7d,Ofcfd6811-b6bc-4c82-8ddc-0d8f56f0f462,2018-03-03 00:00:02,WLAN,WLAN,47.9860743,14.0410021,network,20.0,40912,,AT,3749,529,40.2,,,RTR https 10G AT,7,3,Android,Galaxy J7,3.3.4,,,,nat_local_to_public_ipv4,8447,62.47.60,,,false,-60,true,49104,40912,211,,
+Pa10bd911-2e48-4c15-aa27-e31231c3f432,O7e336c7d-e867-4cc8-9e7b-5fd4ad519abd,2018-03-03 00:01:16,LAN,LAN,,,,,,,,12268,9176,35.5,,,RTR https 10G AT,7,3,,Chrome,0.8.0,,,,,8412,78.132.3,,,false,,true,,,,,
+P83d85a1e-e940-492d-8345-13a1a4c53d7d,O8c74e62a-84c3-4c9e-a493-5d9d65cb689f,2018-03-03 00:01:32,WLAN,WLAN,47.9860743,14.0410021,network,22.5,40912,,AT,6552,517,14.5,,,RTR https 10G AT,7,3,Android,Galaxy J7,3.3.4,,,,nat_local_to_public_ipv4,8447,62.47.60,,,false,-68,false,49104,40912,211,,
 ...</pre>
                         </div>
                     </div>
@@ -2910,14 +3364,14 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
         </div>
     </div>
     <div class="sect1">
-        <h2 id="shareimage-generation"><a class="anchor" href="#shareimage-generation"></a>5. ShareImage-Generation</h2>
+        <h2 id="shareimage-generation">5. ShareImage-Generation</h2>
         <div class="sectionbody">
             <div class="paragraph">
                 <p>This call generates images containing the results of a user’s speed
                     test.</p>
             </div>
             <div class="sect2">
-                <h3 id="request-6"><a class="anchor" href="#request-6"></a>5.1. Request</h3>
+                <h3 id="request-6">5.1. Request</h3>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 50%;">
@@ -2938,7 +3392,7 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
                 </table>
             </div>
             <div class="sect2">
-                <h3 id="parameters-3"><a class="anchor" href="#parameters-3"></a>5.2. Parameters</h3>
+                <h3 id="parameters-3">5.2. Parameters</h3>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 25%;">
@@ -2980,7 +3434,7 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
                 </table>
             </div>
             <div class="sect2">
-                <h3 id="response-6"><a class="anchor" href="#response-6"></a>5.3. Response</h3>
+                <h3 id="response-6">5.3. Response</h3>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 50%;">
@@ -3013,9 +3467,9 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
                 </table>
             </div>
             <div class="sect2">
-                <h3 id="example-3"><a class="anchor" href="#example-3"></a>5.4. Example</h3>
+                <h3 id="example-3">5.4. Example</h3>
                 <div class="sect3">
-                    <h4 id="request-7"><a class="anchor" href="#request-7"></a>5.4.1. Request</h4>
+                    <h4 id="request-7">5.4.1. Request</h4>
                     <div class="exampleblock">
                         <div class="content">
                             <div class="paragraph">
@@ -3025,7 +3479,7 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="response-7"><a class="anchor" href="#response-7"></a>5.4.2. Response</h4>
+                    <h4 id="response-7">5.4.2. Response</h4>
                     <div class="paragraph">
                         <p><span class="image"><img src="./Banner.png" alt="image"></span></p>
                     </div>
@@ -3034,10 +3488,10 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
         </div>
     </div>
     <div class="sect1">
-        <h2 id="quality-of-service"><a class="anchor" href="#quality-of-service"></a>6. Quality of Service</h2>
+        <h2 id="quality-of-service">6. Quality of Service</h2>
         <div class="sectionbody">
             <div class="sect2">
-                <h3 id="request-8"><a class="anchor" href="#request-8"></a>6.1. Request</h3>
+                <h3 id="request-8">6.1. Request</h3>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 50%;">
@@ -3058,7 +3512,7 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
                 </table>
             </div>
             <div class="sect2">
-                <h3 id="parameters-4"><a class="anchor" href="#parameters-4"></a>6.2. Parameters</h3>
+                <h3 id="parameters-4">6.2. Parameters</h3>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 33.3333%;">
@@ -3082,7 +3536,7 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
                 </table>
             </div>
             <div class="sect2">
-                <h3 id="response-8"><a class="anchor" href="#response-8"></a>6.3. Response</h3>
+                <h3 id="response-8">6.3. Response</h3>
                 <table class="tableblock frame-all grid-all spread">
                     <colgroup>
                         <col style="width: 50%;">
@@ -3106,7 +3560,7 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
                     </tbody>
                 </table>
                 <div class="sect3">
-                    <h4 id="returned-json-2"><a class="anchor" href="#returned-json-2"></a>6.3.1. Returned JSON</h4>
+                    <h4 id="returned-json-2">6.3.1. Returned JSON</h4>
                     <table class="tableblock frame-all grid-all spread">
                         <colgroup>
                             <col style="width: 33.3333%;">
@@ -3182,14 +3636,14 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="error-item"><a class="anchor" href="#error-item"></a>6.3.2. Error-item</h4>
+                    <h4 id="error-item">6.3.2. Error-item</h4>
                     <div class="paragraph">
                         <p>An array of strings, e.g. ["Test result could not be loaded."] if the
                             open-test-uuid does not exist, and [] if no error has occurred.</p>
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="testresultdetail-testdesc-item"><a class="anchor" href="#testresultdetail-testdesc-item"></a>6.3.3. Testresultdetail-testdesc-item</h4>
+                    <h4 id="testresultdetail-testdesc-item">6.3.3. Testresultdetail-testdesc-item</h4>
                     <table class="tableblock frame-all grid-all spread">
                         <colgroup>
                             <col style="width: 33.3333%;">
@@ -3253,7 +3707,7 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="testresultdetail-item"><a class="anchor" href="#testresultdetail-item"></a>6.3.4. Testresultdetail-item</h4>
+                    <h4 id="testresultdetail-item">6.3.4. Testresultdetail-item</h4>
                     <table class="tableblock frame-all grid-all spread">
                         <colgroup>
                             <col style="width: 33.3333%;">
@@ -3370,7 +3824,7 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="result-item"><a class="anchor" href="#result-item"></a>6.3.5. Result-item</h4>
+                    <h4 id="result-item">6.3.5. Result-item</h4>
                     <div class="paragraph">
                         <p>Values with name prefix dns_, http_, nontransproxy_, tcp_, udp_, and
                             website_ are specific to the respective subtest types.</p>
@@ -3943,7 +4397,7 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="testresultdetail-desc-item"><a class="anchor" href="#testresultdetail-desc-item"></a>6.3.6. Testresultdetail-desc-item</h4>
+                    <h4 id="testresultdetail-desc-item">6.3.6. Testresultdetail-desc-item</h4>
                     <table class="tableblock frame-all grid-all spread">
                         <colgroup>
                             <col style="width: 33.3333%;">
@@ -4021,9 +4475,9 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
                 </div>
             </div>
             <div class="sect2">
-                <h3 id="example-4"><a class="anchor" href="#example-4"></a>6.4. Example</h3>
+                <h3 id="example-4">6.4. Example</h3>
                 <div class="sect3">
-                    <h4 id="request-9"><a class="anchor" href="#request-9"></a>6.4.1. Request</h4>
+                    <h4 id="request-9">6.4.1. Request</h4>
                     <div class="exampleblock">
                         <div class="content">
                             <div class="paragraph">
@@ -4033,7 +4487,7 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
                     </div>
                 </div>
                 <div class="sect3">
-                    <h4 id="response-9"><a class="anchor" href="#response-9"></a>6.4.2. Response</h4>
+                    <h4 id="response-9">6.4.2. Response</h4>
                     <div class="literalblock">
                         <div class="content">
 <pre>{
@@ -4262,7 +4716,7 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
         </div>
     </div>
     <div class="sect1">
-        <h2 id="change-history"><a class="anchor" href="#change-history"></a>7. Change history</h2>
+        <h2 id="change-history">7. Change history</h2>
         <div class="sectionbody">
             <table class="tableblock frame-all grid-all spread">
                 <colgroup>
@@ -4297,6 +4751,15 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
                             <p>New RTR logo.</p>
                         </div></div></td>
                 </tr>
+                <tr>
+                    <td class="tableblock halign-left valign-top"><p class="tableblock">2018-03-29</p></td>
+                    <td class="tableblock halign-left valign-top"><div><div class="paragraph">
+                        <p>New Open data fields</p>
+                    </div>
+                        <div class="paragraph">
+                            <p>zip_code is now obsolete and will be removed in future versions</p>
+                        </div></div></td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -4304,11 +4767,8 @@ mini WiFi,1.2.3,,,,nat_local_to_public_ipv4,8412,212.95.7,,,false,
 </div>
 <div id="footer">
     <div id="footer-text">
-        Last updated 2017-03-22 14:24:33 MZ
+        Last updated 2018-04-03 10:12:18 CEST
     </div>
 </div>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
-<script>hljs.initHighlighting()</script>
 </body>
 </html>
