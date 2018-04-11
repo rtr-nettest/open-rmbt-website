@@ -961,13 +961,15 @@ function RMBTstatistics() {
                         $('#statistik_devices_foot').empty();
                         //$('#statistik').append('<tbody>');
                         $.each(data.devices, function(key,row){
+                                var opentestsProviderParams = jQuery.extend({}, opendataParams);
+
                                 //get if only mobile tests are evaluated or all tests
-                                var opentests_query_country_provider = 'provider_name=*';
                                 if ($("#statistik_type").val() === 'mobile') {
-                                    opentests_query_country_provider = 'mobile_provider_name=*';
+                                    opentestsProviderParams['mobile_provider_name']='*';
                                 }
                                 if (country && country !== 'null' && country !== 'AT' && country !== 'at') {
-                                    opentests_query_country_provider = 'country_geoip=' + country.toLowerCase();
+                                    opentestsProviderParams['provider_name'] = '*';
+                                    opentestsProviderParams['country_geoip'] = country.toLowerCase();
                                 }
                             
                             
@@ -1010,7 +1012,8 @@ function RMBTstatistics() {
                                 if (typeof row.model == 'undefined')
                                 	model = '-';
                                 else model = row.model;
-                                
+
+                                opentestsProviderParams["model"] = model;
                                 
                                 $('#statistik_devices_body').append(
                                         '<tr' + ((current_device_count > break_devices_after)?' style="display:none;"' : '') + '>'+
@@ -1021,7 +1024,7 @@ function RMBTstatistics() {
                                         '</div></td>'+
                                         '<td class="align-right quantile"><div>'+quantile_ping+' ms'+
                                         '</div></td>'+
-                                        '<td class="align-right"><a href="Opentests?' + opentests_query_country_provider + '&model='+ encodeURI(model + opendata)+'">'+row.count.formatNumber()+'</a></td>'+
+                                        '<td class="align-right"><a href="Opentests?' + jQuery.param(opentestsProviderParams).replace(/\+/g,"%20") + '">'+row.count.formatNumber()+'</a></td>'+
                                         '</tr>'
                                     );
                                         
