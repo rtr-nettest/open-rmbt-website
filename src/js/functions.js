@@ -872,36 +872,35 @@ function RMBTstatistics() {
                         }
 
                         //calculate open-data-search-parameters
-                        var opendata = "";
+                        var opendataParams = {};
                         if ($('#statistik_network_type_group').val() === "2G" || $('#statistik_network_type_group').val() === "3G" || $('#statistik_network_type_group').val() === "4G")
-                            opendata += "&cat_technology=" + $('#statistik_network_type_group').val();
+                            opendataParams["cat_technology"] =$('#statistik_network_type_group').val();
                         
                         if ($('#statistik_type').val() === "wifi")
-                            opendata = "&network_type=WLAN";
+                            opendataParams["network_type"] = "WLAN";
                         
                         if ($('#statistik_type').val() === "browser")
-                            opendata = "&network_type=LAN";
+                            opendataParams["network_type"]="LAN";
                         
                         if ($('#statistik_location_accuracy').val() > 0) {
-                            opendata += "&loc_accuracy[]=>0&loc_accuracy[]=<" + $('#statistik_location_accuracy').val();
+                            opendataParams["loc_accuracy"] = [">0", "<" + $('#statistik_location_accuracy').val()];
                         }
                         if (province !== null) {
-                            opendata += "&gkz[]=>" + province*10000 + "&gkz[]=<" + (((province+1)*10000)-1);
+                            opendataParams["gkz"] = [">" + province*10000, "<"  + (((province+1)*10000)-1)];
                         }
                         
                         if (end_date === null) {
                             var now = moment();
                             var then =  moment(now).subtract($('#statistik_duration').val(),"days").add(1,"milliseconds");
-                            opendata += "&time[]=>" + then.utc().format("YYYY-MM-DD HH:mm:ss") + 
-                                    "&time[]=<" + now.utc().format("YYYY-MM-DD HH:mm:ss");
+                            opendataParams["time"] = [">" + then.utc().format("YYYY-MM-DD HH:mm:ss"), "<" + now.utc().format("YYYY-MM-DD HH:mm:ss")];
                         } 
                         else {
                             //adjust begin date to match
                             var begin_date =  moment(end_date.toDate()).subtract($('#statistik_duration').val(),"days").add(1,"milliseconds").utc();
-                            opendata += "&time[]=>" + begin_date.format("YYYY-MM-DD HH:mm:ss") + "&time[]=<" + end_date.format("YYYY-MM-DD HH:mm:ss");
+                            opendataParams["time"] = [">" + begin_date.format("YYYY-MM-DD HH:mm:ss"), "<"+  end_date.format("YYYY-MM-DD HH:mm:ss")];
                         }
-                        
-                        opendata += "&pinned=true";
+
+                        opendataParams["pinned"] = true;
                     
                         //console.log(data);
                         var down_green, down_yellow, down_red, up_green, up_yellow, up_red, ping_green, ping_yellow, ping_red, signal_green, signal_yellow, signal_red, sum_count, sum_down, sum_up, sum_ping, signalDetailDiv, model;
@@ -914,20 +913,22 @@ function RMBTstatistics() {
 
                         //generate open data links
                         $.each(data.providers, function(key, row) {
-                            var opentests_provider_query;
+                            var opentestsProviderParams = jQuery.extend({}, opendataParams);
                             if (row.asn !== undefined) {
-                                opentests_provider_query = "asn=" + row.asn + "&public_ip_as_name=" + row.name + "&country_geoip=" + country.toLowerCase();
+                                opentestsProviderParams["asn"] = row.asn;
+                                opentestsProviderParams["public_ip_as_name"] = row.name;
+                                opentestsProviderParams["country_geoip"] = country.toLowerCase();
                             }
                             else if (row.sim_mcc_mnc !== undefined) {
-                                opentests_provider_query = "sim_mcc_mnc=" + row.sim_mcc_mnc;
+                                opentestsProviderParams["sim_mcc_mnc"] = row.sim_mcc_mnc;
                             }
                             else if ($("#statistik_type").val() === 'mobile') {
-                                opentests_provider_query = "mobile_provider_name=" + row.name;
+                                opentestsProviderParams["mobile_provider_name"] = row.name;
                             }
                             else {
-                                opentests_provider_query = "provider_name=" + row.name;
+                                opentestsProviderParams["provider_name"] = row.name;
                             }
-                            row.query_opendata = opentests_provider_query + opendata;
+                            row.query_opendata = jQuery.param(opentestsProviderParams).replace(/\+/g,"%20"); //still needed in jQuery 1.8.2
                         });
 
                         var resultTemplate = Handlebars.compile($("#statisticsTemplate").html());
