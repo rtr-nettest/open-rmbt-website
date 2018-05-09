@@ -127,7 +127,9 @@ exports.strings = {
         "preferred_test_type" : "Bevorzugter Testtyp",
         "choose_server_desc" : "Bitte wählen Sie, auf welchem Server der WebSocket-Test ausgeführt werden soll.",
         "config_saved" : "Die Änderungen wurden gespeichert.",
-        "run_ndt" : "Ich möchte zusätzlich den optionalen, vertiefenden NDT-Test ausführen."
+        "run_ndt" : "Ich möchte zusätzlich den optionalen, vertiefenden NDT-Test ausführen.",
+        "email_subject" : "RTR-Netztest%20Supportanfrage",
+        "email_address": "netztest@rtr.at"
     },
 
     "opendata_content" : {
