@@ -193,16 +193,27 @@ function fetchRemoteFiles(fileList) {
         }
 
         var downloaded = 0;
-        filesArray.forEach(function (fileInfo) {
+
+        var baseRequest = request.defaults({
+            pool: {
+                maxSockets: 10
+            },
+            time: 100000
+        });
+
+        filesArray.reverse().forEach(function (fileInfo) {
             var folder = path.dirname(fileInfo.target);
             mkdirp.sync(folder);
             var file = fs.createWriteStream(fileInfo.target);
-            request(fileInfo.source, {
-                pool: {
-                    maxSockets: 10
-                },
-                time: 100000
-            }).pipe(file).on('finish', function () {
+            baseRequest(fileInfo.source)
+                .on('error', function(err) {
+                    console.log(err);
+                    downloaded++;
+                    if (downloaded === filesArray.length) {
+                        done();
+                    }
+                })
+                .pipe(file).on('finish', function () {
                 downloaded++;
                 console.log("Downloaded File: (" + downloaded + "/" + filesArray.length + ")" + fileInfo.source + " -> " + fileInfo.target);
                 if (downloaded === filesArray.length) {
