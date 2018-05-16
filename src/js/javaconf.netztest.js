@@ -46,7 +46,7 @@ var client_name = "RMBTjs";
 var test_token, testUUID;
 var bing_api_key = "AhtZ2SmIKuAaKmtpxQksx2lFYBLkqF7xi-AXtnyrb7ocVo1DldoaGSpOtziHjytA";
 var fallbackOnJS = false;
-var terms_version = 4;
+var terms_version = 5;
 
 test_timezone = "Europe/Vienna"; // ToDo Timezone dynamisch erzeugen.
 
