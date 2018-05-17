@@ -226,6 +226,7 @@ exports.strings = {
     "X_km" : "%X% km",
     "quantity" : "Anzahl",
     "location_accuracy" : "Standortgenauigkeit",
+    "accuracy": "Genauigkeit",
     "any" : "jede",
     "name" : "Name",
     "all" : "Alle",

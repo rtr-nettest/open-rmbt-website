@@ -129,6 +129,9 @@ Lang.setStrings({
     'ndt_details_main': 'Details NDT (main)',
     'ndt_details_stat': 'Details NDT (stat)',
     'ndt_details_diag': 'Details NDT (diag)',
+    'speed': 'Geschwindigkeit',
+    'bearing': 'Richtung',
+    'altitude': 'Seehöhe',
 
     //values not in the controlserver resource file
     'cat_technology' : 'Verbindungstechnologie',
