@@ -680,8 +680,13 @@ function loadOpenTestData(openTestUUID, testUUIDForZipPopup) {
             $("#verlauf-detailcontainer .signal-curve-table").find("tr:gt(0)").remove();
             $("#verlauf-detailcontainer .test-map-container").empty();
             $("#verlauf-detailcontainer .social").empty();
-             
-            
+
+
+            //ping curve
+            if (testdata.speed_curve.ping.length > 0) {
+                drawPingCurve("#verlauf-detailcontainer", testdata.speed_curve.ping);
+            }
+
             if (testdata.speed_curve.download.length>0 && testdata.speed_curve.upload.length>0) {
                 try {
                     drawSingleSpeedCurve("#verlauf-detailcontainer",testdata.speed_curve.download,"download");
