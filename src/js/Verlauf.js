@@ -703,7 +703,14 @@ function loadOpenTestData(openTestUUID, testUUIDForZipPopup) {
             //if at least two entries
             if (testdata.speed_curve.signal.length > 1) {
                 try {
-                    drawSignalCurve("#verlauf-detailcontainer", testdata.speed_curve, testdata.time_dl_ms, testdata.duration_download_ms, testdata.time_ul_ms, testdata.duration_upload_ms);
+                    var beginPing = null, durationPing = null;
+                    if (testdata.speed_curve.ping.length > 0) {
+                        beginPing = testdata.speed_curve.ping[0].time_elapsed;
+                        var lastPing = testdata.speed_curve.ping[testdata.speed_curve.ping.length-1];
+                        durationPing = (lastPing.time_elapsed + lastPing.ping_ms) - beginPing;
+                    }
+
+                    drawSignalCurve("#verlauf-detailcontainer", testdata.speed_curve, testdata.time_dl_ms, testdata.duration_download_ms, testdata.time_ul_ms, testdata.duration_upload_ms, beginPing, durationPing);
                 } catch (e) { /* IE without canvas */
                 }
             } else {
