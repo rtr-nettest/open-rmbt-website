@@ -172,7 +172,7 @@ var LoopTestVisualization = (function () {
     LoopTestVisualization.prototype.setLocation = function (latitude, longitude) {
         //from Opentest.js
         var formatCoordinate = function (decimal, label_positive, label_negative) {
-            var label = (deg < 0) ? label_negative : label_positive;
+            var label = (decimal < 0) ? label_negative : label_positive;
             var deg = Math.floor(Math.abs(decimal));
             var tmp = Math.abs(decimal) - deg;
             var min = tmp * 60;
