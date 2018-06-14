@@ -129,7 +129,8 @@ exports.strings = {
         "config_saved" : "The configuration has been saved.",
         "run_ndt" : "I wish to run the optional NDT-Test.",
         "email_subject" : "RTR-NetTest%20support%20request",
-        "email_address": "netztest@rtr.at"
+        "email_address": "netztest@rtr.at",
+        "fix_threads": "lock parallel threads"
     },
 
     "opendata_content" : {

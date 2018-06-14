@@ -129,7 +129,8 @@ exports.strings = {
         "config_saved" : "Die Änderungen wurden gespeichert.",
         "run_ndt" : "Ich möchte zusätzlich den optionalen, vertiefenden NDT-Test ausführen.",
         "email_subject" : "RTR-Netztest%20Supportanfrage",
-        "email_address": "netztest@rtr.at"
+        "email_address": "netztest@rtr.at",
+        "fix_threads": "Anzahl paralleler TCP-Verbindungen fixieren"
     },
 
     "opendata_content" : {

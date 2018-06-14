@@ -22,6 +22,13 @@ function loadFormValues() {
 
     $("#optionsForm input[name='ipversion']").filter("[value='" + UserConf.ipVersion + "']").attr("checked","checked");
 
+    if (UserConf.fixedDownloadThreads) {
+        $("#threads_dl").val(UserConf.fixedDownloadThreads);
+    }
+    if (UserConf.fixedUploadThreads) {
+        $("#threads_ul").val(UserConf.fixedUploadThreads);
+    }
+
     updateForm();
 }
 
@@ -66,6 +73,24 @@ function saveFormValues() {
         case "ipv6":
             UserConf.overrideControlServer = "https://" + urls.control_ipv6_only;
             break;
+    }
+
+    //fixed test threads
+    var fixedDownloadThreads = $("#threads_dl").val();
+    var fixedUploadThreads = $("#threads_ul").val();
+
+    if (fixedDownloadThreads) {
+        UserConf.fixedDownloadThreads = parseInt(fixedDownloadThreads);
+    }
+    else {
+        UserConf.fixedDownloadThreads = null;
+    }
+
+    if (fixedUploadThreads) {
+        UserConf.fixedUploadThreads = parseInt(fixedUploadThreads);
+    }
+    else {
+        UserConf.fixedUploadThreads = null;
     }
     
     setCookie("RMBTOptions", JSON.stringify(UserConf), 365 * 20 * 24 * 3600);
@@ -211,4 +236,9 @@ $(document).ready(function() {
         if (UserConf.preferredServer && UserConf.preferredServer !== "default") {
             $("#testserverForm").show();
         }
+
+    //show, if threading is set
+    if (UserConf.fixedUploadThreads) {
+        $("#threadsForm").show();
+    }
 });

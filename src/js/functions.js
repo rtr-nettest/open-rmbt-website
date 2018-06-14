@@ -1130,6 +1130,23 @@ function RMBTWebsocketTest(uuid) {
     if (UserConf.ipVersion === "ipv4" || UserConf.ipVersion === "ipv6") {
         config.additionalRegistrationParameters["protocol_version"] = UserConf.ipVersion;
     }
+    var numThreads = 0;
+    if (UserConf.fixedDownloadThreads) {
+        config.downloadThreadsLimitsMbit = {
+            0: UserConf.fixedDownloadThreads
+        };
+        numThreads = UserConf.fixedDownloadThreads;
+    }
+    if (UserConf.fixedUploadThreads) {
+        config.uploadThreadsLimitsMbit = {
+            0: UserConf.fixedUploadThreads
+        }
+        numThreads = Math.max(numThreads, UserConf.fixedUploadThreads);
+    }
+    if (numThreads > 0) {
+        config.additionalRegistrationParameters["num_threads"] = numThreads;
+    }
+
 
     //override userServiceSelection if server was selected to just affect the test itself
     if (UserConf.preferredServer !== "default") {

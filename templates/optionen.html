@@ -3,6 +3,11 @@
 
 {% block headerscriptingExtended %}
 <script type="text/javascript" src="../{{ fingerprint["js/Optionen.js"] }}"></script>
+<style>
+    input.form-control {
+        background-color: white;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -41,6 +46,23 @@
             </div>
         </div>
 
+    </div>
+
+
+    <div id="threadsForm" class="form-horizontal" style="display: none">
+        <h3>{{ Lang.options_content.fix_threads }}</h3>
+        <div class="form-group">
+            <label class="col-sm-4 control-label" for="threads_dl">{{ Lang.download }}</label>
+            <div class="col-md-7 col-sm-8">
+                <input class="form-control" type="number" id="threads_dl" placeholder="default" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label" for="threads_ul">{{ Lang.upload }}</label>
+            <div class="col-md-7 col-sm-8">
+                <input class="form-control" type="number" id="threads_ul" placeholder="default" />
+            </div>
+        </div>
     </div>
 
     <div>

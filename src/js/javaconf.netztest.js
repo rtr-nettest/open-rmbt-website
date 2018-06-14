@@ -30,7 +30,9 @@ var UserConf = {
     preferredTest: preferredTest,
     preferredServer: "default",
     overrideControlServer: false,
-    ipVersion: "default"
+    ipVersion: "default",
+    fixedDownloadThreads: null,
+    fixedUploadThreads: null
 };
 
 var test_version_name = "0.1";
