@@ -114,7 +114,9 @@ exports.strings = {
         'cell_area_code': 'Cell area code',
         'cell_location_id': 'Cell location id',
         'channel_number': 'Frequency channel',
-        "additional_filters" : "Further filters"
+        "additional_filters" : "Further filters",
+        "intraday": "Intraday",
+        "down_upload": "Download/Upload"
     },
 
     "options_content" : {

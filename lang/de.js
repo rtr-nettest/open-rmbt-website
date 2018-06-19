@@ -114,7 +114,9 @@ exports.strings = {
         'channel_number': 'Frequenzkanal',
         'cell_area_code': 'Sender-Gebiet',
         'cell_location_id': 'Sender-Kennung',
-        "additional_filters" : "Weitere Filter"
+        "additional_filters" : "Weitere Filter",
+        "intraday": "Tagesverlauf",
+        "down_upload": "Download/Upload"
     },
 
     "options_content" : {
