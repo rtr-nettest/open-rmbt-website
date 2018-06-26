@@ -877,11 +877,15 @@ function RMBTstatistics() {
                             opendataParams["cat_technology"] =$('#statistik_network_type_group').val();
                         
                         if ($('#statistik_type').val() === "wifi")
-                            opendataParams["network_type"] = "WLAN";
+                            opendataParams["cat_technology"] = "WLAN";
                         
                         if ($('#statistik_type').val() === "browser")
-                            opendataParams["network_type"]="LAN";
-                        
+                            opendataParams["cat_technology"]="LAN";
+
+                        if ($("#statistik_type").val() === 'mobile') {
+                            opendataParams["mobile_provider_name"] = "*";
+                        }
+
                         if ($('#statistik_location_accuracy').val() > 0) {
                             opendataParams["loc_accuracy"] = [">0", "<" + $('#statistik_location_accuracy').val()];
                         }
@@ -901,6 +905,9 @@ function RMBTstatistics() {
                         }
 
                         opendataParams["pinned"] = true;
+
+                        //set for provider sums
+                        data.providers_sums.query_opendata = jQuery.param(opendataParams).replace(/\+/g,"%20"); //still needed in jQuery 1.8.2opendataParams;
                     
                         //console.log(data);
                         var down_green, down_yellow, down_red, up_green, up_yellow, up_red, ping_green, ping_yellow, ping_red, signal_green, signal_yellow, signal_red, sum_count, sum_down, sum_up, sum_ping, signalDetailDiv, model;
