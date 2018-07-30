@@ -3,13 +3,11 @@ var pan_on_most_recent_tests = 5; //take into account when zooming/panning on ne
 var fullscreenMap = getParam("fullscreenMap");
 
 $(window).bind("load", function() {
-    $(".teaser-icon").css("visibility","visible");
+    //show custom font objects when the font and content is loaded
+    $(".teaser-icon, .teaser-netztest").css("visibility","visible");
 });
 
 $(document).ready(function() {
-    //hide custom font objects until the font is loaded
-    $(".teaser-icon").css("visibility","hidden");
-    
     var mobile_client = navigator.userAgent;
     
     //is it windows phone?
