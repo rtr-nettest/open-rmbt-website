@@ -143,7 +143,7 @@ exports.strings = {
         "recent_tests" : 'Die Ergebnisse der letzten 31 Tage sind unter <a href="/netztest-opendata.zip" class="external-link-new-window" title="RTR-Netztest Open Data-ZIP">netztest-opendata.zip</a> abrufbar.',
         "further_results" : "Weitere Ergebnisse sind auf monatlicher Basis verfügbar:",
         "note_timestamp" : "Bitte beachten Sie, dass die Zeitstempel in UTC (nicht in Lokalzeit) sind. Um die Richtigkeit der Ergebnisse sicher zu stellen, kann die RTR-GmbH unplausible und/oder offensichtlich missbr&auml;uchliche Messungen mit dem Flag 'implausible' kennzeichnen.  ",
-        "license_text" : 'Diese Daten stehen unter der <a rel="license" href="http://creativecommons.org/licenses/by/3.0/at/deed.de_AT" >Creative Commons Namensnennung 3.0 Österreich Lizenz</a>. Bitte beachten Sie die <a rel="license" href="https://www.rtr.at/de/tk/netztest_use_opendata">weiteren Lizenzbestimmungen</a>.'
+        "license_text" : 'Diese Daten stehen unter der <a rel="license" href="http://creativecommons.org/licenses/by/3.0/at/deed.de_AT" >Creative Commons Namensnennung 3.0 Österreich Lizenz</a>. Bitte beachten Sie die <a rel="license" href="https://www.rtr.at/de/tk/netztest_use_opendata">weiteren Lizenzbestimmungen</a>.<p><b>Vorankündigung:</b> Ab 1.12.2018 werden die Daten unter der <a href="https://creativecommons.org/licenses/by/4.0/deed.de">Creative Commons Namensnennung 4.0 Lizenz</a> veröffentlicht.</p>'
     },
 
     "loop_mode_content" : {

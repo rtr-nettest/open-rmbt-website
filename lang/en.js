@@ -143,7 +143,7 @@ exports.strings = {
         "recent_tests" : 'The results of the last 31 days are available as zip-archive under <a href="/netztest-opendata.zip" title="RTR-Netztest Open Data" target="_blank" class="external-link-new-window">netztest-opendata.zip</a>.',
         "further_results" : "Further results are available on a monthly basis:",
         "note_timestamp" : "Please note that time stamps are in UTC (not in local time). To ensure the correctness of the results, implausible and/or obvious abusive measurements may be marked with the flag 'implausible' by RTR.",
-        "license_text" : 'The data is published under the <a href="http://creativecommons.org/licenses/by/3.0/at/deed.en" target="_blank" class="external-link-new-window">Creative Commons Attribution 3.0 Austria (CC BY 3.0 AT)</a> license. Please also refer the additional <a rel="license" href="https://www.rtr.at/en/tk/netztest_use_opendata">licensing terms</a>.'
+        "license_text" : 'The data is published under the <a href="http://creativecommons.org/licenses/by/3.0/at/deed.en" target="_blank" class="external-link-new-window">Creative Commons Attribution 3.0 Austria (CC BY 3.0 AT)</a> license. Please also refer the additional <a rel="license" href="https://www.rtr.at/en/tk/netztest_use_opendata">licensing terms</a>. Bitte beachten Sie die <a rel="license" href="https://www.rtr.at/de/tk/netztest_use_opendata">weiteren Lizenzbestimmungen</a>.<p><b>Notice:</b> Beginning with Dec. 1<sup>st</sup>, 2018 the data will be published under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution  4.0 license</a>.</p>'
     },
 
     "loop_mode_content" : {
