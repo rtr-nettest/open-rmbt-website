@@ -247,7 +247,9 @@ function transformRTRUrls(fileList) {
         "/Opentests": "Opentests",
         "/Verlauf": "Verlauf",
         "/Optionen": "Optionen",
-        "/tk/netztest" : ""
+        "/tk/netztest" : "",
+        "/de": "",
+        "/en": ""
     };
 
     return function(files, metalsmith, done) {
