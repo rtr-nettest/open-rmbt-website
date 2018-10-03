@@ -38,6 +38,7 @@ var remoteFiles = require("./conf/remoteFiles.json");
 var target = null, targets = ["qostest","netztest"];
 var useWatch = false;
 var downloadedOnce = false;
+var updateRtrDependencies = true;
 
 //check command line to find which target should be built
 process.argv.forEach(function(val, index, array) {
@@ -47,8 +48,11 @@ process.argv.forEach(function(val, index, array) {
             target = val;
         }
     }
-    if (index === 3 && val === "watch") {
+    if (index >= 3 && val === "watch") {
         useWatch = true;
+    }
+    else if (index >= 3 && val == "--ignore-rtr-dependencies") {
+        updateRtrDependencies = false;
     }
 });
 
@@ -61,11 +65,11 @@ if (target === null ){
 //execute
 var metalsmith = Metalsmith(__dirname)
     //.use(generateRandomJSTestFilesIfMissing())
-    .use(fetchRemoteFiles(remoteFiles))
-    .use(fetchRemoteFiles(function() {
+    .use(updateRtrDependencies ? fetchRemoteFiles(remoteFiles) : noOp)
+    .use(updateRtrDependencies ? fetchRemoteFiles(function () {
         return transformRemoteNetztestJSONtoFetchableFiles(require('./conf/filelist_nettest.json'))
-    }))
-    .use(transformRTRUrls([
+    }) : noOp)
+    .use(updateRtrDependencies ? transformRTRUrls([
         "./templates/parts/02_navigation_de.html",
         "./templates/parts/02_navigation_en.html",
 //      "./templates/parts/03_navigationToContent_en.html",
@@ -74,7 +78,7 @@ var metalsmith = Metalsmith(__dirname)
         "./templates/parts/04_contentToFooter_en.html",
         "./templates/parts/05_footerScripts_no_mlpushmenu_de.html",
         "./templates/parts/05_footerScripts_no_mlpushmenu_en.html"
-    ]))
+    ]) : noOp)
     .use(setConfig())
     .use(duplicateFile())
     .use(fingerprint({
@@ -146,6 +150,9 @@ function generateRandomJSTestFilesIfMissing() {
         }
     }
 }
+
+//metalsmith no operation
+function noOp(files, metalsmith, done) { done() }
 
 /**
  * Transform the filelist provided by alladin-it for RTR-dependencies
