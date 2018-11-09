@@ -101,6 +101,7 @@ exports.strings = {
         "sim_home_country" : "SIM-Heimatland",
         "sim_mcc_mnc" : "SIM-MCC-MNC",
         "country_geoip" : "Land (IP)",
+        "country_location" : "Land (Standort)",
         "public_ip_as_name" : "Netzwerk (AS)",
         "software_version" : "Software-Version",
         "next_page" : "Nächste Seite",
