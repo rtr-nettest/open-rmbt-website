@@ -3,7 +3,7 @@ var min_accuracy_for_showing_address_popup = 2000;
 
 var fastConnectionWarningConfig = {
     test_types : ["RMBTws", "RMBTjs"],
-    min_download_kbit : 200*1000,
+    min_download_kbit : 500*1000,
     min_upload_kbit : 100*1000
 };
 
