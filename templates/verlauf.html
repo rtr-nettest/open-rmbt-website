@@ -76,7 +76,12 @@
 
 
 <div id="verlaufcontainer">
-    <div><form id="csv-link-form" method="post" style="display:inline"><a id="csv-link" class="" style="float:right" href="#">{{ Lang.history_content.download }}</a></form></div>
+    <div style="float:right">{{ Lang.history_content.download }}:
+        <form id="download-link-form" method="post" style="display:inline">
+            <a id="csv-link" class="" href="#">{{ Lang.history_content.csv }}</a> |
+            <a id="xlsx-link" href="#">{{ Lang.history_content.xlsx }}</a>
+        </form>
+    </div>
     <table id="verlauf" class="dont-stack">
         <colgroup>
             <col />

@@ -88,7 +88,9 @@ exports.strings = {
     "history_content" : {
         "request_code" : "Request synchronization code",
         "enter_code" : "or enter a known synchronization code in the input box below and confirm your entry by clicking on submit",
-        "download": "Download (CSV)"
+        "download": "Download",
+        "csv": "CSV",
+        "xlsx": "XLSX"
     },
 
     "opentest_content" : {
