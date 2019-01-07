@@ -168,13 +168,23 @@
             <script id="resultTemplate" type="text/x-handlebars-template">
                 {{#if error }}
                 <tr class="test-result-error">
-                    <td>{{ formatDate time }}</td>
+                    <td>
+                    {{#if fullDate }}
+                    {{ formatFullDate time }}
+                    {{ else }}
+                    {{ formatDate time }}
+                    {{/if }}
+                    </td>
                     <td colspan="3">{% endraw %}{{ Lang.loop_mode_content.error_during_test }}{% raw %}</td>
                 </tr>
                 {{ else }}
                 <tr class="test-result">
                     <td>
-                        <a href="Verlauf#{{ testUUID }}" target="_blank">{{ formatDate time }}</a>
+                        <a href="Verlauf#{{ testUUID }}" target="_blank">{{#if fullDate }}
+                            {{ formatFullDate time }}
+                            {{ else }}
+                            {{ formatDate time }}
+                            {{/if }}</a>
                     </td>
                     <td class="align-right">{{ formatNumberSignificant down }}</td>
                     <td class="align-right">{{ formatNumberSignificant up }}</td>

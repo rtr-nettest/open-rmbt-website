@@ -381,7 +381,8 @@ function conductTests() {
 
     var tests = 0;
     var newTests = 0;
-    var lastTestStart = moment();
+    var currentTestStart = moment();
+    var previousTestStart = null;
     var firstTestStart = moment().startOf('second');
     $("#testcount").text(tests);
     $("#teststotal").text(repetitions);
@@ -390,7 +391,15 @@ function conductTests() {
         result.down = result.downBitPerSec / 1e6;
         result.up = result.upBitPerSec / 1e6;
         result.ping = result.pingNano / 1e6;
-        result.time = lastTestStart.toDate();
+        result.time = currentTestStart.toDate();
+
+        //if on first test, or if date has changed,
+        //also print full datetime
+        if (previousTestStart === null ||
+            previousTestStart.date() !== currentTestStart.date()) {
+            result.fullDate = true;
+        }
+
         results.push(result);
 
         //add result to table
@@ -413,9 +422,15 @@ function conductTests() {
     };
     var testErrorCallback = function (result) {
         var result = {
-            time: lastTestStart.toDate(),
+            time: currentTestStart.toDate(),
             error: true
         };
+
+        if (previousTestStart === null ||
+            previousTestStart.date() !== currentTestStart.date()) {
+            result.fullDate = true;
+        }
+
         //add error to table
         $("#verlauf_tbody").prepend(resultTemplate(result));
 
@@ -426,6 +441,7 @@ function conductTests() {
 
     var testFinished = function (result) {
         tests++;
+        previousTestStart = currentTestStart;
 
         //once again, check boundaries
         waitingTime = Math.min(waitingTime, 60*60*48);
@@ -454,7 +470,7 @@ function conductTests() {
             lastTimeslotCounter = timeslotCounter;
             var nextTestStart = firstTestStart.add((timeslotCounter + 1) * waitingTime, 'seconds');
             waitForNextTest(tests, nextTestStart, function () {
-                lastTestStart = moment();
+                currentTestStart = moment();
                 startSingleTest(tests, testSuccessCallback, testErrorCallback);
                 $(".progress-bar").removeClass("inactive");
             });
@@ -578,6 +594,12 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
 Handlebars.registerHelper('formatDate', function (timestamp) {
     var d = new Date(timestamp);
     return moment(d).format(Lang.getString('map_index_dateformat'));
+});
+
+//add datetime helper
+Handlebars.registerHelper('formatFullDate', function (timestamp) {
+    var d = new Date(timestamp);
+    return moment(d).format(Lang.getString('map_dateformat'));
 });
 
 //add formatting helper
