@@ -6,16 +6,32 @@
     $(document).ready(function() {
         var startY = 2013;
         var now = new Date();
+        var options = [
+            {
+                label: "csv",
+                extension: "zip",
+                id: "#old"
+            },
+            {
+                label: "xlsx",
+                extension: "xlsx",
+                id: "#xlsx"
+            }
+        ];
         while (now.getFullYear() >= startY) {
-            $("#old").append('<option>' + now.getFullYear() + "-" + pad(now.getMonth()+1,2) + '</option>');
+            $.each(options, function(i, option) {
+                var date =  now.getFullYear() + "-" + pad(now.getMonth()+1,2);
+                var value  = "netztest-opendata-" + date + "." + option.extension;
+                $(option.id).append('<option value="' + value + '">' + date + '</option>');
+            });
             now.setMonth(now.getMonth() -1);
         }
 
-        $("#old").bind("change",function() {
-            var val = $("#old").val();
+        $("#old, #xlsx").bind("change",function(e) {
+            var val = $(e.target).val();
             //if a date is selected
-            if (val.substr(0,1) === "2") {
-                document.location.href = "/" + statisticpath + "/export/netztest-opendata-" + val + ".zip";
+            if (val.substr(0,1) !== "-") {
+                document.location.href = statisticProxy + "/" + statisticpath + "/export/" + val;
             }
         });
     });
@@ -34,11 +50,26 @@
     {{ Lang.opendata_content.recent_tests }}
 <p>
     {{ Lang.opendata_content.further_results }}
-<fieldset>
-    <select id="old">
-        <option>-- {{ Lang.please_select }} --</option>
-    </select>
-</fieldset>
+    <form class="form-horizontal">
+        <fieldset>
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">CSV</label>
+                <div class="col-sm-10">
+                    <select id="old" class="form-control">
+                        <option>-- {{ Lang.please_select }} --</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">XLSX</label>
+                <div class="col-sm-10">
+                    <select id="xlsx" class="form-control">
+                        <option>-- {{ Lang.please_select }} --</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+    </form>
 </p>
     {{ Lang.opendata_content.note_timestamp }}
 </p>

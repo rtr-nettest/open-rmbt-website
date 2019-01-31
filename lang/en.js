@@ -88,7 +88,9 @@ exports.strings = {
     "history_content" : {
         "request_code" : "Request synchronization code",
         "enter_code" : "or enter a known synchronization code in the input box below and confirm your entry by clicking on submit",
-        "download": "Download (CSV)"
+        "download": "Download",
+        "csv": "CSV",
+        "xlsx": "XLSX"
     },
 
     "opentest_content" : {
@@ -138,7 +140,7 @@ exports.strings = {
 
     "opendata_content" : {
         "open_data_specification" : "Open Data Interface Specification",
-        "content_block" : 'In compliance with the RTR-NetTest privacy policy the measurement results of the RTR-NetTest are available as Open Data. The <a href="/en/OpenDataSpecification.html">specification is available as HTML</a>. This specification describes the information which is available as Open Data. It is available as JSON and as CSV-file (see below).',
+        "content_block" : 'In compliance with the RTR-NetTest privacy policy the measurement results of the RTR-NetTest are available as Open Data. The <a href="/en/OpenDataSpecification.html">specification is available as HTML</a> and <a hreF="https://github.com/rtr-nettest/open-rmbt/blob/master/RMBTStatisticServer/doc/swagger.json">Swagger</a>. This specification describes the information which is available as Open Data. It is available as JSON and as CSV-file (see below).',
         "csv_interface" : 'CSV interface',
         "recent_tests_hours" : 'The results of the last 48 hours are available as zip-archive under <a href="/RMBTStatisticServer/export/netztest-opendata_hours-048.zip" title="RTR-Netztest Open Data 48h" target="_blank" class="external-link-new-window">netztest-opendata_hours-048.zip</a>.',
         "recent_tests" : 'The results of the last 31 days are available as zip-archive under <a href="/netztest-opendata.zip" title="RTR-Netztest Open Data" target="_blank" class="external-link-new-window">netztest-opendata.zip</a>.',
