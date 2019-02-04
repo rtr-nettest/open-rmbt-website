@@ -333,6 +333,14 @@ function searchAndPositionOnAddress() {
         
         
         $('#spinner').spin('modal');
+
+        //temporary log to server
+        $.ajax({
+            url: controlProxy + "/" + wspath+ "/geocoding/" + address,
+            type: 'GET',
+            dataType: 'json',
+            cache: false
+        });
         
         geocoder_google.geocode( { 'address': address}, function(results, status) {
                 $('#spinner').spin('modal');
