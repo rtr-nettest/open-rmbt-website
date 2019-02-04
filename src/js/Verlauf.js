@@ -224,6 +224,14 @@ function searchAndPositionOnAddress(callback) {
         prevQuery = query;
         
         $('#spinner').spin('modal');
+
+    //temporary log to server
+    $.ajax({
+        url: controlProxy + "/" + wspath+ "/geocoding/verlauf/" + address,
+        type: 'GET',
+        dataType: 'json',
+        cache: false
+    });
         
         geocoder_google.geocode( { 'address': query, 'region': $("select[name=country]").val()}, function(results, status) {
                 $('#spinner').spin('modal');

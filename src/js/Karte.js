@@ -336,7 +336,7 @@ function searchAndPositionOnAddress() {
 
         //temporary log to server
         $.ajax({
-            url: controlProxy + "/" + wspath+ "/geocoding/" + address,
+            url: controlProxy + "/" + wspath+ "/geocoding/karte/" + address,
             type: 'GET',
             dataType: 'json',
             cache: false
