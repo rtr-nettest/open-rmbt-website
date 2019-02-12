@@ -895,6 +895,12 @@ function RMBTstatistics() {
                             opendataParams["mobile_provider_name"] = "*";
                         }
 
+                        //set country geoip if not Austria
+                        if (country && country !== 'null' && country !== 'AT' && country !== 'at') {
+                            opendataParams['country_geoip'] = country.toLowerCase();
+                            delete opendataParams["mobile_provider_name"]; //as there is no mapping on t.mobile_provider_id
+                        }
+
                         if ($('#statistik_location_accuracy').val() > 0) {
                             opendataParams["loc_accuracy"] = [">0", "<" + $('#statistik_location_accuracy').val()];
                         }
@@ -984,10 +990,14 @@ function RMBTstatistics() {
                                     opentestsProviderParams['mobile_provider_name']='*';
                                 }
                                 if (country && country !== 'null' && country !== 'AT' && country !== 'at') {
-                                    opentestsProviderParams['provider_name'] = '*';
-                                    opentestsProviderParams['country_geoip'] = country.toLowerCase();
+                                    delete opentestsProviderParams["mobile_provider_name"]; //as there is no mapping on t.mobile_provider_id
+                                    delete opentestsProviderParams["provider_name"];
+
+                                    //get if only mobile tests are evaluated or all tests
+                                    if ($("#statistik_type").val() === 'mobile') {
+                                        opentestsProviderParams["cat_technology"]="!WLAN"; //good 80/20 solution
+                                    }
                                 }
-                            
                             
                                 current_device_count++;
                             
