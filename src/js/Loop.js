@@ -2,6 +2,7 @@
 
 var repetitions = 5;
 var waitingTime = 15*60;
+var lastKnownGeoPosition = null;
 
 var LoopTestVisualization = (function () {
     var _rmbtTest;
@@ -540,6 +541,8 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
         }));
     };
 
+    var wsTracker = new BackgroundAwareGeoTracker();
+
     TestEnvironment.init(new LoopTestVisualization(function (result) {
         //window.removeEventListener("beforeunload", beforeUnloadEventListener);
         window.removeEventListener("unload", unloadEventListener,false);
@@ -557,7 +560,8 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
             self.clearTimeout(fallbackTimer);
             testErrorCallback(result);
         }
-    }), null);
+    }), wsTracker);
+
     var config = new RMBTTestConfig(selectedLanguage, controlProxy, wspath);
     var ctrl = new RMBTControlServerCommunication(config);
     config.uuid = clientUUID;
@@ -573,7 +577,10 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
     TestEnvironment.getTestVisualization().setRMBTTest(websocketTest);
     TestEnvironment.getTestVisualization().startTest();
 
-    websocketTest.startTest();
+    //start test after obtaining location
+    wsTracker.start(function() {
+        websocketTest.startTest();
+    },  TestEnvironment.getTestVisualization());
 
     //if a user wants to leave - ask the user if test should really be cancelled
     //no - since all communication is seized by the Browser, if the user is asked
@@ -609,3 +616,33 @@ Handlebars.registerHelper('formatNumberSignificant', function (number) {
         return number.formatNumber(decimals);
     }
 });
+
+
+/**
+ * GeoTracker that uses an old GeoPosition in case there is none available
+ * @type {BackgroundAwareGeoTracker}
+ */
+const BackgroundAwareGeoTracker = (function() {
+    function BackgroundAwareGeoTracker() {
+        GeoTracker.call(this);
+    }
+    BackgroundAwareGeoTracker.prototype = Object.create(GeoTracker.prototype);
+
+    BackgroundAwareGeoTracker.prototype.getResults = function() {
+        var results = GeoTracker.prototype.getResults.call(this);
+        if (results.length > 0) {
+            lastKnownGeoPosition = results[results.length - 1];
+        }
+        else {
+            //if no geoposition due to background tab - use previous
+            if (document.visibilityState === "hidden" && lastKnownGeoPosition !== null) {
+                console.log("no geoposition obtained in background tab, use old one");
+                results.push(lastKnownGeoPosition);
+            }
+        }
+
+        return results;
+    };
+
+    return BackgroundAwareGeoTracker;
+})();
