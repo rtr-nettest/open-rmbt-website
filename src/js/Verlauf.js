@@ -227,7 +227,7 @@ function searchAndPositionOnAddress(callback) {
 
     //temporary log to server
     $.ajax({
-        url: controlProxy + "/" + wspath+ "/geocoding/verlauf/" + address,
+        url: controlProxy + "/" + wspath+ "/geocoding/verlauf/" + query,
         type: 'GET',
         dataType: 'json',
         cache: false
