@@ -1477,20 +1477,55 @@ function getOpenDataRow(testdata, showUnits) {
     
     //generate table row in javascript for more speed :-(
     var row = "<tr>";
-    
+
+    //image
+    var img = $("<i class='svg-icon svg14'></i>");
+    var classification = 3;
+    var svgType = "";
+    if (testdata.platform.indexOf('WLAN') !== -1) {
+        svgType = "wlan4";
+    }
+    else if (testdata.platform.indexOf('LAN') !== -1) {
+        svgType = "browser";
+    }
+    else if (testdata.platform.indexOf('/') !== -1) {
+        svgType = "mobile";
+    }
+    else if (testdata.platform.indexOf('4G') !== -1) {
+        svgType = "4g";
+    }
+    else if (testdata.platform.indexOf('3G') !== -1) {
+        svgType = "3g";
+    }
+    else if (testdata.platform.indexOf('2G') !== -1) {
+        svgType = "2g";
+    }
+
+    if (testdata.hasOwnProperty('signal_classification')) {
+        svgType += "-" + (testdata.signal_classification);
+    }
+    else if (testdata.platform.indexOf('WLAN') !== -1) {
+        svgType = "wlan3";
+    }
+    else if (testdata.platform.indexOf('LAN') == -1) {
+        svgType += "-0";
+    }
+
+    img.addClass("svg-" + svgType);
+
     //time
     var val = testdata.time; //1234-67-90 23:56
     var d = new Date(val.substr(0,10));
     d.setUTCHours(val.substr(11,2), val.substr(14,2));
     
-    row += "<td class='time'>" + link + formatOpenDataDateToLocalTime(testdata.time) + "</a></td>";
+    row += "<td class='time'>" +  link + img[0].outerHTML + formatOpenDataDateToLocalTime(testdata.time) + "</a></td>";
         
     //environment info
     //position marker
     var position_marker = "";
     if (testdata.long !== null) {
-        var image = (testdata.loc_accuracy<=min_accuracy_for_showing_map)?"marker_fa.png":"marker_fa_o.png";
-        position_marker = '<img src="/images/' + image + '" class="position-marker" /> '
+        var image = (testdata.loc_accuracy<=min_accuracy_for_showing_map)?"svg-marker":"svg-marker-line";
+        position_marker = "<i class='svg-icon svg14 " + image + "'></i>";
     }
     row += "<td class='test-platform'>" + link +  position_marker + infoFormatter(testdata.model, testdata.platform, testdata.provider_name) + "</a></td>";
     
