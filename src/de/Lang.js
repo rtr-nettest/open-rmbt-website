@@ -142,8 +142,9 @@ Lang.setStrings({
     'open_uuid' : 'Open-User-UUID',
     'network_country' : 'Land des Netzwerks',
     'distance' : 'Zurückgelegter Weg',
-    'lte_rsrp' : 'Signalstärke (RSRP)',
+    'lte_rsrp' : 'Signalstärke',
     'lte_rsrq' : 'Signalqualität (RSRQ)',
+    'referenced_signal_received_quality': 'Referenced Signal Received Quality',
 
 
     'model_native': 'Modell (Original)',

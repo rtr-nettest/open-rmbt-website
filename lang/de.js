@@ -264,7 +264,7 @@ exports.strings = {
     "speed" : "Geschwindigkeit",
     "data_volume" : "Übertragene Datenmenge",
     "signal_strength" : "Signalstärke",
-    "connection_technology" : "Verbindungstechnologie",
+    "connection_technology" : "Technologie",
     "share" : "Ergebnis mitteilen",
     "get_forum_banner" : "Forenbanner einbinden",
     "send_email" : "Als E-Mail versenden",

@@ -264,7 +264,7 @@ exports.strings = {
     "speed" : "Speed",
     "data_volume" : "Data volume",
     "signal_strength" : "Signal strength",
-    "connection_technology" : "Connection Technology",
+    "connection_technology" : "Technology",
     "share" : "Share",
     "get_forum_banner" : "Get forum banner",
     "send_email" : "Send email",
