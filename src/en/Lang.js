@@ -134,6 +134,7 @@ Lang.setStrings({
    'speed': 'Speed',
    'bearing': 'Bearing',
    'altitude': 'Altitude',
+   'timing_advance': 'Timing Advance',
    
    //values not in the controlserver resource file
    'cat_technology': 'Connection Technology',

@@ -132,6 +132,7 @@ Lang.setStrings({
     'speed': 'Geschwindigkeit',
     'bearing': 'Richtung',
     'altitude': 'Seehöhe',
+    'timing_advance': 'Timing Advance',
 
     //values not in the controlserver resource file
     'cat_technology' : 'Verbindungstechnologie',
