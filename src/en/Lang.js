@@ -146,7 +146,7 @@ Lang.setStrings({
    'distance': 'Movement',
    'lte_rsrp' : 'Signal strength',
    'lte_rsrq' : 'Signal quality (RSRQ)',
-   'referenced_signal_received_quality': 'Referenced signal received quality',
+   'referenced_signal_received_quality': 'Reference signal received quality',
            
     //new attributes by DZ and attributes previously not displayed
     'model_native': 'Model (native)',

@@ -144,7 +144,7 @@ Lang.setStrings({
     'distance' : 'Zurückgelegter Weg',
     'lte_rsrp' : 'Signalstärke',
     'lte_rsrq' : 'Signalqualität (RSRQ)',
-    'referenced_signal_received_quality': 'Referenced Signal Received Quality',
+    'referenced_signal_received_quality': 'Reference Signal Received Quality',
 
 
     'model_native': 'Modell (Original)',
