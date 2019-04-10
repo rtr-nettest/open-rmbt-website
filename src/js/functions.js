@@ -1550,7 +1550,7 @@ function getOpenDataRow(testdata, showUnits) {
         row += "<td class='test-network-signal align-right'>" + link + Math.round(val_dbm)+ (showUnits ? '&nbsp;' + Lang.getString('dBm') : '') + "</a></td>";    
     }
     else if (val_lte !== null) {
-        row += "<td class='test-network-signal align-right'>" + link + "<abbr class='lte-rsrp' title='" + Lang.getString('lte_rsrp') + "'>" + Math.round(val_lte)+ (showUnits ? ' ' + Lang.getString('dB') : '') + "</a></abbr></td>";        
+        row += "<td class='test-network-signal align-right'>" + link + Math.round(val_lte)+ (showUnits ? ' ' + Lang.getString('dBm') : '') + "</a></td>";
     }
     else {
         row += "<td class='test-network-signal align-right'>" + link + "-</a></td>";

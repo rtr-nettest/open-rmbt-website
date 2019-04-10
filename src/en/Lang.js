@@ -144,7 +144,7 @@ Lang.setStrings({
    'open_uuid': 'Open-User-UUID',
    'network_country': 'Country of network',
    'distance': 'Movement',
-   'lte_rsrp' : 'Signal strength',
+   'lte_rsrp' : 'Signal strength (RSRP)',
    'lte_rsrq' : 'Signal quality (RSRQ)',
    'referenced_signal_received_quality': 'Reference signal received quality',
            
