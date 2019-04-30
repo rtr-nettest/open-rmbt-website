@@ -319,6 +319,7 @@ $(document).ready(function () {
 });
 
 var clientUUID;
+var loopUUID;
 var currentTestUUID;
 function RMBTLoopTest(uuid){
     var onError = function() {
@@ -563,13 +564,18 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
     }), wsTracker);
 
     var config = new RMBTTestConfig(selectedLanguage, controlProxy, wspath);
-    var ctrl = new RMBTControlServerCommunication(config);
+    var ctrl = new RMBTControlServerCommunication(config, {
+        register: function(registration) {
+            //from the registration - get the uuid
+            loopUUID = registration.response["loop_uuid"];
+        }
+    });
     config.uuid = clientUUID;
     config.additionalRegistrationParameters["loopmode_info"] = {
         max_delay: (waitingTime/60),
         test_counter: (i+1),
-        text_counter: (i+1), //@TODO: Remove, as soon as the ControlServer is fixed...
-        max_tests: repetitions
+        max_tests: repetitions,
+        loop_uuid: loopUUID
     };
     var websocketTest = new RMBTTest(config, ctrl);
     $("#testcount").text((i + 1));
