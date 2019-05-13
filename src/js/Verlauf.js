@@ -647,6 +647,15 @@ function loadOpenTestData(openTestUUID, testUUIDForZipPopup) {
         url: statisticProxy + "/" + statisticpath + "/opentests/" + openTestUUID + "?" + getCapabilitiesAsQueryParam(),
         type: 'GET',
         dataType: 'json',
+        statusCode: {
+            404: function() {
+                //might be a slow replication, reload again
+                console.log("opendata timed out, trying again in 3sec")
+                self.setTimeout(function () {
+                    loadOpenTestData(openTestUUID, testUUIDForZipPopup);
+                }, 3000);
+            }
+        },
         success: function(testdata) {
             //request ZIP popup?
             if (testUUIDForZipPopup !== undefined && testUUIDForZipPopup !== null & testUUIDForZipPopup.length > 1) {
