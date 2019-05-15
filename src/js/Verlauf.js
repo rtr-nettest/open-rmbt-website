@@ -644,7 +644,7 @@ var qosPrototypeHTML = null;
  */
 function loadOpenTestData(openTestUUID, testUUIDForZipPopup) {
     $.ajax({
-        url: statisticProxy + "/" + statisticpath + "/opentests/" + openTestUUID + "?" + getCapabilitiesAsQueryParam(),
+        url: controlProxy + "/" + statisticpath + "/opentests/" + openTestUUID + "?" + getCapabilitiesAsQueryParam(),
         type: 'GET',
         dataType: 'json',
         statusCode: {
