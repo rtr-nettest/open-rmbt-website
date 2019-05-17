@@ -297,5 +297,8 @@ Lang.setStrings({
     'link_name1': 'Straße Name1',
     'link_name2': 'Straße Name2',
     'link_frc': 'Straßenkategorie',
-    'settlement_type': 'Dauersiedlungsraum'
+    'settlement_type': 'Dauersiedlungsraum',
+    'settlement_type_0':'kein DSR',
+    'settlement_type_1':'Besiedelbarer Raum',
+    'settlement_type_2':'Siedlungsraum'
 });
