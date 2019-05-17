@@ -289,5 +289,13 @@ Lang.setStrings({
     'corine_523':'Meer und Ozean',
     'land_cover': 'Bodenbedeckung',
     'land_cover_cat1': 'Bodenbedeckung (Kategorie)',
-    'land_cover_cat2': 'Bodenbedeckung (Unterkategorie)'
+    'land_cover_cat2': 'Bodenbedeckung (Unterkategorie)',
+    'link_id': 'Straße Link ID',
+    'link_name': 'Straße Kurzbezeichnung',
+    'link_distance': 'Straße Distanz',
+    'edge_id': 'Straße Kanten ID',
+    'link_name1': 'Straße Name1',
+    'link_name2': 'Straße Name2',
+    'link_frc': 'Straßenkategorie',
+    'settlement_type': 'Dauersiedlungsraum'
 });

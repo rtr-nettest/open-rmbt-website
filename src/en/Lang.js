@@ -292,5 +292,13 @@ Lang.setStrings({
     'corine_523':'Sea and ocean',
     'land_cover': 'Land cover',
     'land_cover_cat1': 'Land cover (category)',
-    'land_cover_cat2': 'Land cove (subcategory)'
+    'land_cover_cat2': 'Land cove (subcategory)',
+    'link_id': 'Street link ID',
+    'link_name': 'Street identifier',
+    'link_distance': 'Street distance ',
+    'edge_id': 'Street edge ID',
+    'link_name1': 'Street name1',
+    'link_name2': 'Street name2',
+    'link_frc': 'Street category',
+    'settlement_type': 'Settlement type'
 });
