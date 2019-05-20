@@ -301,7 +301,7 @@ Lang.setStrings({
     'link_name2': 'Street name2',
     'link_frc': 'Street category',
     'settlement_type': 'Settlement type',
-    'settlement_type_0':'No settlement area',
-    'settlement_type_1':'Habitable area',
-    'settlement_type_2':'Settlement area'
+    'settlement_type_1':'No settlement area',
+    'settlement_type_2':'Habitable area',
+    'settlement_type_3':'Settlement area'
 });
