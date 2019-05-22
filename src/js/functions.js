@@ -721,9 +721,15 @@ function RMBThistory() {
                                 });
 
                                 $("#download-link-form").append('<input type="hidden" name="test_uuid" value="' + decodeURIComponent(allTestUuids.join(",")) + '" />');
-                                $("#download-link-form").append("<input type='hidden' name='format' value='" + format + "' />");
-                                $("#download-link-form").append("<input type='hidden' name='max_results' value='" + Math.min(10000,data.history.length) + "' />");
-                                $("#download-link-form").attr("action", statisticProxy + "/" + statisticpath + "/opentests/search");
+                                if (format === 'pdf') {
+                                    $("#download-link-form").attr("action", statisticProxy + "/" + statisticpath + "/export/pdf");
+                                }
+                                else {
+                                    $("#download-link-form").append("<input type='hidden' name='format' value='" + format + "' />");
+                                    $("#download-link-form").append("<input type='hidden' name='max_results' value='" + Math.min(10000,data.history.length) + "' />");
+                                    $("#download-link-form").attr("action", statisticProxy + "/" + statisticpath + "/opentests/search");
+                                }
+
                                 $("#download-link-form").submit();
                             }
 
@@ -736,6 +742,12 @@ function RMBThistory() {
 
                             $("#xlsx-link").click(function (e) {
                                 triggerDownloadForm("xlsx");
+                                e.preventDefault();
+                                return false;
+                            });
+
+                            $("#pdf-link").click(function (e) {
+                                triggerDownloadForm("pdf");
                                 e.preventDefault();
                                 return false;
                             });

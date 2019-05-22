@@ -90,7 +90,8 @@ exports.strings = {
         "enter_code" : "or enter a known synchronization code in the input box below and confirm your entry by clicking on submit",
         "download": "Download",
         "csv": "CSV",
-        "xlsx": "XLSX"
+        "xlsx": "XLSX",
+        "pdf": "PDF"
     },
 
     "opentest_content" : {
