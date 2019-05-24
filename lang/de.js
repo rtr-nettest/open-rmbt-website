@@ -161,7 +161,7 @@ exports.strings = {
         "current_test": "Aktuelle Messung",
         "save_results": "Testergebnisse aufbewahren",
         "download_results": "Ergebnisse herunterladen als",
-        "available_history": "Alle Messergebnisse sind auch im Menüpunkt <em>Verlauf</em> abrufbar."
+        "available_history": "Die Messergebnisse sind auch im Menüpunkt <em>Verlauf</em> abrufbar."
     },
 
     //Page titles and link descriptions

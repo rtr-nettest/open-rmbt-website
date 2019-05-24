@@ -161,7 +161,7 @@ exports.strings = {
         "current_test": "Current measurement",
         "save_results": "Save results",
         "download_results": "Download results:",
-        "available_history": "All test results are available under menu item <em>History</em>."
+        "available_history": "Test results are available under menu item <em>History</em>."
     },
 
     //Page titles and link descriptions
