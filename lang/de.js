@@ -158,7 +158,10 @@ exports.strings = {
         "start": "Wiederholungsmodus starten",
         "measurements" : "Letzte Messungen",
         "error_during_test" : "Messung konnte nicht erfolgreich abgeschlossen werden.",
-        "current_test": "Aktuelle Messung"
+        "current_test": "Aktuelle Messung",
+        "save_results": "Testergebnisse aufbewahren",
+        "download_results": "Ergebnisse herunterladen als",
+        "available_history": "Alle Messergebnisse sind auch im Menüpunkt <em>Verlauf</em> abrufbar."
     },
 
     //Page titles and link descriptions

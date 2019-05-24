@@ -486,9 +486,7 @@ function conductTests() {
 
         }
         else {
-            $("#infostatus").text(Lang.getString("LoopModeTestsFinished"));
-            $("#testprogress").text(Lang.getString("LoopModeFinished"));
-            $("#testprogress").css("width", "100%");
+            allTestsFinished();
         }
     };
 
@@ -599,6 +597,53 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
         testErrorCallback();
     }, 3*60*1000);
 }
+
+/**
+ * Called when all tests are done
+ */
+function allTestsFinished() {
+    $("#infostatus").text(Lang.getString("LoopModeTestsFinished"));
+    $("#testprogress").text(Lang.getString("LoopModeFinished"));
+    $("#testprogress").css("width", "100%");
+
+    $("#infocurrent").hide();
+    $("#infofinished").show();
+
+    var triggerDownloadForm = function(format) {
+        $("#download-link-form input").remove();
+
+        $("#download-link-form").append('<input type="hidden" name="loop_uuid" value="' + loopUUID + '" />');
+        if (format === 'pdf') {
+            $("#download-link-form").attr("action", statisticProxy + "/" + statisticpath + "/export/pdf");
+        }
+        else {
+            $("#download-link-form").append("<input type='hidden' name='format' value='" + format + "' />");
+            $("#download-link-form").attr("action", statisticProxy + "/" + statisticpath + "/opentests/search");
+        }
+
+        $("#download-link-form").submit();
+    };
+
+    //bind csv link - http://stackoverflow.com/a/27208677
+    $("#csv-link").click(function (e) {
+        triggerDownloadForm("csv");
+        e.preventDefault();
+        return false;
+    });
+
+    $("#xlsx-link").click(function (e) {
+        triggerDownloadForm("xlsx");
+        e.preventDefault();
+        return false;
+    });
+
+    $("#pdf-link").click(function (e) {
+        triggerDownloadForm("pdf");
+        e.preventDefault();
+        return false;
+    });
+}
+
 
 
 /* From Karte.js */

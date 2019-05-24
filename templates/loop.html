@@ -45,7 +45,7 @@
             font-weight: bold;
         }
 
-        #loop-mode, #loop-mode-form-container {
+        #loop-mode, #loop-mode-form-container, #infofinished {
             display: none;
         }
     </style>
@@ -193,5 +193,17 @@
                 {{/if }}
             </script>
         {%  endraw %}
+        <div id="infofinished">
+            <h3>{{ Lang.loop_mode_content.save_results}}</h3>
+            <form id="download-link-form" method="post" style="display:inline">
+                <p>{{ Lang.loop_mode_content.download_results }}
+                    <a id="pdf-link" href="#">{{ Lang.history_content.pdf }}</a> |
+                    <a id="csv-link" class="" href="#">{{ Lang.history_content.csv }}</a> |
+                    <a id="xlsx-link" href="#">{{ Lang.history_content.xlsx }}</a></p>
+            </form>
+            <p>
+                {{ Lang.loop_mode_content.available_history }}
+            </p>
+        </div>
     </div>
 {% endblock %}

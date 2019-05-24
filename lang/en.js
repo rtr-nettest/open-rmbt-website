@@ -158,7 +158,10 @@ exports.strings = {
         "start": "Start loop mode",
         "measurements" : "Last measurements",
         "error_during_test" : "An error occurred during the measurement.",
-        "current_test": "Current measurement"
+        "current_test": "Current measurement",
+        "save_results": "Save results",
+        "download_results": "Download results:",
+        "available_history": "All test results are available under menu item <em>History</em>."
     },
 
     //Page titles and link descriptions
