@@ -295,7 +295,7 @@ Lang.setStrings({
     'land_cover_cat2': 'Land cove (subcategory)',
     'link_id': 'Street link ID',
     'link_name': 'Street identifier',
-    'link_distance': 'Street distance ',
+    'link_distance': 'Street distance',
     'edge_id': 'Street edge ID',
     'link_name1': 'Street name1',
     'link_name2': 'Street name2',
