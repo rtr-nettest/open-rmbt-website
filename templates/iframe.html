@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        @font-face {
+            font-family: 'open_sansregular';
+            src: url('../fileadmin/template/rtr/css/fonts/OpenSans-Regular-webfont.eot');
+            src: url('../fileadmin/template/rtr/css/fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'), url('../fileadmin/template/rtr/css/fonts/OpenSans-Regular-webfont.woff') format('woff'), url('../fileadmin/template/rtr/css/fonts/OpenSans-Regular-webfont.ttf') format('truetype'), url('../fileadmin/template/rtr/css/fonts/OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
+            font-weight: normal;
+            font-style: normal
+        }
+
+        @font-face {
+            font-family: 'open_sansitalic';
+            src: url('../fileadmin/template/rtr/css/fonts/OpenSans-Italic-webfont.eot');
+            src: url('../fileadmin/template/rtr/css/fonts/OpenSans-Italic-webfont.eot?#iefix') format('embedded-opentype'), url('../fileadmin/template/rtr/css/fonts/OpenSans-Italic-webfont.woff') format('woff'), url('../fileadmin/template/rtr/css/fonts/OpenSans-Italic-webfont.ttf') format('truetype'), url('../fileadmin/template/rtr/css/fonts/OpenSans-Italic-webfont.svg#open_sansitalic') format('svg');
+            font-weight: normal;
+            font-style: normal
+        }
+
+        @font-face {
+            font-family: 'open_sansbold';
+            src: url('../fileadmin/template/rtr/css/fonts/OpenSans-Bold-webfont.eot');
+            src: url('../fileadmin/template/rtr/css/fonts/OpenSans-Bold-webfont.eot?#iefix') format('embedded-opentype'), url('../fileadmin/template/rtr/css/fonts/OpenSans-Bold-webfont.woff') format('woff'), url('../fileadmin/template/rtr/css/fonts/OpenSans-Bold-webfont.ttf') format('truetype'), url('../fileadmin/template/rtr/css/fonts/OpenSans-Bold-webfont.svg#open_sansbold') format('svg');
+            font-weight: normal;
+            font-style: normal
+        }
+
+        @font-face {
+            font-family: 'open_sanssemibold';
+            src: url('../fileadmin/template/rtr/css/fonts/OpenSans-Semibold-webfont.eot');
+            src: url('../fileadmin/template/rtr/css/fonts/OpenSans-Semibold-webfont.eot?#iefix') format('embedded-opentype'), url('../fileadmin/template/rtr/css/fonts/OpenSans-Semibold-webfont.woff') format('woff'), url('../fileadmin/template/rtr/css/fonts/OpenSans-Semibold-webfont.ttf') format('truetype'), url('../fileadmin/template/rtr/css/fonts/OpenSans-Semibold-webfont.svg#open_sanssemibold') format('svg');
+        }
+
+        .loader {
+            border: 2px solid #c3c3c3;
+            border-top: 2px solid #59b200;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            animation: loader-spin 2s linear infinite;
+            float: left;
+            margin-right: 10px;
+            margin-top: 3px;
+            display: none;
+        }
+
+        @keyframes loader-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .before-test .current-test,
+        .before-test #passDataForm,
+        .test-running #testResultRow {
+            display: none;
+        }
+
+        .test-running #tcForm,
+        .test-running #passDataForm ,
+        .test-running #testResultRow {
+            display: none;
+        }
+
+        .test-finished #tcForm {
+            display: none;
+        }
+
+    </style>
+    <script type="text/javascript" src="../{{ fingerprint["js/jquery-1.8.2.min.js"] }}"></script>
+    <link rel="stylesheet" type="text/css" href="../{{ fingerprint["css/bootstrap.css"] }}" media="screen">
+
+    <script type="text/javascript" src="../{{ fingerprint["lib/rmbtws.min.js"] }}"></script>
+    <script src="https://raw.githack.com/rtr-nettest/rmbtws/master/test/DemoTestVisualization.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body class="before-test">
+<script>
+    var websocketTest = null;
+    var openTestUuid = null;
+
+    function submitTCForm() {
+        try {
+        //check checkbox
+        if ($("#acceptTCCheckbox:checked").length == 0) {
+            $("#tcForm").addClass("has-error");
+            $("#acceptTCCheckbox").addClass("has-error");
+            return false;
+        }
+
+        //remove error classes
+        $("#tcForm").removeClass("has-error");
+        $("#acceptTCCheckbox").removeClass("has-error");
+
+        startTest();
+
+        } catch(e) {
+            console.log(e);
+            return false;
+        }
+        return false;
+    }
+
+    function startTest(e) {
+        $("body").removeClass("before-test");
+        $("body").removeClass("test-finished");
+        $("body").addClass("test-running");
+        $("#passDataForm button").removeAttr("disabled");
+
+        //TODO: Settings request
+
+        TestEnvironment.init(new DemoTestVisualization(testFinished, function (error) {
+            //TODO
+        }), null);
+        var config = new RMBTTestConfig("de", "https://dev.netztest.at", "RMBTControlServer");
+        var ctrl = new RMBTControlServerCommunication(config, {
+            register: function (registration) {
+                //from the registration - get the uuid
+                openTestUuid = registration.response["open_test_uuid"];
+            }
+        });
+
+        //demo uuid - todo: settings request
+        config.uuid = "61244514-1fe8-483f-814a-1734fa4c4a3f";
+
+        websocketTest = new RMBTTest(config, ctrl);
+
+        TestEnvironment.getTestVisualization().setRMBTTest(websocketTest);
+        TestEnvironment.getTestVisualization().startTest(); //start the visualization
+
+        websocketTest.startTest();
+
+        //inform about test start
+        if (parent.window && typeof parent.window.postMessage === 'function') {
+            parent.window.postMessage({
+                type: "start"
+            },'*');
+        }
+    }
+
+    function testFinished(success) {
+        //show form for data passing
+        $("body").removeClass("test-running");
+        $("body").addClass("test-finished");
+
+        //inform about test finish
+        if (parent.window && typeof parent.window.postMessage === 'function') {
+            parent.window.postMessage({
+                type: "end"
+            },'*');
+        }
+
+        //attach links
+        $("#openDataLink").attr("href","https://dev.netztest.at/de/Opentest?" + openTestUuid);
+
+    }
+
+    function passData() {
+        //pass to embedding frame, if any
+        if (parent.window && typeof parent.window.postMessage === 'function') {
+            parent.window.postMessage({
+                type: "result",
+                uri: "https://dev.netztest.at/RMBTStatisticServer/opentests/" + openTestUuid
+            },'*');
+        }
+        $("#passDataForm button").attr("disabled","disabled");
+        return false;
+    }
+</script>
+<div class="container">
+    <h3>RTR-Netztest</h3>
+
+    <form id="tcForm" onsubmit="return submitTCForm()">
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="t" name="acceptTC" id="acceptTCCheckbox">
+                    Ich stimme den <a href="https://www.rtr.at/de/tk/rtrnetztesttermsofuse" target="_blank">Nutzungsbedingungen</a> und <a href="https://www.rtr.at/de/tk/netztestprivacypolicyweb" target="_blank">Datenschutzbestimmungen</a> zu.
+                </label>
+            </div>
+        </div>
+        <button class="btn" type="submit">Test starten</button>
+    </form>
+
+
+    <div class="current-test">
+        <div class="progress">
+            <div id="testprogress" class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0"
+                 aria-valuemax="100" style="min-width: 3em; width: 0%;">0 %
+            </div>
+        </div>
+        <div id="infocurrent">
+            <div class="row">
+                <div class="col-xs-3">Status</div>
+                <div class="col-xs-9" id="infostatus">-</div>
+            </div>
+            <p></p>
+            <p>
+            </p>
+            <div class="row inforow">
+                <div class="col-xs-3">Ping</div>
+                <div class="col-xs-9" id="infoping">
+                    <div class="loader" style="display: none;"></div>
+                    <span>-</span></div>
+            </div>
+            <div class="row inforow">
+                <div class="col-xs-3">Download</div>
+                <div class="col-xs-9" id="infodown">
+                    <div class="loader" style="display: none;"></div>
+                    <span>-</span></div>
+            </div>
+            <div class="row inforow">
+                <div class="col-xs-3">Upload</div>
+                <div class="col-xs-9" id="infoup">
+                    <div class="loader" style="display: none;"></div>
+                    <span>-</span></div>
+            </div>
+            <div class="row inforow" id="testResultRow">
+                <div class="col-xs-3">Testergebnis</div>
+                <div class="col-xs-9"><a href="" target="_blank" id="openDataLink">Open Data</a> &middot; <a onclick="startTest();return false;" href="#">Test wiederholen</a></div>
+            </div>
+        </div>
+        <div class="row">
+        </div>
+    </div>
+    <form id="passDataForm" onsubmit="return passData()">
+
+        <button class="btn" type="submit">Testergebnisse teilen</button>
+    </form>
+</div>
+
+<script>
+    //Language handling
+
+</script>
+<!--<pre id="debug"></pre>-->
+</body>
+</html>
