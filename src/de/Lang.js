@@ -300,5 +300,6 @@ Lang.setStrings({
     'settlement_type': 'Dauersiedlungsraum',
     'settlement_type_1':'kein DSR',
     'settlement_type_2':'Besiedelbarer Raum',
-    'settlement_type_3':'Siedlungsraum'
+    'settlement_type_3':'Siedlungsraum',
+    'dtm_level': 'DGM-Niveau'
 });

@@ -303,5 +303,6 @@ Lang.setStrings({
     'settlement_type': 'Settlement type',
     'settlement_type_1':'No settlement area',
     'settlement_type_2':'Habitable area',
-    'settlement_type_3':'Settlement area'
+    'settlement_type_3':'Settlement area',
+    'dtm_level': 'DTM level'
 });
