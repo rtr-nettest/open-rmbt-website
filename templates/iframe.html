@@ -118,7 +118,7 @@
         TestEnvironment.init(new DemoTestVisualization(testFinished, function (error) {
             //TODO
         }), null);
-        var config = new RMBTTestConfig("de", "https://dev.netztest.at", "RMBTControlServer");
+        var config = new RMBTTestConfig("de", "https://c01.netztest.at", "RMBTControlServer");
         var ctrl = new RMBTControlServerCommunication(config, {
             register: function (registration) {
                 //from the registration - get the uuid
@@ -157,7 +157,7 @@
         }
 
         //attach links
-        $("#openDataLink").attr("href","https://dev.netztest.at/de/Opentest?" + openTestUuid);
+        $("#openDataLink").attr("href","https://c01.netztest.at/de/Opentest?" + openTestUuid);
 
     }
 
@@ -166,7 +166,7 @@
         if (parent.window && typeof parent.window.postMessage === 'function') {
             parent.window.postMessage({
                 type: "result",
-                uri: "https://dev.netztest.at/RMBTStatisticServer/opentests/" + openTestUuid
+                uri: "https://data.netztest.at/RMBTStatisticServer/opentests/" + openTestUuid
             },'*');
         }
         $("#passDataForm button").attr("disabled","disabled");
