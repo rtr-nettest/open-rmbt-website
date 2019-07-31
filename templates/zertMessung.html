@@ -1,0 +1,390 @@
+{% extends basetemplate %}
+{% set title = Lang.loop_mode %}
+
+{% block headerscriptingExtended %}
+    <link rel="stylesheet" href="../{{ fingerprint["css/test.css"] }}">
+
+    <script src="../{{ fingerprint["js/vendor/modernizr-2.6.1.min.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["lib/rmbtws.min.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["lib/moment.min.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["lib/handlebars.min.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["js/Loop.js"] }}"></script>
+    <script>
+        repetitions = 8;
+        waitingTime = 15*60;
+        certTest = true;
+    </script>
+
+    <style>
+        input.form-control {
+            background-color: white;
+        }
+
+        .loader {
+            border: 2px solid #c3c3c3;
+            border-top: 2px solid #59b200;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            animation: loader-spin 2s linear infinite;
+            float: left;
+            margin-right: 10px;
+            margin-top: 3px;
+            display: none;
+        }
+
+        @keyframes loader-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .progress-bar.inactive {
+            background-color: #545454;
+        }
+
+        tr.median {
+            font-weight: bold;
+        }
+
+        #loop-mode, #loop-mode-form-container, #infofinished {
+            display: none;
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+    <h2 id="h2">Zertifizierte Messung</h2>
+    <!-- <div id="loading-placeholder">
+        <h2>Test framework is loading...</h2>
+    </div>-->
+
+    <div id="intro-container">
+        <h3>Hinweise zur Messung</h3>
+        <p>
+            Bitte beachten Sie die <a>Anleitung zur zertifizierten Messung Ihres Internetanschlusses</a>.
+        </p>
+        <p>
+            Bitte beachten Sie::
+            <ul>
+                <li>
+                    Während eines Messzyklus dürfen Sie Ihren Computer nicht für andere Anwendungen verwenden
+                </li>
+            <li>
+                Versichern Sie sich vor dem Start eines Messzyklus, dass im Hintergrund keine
+                datenintensiven Applikationen laufen (z.B. Datei-Downloads, Video-Streams etc.) bzw.
+                keine anderen Nutzer (z.B. Familienangehörige mittels Smartphone) denselben
+                Internetzugang zum Zeitpunkt der Messung verwenden.
+            </li>
+            <li>
+                Achten Sie daher insbesondere darauf, dass während der Messungen der Energiesparmodus auf Ihrem Endgerät nicht aktiv wird.
+            </li>
+            </ul>
+        </p>
+        <h3>Ablauf</h3>
+        <p>
+            Ein Messzyklus dauert zumindest zwei Stunden. In diesem Zeitraum werden
+            Einzelmessungen im Abstand von 15 Minuten durchgeführt. Es sind zumindest drei
+            Messzyklen an drei unterschiedlichen Tagen innerhalb von zwei Wochen durchzuführen. Am
+            Ende dieses Dokumentes finden Sie eine Checkliste, die Sie bei der Durchführung der
+            zertifizierten Messung unterstützen soll.
+        </p>
+        <p>
+            <button type="submit" class="btn btn-primary" onclick="$('#intro-container').hide();$('#intermediate-container').show();">Nutzungsbedingungen zustimmen und weiter</button>
+        </p>
+    </div>
+
+    <div id="intermediate-container" style="display:none">
+        <h3 style="color:grey">&check; Hinweise zur Messung</h3>
+        <h3>Basisinformationen zur Messung</h3>
+        <form>
+            <div class="form-group">
+                <label for="title_prepend">Titel (vorangestellt)</label>
+                <input id="title_prepend" name="title_prepend" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="first_name">Vorname</label>
+                <input id="first_name" name="first_name" type="text" class="form-control"
+                       required="required">
+            </div>
+            <div class="form-group">
+                <label for="text">Nachname</label>
+                <input id="text" name="text" type="text" class="form-control" required="required">
+            </div>
+            <div class="form-group">
+                <label for="title_prepend">Titel (nachgestellt)</label>
+                <input id="title_prepend" name="title_prepend" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="textarea">Standort der Messungen</label>
+                <textarea id="textarea" name="textarea" cols="40" rows="2" class="form-control"
+                          aria-describedby="textareaHelpBlock" required="required"></textarea>
+                <span id="textareaHelpBlock" class="form-text text-muted help-block">Die Adresse, an der die Messungen durchgeführt wurden</span>
+            </div>
+
+            <div class="form-group">
+                <label>Handelt es sich um den ersten Messzyklus?</label>
+                <div class="radio">
+                    <label for="first">
+                        <input name="first" id="first" type="radio" value="y" checked="checked"
+                               onclick="if($('input[name=\'first\']:checked').val()=='y'){$('#further-input').show()}else{$('#further-input').hide()};">
+                        Ja, erster Messungzyklus</label>
+                    <!-- <p id="furter-input" style="display:none">
+                        In diesem Fall ersuchen wir Sie, im nächsten Schritt einige weitere Fragen zu beantworten.
+                    </p> -->
+                </div>
+                <div class="radio">
+                    <label for="not_first">
+                        <input name="first" id="not_first" type="radio" value="n"
+                               onclick="if($('input[name=\'first\']:checked').val()=='y'){$('#further-input').show()}else{$('#further-input').hide()};">
+                        Nein, Folgezyklus</label>
+                </div>
+                <div class="form-group">
+                    <p>
+                        <button type="submit" class="btn btn-primary"  onclick="$('#intermediate-container').hide();if($('input[name=\'first\']:checked').val()=='y') $('#additional-information-container').show(); else $('#loop-mode').show();conductTests();">Zertifizierte Messung starten
+                        </button>
+                    </p>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+
+
+    <div id="additional-information-container" style="display: none">
+        <h3 style="color:grey">&check; Hinweise zur Messung</h3>
+        <h3 style="color:grey">&check; Basisinformationen zur Messung</h3>
+        <div id="additional-information">
+            <h3>Weitere Informationen zur Messung</h3>
+            <div class="certified-form">
+                <p><i>Die Durchführung der Messungen hat bereits gestartet und wird zwei Stunden benötigen.</i></p>
+                <p>Um die Umstände der
+                    Messung nachvollziehbarer
+                    zu gestalten, bitten wir Sie in der Zwischenzeit um die Beantwortung der unten
+                    gestellten Fragen.
+                </p>
+                <p>
+                    Wir bitten Sie, diese Fragen zu beantworten, da es sich um den ersten Messzyklus handelt.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <label>Beschreiben Sie den Standort des Anschlusses</label>
+                        <div>
+                            <div class="custom-controls-stacked">
+                                <div class="checkbox">
+                                    <label for="location_type_0">
+                                        <input name="location_type" id="location_type_0"
+                                               type="checkbox"
+                                               value="s1">
+                                        Wohnhausanlage</label>
+                                </div>
+                            </div>
+                            <div class="custom-controls-stacked">
+                                <div class="checkbox">
+                                    <label for="location_type_1">
+                                        <input name="location_type" id="location_type_1"
+                                               type="checkbox"
+                                               value="s2">
+                                        Einfamilienhaus</label>
+                                </div>
+                            </div>
+                            <div class="custom-controls-stacked">
+                                <div class="checkbox">
+                                    <label for="location_type_2">
+                                        <input name="location_type" id="location_type_2"
+                                               type="checkbox"
+                                               value="s3">
+                                        Städtische Umgebung</label>
+                                </div>
+                            </div>
+                            <div class="custom-controls-stacked">
+                                <div class="checkbox">
+                                    <label for="location_type_3">
+                                        <input name="location_type" id="location_type_3"
+                                               type="checkbox"
+                                               value="s4">
+                                        Ländliche Umgebung</label>
+                                </div>
+                                <div class="checkbox form-group-sm">
+                                    <label for="location_type_3" class="custom-control-label row">
+                                        <input name="location_type" id="location_type_3"
+                                               type="checkbox"
+                                               value="s4"/>
+                                        Sonstiges:
+                                        <input type="text" class="form-control col-xs-10"
+                                               placeholder="Sonstiges"/></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="type_text">Beschreiben Sie Ihren Anschluss</label>
+                        <textarea id="type_text" name="type_text" cols="40" rows="5"
+                                  class="form-control"
+                                  aria-describedby="type_textHelpBlock"></textarea>
+                        <span id="type_textHelpBlock" class="form-text text-muted help-block">Um welche Art von Internetanschluss (DSL, Kabel, Richtfunk, andere) handelt es sich? Welches Modem bzw. welchen Router verwenden Sie? Wenn möglich, geben Sie eine genaue Typenbezeichnung an.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="test-device">Beschreiben Sie Ihr Testgerät</label>
+                        <textarea id="test-device" name="test-device" cols="40" rows="3"
+                                  class="form-control" aria-describedby="test-deviceHelpBlock"
+                                  required="required"></textarea>
+                        <span id="test-deviceHelpBlock" class="form-text text-muted help-block">Beschreiben Sie den Computer, mit dem Sie den Test durchführen. Wie ist dieser mit dem Modem/Router verbunden? Sind Ihre Geräte über Kabel verbunden (LAN), oder kabellos (WLAN)? Werden die elektrischen Leitungen in Ihrem Haus auch zur Übertragung von Daten benutzt (PowerLAN)? Bei WLAN: Befinden sich Testgerät und Modem/Router im selben Raum?</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="test-pictures">Fotoupload</label>
+                        <input id="test-pictures" type="file" multiple="multiple"/>
+                        <span id="test-deviceHelpBlock" class="form-text text-muted help-block">Bitte übermitteln Sie uns: Foto des Modems/Routers, Computers (wenn möglich gemeinsam auf einem Bild; und Fotos von den einzelnen Typenbezeichnungen). Falls vorhanden: Foto von der Wanddose.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <button name="submit" type="submit" class="btn btn-primary" onclick="$('#additional-information-container').hide();$('#loop-mode').show();">Fragebeantwortung speichern.</button>
+                        <p class="form-text text-muted help-block">Sie können Ihre Antworten auch später korrigieren.</p>
+                    </div>
+                    <hr/>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="loop-mode" style="display: none">
+        <h3 style="color:grey">&check; Hinweise zur Messung</h3>
+        <h3 style="color:grey">&check; Basisinformationen zur Messung</h3>
+        <h3 ><a style="color:grey; !important;" onclick="$('#additional-information-container').show();$('#loop-mode').hide();return false;" href="#">&check; Weitere Informationen zur Messung</a></h3>
+        <h3>Durchführung der Messungen</h3>
+        <p>
+            Test <span id="testcount">0</span>/<span id="teststotal">8</span>
+        </p>
+
+        <div class="progress">
+            <div id="testprogress" class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"
+                 style="min-width: 3em;width: 0%">
+                0%
+            </div>
+        </div>
+        <div id="infocurrent">
+            <p>
+            <div class="row">
+                <div class="col-sm-3">{{ Lang.state }}</div>
+                <div class="col-sm-9" id="infostatus">-</div>
+            </div>
+            </p>
+            <p>
+            <div class="row inforow">
+                <div class="col-sm-3">{{ Lang.ping }}</div>
+                <div class="col-sm-9" id="infoping"><div class="loader"></div> <span>-</span></div>
+            </div>
+            <div class="row inforow">
+                <div class="col-sm-3">{{ Lang.download }}</div>
+                <div class="col-sm-9" id="infodown"><div class="loader"></div> <span>-</span></div>
+            </div>
+            <div class="row inforow">
+                <div class="col-sm-3">{{ Lang.upload }}</div>
+                <div class="col-sm-9" id="infoup"><div class="loader"></div> <span>-</span></div>
+            </div>
+            </p>
+            <p>
+            <!--<div class="row">
+                <div class="col-sm-3">{{ Lang.coordinates }}</div>
+                <div class="col-sm-9" id="infogeo">-</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ Lang.test_server }}</div>
+                <div class="col-sm-9" id="infoserver">-</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ Lang.ip }}</div>
+                <div class="col-sm-9" id="infoip">-</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">{{ Lang.operator }}</div>
+                <div class="col-sm-9" id="infoprovider">-</div>
+            </div>-->
+            </p>
+
+
+        </div>
+
+        <h3>Bereits abgeschlossene Messungen</h3>
+        <table class="dont-stack">
+            <colgroup>
+                <col/>
+                <col/>
+                <col/>
+                <col/>
+            </colgroup>
+            <thead>
+            <tr>
+                <th scope="col">{{ Lang.time }}</th>
+                <th scope="col" class="align-right">{{ Lang.down }} ({{ Lang.mbps }})</th>
+                <th scope="col" class="align-right">{{ Lang.up }} ({{ Lang.mbps }})</th>
+                <th scope="col" class="align-right">{{ Lang.ping }} ({{ Lang.ms }})</th>
+            </tr>
+            </thead>
+            <tbody id="verlauf_tbody">
+
+            <tr class="median">
+                <td>Median</td>
+                <td class="align-right" id="mediandown">-</td>
+                <td class="align-right" id="medianup">-</td>
+                <td class="align-right" id="medianping">-</td>
+            </tr>
+            </tbody>
+        </table>
+        {%  raw %}
+            <script id="resultTemplate" type="text/x-handlebars-template">
+                {{#if error }}
+                <tr class="test-result-error">
+                    <td>
+                    {{#if fullDate }}
+                    {{ formatFullDate time }}
+                    {{ else }}
+                    {{ formatDate time }}
+                    {{/if }}
+                    </td>
+                    <td colspan="3">{% endraw %}{{ Lang.loop_mode_content.error_during_test }}{% raw %}</td>
+                </tr>
+                {{ else }}
+                <tr class="test-result">
+                    <td>
+                        <a href="Verlauf#{{ testUUID }}" target="_blank">{{#if fullDate }}
+                            {{ formatFullDate time }}
+                            {{ else }}
+                            {{ formatDate time }}
+                            {{/if }}</a>
+                    </td>
+                    <td class="align-right">{{ formatNumberSignificant down }}</td>
+                    <td class="align-right">{{ formatNumberSignificant up }}</td>
+                    <td class="align-right">{{ formatNumberSignificant ping }}</td>
+                </tr>
+                {{/if }}
+            </script>
+        {%  endraw %}
+        <div>
+            <h3>{{ Lang.loop_mode_content.save_results }}</h3>
+            <div id="infonotfinished">
+                <p><i>Ihr Messergebnis steht nach Abschluss aller Messungen zum Download zur
+                        Verfügung</i></p>
+                <p>Geplanter Abschluss der Messungen: ca. <script>document.write(moment().add(2,'hours').format('H:mm'))</script> Uhr.
+                </p>
+            </div>
+            <div id="infofinished">
+                <form id="download-link-form" method="post" style="display:inline">
+                    <p>{{ Lang.loop_mode_content.download_results }}
+                        <a id="pdf-link" href="#">{{ Lang.history_content.pdf }}</a> |
+                        <a id="csv-link" class="" href="#">{{ Lang.history_content.csv }}</a> |
+                        <a id="xlsx-link" href="#">{{ Lang.history_content.xlsx }}</a></p>
+                </form>
+                <p>
+                    {{ Lang.loop_mode_content.available_history }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
