@@ -132,7 +132,7 @@
                     <label for="first">
                         <input name="first" id="first" type="radio" value="y" checked="checked"
                                onclick="if($('input[name=\'first\']:checked').val()=='y'){$('#further-input').show()}else{$('#further-input').hide()};">
-                        Ja, erster Messungzyklus</label>
+                        Ja, erster Messzyklus</label>
                     <!-- <p id="furter-input" style="display:none">
                         In diesem Fall ersuchen wir Sie, im nächsten Schritt einige weitere Fragen zu beantworten.
                     </p> -->
@@ -377,11 +377,10 @@
                 <form id="download-link-form" method="post" style="display:inline">
                     <p>{{ Lang.loop_mode_content.download_results }}
                         <a id="pdf-link" href="#">{{ Lang.history_content.pdf }}</a> |
-                        <a id="csv-link" class="" href="#">{{ Lang.history_content.csv }}</a> |
-                        <a id="xlsx-link" href="#">{{ Lang.history_content.xlsx }}</a></p>
                 </form>
                 <p>
-                    {{ Lang.loop_mode_content.available_history }}
+                    Der Messzyklus ist nun abgeschlossen. Bitte speichern Sie das PDF-Dokument ab und bewahren Sie es gut auf. <br/>
+                    Das Dokument kann nicht erneut generiert werden.
                 </p>
             </div>
         </div>
