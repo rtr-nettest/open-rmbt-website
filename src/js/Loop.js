@@ -299,14 +299,15 @@ function getSignificantDigits (number) {
     }
 };
 
-if (typeof certTest === 'undefined') {
-    $(document).ready(function () {
+
+$(document).ready(function () {
+    if (typeof certTest === 'undefined') {
         //1. check TOC
         //this will callback to RMBTLoopTest
         //via popupform ->
         show_agbform(false, 'RMBTsettings', 'loop');
-    });
-}
+    }
+});
 
 var clientUUID;
 var loopUUID;
