@@ -306,6 +306,8 @@ $(document).ready(function () {
         //this will callback to RMBTLoopTest
         //via popupform ->
         show_agbform(false, 'RMBTsettings', 'loop');
+    } else {
+        show_agbform(false, 'RMBTsettings', 'certTest');
     }
 });
 
@@ -364,6 +366,9 @@ function RMBTLoopTest(uuid){
             showCheckbox: true
         }
     )
+}
+function RMBTCertTest(uuid) {
+    clientUUID = uuid;
 }
 
 var results=[];

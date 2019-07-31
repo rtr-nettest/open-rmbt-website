@@ -340,6 +340,9 @@ function RMBTsettings(options) {
                         else if (options === 'loop') {
                                 RMBTLoopTest(uuid);
                         }
+                        else if (options === 'certTest') {
+                                RMBTCertTest(uuid);
+                        }
                         else if (options !== 'verlauf') {
                             var testStartFunction = function() {
                                 try {
