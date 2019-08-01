@@ -58,22 +58,42 @@
 {% endblock %}
 
 {% block content %}
-    <h2 id="h2">Zertifizierte Messung</h2>
+    <h2 id="h2">Zertifizierte Messung der RTR-GmbH</h2>
     <!-- <div id="loading-placeholder">
         <h2>Test framework is loading...</h2>
     </div>-->
 
     <div id="intro-container">
+        <p>
+            Die RTR-GmbH bietet auf der Grundlage von § 17b TKG 2003 einen
+            „Leistungs&shy;überprüfungs&shy;mechanismus für Endnutzer“ an, der im Folgenden als zertifizierte
+            Messung bezeichnet wird. Die zertifizierte Messung bietet Endnutzern die Möglichkeit,
+            die Einhaltung der nach der Verordnung (EU) 2120/2015 vorgegebenen Qualitätsparameter zu
+            überprüfen und stellt gleichzeitig eine Beweiserleichterung in Streitfällen dar.
+        </p>
         <h3>Hinweise zur Messung</h3>
         <p>
-            Bitte beachten Sie die <a>Anleitung zur zertifizierten Messung Ihres Internetanschlusses</a>.
+            Bevor Sie die zertifizierte Messung starten, lesen Sie bitte die <a
+                    href="https://www.rtr.at/de/inf/KonsultZertMessung2019/Anleitung_zur_zertifizierten_Messung.pdf"
+                    class="external">Anleitung zur
+                zertifizierten Messung Ihres Internetanschlusses</a> sorgfältig durch.
+            Bei allfälligen Fragen zur zertifizierten Messung kontaktieren Sie uns bitte unter <a>rtr@rtr.at</a>.
         </p>
         <p>
-            Bitte beachten Sie::
-            <ul>
-                <li>
-                    Während eines Messzyklus dürfen Sie Ihren Computer nicht für andere Anwendungen verwenden
-                </li>
+            Bitte beachten Sie dabei insbesondere:
+        <ul>
+            <li>
+                Mit der zertifizierten Messung können kabelgebundene Internetzugangsdienste
+                überprüft werden.
+            </li>
+            <li>
+                Zertifizierte Messungen können nur über einen Internetbrowser (Chrome, Edge, Firefox
+                etc.) Ihres Computers durchgeführt werden
+            </li>
+            <li>
+                Während eines Messzyklus dürfen Sie Ihren Computer nicht für andere Anwendungen
+                verwenden
+            </li>
             <li>
                 Versichern Sie sich vor dem Start eines Messzyklus, dass im Hintergrund keine
                 datenintensiven Applikationen laufen (z.B. Datei-Downloads, Video-Streams etc.) bzw.
@@ -81,16 +101,21 @@
                 Internetzugang zum Zeitpunkt der Messung verwenden.
             </li>
             <li>
-                Achten Sie daher insbesondere darauf, dass während der Messungen der Energiesparmodus auf Ihrem Endgerät nicht aktiv wird.
+                Achten Sie daher insbesondere darauf, dass während der Messungen der
+                Energiesparmodus auf Ihrem Endgerät nicht aktiv wird.
             </li>
-            </ul>
+        </ul>
         </p>
-        <h3>Ablauf</h3>
+        <h3>Ablauf der zertifizierten Messung</h3>
         <p>
             Ein Messzyklus dauert zumindest zwei Stunden. In diesem Zeitraum werden
             Einzelmessungen im Abstand von 15 Minuten durchgeführt. Es sind zumindest drei
-            Messzyklen an drei unterschiedlichen Tagen innerhalb von zwei Wochen durchzuführen. Am
-            Ende dieses Dokumentes finden Sie eine Checkliste, die Sie bei der Durchführung der
+            Messzyklen an drei unterschiedlichen Tagen innerhalb von zwei Wochen durchzuführen,
+            damit eine zertifizierte Messung vorliegt. In der <a
+                    href="https://www.rtr.at/de/inf/KonsultZertMessung2019/Anleitung_zur_zertifizierten_Messung.pdf"
+                    class="external">Anleitung zur
+                zertifizierten Messung Ihres Internetanschlusses</a> finden Sie eine Checkliste, die
+            Sie bei der Durchführung der
             zertifizierten Messung unterstützen soll.
         </p>
         <p>
@@ -100,7 +125,7 @@
 
     <div id="intermediate-container" style="display:none">
         <h3 style="color:grey">&check; Hinweise zur Messung</h3>
-        <h3>Basisinformationen zur Messung</h3>
+        <h3>Basisinformationen zur zertifizierten Messung</h3>
         <form>
             <div class="form-group">
                 <label for="title_prepend">Titel (vorangestellt)</label>
@@ -166,11 +191,13 @@
                 <p><i>Die Durchführung der Messungen hat bereits gestartet und wird zwei Stunden benötigen.</i></p>
                 <p>Um die Umstände der
                     Messung nachvollziehbarer
-                    zu gestalten, bitten wir Sie in der Zwischenzeit um die Beantwortung der unten
+                    zu gestalten, ersuchen wir Sie in der Zwischenzeit um die Beantwortung der unten
                     gestellten Fragen.
                 </p>
                 <p>
-                    Wir bitten Sie, diese Fragen zu beantworten, da es sich um den ersten Messzyklus handelt.
+                    Da es sich um den ersten Messzyklus handelt, ersuchen wir Sie folgende Fragen zu
+                    beantworten, um die Umstände der Messung nachvollziehen zu können. Bei weiteren
+                    Messzyklen ist die Beantwortung dieser Fragen nicht mehr notwendig.
                 </p>
                 <form>
                     <div class="form-group">
@@ -366,11 +393,11 @@
             </script>
         {%  endraw %}
         <div>
-            <h3>{{ Lang.loop_mode_content.save_results }}</h3>
+            <h3>Testergebnis</h3>
             <div id="infonotfinished">
                 <p><i>Ihr Messergebnis steht nach Abschluss aller Messungen zum Download zur
                         Verfügung</i></p>
-                <p>Geplanter Abschluss der Messungen: ca. <script>document.write(moment().add(2,'hours').format('H:mm'))</script> Uhr.
+                <p>Geplanter Abschluss der Messung: ca. <script>document.write(moment().add(105,'minutes').format('H:mm'))</script> Uhr.
                 </p>
             </div>
             <div id="infofinished">
@@ -379,8 +406,9 @@
                         <a id="pdf-link" href="#">{{ Lang.history_content.pdf }}</a> |
                 </form>
                 <p>
-                    Der Messzyklus ist nun abgeschlossen. Bitte speichern Sie das PDF-Dokument ab und bewahren Sie es gut auf. <br/>
-                    Das Dokument kann nicht erneut generiert werden.
+                    Der Messzyklus ist nun abgeschlossen.
+                    <b>Speichern Sie das Ergebnis des Messzyklus sofort ab. Dieses wird von der
+                        RTR-GmbH nicht gespeichert und kann nicht wiederhergestellt werden.</b>
                 </p>
             </div>
         </div>
