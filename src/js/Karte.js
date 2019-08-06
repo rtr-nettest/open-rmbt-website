@@ -360,12 +360,12 @@ function searchAndPositionOnAddress() {
         $('#spinner').spin('modal');
 
         //temporary log to server
-        $.ajax({
+        /*$.ajax({
             url: controlProxy + "/" + wspath+ "/geocoding/karte/" + address,
             type: 'GET',
             dataType: 'json',
             cache: false
-        });
+        });*/
         
         geocoder_google.geocode( { 'address': address}, function(results, status) {
                 $('#spinner').spin('modal');
