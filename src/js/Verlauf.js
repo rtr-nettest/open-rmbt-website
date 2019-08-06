@@ -190,6 +190,7 @@ function convertLongLatToOpenLayersPoint(long,lat) {
                 'EPSG:4326', 'EPSG:3857');
 }
 
+var geocodingCache = {};
 /**
  * Geocode the address that the user entered, 
  * store the results in the local variables
@@ -233,100 +234,113 @@ function searchAndPositionOnAddress(callback) {
         cache: false
     });*/
 
-        geocoder_google.geocode( { 'address': query, 'region': $("select[name=country]").val()}, function(results, status) {
+        var handleResults = function(results) {
+                var pan = function(i) {
+                    $("#address_search .address_input").show();
+                    $("#address_search .selection").hide();
+
+                    $("#address_search #address_search_input").val(results[i].formatted_address);
+
+                    var ne = convertLongLatToOpenLayersPoint(results[i].geometry.viewport.getNorthEast().lng(), results[i].geometry.viewport.getNorthEast().lat()); //North East
+                    var sw = convertLongLatToOpenLayersPoint(results[i].geometry.viewport.getSouthWest().lng(), results[i].geometry.viewport.getSouthWest().lat()); //South West
+                    var center = convertLongLatToOpenLayersPoint(results[i].geometry.location.lng(), results[i].geometry.location.lat());
+
+                    //http://openlayers.org/en/v3.7.0/apidoc/ol.html#Extent
+                    //[minx, miny, maxx, maxy]
+                    var extent=[
+                        ne[0], ne[1],
+                        sw[0], sw[1]
+                    ];
+
+                    map_geoposition.getView().fit(extent, map_geoposition.getSize());
+                    map_geoposition.getView().setZoom(map_geoposition.getView().getZoom()+2);
+                    map_geoposition.getView().setCenter(center);
+
+                    map_geoposition_pointer.getGeometry().setCoordinates(center);//(new ol.geom.Point(center));
+
+                    //re-add modify-event in olv3 for some reason
+                    var modify = new ol.interaction.Modify({
+                        features: new ol.Collection([map_geoposition_pointer])
+                    });
+
+                    map_geoposition_pointer.on('change', function () {
+                        geocoder_provider = "manual";
+                        geocoder_accuracy = 10;
+                    }, map_geoposition_pointer);
+
+                    map_geoposition.addInteraction(modify);
+
+                    //reset provider
+                    geocoder_provider = "geocoder";
+
+
+                    //address components
+                    $.each(results[i].address_components, function(j,component) {
+                        if (zip === "" && component.types.indexOf('postal_code') >= 0) {
+                            $("input[name=input_zip]").val(component.long_name);
+                        }
+                        else if (city === "" && component.types.indexOf('locality') >= 0) {
+                            $("input[name=input_city]").val(component.long_name);
+                        }
+                        else if (component.types.indexOf('country') >= 0) {
+                            $("select[name=country]").val(component.short_name.toLowerCase());
+
+                            //set map layer
+                            if (component.short_name.toLowerCase() === 'at') {
+                                map_baselayer_basemap.setVisible(true);
+                                map_baselayer_bing.setVisible(false);
+                            }
+                            else {
+                                map_baselayer_bing.setVisible(true);
+                                map_baselayer_basemap.setVisible(false);
+                            }
+                        }
+                    });
+
+                    //"guess" accuracy
+                    geocoder_accuracy = 50000;
+                    if (results[i].geometry.location_type === 'ROOFTOP') {
+                        geocoder_accuracy = 100;
+                    }
+                    else if (results[i].geometry.location_type === 'RANGE_INTERPOLATED') {
+                        geocoder_accuracy = 500;
+                    }
+                    else if (results[i].geometry.location_type === 'GEOMETRIC_CENTER') {
+                        geocoder_accuracy = 1900;
+                    }
+
+                    prevQuery = buildQuery();
+
+                    if (callback !== undefined) {
+                        callback(true);
+                    }
+                };
+
+                pan(0);
+
+
+        }
+
+        if (geocodingCache.hasOwnProperty(query)) {
+            $('#spinner').spin('modal');
+            handleResults(geocodingCache[query].results);
+        }
+        else {
+            geocoder_google.geocode( { 'address': query, 'region': $("select[name=country]").val()}, function(results, status) {
                 $('#spinner').spin('modal');
                 if (status === google.maps.GeocoderStatus.OK) {
-                        var pan = function(i) {
-                            $("#address_search .address_input").show();
-                            $("#address_search .selection").hide();
-
-                            $("#address_search #address_search_input").val(results[i].formatted_address);
-                            
-                            var ne = convertLongLatToOpenLayersPoint(results[i].geometry.viewport.getNorthEast().lng(), results[i].geometry.viewport.getNorthEast().lat()); //North East
-                            var sw = convertLongLatToOpenLayersPoint(results[i].geometry.viewport.getSouthWest().lng(), results[i].geometry.viewport.getSouthWest().lat()); //South West
-                            var center = convertLongLatToOpenLayersPoint(results[i].geometry.location.lng(), results[i].geometry.location.lat());
-                           
-                            //http://openlayers.org/en/v3.7.0/apidoc/ol.html#Extent
-                            //[minx, miny, maxx, maxy]
-                            var extent=[
-                                ne[0], ne[1],
-                                sw[0], sw[1]
-                            ];
-                            
-                            map_geoposition.getView().fit(extent, map_geoposition.getSize());
-                            map_geoposition.getView().setZoom(map_geoposition.getView().getZoom()+2);
-                            map_geoposition.getView().setCenter(center);
-                            
-                            map_geoposition_pointer.getGeometry().setCoordinates(center);//(new ol.geom.Point(center));
-                            
-                            //re-add modify-event in olv3 for some reason
-                            var modify = new ol.interaction.Modify({
-                                features: new ol.Collection([map_geoposition_pointer])
-                            });
-
-                            map_geoposition_pointer.on('change', function () {
-                                geocoder_provider = "manual";
-                                geocoder_accuracy = 10;
-                            }, map_geoposition_pointer);
-
-                            map_geoposition.addInteraction(modify);
-                            
-                            //reset provider
-                            geocoder_provider = "geocoder";
-
-
-                            //address components
-                            $.each(results[i].address_components, function(j,component) {
-                                if (zip === "" && component.types.indexOf('postal_code') >= 0) {
-                                    $("input[name=input_zip]").val(component.long_name);
-                                }
-                                else if (city === "" && component.types.indexOf('locality') >= 0) {
-                                    $("input[name=input_city]").val(component.long_name);
-                                }
-                                else if (component.types.indexOf('country') >= 0) {
-                                   $("select[name=country]").val(component.short_name.toLowerCase());
-                                   
-                                   //set map layer
-                                   if (component.short_name.toLowerCase() === 'at') {
-                                       map_baselayer_basemap.setVisible(true);
-                                       map_baselayer_bing.setVisible(false);
-                                   }
-                                   else {
-                                       map_baselayer_bing.setVisible(true);
-                                       map_baselayer_basemap.setVisible(false);
-                                   }
-                                }
-                            });
-                            
-                            //"guess" accuracy
-                            geocoder_accuracy = 50000;
-                            if (results[i].geometry.location_type === 'ROOFTOP') {
-                                geocoder_accuracy = 100;
-                            }
-                            else if (results[i].geometry.location_type === 'RANGE_INTERPOLATED') {
-                                geocoder_accuracy = 500;
-                            }
-                            else if (results[i].geometry.location_type === 'GEOMETRIC_CENTER') {
-                                geocoder_accuracy = 1900;
-                            }
-                            
-                            prevQuery = buildQuery();
-                            
-                            if (callback !== undefined) {
-                                callback(true);
-                            }
-                        };
-                
-                        pan(0);
-                        
+                    handleResults(results, status);
+                    geocodingCache[query] = {
+                        results: results
+                    };
                 } else {
-                        if (callback !== undefined) {
-                            callback(false);
-                        }
-                        alert(Lang.getString('addressNotFound'));
+                    if (callback !== undefined) {
+                        callback(false);
+                    }
+                    alert(Lang.getString('addressNotFound'));
                 }
-        });
-        
+            });
+        }
 }
 
 $(document).ready(function() {
