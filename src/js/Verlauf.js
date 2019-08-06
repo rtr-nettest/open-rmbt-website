@@ -766,22 +766,18 @@ function loadOpenTestData(openTestUUID, testUUIDForZipPopup) {
             
             //wire up share links
             var url = "https://" + document.domain + "/" + selectedLanguage + "/Opentest?" + openTestUUID;
-            $("#verlauf-detailcontainer .social").socialSharePrivacy({
-                services: {
-                    facebook: {
-                        'perma_option': 'off'
-                    },
-                    twitter: {
-                        'perma_option': 'off'
-                    },
-                    gplus: {
-                        'perma_option': 'off'
-                    }
-                },
-                uri: url
-            });
             
             $("#verlauf-detailcontainer .shareLink").attr("href",url);
+            var buttonsContainer = $('#verlauf-detailcontainer .social');
+            new Shariff(buttonsContainer, {
+                orientation: 'horizontal',
+                title: Lang.getString('RTR-NetTest'),
+                url: url,
+                buttonStyle: 'standard',
+                lang: selectedLanguage,
+                services: ['twitter','facebook','whatsapp','print'],
+                theme: 'white'
+            });
         }
     });
     

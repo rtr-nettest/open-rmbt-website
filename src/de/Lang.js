@@ -4,6 +4,7 @@
  */
 
 Lang.setStrings({
+    'RTR-NetTest': 'RTR-Netztest',
     'Mbps' : 'Mbit/s',
     'ms' : 'ms',
     'dBm' : 'dBm',
