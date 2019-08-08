@@ -235,6 +235,28 @@ function viewMapV3() {
         );
     }
 
+    var myControl = function(opt_options) {
+
+        var options = opt_options || {};
+
+        var button = document.createElement('button');
+        button.innerHTML = '&#8226;';
+
+        button.addEventListener('click', panToUserPosition, false);
+        button.addEventListener('touchstart', panToUserPosition, false);
+
+        var element = document.createElement('div');
+        element.className = 'ol-pan-user-position ol-unselectable ol-control';
+        element.appendChild(button);
+
+        ol.control.Control.call(this, {
+            element: element,
+            target: options.target
+        });
+
+    };
+    ol.inherits(myControl, ol.control.Control);
+
     //Create the map object
     map = new ol.Map({
         layers: bases,
@@ -242,7 +264,9 @@ function viewMapV3() {
             attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
                 collapsible: false
             })
-        }),
+        }).extend([
+                new myControl()
+            ]),
         target: 'speedtestmap',
         view: new ol.View({
             center: [0, 0],
@@ -250,13 +274,13 @@ function viewMapV3() {
             maxZoom : 19
         })
     });
-    
+
     
     /*var myControl = new ol.control.Control({
         element: $("#mycontrol")[0]
     });
     map.addControl(myControl);*/
-    
+
     var layerSwitcher = new ol.control.LayerSwitcher({
         tipLabel: 'Kartenquelle' // Optional label for button
     });
@@ -311,8 +335,9 @@ function viewMapV3() {
     }
     else {
         //Pan to Test or User Position   
+
         panToLastUserTest();
-        panToUserPosition();
+        //panToUserPosition();
     }
 }
 
@@ -335,12 +360,12 @@ function searchAndPositionOnAddress() {
         $('#spinner').spin('modal');
 
         //temporary log to server
-        $.ajax({
+        /*$.ajax({
             url: controlProxy + "/" + wspath+ "/geocoding/karte/" + address,
             type: 'GET',
             dataType: 'json',
             cache: false
-        });
+        });*/
         
         geocoder_google.geocode( { 'address': address}, function(results, status) {
                 $('#spinner').spin('modal');
