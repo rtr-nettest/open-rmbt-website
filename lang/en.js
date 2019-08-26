@@ -49,7 +49,8 @@ exports.strings = {
         "enlarge_map" : "Enlarge map",
         "fullscreen" : "Full screen",
         "loop_mode_content": "Conduct repeated measurements",
-        "opendata_content": "Explore open data test results"
+        "opendata_content": "Explore open data test results",
+        "certified_content": "Conduct certified measurement"
     },
 
     "map_content" : {
@@ -179,6 +180,7 @@ exports.strings = {
     "imprint_url" : "https://www.rtr.at/en/rtr/impressum",
     "menu" : "Menu",
     "loop_mode" : "Loop mode",
+    "certified_measurement": "Certified measurement",
 
     //common words
     "top" : "Top",

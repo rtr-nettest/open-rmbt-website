@@ -49,7 +49,8 @@ exports.strings = {
         "enlarge_map" : "Karte vergrößern",
         "fullscreen" : "Vollbild",
         "loop_mode_content": "Sich automatisch wiederholende Tests durchführen",
-        "opendata_content": "Testergebnisse als Open Data einsehen"
+        "opendata_content": "Testergebnisse als Open Data einsehen",
+        "certified_content": "Zertifizierte Messung durchführen"
     },
 
     "map_content" : {
@@ -179,6 +180,7 @@ exports.strings = {
     "imprint_url" : "https://www.rtr.at/de/rtr/impressum",
     "menu" : "Menü",
     "loop_mode" : "Wiederholungsmodus",
+    "certified_measurement": "Zertifizierte Messung",
 
     //common words
     "top" : "Seitenanfang",
