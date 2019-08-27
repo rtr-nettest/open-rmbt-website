@@ -8,6 +8,8 @@
     <script type="text/javascript" src="../{{ fingerprint["lib/rmbtws.min.js"] }}"></script>
     <script type="text/javascript" src="../{{ fingerprint["lib/moment.min.js"] }}"></script>
     <script type="text/javascript" src="../{{ fingerprint["lib/handlebars.min.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["lib/jquery.validate.min.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint["js/ZertMessung.js"] }}"></script>
     <script type="text/javascript" src="../{{ fingerprint["js/Loop.js"] }}"></script>
     <script>
         repetitions = 8;
@@ -58,6 +60,99 @@
 {% endblock %}
 
 {% block content %}
+
+        <div class="steps">
+            <style>
+                /* https://codepen.io/tomek8899/pen/obJsu */
+                /* Second try, as RTR design is not suitable for retina displays */
+
+                .breadCrumbs {
+                    position: relative;
+                    padding-left: 0 !important;
+                }
+
+                .breadCrumbs li {
+                    position: relative;
+                    float: left;
+                    border-left: none !important;
+                    padding-left: 0 !important;
+                }
+
+                .breadCrumbs li a,
+                .breadCrumbs li p {
+                    display: block;
+                    padding: 0 10px 0 30px;
+                    line-height: 30px;
+                    font-size: 10pt;
+                    color: #545454 !important;
+                    background: white;
+                }
+
+                .breadCrumbs li:first-child a {
+                    padding: 0 10px 0 20px;
+                }
+
+                .breadCrumbs li:last-child a {
+                    padding-right: 20px;
+                }
+
+                .breadCrumbs li a:hover {
+
+                }
+
+                .breadCrumbs li.activePage p,
+                .breadCrumbs li.activePage a {
+                    background: #333;
+                }
+
+                .breadCrumbs li:after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    right: -15px;
+                    display: block;
+                    width: 0;
+                    height: 0;
+                    border-top: 15px solid transparent;
+                    border-bottom: 15px solid transparent;
+                    border-left: 15px solid white;
+                    z-index: 10;
+                }
+
+                .breadCrumbs li:last-child:after {
+                    border:none;
+                }
+
+                .breadCrumbs li.activePage a,
+                .breadCrumbs li.activePage p {
+                    background-color: #59b200;
+                    color: white !important;
+                }
+
+                .breadCrumbs li.activePage:after {
+                    border-left-color: #59b200;
+                }
+
+                .breadCrumbs li.visitedPage a,
+                .breadCrumbs li.visitedPage p {
+                    background-color: #bebab0;
+                }
+
+                .breadCrumbs li.visitedPage:after {
+                    border-left-color: #bebab0;
+                }
+
+
+            </style>
+            <ul class="breadCrumbs">
+                <li class="breadCrumb-intro"><a href="" title="Home" class="animation">1. Start</a></li>
+                <li class="breadCrumb-intermediate"><a href="" title="Portfolio" class="animation">2. Basisdaten</a></li>
+                <li class="breadCrumb-additional"><a href="" title="Websites" class="animation">3. Erweiterte Daten</a></li>
+                <li class="breadCrumb-measurement"><a href="" title="Websites" class="animation">4. Messung</a></li>
+                <li class="breadCrumb-report"><a href="" title="Websites" class="animation">5. Bericht</a></li>
+            </ul>
+</div>
+
     <h2 id="h2">Zertifizierte Messung der RTR-GmbH</h2>
     <!-- <div id="loading-placeholder">
         <h2>Test framework is loading...</h2>
@@ -72,7 +167,7 @@
             überprüfen und stellt gleichzeitig eine Beweiserleichterung in Streitfällen dar.
         </p>
         <h3>Hinweise zur Messung</h3>
-        <p>
+        <p class="preface">
             Bevor Sie die zertifizierte Messung starten, lesen Sie bitte die <a
                     href="https://www.rtr.at/de/inf/KonsultZertMessung2019/Anleitung_zur_zertifizierten_Messung.pdf"
                     class="external">Anleitung zur
@@ -119,44 +214,42 @@
             zertifizierten Messung unterstützen soll.
         </p>
         <p>
-            <button type="submit" class="btn btn-primary" onclick="$('#intro-container').hide();$('#intermediate-container').show();">Nutzungsbedingungen zustimmen und weiter</button>
+            <button type="submit" class="btn btn-primary">Weiter</button>
         </p>
     </div>
 
     <div id="intermediate-container" style="display:none">
-        <h3 style="color:grey">&check; Hinweise zur Messung</h3>
         <h3>Basisinformationen zur zertifizierten Messung</h3>
-        <form>
+        <form id="intermediate-form">
             <div class="form-group">
                 <label for="title_prepend">Titel (vorangestellt)</label>
                 <input id="title_prepend" name="title_prepend" type="text" class="form-control">
             </div>
             <div class="form-group">
-                <label for="first_name">Vorname</label>
+                <label for="first_name">Vorname*</label>
                 <input id="first_name" name="first_name" type="text" class="form-control"
                        required="required">
             </div>
             <div class="form-group">
-                <label for="text">Nachname</label>
-                <input id="text" name="text" type="text" class="form-control" required="required">
+                <label for="last_name">Nachname*</label>
+                <input id="last_name" name="last_name" type="text" class="form-control" required="required">
             </div>
             <div class="form-group">
                 <label for="title_prepend">Titel (nachgestellt)</label>
                 <input id="title_prepend" name="title_prepend" type="text" class="form-control">
             </div>
             <div class="form-group">
-                <label for="textarea">Standort der Messungen</label>
-                <textarea id="textarea" name="textarea" cols="40" rows="2" class="form-control"
+                <label for="address">Standort der Messungen*</label>
+                <textarea id="address" name="address" cols="40" rows="2" class="form-control"
                           aria-describedby="textareaHelpBlock" required="required"></textarea>
                 <span id="textareaHelpBlock" class="form-text text-muted help-block">Die Adresse, an der die Messungen durchgeführt wurden</span>
             </div>
 
             <div class="form-group">
-                <label>Handelt es sich um den ersten Messzyklus?</label>
+                <label>Handelt es sich um den ersten Messzyklus?*</label>
                 <div class="radio">
                     <label for="first">
-                        <input name="first" id="first" type="radio" value="y" checked="checked"
-                               onclick="if($('input[name=\'first\']:checked').val()=='y'){$('#further-input').show()}else{$('#further-input').hide()};">
+                        <input name="first" id="first" type="radio" value="y" checked="checked" />
                         Ja, erster Messzyklus</label>
                     <!-- <p id="furter-input" style="display:none">
                         In diesem Fall ersuchen wir Sie, im nächsten Schritt einige weitere Fragen zu beantworten.
@@ -164,13 +257,12 @@
                 </div>
                 <div class="radio">
                     <label for="not_first">
-                        <input name="first" id="not_first" type="radio" value="n"
-                               onclick="if($('input[name=\'first\']:checked').val()=='y'){$('#further-input').show()}else{$('#further-input').hide()};">
+                        <input name="first" id="not_first" type="radio" value="n" />
                         Nein, Folgezyklus</label>
                 </div>
                 <div class="form-group">
                     <p>
-                        <button type="submit" class="btn btn-primary"  onclick="$('#intermediate-container').hide();if($('input[name=\'first\']:checked').val()=='y') $('#additional-information-container').show(); else $('#loop-mode').show();conductTests();">Zertifizierte Messung starten
+                        <button type="submit" class="btn btn-primary"  onclick="">Zertifizierte Messung starten
                         </button>
                     </p>
                 </div>
@@ -183,20 +275,18 @@
 
 
     <div id="additional-information-container" style="display: none">
-        <h3 style="color:grey">&check; Hinweise zur Messung</h3>
-        <h3 style="color:grey">&check; Basisinformationen zur Messung</h3>
+
         <div id="additional-information">
             <h3>Weitere Informationen zur Messung</h3>
             <div class="certified-form">
-                <p><i>Die Durchführung der Messungen hat bereits gestartet und wird zwei Stunden benötigen.</i></p>
                 <p>
                     Da es sich um den ersten Messzyklus handelt, ersuchen wir Sie folgende Fragen zu
                     beantworten, um die Umstände der Messung nachvollziehen zu können. Bei weiteren
                     Messzyklen ist die Beantwortung dieser Fragen nicht mehr notwendig.
                 </p>
-                <form>
+                <form id="additiona-information-form">
                     <div class="form-group">
-                        <label>Beschreiben Sie den Standort des Anschlusses</label>
+                        <label>Beschreiben Sie den Standort des Anschlusses*</label>
                         <div>
                             <div class="custom-controls-stacked">
                                 <div class="checkbox">
@@ -266,7 +356,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button name="submit" type="submit" class="btn btn-primary" onclick="$('#additional-information-container').hide();$('#loop-mode').show();">Fragebeantwortung speichern.</button>
+                        <button name="submit" type="submit" class="btn btn-primary">Fragebeantwortung speichern.</button>
                         <p class="form-text text-muted help-block">Sie können Ihre Antworten auch später korrigieren.</p>
                     </div>
                     <hr/>
@@ -275,9 +365,7 @@
         </div>
     </div>
     <div id="loop-mode" style="display: none">
-        <h3 style="color:grey">&check; Hinweise zur Messung</h3>
-        <h3 style="color:grey">&check; Basisinformationen zur Messung</h3>
-        <h3 ><a style="color:grey; !important;" onclick="$('#additional-information-container').show();$('#loop-mode').hide();return false;" href="#">&check; Weitere Informationen zur Messung</a></h3>
+
         <h3>Durchführung der Messungen</h3>
         <p>
             Test <span id="testcount">0</span>/<span id="teststotal">8</span>
