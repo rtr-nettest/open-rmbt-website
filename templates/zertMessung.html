@@ -123,6 +123,15 @@
                     border:none;
                 }
 
+                .breadCrumbs li.visitedPage a,
+                .breadCrumbs li.visitedPage p {
+                    background-color: #bebab0;
+                }
+
+                .breadCrumbs li.visitedPage:after {
+                    border-left-color: #bebab0;
+                }
+
                 .breadCrumbs li.activePage a,
                 .breadCrumbs li.activePage p {
                     background-color: #59b200;
@@ -133,23 +142,13 @@
                     border-left-color: #59b200;
                 }
 
-                .breadCrumbs li.visitedPage a,
-                .breadCrumbs li.visitedPage p {
-                    background-color: #bebab0;
-                }
-
-                .breadCrumbs li.visitedPage:after {
-                    border-left-color: #bebab0;
-                }
-
-
             </style>
             <ul class="breadCrumbs">
-                <li class="breadCrumb-intro"><a href="" title="Home" class="animation">1. Start</a></li>
-                <li class="breadCrumb-intermediate"><a href="" title="Portfolio" class="animation">2. Basisdaten</a></li>
-                <li class="breadCrumb-additional"><a href="" title="Websites" class="animation">3. Erweiterte Daten</a></li>
-                <li class="breadCrumb-measurement"><a href="" title="Websites" class="animation">4. Messung</a></li>
-                <li class="breadCrumb-report"><a href="" title="Websites" class="animation">5. Bericht</a></li>
+                <li class="breadCrumb-intro"><a title="Home" class="animation">1. Start</a></li>
+                <li class="breadCrumb-intermediate"><a title="Portfolio" class="animation">2. Basisdaten</a></li>
+                <li class="breadCrumb-additional"><a title="Websites" class="animation">3. Erweiterte Daten</a></li>
+                <li class="breadCrumb-measurement"><a title="Websites" class="animation">4. Messung</a></li>
+                <li class="breadCrumb-report"><a title="Websites" class="animation">5. Bericht</a></li>
             </ul>
 </div>
 
@@ -284,14 +283,14 @@
                     beantworten, um die Umstände der Messung nachvollziehen zu können. Bei weiteren
                     Messzyklen ist die Beantwortung dieser Fragen nicht mehr notwendig.
                 </p>
-                <form id="additiona-information-form">
-                    <div class="form-group">
+                <form id="additional-information-form">
+                    <div class="form-group" id="location_form_group">
                         <label>Beschreiben Sie den Standort des Anschlusses*</label>
                         <div>
                             <div class="custom-controls-stacked">
                                 <div class="checkbox">
                                     <label for="location_type_0">
-                                        <input name="location_type" id="location_type_0"
+                                        <input name="location_type_0" id="location_type_0"
                                                type="checkbox"
                                                value="s1">
                                         Wohnhausanlage</label>
@@ -300,7 +299,7 @@
                             <div class="custom-controls-stacked">
                                 <div class="checkbox">
                                     <label for="location_type_1">
-                                        <input name="location_type" id="location_type_1"
+                                        <input name="location_type_1" id="location_type_1"
                                                type="checkbox"
                                                value="s2">
                                         Einfamilienhaus</label>
@@ -309,7 +308,7 @@
                             <div class="custom-controls-stacked">
                                 <div class="checkbox">
                                     <label for="location_type_2">
-                                        <input name="location_type" id="location_type_2"
+                                        <input name="location_type_2" id="location_type_2"
                                                type="checkbox"
                                                value="s3">
                                         Städtische Umgebung</label>
@@ -324,8 +323,8 @@
                                         Ländliche Umgebung</label>
                                 </div>
                                 <div class="checkbox form-group-sm">
-                                    <label for="location_type_3" class="custom-control-label row">
-                                        <input name="location_type" id="location_type_3"
+                                    <label for="location_type_4" class="custom-control-label row">
+                                        <input name="location_type" id="location_type_4"
                                                type="checkbox"
                                                value="s4"/>
                                         Sonstiges:
@@ -345,8 +344,7 @@
                     <div class="form-group">
                         <label for="test-device">Beschreiben Sie Ihr Testgerät</label>
                         <textarea id="test-device" name="test-device" cols="40" rows="3"
-                                  class="form-control" aria-describedby="test-deviceHelpBlock"
-                                  required="required"></textarea>
+                                  class="form-control" aria-describedby="test-deviceHelpBlock"></textarea>
                         <span id="test-deviceHelpBlock" class="form-text text-muted help-block">Beschreiben Sie den Computer, mit dem Sie den Test durchführen. Wie ist dieser mit dem Modem/Router verbunden? Sind Ihre Geräte über Kabel verbunden (LAN), oder kabellos (WLAN)? Werden die elektrischen Leitungen in Ihrem Haus auch zur Übertragung von Daten benutzt (PowerLAN)? Bei WLAN: Befinden sich Testgerät und Modem/Router im selben Raum?</span>
                     </div>
                     <div class="form-group">
