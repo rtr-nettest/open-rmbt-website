@@ -152,6 +152,10 @@ function step4() {
     }
 }
 
+function certTestFinished() {
+    setBreadCrumb("report");
+}
+
 function setBreadCrumb(name) {
     $(".breadCrumbs .activePage").removeClass("activePage");
     $(".breadCrumbs li").each(function(val, i) {

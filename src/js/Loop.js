@@ -604,6 +604,7 @@ function allTestsFinished() {
 
     $("#infocurrent").hide();
     $("#infofinished").show();
+    $("#infonotfinished").hide();
 
     var triggerDownloadForm = function(format) {
         $("#download-link-form input").remove();
@@ -638,6 +639,10 @@ function allTestsFinished() {
         e.preventDefault();
         return false;
     });
+
+    if (certTest && typeof certTestFinished === "function") {
+        certTestFinished();
+    }
 }
 
 
