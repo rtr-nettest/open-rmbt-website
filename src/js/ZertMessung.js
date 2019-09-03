@@ -113,6 +113,14 @@ function step2() {
         }
         return false;
     })
+
+    $('input[name=\'first\']').change(function() {
+        if ($('input[name=\'first\']:checked').val() == 'y') {
+            $("#intermediate-form button[type='submit']").text("Weiter");
+        } else {
+            $("#intermediate-form button[type='submit']").text("Zertifizierte Messung starten");
+        }
+    })
 }
 
 function step3() {
@@ -154,6 +162,79 @@ function step4() {
 
 function certTestFinished() {
     setBreadCrumb("report");
+
+   // $("#intermediate-form").ajaxForm();
+   // $("#intermediate-form").ajaxSubmit();
+
+    //submit form, wire link
+    var formDataBasic = new FormData($("#intermediate-form")[0]);
+    var formDataAdditional  = new FormData($("#additional-information-form")[0]);
+    var formForSubmission;
+    if ($('input[name=\'first\']:checked').val() == 'y') {
+        var inputs = $('#intermediate-form input, #intermediate-form textarea');
+
+        inputs.each(function() {
+            formDataAdditional.append(this.name,$(this).val());
+        });
+        formForSubmission = formDataAdditional;
+    }
+    else {
+        formForSubmission = formDataBasic;
+    }
+    formForSubmission.append("loop_uuid",loopUUID);
+
+    //start with pdf progress
+    //50 % upload, 50 % download
+    var progressInterval;
+
+    $.ajax({
+        url: statisticProxy + "/" + statisticpath + "/export/pdf",
+        method: "POST",
+        data: formForSubmission,
+        type: "post",
+        cache: false,
+        contentType: false,
+        processData: false,
+        dataType: "json",
+        success: function (data) {
+            console.log("received data");
+            clearInterval(progressInterval);
+            $("#pdfProgress").css('width','100%');
+            $("#pdfProgress").text('100 %');
+            window.setInterval(function() {
+                $("#pdfProgressContainer").slideUp('medium');
+            }, 500)
+
+            //wire up download
+            $("#report-link").attr('href',statisticProxy + "/" + statisticpath + "/export/pdf/" + data.file);
+            $("#report-link").text('Ergebnisse als PDF herunterladen');
+            $("#report-link").get(0).click();
+        },
+        xhr: function() {
+            // get the native XmlHttpRequest object
+            var xhr = $.ajaxSettings.xhr();
+            // set the onprogress event handler
+            xhr.upload.onprogress = function (evt) {
+                var progress = Math.round((evt.loaded / evt.total * 50));
+                $("#pdfProgress").css('width',progress+'%');
+                $("#pdfProgress").text(progress+' %');
+                console.log('progress', evt.loaded / evt.total * 100)
+            };
+            // set the onload event handler
+            xhr.upload.onload = function () {
+                var started = (new Date()).getTime();
+                progressInterval = window.setInterval(function () {
+                    var secondsPassed = ((new Date()).getTime() - started) / 1000;
+                    var progress = Math.round(((secondsPassed / (secondsPassed + 10)) * 0.5 + 0.5) * 100);
+                    $("#pdfProgress").css('width', progress + '%');
+                    $("#pdfProgress").text(progress + ' %');
+                }, 500);
+            };
+            // return the customized object
+            return xhr ;
+        }
+    });
+    console.log("queried for pdf");
 }
 
 function setBreadCrumb(name) {
@@ -167,4 +248,5 @@ function setBreadCrumb(name) {
             $(this).addClass("visitedPage");
         }
     })
+    $('h1')[0].scrollIntoView();
 }

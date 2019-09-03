@@ -261,7 +261,7 @@
                 </div>
                 <div class="form-group">
                     <p>
-                        <button type="submit" class="btn btn-primary"  onclick="">Zertifizierte Messung starten
+                        <button type="submit" class="btn btn-primary"  onclick="">Weiter
                         </button>
                     </p>
                 </div>
@@ -349,7 +349,7 @@
                     </div>
                     <div class="form-group">
                         <label for="test-pictures">Fotoupload</label>
-                        <input id="test-pictures" type="file" multiple="multiple"/>
+                        <input id="test-pictures" type="file" multiple="multiple" name="test_pictures"/>
                         <span id="test-deviceHelpBlock" class="form-text text-muted help-block">Bitte übermitteln Sie uns: Foto des Modems/Routers, Computers (wenn möglich gemeinsam auf einem Bild; und Fotos von den einzelnen Typenbezeichnungen). Falls vorhanden: Foto von der Wanddose.</span>
                     </div>
 
@@ -476,15 +476,21 @@
         <div>
             <h3>Testergebnis</h3>
             <div id="infonotfinished">
-                <p><i>Ihr Messergebnis steht nach Abschluss aller Messungen zum Download zur
-                        Verfügung</i></p>
+                <p>Ihr Messergebnis steht nach Abschluss aller Messungen zum Download zur
+                        Verfügung</p>
                 <p>Geplanter Abschluss der Messung: ca. <script>document.write(moment().add(105,'minutes').format('H:mm'))</script> Uhr.
                 </p>
             </div>
             <div id="infofinished">
                 <form id="download-link-form" method="post" style="display:inline">
-                    <p>{{ Lang.loop_mode_content.download_results }}
-                        <a id="pdf-link" href="#">{{ Lang.history_content.pdf }}</a>
+                    <div class="progress" id="pdfProgressContainer">
+                        <div id="pdfProgress" class="progress-bar" role="progressbar"
+                             aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"
+                             style="min-width: 3em;width: 0%">
+                            0%
+                        </div>
+                    </div>
+                    <p><a id="report-link" >Ergebnisse werden erstellt...</a>
                 </form>
                 <p>
                     Der Messzyklus ist nun abgeschlossen. <br/>
