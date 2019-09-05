@@ -238,8 +238,8 @@
                 <input id="last_name" name="last_name" type="text" class="form-control" required="required">
             </div>
             <div class="form-group">
-                <label for="title_prepend">Titel (nachgestellt)</label>
-                <input id="title_prepend" name="title_prepend" type="text" class="form-control">
+                <label for="title_append">Titel (nachgestellt)</label>
+                <input id="title_append" name="title_append" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label for="address">Standort der Messungen*</label>
@@ -321,18 +321,18 @@
                             <div class="custom-controls-stacked">
                                 <div class="checkbox">
                                     <label for="location_type_3">
-                                        <input name="location_type" id="location_type_3"
+                                        <input name="location_type_3" id="location_type_3"
                                                type="checkbox"
                                                value="s4">
                                         Ländliche Umgebung</label>
                                 </div>
                                 <div class="checkbox form-group-sm">
                                     <label for="location_type_4" class="custom-control-label row">
-                                        <input name="location_type" id="location_type_4"
+                                        <input name="location_type_4" id="location_type_4"
                                                type="checkbox"
                                                value="s4"/>
                                         Sonstiges:
-                                        <input type="text" class="form-control col-xs-10"
+                                        <input type="text" name="location_type_other" class="form-control col-xs-10"
                                                placeholder="Sonstiges"/></label>
                                 </div>
                             </div>
@@ -347,7 +347,7 @@
                     </div>
                     <div class="form-group">
                         <label for="test-device">Beschreiben Sie Ihr Testgerät</label>
-                        <textarea id="test-device" name="test-device" cols="40" rows="3"
+                        <textarea id="test-device" name="test_device" cols="40" rows="3"
                                   class="form-control" aria-describedby="test-deviceHelpBlock"></textarea>
                         <span id="test-deviceHelpBlock" class="form-text text-muted help-block">Beschreiben Sie den Computer, mit dem Sie den Test durchführen. Wie ist dieser mit dem Modem/Router verbunden? Sind Ihre Geräte über Kabel verbunden (LAN), oder kabellos (WLAN)? Werden die elektrischen Leitungen in Ihrem Haus auch zur Übertragung von Daten benutzt (PowerLAN)? Bei WLAN: Befinden sich Testgerät und Modem/Router im selben Raum?</span>
                     </div>
