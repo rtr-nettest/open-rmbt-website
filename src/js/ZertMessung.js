@@ -133,6 +133,14 @@ function step3() {
     $('#additional-information-container').show();
     $('#loop-mode').hide();
 
+    $("input[name='test_pictures[]']").change(function () {
+        if ($("input[name='test_pictures[]']").filter(function () {return $(this).val() == "";}).length == 0) {
+            //clone
+            $("input[name='test_pictures[]']:first").clone(true)
+                .insertAfter("input[name='test_pictures[]']:last").removeAttr('id').val("");
+        }
+    })
+
     $("#additional-information-form").submit(function() {
         if (!$("#additional-information-form").valid()) {
             return false;

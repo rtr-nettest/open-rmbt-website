@@ -142,6 +142,10 @@
                     border-left-color: #59b200;
                 }
 
+                .upload input+input {
+                    margin-top: 1em;
+                }
+
             </style>
             <ul class="breadCrumbs">
                 <li class="breadCrumb-intro"><a>1. Start</a></li>
@@ -347,9 +351,9 @@
                                   class="form-control" aria-describedby="test-deviceHelpBlock"></textarea>
                         <span id="test-deviceHelpBlock" class="form-text text-muted help-block">Beschreiben Sie den Computer, mit dem Sie den Test durchführen. Wie ist dieser mit dem Modem/Router verbunden? Sind Ihre Geräte über Kabel verbunden (LAN), oder kabellos (WLAN)? Werden die elektrischen Leitungen in Ihrem Haus auch zur Übertragung von Daten benutzt (PowerLAN)? Bei WLAN: Befinden sich Testgerät und Modem/Router im selben Raum?</span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group upload">
                         <label for="test-pictures">Fotoupload</label>
-                        <input id="test-pictures" type="file" multiple="multiple" name="test_pictures"/>
+                        <input id="test-pictures" type="file" multiple="multiple" name="test_pictures[]" accept="image/*" />
                         <span id="test-deviceHelpBlock" class="form-text text-muted help-block">Bitte übermitteln Sie uns: Foto des Modems/Routers, Computers (wenn möglich gemeinsam auf einem Bild; und Fotos von den einzelnen Typenbezeichnungen). Falls vorhanden: Foto von der Wanddose.</span>
                     </div>
 
