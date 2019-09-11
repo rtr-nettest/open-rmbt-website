@@ -182,7 +182,8 @@ function certTestFinished() {
     var formDataAdditional  = new FormData($("#additional-information-form")[0]);
     var formForSubmission;
     if ($('input[name=\'first\']:checked').val() == 'y') {
-        var inputs = $('#intermediate-form input, #intermediate-form textarea');
+        formDataAdditional.append("first","y");
+        var inputs = $('#intermediate-form input, #intermediate-form textarea').not("input[type='radio']");
 
         inputs.each(function() {
             formDataAdditional.append(this.name,$(this).val());
