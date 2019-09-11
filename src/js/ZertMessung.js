@@ -58,6 +58,9 @@ $(document).ready(function() {
                 document.location="ZertMessung";
                 document.location.reload();
             }
+            else if (state.data.step === "step1") {
+                step1();
+            }
             else if (state.data.step === "step2") {
                 step2();
             }
