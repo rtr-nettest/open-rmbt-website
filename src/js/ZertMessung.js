@@ -2,8 +2,10 @@ var certTest = true;
 var testsRunning = false;
 var History = window.History;
 var currentSession = Math.random();
+var pageTitle;
 
 $(document).ready(function() {
+    pageTitle = $("title").text();
     var locationRule = function() {
         return $("#location_form_group :checked").length>0
     };
@@ -81,7 +83,7 @@ $(document).ready(function() {
 
 function step1() {
     if (History) {
-        History.replaceState({step:"step1", session: currentSession},"","ZertMessung?step1");
+        History.replaceState({step:"step1", session: currentSession},pageTitle,"ZertMessung?step1");
     }
     setBreadCrumb("intro");
     $('#intro-container').show();
@@ -96,7 +98,7 @@ function step1() {
 
 function step2() {
     if (History) {
-        History.pushState({step:"step2", session: currentSession},"","ZertMessung?step2");
+        History.pushState({step:"step2", session: currentSession},pageTitle,"ZertMessung?step2");
     }
     setBreadCrumb("intermediate");
     $('#intro-container').hide();
@@ -128,7 +130,7 @@ function step2() {
 
 function step3() {
     if (History) {
-        History.pushState({step:"step3", session: currentSession},"","ZertMessung?step3");
+        History.pushState({step:"step3", session: currentSession},pageTitle,"ZertMessung?step3");
     }
     setBreadCrumb("additional");
     $('#intro-container').hide();
@@ -157,7 +159,7 @@ function step3() {
 
 function step4() {
     if (History) {
-        History.pushState({step:"step4", session: currentSession},"","ZertMessung?step4");
+        History.pushState({step:"step4", session: currentSession},pageTitle,"ZertMessung?step4");
     }
     setBreadCrumb("measurement");
     $('#intro-container').hide();
