@@ -138,6 +138,17 @@ function step3() {
     $('#additional-information-container').show();
     $('#loop-mode').hide();
 
+    //activate "other" textfield only if checkbox is set
+    $('input[name=\'location_type_4\']').change(function() {
+        if ($('input[name=\'location_type_4\']:checked').val() == 's4') {
+            $('input[name=\'location_type_other\']').removeAttr("disabled");
+        }
+        else {
+            $('input[name=\'location_type_other\']').attr("disabled","disabled");
+        }
+    });
+
+    //allow uploading multiple pictures
     $("input[name='test_pictures[]']").change(function () {
         if ($("input[name='test_pictures[]']").filter(function () {return $(this).val() == "";}).length == 0) {
             //clone
