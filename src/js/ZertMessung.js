@@ -4,6 +4,8 @@ var History = window.History;
 var currentSession = Math.random();
 var pageTitle;
 
+var compressedImages = null;
+
 $(document).ready(function() {
     pageTitle = $("title").text();
     var locationRule = function() {
@@ -129,6 +131,7 @@ function step2() {
 }
 
 function step3() {
+    compressedImages = null; //reset
     if (History) {
         History.pushState({step:"step3", session: currentSession},pageTitle,"ZertMessung?step3");
     }
@@ -162,6 +165,34 @@ function step3() {
             return false;
         }
 
+        //on modern browsers - compress images
+        if(typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1 &&
+            compressedImages === null){
+            //compress images, if any
+            var options = {
+                targetSize: 0.4,
+                quality: 0.75,
+                maxWidth: 1000,
+                maxHeight: 1000
+            };
+            var compress = new Compress(options);
+            compressedImages = [];
+
+            //get files
+            $("input[name='test_pictures[]']").each(function(i, val) {
+                var files = val.files;
+                if (files) {
+                    $.each(files, function(i, file) {
+                        compress.compress([file])
+                            .then(function(conversion) {
+                                //save conversions for later
+                                //will definitly be finished before report submission
+                                compressedImages.push(conversion[0]);
+                            })
+                    })
+                }
+            });
+        }
         step4();
 
         return false;
@@ -207,6 +238,14 @@ function certTestFinished() {
         formForSubmission = formDataBasic;
     }
     formForSubmission.append("loop_uuid",loopUUID);
+
+    //if compressed photos exist - remove the originals, replace
+    if (compressedImages !== null && compressedImages.length > 0) {
+        formForSubmission.delete("test_pictures[]");
+        $.each(compressedImages, function(i, image) {
+            formForSubmission.append("test_pictures[]",image.photo.data,image.photo.name);
+        })
+    }
 
     //start with pdf progress
     //50 % upload, 50 % download
@@ -264,7 +303,7 @@ function certTestFinished() {
 
 function setBreadCrumb(name) {
     $(".breadCrumbs .activePage").removeClass("activePage");
-    $(".breadCrumbs li").each(function(val, i) {
+    $(".breadCrumbs li").each(function(i, val) {
         if ($(this).hasClass("breadCrumb-" + name)) {
             $(this).addClass("activePage");
             return false;
