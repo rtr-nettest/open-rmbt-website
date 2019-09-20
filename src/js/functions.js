@@ -1506,6 +1506,9 @@ function getOpenDataRow(testdata, showUnits) {
     else if (testdata.platform.indexOf('/') !== -1) {
         svgType = "mobile";
     }
+    else if (testdata.platform.indexOf('5G') !== -1) {
+        svgType = "5g";
+    }
     else if (testdata.platform.indexOf('4G') !== -1) {
         svgType = "4g";
     }
