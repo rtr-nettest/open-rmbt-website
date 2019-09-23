@@ -18,8 +18,8 @@ $(document).ready(function() {
             return true;
         },
         messages: {
-            first_name: "Bitte geben Sie Ihren Vornamen an.",
-            last_name: "Bitte geben Sie Ihren Nachnamen an.",
+            first_name: Lang.getString("enter_first_name"),
+            last_name: Lang.getString("enter_last_name"),
             address: null
         },
         errorElement: "span",
@@ -123,9 +123,9 @@ function step2() {
 
     $('input[name=\'first\']').change(function() {
         if ($('input[name=\'first\']:checked').val() == 'y') {
-            $("#intermediate-form button[type='submit']").text("Weiter");
+            $("#intermediate-form button[type='submit']").text($("#intermediate-form button[type='submit']").attr("data-next"));
         } else {
-            $("#intermediate-form button[type='submit']").text("Zertifizierte Messung starten");
+            $("#intermediate-form button[type='submit']").text($("#intermediate-form button[type='submit']").attr("data-start"));
         }
     })
 }
@@ -212,6 +212,10 @@ function step4() {
     if (!testsRunning) {
         testsRunning = true;
         conductTests();
+
+        //set planned time of end
+        $("#plannedEnd").text($("#plannedEnd").text().replace("%X%",
+            moment().add(((repetitions - 1) * waitingTime / 60 + 1), 'minutes').format('H:mm')));
     }
 }
 
@@ -271,7 +275,7 @@ function certTestFinished() {
 
             //wire up download
             $("#report-link").attr('href',statisticProxy + "/" + statisticpath + "/export/pdf/" + data.file);
-            $("#report-link").text('Ergebnisse als PDF herunterladen');
+            $("#report-link").text(Lang.getString('download_results_as_pdf'));
             $("#report-link").get(0).click();
         },
         xhr: function() {
