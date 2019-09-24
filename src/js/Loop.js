@@ -611,7 +611,7 @@ function allTestsFinished() {
 
         $("#download-link-form").append('<input type="hidden" name="loop_uuid" value="' + loopUUID + '" />');
         if (format === 'pdf') {
-            $("#download-link-form").attr("action", statisticProxy + "/" + statisticpath + "/export/pdf");
+            $("#download-link-form").attr("action", statisticProxy + "/" + statisticpath + "/export/pdf/" + selectedLanguage);
         }
         else {
             $("#download-link-form").append("<input type='hidden' name='format' value='" + format + "' />");

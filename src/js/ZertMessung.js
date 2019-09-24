@@ -256,7 +256,7 @@ function certTestFinished() {
     var progressInterval;
 
     $.ajax({
-        url: statisticProxy + "/" + statisticpath + "/export/pdf",
+        url: controlProxy + "/" + statisticpath + "/export/pdf/" + selectedLanguage,
         method: "POST",
         data: formForSubmission,
         type: "post",
@@ -274,7 +274,7 @@ function certTestFinished() {
             }, 500)
 
             //wire up download
-            $("#report-link").attr('href',statisticProxy + "/" + statisticpath + "/export/pdf/" + data.file);
+            $("#report-link").attr('href',controlProxy + "/" + statisticpath + "/export/pdf/" + selectedLanguage + "/" + data.file);
             $("#report-link").text(Lang.getString('download_results_as_pdf'));
             $("#report-link").get(0).click();
         },
