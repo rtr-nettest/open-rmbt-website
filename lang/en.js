@@ -212,7 +212,9 @@ exports.strings = {
         "planned_end": "Planned completion of the measurement: approx. %X%.",
         "generating_report": "Document is being created ...",
         "finished": "The measuring cycle is now complete.",
-        "finished_desc": "Save the result of the measurement cycle immediately or print it out. The document will not be saved by RTR-GmbH."
+        "finished_desc": "Save the result of the measurement cycle immediately or print it out. The document will not be saved by RTR-GmbH.",
+        "error_generating": "Error generating the document.",
+        "generate_new": "Try again"
     },
     //Page titles and link descriptions
     "index": "Home",

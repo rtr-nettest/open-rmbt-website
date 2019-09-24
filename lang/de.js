@@ -212,7 +212,9 @@ exports.strings = {
         "planned_end": "Geplanter Abschluss der Messung: ca. %X% Uhr.",
         "generating_report": "Dokument wird erstellt...",
         "finished": "Der Messzyklus nun abgeschlossen.",
-        "finished_desc": "Speichern Sie das Ergebnis des Messzyklus sofort ab oder drucken Sie es aus. Das Dokument wird von der RTR-GmbH nicht gespeichert."
+        "finished_desc": "Speichern Sie das Ergebnis des Messzyklus sofort ab oder drucken Sie es aus. Das Dokument wird von der RTR-GmbH nicht gespeichert.",
+        "error_generating": "Fehler bei der Erstellung des PDFs.",
+        "generate_new": "Erneut antordern"
     },
     //Page titles and link descriptions
     "index" : "Home",

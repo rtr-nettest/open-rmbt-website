@@ -53,7 +53,7 @@
             font-weight: bold;
         }
 
-        #loop-mode, #loop-mode-form-container, #infofinished {
+        #loop-mode, #loop-mode-form-container, #infofinished, #infofailed {
             display: none;
         }
     </style>
@@ -240,7 +240,7 @@
                 </div>
                 <div class="form-group">
                     <p>
-                        <button type="submit" class="btn btn-primary"  onclick="" data-next="{{ Lang.next }}" data-start="{{ Lang.certified_measurement_content.start_measurement }}" >{{ Lang.next }}</button>
+                        <button type="submit" class="btn btn-primary"  data-next="{{ Lang.next }}" data-start="{{ Lang.certified_measurement_content.start_measurement }}" >{{ Lang.next }}</button>
                     </p>
                 </div>
             </div>
@@ -434,6 +434,9 @@
             <div id="infonotfinished">
                 <p>{{ Lang.certified_measurement_content.result_when_finished }}</p>
                 <p id="plannedEnd">{{ Lang.certified_measurement_content.planned_end }}</p>
+            </div>
+            <div id="infofailed">
+                <p>{{ Lang.certified_measurement_content.error_generating }} <a href="#">{{ Lang.certified_measurement_content.generate_new }}</a></p>
             </div>
             <div id="infofinished">
                 <form id="download-link-form" method="post" style="display:inline">

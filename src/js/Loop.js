@@ -603,6 +603,7 @@ function allTestsFinished() {
     $("#testprogress").css("width", "100%");
 
     $("#infocurrent").hide();
+    $("#infofailed").hide();
     $("#infofinished").show();
     $("#infonotfinished").hide();
 

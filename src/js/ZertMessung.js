@@ -254,6 +254,22 @@ function certTestFinished() {
     //start with pdf progress
     //50 % upload, 50 % download
     var progressInterval;
+    $("#pdfProgress").css('width','0%');
+    $("#pdfProgress").text('0 %');
+
+    var errorTimeout = null;
+    var errorHandler = function() {
+        console.log("Error while generating PDF - ask user to try again.")
+        $("#infofinished").hide();
+        $("#infofailed").show();
+        $("#infofailed a").off("click");
+        $("#infofailed a").on("click",function(e) {
+            $("#infofinished").show();
+            $("#infofailed").hide();
+            allTestsFinished();
+            e.preventDefault();
+        });
+    };
 
     $.ajax({
         url: controlProxy + "/" + statisticpath + "/export/pdf/" + selectedLanguage,
@@ -265,6 +281,9 @@ function certTestFinished() {
         processData: false,
         dataType: "json",
         success: function (data) {
+            //clear timeout, as it was successful :-)
+            self.clearTimeout(errorTimeout);
+
             console.log("received data");
             clearInterval(progressInterval);
             $("#pdfProgress").css('width','100%');
@@ -277,6 +296,10 @@ function certTestFinished() {
             $("#report-link").attr('href',controlProxy + "/" + statisticpath + "/export/pdf/" + selectedLanguage + "/" + data.file);
             $("#report-link").text(Lang.getString('download_results_as_pdf'));
             $("#report-link").get(0).click();
+        },
+        error: function(data) {
+            self.clearTimeout(errorTimeout);
+            errorHandler();
         },
         xhr: function() {
             // get the native XmlHttpRequest object
@@ -302,6 +325,8 @@ function certTestFinished() {
             return xhr ;
         }
     });
+    //set timeout for error handling for a few secs
+    errorTimeout = self.setTimeout(errorHandler, 60 * 1000);
     console.log("queried for pdf");
 }
 
@@ -316,5 +341,6 @@ function setBreadCrumb(name) {
             $(this).addClass("visitedPage");
         }
     })
+    window.scrollTo(0,0);
     $('h1')[0].scrollIntoView();
 }

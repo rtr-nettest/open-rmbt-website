@@ -308,5 +308,5 @@ Lang.setStrings({
     'dtm_level': 'DTM level',
     'enter_first_name': 'Please enter your first name.',
     'enter_last_name': 'Please enter your last name.',
-    'download_results_as_pdf': 'PDF is being generated'
+    'download_results_as_pdf': 'Download results as PDF'
 });
