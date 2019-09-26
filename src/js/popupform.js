@@ -79,7 +79,7 @@ function show_agbform(run_Test, callback, options) {
     };
 
     show_agb_popup(successFunc, closeFunc, {
-        cookieIdentifier: "RMBTTermsV5",
+        cookieIdentifier: "RMBTTermsV6",
         title: (selectedLanguage === 'de') ? 'Datenschutzerklärung und Nutzungsbedingungen' : 'Privacy Policy and Terms of Use',
         tocFile: "tc.html",
         // toc: (selectedLanguage === 'de') ? tc_short_de : tc_short_en,
@@ -247,7 +247,7 @@ function show_ndtform(run_Test, callback, options, terms_accepted) {
 	        bValid = true;
 	        //console.log(terms_accepted);
                 if(terms_accepted != null && terms_accepted == true) {
-                        setCookie("RMBTTermsV5", true, 365 * 20 * 24 * 3600);
+                        setCookie("RMBTTermsV6", true, 365 * 20 * 24 * 3600);
                         //console.log("cookie set!");
                 }
                         
@@ -353,7 +353,7 @@ function show_zipform(run_Test, callback, options) {
 	var allFields = $([]);
 	var bValid = false;
 	form_tips = $(".validateTips");
-	var terms_accepted = getCookie("RMBTTermsV5");
+	var terms_accepted = getCookie("RMBTTermsV6");
 	var popup_title = (selectedLanguage=='de')?'Postleitzahl':'Post code';
 	allFields.add(zip);
 	
