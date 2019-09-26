@@ -443,8 +443,8 @@ function conductTests() {
 
         //once again, check boundaries
         waitingTime = Math.min(waitingTime, 60*60*48);
-        waitingTime = Math.max(waitingTime, 60*15);
-        repetitions = Math.min(repetitions, 100);
+        waitingTime = Math.max(waitingTime, 60*10);
+        repetitions = Math.min(repetitions, 500);
         repetitions = Math.max(repetitions, 1);
 
         //check for hard cutoff after two days
