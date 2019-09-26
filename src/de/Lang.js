@@ -305,5 +305,6 @@ Lang.setStrings({
     'dtm_level': 'DGM-Niveau',
     'enter_first_name': 'Bitte geben Sie Ihren Vornamen an.',
     'enter_last_name': 'Bitte geben Sie Ihren Nachnamen an.',
-    'download_results_as_pdf': 'Ergebnisse als PDF herunterladen'
+    'download_results_as_pdf': 'Ergebnisse als PDF herunterladen',
+    'alert_close_tab': 'Wollen Sie die Messung abbrechen?'
 });

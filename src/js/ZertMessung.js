@@ -216,6 +216,15 @@ function step4() {
         //set planned time of end
         $("#plannedEnd").text($("#plannedEnd").text().replace("%X%",
             moment().add(((repetitions - 1) * waitingTime / 60 + 1), 'minutes').format('H:mm')));
+
+        //add onbeforeunload event listener
+        //to prevent closing the window by accident
+        window.addEventListener('beforeunload', function (e) {
+            // Cancel the event
+            e.preventDefault();
+            // Chrome requires returnValue to be set
+            e.returnValue = Lang.getString('alert_close_tab');
+        });
     }
 }
 

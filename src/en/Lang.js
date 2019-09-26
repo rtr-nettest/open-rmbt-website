@@ -308,5 +308,6 @@ Lang.setStrings({
     'dtm_level': 'DTM level',
     'enter_first_name': 'Please enter your first name.',
     'enter_last_name': 'Please enter your last name.',
-    'download_results_as_pdf': 'Download results as PDF'
+    'download_results_as_pdf': 'Download results as PDF',
+    'alert_close_tab': 'Do you want to cancel the measurement?'
 });

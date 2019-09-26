@@ -173,7 +173,7 @@ exports.strings = {
         "introduction_desc": "The certified measurement allows you to make conclusive statements about the quality of your wired Internet access. The results provide the basis for a so-called \"prima facie proof\" of certain legal value of your Internet access provided by an Austrian Internet service provider. The certified measurement only states facts. Whether a contract-compliant service is provided or not, is therefore always up to the deciding entity. This could be a court or the <a href=\"https://www.rtr.at/en/tk/TKKS_Schlichtung01\"> conciliation body </a> of RTR-GmbH.",
         "introduction_instruction": "Notes on the measurement",
         "introduction_instruction_desc": "Before you start the certified measurement, please read the <a href=\"https://www.rtr.at/en/tk/netztestfaq_instructions_certified_measurement/Certified_measurement_guide.pdf\" target=\"_blank\" rel=\"noopener noreferrer\"> instructions for certified measurement </a> carefully. It also includes a checklist to assist you in performing the certified measurement. For more information, see the <a href=\"https://www.rtr.at/en/tk/netztestfaq_certified_measurement\"> FAQ </a>.",
-        "please_note": "Please note in particular",
+        "please_note": "Please note in particular:",
         "note_fixed": "The certified measurement can only be used to verify wired Internet access services.",
         "note_browser": "Certified measurements can only be done via an internet browser (Chrome, Edge, Firefox etc.) on your computer.",
         "note_no_other_usage": "During a measurement cycle, do not use your computer for other applications.",
