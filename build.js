@@ -247,6 +247,8 @@ function transformRTRUrls(fileList) {
         "/Opentests": "Opentests",
         "/Verlauf": "Verlauf",
         "/Optionen": "Optionen",
+        "/Loop": "Loop",
+        "/Opentests": "Opentests",
         "/tk/netztest" : "",
         "/de": "",
         "/en": ""
