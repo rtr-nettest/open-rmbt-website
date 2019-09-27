@@ -7,11 +7,6 @@ var lastKnownGeoPosition = null;
 var LoopTestVisualization = (function () {
     var _rmbtTest;
 
-    var _infogeo = null;
-    var _infoserver = null;
-    var _infoip = null;
-    var _infostatus = null;
-    var _infoprovider = null;
     var _serverName = null;
     var _remoteIp = null;
     var _providerName = null;
@@ -27,17 +22,11 @@ var LoopTestVisualization = (function () {
             _errorCallback = errorCallback;
         }
 
-        _infogeo = document.getElementById("infogeo");
-        _infoserver = document.getElementById("infoserver");
-        _infoip = document.getElementById("infoip");
-        _infostatus = document.getElementById("infostatus");
-        _infoprovider = document.getElementById("infoprovider");
-
         //reset
-        _infogeo.innerHTML = '-';
-        _infoserver.innerHTML = '-';
-        _infoip.innerHTML = '-';
-        _infoprovider.innerHTML = '-';
+        $("#infogeo").html('-');
+        $("#infoserver").html('-');
+        $("#infoip").html('-');
+        $("#infoprovider").html('-');
         $("#infoping span").text("-");
         $("#infodown span").text("-");
         $("#infoup span").text("-");
@@ -219,15 +208,15 @@ var LoopTestVisualization = (function () {
         }
 
         if (_serverName !== undefined && _serverName !== null && _serverName !== '') {
-            _infoserver.innerHTML = _serverName;
+            $("#infoserver").html(_serverName);
         }
 
         if (_remoteIp !== undefined && _remoteIp !== null && _remoteIp !== '') {
-            _infoip.innerHTML = _remoteIp;
+            $("#infoip").html(_remoteIp);
         }
 
         if (_providerName !== undefined && _providerName !== null && _providerName !== '') {
-            _infoprovider.innerHTML = _providerName;
+            $("#infoprovider").html(_providerName);
         }
 
         //show-Strings
@@ -312,10 +301,14 @@ function getSignificantDigits (number) {
 
 
 $(document).ready(function () {
-    //1. check TOC
-    //this will callback to RMBTLoopTest
-    //via popupform ->
-    show_agbform(false, 'RMBTsettings', 'loop');
+    if (typeof certTest === 'undefined') {
+        //1. check TOC
+        //this will callback to RMBTLoopTest
+        //via popupform ->
+        show_agbform(false, 'RMBTsettings', 'loop');
+    } else {
+        show_agbform(false, 'RMBTsettings', 'certTest');
+    }
 });
 
 var clientUUID;
@@ -373,6 +366,9 @@ function RMBTLoopTest(uuid){
             showCheckbox: true
         }
     )
+}
+function RMBTCertTest(uuid) {
+    clientUUID = uuid;
 }
 
 var results=[];
@@ -447,8 +443,8 @@ function conductTests() {
 
         //once again, check boundaries
         waitingTime = Math.min(waitingTime, 60*60*48);
-        waitingTime = Math.max(waitingTime, 60*15);
-        repetitions = Math.min(repetitions, 100);
+        waitingTime = Math.max(waitingTime, 60*10);
+        repetitions = Math.min(repetitions, 500);
         repetitions = Math.max(repetitions, 1);
 
         //check for hard cutoff after two days
@@ -607,14 +603,16 @@ function allTestsFinished() {
     $("#testprogress").css("width", "100%");
 
     $("#infocurrent").hide();
+    $("#infofailed").hide();
     $("#infofinished").show();
+    $("#infonotfinished").hide();
 
     var triggerDownloadForm = function(format) {
         $("#download-link-form input").remove();
 
         $("#download-link-form").append('<input type="hidden" name="loop_uuid" value="' + loopUUID + '" />');
         if (format === 'pdf') {
-            $("#download-link-form").attr("action", statisticProxy + "/" + statisticpath + "/export/pdf");
+            $("#download-link-form").attr("action", statisticProxy + "/" + statisticpath + "/export/pdf/" + selectedLanguage);
         }
         else {
             $("#download-link-form").append("<input type='hidden' name='format' value='" + format + "' />");
@@ -642,6 +640,10 @@ function allTestsFinished() {
         e.preventDefault();
         return false;
     });
+
+    if (certTest && typeof certTestFinished === "function") {
+        certTestFinished();
+    }
 }
 
 

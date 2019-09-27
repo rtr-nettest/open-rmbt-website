@@ -163,7 +163,7 @@ function requestBrowserData(callback, options) {
 
 function RMBTmapfilter(options) {
         cookie_uuid = getCookie("RMBTuuid");
-        var terms_accepted = getCookie("RMBTTermsV5");
+        var terms_accepted = getCookie("RMBTTermsV6");
         
         var json_data = {
                 version_name: test_version_name,
@@ -289,7 +289,7 @@ function RMBTsettings(options) {
         }
 
         cookie_uuid = getCookie("RMBTuuid");
-        var terms_accepted = getCookie("RMBTTermsV5");
+        var terms_accepted = getCookie("RMBTTermsV6");
         var terms_and_conditions_accepted_version = (terms_accepted)?terms_version:null;
         
         var json_data = {
@@ -339,6 +339,9 @@ function RMBTsettings(options) {
                         }
                         else if (options === 'loop') {
                                 RMBTLoopTest(uuid);
+                        }
+                        else if (options === 'certTest') {
+                                RMBTCertTest(uuid);
                         }
                         else if (options !== 'verlauf') {
                             var testStartFunction = function() {
@@ -1502,6 +1505,9 @@ function getOpenDataRow(testdata, showUnits) {
     }
     else if (testdata.platform.indexOf('/') !== -1) {
         svgType = "mobile";
+    }
+    else if (testdata.platform.indexOf('5G') !== -1) {
+        svgType = "5g";
     }
     else if (testdata.platform.indexOf('4G') !== -1) {
         svgType = "4g";

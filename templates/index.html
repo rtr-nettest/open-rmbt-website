@@ -37,11 +37,11 @@
             font-size: 18px;
         }
 
-        .teaser-netztest {
+        .teaser-certified {
             font-family: 'Netztest';
         }
 
-        .teaser-icon, .teaser-netztest {
+        .teaser-icon, .teaser-certified {
             visibility: hidden;
         }
     </style>
@@ -136,30 +136,10 @@
     <section class="teaser-element clearfix">
 
         <div class="teaser-block full-link">
-            <div class="teaser-icon" aria-hidden="true">z</div>
-            <div class="teaser-text">
-                <h4 class="teaser-headline"><a href="{{ Lang.index_content.apps_url }}">{{ Lang.index_content.apps }}</a></h4>
-                <p>{{ Lang.index_content.apps_content }}</p>
-            </div>
-        </div>
-
-        <div class="teaser-block full-link">
             <div class="teaser-icon" aria-hidden="true">&#x00C1</div>
             <div class="teaser-text">
                 <h4 class="teaser-headline"><a href="/{{ Lang.lang }}/Loop">{{ Lang.loop_mode }}</a></h4>
                 <p>{{ Lang.index_content.loop_mode_content }}</p>
-            </div>
-        </div>
-
-    </section>
-
-
-    <section class="teaser-element clearfix">
-        <div class="teaser-block full-link">
-            <div class="teaser-icon" aria-hidden="true">X</div>
-            <div class="teaser-text">
-                <h4 class="teaser-headline"><a href="/{{ Lang.lang }}/Statistik">{{ Lang.statistics }}</a></h4>
-                <p>{{ Lang.index_content.statistics_content }}</p>
             </div>
         </div>
 
@@ -172,17 +152,53 @@
             </div>
         </div>
 
+
+
+
+
     </section>
 
 
     <section class="teaser-element clearfix">
-        <div class="teaser-block full-link">
+        <!--<div class="teaser-block full-link">
             <div class="teaser-icon" aria-hidden="true">?</div>
             <div class="teaser-text">
                 <h4 class="teaser-headline"><a href="{{ Lang.help_url }}">{{ Lang.help }}</a></h4>
                 <p>{{ Lang.index_content.help_content }}</p>
             </div>
+        </div>-->
+
+        <div class="teaser-block full-link">
+            <div class="teaser-icon teaser-certified" aria-hidden="true">D</div>
+            <div class="teaser-text">
+                <h4 class="teaser-headline"><a href="/{{ Lang.lang }}/ZertMessung">{{ Lang.certified_measurement }}</a></h4>
+                <p>{{ Lang.index_content.certified_content }}</p>
+            </div>
         </div>
+
+        <div class="teaser-block full-link">
+            <div class="teaser-icon" aria-hidden="true">X</div>
+            <div class="teaser-text">
+                <h4 class="teaser-headline"><a href="/{{ Lang.lang }}/Statistik">{{ Lang.statistics }}</a></h4>
+                <p>{{ Lang.index_content.statistics_content }}</p>
+            </div>
+        </div>
+
+
+
+
+    </section>
+
+
+    <section class="teaser-element clearfix">
+        <div class="teaser-block full-link">
+            <div class="teaser-icon" aria-hidden="true">z</div>
+            <div class="teaser-text">
+                <h4 class="teaser-headline"><a href="{{ Lang.index_content.apps_url }}">{{ Lang.index_content.apps }}</a></h4>
+                <p>{{ Lang.index_content.apps_content }}</p>
+            </div>
+        </div>
+
 
         <div class="teaser-block full-link">
             <div class="teaser-icon" aria-hidden="true">&#x004D</div>
@@ -191,6 +207,8 @@
                 <p>{{ Lang.index_content.opendata_content }}</p>
             </div>
         </div>
+
+
 
     </section>
 

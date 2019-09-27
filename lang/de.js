@@ -25,7 +25,7 @@ exports.strings = {
         "apps_content": '<a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">iOS-</a> oder <a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android">Android-App</a> herunterladen bzw. <a href="https://www.rtr.at/de/tk/rtrnetztest_tests">Browser-Test</a> durchführen',
         "apps_url" : "https://www.rtr.at/de/tk/rtrnetztest_tests",
         "apps" : {
-            "netztest" : "App und Browser-Test",
+            "netztest" : "RTR-Netztest Apps",
             "qostest" : "Netztest Apps"
         },
         "select_version" : "Version auswählen",
@@ -49,7 +49,8 @@ exports.strings = {
         "enlarge_map" : "Karte vergrößern",
         "fullscreen" : "Vollbild",
         "loop_mode_content": "Sich automatisch wiederholende Tests durchführen",
-        "opendata_content": "Testergebnisse als Open Data einsehen"
+        "opendata_content": "Testergebnisse als Open Data einsehen",
+        "certified_content": "Zertifizierte Messung durchführen"
     },
 
     "map_content" : {
@@ -163,7 +164,58 @@ exports.strings = {
         "download_results": "Ergebnisse herunterladen als",
         "available_history": "Die Messergebnisse sind auch im Menüpunkt <em>Verlauf</em> abrufbar."
     },
-
+    "certified_measurement_content": {
+        "info": "Info",
+        "data": "Angaben",
+        "environment": "Messumfeld",
+        "measurement": "Messung",
+        "result": "Ergebnis",
+        "introduction_desc": "Die zertifizierte Messung ermöglicht es Ihnen, beweiskräftige Feststellungen über die Qualität Ihres kabelgebundenen Internetzuganges zu erheben. Die Ergebnisse stellen die Grundlage für einen so genannten „Anscheinsbeweis“ für bestimmte rechtliche Aspekte Ihres Internetzuganges dar. Die zertifizierte Messung stellt nur Tatsachen fest. Ob eine vertragskonforme Leistung erbracht wird oder nicht, obliegt daher immer der entscheidenden Stelle. Das kann etwa ein Gericht oder die <a href=\"https://www.rtr.at/de/tk/TKKS_Schlichtung01\">Schlichtungsstelle</a> bei der RTR-GmbH sein.",
+        "introduction_instruction": "Hinweise zur Messung",
+        "introduction_instruction_desc": "Bevor Sie die zertifizierte Messung starten, lesen Sie bitte die <a href=\"https://www.rtr.at/de/tk/netztestfaq_instructions_certified_measurement/Anleitung_zert_Messung.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Anleitung zur zertifizierten Messung</a> sorgfältig durch. Darin findet sich auch eine Checkliste, die Sie bei der Durchführung der zertifizierten Messung unterstützt. Weitere Informationen finden Sie in den <a href=\"https://www.rtr.at/de/tk/netztestfaq_certified_measurement\">FAQ</a>.",
+        "please_note": "Bitte beachten Sie insbesondere:",
+        "note_fixed": " Mit der zertifizierten Messung können kabelgebundene Internetzugangsdienste überprüft werden.",
+        "note_browser": " Zertifizierte Messungen können nur über einen Internetbrowser (Chrome, Edge, Firefox etc.) Ihres Computers durchgeführt werden.",
+        "note_no_other_usage": "Während eines Messzyklus dürfen Sie Ihren Computer nicht für andere Anwendungen verwenden.",
+        "note_no_other_users": "Stellen Sie bitte sicher, dass Sie oder andere Nutzer nicht denselben Internetzugang während der Messung verwenden (z.B. Familienangehörige mittels Smartphone).",
+        "process": "Ablauf der zertifizierten Messung",
+        "process_desc": "Ein Messzyklus dauert zumindest zwei Stunden. In diesem Zeitraum werden Einzelmessungen im Abstand von 15 Minuten durchgeführt. Es sind zumindest drei Messzyklen an drei unterschiedlichen Tagen innerhalb von zwei Wochen durchzuführen, damit eine zertifizierte Messung vorliegt.",
+        "questions_desc": "Bei Fragen zur zertifizierten Messung kontaktieren Sie uns bitte unter <a href=\"mailto:netztest@rtr.at\">netztest@rtr.at</a>.",
+        "basic_information": "Basisinformationen zur zertifizierten Messung",
+        "title_prepended": "Titel (vorangestellt)",
+        "first_name": "Vorname",
+        "last_name": "Nachname",
+        "title_appended": "Titel (nachgestellt)",
+        "location": "Standort der Messungen",
+        "location_desc": "Die Adresse, an der die Messungen durchgeführt werden",
+        "first_cycle_question": "Handelt es sich um den ersten Messzyklus?",
+        "yes_first_cycle": "Ja, erster Messzyklus",
+        "no_subsequent_cycle": "Nein, Folgezyklus",
+        "start_measurement": "Zertifizierte Messung starten",
+        "additional_information": "Weitere Informationen zur Messung",
+        "additional_information_desc": "Da es sich um den ersten Messzyklus handelt, ersuchen wir Sie folgende Fragen zu beantworten, um die Umstände der Messung nachvollziehen zu können. Bei weiteren Messzyklen ist die Beantwortung dieser Fragen nicht mehr notwendig.",
+        "location_access": "Beschreiben Sie den Standort des Anschlusses",
+        "location_access_residential": "Wohnhausanlage",
+        "location_access_single_family": "Einfamilienhaus",
+        "location_access_urban": "Städtischer Umgebung",
+        "location_access_rural": "Ländliche Umgebung",
+        "location_access_other": "Sonstiges",
+        "access_type": "Beschreiben Sie Ihren Anschluss",
+        "access_type_desc": "Um welche Art von Internetzugang (DSL, Kabel, Richtfunk, andere) handelt es sich? Welches Modem bzw. welchen Router verwenden Sie? Wenn möglich, geben Sie eine genaue Typenbezeichnung an.",
+        "test_device": "Beschreiben Sie Ihr Testgerät",
+        "test_device_desc": "Beschreiben Sie den Computer, mit dem Sie den Test durchführen. Wie ist dieser mit dem Modem/Router verbunden? Sind Ihre Geräte über Kabel verbunden (LAN), oder kabellos (WLAN)? Werden die elektrischen Leitungen in Ihrem Haus auch zur Übertragung von Daten benutzt (PowerLAN)? Bei WLAN: Befinden sich Testgerät und Modem/Router im selben Raum?",
+        "photo_upload": "Fotoupload",
+        "photo_upload_desc": "Bitte übermitteln Sie uns ein Foto des Modems/Routers, des Computers (wenn möglich gemeinsam auf einem Bild) und Fotos der einzelnen Typenbezeichnungen (\"Pickerl\"). Falls möglich übermitteln Sie bitte auch ein Foto der Wanddose",
+        "conducting_measurements": "Durchführung der Messungen",
+        "measurements": "Bereits abgeschlossene Messungen",
+        "result_when_finished": "Ihr Messergebnis steht nach Abschluss aller Messungen zum Download zur Verfügung.",
+        "planned_end": "Geplanter Abschluss der Messung: ca. %X% Uhr.",
+        "generating_report": "Dokument wird erstellt...",
+        "finished": "Der Messzyklus nun abgeschlossen.",
+        "finished_desc": "Speichern Sie das Ergebnis des Messzyklus sofort ab oder drucken Sie es aus. Das Dokument wird von der RTR-GmbH nicht gespeichert.",
+        "error_generating": "Fehler bei der Erstellung des PDFs.",
+        "generate_new": "Erneut antordern"
+    },
     //Page titles and link descriptions
     "index" : "Home",
     "statistics" : "Statistik",
@@ -179,6 +231,7 @@ exports.strings = {
     "imprint_url" : "https://www.rtr.at/de/rtr/impressum",
     "menu" : "Menü",
     "loop_mode" : "Wiederholungsmodus",
+    "certified_measurement": "Zertifizierte Messung",
 
     //common words
     "top" : "Seitenanfang",
@@ -301,5 +354,6 @@ exports.strings = {
     "coordinates": "Standort",
     "provider" : "Betreiber",
     "surrounding_tests": "Tests in der Umgebung als Open Data",
-    "land_cover": "Bodenbedeckung"
+    "land_cover": "Bodenbedeckung",
+    "next": "Weiter"
 }

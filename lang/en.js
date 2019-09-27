@@ -49,7 +49,8 @@ exports.strings = {
         "enlarge_map" : "Enlarge map",
         "fullscreen" : "Full screen",
         "loop_mode_content": "Conduct repeated measurements",
-        "opendata_content": "Explore open data test results"
+        "opendata_content": "Explore open data test results",
+        "certified_content": "Conduct certified measurements"
     },
 
     "map_content" : {
@@ -104,7 +105,7 @@ exports.strings = {
         "sim_home_country" : "SIM home country",
         "sim_mcc_mnc" : "SIM-MCC-MNC",
         "country_geoip" : "Country (IP)",
-        "country_geoip" : "Country (Location)",
+        "country_location" : "Country (Location)",
         "public_ip_as_name" : "Network name (AS)",
         "software_version" : "Software version",
         "next_page" : "Next page",
@@ -125,7 +126,7 @@ exports.strings = {
 
     "options_content" : {
         "client_uuid" : "Client-UUID",
-        "options_apps_text" : "<h5>Android-App</h5><p>The RTR-NetTest measures, in addition to the speed of your current internet connection (upload, download, ping, signal strength), also a number of quality parameters (VoIP, unchanged content, website, transparent connection, DNS, ports).<br /> <br /> When starting the app, several symbols will give you information about your Internet connection: mobile data or WLAN connection, background data transmission, IP address and location. The start button initiates the RTR-NetTest. The speed tests are followed by QoS tests. QoS stands for Quality of Service. Horizontal bars show the progress of the QoS tests. Once all tests are completed, the results as well as other detailed information can be viewed in the summary. The menu is located on the left and contains buttons to access the pages home , history, map, statistics, help, information and settings.</p><p>The Android-App Version 2.2 can be downloaded using the&nbsp; <a href=\"https://play.google.com/store/apps/details?id=at.alladin.rmbt.android\" title=\"Download RTR-Netztest\" target=\"_blank\">Google Play Store</a> or direcly <a href=\"https://www.netztest.at/RTR-Netztest.apk\" title=\"Opens external link in new window\" target=\"_blank\">here</a>. It is available for devices with Android 4.0 and above. <a href=\"https://www.rtr.at/en/tk/netztestfaq_app\" title=\"Opens internal link in current window\">More information...</a></p><h5>iOS-App (iPhone, iPad)</h5><p>The iOS-App can be downloaded using the App <a href=\"https://itunes.apple.com/at/app/rtr-netztest/id724321403\" title=\"Download RTR-Netztest iOS\" target=\"_blank\">Apple iTunes-Store</a>. It is available for devices with iOS 7.0 and above. <a href=\"https://www.rtr.at/en/tk/netztestfaq_app\" title=\"Opens internal link in current window\">More information...</a></p><h5>Web-Browser</h5><p>Measurements with the RTR-NetTest with other mobile operating systems and with the desktop&nbsp;can be conducted with a web browser&nbsp; - <a href=\"https://www.netztest.at/en/Test?websocket=t\" title=\"Start RTR-Netztest using WebSockets\" target=\"_blank\">start test using Websockets</a></p><p><a href=\"https://www.rtr.at/en/tk/netztestfaq_web\" title=\"Opens internal link in current window\">More information on Web-Browsers.<br /></a></p>",
+        "options_apps_text" : "<h5>Android-App</h5><p>The RTR-NetTest measures, in addition to the speed of your current internet connection (upload, download, ping, signal strength), also a number of quality parameters (VoIP, unchanged content, website, transparent connection, DNS, ports).<br /> <br /> When starting the app, several symbols will give you information about your internet connection: mobile data or WLAN connection, background data transmission, IP address and location. The start button initiates the RTR-NetTest. The speed tests are followed by QoS tests. QoS stands for Quality of Service. Horizontal bars show the progress of the QoS tests. Once all tests are completed, the results as well as other detailed information can be viewed in the summary. The menu is located on the left and contains buttons to access the pages home , history, map, statistics, help, information and settings.</p><p>The Android-App Version 2.2 can be downloaded using the&nbsp; <a href=\"https://play.google.com/store/apps/details?id=at.alladin.rmbt.android\" title=\"Download RTR-Netztest\" target=\"_blank\">Google Play Store</a> or direcly <a href=\"https://www.netztest.at/RTR-Netztest.apk\" title=\"Opens external link in new window\" target=\"_blank\">here</a>. It is available for devices with Android 4.0 and above. <a href=\"https://www.rtr.at/en/tk/netztestfaq_app\" title=\"Opens internal link in current window\">More information...</a></p><h5>iOS-App (iPhone, iPad)</h5><p>The iOS-App can be downloaded using the App <a href=\"https://itunes.apple.com/at/app/rtr-netztest/id724321403\" title=\"Download RTR-Netztest iOS\" target=\"_blank\">Apple iTunes-Store</a>. It is available for devices with iOS 7.0 and above. <a href=\"https://www.rtr.at/en/tk/netztestfaq_app\" title=\"Opens internal link in current window\">More information...</a></p><h5>Web-Browser</h5><p>Measurements with the RTR-NetTest with other mobile operating systems and with the desktop&nbsp;can be conducted with a web browser&nbsp; - <a href=\"https://www.netztest.at/en/Test?websocket=t\" title=\"Start RTR-Netztest using WebSockets\" target=\"_blank\">start test using Websockets</a></p><p><a href=\"https://www.rtr.at/en/tk/netztestfaq_web\" title=\"Opens internal link in current window\">More information on Web-Browsers.<br /></a></p>",
         "your_uuid" : "Your UUID is",
         "ip_version": "IP-Version",
         "ip_version_desc": "If your internet access supports both IPv4 and IPv6, you can choose which protocol version is used for conducting the test.",
@@ -163,7 +164,58 @@ exports.strings = {
         "download_results": "Download results:",
         "available_history": "Test results are available under menu item <em>History</em>."
     },
-
+    "certified_measurement_content": {
+        "info": "Info",
+        "data": "Data",
+        "environment": "Environment",
+        "measurement": "Measurement",
+        "result": "Result",
+        "introduction_desc": "The certified measurement allows you to make conclusive statements about the quality of your wired Internet access. The results provide the basis for a so-called \"prima facie proof\" of certain legal value of your Internet access provided by an Austrian Internet service provider. The certified measurement only states facts. Whether a contract-compliant service is provided or not, is therefore always up to the deciding entity. This could be a court or the <a href=\"https://www.rtr.at/en/tk/TKKS_Schlichtung01\"> conciliation body </a> of RTR-GmbH.",
+        "introduction_instruction": "Notes on the measurement",
+        "introduction_instruction_desc": "Before you start the certified measurement, please read the <a href=\"https://www.rtr.at/en/tk/netztestfaq_instructions_certified_measurement/Certified_measurement_guide.pdf\" target=\"_blank\" rel=\"noopener noreferrer\"> instructions for certified measurement </a> carefully. It also includes a checklist to assist you in performing the certified measurement. For more information, see the <a href=\"https://www.rtr.at/en/tk/netztestfaq_certified_measurement\"> FAQ </a>.",
+        "please_note": "Please note in particular:",
+        "note_fixed": "The certified measurement can only be used to verify wired Internet access services.",
+        "note_browser": "Certified measurements can only be done via an internet browser (Chrome, Edge, Firefox etc.) on your computer.",
+        "note_no_other_usage": "During a measurement cycle, do not use your computer for other applications.",
+        "note_no_other_users": "Please make sure that you or other users do not use the same internet connection during the measurement (eg. family members by smartphone).",
+        "process": "Process of a certified measurement",
+        "process_desc": "A measuring cycle lasts at least two hours. During this period, individual measurements are taken every 15 minutes. At least three measurement cycles must be performed on three different days within two weeks for a certified measurement.",
+        "questions_desc": "For questions about the certified measurement, please contact <a href=\"mailto:netztest@rtr.at\"> netztest@rtr.at </a>.",
+        "basic_information": "Basic information on the certified measurement",
+        "title_prepended": "Title",
+        "first_name": "First name",
+        "last_name": "Last name",
+        "title_appended": "Academic degree",
+        "location": "Location of the measurements",
+        "location_desc": "The address at which the measurements are taken",
+        "first_cycle_question": "Is it the first measurement cycle?",
+        "yes_first_cycle": "Yes, first cycle",
+        "no_subsequent_cycle": "No, follow-up cycle",
+        "start_measurement": "Start certified measurement",
+        "additional_information": "Further information on the measurement",
+        "additional_information_desc": "Since this is the first measurement cycle, we ask you to answer the following questions in order to understand the circumstances of the measurement. For further measuring cycles, answering these questions is no longer necessary.",
+        "location_access": "Please describe the location of your internet access",
+        "location_access_residential": "Apartment building",
+        "location_access_single_family": "Single-family home",
+        "location_access_urban": "Urban area",
+        "location_access_rural": "Rural area",
+        "location_access_other": "Other",
+        "access_type": "Please describe your internet access",
+        "access_type_desc": "What kind of internet access (DSL, cable, radio, other) do you have? Which modem or which router do you use? If possible, specify an exact type designation.",
+        "test_device": "Please describe your device used for measuring",
+        "test_device_desc": "Describe the computer that you are running the test with. How is the computer connected to the modem/router? Are your devices connected wired (LAN) or wireless (WLAN)? Are the electrical wires in your house also used to transmit data (PowerLAN)? For WLAN: Are the test device and modem / router in the same room?",
+        "photo_upload": "Photo upload",
+        "photo_upload_desc": "Please send us a photo of the modem / router, the computer (if possible together on one picture) and photos of the individual type designations. If possible, please also send a photo of the wall socket",
+        "conducting_measurements": "Conduction of the measurement",
+        "measurements": "Measurement",
+        "result_when_finished": "Your measurement result will be available for download after completion of all measurements.",
+        "planned_end": "Planned completion of the measurement: approx. %X%.",
+        "generating_report": "Document is being created ...",
+        "finished": "The measuring cycle is now complete.",
+        "finished_desc": "Save the result of the measurement cycle immediately or print it out. The document will not be saved by RTR-GmbH.",
+        "error_generating": "Error generating the document.",
+        "generate_new": "Try again"
+    },
     //Page titles and link descriptions
     "index": "Home",
     "statistics": "Statistics",
@@ -179,6 +231,7 @@ exports.strings = {
     "imprint_url" : "https://www.rtr.at/en/rtr/impressum",
     "menu" : "Menu",
     "loop_mode" : "Loop mode",
+    "certified_measurement": "Certified measurement",
 
     //common words
     "top" : "Top",
@@ -301,5 +354,6 @@ exports.strings = {
     "coordinates": "Coordinates",
     "provider" : "Provider",
     "surrounding_tests": "Show surrounding measurements as open data",
-    "land_cover": "Land cover"
+    "land_cover": "Land cover",
+    "next": "Next"
 }

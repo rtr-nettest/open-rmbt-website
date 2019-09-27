@@ -302,5 +302,9 @@ Lang.setStrings({
     'settlement_type_1':'kein DSR',
     'settlement_type_2':'Besiedelbarer Raum',
     'settlement_type_3':'Siedlungsraum',
-    'dtm_level': 'DGM-Niveau'
+    'dtm_level': 'DGM-Niveau',
+    'enter_first_name': 'Bitte geben Sie Ihren Vornamen an.',
+    'enter_last_name': 'Bitte geben Sie Ihren Nachnamen an.',
+    'download_results_as_pdf': 'Ergebnisse als PDF herunterladen',
+    'alert_close_tab': 'Wollen Sie die Messung abbrechen?'
 });
