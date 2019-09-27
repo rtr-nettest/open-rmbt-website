@@ -249,6 +249,7 @@ function transformRTRUrls(fileList) {
         "/Optionen": "Optionen",
         "/Loop": "Loop",
         "/Opentests": "Opentests",
+        "/ZertMessung": "ZertMessung",
         "/tk/netztest" : "",
         "/de": "",
         "/en": ""
