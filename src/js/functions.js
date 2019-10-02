@@ -897,7 +897,8 @@ function RMBTstatistics() {
 
                         //calculate open-data-search-parameters
                         var opendataParams = {};
-                        if ($('#statistik_network_type_group').val() === "2G" || $('#statistik_network_type_group').val() === "3G" || $('#statistik_network_type_group').val() === "4G")
+                        if ($('#statistik_network_type_group').val() === "2G" || $('#statistik_network_type_group').val() === "3G" ||
+                            $('#statistik_network_type_group').val() === "4G" || $('#statistik_network_type_group').val() === "5G")
                             opendataParams["cat_technology"] =$('#statistik_network_type_group').val();
                         
                         if ($('#statistik_type').val() === "wifi")
