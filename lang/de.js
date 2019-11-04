@@ -197,7 +197,7 @@ exports.strings = {
         "location_access": "Beschreiben Sie den Standort des Anschlusses",
         "location_access_residential": "Wohnhausanlage",
         "location_access_single_family": "Einfamilienhaus",
-        "location_access_urban": "Städtischer Umgebung",
+        "location_access_urban": "Städtische Umgebung",
         "location_access_rural": "Ländliche Umgebung",
         "location_access_other": "Sonstiges",
         "access_type": "Beschreiben Sie Ihren Anschluss",
@@ -214,7 +214,7 @@ exports.strings = {
         "finished": "Der Messzyklus nun abgeschlossen.",
         "finished_desc": "Speichern Sie das Ergebnis des Messzyklus sofort ab oder drucken Sie es aus. Das Dokument wird von der RTR-GmbH nicht gespeichert.",
         "error_generating": "Fehler bei der Erstellung des PDFs.",
-        "generate_new": "Erneut antordern"
+        "generate_new": "Erneut anfordern"
     },
     //Page titles and link descriptions
     "index" : "Home",
