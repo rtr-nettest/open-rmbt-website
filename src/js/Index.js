@@ -334,7 +334,7 @@ function switchToFullscreenMap() {
     window.alert = function() {};
 
     fullscreenMap = true;
-    if (screenfull.enabled) {
+    if (screenfull.isEnabled) {
         if (originalMapStyle === null) {
             originalMapStyle = mapElem.attr("style");
         }
