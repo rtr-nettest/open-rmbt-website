@@ -156,7 +156,7 @@ function getLastOpenDataResults() {
         data = "&user_server_selection=" + userServerSelection;
     }
     $.ajax({
-        url: statisticProxy + "/" + statisticpath + "/opentests/search?additional_info[]=signal_classification&max_results=" + most_recent_tests + data,
+        url: statisticProxy + "/" + statisticpath + "/opentests/search?additional_info=signal_classification&max_results=" + most_recent_tests + data,
         type: 'GET',
         dataType: 'json',
         cache: false,
