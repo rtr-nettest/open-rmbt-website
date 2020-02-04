@@ -354,7 +354,7 @@ function searchAndPositionOnAddress(callback) {
                         }
                         alert(Lang.getString('addressNotFound'));
                     }
-                })
+                }, "json")
         } else {
             geocoder_google.geocode({
                 'address': query,
