@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright 2013-2020 Rundfunk und Telekom Regulierungs-GmbH (RTR-GmbH)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 var tc_short_de = '<b>Im Sinne größtmöglicher Transparenz und Information für den Nutzer, ist die Verwendung der Browser-Version des RTR-Netztests erst nach ausdrücklicher Zustimmung zur Datenschutzerklärung sowie zu den Nutzungsbedingungen der RTR-GmbH hinsichtlich des RTR-Netztests möglich:';
 var tc_short_en = '<b>In order to ensure users with the greatest possible transparency and information, the RTR-NetTest browser version can be used only after explicit consent to RTR’s Privacy Policy and Terms of Use for the RTR-NetTest:';
 var tc_agree_de = 'Ich stimme der Datenschutzerklärung und den Nutzungsbedingungen der RTR-GmbH hinsichtlich des RTR-Netztests zu.';
