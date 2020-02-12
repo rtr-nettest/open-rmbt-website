@@ -239,8 +239,7 @@ function searchAndPositionOnAddress(callback) {
             return;
         }
         prevQuery = query;
-        
-        $('#spinner').spin('modal');
+
 
     //temporary log to server
     /*$.ajax({
@@ -350,12 +349,10 @@ function searchAndPositionOnAddress(callback) {
     }
 
     if (geocodingCache.hasOwnProperty(query)) {
-        $('#spinner').spin('modal');
         handleResults(geocodingCache[query].results);
     } else {
-        //if Austria - try DORIS
-        if (browser_country_geoip !== null && browser_country_geoip === 'AT') {
-            //try DORIS
+        var useDoris = function() {
+            $('#spinner').spin('modal');
             $.get('https://srv.doris.at/solr/searchservice/search/adressen2/?q=' + encodeURIComponent(query),
                 function (res) {
                     $('#spinner').spin('modal');
@@ -365,13 +362,19 @@ function searchAndPositionOnAddress(callback) {
                         var firstDoc = res.response.docs[0];
                         handleResults(firstDoc);
                     } else {
-                        if (callback !== undefined) {
-                            callback(false);
-                        }
-                        alert(Lang.getString('addressNotFound'));
+                        console.log("no results with DORIS, fallback to Google");
+                        useGoogle();
                     }
                 }, "json")
-        } else {
+                .fail(function(error) {
+                    $('#spinner').spin('modal');
+                    console.log("error  with DORIS, fallback to Google");
+                    useGoogle();
+                });
+        };
+
+        var useGoogle = function() {
+            $('#spinner').spin('modal');
             geocoder_google.geocode({
                 'address': query,
                 'region': $("select[name=country]").val()
@@ -389,6 +392,14 @@ function searchAndPositionOnAddress(callback) {
                     alert(Lang.getString('addressNotFound'));
                 }
             });
+        }
+
+        //if Austria - try DORIS
+        if (browser_country_geoip !== null && browser_country_geoip === 'AT') {
+            //try DORIS
+            useDoris();
+        } else {
+            useGoogle();
         }
     }
 }
