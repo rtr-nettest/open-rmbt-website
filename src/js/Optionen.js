@@ -257,4 +257,10 @@ $(document).ready(function() {
     if (UserConf.fixedUploadThreads) {
         $("#threadsForm").show();
     }
+
+    //show all on options (#showAll)
+    if (window.location.hash && window.location.hash.length > 0 && window.location.hash.indexOf("showAll") >= 0) {
+        $("#testserverForm").show();
+        $("#threadsForm").show();
+    }
 });
