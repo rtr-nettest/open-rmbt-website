@@ -217,7 +217,7 @@ function RMBTmapfilter(options) {
                         var form_filter = '';
                         //console.log(data.settings[0].mapfilter.mapFilters);
                         $.each(data.mapfilter.mapFilters, function(key1,row1){
-                                form_filter += '<div id="filter_'+key1+'">';
+                                form_filter += '<div id="filter_'+key1+'" uk-grid>';
                                 //form_filter += '<h3>'+key1+'</h3>';
                                 $.each(row1, function(key,row){
                                      var filtername = '';
@@ -227,7 +227,7 @@ function RMBTmapfilter(options) {
                                      });
                                      form_filter += '<div class="form_line">';
                                      //form_filter += '<label for="'+filtername+'">'+row.title+'</label>';
-                                     form_filter += '<select name="'+filtername+'" id="'+filtername+'" onchange="redrawOverlay();" class="form-control input-sm">';
+                                     form_filter += '<select name="'+filtername+'" id="'+filtername+'" onchange="redrawOverlay();" class="uk-select">';
                                      $.each(row.options,function(key1,row1){
                                              form_filter += '<option value="'+eval('row1.'+filtername)+'"';
                                              //console.log(row1.title+': '+row1.default);
@@ -243,7 +243,7 @@ function RMBTmapfilter(options) {
                                      form_filter += '</select>';
                                      form_filter += '</div>';
                                 });
-                                form_filter += '</div><div class="clear"></div>';
+                                form_filter += '</div>';
                                 
                         });
                         $('#filter_selector').append(form_filter);
@@ -251,8 +251,8 @@ function RMBTmapfilter(options) {
                         
                         
                         var form_auswahl = '';
-                        form_auswahl += '<div class="form-group">';
-                        form_auswahl += '<select name="map_options" id="map_options" onchange="redrawOverlay();" class="form-control input-sm">';
+                        form_auswahl += '<div uk-grid>';
+                        form_auswahl += '<div class="uk-width-1-1"><select name="map_options" id="map_options" onchange="redrawOverlay();" class="uk-select "></div>';
                         var default_cardtyp;
                         $.each(data.mapfilter.mapTypes, function(key,row){
                              var auswahlname = '';
