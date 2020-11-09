@@ -125,14 +125,14 @@
     </table>
     <h3>{{ Lang.position }}</h3>
     <div>
-        <div style="height: 250px;" id="tmpmap" class="test-map-container"  onclick="$('.location-graph-table').closest('[data-accordion]').find('[data-control]').trigger('accordion.toggle');"></div>
+        <div style="height: 250px;" id="tmpmap" class="test-map-container"></div>
         <a href="Opentests" class="open-data-radius-link">{{ Lang.surrounding_tests }}</a>
     </div>
     <ul uk-accordion="" class="uk-accordion ac-content">
         <li>
             <a class="uk-accordion-title" href="#">Details einblenden</a>
             <div class="uk-accordion-content" aria-hidden="true">
-                <table class="uk-table-striped uk-table-small">
+                <table class="location-curve-table  uk-table-striped uk-table-small">
                     <thead>
                     <tr>
                         <th>{{ Lang.time }}</th>
