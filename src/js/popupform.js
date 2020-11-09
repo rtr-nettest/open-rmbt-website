@@ -151,23 +151,51 @@ function show_agb_popup(onAccept, onDecline, options) {
     });
 
     //load and add text
-    $("#popupform").append(
+	let popupText = $("<div>" +
         '<div id="terms_check">' +
         '<div class="longtext">' +
         '<p>'+toc +'</p>' +
 		'</div>' +
-		'</div>'
+		'</div></div>'
     );
 
     $.get(tocFile ,function(data) {
         data=data.replace(/^[\s\S]+<h1>1/,"<h1>1");
         data=data.replace(/<style>[\s\S]*<\/style>/,"");
         data=data.replace(/<\/body><\/html>/,"");
-        $("#popupform .longtext").append(data);
+		popupText.find(".longtext").append(data);
 
+		var template = Handlebars.compile($("#modalTemplate").html());
+		var html = template({
+			"content": popupText.html(),
+			"confirm": (selectedLanguage === 'de') ? 'Zustimmung' : 'Agree',
+			"cancel": (selectedLanguage === 'de') ? 'Abbruch' : 'Decline',
+			"title": title,
+			"container-modifier": "uk-modal-container"
+		});
+		$("#modal-container").remove();
+		$("body").append(html);
+		$("#modal-container").find("#modal-confirm").click(function(e) {
+			console.log("confirm")
+			if (cookieIdentifier) {
+				/*if (showCheckbox && $("#popupformCheckbox").is(":checked")) {
+					setCookie(cookieIdentifier, true, cookieExpiresSecondsWithCheckbox);
+				}
+				else {*/ //TODO Wiederholungsmodus
+					setCookie(cookieIdentifier, true, cookieExpiresSeconds);
+				//}
+			}
+			onAccept();
+			UIkit.modal($("#modal-container")[0]).hide();
+		})
+		$("#modal-container").find("#modal-cancel").click(function(e) {
+			onDecline();
+			UIkit.modal($("#modal-container")[0]).hide();
+		})
+		UIkit.modal($("#modal-container")[0]).show();
     });
 
-    $("#popupform").dialog({
+    /*$("#popupform").dialog({
         autoOpen: false,
         title: title,
         modal: true,
@@ -196,7 +224,9 @@ function show_agb_popup(onAccept, onDecline, options) {
 	}
 
     //show the popup
-    $("#popupform").dialog("open");
+    $("#popupform").dialog("open");*/
+
+
 }
 //show_agb_popup("RMBTTermsV5", function(){alert(1)}, function(){alert(2)});
 

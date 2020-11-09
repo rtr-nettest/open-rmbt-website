@@ -1,0 +1,82 @@
+/* Test gauge */
+/* New test design */
+
+.gauge {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  background: url("../images/gauge.svg");
+  background-repeat: repeat;
+  background-position-x: 0%;
+  background-position-y: 0%;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  margin: 0 0;
+  padding: 0;
+  position: relative;
+}
+
+
+svg .gauge {
+  stroke-width: 26px;
+  stroke-dasharray: 0,9999;
+  fill: transparent;
+}
+
+svg .gauge.active  {
+  transition: stroke-dasharray 0.4s linear;
+}
+
+svg #speed.gauge.active {
+  transition: stroke-dasharray 0.4s ease;
+}
+
+svg .init,
+svg .ping,
+svg .download,
+svg .upload {
+  stroke: rgb(0, 94, 174);
+}
+
+svg .speed {
+  stroke: rgb(89, 178, 0);
+}
+
+.loader {
+  border: 2px solid #c3c3c3;
+  border-top: 2px solid #59b200;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  animation: loader-spin 2s linear infinite;
+  float: left;
+  margin-right: 10px;
+  margin-top: 3px;
+  display: none;
+}
+
+@keyframes loader-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* responsive layout
+@media (min-width: 1275px) {
+  #inner-test-container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #infocurrent {
+    align-self: flex-end;
+    min-width: 350px;
+  }
+
+  #infocurrent p:last-of-type {
+    margin-bottom: 0px;
+  }
+} */

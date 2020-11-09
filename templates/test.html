@@ -3,24 +3,17 @@
 {% set containerclass = "full-width" %}
 
 {% block headerscriptingExtended %}
-<link rel="stylesheet" href="../{{ fingerprint["css/test.css"] }}">
+<script src="../{{ fingerprint['js/vendor/modernizr-2.6.1.min.js'] }}"></script>
 
-<script src="../{{ fingerprint["js/vendor/modernizr-2.6.1.min.js"] }}"></script>
-
-<script type="text/javascript">
-    if (preferredTest === TestTypes.Java || getParam("Java"))
-        document.writeln('<script type="text/javascript" src="../{{ fingerprint["lib/deployJava.js"] }}"><\/script>');
-</script>
-
-<script type="text/javascript" src="../{{ fingerprint["lib/rmbtws.min.js"] }}"></script>
-<script type="text/javascript" src="../{{ fingerprint["js/Test.js"] }}"></script>
-<script type="text/javascript" src="../{{ fingerprint["js/test/TestVisualization.js"] }}"></script>
+<script type="text/javascript" src="../{{ fingerprint['lib/rmbtws.min.js'] }}"></script>
+<script type="text/javascript" src="../{{ fingerprint['js/Test.js'] }}"></script>
+<script type="text/javascript" src="../{{ fingerprint['js/test/TestVisualization.js'] }}"></script>
 
 {% endblock %}
 
 
 {% block content %}
-<div id="test_container">
+<div id="test_container" class="uk-container">
 <div id="noJavaWarning"></div>
 <div id="androidApp"></div>
 <div id="iOSApp"></div>
@@ -35,11 +28,11 @@
     </div>
 </noscript>
 
-    <div id="inner-test-container" style="display: none">
+    <div id="inner-test-container" style="display: none" class="uk-grid-match" uk-grid>
 
 
 
-        <div class="gauge">
+        <div class="gauge uk-width-1-2@s">
 
             <!-- This code is based on the great Open Source code by CZ.NIC -->
             <!-- You can find their repository here: https://gitlab.labs.nic.cz/websites/netmetr.cz -->
@@ -56,45 +49,45 @@
 
         </div>
 
-        <div id="infocurrent">
-            <p>
-            <div class="row inforow">
-                <div class="col-sm-3">{{ Lang.ping }}</div>
-                <div class="col-sm-9" id="infoping">
+        <div id="infocurrent" class="uk-width-1-2@s uk-flex-bottom">
+            <div>
+
+            <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                <div class="uk-width-1-4">{{ Lang.ping }}</div>
+                <div class="uk-width-3-4" id="infoping">
                     <div class="loader"></div>
                     <span>-</span></div>
             </div>
-            <div class="row inforow">
-                <div class="col-sm-3">{{ Lang.download }}</div>
-                <div class="col-sm-9" id="infodown">
+            <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                <div class="uk-width-1-4">{{ Lang.download }}</div>
+                <div class="uk-width-3-4" id="infodown">
                     <div class="loader"></div>
                     <span>-</span></div>
             </div>
-            <div class="row inforow">
-                <div class="col-sm-3">{{ Lang.upload }}</div>
-                <div class="col-sm-9" id="infoup">
+            <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                <div class="uk-width-1-4">{{ Lang.upload }}</div>
+                <div class="uk-width-3-4" id="infoup">
                     <div class="loader"></div>
                     <span>-</span></div>
             </div>
-            </p>
-            <p>
-            <div class="row inforow">
-                <div class="col-sm-3">{{ Lang.coordinates }}</div>
-                <div class="col-sm-9" id="infogeo">-</div>
+            <p></p>
+            <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                <div class="uk-width-1-4">{{ Lang.coordinates }}</div>
+                <div class="uk-width-3-4" id="infogeo">-</div>
             </div>
-            <div class="row inforow">
-                <div class="col-sm-3">{{ Lang.test_server }}</div>
-                <div class="col-sm-9" id="infoserver">-</div>
+            <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                <div class="uk-width-1-4">{{ Lang.test_server }}</div>
+                <div class="uk-width-3-4" id="infoserver">-</div>
             </div>
-            <div class="row inforow">
-                <div class="col-sm-3">{{ Lang.ip }}</div>
-                <div class="col-sm-9" id="infoip">-</div>
+            <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                <div class="uk-width-1-4">{{ Lang.ip }}</div>
+                <div class="uk-width-3-4" id="infoip">-</div>
             </div>
-            <div class="row inforow">
-                <div class="col-sm-3">{{ Lang.operator }}</div>
-                <div class="col-sm-9" id="infoprovider">-</div>
+            <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                <div class="uk-width-1-4">{{ Lang.operator }}</div>
+                <div class="uk-width-3-4" id="infoprovider">-</div>
             </div>
-            </p>
+            </div>
 
 
         </div>
