@@ -80,3 +80,87 @@ svg .speed {
     margin-bottom: 0px;
   }
 } */
+
+
+/* Verlauf */
+/*#verlauf-detailcontainer table th{
+  text-align: left;
+}
+.testdata {
+  margin-bottom: 20px;
+}
+.forumbanner, #data-prototype {
+  display:none;
+}
+.forumbanner input {
+  width: 100%;
+}
+div.olControlAttribution, div.olControlScaleLine {
+  bottom: 3px;
+}
+div.speed-curve-graph-upload, div.speed-curve-graph-download, div.speed-curve-graph-ping, div.signal-curve-graph {
+  cursor: pointer;
+}
+table.speed-curve, table.test-map, table.signal-curve {
+  background-color: white;
+}
+tr.highlight {
+  background-color: #eef2f4;
+}
+tr.header-highlight {
+  background-color: #bfd1d7;
+}
+
+img {
+  max-width: none !important;
+}
+
+table#testresult-detail td {
+  word-break: break-all;
+}
+
+.shariff ul li {
+  border: none;
+  padding-left:0;
+}
+
+tr.shariff-container:hover td {
+  background-color: initial !important;
+}
+
+@media print {
+  .scroller-inner div.speed-curve-graph-download div, .scroller-inner div.speed-curve-graph-upload div, .scroller-inner div.signal-curve-graph div {
+    background-color: transparent !important;
+  }
+  .scroller-inner canvas {
+    background-color: transparent !important;
+  }
+
+  div.social {
+    display: none;
+  }
+}
+
+/* accordion *
+.task-telekom .first-level [data-control]{
+  background-color: white;
+  color: #59b200;
+}
+
+[data-accordion].open > [data-control] {
+  background-color: white !important;
+}
+
+[data-accordion] table {
+  float: none;
+  margin-bottom: 0;
+}
+
+[data-accordion] table thead {
+  border-top: 1px solid rgb(162, 162, 162);
+}
+
+.first-level.open {
+  border-bottom: none !important;
+  margin-bottom: 0 !important;
+} */

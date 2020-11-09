@@ -520,15 +520,13 @@ function RMBTtestresult(testUUID) {
                                    encodeURIComponent(data.testresult[0].share_text));
                                 $('#code-eingabe').hide();
                                 var ampel;
-                                $('#verlauf-detail tbody').empty();
-                                $('#verlauf-detail thead').empty();
-                                var tmp = Lang.getString('MeasurementResultFrom')
-                                $('#verlauf-detail thead').append(
-                                        '<tr>' +
-                                        '<th scope="col" colspan="3">'+tmp+' '+data.testresult[0].time_string+'<span class="align-right"><a href="https://www.netztest.at/redirect/' + selectedLanguage + '/help_result" target="_blank">&nbsp;?&nbsp;</a></span></th>' +
-                                        '</tr>'
-                                );
-                                  
+                                var tmp = Lang.getString('MeasurementResultFrom');
+                                $("#verlauf-result-from").html(
+                                    tmp + ' ' + data.testresult[0].time_string +
+                                    '<span class="align-right"><a href="https://www.netztest.at/redirect/' +
+                                    selectedLanguage + '/help_result" target="_blank">&nbsp;?&nbsp;</a></span>');
+
+
                                 $.each(data.testresult[0].measurement, function(key,row){
                                         if (row.classification == 0)
                                                 ampel = 'traffic_lights_grey.png';
@@ -543,9 +541,8 @@ function RMBTtestresult(testUUID) {
                                         else ampel = 'traffic_lights_transparent.png';
                                         $('#verlauf-detail').append(
                                                 '<tr>' +
-                                                '<td>'+row.title+'</td>' +
-                                                '<td><a href="https://www.netztest.at/redirect/' + selectedLanguage + '/help_result" target="_blank"><img src="../img/speedtest/'+ampel+'" /></a></td>' +
-                                                '<td>'+row.value+'</td>' +
+                                                '<td class="uk-width-medium">'+row.title+'</td>' +
+                                                '<td><a href="https://www.netztest.at/redirect/' + selectedLanguage + '/help_result" target="_blank"><img src="../img/speedtest/'+ampel+'" /></a> ' +row.value+'</td>' +
                                                 '</tr>'
                                         );
                                 });
@@ -562,7 +559,7 @@ function RMBTtestresult(testUUID) {
                                                 $.each(data.testresultdetail, function(keydetail,detail){
                                                         $('#testresult-detail tbody').append(
                                                                 '<tr>' +
-                                                                '<td>'+detail.title+'</td>' +
+                                                                '<td class="uk-width-medium">'+detail.title+'</td>' +
                                                                 '<td data-label="' + detail.title + '"><span>'+nl2br(detail.value,true)+'</span></td>' +
                                                                 '</tr>'
                                                         );
