@@ -583,7 +583,7 @@
 
 {%  raw %}
 <script id="modalTemplate" type="text/x-handlebars-template">
-<div id="modal-container" class="{{ container-modifier }}" uk-modal >
+<div id="{{ container-id }}" class="{{ container-modifier }}" uk-modal >
     <div class="uk-modal-dialog">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         {{#if title}}

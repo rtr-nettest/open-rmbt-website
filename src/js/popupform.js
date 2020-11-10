@@ -166,33 +166,36 @@ function show_agb_popup(onAccept, onDecline, options) {
 		popupText.find(".longtext").append(data);
 
 		var template = Handlebars.compile($("#modalTemplate").html());
+		var containerId = "modal-container-" + Math.round(Math.random() * 1024e4)
 		var html = template({
 			"content": popupText.html(),
 			"confirm": (selectedLanguage === 'de') ? 'Zustimmung' : 'Agree',
 			"cancel": (selectedLanguage === 'de') ? 'Abbruch' : 'Decline',
 			"title": title,
-			"container-modifier": "uk-modal-container"
+			"container-modifier": "uk-modal-container",
+			"container-id": containerId
 		});
-		$("#modal-container").remove();
 		$("body").append(html);
-		$("#modal-container").find("#modal-confirm").click(function(e) {
+		$("#" + containerId).find("#modal-confirm").click(function (e) {
 			console.log("confirm")
 			if (cookieIdentifier) {
 				/*if (showCheckbox && $("#popupformCheckbox").is(":checked")) {
 					setCookie(cookieIdentifier, true, cookieExpiresSecondsWithCheckbox);
 				}
 				else {*/ //TODO Wiederholungsmodus
-					setCookie(cookieIdentifier, true, cookieExpiresSeconds);
+				setCookie(cookieIdentifier, true, cookieExpiresSeconds);
 				//}
 			}
+			UIkit.modal($("#" + containerId)[0]).hide();
+			//$("#modal-container").remove();
 			onAccept();
-			UIkit.modal($("#modal-container")[0]).hide();
 		})
-		$("#modal-container").find("#modal-cancel").click(function(e) {
+		$("#modal-container").find("#modal-cancel").click(function (e) {
+			UIkit.modal($("#" + containerId)[0]).hide();
+			//$("#" + containerId").remove();
 			onDecline();
-			UIkit.modal($("#modal-container")[0]).hide();
 		})
-		UIkit.modal($("#modal-container")[0]).show();
+		UIkit.modal($("#" + containerId)[0]).show();
     });
 
     /*$("#popupform").dialog({

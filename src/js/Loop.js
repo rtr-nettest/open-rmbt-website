@@ -162,11 +162,11 @@ var LoopTestVisualization = (function () {
                 console.log("Unknown test state: " + curStatus);
         }
         if (elem !== null) {
-            $("#infocurrent").find("div.row").not(":has(#" + elem + ")").find(".loader").hide();
-            $("#infocurrent").find("div.row #" + elem + " .loader").show();
+            $("#infocurrent").find("div.uk-grid").not(":has(#" + elem + ")").find(".loader").hide();
+            $("#infocurrent").find("div.uk-grid #" + elem + " .loader").show();
         }
         else {
-            $("#infocurrent").find("div.row  .loader").hide();
+            $("#infocurrent").find("div.uk-grid  .loader").hide();
         }
         $("#infostatus").text(text);
     }
