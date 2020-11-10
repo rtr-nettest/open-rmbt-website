@@ -53,10 +53,10 @@ $(document).ready(function() {
             this.defaultShowErrors();
         },
         highlight: function (element, errorClass, validClass) {
-            $(element).parents(".form-group").addClass("has-error");
+            $(element).closest("div").addClass("has-error");
         },
         unhighlight: function (element, errorClass, validClass) {
-            $(element).parents(".form-group").removeClass("has-error");
+            $(element).closest("div").removeClass("has-error");
         },
     });
     $("#intermediate-form").validate();
@@ -367,5 +367,5 @@ function setBreadCrumb(name) {
         }
     })
     window.scrollTo(0,0);
-    $('h1')[0].scrollIntoView();
+    $('h2')[0].scrollIntoView();
 }

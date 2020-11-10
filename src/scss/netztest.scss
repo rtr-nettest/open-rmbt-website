@@ -4,7 +4,16 @@
 $black: #222222;
 $red: #cd1236;
 $green: #438700;
+$muted: #f8f8f8;
+$grey: #545454;
 
+/* General fixes */
+.tm-header {
+  z-index: 30; //will collide with breadcrumbs otherwise
+}
+
+
+/* Test */
 .gauge {
   width: 100%;
   max-width: 500px;
@@ -615,4 +624,107 @@ tr.median {
 
 .progress-bar.inactive {
   background-color: #545454;
+}
+
+/* Certified Measurement / Zertifizierte Messung */
+/* https://codepen.io/tomek8899/pen/obJsu */
+/* Second try, as RTR design is not suitable for retina displays */
+
+.breadCrumbs {
+  position: relative;
+  padding-left: 0 !important;
+  list-style: none;
+
+  li {
+    position: relative;
+    float: left;
+    border-left: none !important;
+    padding-left: 0 !important;
+
+    a, p {
+      display: block;
+      padding: 0 10px 0 30px;
+      line-height: 30px;
+      font-size: 10pt;
+      color: #545454 !important;
+      background: $muted;
+      text-decoration: none;
+
+      &:hover {
+        cursor: initial;
+        background: $muted !important;
+        text-decoration: none !important;
+      }
+    }
+
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: -14.5px;
+      display: block;
+      width: 0;
+      height: 0;
+      border-top: 15px solid transparent;
+      border-bottom: 15px solid transparent;
+      border-left: 15px solid $muted;
+      z-index: 10;
+    }
+
+    &:last-child:after {
+      border:none;
+    }
+
+    &.visitedPage a,
+    &.visitedPage p {
+      background-color: #bebab0;
+
+      &:hover {
+        background: #bebab0 !important;
+      }
+    }
+
+    &.visitedPage:after {
+      border-left-color: #bebab0;
+    }
+
+    &.activePage a,
+    &.activePage p {
+      background-color: $green;
+      color: white !important;
+
+      &:hover {
+        cursor: initial;
+        background: $green !important;
+        text-decoration: none !important;
+      }
+    }
+
+    &.activePage:after {
+      border-left-color: $green;
+    }
+  }
+
+  li:first-child a {
+    padding: 0 10px 0 20px;
+  }
+
+  li:last-child a {
+    padding-right: 20px;
+  }
+}
+
+//Validation errors
+.has-error {
+  input, textarea {
+    border-color: $red !important;
+  }
+  span.error {
+    color: $red;
+  }
+}
+
+.uk-form .text-muted {
+  color: $grey;
 }
