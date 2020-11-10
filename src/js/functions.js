@@ -1572,30 +1572,30 @@ function getOpenDataRow(testdata, showUnits) {
     row += "<td class='test-platform'>" + link +  position_marker + infoFormatter(testdata.model, testdata.platform, testdata.provider_name) + "</a></td>";
     
     //down
-    row += "<td class='test-download align-right'>" + link + (testdata.download_kbit / 1000).formatNumber(getSignificantDigits(testdata.download_kbit / 1000)) + (showUnits ? '&nbsp;' + Lang.getString('Mbps') : '') + "</a></td>";
+    row += "<td class='test-download uk-text-right'>" + link + (testdata.download_kbit / 1000).formatNumber(getSignificantDigits(testdata.download_kbit / 1000)) + (showUnits ? '&nbsp;' + Lang.getString('Mbps') : '') + "</a></td>";
     
     //up
-    row += "<td class='test-upload align-right'>" + link + (testdata.upload_kbit / 1000).formatNumber(getSignificantDigits(testdata.upload_kbit / 1000))+ (showUnits ? '&nbsp;' + Lang.getString('Mbps') : '') + "</a></td>";
+    row += "<td class='test-upload uk-text-right'>" + link + (testdata.upload_kbit / 1000).formatNumber(getSignificantDigits(testdata.upload_kbit / 1000))+ (showUnits ? '&nbsp;' + Lang.getString('Mbps') : '') + "</a></td>";
     
     //ping
     if (testdata.ping_ms >= 0 && testdata.ping_ms !== null) {
-        row += "<td class='test-ping align-right'>" + link + (testdata.ping_ms).formatNumber(getSignificantDigits(testdata.ping_ms))+ (showUnits ? '&nbsp;' + Lang.getString('ms') : '') + "</a></td>";
+        row += "<td class='test-ping uk-text-right'>" + link + (testdata.ping_ms).formatNumber(getSignificantDigits(testdata.ping_ms))+ (showUnits ? '&nbsp;' + Lang.getString('ms') : '') + "</a></td>";
     }
     else {
-        row += "<td class='test-ping align-right'>" + link + "-</a></td>";
+        row += "<td class='test-ping uk-text-right'>" + link + "-</a></td>";
     }
     
     //signal
     var val_dbm = testdata.signal_strength;
     var val_lte = testdata.lte_rsrp;
     if (val_dbm !== null) {
-        row += "<td class='test-network-signal align-right'>" + link + Math.round(val_dbm)+ (showUnits ? '&nbsp;' + Lang.getString('dBm') : '') + "</a></td>";    
+        row += "<td class='test-network-signal uk-text-right'>" + link + Math.round(val_dbm)+ (showUnits ? '&nbsp;' + Lang.getString('dBm') : '') + "</a></td>";
     }
     else if (val_lte !== null) {
-        row += "<td class='test-network-signal align-right'>" + link + Math.round(val_lte)+ (showUnits ? ' ' + Lang.getString('dBm') : '') + "</a></td>";
+        row += "<td class='test-network-signal uk-text-right'>" + link + Math.round(val_lte)+ (showUnits ? ' ' + Lang.getString('dBm') : '') + "</a></td>";
     }
     else {
-        row += "<td class='test-network-signal align-right'>" + link + "-</a></td>";
+        row += "<td class='test-network-signal uk-text-right'>" + link + "-</a></td>";
     }        
     
     

@@ -1,6 +1,8 @@
 /* Test gauge */
 /* New test design */
 
+$black: #222222;
+
 .gauge {
   width: 100%;
   max-width: 500px;
@@ -506,4 +508,13 @@ div#map_key_heatmap .map_key_caption {
 /* Verlauf: Mouse pointer for table */
 table#verlauf tr {
   cursor: pointer;
+
+  a {
+    text-decoration: none;
+    color: $black;
+  }
+
+  a:hover {
+    background: none;
+  }
 }
