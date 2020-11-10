@@ -855,7 +855,7 @@ function loadOpenTestData(openTestUUID, testUUIDForZipPopup) {
             else {
                 //reset
                 $("#verlauf-detailcontainer .testresult-qos tbody").remove();
-                $("#verlauf-detailcontainer .testresult-qos").append(qosPrototypeHTML);
+                $("#verlauf-detailcontainer .testresult-qos table").append(qosPrototypeHTML);
             }
             if (data.error.length === 0) {
                 printQoSTestData(data, "#verlauf-detailcontainer");

@@ -94,61 +94,66 @@
     <table id="verlauf-detail" class="uk-table uk-table-striped">
         <tbody></tbody>
     </table>
-    <h3>{{ Lang.quality_of_service }}</h3>
-    <table class="testresult testresult-qos uk-table uk-table-striped uk-table-small">
-        <tbody class='prototype'>
-        <tr>
-            <td class='caption' style="width: 150px"></td>
-            <!-- <td class='classification'></td> -->
-            <td class='detail' colspan="2"></td>
-        </tr>
-        <tr class="description" style='display:none'>
-            <td></td>
-            <td class='description' colspan="2"></td>
-        </tr>
-        <tr class='qos-singletest qos-prototype' style='display:none'>
-            <td class=''></td>
-            <td class='qos-classification'></td>
-            <td class='qos-description'><p></p>
-                <div class='qos-detail-div' style='display:none'>
-                    <strong class='qos-success'></strong>
-                    <p class='qos-success'></p>
-                    <strong>{{ Lang.details }}</strong>
-                    <p class='qos-detail'></p>
-                </div></td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="testresult-qos">
+        <h3>{{ Lang.quality_of_service }}</h3>
+        <table class="testresult uk-table uk-table-striped uk-table-small">
+            <tbody class='prototype'>
+            <tr>
+                <td class='caption' style="width: 150px"></td>
+                <!-- <td class='classification'></td> -->
+                <td class='detail' colspan="2"></td>
+            </tr>
+            <tr class="description" style='display:none'>
+                <td></td>
+                <td class='description' colspan="2"></td>
+            </tr>
+            <tr class='qos-singletest qos-prototype' style='display:none'>
+                <td class=''></td>
+                <td class='qos-classification'></td>
+                <td class='qos-description'><p></p>
+                    <div class='qos-detail-div' style='display:none'>
+                        <strong class='qos-success'></strong>
+                        <p class='qos-success'></p>
+                        <strong>{{ Lang.details }}</strong>
+                        <p class='qos-detail'></p>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <h3>{{ Lang.detailed_results }}</h3>
     <table id="testresult-detail" class="uk-table uk-table-striped uk-table-small">
         <tbody></tbody>
     </table>
-    <h3>{{ Lang.position }}</h3>
-    <div>
-        <div style="height: 250px;" id="tmpmap" class="test-map-container"></div>
-        <a href="Opentests" class="open-data-radius-link">{{ Lang.surrounding_tests }}</a>
+    <div class="test-map">
+        <h3>{{ Lang.position }}</h3>
+        <div>
+            <div style="height: 250px;" id="tmpmap" class="test-map-container"></div>
+            <a href="Opentests" class="open-data-radius-link">{{ Lang.surrounding_tests }}</a>
+        </div>
+        <ul uk-accordion="" class="uk-accordion ac-content">
+            <li>
+                <a class="uk-accordion-title" href="#">Details einblenden</a>
+                <div class="uk-accordion-content" aria-hidden="true">
+                    <table class="location-curve-table  uk-table-striped uk-table-small">
+                        <thead>
+                        <tr>
+                            <th>{{ Lang.time }}</th>
+                            <th>{{ Lang.position}}</th>
+                            <th>{{ Lang.accuracy }}</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </li>
+        </ul>
     </div>
-    <ul uk-accordion="" class="uk-accordion ac-content">
-        <li>
-            <a class="uk-accordion-title" href="#">Details einblenden</a>
-            <div class="uk-accordion-content" aria-hidden="true">
-                <table class="location-curve-table  uk-table-striped uk-table-small">
-                    <thead>
-                    <tr>
-                        <th>{{ Lang.time }}</th>
-                        <th>{{ Lang.position}}</th>
-                        <th>{{ Lang.accuracy }}</th>
-                    </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </li>
-    </ul>
 
     <h3>{{ Lang.speed_curve }}</h3>
     <h4>{{ Lang.download }}</h4>
-    <div style="height: 200px;" class="speed-curve-graph-download"  onclick="$('.speed-graph-table-download').closest('[data-accordion]').find('[data-control]').trigger('accordion.toggle');"></div>
+    <div style="height: 200px;" class="speed-curve-graph-download"></div>
     <ul uk-accordion="" class="uk-accordion ac-content">
         <li>
             <a class="uk-accordion-title" href="#">Details einblenden</a>
@@ -168,7 +173,7 @@
     </ul>
 
     <h4>{{ Lang.upload }}</h4>
-    <div style="height: 200px;" class="speed-curve-graph-upload"  onclick="$('.speed-graph-table-upload').closest('[data-accordion]').find('[data-control]').trigger('accordion.toggle');"></div>
+    <div style="height: 200px;" class="speed-curve-graph-upload"></div>
     <ul uk-accordion="" class="uk-accordion ac-content">
         <li>
             <a class="uk-accordion-title" href="#">Details einblenden</a>
@@ -188,7 +193,7 @@
     </ul>
 
     <h4>{{ Lang.ping }}</h4>
-    <div style="height: 100px;" class="speed-curve-graph-ping"  onclick="$('.speed-graph-table-ping').closest('[data-accordion]').find('[data-control]').trigger('accordion.toggle');"></div>
+    <div style="height: 100px;" class="speed-curve-graph-ping"></div>
     <ul uk-accordion="" class="uk-accordion ac-content">
         <li>
             <a class="uk-accordion-title" href="#">Details einblenden</a>
@@ -206,25 +211,27 @@
         </li>
     </ul>
 
-    <h4>{{ Lang.signal_strength }}</h4>
-    <div style="height: 200px;" class="signal-curve-graph" onclick="$('.signal-graph-table').closest('[data-accordion]').find('[data-control]').trigger('accordion.toggle');"></div>
-    <ul uk-accordion="" class="uk-accordion ac-content">
-        <li>
-            <a class="uk-accordion-title" href="#">Details einblenden</a>
-            <div class="uk-accordion-content" aria-hidden="true">
-                <table class="signal-curve-table uk-table-striped uk-table-small">
-                    <thead>
-                    <tr>
-                        <th>{{ Lang.time }}</th>
-                        <th>{{ Lang.signal_strength }}</th>
-                        <th>{{ Lang.connection_technology }}</th>
-                    </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </li>
-    </ul>
+    <div class="signal-curve">
+        <h4>{{ Lang.signal_strength }}</h4>
+        <div style="height: 200px;" class="signal-curve-graph"></div>
+        <ul uk-accordion="" class="uk-accordion ac-content">
+            <li>
+                <a class="uk-accordion-title" href="#">Details einblenden</a>
+                <div class="uk-accordion-content" aria-hidden="true">
+                    <table class="signal-curve-table uk-table-striped uk-table-small">
+                        <thead>
+                        <tr>
+                            <th>{{ Lang.time }}</th>
+                            <th>{{ Lang.signal_strength }}</th>
+                            <th>{{ Lang.connection_technology }}</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </li>
+        </ul>
+    </div>
 
     <h4>{{ Lang.share }}</h4>
     <div>
