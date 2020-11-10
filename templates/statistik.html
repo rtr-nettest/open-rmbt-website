@@ -22,26 +22,16 @@
         background-color: white;
     }
 
-    #statistics_failure {
-        background: #ffffff;
-        padding: .666em 2%;
-        display: none;
-    }
 
-    /* Visualization of statistics distribution, as seen with CZ.NIC NetMetr *
-    .distribution {
-        width: 100%;
-        height: 5px;
-        position: relative;
-        padding: 0;
-        border: 1px solid white
-    }*/
+
+
+
 </style>
 {% endblock %}
 
 {% block content %}
 
-<div class="uk-container">
+<div class="uk-container uk-margin-large-bottom">
     <h3>{{ Lang.recent_tests }}</h3>
     <table id="verlauf" class="uk-table uk-table-small uk-table-link uk-table-hover">
         <thead>
@@ -67,12 +57,10 @@
 </div>
 
 
-
-<div class="clear"><!-- --></div>
-    <div id="statistics_failure">
+    <div id="statistics_failure" class="uk-container">
         {{ Lang.statistics_content.failure }}
     </div>
-    <div id="statistics_container">
+    <div id="statistics_container" class="uk-container">
         <h2>{{ Lang.statistics }}</h2>
         <div id="spinner"></div>
         <div class="hinweis">
@@ -80,116 +68,112 @@
         </div>
 
         <form class="form-inline">
-            <fieldset>
-                <div class="form_line">
-                    <label for="country">{{ Lang.statistics_content.operators_from }} </label>
-                    <select class="form-control" id="country" onchange="requestBrowserData('RMBTstatistics');">
-                        <option value="null">{{ Lang.austria }}</option>
-                    </select>
-                    <select class="form-control" id="province" onchange="requestBrowserData('RMBTstatistics');">
-                        <option value="null">{{ Lang.statistics_content.all_states }}</option>
-                        <option value="1">{{ Lang.statistics_content.burgenland }}</option>
-                        <option value="2">{{ Lang.statistics_content.carinthia }}</option>
-                        <option value="3">{{ Lang.statistics_content.lower_austria }}</option>
-                        <option value="4">{{ Lang.statistics_content.upper_austria }}</option>
-                        <option value="5">{{ Lang.statistics_content.salzburg }}</option>
-                        <option value="6">{{ Lang.statistics_content.styria }}</option>
-                        <option value="7">{{ Lang.statistics_content.tyrol }}</option>
-                        <option value="8">{{ Lang.statistics_content.vorarlberg }}</option>
-                        <option value="9">{{ Lang.statistics_content.vienna }}</option>
-                    </select>
-                    <a href="https://www.netztest.at/redirect/{{ Lang.lang }}/help_result" class="btn btn-default">?</a>
-                </div>
-            </fieldset>
+            <div class="form_line">
+                <label for="country">{{ Lang.statistics_content.operators_from }} </label>
+                <select class="uk-select uk-width-auto" id="country" onchange="requestBrowserData('RMBTstatistics');">
+                    <option value="null">{{ Lang.austria }}</option>
+                </select>
+                <select class="uk-select uk-width-auto" id="province" onchange="requestBrowserData('RMBTstatistics');">
+                    <option value="null">{{ Lang.statistics_content.all_states }}</option>
+                    <option value="1">{{ Lang.statistics_content.burgenland }}</option>
+                    <option value="2">{{ Lang.statistics_content.carinthia }}</option>
+                    <option value="3">{{ Lang.statistics_content.lower_austria }}</option>
+                    <option value="4">{{ Lang.statistics_content.upper_austria }}</option>
+                    <option value="5">{{ Lang.statistics_content.salzburg }}</option>
+                    <option value="6">{{ Lang.statistics_content.styria }}</option>
+                    <option value="7">{{ Lang.statistics_content.tyrol }}</option>
+                    <option value="8">{{ Lang.statistics_content.vorarlberg }}</option>
+                    <option value="9">{{ Lang.statistics_content.vienna }}</option>
+                </select>
+                <a href="https://www.netztest.at/redirect/{{ Lang.lang }}/help_result" class="">?</a>
+            </div>
         </form>
 
 
-        <form class="form-inline">
+        <form class="uk-margin-bottom">
             <div class="statistik search_form">
-                <fieldset>
-                    <div class="form-group">
-                        <label for="statistik_type">{{ Lang.type }}</label>
-                        <select class="form-control" id="statistik_type" name="statistik_type"
-                                onchange="requestBrowserData('RMBTstatistics');">
-                            <option value="mobile">{{ Lang.mobile }}</option>
-                            <option value="wifi">{{ Lang.wifi_test }}</option>
-                            <option value="browser">{{ Lang.browser }}</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="statistik_duration">{{ Lang.time_span }}</label>
-                        <select class="form-control" id="statistik_duration" name="statistik_duration"
-                                onchange="requestBrowserData('RMBTstatistics');">
-                            <option value="1">{{ Lang.24_hours }}</option>
-                            <option value="7">{{ Lang.1_week }}</option>
-                            <option value="30" id="statistik_duration_default_world">{{ Lang.1_month }}</option>
-                            <option value="90" id="statistik_duration_default_at"
-                                    selected="selected">{{ Lang.X_months | replace("%X%","3") }}</option>
-                            <option value="180">{{ Lang.X_months | replace("%X%","6") }}</option>
-                            <option value="365">{{ Lang.1_year }}</option>
-                            <option value="730">{{ Lang.X_years | replace("%X%","2") }}</option>
-                            <option value="1095">{{ Lang.X_years | replace("%X%","3") }}</option>
-                            <option value="1460">{{ Lang.X_years | replace("%X%","4") }}</option>
-                            <option value="2920">{{ Lang.X_years | replace("%X%","8") }}</option>
-                        </select>
-                    </div>
+                <div class="uk-margin-top">
+                    <label for="statistik_type">{{ Lang.type }}</label>
+                    <select class="uk-select uk-width-auto" id="statistik_type" name="statistik_type"
+                            onchange="requestBrowserData('RMBTstatistics');">
+                        <option value="mobile">{{ Lang.mobile }}</option>
+                        <option value="wifi">{{ Lang.wifi_test }}</option>
+                        <option value="browser">{{ Lang.browser }}</option>
+                    </select>
 
 
-                    <a href="#" id="show_more_button" class="btn btn-default"
+                    <label for="statistik_duration" class="uk-margin-left">{{ Lang.time_span }}</label>
+                    <select class="uk-select uk-width-auto" id="statistik_duration" name="statistik_duration"
+                            onchange="requestBrowserData('RMBTstatistics');">
+                        <option value="1">{{ Lang.24_hours }}</option>
+                        <option value="7">{{ Lang.1_week }}</option>
+                        <option value="30" id="statistik_duration_default_world">{{ Lang.1_month }}</option>
+                        <option value="90" id="statistik_duration_default_at"
+                                selected="selected">{{ Lang.X_months | replace("%X%","3") }}
+                        </option>
+                        <option value="180">{{ Lang.X_months | replace("%X%","6") }}</option>
+                        <option value="365">{{ Lang.1_year }}</option>
+                        <option value="730">{{ Lang.X_years | replace("%X%","2") }}</option>
+                        <option value="1095">{{ Lang.X_years | replace("%X%","3") }}</option>
+                        <option value="1460">{{ Lang.X_years | replace("%X%","4") }}</option>
+                        <option value="2920">{{ Lang.X_years | replace("%X%","8") }}</option>
+                    </select>
+                    <a href="#" id="show_more_button" class="uk-margin-left"
                        data-alternate="{{ Lang.less }} &#x25b2;">{{ Lang.more }} &#x25bc;</a>
+                </div>
 
-                    <div class="additional-fields" style="display:none;">
-                        <div id="statistik_network_type_group_form_line" class="form-group">
-                            <label for="statistik_network_type_group">{{ Lang.technology }}</label>
-                            <select class="form-control" id="statistik_network_type_group"
-                                    name="statistik_network_type_group"
-                                    onchange="requestBrowserData('RMBTstatistics');">
-                                <option value="all" selected="selected">{{ Lang.all }}</option>
-                                <option value="2G">2G</option>
-                                <option value="3G">3G</option>
-                                <option value="4G">4G</option>
-                                <option value="5G">5G</option>
-                                <option value="mixed">{{ Lang.mixed }}</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
+                <div class="additional-fields uk-margin-top" style="display:none;">
+                    <div id="statistik_network_type_group_form_line" class="uk-inline">
+                        <label for="statistik_network_type_group">{{ Lang.technology }}</label>
+                        <select class="uk-select uk-width-auto" id="statistik_network_type_group"
+                                name="statistik_network_type_group"
+                                onchange="requestBrowserData('RMBTstatistics');">
+                            <option value="all" selected="selected">{{ Lang.all }}</option>
+                            <option value="2G">2G</option>
+                            <option value="3G">3G</option>
+                            <option value="4G">4G</option>
+                            <option value="5G">5G</option>
+                            <option value="mixed">{{ Lang.mixed }}</option>
+                        </select>
+                    </div>
+                    <div class="uk-inline">
 
-                            <label for="statistik_quantile">{{ Lang.quantile }}</label>
-                            <select class="form-control" id="statistik_quantile" name="statistik_quantile"
-                                    onchange="requestBrowserData('RMBTstatistics');">
-                                <option value="0.2">20%</option>
-                                <option value="0.5" selected="selected">50%</option>
-                                <option value="0.8">80%</option>
-                            </select>
-                        </div>
-                        <div id="statistik_location_accuracy_form_line" class="form-group">
-                            <label for="statistik_location_accuracy">{{ Lang.location_accuracy }}</label>
-                            <select class="form-control" id="statistik_location_accuracy"
-                                    name="statistik_location_accuracy"
-                                    onchange="requestBrowserData('RMBTstatistics');">
-                                <option value="-1">{{ Lang.any }}</option>
-                                <option value="10000">&lt; {{ Lang.X_km | replace("%X%","10") }}</option>
-                                <option value="2000" selected="selected">
-                                    &lt; {{ Lang.X_km | replace("%X%","2") }}</option>
-                                <option value="100">&lt; {{ Lang.X_m | replace("%X%","100") }}</option>
-                            </select>
-                        </div>
-
-                        <div id="statistik_enddate_form_line" class="form-group">
-                            <label for="statistik_enddate">{{ Lang.statistics_content.enddate }}</label>
-                            <input type="date" class="form-control" id="statistik_enddate" placeholder="2015-01-01"
-                                   onchange="requestBrowserData('RMBTstatistics');"/>
-                        </div>
+                        <label for="statistik_quantile">{{ Lang.quantile }}</label>
+                        <select class="uk-select uk-width-auto" id="statistik_quantile" name="statistik_quantile"
+                                onchange="requestBrowserData('RMBTstatistics');">
+                            <option value="0.2">20%</option>
+                            <option value="0.5" selected="selected">50%</option>
+                            <option value="0.8">80%</option>
+                        </select>
+                    </div>
+                    <div id="statistik_location_accuracy_form_line" class="uk-inline">
+                        <label for="statistik_location_accuracy">{{ Lang.location_accuracy }}</label>
+                        <select class="uk-select uk-width-auto" id="statistik_location_accuracy"
+                                name="statistik_location_accuracy"
+                                onchange="requestBrowserData('RMBTstatistics');">
+                            <option value="-1">{{ Lang.any }}</option>
+                            <option value="10000">&lt; {{ Lang.X_km | replace("%X%","10") }}</option>
+                            <option value="2000" selected="selected">
+                                &lt; {{ Lang.X_km | replace("%X%","2") }}
+                            </option>
+                            <option value="100">&lt; {{ Lang.X_m | replace("%X%","100") }}</option>
+                        </select>
                     </div>
 
-                </fieldset>
+                    <div id="statistik_enddate_form_line" class="uk-inline">
+                        <label for="statistik_enddate">{{ Lang.statistics_content.enddate }}</label>
+                        <input type="date" class="uk-input uk-width-auto" id="statistik_enddate" placeholder="2021-01-01"
+                               onchange="requestBrowserData('RMBTstatistics');"/>
+                    </div>
+                </div>
+
+
             </div>
         </form>
 
         {%  raw %}
         <script type="text/x-handlebars-template" id="statisticsTemplate">
-            <table id="{{ id }}" class="{{#unless onlyCaptions}}tablesorter{{/unless}}">
+            <table id="{{ id }}" class="{{#unless onlyCaptions}}tablesorter{{/unless}} uk-table uk-table-small">
                 <colgroup>
                     <col width="25%"/>
                     <col/>
@@ -202,11 +186,11 @@
                 <tr>
 
                     {{#unless onlyCaptions }}<th scope="col">{% endraw %}{{ Lang.name }}{% raw %}</th>{{/unless }}{% endraw %}
-                    <th scope="col" class="right">{{ Lang.down }}</th>
-                    <th scope="col" class="right">{{ Lang.up }}</th>
-                    <th scope="col" class="right">{{ Lang.ping }}</th>
-                    <th scope="col" class="right test-network-signal">{{ Lang.signal }}</th>
-                    <th scope="col" class="right">{{ Lang.quantity }}</th>
+                    <th scope="col" class="uk-text-right">{{ Lang.down }}</th>
+                    <th scope="col" class="uk-text-right">{{ Lang.up }}</th>
+                    <th scope="col" class="uk-text-right">{{ Lang.ping }}</th>
+                    <th scope="col" class="uk-text-right test-network-signal">{{ Lang.signal }}</th>
+                    <th scope="col" class="uk-text-right">{{ Lang.quantity }}</th>
                     {%  raw %}
                 </tr>
                 </thead>
@@ -221,7 +205,7 @@
                     {{#unless ../onlyCaptions }}
                     <td> {{#if ../../useShortNames  }}{{ shortname }}{{ else }}{{ name }}{{/if }}</td>
                     {{/unless }}
-                    <td class="align-right quantile">
+                    <td class="uk-text-right quantile">
                         <div>{{ formatNumberSignificant (divideBy quantile_down 1000) }} {% endraw %}{{ Lang.mbps }}{% raw %}
                             <div class="distribution">
                                 <div style="width:{{ multiplyBy down_ultragreen 100 }}%;background-color:#359314;height:100%;float:left"></div>
@@ -239,7 +223,7 @@
                             </div>
                         </div>
                     </td>
-                    <td class="align-right quantile">
+                    <td class="uk-text-right quantile">
                         <div>{{ formatNumberSignificant (divideBy quantile_up 1000) }} {% endraw %}{{ Lang.mbps }}{% raw %}
                             <div class="distribution">
                                 <div style="width:{{ multiplyBy up_ultragreen 100 }}%;background-color:#359314;height:100%;float:left"></div>
@@ -257,7 +241,7 @@
                             </div>
                         </div>
                     </td>
-                    <td class="align-right quantile">
+                    <td class="uk-text-right quantile">
                         <div>{{ formatNumberSignificant (divideBy quantile_ping 1000000) }} {% endraw %}{{ Lang.ms }}{% raw %}
                             <div class="distribution">
                                 <div style="width:{{ multiplyBy ping_ultragreen 100 }}%;background-color:#359314;height:100%;float:left"></div>
@@ -275,7 +259,7 @@
                             </div>
                         </div>
                     </td>
-                    <td class="align-right quantile test-network-signal">
+                    <td class="uk-text-right quantile test-network-signal">
                         {{#if  quantile_signal}}
                         <div>{{ quantile_signal }} {% endraw %}{{ Lang.dBm }}{% raw %}
                             <div class="distribution">
@@ -297,16 +281,16 @@
                         -
                         {{/if }}
                     </td>
-                    <td class="align-right"><a href="Opentests?{{ query_opendata }}">{{ formatNumber count }}</a></td>
+                    <td class="uk-text-right"><a href="Opentests?{{ query_opendata }}">{{ formatNumber count }}</a></td>
                     </tr>
                 {{/each }}
                 </tbody>
 
-                <tfoot id="statistik_provider_foot1">
+                <tfoot id="statistik_provider_foot">
                 {{#if providers }}
                 <tr>
-                    {{#unless onlyCaptions }}<th scope="col"></th>{{/unless }}
-                    <th class="align-right quantile">
+                    {{#unless onlyCaptions }}<td scope="col"></td>{{/unless }}
+                    <td class="uk-text-right quantile">
                         <div>{{ formatNumberSignificant (divideBy providers_sums.quantile_down 1000) }} {% endraw %}{{ Lang.mbps }}{% raw %}
                             <div id="sum_down" class="quantile_details">
                                 {% endraw %}{{ Lang.statistics_content.all_operators }}{% raw %} <br/>
@@ -317,8 +301,8 @@
                                 <span class="red">{{ percent providers_sums.down_red }}</span>
                             </div>
                         </div>
-                    </th>
-                    <th class="align-right quantile">
+                    </td>
+                    <td class="uk-text-right quantile">
                         <div>{{ formatNumberSignificant (divideBy providers_sums.quantile_up 1000) }} {% endraw %}{{ Lang.mbps }}{% raw %}
                             <div id="sum_up" class="quantile_details">
                                 {% endraw %}{{ Lang.statistics_content.all_operators }}{% raw %} <br/>
@@ -329,8 +313,8 @@
                                 <span class="red">{{ percent providers_sums.up_red }}</span>
                             </div>
                         </div>
-                    </th>
-                    <th class="align-right quantile">
+                    </td>
+                    <td class="uk-text-right quantile">
                         <div>{{ formatNumberSignificant (divideBy providers_sums.quantile_ping 1000000) }} {% endraw %}{{ Lang.ms }}{% raw %}
                             <div id="sum_ping" class="quantile_details">
                                 {% endraw %}{{ Lang.statistics_content.all_operators }}{% raw %}  <br/>
@@ -341,8 +325,8 @@
                                 <span class="red">{{ percent providers_sums.ping_red }}</span>
                             </div>
                         </div>
-                    </th>
-                    <th class="align-right quantile test-network-signal">
+                    </td>
+                    <td class="uk-text-right quantile test-network-signal">
                         <div>{{#if providers_sums.quantile_signal}}
                             {{ providers_sums.quantile_signal }} {% endraw %}{{ Lang.dBm }}{% raw %}
                             <div id="sum_signal" class="quantile_details">
@@ -357,12 +341,12 @@
                             -
                             {{/if }}
                         </div>
-                    </th>
-                    <th scope="col" class="align-right"><a href="Opentests?{{ providers_sums.query_opendata }}">{{ formatNumber providers_sums.count }}</a></th>
+                    </td>
+                    <td scope="col" class="uk-text-right"><a href="Opentests?{{ providers_sums.query_opendata }}">{{ formatNumber providers_sums.count }}</a></td>
                 </tr>
                 {{else}}
                 <tr>
-                    <th colspan="{{#if onlyCaptions }}5{{ else }}6{{/if }}"> {% endraw %}{{ Lang.statistics_content.no_operators }}{% raw %} </th>
+                    <td colspan="{{#if onlyCaptions }}5{{ else }}6{{/if }}"> {% endraw %}{{ Lang.statistics_content.no_operators }}{% raw %} </td>
                 </tr>
                 {{/if }}
                 </tfoot>
@@ -378,8 +362,8 @@
 
         <p>{{ Lang.statistics_content.disclaimer }}</p>
 
-        <h3>{{ Lang.devices }}</h3>
-        <table id="statistik_devices" class="tablesorter dont-stack">
+        <h3 class="uk-margin-medium-top">{{ Lang.devices }}</h3>
+        <table id="statistik_devices" class="uk-table uk-table-small uk-table-hover">
             <colgroup>
                 <col width="25%"/>
                 <col/>
@@ -390,10 +374,10 @@
             <thead>
             <tr>
                 <th scope="col">{{ Lang.name }}</th>
-                <th>{{ Lang.down }}</th>
-                <th scope="col" class="right">{{ Lang.up }}</th>
-                <th scope="col" class="right">{{ Lang.ping }}</th>
-                <th scope="col" class="right">{{ Lang.quantity }}</th>
+                <th class="uk-text-right">{{ Lang.down }}</th>
+                <th scope="col" class="uk-text-right">{{ Lang.up }}</th>
+                <th scope="col" class="uk-text-right">{{ Lang.ping }}</th>
+                <th scope="col" class="uk-text-right">{{ Lang.quantity }}</th>
             </tr>
             </thead>
             <tbody id="statistik_devices_body">

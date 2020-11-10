@@ -1083,13 +1083,13 @@ function RMBTstatistics() {
                                 $('#statistik_devices_body').append(
                                         '<tr' + ((current_device_count > break_devices_after)?' style="display:none;"' : '') + '>'+
                                         '<td>'+model+'</td>'+ //link to open-data
-                                        '<td class="align-right quantile"><div>'+quantile_down+' ' + Lang.getString('Mbps')+
+                                        '<td class="uk-text-right"><div>'+quantile_down+' ' + Lang.getString('Mbps')+
                                         '</div></td>'+
-                                        '<td class="align-right quantile"><div>'+quantile_up+' ' + Lang.getString('Mbps')+
+                                        '<td class="uk-text-right"><div>'+quantile_up+' ' + Lang.getString('Mbps')+
                                         '</div></td>'+
-                                        '<td class="align-right quantile"><div>'+quantile_ping+' ms'+
+                                        '<td class="uk-text-right"><div>'+quantile_ping+' ms'+
                                         '</div></td>'+
-                                        '<td class="align-right"><a href="Opentests?' + jQuery.param(opentestsProviderParams).replace(/\+/g,"%20") + '">'+row.count.formatNumber()+'</a></td>'+
+                                        '<td class="uk-text-right"><a href="Opentests?' + jQuery.param(opentestsProviderParams).replace(/\+/g,"%20") + '">'+row.count.formatNumber()+'</a></td>'+
                                         '</tr>'
                                     );
                                         

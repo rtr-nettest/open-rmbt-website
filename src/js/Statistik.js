@@ -27,7 +27,7 @@ $(document).ready(function() {
         setInterval(getLastOpenDataResults, 30000);
 
         //set up enddate field
-        Modernizr.load({
+        /*Modernizr.load({
             test: Modernizr.inputtypes.date,
             nope: [bootstrap_datepicker_path + 'bootstrap-datepicker.min.js',
                 bootstrap_datepicker_path + 'bootstrap-datepicker.de.min.js',
@@ -45,7 +45,7 @@ $(document).ready(function() {
                     autoclose: true
                 });
             }
-        });
+        });*/
 
         //set up "show more"-Button
         $("#show_more_button").click(function() {
@@ -133,7 +133,7 @@ function adjustTimePeriods(enddate) {
 
 function adjustTablesToWindowSize() {
     //var device_width = $(".text100").width();
-    var device_width = $(".main-article").width();
+    var device_width = $("#statistics_container").width();
     
     
     //decide which table to display as follows:
