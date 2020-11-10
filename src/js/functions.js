@@ -731,9 +731,9 @@ function RMBThistory() {
                                         '<td onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+model+'</td>' +
                                         '<td onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+network_type+'</td>'+
                                         '<td onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+time_string+'</td>' +
-                                        '<td class="align-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+speed_download+'</td>' +
-                                        '<td class="align-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+speed_upload+'</td>' +
-                                        '<td class="align-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+ping+'</td>' +
+                                        '<td class="uk-text-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+speed_download+'</td>' +
+                                        '<td class="uk-text-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+speed_upload+'</td>' +
+                                        '<td class="uk-text-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+ping+'</td>' +
                                         '</tr>'
                                   );
                                 });
