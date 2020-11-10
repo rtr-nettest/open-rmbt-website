@@ -503,3 +503,7 @@ div#map_key_heatmap .map_key_caption {
   }
 }
 
+/* Verlauf: Mouse pointer for table */
+table#verlauf tr {
+  cursor: pointer;
+}
