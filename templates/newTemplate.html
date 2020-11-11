@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>{{ title }} - {{ Lang.title }}</title>
+    <title>{{ title }} - {{ Lang.headline }}</title>
 
     <!-- Website icon -->
     <link rel="icon" type="image/png" href="/static/rtrwebsite/files/img/logos/favicon.ico">
@@ -62,9 +62,9 @@
                                  uk-drop="mode:click;offset:0;duration:100;delay-show:0;boundary: !.uk-container; boundary-align: true; pos: bottom-justify;">
                                 <div class="uk-container uk-container-large">
                                     <ul class="uk-subnav uk-list-divider">
-                                        <li><a href="/medien/startseite_medien.de.html" class="area-switch">{{ Lang.template.tk_postal }}</a></li>
-                                        <li><a href="/rtr/startseite.de.html" class="area-switch">{{ Lang.template.media }}</a></li>
-                                        <li><a href="/rtr/startseite.de.html" class="area-switch">{{ Lang.template.rtr }}</a></li>
+                                        <li><a href="https://www.rtr.at/TKP/startseite.de.html" class="area-switch">{{ Lang.template.tk_postal }}</a></li>
+                                        <li><a href="https://www.rtr.at/medien/startseite_medien.de.html" class="area-switch">{{ Lang.template.media }}</a></li>
+                                        <li><a href="https://www.rtr.at/rtr/startseite.de.html" class="area-switch">{{ Lang.template.rtr }}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -169,16 +169,17 @@
                                                         <div class="uk-navbar-dropdown-grid uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
                                                             <div class="uk-first-column">
                                                                 <ul class="uk-nav uk-navbar-dropdown-nav">
+                                                                    <li><a href="Loop">{{ Lang.loop_mode }}</a></li>
 
-                                                                    <li><a href="/TKP/wer_wir_sind/rtr/startseite.de.html">{{ Lang.certified_measurement }}</a></li>
+                                                                    <li><a href="ZertMessung">{{ Lang.certified_measurement }}</a></li>
 
                                                                     <li><a href="{{ Lang.index_content.apps_url }}">{{ Lang.index_content.apps }}</a></li>
 
-                                                                    <li><a href="/TKP/wer_wir_sind/telekommunikation_und_post/startseite.de.html">{{ Lang.opendata }}</a></li>
+                                                                    <li><a href="Opentests">{{ Lang.opendata }}</a></li>
 
-                                                                    <li><a href="/TKP/wer_wir_sind/pck/startseite.de.html">{{ Lang.options }}</a></li>
+                                                                    <li><a href="Optionen">{{ Lang.options }}</a></li>
 
-                                                                    <li><a href="/TKP/wer_wir_sind/tkk/startseite.de.html">{{ Lang.help }}</a></li>
+                                                                    <li><a href="{{ Lang.help_url }}">{{ Lang.help }}</a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -258,15 +259,17 @@
                                             <div class="uk-first-column">
                                                 <ul class="uk-nav uk-navbar-dropdown-nav">
 
-                                                    <li><a href="/TKP/wer_wir_sind/rtr/startseite.de.html">{{ Lang.certified_measurement }}</a></li>
+                                                    <li><a href="Loop">{{ Lang.loop_mode }}</a></li>
+
+                                                    <li><a href="ZertMessung">{{ Lang.certified_measurement }}</a></li>
 
                                                     <li><a href="{{ Lang.index_content.apps_url }}">{{ Lang.index_content.apps }}</a></li>
 
-                                                    <li><a href="/TKP/wer_wir_sind/telekommunikation_und_post/startseite.de.html">{{ Lang.opendata }}</a></li>
+                                                    <li><a href="Opentests">{{ Lang.opendata }}</a></li>
 
-                                                    <li><a href="/TKP/wer_wir_sind/pck/startseite.de.html">{{ Lang.options }}</a></li>
+                                                    <li><a href="Optionen">{{ Lang.options }}</a></li>
 
-                                                    <li><a href="/TKP/wer_wir_sind/tkk/startseite.de.html">{{ Lang.help }}</a></li>
+                                                    <li><a href="{{ Lang.help_url }}">{{ Lang.help }}</a></li>
 
 
                                                 </ul>
@@ -289,9 +292,9 @@
     <div class="uk-section-default uk-section uk-section-xsmall" id="breadcrumbs">
         <div class="uk-container uk-container-large">
             <ul class="uk-breadcrumb">
-                <li><a href="/">{{ Lang.headline }}</a></li>
+                <li><a href="/{{ Lang.lang }}">{{ Lang.headline }}</a></li>
                 <li class="uk-disabled">
-                    <a href="/TKP/startseite.de.html">{{ title }}</a>
+                    <a>{{ title }}</a>
                 </li>
             </ul>
         </div>
@@ -341,65 +344,65 @@
             </div>
             <div class="uk-flex-auto uk-width-1-2 uk-width-1-4@s m2 uk-hidden@l">
                 <ul class="uk-list">            <li>
-                    <a href="/rtr/footer/Kontakt.de.html">Kontakt</a>
+                    <a href="https://www.rtr.at/rtr/footer/Kontakt.de.html">Kontakt</a>
                 </li>
                     <li>
-                        <a href="/rtr/footer/Press.de.html">Press</a>
+                        <a href="https://www.rtr.at/rtr/footer/Press.de.html">Press</a>
                     </li>
                     <li>
-                        <a href="/rtr/footer/Open_Data.de.html"><p>Open Data</p></a>
+                        <a href="https://www.rtr.at/rtr/footer/Open_Data.de.html"><p>Open Data</p></a>
                     </li>
                     <li>
-                        <a href="/rtr/footer/FAQ.de.html">FAQ</a>
+                        <a href="https://www.rtr.at/rtr/footer/FAQ.de.html">FAQ</a>
                     </li>
                     <li>
-                        <a href="/rtr/footer/eRTR.de.html">eRTR</a>
+                        <a href="https://www.rtr.at/rtr/footer/eRTR.de.html">eRTR</a>
                     </li>
                 </ul>
             </div>
             <div class="uk-flex-auto uk-width-1-2 uk-width-1-4@s m3 uk-hidden@l">
                 <ul class="uk-list">            <li>
-                    <a href="/TKP/footer/Impressum.de.html">Impressum</a>
+                    <a href="https://www.rtr.at/TKP/footer/Impressum.de.html">Impressum</a>
                 </li>
                     <li>
-                        <a href="/TKP/footer/Datenschutz.de.html">Datenschutz</a>
+                        <a href="https://www.rtr.at/TKP/footer/Datenschutz.de.html">Datenschutz</a>
                     </li>
                     <li>
-                        <a href="/TKP/footer/Barrierefreiheit.de.html">Barrierefreiheit</a>
+                        <a href="https://www.rtr.at/TKP/footer/Barrierefreiheit.de.html">Barrierefreiheit</a>
                     </li>
                     <li>
-                        <a href="/TKP/footer/Sitemap.de.html">Sitemap</a>
+                        <a href="https://www.rtr.at/TKP/footer/Sitemap.de.html">Sitemap</a>
                     </li>
                 </ul>
             </div>
             <div class="uk-flex-auto uk-width-1-2 uk-width-1-4@s footer-large uk-visible@l">
                 <ul class="uk-list">            <li>
-                    <a href="/TKP/footer/Impressum.de.html">Impressum</a>
+                    <a href="https://www.rtr.at/TKP/footer/Impressum.de.html">Impressum</a>
                 </li>
                     <li>
-                        <a href="/TKP/footer/Datenschutz.de.html">Datenschutz</a>
+                        <a href="https://www.rtr.at/TKP/footer/Datenschutz.de.html">Datenschutz</a>
                     </li>
                     <li>
-                        <a href="/TKP/footer/Barrierefreiheit.de.html">Barrierefreiheit</a>
+                        <a href="https://www.rtr.at/TKP/footer/Barrierefreiheit.de.html">Barrierefreiheit</a>
                     </li>
                     <li>
-                        <a href="/TKP/footer/Sitemap.de.html">Sitemap</a>
+                        <a href="https://www.rtr.at/TKP/footer/Sitemap.de.html">Sitemap</a>
                     </li>
                 </ul>
                 <ul class="uk-list">            <li>
-                    <a href="/rtr/footer/Kontakt.de.html">Kontakt</a>
+                    <a href="https://www.rtr.at/rtr/footer/Kontakt.de.html">Kontakt</a>
                 </li>
                     <li>
-                        <a href="/rtr/footer/Press.de.html">Press</a>
+                        <a href="https://www.rtr.at/rtr/footer/Press.de.html">Press</a>
                     </li>
                     <li>
-                        <a href="/rtr/footer/Open_Data.de.html"><p>Open Data</p></a>
+                        <a href="https://www.rtr.at/rtr/footer/Open_Data.de.html"><p>Open Data</p></a>
                     </li>
                     <li>
-                        <a href="/rtr/footer/FAQ.de.html">FAQ</a>
+                        <a href="https://www.rtr.at/rtr/footer/FAQ.de.html">FAQ</a>
                     </li>
                     <li>
-                        <a href="/rtr/footer/eRTR.de.html">eRTR</a>
+                        <a href="https://www.rtr.at/rtr/footer/eRTR.de.html">eRTR</a>
                     </li>
                 </ul>
             </div>
