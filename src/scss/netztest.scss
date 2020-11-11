@@ -748,37 +748,45 @@ tr.median {
   margin-top: 8px;
 }
 
-.uk-card {
-  transition: -webkit-transform .15s ease-out;
-  transition: transform .15s ease-out;
-  transition: transform .15s ease-out,-webkit-transform .15s ease-out;
-}
 
-.uk-card:hover {
-  -webkit-transform: translateY(.4rem) scale(.98);
-  transform: translateY(.4rem) scale(.98);
-}
+/* Homepage */
+#netztest_homepage {
+  .uk-card {
+    transition: -webkit-transform .15s ease-out;
+    transition: transform .15s ease-out;
+    transition: transform .15s ease-out, -webkit-transform .15s ease-out;
+  }
 
-.uk-card-default .uk-card-media-top {
-  position: relative;
-}
-.uk-card-default .uk-icon-button {
-  width: 50px;
-  height: 50px;
-}
-.uk-card-default .uk-icon {
-  position: absolute;
-  bottom: -25px;
-  right: 20px;
-  color: #438700;
-  background: #fff;
-}
-.uk-icon-button {
-  border: 1px solid;
-  border-radius: 500px;
-  background: transparent;
-  color: #222;
-}
-.green .uk-section-default a:hover {
-  background: transparent;
+  .uk-card:hover {
+    -webkit-transform: translateY(.4rem) scale(.98);
+    transform: translateY(.4rem) scale(.98);
+  }
+
+  .uk-card-default .uk-card-media-top {
+    position: relative;
+  }
+
+  .uk-card-default .uk-icon-button {
+    width: 50px;
+    height: 50px;
+  }
+
+  .uk-card-default .uk-icon {
+    position: absolute;
+    bottom: -25px;
+    right: 20px;
+    color: #438700;
+    background: #fff;
+  }
+
+  .uk-icon-button {
+    border: 1px solid;
+    border-radius: 500px;
+    background: transparent;
+    color: #222;
+  }
+
+  .uk-card a:hover {
+    background: transparent;
+  }
 }
