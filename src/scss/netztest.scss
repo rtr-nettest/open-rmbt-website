@@ -737,3 +737,13 @@ tr.median {
 .uk-form .text-muted {
   color: $grey;
 }
+
+/* Opentests */
+#expert_filters {
+  display: none;
+}
+
+#statistic_advanced_search>div>label,
+#statistic_advanced_search #expert_filters>div>label {
+  margin-top: 8px;
+}
