@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>{{ title }}</title>
+    <title>{{ title }} - {{ Lang.title }}</title>
 
     <!-- Website icon -->
     <link rel="icon" type="image/png" href="/static/rtrwebsite/files/img/logos/favicon.ico">
@@ -16,14 +16,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/scss/app.css">
     <link rel="stylesheet" href="/scss/netztest.css">
-    <!-- Meta information --><meta name="description" content="Digitale Plattformen und Ökosysteme prägen den digitalen Raum - und werfen Wettbewerbsfragen auf, mit denen sich der Fachbereich Telekom und Post durch Monitoring von Kommunikationsplattformen und Studien beschäftigt." /><meta name="robots" content="index, follow">
+    <!-- Meta information --><meta name="description" content="{{ Lang.index_content.service_description }}" />
+    <meta name="robots" content="index, follow">
     <!-- Social media (frontend only) -->
     <meta property="og:site_name" content="RTR" />
 
-    <meta property="og:title" content="Digitale Plattformen und Gatekeeper" />
+    <meta property="og:title" content="{{ title }} - {{ Lang.headline }}" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://web-test.rtr.at/TKP/was_wir_tun/telekommunikation/weitere-regulierungsthemen/digitale_plattformen_und_gatekeeper/plattformen.de.html" /><meta property="og:description" content="Digitale Plattformen und Ökosysteme prägen den digitalen Raum - und werfen Wettbewerbsfragen auf, mit denen sich der Fachbereich Telekom und Post durch Monitoring von Kommunikationsplattformen und Studien beschäftigt." /><meta property="og:locale" content="de_DE">
 
     {% block headerscriptingBasic %}
     <script type="text/javascript" src="../{{ fingerprint['js/jquery-1.8.2.min.js'] }}"></script>
@@ -62,16 +62,15 @@
                                  uk-drop="mode:click;offset:0;duration:100;delay-show:0;boundary: !.uk-container; boundary-align: true; pos: bottom-justify;">
                                 <div class="uk-container uk-container-large">
                                     <ul class="uk-subnav uk-list-divider">
-                                        <li><a href="/medien/startseite_medien.de.html" class="area-switch">Telekommunikation
-                                            und Post</a></li>
-                                        <li><a href="/rtr/startseite.de.html" class="area-switch">Medien</a></li>
-                                        <li><a href="/rtr/startseite.de.html" class="area-switch">RTR</a></li>
+                                        <li><a href="/medien/startseite_medien.de.html" class="area-switch">{{ Lang.template.tk_postal }}</a></li>
+                                        <li><a href="/rtr/startseite.de.html" class="area-switch">{{ Lang.template.media }}</a></li>
+                                        <li><a href="/rtr/startseite.de.html" class="area-switch">{{ Lang.template.rtr }}</a></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="uk-inline">
-                            <button class="uk-button uk-button-top" type="button">DE<span
+                            <button class="uk-button uk-button-top" type="button">{{Lang.LANG}}<span
                                     class="uk-margin-small-right chevdown" uk-icon="chevron-down"></span><span
                                     class="uk-margin-small-right  chevup" uk-icon="chevron-up"></span></button>
                             <div class="uk-navbar-dropdown"
@@ -79,11 +78,11 @@
                                 <div class="uk-container uk-container-large">
                                     <ul class="uk-subnav uk-list-divider">
                                         <li>
-                                            <a href="/api/language?lang=en&redirect=/TKP/was_wir_tun/telekommunikation/weitere-regulierungsthemen/digitale_plattformen_und_gatekeeper/plattformen.en.html">
-                                                Englisch
+                                            <a href="/en">
+                                                English
                                             </a>
                                         <li>
-                                            <a href="/api/language?lang=de&redirect=/TKP/was_wir_tun/telekommunikation/weitere-regulierungsthemen/digitale_plattformen_und_gatekeeper/plattformen.de.html">
+                                            <a href="/de">
                                                 Deutsch
                                             </a>
                                         </li>
@@ -106,7 +105,7 @@
                             <div class="uk-first-column">
                                 <a href="/{{ Lang.lang }}">
                                     <picture>
-                                        <img src='/img/newTemplate/netztest_logo.svg' alt="Logo RTR" title="RTR" style="height:50px;">
+                                        <img src='/img/newTemplate/netztest_logo.svg' alt="Logo {{ Lang.title }}" title="RTR" style="height:50px;">
                                     </picture>
                                 </a>
                             </div>
@@ -144,20 +143,20 @@
                             <div class="uk-panel" id="module-menu-mobile">
                                 <ul class="uk-nav uk-nav-default uk-list uk-list-divider">
                                     <li class="">
-                                        <a href="Verlauf">Verlauf</a>
+                                        <a href="Verlauf">{{ Lang.history }}</a>
                                     </li>
                                     <li class="">
-                                        <a href="Karte">Karte</a>
+                                        <a href="Karte">{{ Lang.map }}</a>
                                     </li>
                                     <li class="">
-                                        <a href="Statistik">Statistik</a>
+                                        <a href="Statistik">{{ Lang.statistics }}</a>
                                     </li>
                                     <li class="uk-parent">
                                         <div class="uk-navbar-container uk-navbar"
                                              uk-navbar="dropbar: true; dropbar-mode: push;mode: click">
                                             <ul class="uk-navbar-nav second-level-nav">
                                                 <li class="uk-parent">
-                                                    <a href="#" aria-expanded="false">Weiteres<span
+                                                    <a href="#" aria-expanded="false">{{ Lang.further }}<span
                                                             class="icon-drop uk-icon"
                                                             uk-icon="icon: chevron-down; ratio: 1.5"><svg
                                                             width="30" height="30" viewBox="0 0 20 20"
@@ -171,15 +170,15 @@
                                                             <div class="uk-first-column">
                                                                 <ul class="uk-nav uk-navbar-dropdown-nav">
 
-                                                                    <li><a href="/TKP/wer_wir_sind/rtr/startseite.de.html">Zertifizierte Messung</a></li>
+                                                                    <li><a href="/TKP/wer_wir_sind/rtr/startseite.de.html">{{ Lang.certified_measurement }}</a></li>
 
-                                                                    <li><a href="/TKP/wer_wir_sind/rtr/startseite.de.html">Apps</a></li>
+                                                                    <li><a href="{{ Lang.index_content.apps_url }}">{{ Lang.index_content.apps }}</a></li>
 
-                                                                    <li><a href="/TKP/wer_wir_sind/telekommunikation_und_post/startseite.de.html">Open Data</a></li>
+                                                                    <li><a href="/TKP/wer_wir_sind/telekommunikation_und_post/startseite.de.html">{{ Lang.opendata }}</a></li>
 
-                                                                    <li><a href="/TKP/wer_wir_sind/pck/startseite.de.html">Optionen</a></li>
+                                                                    <li><a href="/TKP/wer_wir_sind/pck/startseite.de.html">{{ Lang.options }}</a></li>
 
-                                                                    <li><a href="/TKP/wer_wir_sind/tkk/startseite.de.html">Hilfe</a></li>
+                                                                    <li><a href="/TKP/wer_wir_sind/tkk/startseite.de.html">{{ Lang.help }}</a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -187,7 +186,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                    <li><a href="Test">Test starten</a></li>
+                                    <li><a href="Test">{{ Lang.start_test }}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -240,22 +239,18 @@
                         <div class="uk-navbar-right">
                             <ul class="uk-navbar-nav">
 
-
-
-
-
                                 <li class="">
-                                    <a href="Verlauf">Verlauf</a>
+                                    <a href="Verlauf">{{ Lang.history }}</a>
                                 </li>
                                 <li class="">
-                                    <a href="Karte">Karte</a>
+                                    <a href="Karte">{{ Lang.map }}</a>
                                 </li>
                                 <li class="">
-                                    <a href="Statistik">Statistik</a>
+                                    <a href="Statistik">{{ Lang.statistics }}</a>
                                 </li>
 
                                 <li class="uk-parent">
-                                    <a href="#" aria-expanded="false">Weiteres
+                                    <a href="#" aria-expanded="false">{{ Lang.further }}
                                         <span uk-icon="chevron-down"></span>
                                     </a>
                                     <div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left" style="left: 861.844px; top: 80px;">
@@ -263,15 +258,15 @@
                                             <div class="uk-first-column">
                                                 <ul class="uk-nav uk-navbar-dropdown-nav">
 
-                                                    <li><a href="/TKP/wer_wir_sind/rtr/startseite.de.html">Zertifizierte Messung</a></li>
+                                                    <li><a href="/TKP/wer_wir_sind/rtr/startseite.de.html">{{ Lang.certified_measurement }}</a></li>
 
-                                                    <li><a href="/TKP/wer_wir_sind/rtr/startseite.de.html">Apps</a></li>
+                                                    <li><a href="{{ Lang.index_content.apps_url }}">{{ Lang.index_content.apps }}</a></li>
 
-                                                    <li><a href="/TKP/wer_wir_sind/telekommunikation_und_post/startseite.de.html">Open Data</a></li>
+                                                    <li><a href="/TKP/wer_wir_sind/telekommunikation_und_post/startseite.de.html">{{ Lang.opendata }}</a></li>
 
-                                                    <li><a href="/TKP/wer_wir_sind/pck/startseite.de.html">Optionen</a></li>
+                                                    <li><a href="/TKP/wer_wir_sind/pck/startseite.de.html">{{ Lang.options }}</a></li>
 
-                                                    <li><a href="/TKP/wer_wir_sind/tkk/startseite.de.html">Hilfe</a></li>
+                                                    <li><a href="/TKP/wer_wir_sind/tkk/startseite.de.html">{{ Lang.help }}</a></li>
 
 
                                                 </ul>
@@ -281,7 +276,7 @@
 
                                 </li>
 
-                                <li class="nav-button"><a href="Test" class="uk-button uk-button-default">Test starten</a></li>
+                                <li class="nav-button"><a href="Test" class="uk-button uk-button-default">{{ Lang.start_test }}</a></li>
                             </ul>
                         </div>
                     </nav>
@@ -294,9 +289,9 @@
     <div class="uk-section-default uk-section uk-section-xsmall" id="breadcrumbs">
         <div class="uk-container uk-container-large">
             <ul class="uk-breadcrumb">
-                <li><a href="/">Start</a></li>
+                <li><a href="/">{{ Lang.headline }}</a></li>
                 <li class="uk-disabled">
-                    <a href="/TKP/startseite.de.html">{{ Lang.title }}</a>
+                    <a href="/TKP/startseite.de.html">{{ title }}</a>
                 </li>
             </ul>
         </div>
@@ -306,146 +301,8 @@
     <div class="uk-section-default uk-section">
         {% block content %}
 
-        <div class="uk-container">
-            <div class="uk-grid-margin uk-container-rtr uk-grid uk-grid-stack" uk-grid="">
-                <div class="uk-flex-auto uk-first-column">
-                    <!-- Page Content -->
-                    <p ><p>Der Bereich der Telekommunikation ist stark von europäischen Vorgaben geprägt: Der europäische Prozess der Liberalisierung des Telekommunikationssektors aller Mitgliedstaaten durch Beseitigung der überwiegend staatlichen Monopole nahm bereits 1987 seinen Anfang.</p><p>Der europäische Rechtsrahmen wurde in Österreich im Wesentlichen mit dem Telekommunikationsgesetz umgesetzt. Zur Regulierung und Beaufsichtigung der nationalen Telekommunikationsmärkte wurden die Telekom-Control-Kommission sowie die Rundfunk und Telekom Regulierungs-GmbH (vormals Telekom Control GmbH) geschaffen.</p><p>Auf den folgenden Seiten informieren wir Sie über die Aufgaben und Aktivitäten der Telekom-Control-Kommission sowie die Rundfunk und Telekom Regulierungs-GmbH im Bereich der Regulierung der Telekommunikationsmärkte.</p></p>
-                    <!-- Our Services -->
-                    <div class="uk-flex-auto uk-first-column">
-                        <div class="uk-grid-margin uk-grid uk-grid-stack uk-margin-large-top" uk-grid="">
-                            <div class="uk-flex-auto uk-width-1-1@m uk-first-column">
-                                <h2>Unsere Services im Bereich Telekommunikation</h2>
-                            </div>
-                        </div>
-                        <div class="uk-grid-margin-large  uk-grid uk-grid-stack" uk-grid="">
-                            <div class="uk-flex-auto uk-width-1-1@m uk-first-column">
-                                <div class="uk-margin-large">
-                                    <div class="uk-child-width-1-1@s uk-child-width-1-3@m uk-grid-small uk-grid-match uk-grid" uk-grid="">
-                                        <div class="uk-first-column uk-width-2-3@m">
-                                            <div class="el-item uk-card uk-card-secondary uk-card-body uk-margin-remove-first-child">
-                                                <h3 class="el-title uk-card-title uk-margin-top uk-margin-remove-bottom">RTR-Netztest starten</h3>
-
-                                                <div class="el-content uk-panel uk-margin-top">
-                                                    <a href="Test" class="uk-button uk-button-default uk-button-large uk-margin-small-top ">
-                                                        Mehr Info
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="el-item uk-card uk-card-secondary uk-card-body uk-margin-remove-first-child">
-                                                <h3 class="el-title uk-card-title uk-margin-top uk-margin-remove-bottom">Wiederholungsmodus</h3>
-                                                <p>Sich automatisch wiederholende Tests durchführen</p>
-                                                <div class="el-content uk-panel uk-margin-top">
-                                                    <a href="/TKP/was_wir_tun/telekommunikation/betreiber_information/Betreiberservice.de.html" class="uk-button uk-button-default uk-button-large uk-margin-small-top ">
-                                                        Mehr Info
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="el-item uk-card uk-card-secondary uk-card-body uk-margin-remove-first-child">
-                                                <h3 class="el-title uk-card-title uk-margin-top uk-margin-remove-bottom">Nummerierung</h3>
-                                                <div class="el-content uk-panel uk-margin-top">
-                                                    <a href="/TKP/was_wir_tun/telekommunikation/nummerierung/Nummerierung.de.html" class="uk-button uk-button-default uk-button-large uk-margin-small-top ">
-                                                        Mehr Info
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="el-item uk-card uk-card-secondary uk-card-body uk-margin-remove-first-child">
-                                                <h3 class="el-title uk-card-title uk-margin-top uk-margin-remove-bottom">Konsumentenservice</h3>
-                                                <div class="el-content uk-panel uk-margin-top">
-                                                    <a href="/TKP/was_wir_tun/telekommunikation/konsumenten_information/Konsumenten_Service.de.html" class="uk-button uk-button-default uk-button-large uk-margin-small-top ">
-                                                        Mehr Info
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="el-item uk-card uk-card-secondary uk-card-body uk-margin-remove-first-child">
-                                                <h3 class="el-title uk-card-title uk-margin-top uk-margin-remove-bottom">Weitere Regulierungsthemen</h3>
-                                                <div class="el-content uk-panel uk-margin-top">
-                                                    <a href="/TKP/was_wir_tun/telekommunikation/weitere_regulierungsthemen/Regulierungsthemen.de.html" class="uk-button uk-button-default uk-button-large uk-margin-small-top ">
-                                                        Mehr Info
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="el-item uk-card uk-card-secondary uk-card-body uk-margin-remove-first-child">
-                                                <h3 class="el-title uk-card-title uk-margin-top uk-margin-remove-bottom">Frequenzen</h3>
-                                                <div class="el-content uk-panel uk-margin-top">
-                                                    <a href="/TKP/was_wir_tun/telekommunikation/frequenzen/Frequenzen.de.html" class="uk-button uk-button-default uk-button-large uk-margin-small-top ">
-                                                        Mehr Info
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
         {% endblock %}
     </div>
-    <!-- Boxen -->
-
-    <!--<div class="uk-section-default uk-section card-aktuell uk-margin-large-top">
-        <div class="uk-container uk-container-large">
-            <div class="uk-grid-column-medium uk-grid-margin uk-grid  uk-grid-match" uk-grid="" uk-height-match="target: .uk-card; row: false">
-                <div class="uk-width-1-3@m uk-first-column">
-                    <div class="uk-card uk-card-default uk-margin has-link uk-animation-toggle">
-                        <a href="/TKP/aktuelles/publikationen/Schlichtungsbericht_2019.de.html">
-                            <div class="uk-card-media-top">
-                                <img src="https://web-test.rtr.at/GenticsImageStore/447/186/cropandresize/smart/0/100/200/83/TKP/aktuelles/publikationen/RTR_Schlichtungsbericht2018-ani.gif" alt="altText" title="RTR GmbH">
-                                <span class="uk-icon-button uk-icon" uk-icon="icon: handshake; ratio: 0.5"></span>
-                            </div>
-                            <div class="uk-card-body uk-margin-remove-first-child">
-                                <div class="el-meta uk-text-meta uk-margin-top">Publikationen</div>
-                                <div class="el-content uk-panel uk-margin-top">
-                                    <h3>Jahresbericht der Schlichtungsstellen 2019</h3>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="uk-width-1-3@m uk-first-column">
-                    <div class="uk-card uk-card-default uk-margin has-link uk-animation-toggle">
-                        <a href="/TKP/aktuelles/publikationen/Kommunikationsbericht_2019.de.html">
-                            <div class="uk-card-media-top">
-                                <img src="https://web-test.rtr.at/GenticsImageStore/447/186/cropandresize/smart/0/100/200/83/TKP/aktuelles/publikationen/Kommunikationsbericht_2019-epaper-ani.gif" alt="altText" title="RTR GmbH">
-                                <span class="uk-icon-button uk-icon" uk-icon="icon: handshake; ratio: 0.5"></span>
-                            </div>
-                            <div class="uk-card-body uk-margin-remove-first-child">
-                                <div class="el-meta uk-text-meta uk-margin-top">Publikationen</div>
-                                <div class="el-content uk-panel uk-margin-top">
-                                    <h3>Kommunikationsbericht 2019</h3>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="uk-width-1-3@m">            <div class="uk-card uk-card-full uk-card-large uk-card-body uk-margin-remove-first-child uk-margin uk-text-center"><div class="el-content uk-panel uk-margin-top">
-                    <h3>Gerne halten wir Sie über aktuelle Themen auf dem Laufenden</h3>
-                </div>
-
-                    <div class="uk-margin-top">
-                        <a href="/TKP/kontakt/startseite.de.html"  class="el-link uk-button uk-button-default uk-button-white">
-                            jetzt eintragen
-                        </a>
-                    </div>
-                </div>    </div>
-            </div>
-        </div>
-    </div>-->
 
 </div>
 
