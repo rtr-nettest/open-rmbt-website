@@ -520,7 +520,7 @@ div#map_key_heatmap .map_key_caption {
 
   div.infoWrap {
     width:100%;
-    height:220px !important;
+    height:250px !important;
     overflow:auto !important;
   }
 }
@@ -746,4 +746,39 @@ tr.median {
 #statistic_advanced_search>div>label,
 #statistic_advanced_search #expert_filters>div>label {
   margin-top: 8px;
+}
+
+.uk-card {
+  transition: -webkit-transform .15s ease-out;
+  transition: transform .15s ease-out;
+  transition: transform .15s ease-out,-webkit-transform .15s ease-out;
+}
+
+.uk-card:hover {
+  -webkit-transform: translateY(.4rem) scale(.98);
+  transform: translateY(.4rem) scale(.98);
+}
+
+.uk-card-default .uk-card-media-top {
+  position: relative;
+}
+.uk-card-default .uk-icon-button {
+  width: 50px;
+  height: 50px;
+}
+.uk-card-default .uk-icon {
+  position: absolute;
+  bottom: -25px;
+  right: 20px;
+  color: #438700;
+  background: #fff;
+}
+.uk-icon-button {
+  border: 1px solid;
+  border-radius: 500px;
+  background: transparent;
+  color: #222;
+}
+.green .uk-section-default a:hover {
+  background: transparent;
 }
