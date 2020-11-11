@@ -1089,7 +1089,7 @@ function RMBTstatistics() {
                                         '</div></td>'+
                                         '<td class="uk-text-right"><div>'+quantile_ping+' ms'+
                                         '</div></td>'+
-                                        '<td class="uk-text-right"><a href="Opentests?' + jQuery.param(opentestsProviderParams).replace(/\+/g,"%20") + '">'+row.count.formatNumber()+'</a></td>'+
+                                        '<td class="uk-text-right uk-table-link"><a href="Opentests?' + jQuery.param(opentestsProviderParams).replace(/\+/g,"%20") + '">'+row.count.formatNumber()+'</a></td>'+
                                         '</tr>'
                                     );
                                         

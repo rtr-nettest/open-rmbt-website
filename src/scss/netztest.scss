@@ -12,6 +12,15 @@ $grey: #545454;
   z-index: 30; //will collide with breadcrumbs otherwise
 }
 
+.uk-card.uk-card-muted {
+  border: solid 0.5px $green;
+  padding: 15px;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 9px;
+  background: $muted;
+}
+
 
 /* Test */
 .gauge {

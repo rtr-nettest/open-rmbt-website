@@ -66,7 +66,7 @@
         <div class="hinweis">
             <p>{{ Lang.statistics_content.teaser }}</p>
         </div>
-
+        <div class="uk-margin-bottom uk-container uk-card uk-card-muted">
         <form class="form-inline">
             <div class="form_line">
                 <label for="country">{{ Lang.statistics_content.operators_from }} </label>
@@ -90,7 +90,7 @@
         </form>
 
 
-        <form class="uk-margin-bottom">
+        <form>
             <div class="statistik search_form">
                 <div class="uk-margin-top">
                     <label for="statistik_type">{{ Lang.type }}</label>
@@ -170,6 +170,7 @@
 
             </div>
         </form>
+        </div>
 
         {%  raw %}
         <script type="text/x-handlebars-template" id="statisticsTemplate">
@@ -281,7 +282,7 @@
                         -
                         {{/if }}
                     </td>
-                    <td class="uk-text-right"><a href="Opentests?{{ query_opendata }}">{{ formatNumber count }}</a></td>
+                    <td class="uk-text-right uk-table-link"><a href="Opentests?{{ query_opendata }}">{{ formatNumber count }}</a></td>
                     </tr>
                 {{/each }}
                 </tbody>
@@ -342,7 +343,7 @@
                             {{/if }}
                         </div>
                     </td>
-                    <td scope="col" class="uk-text-right"><a href="Opentests?{{ providers_sums.query_opendata }}">{{ formatNumber providers_sums.count }}</a></td>
+                    <td scope="col" class="uk-text-right uk-table-link"><a href="Opentests?{{ providers_sums.query_opendata }}">{{ formatNumber providers_sums.count }}</a></td>
                 </tr>
                 {{else}}
                 <tr>
