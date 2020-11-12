@@ -21,6 +21,17 @@ $grey: #545454;
   background: $muted;
 }
 
+.uk-button-secondary {
+  background-color: white !important;
+  color: $green !important;
+
+  &:hover {
+    background-color: $green !important;
+    border-color: $green !important;
+    color: #ffffff !important;
+  }
+}
+
 
 /* Test */
 .gauge {
@@ -784,7 +795,7 @@ tr.median {
     }
 
     .uk-icon-button {
-      border-color: white;
+      //border-color: white;
     }
 
     .uk-icon {
