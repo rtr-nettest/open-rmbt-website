@@ -1,10 +1,5 @@
 [
   {
-    "source": "https://www.rtr.at/fileadmin/template/main/grep/temp/result_temp/__nettest/filelist_nettest.js",
-    "source-bak": "https://rtr2015.alladin.at/fileadmin/template/main/grep/temp/result_temp/__nettest/filelist_nettest.js",
-    "target": "conf/filelist_nettest.json"
-  },
-  {
     "source": "https://code.jquery.com/jquery-1.8.2.min.js",
     "target": "src/js/jquery-1.8.2.min.js"
   },
