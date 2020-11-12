@@ -755,6 +755,18 @@ tr.median {
     transition: -webkit-transform .15s ease-out;
     transition: transform .15s ease-out;
     transition: transform .15s ease-out, -webkit-transform .15s ease-out;
+
+    h3 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: .06px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 400;
+    }
   }
 
   .uk-card:hover {
@@ -762,31 +774,76 @@ tr.median {
     transform: translateY(.4rem) scale(.98);
   }
 
-  .uk-card-default .uk-card-media-top {
-    position: relative;
+  .uk-card.uk-card-primary {
+    background-color: $green !important;
+    color: white !important;
+
+    p, a, h3 {
+      color: white;
+    }
+
+    .uk-icon {
+      position: absolute;
+      color: white;
+      background: $green;
+
+      &hover {
+        color: white !important;
+      }
+    }
   }
 
-  .uk-card-default .uk-icon-button {
+  .uk-card.uk-card-secondary {
+    p {
+      color: $green;
+    }
+
+    h3, h3 a {
+      color: #222;
+    }
+
+    &:hover {
+      background-color: white;
+    }
+
+    a:hover {
+      color: #222;
+    }
+  }
+
+  .uk-icon-button {
     width: 50px;
     height: 50px;
   }
 
-  .uk-card-default .uk-icon {
+  .uk-icon {
     position: absolute;
-    bottom: -25px;
-    right: 20px;
-    color: #438700;
+    bottom: -25px + 40px; //undo padding
+    right: 20px - 30px; //undo padding
+    color: $green;
     background: #fff;
   }
 
   .uk-icon-button {
     border: 1px solid;
     border-radius: 500px;
-    background: transparent;
     color: #222;
   }
 
   .uk-card a:hover {
     background: transparent;
+  }
+
+  a.uk-card {
+    padding: 40px 30px;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    .uk-card-media-top {
+      position: relative;
+    }
   }
 }
