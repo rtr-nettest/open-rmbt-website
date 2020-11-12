@@ -1,17 +1,17 @@
 {% extends basetemplate %}
-{% set title = Lang.loop_mode %}
+{% set title = Lang.certified_measurement %}
 
 {% block headerscriptingExtended %}
-    <link rel="stylesheet" href="../{{ fingerprint["css/test.css"] }}">
+    <link rel="stylesheet" href="../{{ fingerprint['css/test.css'] }}">
 
-    <script src="../{{ fingerprint["js/vendor/modernizr-2.6.1.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["lib/rmbtws.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["lib/moment.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["lib/handlebars.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["lib/jquery.validate.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["lib/client-compress.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["js/ZertMessung.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["js/Loop.js"] }}"></script>
+    <script src="../{{ fingerprint['js/vendor/modernizr-2.6.1.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['lib/rmbtws.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['lib/moment.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['lib/handlebars.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['lib/jquery.validate.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['lib/client-compress.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['js/ZertMessung.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['js/Loop.js'] }}"></script>
     <script>
         repetitions = 8;
         waitingTime = 15*60;
