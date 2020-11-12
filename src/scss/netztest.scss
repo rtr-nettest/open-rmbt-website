@@ -755,6 +755,7 @@ tr.median {
     transition: -webkit-transform .15s ease-out;
     transition: transform .15s ease-out;
     transition: transform .15s ease-out, -webkit-transform .15s ease-out;
+    box-shadow: 0 5px 15px rgb(0 0 0 / 28%);
 
     h3 {
       font-size: 24px;
@@ -780,6 +781,10 @@ tr.median {
 
     p, a, h3 {
       color: white;
+    }
+
+    .uk-icon-button {
+      border-color: white;
     }
 
     .uk-icon {
@@ -825,9 +830,9 @@ tr.median {
   }
 
   .uk-icon-button {
-    border: 1px solid;
+    border: 1px solid $green;
     border-radius: 500px;
-    color: #222;
+    color: $green;
   }
 
   .uk-card a:hover {
