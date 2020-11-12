@@ -239,6 +239,7 @@ exports.strings = {
     "certified_measurement": "Zertifizierte Messung",
     "further": "Weiteres",
     "start_test": "Test starten",
+    "test": "Test",
 
     //common words
     "top" : "Seitenanfang",

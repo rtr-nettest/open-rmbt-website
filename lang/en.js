@@ -240,6 +240,7 @@ exports.strings = {
     "certified_measurement": "Certified measurement",
     "further": "Further",
     "start_test": "Start test",
+    "test": "Test",
 
     //common words
     "top" : "Top",
