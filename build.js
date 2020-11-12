@@ -5,7 +5,6 @@
  */
 
     //https://github.com/segmentio/metalsmith/blob/master/examples/project-scaffolder/build.js
-var RTR_FILES_BASEURL = "https://www.rtr.at/fileadmin/template/main/grep/temp/result_temp";
 var RTR_LINKS_BASEURL = "https://www.rtr.at";
 
 
@@ -66,19 +65,6 @@ if (target === null ){
 var metalsmith = Metalsmith(__dirname)
     //.use(generateRandomJSTestFilesIfMissing())
     .use(updateRtrDependencies ? fetchRemoteFiles(remoteFiles) : noOp)
-    .use(updateRtrDependencies ? fetchRemoteFiles(function () {
-        return transformRemoteNetztestJSONtoFetchableFiles(require('./conf/filelist_nettest.json'))
-    }) : noOp)
-    .use(updateRtrDependencies ? transformRTRUrls([
-        "./templates/parts/02_navigation_de.html",
-        "./templates/parts/02_navigation_en.html",
-//      "./templates/parts/03_navigationToContent_en.html",
-//      "./templates/parts/03_navigationToContent_de.html",
-        "./templates/parts/04_contentToFooter_de.html",
-        "./templates/parts/04_contentToFooter_en.html",
-        "./templates/parts/05_footerScripts_no_mlpushmenu_de.html",
-        "./templates/parts/05_footerScripts_no_mlpushmenu_en.html"
-    ]) : noOp)
     .use(setConfig())
     .use(duplicateFile())
     .use(fingerprint({
