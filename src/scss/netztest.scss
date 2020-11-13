@@ -393,12 +393,6 @@ div#map_key_heatmap .map_key_caption {
 }
 
 #lightboxbutton {
-  color:#FFF;
-  background:#006496;
-  padding-top:1px;
-  padding-bottom:2px;
-  box-shadow:0 2px 4px rgba(0,0,0,.5);
-  border:none;
   right: 0px;
   position: absolute;
   top: 0px;
@@ -531,10 +525,6 @@ div#map_key_heatmap .map_key_caption {
     .rowclassification	{
       float:left;
       width:16px;
-      -moz-background-size:contain;
-      -webkit-background-size:contain;
-      background-size:contain;
-      text-indent:-9000px;
     }
 
     .classification1	{

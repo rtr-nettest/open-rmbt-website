@@ -1075,7 +1075,7 @@ function switchToLargeMap() {
     
     //move, hide button during transition
     $(mapId).prependTo("body");
-    $(mapStateButtonId).prependTo("body");
+    $(mapStateButtonId).prependTo("#nettestmap");
     $(mapStateButtonId).hide();
     
     //set absolute position
