@@ -563,6 +563,12 @@ div#map_key_heatmap .map_key_caption {
     height:250px !important;
     overflow:auto !important;
   }
+
+  hr {
+    border: none;
+    border-bottom: 1px solid $grey;
+    margin-bottom: 10px;
+  }
 }
 
 /* Verlauf: Mouse pointer for table */
