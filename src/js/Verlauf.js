@@ -748,7 +748,7 @@ function loadOpenTestData(openTestUUID, testUUIDForZipPopup) {
                     requestPopup = false;
                 }
                 if (requestPopup) {
-                    show_addressPopup(testUUIDForZipPopup);
+                    //show_addressPopup(testUUIDForZipPopup); //@TODO Re-activate!
                 }
                 else {
                     console.log("ZIP input no longer supported");
