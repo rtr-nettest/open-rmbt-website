@@ -529,16 +529,12 @@ function RMBTtestresult(testUUID) {
 
                                 $.each(data.testresult[0].measurement, function(key,row){
                                         var sprite = null;
-                                        if (row.classification === 1)
-                                            sprite = 'svg-traffic-light-red';
-                                        else if (row.classification === 2)
-                                            sprite = 'svg-traffic-light-yellow';
-                                        else if (row.classification === 3)
-                                            sprite = 'svg-traffic-light-green';
-                                        else if (row.classification === 4)
-                                            sprite = 'svg-traffic-light-ultra-green';
-                                        else
+                                        if (row.classification >= 1 && row.classification <= 4) {
+                                            sprite = 'svg-traffic-light-' + row.classification;
+                                        }
+                                        else {
                                             sprite = 'svg-empty';
+                                        }
 
                                         $('#verlauf-detail').append(
                                                 '<tr>' +
