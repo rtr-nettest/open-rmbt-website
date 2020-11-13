@@ -792,11 +792,22 @@ tr.median {
 /* Homepage */
 #netztest_homepage {
   .uk-card {
+    padding: 40px 30px;
+
     transition: -webkit-transform .15s ease-out;
     transition: transform .15s ease-out;
     transition: transform .15s ease-out, -webkit-transform .15s ease-out;
     box-shadow: 0 5px 15px rgb(0 0 0 / 28%);
     border: 1px solid $green;
+
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+
+    a {
+      text-decoration: none;
+      font-weight: 700;
+    }
 
     h3 {
       font-size: 24px;
@@ -809,6 +820,8 @@ tr.median {
       line-height: 1.4;
       font-weight: 400;
     }
+
+
   }
 
   .uk-card:hover {
@@ -825,7 +838,9 @@ tr.median {
     }
 
     .uk-icon-button {
-      //border-color: white;
+      &:hover {
+        color: white !important;
+      }
     }
 
     .uk-icon {
@@ -833,13 +848,14 @@ tr.median {
       color: white;
       background: $green;
 
-      &hover {
-        color: white !important;
-      }
+
     }
   }
 
   .uk-card.uk-card-secondary {
+    background: #fff;
+    color: $black;
+
     p {
       color: $green;
     }
@@ -854,6 +870,7 @@ tr.median {
 
     a:hover {
       color: #222;
+      background: transparent;
     }
   }
 
@@ -881,7 +898,6 @@ tr.median {
   }
 
   a.uk-card {
-    padding: 40px 30px;
     text-decoration: none;
 
     &:hover {
