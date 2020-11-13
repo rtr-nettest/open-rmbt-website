@@ -767,6 +767,7 @@ tr.median {
     transition: transform .15s ease-out;
     transition: transform .15s ease-out, -webkit-transform .15s ease-out;
     box-shadow: 0 5px 15px rgb(0 0 0 / 28%);
+    border: 1px solid $green;
 
     h3 {
       font-size: 24px;
