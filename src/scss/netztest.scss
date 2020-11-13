@@ -7,6 +7,35 @@ $green: #438700;
 $muted: #f8f8f8;
 $grey: #545454;
 
+/* Fonts */
+@font-face{
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: url('/css/fonts/OpenSans-Bold-webfont.woff');
+}
+
+@font-face{
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: url('/css/fonts/OpenSans-Semibold-webfont.woff');
+}
+
+@font-face{
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/css/fonts/OpenSans-Regular-webfont.woff');
+}
+
+@font-face{
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: url('/css/fonts/OpenSans-Light-webfont.woff');
+}
+
 /* General fixes */
 .tm-header {
   z-index: 30; //will collide with breadcrumbs otherwise
