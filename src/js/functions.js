@@ -519,7 +519,7 @@ function RMBTtestresult(testUUID) {
                                    "&body=" +
                                    encodeURIComponent(data.testresult[0].share_text));
                                 $('#code-eingabe').hide();
-                                var ampel;
+
                                 var tmp = Lang.getString('MeasurementResultFrom');
                                 $("#verlauf-result-from").html(
                                     tmp + ' ' + data.testresult[0].time_string +
@@ -528,21 +528,22 @@ function RMBTtestresult(testUUID) {
 
 
                                 $.each(data.testresult[0].measurement, function(key,row){
-                                        if (row.classification == 0)
-                                                ampel = 'traffic_lights_grey.png';
-                                        else if (row.classification == 1)
-                                                ampel = 'traffic_lights_red.png';
-                                        else if (row.classification == 2)
-                                                ampel = 'traffic_lights_yellow.png';
-                                        else if (row.classification == 3)
-                                                ampel = 'traffic_lights_green.png';
-                                        else if (row.classification == 4)
-                                        		ampel = 'traffic_lights_ultra_green.png';
-                                        else ampel = 'traffic_lights_transparent.png';
+                                        var sprite = null;
+                                        if (row.classification === 1)
+                                            sprite = 'svg-traffic-light-red';
+                                        else if (row.classification === 2)
+                                            sprite = 'svg-traffic-light-yellow';
+                                        else if (row.classification === 3)
+                                            sprite = 'svg-traffic-light-green';
+                                        else if (row.classification === 4)
+                                            sprite = 'svg-traffic-light-ultra-green';
+                                        else
+                                            sprite = 'svg-empty';
+
                                         $('#verlauf-detail').append(
                                                 '<tr>' +
                                                 '<td class="uk-width-medium">'+row.title+'</td>' +
-                                                '<td><a href="https://www.netztest.at/redirect/' + selectedLanguage + '/help_result" target="_blank"><img src="../img/speedtest/'+ampel+'" /></a> ' +row.value+'</td>' +
+                                                '<td><a href="https://www.netztest.at/redirect/' + selectedLanguage + '/help_result" target="_blank"><i class="svg-icon svg16 ' + sprite + '"></i></a> ' +row.value+'</td>' +
                                                 '</tr>'
                                         );
                                 });
