@@ -1,5 +1,6 @@
 /* Test gauge */
 /* New test design */
+@import 'variables-theme.scss';
 
 $black: #222222;
 $red: #cd1236;
@@ -60,6 +61,17 @@ $grey: #545454;
     color: #ffffff !important;
   }
 }
+
+.uk-width-medium\@s {
+  width: $width-medium-width;
+}
+
+@media (max-width: $breakpoint-medium) {
+  .uk-width-medium\@s {
+    width: auto;
+  }
+}
+
 
 
 /* Test */

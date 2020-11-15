@@ -538,7 +538,7 @@ function RMBTtestresult(testUUID) {
 
                                         $('#verlauf-detail').append(
                                                 '<tr>' +
-                                                '<td class="uk-width-medium">'+row.title+'</td>' +
+                                                '<td class="uk-width-medium@s">'+row.title+'</td>' +
                                                 '<td><a href="https://www.netztest.at/redirect/' + selectedLanguage + '/help_result" target="_blank"><i class="svg-icon svg16 ' + sprite + '"></i></a> ' +row.value+'</td>' +
                                                 '</tr>'
                                         );
@@ -556,7 +556,7 @@ function RMBTtestresult(testUUID) {
                                                 $.each(data.testresultdetail, function(keydetail,detail){
                                                         $('#testresult-detail tbody').append(
                                                                 '<tr>' +
-                                                                '<td class="uk-width-medium">'+detail.title+'</td>' +
+                                                                '<td class="uk-width-medium@s">'+detail.title+'</td>' +
                                                                 '<td data-label="' + detail.title + '"><span>'+nl2br(detail.value,true)+'</span></td>' +
                                                                 '</tr>'
                                                         );
