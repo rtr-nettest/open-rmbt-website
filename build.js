@@ -74,7 +74,7 @@ var metalsmith = Metalsmith(__dirname)
         "outputStyle": "compressed"
     }))
     .use(fingerprint({
-        pattern: ['css/*.css', 'js/**/*.js',
+        pattern: ['css/*.css', 'js/**/*.js', 'scss/*.css',
                 '!template/**/*.', '!js/test/jstest.js'],
         deactivate: useWatch,
         keep: false
