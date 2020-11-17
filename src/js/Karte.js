@@ -329,7 +329,7 @@ function viewMapV3() {
     requestBrowserData('RMBTmapfilter', { open_test_uuid: displayed_open_test_uuid });
     
     
-    $("#auswahl_selector").find("input:radio[name='check_layer']").click(function () {
+    $("#control").find("input:radio[name='check_layer']").click(function () {
         setLayersV3();
     });
 
@@ -894,6 +894,8 @@ function redrawOverlay() {
 
         redrawLegend(cardtyp);
 
+        //Update UI
+        UIkit.update(element = document.body, type = 'update');
 
 }
 
@@ -1039,7 +1041,7 @@ function switchToSmallMap() {
                         
                         //now, put back, reset styling
                         $(mapId).prependTo("#speedtestmapcontainer")
-                        $(mapStateButtonId).prependTo("#speedtestmapcontainer")
+                        $(mapStateButtonId).prependTo("#speedtestmap")
                         $(mapId).removeAttr("style");
                 }});
         
@@ -1073,7 +1075,7 @@ function switchToLargeMap() {
     
     //move, hide button during transition
     $(mapId).prependTo("body");
-    $(mapStateButtonId).prependTo("body");
+    $(mapStateButtonId).prependTo("#nettestmap");
     $(mapStateButtonId).hide();
     
     //set absolute position

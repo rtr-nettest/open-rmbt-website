@@ -1,17 +1,17 @@
 {% extends basetemplate %}
-{% set title = Lang.loop_mode %}
+{% set title = Lang.certified_measurement %}
 
 {% block headerscriptingExtended %}
-    <link rel="stylesheet" href="../{{ fingerprint["css/test.css"] }}">
+    <link rel="stylesheet" href="../{{ fingerprint['css/test.css'] }}">
 
-    <script src="../{{ fingerprint["js/vendor/modernizr-2.6.1.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["lib/rmbtws.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["lib/moment.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["lib/handlebars.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["lib/jquery.validate.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["lib/client-compress.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["js/ZertMessung.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["js/Loop.js"] }}"></script>
+    <script src="../{{ fingerprint['js/vendor/modernizr-2.6.1.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['lib/rmbtws.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['lib/moment.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['lib/handlebars.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['lib/jquery.validate.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['lib/client-compress.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['js/ZertMessung.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['js/Loop.js'] }}"></script>
     <script>
         repetitions = 8;
         waitingTime = 15*60;
@@ -61,101 +61,16 @@
 {% endblock %}
 
 {% block content %}
-
-        <div class="steps">
-            <style>
-                /* https://codepen.io/tomek8899/pen/obJsu */
-                /* Second try, as RTR design is not suitable for retina displays */
-
-                .breadCrumbs {
-                    position: relative;
-                    padding-left: 0 !important;
-                }
-
-                .breadCrumbs li {
-                    position: relative;
-                    float: left;
-                    border-left: none !important;
-                    padding-left: 0 !important;
-                }
-
-                .breadCrumbs li a,
-                .breadCrumbs li p {
-                    display: block;
-                    padding: 0 10px 0 30px;
-                    line-height: 30px;
-                    font-size: 10pt;
-                    color: #545454 !important;
-                    background: white;
-                }
-
-                .breadCrumbs li:first-child a {
-                    padding: 0 10px 0 20px;
-                }
-
-                .breadCrumbs li:last-child a {
-                    padding-right: 20px;
-                }
-
-                .breadCrumbs li a:hover {
-
-                }
-
-                .breadCrumbs li.activePage p,
-                .breadCrumbs li.activePage a {
-                    background: #333;
-                }
-
-                .breadCrumbs li:after {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    right: -14.5px;
-                    display: block;
-                    width: 0;
-                    height: 0;
-                    border-top: 15px solid transparent;
-                    border-bottom: 15px solid transparent;
-                    border-left: 15px solid white;
-                    z-index: 10;
-                }
-
-                .breadCrumbs li:last-child:after {
-                    border:none;
-                }
-
-                .breadCrumbs li.visitedPage a,
-                .breadCrumbs li.visitedPage p {
-                    background-color: #bebab0;
-                }
-
-                .breadCrumbs li.visitedPage:after {
-                    border-left-color: #bebab0;
-                }
-
-                .breadCrumbs li.activePage a,
-                .breadCrumbs li.activePage p {
-                    background-color: #59b200;
-                    color: white !important;
-                }
-
-                .breadCrumbs li.activePage:after {
-                    border-left-color: #59b200;
-                }
-
-                .upload input+input {
-                    margin-top: 1em;
-                }
-
-            </style>
-            <ul class="breadCrumbs">
-                <li class="breadCrumb-intro"><a>1. {{ Lang.certified_measurement_content.info }}</a></li>
-                <li class="breadCrumb-intermediate"><a>2. {{ Lang.certified_measurement_content.data }}</a></li>
-                <li class="breadCrumb-additional"><a>3. {{ Lang.certified_measurement_content.environment }}</a></li>
-                <li class="breadCrumb-measurement"><a>4. {{ Lang.certified_measurement_content.measurement }}</a></li>
-                <li class="breadCrumb-report"><a>5. {{ Lang.certified_measurement_content.result }}</a></li>
-            </ul>
-</div>
+<div class="uk-container">
+    <div class="steps uk-container uk-margin-bottom">
+        <ul class="breadCrumbs">
+            <li class="breadCrumb-intro"><a>1. {{ Lang.certified_measurement_content.info }}</a></li>
+            <li class="breadCrumb-intermediate"><a>2. {{ Lang.certified_measurement_content.data }}</a></li>
+            <li class="breadCrumb-additional"><a>3. {{ Lang.certified_measurement_content.environment }}</a></li>
+            <li class="breadCrumb-measurement"><a>4. {{ Lang.certified_measurement_content.measurement }}</a></li>
+            <li class="breadCrumb-report"><a>5. {{ Lang.certified_measurement_content.result }}</a></li>
+        </ul>
+    </div>
 
     <h2 id="h2">{{ Lang.certified_measurement }}</h2>
     <!-- <div id="loading-placeholder">
@@ -189,55 +104,54 @@
             {{ Lang.certified_measurement_content.questions_desc }}
         </p>
         <p>
-            <button type="submit" class="btn btn-primary">{{ Lang.next }}</button>
+            <button type="submit" class="uk-button uk-button-primary">{{ Lang.next }}</button>
         </p>
     </div>
 
     <div id="intermediate-container" style="display:none">
         <h3>{{ Lang.certified_measurement_content.basic_information }}</h3>
-        <form id="intermediate-form">
-            <div class="form-group">
-                <label for="title_prepend">{{ Lang.certified_measurement_content.title_prepended }}</label>
-                <input id="title_prepend" name="title_prepend" type="text" class="form-control">
+        <form id="intermediate-form" class="uk-form uk-padding-remove">
+            <div class="uk-margin-bottom">
+                <label class="uk-form-label" for="title_prepend">{{ Lang.certified_measurement_content.title_prepended }}</label>
+                <input id="title_prepend" name="title_prepend" type="text" class="uk-input">
             </div>
-            <div class="form-group">
-                <label for="first_name">{{ Lang.certified_measurement_content.first_name }}*</label>
-                <input id="first_name" name="first_name" type="text" class="form-control"
+            <div class="uk-margin-bottom">
+                <label class="uk-form-label" for="first_name">{{ Lang.certified_measurement_content.first_name }}*</label>
+                <input id="first_name" name="first_name" type="text" class="uk-input"
                        required="required">
             </div>
-            <div class="form-group">
-                <label for="last_name">{{ Lang.certified_measurement_content.last_name }}*</label>
-                <input id="last_name" name="last_name" type="text" class="form-control" required="required">
+            <div class="uk-margin-bottom">
+                <label class="uk-form-label" for="last_name">{{ Lang.certified_measurement_content.last_name }}*</label>
+                <input id="last_name" name="last_name" type="text" class="uk-input" required="required">
             </div>
-            <div class="form-group">
-                <label for="title_append">{{ Lang.certified_measurement_content.title_appended }}</label>
-                <input id="title_append" name="title_append" type="text" class="form-control">
+            <div class="uk-margin-bottom">
+                <label class="uk-form-label" for="title_append">{{ Lang.certified_measurement_content.title_appended }}</label>
+                <input id="title_append" name="title_append" type="text" class="uk-input">
             </div>
-            <div class="form-group">
-                <label for="address">{{ Lang.certified_measurement_content.location }}*</label>
-                <textarea id="address" name="address" cols="40" rows="2" class="form-control"
+            <div class="uk-margin-bottom">
+                <label class="uk-form-label" for="address">{{ Lang.certified_measurement_content.location }}*</label>
+                <textarea id="address" name="address" cols="40" rows="2" class="uk-textarea" placeholder="{{ Lang.certified_measurement_content.location_desc }}"
                           aria-describedby="textareaHelpBlock" required="required"></textarea>
-                <span id="textareaHelpBlock" class="form-text text-muted help-block">{{ Lang.certified_measurement_content.location_desc }}</span>
             </div>
 
-            <div class="form-group">
-                <label>{{ Lang.certified_measurement_content.first_cycle_question }}*</label>
-                <div class="radio">
+            <div class="uk-margin-bottom">
+                <label class="uk-form-label">{{ Lang.certified_measurement_content.first_cycle_question }}*</label>
+                <div class="">
                     <label for="first">
-                        <input name="first" id="first" type="radio" value="y" checked="checked" />
+                        <input name="first" id="first" type="radio" value="y" checked="checked" class="uk-radio" />
                         {{ Lang.certified_measurement_content.yes_first_cycle }}</label>
                     <!-- <p id="furter-input" style="display:none">
                         In diesem Fall ersuchen wir Sie, im nächsten Schritt einige weitere Fragen zu beantworten.
                     </p> -->
                 </div>
-                <div class="radio">
+                <div class="uk-margin-bottom">
                     <label for="not_first">
-                        <input name="first" id="not_first" type="radio" value="n" />
+                        <input name="first" id="not_first" type="radio" value="n" class="uk-radio" />
                         {{ Lang.certified_measurement_content.no_subsequent_cycle }}</label>
                 </div>
                 <div class="form-group">
                     <p>
-                        <button type="submit" class="btn btn-primary"  data-next="{{ Lang.next }}" data-start="{{ Lang.certified_measurement_content.start_measurement }}" >{{ Lang.next }}</button>
+                        <button type="submit" class="uk-button uk-button-primary"  data-next="{{ Lang.next }}" data-start="{{ Lang.certified_measurement_content.start_measurement }}" >{{ Lang.next }}</button>
                     </p>
                 </div>
             </div>
@@ -256,15 +170,16 @@
                 <p>
                     {{ Lang.certified_measurement_content.additional_information_desc }}
                 </p>
-                <form id="additional-information-form">
+                <form id="additional-information-form" class="uk-form uk-padding-remove">
                     <div class="form-group" id="location_form_group">
-                        <label>{{ Lang.certified_measurement_content.location_access }}*</label>
+                        <label class="uk-form-label">{{ Lang.certified_measurement_content.location_access }}*</label>
                         <div>
                             <div class="custom-controls-stacked">
                                 <div class="checkbox">
                                     <label for="location_type_0">
                                         <input name="location_type_0" id="location_type_0"
                                                type="checkbox"
+                                               class="uk-checkbox"
                                                value="s1">
                                         {{ Lang.certified_measurement_content.location_access_residential }}</label>
                                 </div>
@@ -274,6 +189,7 @@
                                     <label for="location_type_1">
                                         <input name="location_type_1" id="location_type_1"
                                                type="checkbox"
+                                               class="uk-checkbox"
                                                value="s2">
                                         {{ Lang.certified_measurement_content.location_access_single_family }}</label>
                                 </div>
@@ -283,6 +199,7 @@
                                     <label for="location_type_2">
                                         <input name="location_type_2" id="location_type_2"
                                                type="checkbox"
+                                               class="uk-checkbox"
                                                value="s3">
                                         {{ Lang.certified_measurement_content.location_access_urban }}</label>
                                 </div>
@@ -292,6 +209,7 @@
                                     <label for="location_type_3">
                                         <input name="location_type_3" id="location_type_3"
                                                type="checkbox"
+                                               class="uk-checkbox"
                                                value="s4">
                                         {{ Lang.certified_measurement_content.location_access_rural }}</label>
                                 </div>
@@ -299,37 +217,38 @@
                                     <label for="location_type_4" class="custom-control-label row">
                                         <input name="location_type_4" id="location_type_4"
                                                type="checkbox"
+                                               class="uk-checkbox"
                                                value="s4"/>
                                         {{ Lang.certified_measurement_content.location_access_other }}:
-                                        <input type="text" name="location_type_other" class="form-control col-xs-10"
+                                        <input type="text" name="location_type_other" class="uk-input col-xs-10"
                                                placeholder="{{ Lang.certified_measurement_content.location_access_other }}" disabled="disabled"/></label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="type_text">{{ Lang.certified_measurement_content.access_type }}</label>
+                    <div class="uk-margin-top">
+                        <label for="type_text"  class="uk-form-label">{{ Lang.certified_measurement_content.access_type }}</label>
                         <textarea id="type_text" name="type_text" cols="40" rows="5"
-                                  class="form-control"
+                                  class="uk-textarea"
                                   aria-describedby="type_textHelpBlock"></textarea>
                         <span id="type_textHelpBlock" class="form-text text-muted help-block">{{ Lang.certified_measurement_content.access_type_desc }}</span>
                     </div>
-                    <div class="form-group">
-                        <label for="test-device">{{ Lang.certified_measurement_content.test_device }}</label>
+                    <div class="uk-margin-top">
+                        <label for="test-device"  class="uk-form-label">{{ Lang.certified_measurement_content.test_device }}</label>
                         <textarea id="test-device" name="test_device" cols="40" rows="3"
-                                  class="form-control" aria-describedby="test-deviceHelpBlock"></textarea>
+                                  class="uk-textarea" aria-describedby="test-deviceHelpBlock"></textarea>
                         <span id="test-deviceHelpBlock" class="form-text text-muted help-block">{{ Lang.certified_measurement_content.test_device_desc }}</span>
                     </div>
-                    <div class="form-group upload">
-                        <label for="test-pictures">{{ Lang.certified_measurement_content.photo_upload }}</label>
-                        <input id="test-pictures" type="file" multiple="multiple" name="test_pictures[]" accept="image/*"  />
-                        <span id="test-deviceHelpBlock" class="form-text text-muted help-block">{{ Lang.certified_measurement_content.photo_upload_desc }}</span>
+                    <div class="uk-margin-top upload">
+                        <label for="test-pictures"  class="uk-form-label">{{ Lang.certified_measurement_content.photo_upload }}</label>
+                        <input id="test-pictures" class="uk-display-block" type="file" multiple="multiple" name="test_pictures[]" accept="image/*"  />
+                        <span id="test-deviceUploadBlock" class="form-text text-muted help-block">{{ Lang.certified_measurement_content.photo_upload_desc }}</span>
                     </div>
 
-                    <div class="form-group">
-                        <button name="submit" type="submit" class="btn btn-primary">{{ Lang.certified_measurement_content.start_measurement }}</button>
+                    <div class="uk-margin-top">
+                        <button name="submit" type="submit" class="uk-button uk-button-primary">{{ Lang.certified_measurement_content.start_measurement }}</button>
                     </div>
-                    <hr/>
+
                 </form>
             </div>
         </div>
@@ -341,59 +260,59 @@
             Test <span id="testcount">0</span>/<span id="teststotal">8</span>
         </p>
 
-        <div class="progress">
-            <div id="testprogress" class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"
-                 style="min-width: 3em;width: 0%">
-                0%
+        <div uk-grid>
+            <div class="progress uk-width-1-1">
+                <div id="testprogress" class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="min-width: 3em;width: 0%">
+                    0%
+                </div>
+            </div>
+            <div id="infocurrent" class="uk-width-1-1">
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">{{ Lang.state }}</div>
+                    <div class="uk-width-3-4" id="infostatus">-</div>
+                </div>
+                </p>
+                <p></p>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">{{ Lang.ping }}</div>
+                    <div class="uk-width-3-4" id="infoping">
+                        <div class="loader"></div>
+                        <span>-</span></div>
+                </div>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">{{ Lang.download }}</div>
+                    <div class="uk-width-3-4" id="infodown">
+                        <div class="loader"></div>
+                        <span>-</span></div>
+                </div>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">{{ Lang.upload }}</div>
+                    <div class="uk-width-3-4" id="infoup">
+                        <div class="loader"></div>
+                        <span>-</span></div>
+                </div>
             </div>
         </div>
-        <div id="infocurrent">
-            <p>
-            <div class="row">
-                <div class="col-sm-3">{{ Lang.state }}</div>
-                <div class="col-sm-9" id="infostatus">-</div>
-            </div>
-            </p>
-            <p>
-            <div class="row inforow">
-                <div class="col-sm-3">{{ Lang.ping }}</div>
-                <div class="col-sm-9" id="infoping"><div class="loader"></div> <span>-</span></div>
-            </div>
-            <div class="row inforow">
-                <div class="col-sm-3">{{ Lang.download }}</div>
-                <div class="col-sm-9" id="infodown"><div class="loader"></div> <span>-</span></div>
-            </div>
-            <div class="row inforow">
-                <div class="col-sm-3">{{ Lang.upload }}</div>
-                <div class="col-sm-9" id="infoup"><div class="loader"></div> <span>-</span></div>
-            </div>
-            </p>
 
-        </div>
-
-        <h3>{{ Lang.certified_measurement_content.measurements }}</h3>
-        <table class="dont-stack">
-            <colgroup>
-                <col/>
-                <col/>
-                <col/>
-                <col/>
-            </colgroup>
+        <h3 class="uk-margin-top">{{ Lang.certified_measurement_content.measurements }}</h3>
+        <table id="loop_result_table" class="dont-stack uk-table uk-table-small uk-table-hover">
             <thead>
             <tr>
                 <th scope="col">{{ Lang.time }}</th>
-                <th scope="col" class="align-right">{{ Lang.down }} ({{ Lang.mbps }})</th>
-                <th scope="col" class="align-right">{{ Lang.up }} ({{ Lang.mbps }})</th>
-                <th scope="col" class="align-right">{{ Lang.ping }} ({{ Lang.ms }})</th>
+                <th scope="col" class="uk-text-right">{{ Lang.down }} ({{ Lang.mbps }})</th>
+                <th scope="col" class="uk-text-right">{{ Lang.up }} ({{ Lang.mbps }})</th>
+                <th scope="col" class="uk-text-right">{{ Lang.ping }} ({{ Lang.ms }})</th>
             </tr>
             </thead>
             <tbody id="verlauf_tbody">
 
             <tr class="median">
                 <td>Median</td>
-                <td class="align-right" id="mediandown">-</td>
-                <td class="align-right" id="medianup">-</td>
-                <td class="align-right" id="medianping">-</td>
+                <td class="uk-text-right" id="mediandown">-</td>
+                <td class="uk-text-right" id="medianup">-</td>
+                <td class="uk-text-right" id="medianping">-</td>
             </tr>
             </tbody>
         </table>
@@ -412,21 +331,21 @@
                 </tr>
                 {{ else }}
                 <tr class="test-result">
-                    <td>
+                    <td class="uk-table-link">
                         <a href="Verlauf?{{ testUUID }}" target="_blank">{{#if fullDate }}
                             {{ formatFullDate time }}
-                            {{ else }}
+                        {{ else }}
                             {{ formatDate time }}
-                            {{/if }}</a>
+                        {{/if }}</a>
                     </td>
-                    <td class="align-right">{{ formatNumberSignificant down }}</td>
-                    <td class="align-right">{{ formatNumberSignificant up }}</td>
-                    <td class="align-right">{{ formatNumberSignificant ping }}</td>
+                    <td class="uk-text-right">{{ formatNumberSignificant down }}</td>
+                    <td class="uk-text-right">{{ formatNumberSignificant up }}</td>
+                    <td class="uk-text-right">{{ formatNumberSignificant ping }}</td>
                 </tr>
                 {{/if }}
             </script>
         {%  endraw %}
-        <div>
+        <div class="uk-margin-top">
             <h3>{{ Lang.measurement_result }}</h3>
             <div id="infonotfinished">
                 <p>{{ Lang.certified_measurement_content.result_when_finished }}</p>
@@ -437,14 +356,18 @@
             </div>
             <div id="infofinished">
                 <form id="download-link-form" method="post" style="display:inline">
-                    <div class="progress" id="pdfProgressContainer">
-                        <div id="pdfProgress" class="progress-bar" role="progressbar"
-                             aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"
-                             style="min-width: 3em;width: 0%">
-                            0%
+                    <div uk-grid>
+                        <div class="progress uk-width-1-1" id="pdfProgressContainer">
+                            <div id="pdfProgress" class="progress-bar" role="progressbar"
+                                 aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"
+                                 style="min-width: 3em;width: 0%">
+                                0%
+                            </div>
                         </div>
+                        <p class="uk-width-1-1"><a id="report-link" target="_blank" download="download">{{
+                            Lang.certified_measurement_content.generating_report }}</a>
+                        </p>
                     </div>
-                    <p><a id="report-link" target="_blank" download="download">{{ Lang.certified_measurement_content.generating_report }}</a>
                 </form>
                 <p>
                     {{ Lang.certified_measurement_content.finished }}
@@ -455,21 +378,5 @@
             </div>
         </div>
     </div>
-
+</div>
 {% endblock %}
-
-{% block sideContent %}
-    <!--
-    <h5>Rechtliche Grundlagen</h5>
-    <div class="main-aside-content-block">
-        <ul>
-            <li><a href="https://www.rtr.at/de/tk/TKG2003#c33745" class="internal-link" target="_blank">§ 17b TKG</a></li>
-            <li><a href="https://www.rtr.at/de/tk/EUVerordnungen" class="internal-link" target="_blank">Art. 4 TSM-VO</a></li>
-        </ul>
-    </div><h5>Weitere Informationen</h5>
-    <div class="main-aside-content-block">
-        <ul>
-            <li><a href="https://www.rtr.at/de/tk/netztesthilfe" class="internal-link" target="_blank">FAQ</a></li>
-        </ul>
-    </div> -->
-{%  endblock %}

@@ -17,6 +17,8 @@ var cheerio = require('cheerio');
 var randomstring = require('randomstring');
 var gitDescribe = require('git-describe');
 var mkdirp = require('mkdirp');
+var sass = require('metalsmith-sass');
+var ignore = require('metalsmith-ignore');
 
 var nunjucks = require('nunjucks');
 nunjucks.configure({ autoescape: false });
@@ -64,11 +66,17 @@ if (target === null ){
 //execute
 var metalsmith = Metalsmith(__dirname)
     //.use(generateRandomJSTestFilesIfMissing())
-    .use(updateRtrDependencies ? fetchRemoteFiles(remoteFiles) : noOp)
+    //.use(updateRtrDependencies ? fetchRemoteFiles(remoteFiles) : noOp)
     .use(setConfig())
     .use(duplicateFile())
+    .use(ignore( ['scss/**/*.scss','!scss/app.scss']))
+    .use(sass({
+        "outputStyle": "compressed",
+        sourceMap: true,
+        sourceMapContents: true
+    }))
     .use(fingerprint({
-        pattern: ['css/*.css', 'js/**/*.js',
+        pattern: ['css/*.css', 'js/**/*.js', 'scss/*.css',
                 '!template/**/*.', '!js/test/jstest.js'],
         deactivate: useWatch,
         keep: false

@@ -1,6 +1,7 @@
 exports.language = "en";
 exports.strings = {
     "lang": "en",
+    "LANG": "EN",
     "title": {
         "netztest": "RTR - NetTest",
         "qostest": "QosTest"
@@ -8,6 +9,11 @@ exports.strings = {
     "headline" : {
         "netztest" : "RTR-NetTest",
         "qostest" : "www.qostest.eu"
+    },
+    "template": {
+        "RTR": "RTR",
+        "tk_postal" : "Telecommunications and Postal Division",
+        "media": "Media"
     },
     "index_content": {
         "service_description": {
@@ -232,6 +238,9 @@ exports.strings = {
     "menu" : "Menu",
     "loop_mode" : "Loop mode",
     "certified_measurement": "Certified measurement",
+    "further": "Further",
+    "start_test": "Start test",
+    "test": "Test",
 
     //common words
     "top" : "Top",
@@ -350,6 +359,8 @@ exports.strings = {
     "apply_filters" : "Apply filters",
     "reset" : "Reset",
     "histogram" : "Histogram",
+    "filter_map": "Filter map",
+    "show_details": "Show details",
 
     "coordinates": "Coordinates",
     "provider" : "Provider",

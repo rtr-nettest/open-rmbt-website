@@ -217,7 +217,7 @@ function RMBTmapfilter(options) {
                         var form_filter = '';
                         //console.log(data.settings[0].mapfilter.mapFilters);
                         $.each(data.mapfilter.mapFilters, function(key1,row1){
-                                form_filter += '<div id="filter_'+key1+'">';
+                                form_filter += '<div id="filter_'+key1+'" uk-grid>';
                                 //form_filter += '<h3>'+key1+'</h3>';
                                 $.each(row1, function(key,row){
                                      var filtername = '';
@@ -227,7 +227,7 @@ function RMBTmapfilter(options) {
                                      });
                                      form_filter += '<div class="form_line">';
                                      //form_filter += '<label for="'+filtername+'">'+row.title+'</label>';
-                                     form_filter += '<select name="'+filtername+'" id="'+filtername+'" onchange="redrawOverlay();" class="form-control input-sm">';
+                                     form_filter += '<select name="'+filtername+'" id="'+filtername+'" onchange="redrawOverlay();" class="uk-select">';
                                      $.each(row.options,function(key1,row1){
                                              form_filter += '<option value="'+eval('row1.'+filtername)+'"';
                                              //console.log(row1.title+': '+row1.default);
@@ -243,7 +243,7 @@ function RMBTmapfilter(options) {
                                      form_filter += '</select>';
                                      form_filter += '</div>';
                                 });
-                                form_filter += '</div><div class="clear"></div>';
+                                form_filter += '</div>';
                                 
                         });
                         $('#filter_selector').append(form_filter);
@@ -251,8 +251,8 @@ function RMBTmapfilter(options) {
                         
                         
                         var form_auswahl = '';
-                        form_auswahl += '<div class="form-group">';
-                        form_auswahl += '<select name="map_options" id="map_options" onchange="redrawOverlay();" class="form-control input-sm">';
+                        form_auswahl += '<div uk-grid>';
+                        form_auswahl += '<div class="uk-width-1-1"><select name="map_options" id="map_options" onchange="redrawOverlay();" class="uk-select "></div>';
                         var default_cardtyp;
                         $.each(data.mapfilter.mapTypes, function(key,row){
                              var auswahlname = '';
@@ -519,33 +519,27 @@ function RMBTtestresult(testUUID) {
                                    "&body=" +
                                    encodeURIComponent(data.testresult[0].share_text));
                                 $('#code-eingabe').hide();
-                                var ampel;
-                                $('#verlauf-detail tbody').empty();
-                                $('#verlauf-detail thead').empty();
-                                var tmp = Lang.getString('MeasurementResultFrom')
-                                $('#verlauf-detail thead').append(
-                                        '<tr>' +
-                                        '<th scope="col" colspan="3">'+tmp+' '+data.testresult[0].time_string+'<span class="align-right"><a href="https://www.netztest.at/redirect/' + selectedLanguage + '/help_result" target="_blank">&nbsp;?&nbsp;</a></span></th>' +
-                                        '</tr>'
-                                );
-                                  
+
+                                var tmp = Lang.getString('MeasurementResultFrom');
+                                $("#verlauf-result-from").html(
+                                    tmp + ' ' + data.testresult[0].time_string +
+                                    '<span class="align-right"><a href="https://www.netztest.at/redirect/' +
+                                    selectedLanguage + '/help_result" target="_blank">&nbsp;?&nbsp;</a></span>');
+
+
                                 $.each(data.testresult[0].measurement, function(key,row){
-                                        if (row.classification == 0)
-                                                ampel = 'traffic_lights_grey.png';
-                                        else if (row.classification == 1)
-                                                ampel = 'traffic_lights_red.png';
-                                        else if (row.classification == 2)
-                                                ampel = 'traffic_lights_yellow.png';
-                                        else if (row.classification == 3)
-                                                ampel = 'traffic_lights_green.png';
-                                        else if (row.classification == 4)
-                                        		ampel = 'traffic_lights_ultra_green.png';
-                                        else ampel = 'traffic_lights_transparent.png';
+                                        var sprite = null;
+                                        if (row.classification >= 1 && row.classification <= 4) {
+                                            sprite = 'svg-traffic-light-' + row.classification;
+                                        }
+                                        else {
+                                            sprite = 'svg-empty';
+                                        }
+
                                         $('#verlauf-detail').append(
                                                 '<tr>' +
-                                                '<td>'+row.title+'</td>' +
-                                                '<td><a href="https://www.netztest.at/redirect/' + selectedLanguage + '/help_result" target="_blank"><img src="../img/speedtest/'+ampel+'" /></a></td>' +
-                                                '<td>'+row.value+'</td>' +
+                                                '<td class="uk-width-medium@s">'+row.title+'</td>' +
+                                                '<td><a href="https://www.netztest.at/redirect/' + selectedLanguage + '/help_result" target="_blank"><i class="svg-icon svg16 ' + sprite + '"></i></a> ' +row.value+'</td>' +
                                                 '</tr>'
                                         );
                                 });
@@ -562,7 +556,7 @@ function RMBTtestresult(testUUID) {
                                                 $.each(data.testresultdetail, function(keydetail,detail){
                                                         $('#testresult-detail tbody').append(
                                                                 '<tr>' +
-                                                                '<td>'+detail.title+'</td>' +
+                                                                '<td class="uk-width-medium@s">'+detail.title+'</td>' +
                                                                 '<td data-label="' + detail.title + '"><span>'+nl2br(detail.value,true)+'</span></td>' +
                                                                 '</tr>'
                                                         );
@@ -734,9 +728,9 @@ function RMBThistory() {
                                         '<td onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+model+'</td>' +
                                         '<td onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+network_type+'</td>'+
                                         '<td onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+time_string+'</td>' +
-                                        '<td class="align-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+speed_download+'</td>' +
-                                        '<td class="align-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+speed_upload+'</td>' +
-                                        '<td class="align-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+ping+'</td>' +
+                                        '<td class="uk-text-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+speed_download+'</td>' +
+                                        '<td class="uk-text-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+speed_upload+'</td>' +
+                                        '<td class="uk-text-right" onclick="requestBrowserData(\'RMBTtestresult\',\''+row.test_uuid+'\');">'+ping+'</td>' +
                                         '</tr>'
                                   );
                                 });
@@ -1086,13 +1080,13 @@ function RMBTstatistics() {
                                 $('#statistik_devices_body').append(
                                         '<tr' + ((current_device_count > break_devices_after)?' style="display:none;"' : '') + '>'+
                                         '<td>'+model+'</td>'+ //link to open-data
-                                        '<td class="align-right quantile"><div>'+quantile_down+' ' + Lang.getString('Mbps')+
+                                        '<td class="uk-text-right"><div>'+quantile_down+' ' + Lang.getString('Mbps')+
                                         '</div></td>'+
-                                        '<td class="align-right quantile"><div>'+quantile_up+' ' + Lang.getString('Mbps')+
+                                        '<td class="uk-text-right"><div>'+quantile_up+' ' + Lang.getString('Mbps')+
                                         '</div></td>'+
-                                        '<td class="align-right quantile"><div>'+quantile_ping+' ms'+
+                                        '<td class="uk-text-right"><div>'+quantile_ping+' ms'+
                                         '</div></td>'+
-                                        '<td class="align-right"><a href="Opentests?' + jQuery.param(opentestsProviderParams).replace(/\+/g,"%20") + '">'+row.count.formatNumber()+'</a></td>'+
+                                        '<td class="uk-text-right uk-table-link"><a href="Opentests?' + jQuery.param(opentestsProviderParams).replace(/\+/g,"%20") + '">'+row.count.formatNumber()+'</a></td>'+
                                         '</tr>'
                                     );
                                         
@@ -1575,30 +1569,30 @@ function getOpenDataRow(testdata, showUnits) {
     row += "<td class='test-platform'>" + link +  position_marker + infoFormatter(testdata.model, testdata.platform, testdata.provider_name) + "</a></td>";
     
     //down
-    row += "<td class='test-download align-right'>" + link + (testdata.download_kbit / 1000).formatNumber(getSignificantDigits(testdata.download_kbit / 1000)) + (showUnits ? '&nbsp;' + Lang.getString('Mbps') : '') + "</a></td>";
+    row += "<td class='test-download uk-text-right'>" + link + (testdata.download_kbit / 1000).formatNumber(getSignificantDigits(testdata.download_kbit / 1000)) + (showUnits ? '&nbsp;' + Lang.getString('Mbps') : '') + "</a></td>";
     
     //up
-    row += "<td class='test-upload align-right'>" + link + (testdata.upload_kbit / 1000).formatNumber(getSignificantDigits(testdata.upload_kbit / 1000))+ (showUnits ? '&nbsp;' + Lang.getString('Mbps') : '') + "</a></td>";
+    row += "<td class='test-upload uk-text-right'>" + link + (testdata.upload_kbit / 1000).formatNumber(getSignificantDigits(testdata.upload_kbit / 1000))+ (showUnits ? '&nbsp;' + Lang.getString('Mbps') : '') + "</a></td>";
     
     //ping
     if (testdata.ping_ms >= 0 && testdata.ping_ms !== null) {
-        row += "<td class='test-ping align-right'>" + link + (testdata.ping_ms).formatNumber(getSignificantDigits(testdata.ping_ms))+ (showUnits ? '&nbsp;' + Lang.getString('ms') : '') + "</a></td>";
+        row += "<td class='test-ping uk-text-right'>" + link + (testdata.ping_ms).formatNumber(getSignificantDigits(testdata.ping_ms))+ (showUnits ? '&nbsp;' + Lang.getString('ms') : '') + "</a></td>";
     }
     else {
-        row += "<td class='test-ping align-right'>" + link + "-</a></td>";
+        row += "<td class='test-ping uk-text-right'>" + link + "-</a></td>";
     }
     
     //signal
     var val_dbm = testdata.signal_strength;
     var val_lte = testdata.lte_rsrp;
     if (val_dbm !== null) {
-        row += "<td class='test-network-signal align-right'>" + link + Math.round(val_dbm)+ (showUnits ? '&nbsp;' + Lang.getString('dBm') : '') + "</a></td>";    
+        row += "<td class='test-network-signal uk-text-right'>" + link + Math.round(val_dbm)+ (showUnits ? '&nbsp;' + Lang.getString('dBm') : '') + "</a></td>";
     }
     else if (val_lte !== null) {
-        row += "<td class='test-network-signal align-right'>" + link + Math.round(val_lte)+ (showUnits ? ' ' + Lang.getString('dBm') : '') + "</a></td>";
+        row += "<td class='test-network-signal uk-text-right'>" + link + Math.round(val_lte)+ (showUnits ? ' ' + Lang.getString('dBm') : '') + "</a></td>";
     }
     else {
-        row += "<td class='test-network-signal align-right'>" + link + "-</a></td>";
+        row += "<td class='test-network-signal uk-text-right'>" + link + "-</a></td>";
     }        
     
     

@@ -9,7 +9,12 @@ exports.strings = {
         "qostest" : "www.qostest.eu"
     },
     "lang" : "de",
-
+    "LANG": "DE",
+    "template": {
+        "RTR": "RTR",
+        "tk_postal" : "Telekommunikation und Post",
+        "media": "Medien"
+    },
     "index_content": {
         "service_description": {
             "netztest": "Der RTR-Netztest stellt Nutzerinnen und Nutzern Informationen über die aktuelle Dienstequalität (ua. Upload, Download, Ping, Signalstärke) ihres Internetzugangs zur Verfügung. Darüber hinaus sind eine Kartendarstellung sowie Statistiken der bisherigen Tests abrufbar.",
@@ -217,7 +222,7 @@ exports.strings = {
         "generate_new": "Erneut anfordern"
     },
     //Page titles and link descriptions
-    "index" : "Home",
+    "index" : "Startseite",
     "statistics" : "Statistik",
     "history" : "Verlauf",
     "map" : "Karte",
@@ -232,6 +237,9 @@ exports.strings = {
     "menu" : "Menü",
     "loop_mode" : "Wiederholungsmodus",
     "certified_measurement": "Zertifizierte Messung",
+    "further": "Weiteres",
+    "start_test": "Test starten",
+    "test": "Test",
 
     //common words
     "top" : "Seitenanfang",
@@ -350,6 +358,8 @@ exports.strings = {
     "apply_filters" : "Filter anwenden",
     "reset" : "Leeren",
     "histogram" : "Histogramm",
+    "filter_map": "Karte filtern",
+    "show_details": "Details einblenden",
 
     "coordinates": "Standort",
     "provider" : "Betreiber",

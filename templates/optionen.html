@@ -2,7 +2,7 @@
 {% set title = Lang.options %}
 
 {% block headerscriptingExtended %}
-<script type="text/javascript" src="../{{ fingerprint["js/Optionen.js"] }}"></script>
+<script type="text/javascript" src="../{{ fingerprint['js/Optionen.js'] }}"></script>
 <style>
     input.form-control {
         background-color: white;
@@ -11,13 +11,14 @@
 {% endblock %}
 
 {% block content %}
+<div class="uk-container">
 <h2 id="h2">{{ Lang.options_content.client_uuid }}</h2>
 <div id="youruuid">{{ Lang.options_content.your_uuid }}: </div>
     <div>E-Mail: <a href="mailto:{{ Lang.options_content.email_address }}?subject={{ Lang.options_content.email_subject }}">{{ Lang.options_content.email_address }}</a></div>
 
-<h2> {{ Lang.options }} </h2>
+<h2 class="uk-margin-top"> {{ Lang.options }} </h2>
 
-<form id="optionsForm" onsubmit="return saveFormValues()">
+<form id="optionsForm" onsubmit="return saveFormValues()" class="uk-form uk-margin-remove uk-padding-remove">
     <div id="ipversionForm">
         <h3>{{ Lang.options_content.ip_version }}</h3>
         <p>
@@ -25,13 +26,13 @@
         </p>
 
         <div class="radio">
-            <label><input type="radio" name="ipversion" value="default" checked="checked"/> {{ Lang.automatic }} </label>
+            <label><input type="radio" name="ipversion" value="default" checked="checked" class="uk-radio"/> {{ Lang.automatic }} </label>
         </div>
         <div class="radio">
-            <label><input type="radio" name="ipversion" value="ipv4" disabled/>{{ Lang.options_content.ipvX_only  | replace("%X%","4") }}</label>
+            <label><input type="radio" name="ipversion" value="ipv4" disabled class="uk-radio"/> {{ Lang.options_content.ipvX_only  | replace("%X%","4") }}</label>
         </div>
         <div class="radio">
-            <label><input type="radio" name="ipversion" value="ipv6" disabled/>{{ Lang.options_content.ipvX_only  | replace("%X%","6") }}</label>
+            <label><input type="radio" name="ipversion" value="ipv6" disabled class="uk-radio"/> {{ Lang.options_content.ipvX_only  | replace("%X%","6") }}</label>
         </div>
     </div>
 
@@ -41,7 +42,7 @@
 
         <div id="serverList">
             <div class="radio">
-                <label><input type="radio" name="testserver" value="default"
+                <label><input type="radio" name="testserver" value="default" class="uk-radio"
                               checked="checked"/> {{ Lang.default_server }}</label>
             </div>
         </div>
@@ -54,19 +55,19 @@
         <div class="form-group">
             <label class="col-sm-4 control-label" for="threads_dl">{{ Lang.download }}</label>
             <div class="col-md-7 col-sm-8">
-                <input class="form-control" type="number" id="threads_dl" placeholder="default" />
+                <input class="uk-input" type="number" id="threads_dl" placeholder="default"  />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-4 control-label" for="threads_ul">{{ Lang.upload }}</label>
             <div class="col-md-7 col-sm-8">
-                <input class="form-control" type="number" id="threads_ul" placeholder="default" />
+                <input class="uk-input" type="number" id="threads_ul" placeholder="default" />
             </div>
         </div>
     </div>
 
     <div>
-        <input type="submit" class="btn submit" value="{{ Lang.save }}"/>
+        <input type="submit" class="uk-button uk-button-primary uk-button-small" value="{{ Lang.save }}"/>
         <p id="saveNotification" style="display:none">{{ Lang.options_content.config_saved }}</p>
     </div>
 </form>
@@ -74,32 +75,7 @@
 
 {{ Lang.options_content.options_apps_text }}
 
-<!-- <div id="yourzip"><label for="RMBTzipID">Your postal code entered is: </label><input type="text" name="RMBTzip" id="RMBTzipID" value="" onchange="resetzip(this.value);" /><span class='error'></span></div> -->
-
-{% if target == "netztest" %}
-<!--
-<h3>{{ Lang.options_content.preferred_test_type }}</h3>
-<form id="preferredTestForm">
-    <ul>
-        <li>
-            <label><input type="radio" name="preferredTest" value="websocket" /> {{ Lang.websocket }}</label>
-        </li>
-        <li>
-            <label><input type="radio" name="preferredTest" value="Java" /> {{ Lang.java_applet }}</label>
-            <ul class="submenu">
-                <li>
-                    <div id="yourndt"><input type="checkbox" name="RMBTndt" id="RMBTndtID" onclick="resetndt();" /><label for="RMBTndtID">{{ Lang.options_content.run_ndt }}</label></div>
-                </li>
-                <li>
-                    <label><input type="checkbox" name="qos" /> {{ Lang.quality_of_service }}</label>
-                </li>
-            </ul>
-        </li>
-    </ul>
-</form>
-    -->
-{% endif %}
-
+</div>
 
 
 

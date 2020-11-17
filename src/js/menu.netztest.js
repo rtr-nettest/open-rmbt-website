@@ -26,17 +26,11 @@ $(document).ready(function() {
  * (window.mlPushMenu) - https://github.com/codrops/MultiLevelPushMenu/blob/master/js/mlpushmenu.js
  */
 function hideMenu() {
-    $("div#mp-pusher").css("transform","none");
-    $("div#mp-pusher>nav#mp-menu").hide();
-    $("div.menu-trigger").hide();
-    $("div#mp-pusher>div.scroller").css("width","100%");
-    $("div.wrapper").css("margin-left","5%");
-    $("div.wrapper").css("margin-right","5%");
-    $("div.wrapper").css("width","90%");
-    $("div.header-container").hide();
-    $("div.banner-container").hide();
-    $("h1.main-article-header").hide();
-    $(".footer-container").hide();
+    $(".tm-toolbar").remove();
+    $(".tm-header").remove();
+    $(".tm-header-mobile").remove();
+    $("#footer").remove();
+    $("#breadcrumbs").remove();
 }
 
 /**

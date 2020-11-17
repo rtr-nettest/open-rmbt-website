@@ -2,82 +2,42 @@
 {% set title = Lang.loop_mode %}
 
 {% block headerscriptingExtended %}
-    <link rel="stylesheet" href="../{{ fingerprint["css/test.css"] }}">
-
-    <script src="../{{ fingerprint["js/vendor/modernizr-2.6.1.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["lib/rmbtws.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["lib/moment.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["lib/handlebars.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["js/Loop.js"] }}"></script>
+    <script src="../{{ fingerprint['js/vendor/modernizr-2.6.1.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['lib/rmbtws.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['lib/moment.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['lib/handlebars.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['js/Loop.js'] }}"></script>
 
     <style>
-        input.form-control {
-            background-color: white;
-        }
 
-        .loader {
-            border: 2px solid #c3c3c3;
-            border-top: 2px solid #59b200;
-            border-radius: 50%;
-            width: 15px;
-            height: 15px;
-            animation: loader-spin 2s linear infinite;
-            float: left;
-            margin-right: 10px;
-            margin-top: 3px;
-            display: none;
-        }
 
-        @keyframes loader-spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .progress-bar.inactive {
-            background-color: #545454;
-        }
-
-        tr.median {
-            font-weight: bold;
-        }
-
-        #loop-mode, #loop-mode-form-container, #infofinished {
-            display: none;
-        }
     </style>
 
 {% endblock %}
 
 {% block content %}
+<div class="uk-container">
     <h2 id="h2">{{ Lang.loop_mode }}</h2>
     <div id="loading-placeholder">
         <h2>Test framework is loading...</h2>
     </div>
 
     <div id="loop-mode-form-container" >
-        <form id="loop-mode-form" class="form-horizontal">
-            <div class="form-group">
-                <label class="col-sm-3 control-label">{{ Lang.loop_mode_content.tests }}</label>
-                <div class="col-sm-8">
-                    <input id="loop-mode-repetitions" type="number" class="form-control" min="1" max="500" value="8"/>
-                    <span class="help-block">{{ Lang.loop_mode_content.tests_sum }}</span>
+        <form id="loop-mode-form" class="uk-form">
+            <div class="">
+                <label class="uk-form-label" for="loop-mode-repetitions">{{ Lang.loop_mode_content.tests_sum }}</label>
+                <div class="">
+                    <input id="loop-mode-repetitions" type="number" class="uk-input uk-width-1-3@s" min="1" max="500" value="8"/>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">{{ Lang.loop_mode_content.waiting_time }}</label>
-                <div class="col-sm-8">
-                    <input id="loop-mode-waiting-time" type="number" class="form-control" min="10" max="1440" value="15"/>
-                    <span class="help-block">{{ Lang.loop_mode_content.waiting_time_desc }}</span>
+            <div class="uk-margin-top">
+                <label class="uk-form-label">{{ Lang.loop_mode_content.waiting_time_desc }}</label>
+                <div class="">
+                    <input id="loop-mode-waiting-time" type="number" class="uk-input uk-width-1-3@s" min="10" max="1440" value="15"/>
                 </div>
             </div>
-            <div class="form-group ">
-                <div class="col-sm-7 col-sm-offset-3">
-                    <button type="submit" class="btn btn-primary">{{ Lang.loop_mode_content.start }}</button>
-                </div>
+            <div>
+                <button type="submit" class="uk-button uk-button-primary uk-width-1-3@s">{{ Lang.loop_mode_content.start }}</button>
             </div>
 
         </form>
@@ -88,79 +48,76 @@
         <p>
             Test <span id="testcount">0</span>/<span id="teststotal">0</span>
         </p>
-
-        <div class="progress">
-            <div id="testprogress" class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"
-                 style="min-width: 3em;width: 0%">
-                0%
+        <div uk-grid>
+            <div class="progress uk-width-1-1">
+                <div id="testprogress" class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="min-width: 3em;width: 0%">
+                    0%
+                </div>
+            </div>
+            <div id="infocurrent" class="uk-width-1-1">
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">{{ Lang.state }}</div>
+                    <div class="uk-width-3-4" id="infostatus">-</div>
+                </div>
+                </p>
+                <p></p>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">{{ Lang.ping }}</div>
+                    <div class="uk-width-3-4" id="infoping">
+                        <div class="loader"></div>
+                        <span>-</span></div>
+                </div>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">{{ Lang.download }}</div>
+                    <div class="uk-width-3-4" id="infodown">
+                        <div class="loader"></div>
+                        <span>-</span></div>
+                </div>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">{{ Lang.upload }}</div>
+                    <div class="uk-width-3-4" id="infoup">
+                        <div class="loader"></div>
+                        <span>-</span></div>
+                </div>
+                <p></p>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">{{ Lang.coordinates }}</div>
+                    <div class="uk-width-3-4" id="infogeo">-</div>
+                </div>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">{{ Lang.test_server }}</div>
+                    <div class="uk-width-3-4" id="infoserver">-</div>
+                </div>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">{{ Lang.ip }}</div>
+                    <div class="uk-width-3-4" id="infoip">-</div>
+                </div>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">{{ Lang.operator }}</div>
+                    <div class="uk-width-3-4" id="infoprovider">-</div>
+                </div>
             </div>
         </div>
-        <div id="infocurrent">
-            <p>
-            <div class="row">
-                <div class="col-sm-3">{{ Lang.state }}</div>
-                <div class="col-sm-9" id="infostatus">-</div>
-            </div>
-            </p>
-            <p>
-            <div class="row inforow">
-                <div class="col-sm-3">{{ Lang.ping }}</div>
-                <div class="col-sm-9" id="infoping"><div class="loader"></div> <span>-</span></div>
-            </div>
-            <div class="row inforow">
-                <div class="col-sm-3">{{ Lang.download }}</div>
-                <div class="col-sm-9" id="infodown"><div class="loader"></div> <span>-</span></div>
-            </div>
-            <div class="row inforow">
-                <div class="col-sm-3">{{ Lang.upload }}</div>
-                <div class="col-sm-9" id="infoup"><div class="loader"></div> <span>-</span></div>
-            </div>
-            </p>
-            <p>
-            <div class="row">
-                <div class="col-sm-3">{{ Lang.coordinates }}</div>
-                <div class="col-sm-9" id="infogeo">-</div>
-            </div>
-            <div class="row">
-                <div class="col-sm-3">{{ Lang.test_server }}</div>
-                <div class="col-sm-9" id="infoserver">-</div>
-            </div>
-            <div class="row">
-                <div class="col-sm-3">{{ Lang.ip }}</div>
-                <div class="col-sm-9" id="infoip">-</div>
-            </div>
-            <div class="row">
-                <div class="col-sm-3">{{ Lang.operator }}</div>
-                <div class="col-sm-9" id="infoprovider">-</div>
-            </div>
-            </p>
 
-
-        </div>
-
-        <h3>{{ Lang.loop_mode_content.measurements }}</h3>
-        <table class="dont-stack">
-            <colgroup>
-                <col/>
-                <col/>
-                <col/>
-                <col/>
-            </colgroup>
+        <h3 class="uk-margin-top">{{ Lang.loop_mode_content.measurements }}</h3>
+        <table id="loop_result_table" class="dont-stack uk-table uk-table-small uk-table-hover">
             <thead>
             <tr>
                 <th scope="col">{{ Lang.time }}</th>
-                <th scope="col" class="align-right">{{ Lang.down }} ({{ Lang.mbps }})</th>
-                <th scope="col" class="align-right">{{ Lang.up }} ({{ Lang.mbps }})</th>
-                <th scope="col" class="align-right">{{ Lang.ping }} ({{ Lang.ms }})</th>
+                <th scope="col" class="uk-text-right">{{ Lang.down }} ({{ Lang.mbps }})</th>
+                <th scope="col" class="uk-text-right">{{ Lang.up }} ({{ Lang.mbps }})</th>
+                <th scope="col" class="uk-text-right">{{ Lang.ping }} ({{ Lang.ms }})</th>
             </tr>
             </thead>
             <tbody id="verlauf_tbody">
 
             <tr class="median">
                 <td>Median</td>
-                <td class="align-right" id="mediandown">-</td>
-                <td class="align-right" id="medianup">-</td>
-                <td class="align-right" id="medianping">-</td>
+                <td class="uk-text-right" id="mediandown">-</td>
+                <td class="uk-text-right" id="medianup">-</td>
+                <td class="uk-text-right" id="medianping">-</td>
             </tr>
             </tbody>
         </table>
@@ -179,16 +136,16 @@
                 </tr>
                 {{ else }}
                 <tr class="test-result">
-                    <td>
+                    <td class="uk-table-link">
                         <a href="Verlauf?{{ testUUID }}" target="_blank">{{#if fullDate }}
                             {{ formatFullDate time }}
                             {{ else }}
                             {{ formatDate time }}
                             {{/if }}</a>
                     </td>
-                    <td class="align-right">{{ formatNumberSignificant down }}</td>
-                    <td class="align-right">{{ formatNumberSignificant up }}</td>
-                    <td class="align-right">{{ formatNumberSignificant ping }}</td>
+                    <td class="uk-text-right">{{ formatNumberSignificant down }}</td>
+                    <td class="uk-text-right">{{ formatNumberSignificant up }}</td>
+                    <td class="uk-text-right">{{ formatNumberSignificant ping }}</td>
                 </tr>
                 {{/if }}
             </script>
@@ -206,4 +163,5 @@
             </p>
         </div>
     </div>
+</div>
 {% endblock %}

@@ -748,7 +748,7 @@ function loadOpenTestData(openTestUUID, testUUIDForZipPopup) {
                     requestPopup = false;
                 }
                 if (requestPopup) {
-                    show_addressPopup(testUUIDForZipPopup);
+                    //show_addressPopup(testUUIDForZipPopup); //@TODO Re-activate!
                 }
                 else {
                     console.log("ZIP input no longer supported");
@@ -855,7 +855,7 @@ function loadOpenTestData(openTestUUID, testUUIDForZipPopup) {
             else {
                 //reset
                 $("#verlauf-detailcontainer .testresult-qos tbody").remove();
-                $("#verlauf-detailcontainer .testresult-qos").append(qosPrototypeHTML);
+                $("#verlauf-detailcontainer .testresult-qos table").append(qosPrototypeHTML);
             }
             if (data.error.length === 0) {
                 printQoSTestData(data, "#verlauf-detailcontainer");

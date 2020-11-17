@@ -1,155 +1,442 @@
-<!DOCTYPE html>
-<!--[if lt IE 7 ]><html class="no-js ie6 oldie"><![endif]-->
-<!--[if IE 7 ]><html class="no-js ie7 oldie"><![endif]-->
-<!--[if IE 8 ]><html class="no-js ie8 oldie"><![endif]-->
-<!--[if IE 9 ]><html class="no-js ie9"><![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<!doctype html>
+<html lang="{{ Lang.lang }}">
 <head>
+    <!-- Basic page info -->
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <!-- base href="https://develop.netztest.at/de" -->
+    <title>{{ title }} | {{ Lang.headline }}</title>
 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="generator" content="NodeJS">
-    <meta name="charset" content="utf-8">
-    <meta name="apple-mobile-web-app-capable" content="no">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="keywords" content="RTR,Rundfunk,Netztest,Geschwindigkeit,Internetgeschwindigkeit">
+    <!-- Website icon -->
+    <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png"/>
 
-    <meta name="copyright" content="RTR-GmbH">
+    <!-- CSS includes -->
+    <link rel="stylesheet" href="../{{ fingerprint['scss/app.css'] }}">
+    <!-- <link rel="stylesheet" href="/scss/netztest.css"> -->
+    <!-- Meta information --><meta name="description" content="{{ Lang.index_content.service_description }}" />
+    <meta name="robots" content="index, follow">
+    <!-- Social media (frontend only) -->
+    <meta property="og:site_name" content="RTR" />
 
-    <meta name="description" content="">
+    <meta property="og:title" content="{{ title }} - {{ Lang.headline }}" />
 
-    {% block viewport %}
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% endblock %}
+    <meta property="og:type" content="website" />
 
     {% block headerscriptingBasic %}
-
-    <link rel="stylesheet" type="text/css" href="../{{ fingerprint["css/bootstrap.css"] }}" media="screen">
-      
-    <!-- link rel="stylesheet" type="text/css" href="../{{ fingerprint["css/rtr-screen.css"] }}" media="screen" / -->
-    <!-- link rel="stylesheet" type="text/css" href="../{{ fingerprint["css/rtr-print.css"] }}" media="print" / -->
-
-    <script type="text/javascript" src="../{{ fingerprint["js/jquery-1.8.2.min.js"] }}"></script>
-    <!-- script type="text/javascript" src="../{{ fingerprint["js/jquery-1.9.1.js"] }}"></script -->
-    
-    <script src="/fileadmin/template/rtr/js/mlpushmenu.js?1431519457" type="text/javascript"></script>
-    <script type="text/javascript" src="../{{ fingerprint["js/menu.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["lib/jquery_ui/jquery-ui.min.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["js/jquery.history.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["js/javaconf.js"] }}"></script>
-    <script type="text/javascript" src="../{{ fingerprint["js/functions.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['js/jquery-1.8.2.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['js/menu.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['lib/jquery_ui/jquery-ui.min.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['js/jquery.history.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['js/javaconf.js'] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['js/functions.js'] }}"></script>
+    <script src="../{{ fingerprint['lib/handlebars.min.js'] }}" type="text/javascript"></script>
 
     <script type="text/javascript" src="Lang.js"></script>
-    <script type="text/javascript" src="../{{ fingerprint["js/popupform.js"] }}"></script>
+    <script type="text/javascript" src="../{{ fingerprint['js/popupform.js'] }}"></script>
 
-
-    <link rel="stylesheet" type="text/css" href="../{{ fingerprint["css/style.css"] }}" />
-    <link rel='stylesheet' type="text/css" href="../{{ fingerprint["css/senderkataster.css"] }}" />
-
-    <link rel="stylesheet" type="text/css" href="../{{ fingerprint["lib/jquery_ui/jquery-ui.min.css"] }}" media="screen" />
-
-    <link rel="stylesheet" type="text/css" href="../{{ fingerprint["css/rtr-mobile.css"] }}" media="screen" />
-    
-    
-    <link rel="stylesheet" type="text/css" href="/fileadmin/template/rtr/css/normalize.min.css?1431519456" media="all">
-    <link rel="stylesheet" type="text/css" href="/fileadmin/template/rtr/css/main.css?1434116672" media="all">
-
-
-    <script src="/fileadmin/template/rtr/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js?1431519457" type="text/javascript"></script>
+    {% endblock %}
+    {% block headerscriptingExtended %}
     {% endblock %}
 
-
-{% block headerscriptingExtended %}
-
-{% endblock %}
-
-    <title>{{ Lang.title }}</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
-    <link rel="apple-touch-icon-precomposed" href="/img/rtr-netztest/apple-touch-icon-precomposed.png"/>
-    <link rel="alternate" type="application/rss+xml" title="RSS-Feed RTR Aktuelles"
-          href="https://www.rtr.at/de/rss/aktuelles"/>
-
 </head>
-<body class="task-telekom  {{ bodyclass }}">
-<div class="container {{ containerclass }}">
-    <div class="menu-trigger" aria-hidden="true">
-        <a href="#" id="trigger" class="toggle-menu" title="">{{ Lang.menu }}</a>
-    </div>
 
-    <!-- div class="mp-pusher mp-pushed" id="mp-pusher" -->
-     <div class="mp-pusher" id="mp-pusher">
+<body class=" green">
 
-
-        {% if Lang.lang == "de" %}
-        {% include "templates/parts/02_navigation_de.html" %}
-        {% else %}
-        {% include "templates/parts/02_navigation_en.html" %}
-        {% endif %}
-
-        <div class="scroller"><!-- this is for emulating position fixed of the nav -->
-            <div class="scroller-inner">
-
-                {% if Lang.lang == "de" %}
-                {% include "templates/parts/03_navigationToContent_de.html" %}
-                {% else %}
-                {% include "templates/parts/03_navigationToContent_en.html" %}
-                {% endif %}
-
-
-                <div class="main-container" role="main">
-                    <div class="main wrapper clearfix">
-
-                        <!-- Page content goes here. -->
-                        <article class="main-article">
-                            <header class="clearfix">
-                                <h1 class="main-article-header">{{ Lang.headline }}</h1>
-                                <!-- h1 class="main-article-header">RTR-Netztest{{ title }}</h1 -->
-                            </header>
-
-                            {% block content %}
-
-                            {% endblock %}
-                            
-                         <div class="clear"></div>  
-
-                            
-                           <div id="popuperror"></div>
-										<div id="popupform"></div>
- 
-                            
-                        </article>
-                        <!-- .main-article -->
-
-                        <aside class="main-aside" role="complementary">
-                            {% block sideContent %}
-
-                            {% endblock %}
-                        </aside>
-                        <!-- .main-aside -->
+<div class="tm-page">
+    <!-- Toolbar -->
+    <div class="tm-toolbar tm-toolbar-default">
+        <div class="uk-navbar-container"
+             uk-navbar="mode: click;boundary-align:true;dropbar:true;dropbar-anchor:!.uk-container;dropbar-mode:slide">
+            <div class="w100">
+                <div class="uk-container uk-container-large">
+                    <div id="icontoggle" class="uk-grid">
+                        <div class="uk-inline">
+                            <button class="uk-button uk-button-top" type="button">
+                                RTR
+                                <span class="uk-margin-small-right chevdown" uk-icon="chevron-down"></span><span
+                                    class="uk-margin-small-right chevup" uk-icon="chevron-up"></span></button>
+                            <div class="uk-navbar-dropdown"
+                                 uk-drop="mode:click;offset:0;duration:100;delay-show:0;boundary: !.uk-container; boundary-align: true; pos: bottom-justify;">
+                                <div class="uk-container uk-container-large">
+                                    <ul class="uk-subnav uk-list-divider">
+                                        <li><a href="https://www.rtr.at/TKP/startseite.de.html" class="area-switch">{{ Lang.template.tk_postal }}</a></li>
+                                        <li><a href="https://www.rtr.at/medien/startseite_medien.de.html" class="area-switch">{{ Lang.template.media }}</a></li>
+                                        <li><a href="https://www.rtr.at/rtr/startseite.de.html" class="area-switch">{{ Lang.template.RTR }}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-inline">
+                            <button class="uk-button uk-button-top" type="button">{{Lang.LANG}}<span
+                                    class="uk-margin-small-right chevdown" uk-icon="chevron-down"></span><span
+                                    class="uk-margin-small-right  chevup" uk-icon="chevron-up"></span></button>
+                            <div class="uk-navbar-dropdown"
+                                 uk-drop="mode:click;offset:0;duration:100;delay-show:0;boundary: !.uk-container; boundary-align: true; pos: bottom-justify;">
+                                <div class="uk-container uk-container-large">
+                                    <ul class="uk-subnav uk-list-divider">
+                                        <li>
+                                            <a href="/en">
+                                                English
+                                            </a>
+                                        <li>
+                                            <a href="/de">
+                                                Deutsch
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- .main -->
                 </div>
-                <!-- .main-container -->
-
-                {% if Lang.lang == "de" %}
-                {% include "templates/parts/04_contentToFooter_de.html" %}
-                {% else %}
-                {% include "templates/parts/04_contentToFooter_en.html" %}
-                {% endif %}
-
             </div>
-            <!-- .scroller-inner -->
         </div>
-        <!-- .scroller -->
     </div>
-    <!-- .pusher -->
+    <!-- Mobiles -->
+    <div class="tm-header-mobile uk-hidden@l">
+        <div sel-target=".uk-navbar-container">
+            <div class="uk-navbar-container">
+                <nav uk-navbar="" class="uk-navbar">
+                    <div class="uk-navbar-left">
+                        <div class="uk-grid-small uk-text-center logos-mobile uk-grid uk-grid-stack" uk-grid="">
+                            <div class="uk-first-column">
+                                <a href="/{{ Lang.lang }}">
+                                    <picture>
+                                        <img src='/images/netztest_logo.svg' alt="Logo {{ Lang.title }}" title="RTR" style="height:50px;">
+                                    </picture>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-navbar-right">
+                        <a id="mobmenu" class="uk-navbar-toggle" href="#tm-mobile" uk-toggle="animation: true;">
+                            <div class="toggleopen uk-icon uk-navbar-toggle-icon" uk-navbar-toggle-icon="">
+                                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+                                     data-svg="navbar-toggle-icon">
+                                    <rect y="9" width="20" height="2"></rect>
+                                    <rect y="3" width="20" height="2"></rect>
+                                    <rect y="15" width="20" height="2"></rect>
+                                </svg>
+                            </div>
+                            <span class="menclose uk-icon" uk-icon="icon: close; ratio: 1.8">
+                            <svg width="36" height="36"
+                                 viewBox="0 0 20 20"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 data-svg="close"><path
+                                    fill="none" stroke="#000" stroke-width="1.06" d="M16,16 L4,4"></path><path
+                                    fill="none"
+                                    stroke="#000"
+                                    stroke-width="1.06"
+                                    d="M16,4 L4,16"></path></svg>
+                        </span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+            <div id="tm-mobile" class="" hidden="">
+                <div class="uk-background-default uk-padding">
+                    <div class="uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
+                        <div>
+                            <div class="uk-panel" id="module-menu-mobile">
+                                <ul class="uk-nav uk-nav-default uk-list uk-list-divider">
+                                    <li class="">
+                                        <a href="Verlauf">{{ Lang.history }}</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="Karte">{{ Lang.map }}</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="Statistik">{{ Lang.statistics }}</a>
+                                    </li>
+                                    <li class="uk-parent">
+                                        <div class="uk-navbar-container uk-navbar"
+                                             uk-navbar="dropbar: true; dropbar-mode: push;mode: click">
+                                            <ul class="uk-navbar-nav second-level-nav">
+                                                <li class="uk-parent">
+                                                    <a href="#" aria-expanded="false">{{ Lang.further }}<span
+                                                            class="icon-drop uk-icon"
+                                                            uk-icon="icon: chevron-down; ratio: 1.5"><svg
+                                                            width="30" height="30" viewBox="0 0 20 20"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            data-svg="chevron-down"><polyline fill="none"
+                                                                                              stroke="#000"
+                                                                                              stroke-width="1.03"
+                                                                                              points="16 7 10 13 4 7"></polyline></svg></span></a>
+                                                    <div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left" style="left: 861.844px; top: 80px;">
+                                                        <div class="uk-navbar-dropdown-grid uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
+                                                            <div class="uk-first-column">
+                                                                <ul class="uk-nav uk-navbar-dropdown-nav">
+                                                                    <li><a href="Loop">{{ Lang.loop_mode }}</a></li>
+
+                                                                    <li><a href="ZertMessung">{{ Lang.certified_measurement }}</a></li>
+
+                                                                    <li><a href="{{ Lang.index_content.apps_url }}">{{ Lang.index_content.apps }}</a></li>
+
+                                                                    <li><a href="Opentests">{{ Lang.opendata }}</a></li>
+
+                                                                    <li><a href="Optionen">{{ Lang.options }}</a></li>
+
+                                                                    <li><a href="{{ Lang.help_url }}">{{ Lang.help }}</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    <li><a href="Test">{{ Lang.start_test }}</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-child-width-auto uk-grid-small uk-grid uk-margin-top-50 uk-grid-stack" uk-grid="">
+                        <div class="uk-first-column">
+                            <a class="el-link uk-icon-button uk-icon" rel="noreferrer" href="mailto:rtr@rtr.at"
+                               uk-icon="icon: mail;">
+                                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+                                     data-svg="mail">
+                                    <polyline fill="none" stroke="#000" points="1.4,6.5 10,11 18.6,6.5"></polyline>
+                                    <path d="M 1,4 1,16 19,16 19,4 1,4 Z M 18,15 2,15 2,5 18,5 18,15 Z"></path>
+                                </svg>
+                            </a>
+                        </div>
+                        <div>
+                            <a class="el-link uk-icon-button uk-icon" rel="noreferrer" href="https://twitter.com/rtrgmbh"
+                               uk-icon="icon: twitter;">
+                                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+                                     data-svg="twitter">
+                                    <path d="M19,4.74 C18.339,5.029 17.626,5.229 16.881,5.32 C17.644,4.86 18.227,4.139 18.503,3.28 C17.79,3.7 17.001,4.009 16.159,4.17 C15.485,3.45 14.526,3 13.464,3 C11.423,3 9.771,4.66 9.771,6.7 C9.771,6.99 9.804,7.269 9.868,7.539 C6.795,7.38 4.076,5.919 2.254,3.679 C1.936,4.219 1.754,4.86 1.754,5.539 C1.754,6.82 2.405,7.95 3.397,8.61 C2.79,8.589 2.22,8.429 1.723,8.149 L1.723,8.189 C1.723,9.978 2.997,11.478 4.686,11.82 C4.376,11.899 4.049,11.939 3.713,11.939 C3.475,11.939 3.245,11.919 3.018,11.88 C3.49,13.349 4.852,14.419 6.469,14.449 C5.205,15.429 3.612,16.019 1.882,16.019 C1.583,16.019 1.29,16.009 1,15.969 C2.635,17.019 4.576,17.629 6.662,17.629 C13.454,17.629 17.17,12 17.17,7.129 C17.17,6.969 17.166,6.809 17.157,6.649 C17.879,6.129 18.504,5.478 19,4.74"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Desktop -->
+    <!-- Desktop -->
+    <div class="tm-header uk-visible@l" uk-header="">
+        <div uk-sticky="" media="@l" cls-active="uk-navbar-sticky" sel-target=".uk-navbar-container" class="uk-sticky" style="">
+            <div class="uk-navbar-container">
+                <div class="uk-container uk-container-large">
+                    <nav uk-navbar="mode: click;boundary-align:true;dropbar:true;dropbar-anchor:!.uk-navbar-container;dropbar-mode:slide" class="uk-navbar">
+                        <div class="uk-navbar-left">
+                            <div class="uk-child-width-expand@s uk-text-center logos uk-grid-small uk-grid" uk-grid="">
+                                <div class="uk-first-column">
+                                    <a href="/{{ Lang.lang }}">
+                                        <picture>
+
+                                            <img src='/images/netztest_logo.svg' alt="Logo RTR" title="RTR" style="height:50px;">
+                                        </picture>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="uk-navbar-right">
+                            <ul class="uk-navbar-nav">
+
+                                <li class="">
+                                    <a href="Verlauf">{{ Lang.history }}</a>
+                                </li>
+                                <li class="">
+                                    <a href="Karte">{{ Lang.map }}</a>
+                                </li>
+                                <li class="">
+                                    <a href="Statistik">{{ Lang.statistics }}</a>
+                                </li>
+
+                                <li class="uk-parent">
+                                    <a href="#" aria-expanded="false">{{ Lang.further }}
+                                        <span uk-icon="chevron-down"></span>
+                                    </a>
+                                    <div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left" style="left: 861.844px; top: 80px;">
+                                        <div class="uk-navbar-dropdown-grid uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
+                                            <div class="uk-first-column">
+                                                <ul class="uk-nav uk-navbar-dropdown-nav">
+
+                                                    <li><a href="Loop">{{ Lang.loop_mode }}</a></li>
+
+                                                    <li><a href="ZertMessung">{{ Lang.certified_measurement }}</a></li>
+
+                                                    <li><a href="{{ Lang.index_content.apps_url }}">{{ Lang.index_content.apps }}</a></li>
+
+                                                    <li><a href="Opentests">{{ Lang.opendata }}</a></li>
+
+                                                    <li><a href="Optionen">{{ Lang.options }}</a></li>
+
+                                                    <li><a href="{{ Lang.help_url }}">{{ Lang.help }}</a></li>
+
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </li>
+
+                                <li class="nav-button"><a href="Test" class="uk-button uk-button-default">{{ Lang.start_test }}</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="uk-sticky-placeholder" style="height: 70px; margin: 0px;" hidden=""></div>
+    </div>
+    <!-- Breadcrumbs -->
+    <div class="uk-section-default uk-section uk-section-xsmall" id="breadcrumbs">
+        <div class="uk-container uk-container-large">
+            <ul class="uk-breadcrumb">
+                <li><a href="/{{ Lang.lang }}">{{ Lang.headline }}</a></li>
+                <li class="uk-disabled">
+                    <a>{{ title }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="uk-section-default uk-section">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
 </div>
-<!-- .container -->
 
-{% include "templates/parts/05_footerScripts_no_mlpushmenu_de.html" %}
 
+
+
+<!-- Footer -->
+<div id="footer" class="uk-section-default uk-section uk-section-small">
+    <div class="uk-container uk-container-large">
+        <div class="uk-grid-margin uk-grid" uk-grid="" uk-height-match="target: .uk-card; row: false">
+            <div class="uk-flex-auto uk-width-1-2@s uk-first-column m1">
+                <div class="uk-margin"><p><b>RUNDFUNK UND TELEKOM<br/>REGULIERUNGS-GMBH</b><br/><br/>A-1060 Wien, Mariahilfer Straße 77-79<br/>Tel.: +<a target='_self' href="tel:+431580580">43 1 58058-0</a><br/>Fax: +43 1 58058-9191</p></div>
+                <div class="uk-margin">
+                    <div class="uk-child-width-auto uk-grid-small uk-grid" uk-grid="">
+
+                        <div class="uk-first-column">
+                            <a class="el-link uk-icon-button uk-icon" rel="noreferrer" href="mailto:rtr@rtr.at" uk-icon="icon: mail;">
+                                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="mail">
+                                    <polyline fill="none" stroke="#000" points="1.4,6.5 10,11 18.6,6.5"></polyline>
+                                    <path d="M 1,4 1,16 19,16 19,4 1,4 Z M 18,15 2,15 2,5 18,5 18,15 Z"></path>
+                                </svg>
+                            </a>
+                        </div>
+
+
+                        <div>
+                            <a class="el-link uk-icon-button uk-icon" rel="noreferrer" href="https://twitter.com/rtrgmbh" uk-icon="icon: twitter;">
+                                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="twitter">
+                                    <path d="M19,4.74 C18.339,5.029 17.626,5.229 16.881,5.32 C17.644,4.86 18.227,4.139 18.503,3.28 C17.79,3.7 17.001,4.009 16.159,4.17 C15.485,3.45 14.526,3 13.464,3 C11.423,3 9.771,4.66 9.771,6.7 C9.771,6.99 9.804,7.269 9.868,7.539 C6.795,7.38 4.076,5.919 2.254,3.679 C1.936,4.219 1.754,4.86 1.754,5.539 C1.754,6.82 2.405,7.95 3.397,8.61 C2.79,8.589 2.22,8.429 1.723,8.149 L1.723,8.189 C1.723,9.978 2.997,11.478 4.686,11.82 C4.376,11.899 4.049,11.939 3.713,11.939 C3.475,11.939 3.245,11.919 3.018,11.88 C3.49,13.349 4.852,14.419 6.469,14.449 C5.205,15.429 3.612,16.019 1.882,16.019 C1.583,16.019 1.29,16.009 1,15.969 C2.635,17.019 4.576,17.629 6.662,17.629 C13.454,17.629 17.17,12 17.17,7.129 C17.17,6.969 17.166,6.809 17.157,6.649 C17.879,6.129 18.504,5.478 19,4.74"></path>
+                                </svg>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="uk-flex-auto uk-width-1-2 uk-width-1-4@s m2 uk-hidden@l">
+                <ul class="uk-list">            <li>
+                    <a href="https://www.rtr.at/rtr/footer/Kontakt.de.html">Kontakt</a>
+                </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/Press.de.html">Press</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/Open_Data.de.html"><p>Open Data</p></a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/FAQ.de.html">FAQ</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/eRTR.de.html">eRTR</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="uk-flex-auto uk-width-1-2 uk-width-1-4@s m3 uk-hidden@l">
+                <ul class="uk-list">            <li>
+                    <a href="https://www.rtr.at/TKP/footer/Impressum.de.html">Impressum</a>
+                </li>
+                    <li>
+                        <a href="https://www.rtr.at/TKP/footer/Datenschutz.de.html">Datenschutz</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/TKP/footer/Barrierefreiheit.de.html">Barrierefreiheit</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/TKP/footer/Sitemap.de.html">Sitemap</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="uk-flex-auto uk-width-1-2 uk-width-1-4@s footer-large uk-visible@l">
+                <ul class="uk-list">            <li>
+                    <a href="https://www.rtr.at/TKP/footer/Impressum.de.html">Impressum</a>
+                </li>
+                    <li>
+                        <a href="https://www.rtr.at/TKP/footer/Datenschutz.de.html">Datenschutz</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/TKP/footer/Barrierefreiheit.de.html">Barrierefreiheit</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/TKP/footer/Sitemap.de.html">Sitemap</a>
+                    </li>
+                </ul>
+                <ul class="uk-list">            <li>
+                    <a href="https://www.rtr.at/rtr/footer/Kontakt.de.html">Kontakt</a>
+                </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/Press.de.html">Press</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/Open_Data.de.html"><p>Open Data</p></a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/FAQ.de.html">FAQ</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/eRTR.de.html">eRTR</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{%  raw %}
+<script id="modalTemplate" type="text/x-handlebars-template">
+<div id="{{ container-id }}" class="{{ container-modifier }}" uk-modal >
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        {{#if title}}
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">{{ title }}</h2>
+        </div>
+        {{/if}}
+        <div class="uk-modal-body" uk-overflow-auto>
+            {{{ content }}}</div>
+        <div class="uk-modal-footer uk-text-right">
+            {{#if cancel}}
+            <button id="modal-cancel" class="uk-button uk-button-default uk-modal-close" type="button">{{ cancel }}</button>
+            {{/if}}
+            <button id="modal-confirm" class="uk-button uk-button-primary" type="button">{{ confirm }}</button>
+        </div>
+    </div>
+</div>
+</script>
+{% endraw %}
+
+<!-- <script src="/static/rtrwebsite/files/js/app.js"></script>
+<script src="/static/rtrwebsite/files/js/gtx-RTRWEB.js"></script>
+<script src="/static/rtrwebsite/files/js/iframeresizer.js"></script> -->
+<script type="text/javascript" src="../{{ fingerprint['lib/uikit.min.js'] }}"></script>
+<script type="text/javascript" src="../{{ fingerprint['lib/uikit-icons.min.js'] }}"></script>
 
 </body>
 </html>
