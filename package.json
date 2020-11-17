@@ -19,6 +19,7 @@
     "nunjucks": "^2.0.0",
     "randomstring": "^1.0.7",
     "request": "^2.57",
-    "uikit": "^3.5.8"
+    "uikit": "^3.5.8",
+    "cheerio": "^0.18.0"
   }
 }
