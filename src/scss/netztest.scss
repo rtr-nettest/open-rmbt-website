@@ -1,10 +1,5 @@
 /* Test gauge */
 /* New test design */
-@import 'variables-theme.scss';
-
-$black: #222222;
-$red: #cd1236;
-$green: #438700;
 $muted: #f8f8f8;
 $grey: #545454;
 
@@ -805,7 +800,7 @@ tr.median {
     transition: -webkit-transform .15s ease-out;
     transition: transform .15s ease-out;
     transition: transform .15s ease-out, -webkit-transform .15s ease-out;
-    box-shadow: 0 5px 15px rgb(0 0 0 / 28%);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.28);
     border: 1px solid $green;
 
     -webkit-border-radius: 7px;
