@@ -71,7 +71,9 @@ var metalsmith = Metalsmith(__dirname)
     .use(duplicateFile())
     .use(ignore( ['scss/**/*.scss','!scss/app.scss']))
     .use(sass({
-        "outputStyle": "compressed"
+        "outputStyle": "compressed",
+        sourceMap: true,
+        sourceMapContents: true
     }))
     .use(fingerprint({
         pattern: ['css/*.css', 'js/**/*.js', 'scss/*.css',
