@@ -222,7 +222,7 @@ exports.strings = {
         "generate_new": "Erneut anfordern"
     },
     //Page titles and link descriptions
-    "index" : "Home",
+    "index" : "Startseite",
     "statistics" : "Statistik",
     "history" : "Verlauf",
     "map" : "Karte",
