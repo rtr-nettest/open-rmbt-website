@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="32" height="32" version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <path id="gamepad-variant" d="m2.4695 2.1167h3.5278a2.1167 2.1167 0 1 1-1.5769 3.5278h-0.37395a2.1167 2.1167 0 1 1-1.5769-3.5278m-0.35278 1.0583v0.70556h-0.70556v0.70556h0.70556v0.70556h0.70556v-0.70556h0.70556v-0.70556h-0.70556v-0.70556h-0.70556m3.3514 1.0583a0.52917 0.52917 0 1 0 0.52917 0.52917 0.52917 0.52917 0 0 0-0.52917-0.52917m1.0583-1.0583a0.52917 0.52917 0 1 0 0.52917 0.52917 0.52917 0.52917 0 0 0-0.52917-0.52917z" fill="#5f6368" stroke-width=".35278"/>
+</svg>
