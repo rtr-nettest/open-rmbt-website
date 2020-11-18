@@ -40,6 +40,6 @@ function hideMenu() {
 function linkLanguageSwitcherToCurrentPage() {
     var cPage = window.location.pathname + window.location.search + window.location.hash;
     cPage = cPage.substr(4);
-    $(".language-select option[data-lang-name='en']").attr("data-href","/en/" + cPage);
-    $(".language-select option[data-lang-name='de']").attr("data-href","/de/" + cPage);
+    $(".language-select a[data-lang-name='en']").attr("href","/en/" + cPage);
+    $(".language-select a[data-lang-name='de']").attr("href","/de/" + cPage);
 }
