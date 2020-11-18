@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <!-- Basic page info -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Test | RTR-Netztest</title>
+
+    <!-- Website icon -->
+    <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png"/>
+
+    <!-- CSS includes -->
+    <link rel="stylesheet" href="../scss/app-1fe139efdab4d68ddc2c065dc4167612.css">
+    <!-- <link rel="stylesheet" href="/scss/netztest.css"> -->
+    <!-- Meta information --><meta name="description" content="Der RTR-Netztest stellt Nutzerinnen und Nutzern Informationen über die aktuelle Dienstequalität (ua. Upload, Download, Ping, Signalstärke) ihres Internetzugangs zur Verfügung. Darüber hinaus sind eine Kartendarstellung sowie Statistiken der bisherigen Tests abrufbar." />
+    <meta name="robots" content="index, follow">
+    <!-- Social media (frontend only) -->
+    <meta property="og:site_name" content="RTR" />
+
+    <meta property="og:title" content="Test - RTR-Netztest" />
+
+    <meta property="og:type" content="website" />
+
+    
+    <script type="text/javascript" src="../js/jquery-1.8.2.min-5b9201ae3ab8f5dcf8c5792bcbd316c2.js"></script>
+    <script type="text/javascript" src="../js/menu-11fdd49325880c84467b9e75c7bb6dd6.js"></script>
+    <script type="text/javascript" src="../lib/jquery_ui/jquery-ui.min-1043f80cd6a5a8b2e82e1bde0f31b3a9.js"></script>
+    <script type="text/javascript" src="../js/jquery.history-cc1c80297e02d927f9b07e82f7cfcaf8.js"></script>
+    <script type="text/javascript" src="../js/javaconf-0e43724af0f60faf350c5d2a69f82cc9.js"></script>
+    <script type="text/javascript" src="../js/functions-f2094c207ea25f3ee718f43dfcde2e42.js"></script>
+    <script src="../lib/handlebars.min-fdc5dfd7ea2aca849de7ef99eaf9f807.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="Lang.js"></script>
+    <script type="text/javascript" src="../js/popupform-60018626e0febaae1c0ef0b48d9ea1d4.js"></script>
+
+    
+    
+<script src="../js/vendor/modernizr-2.6.1.min-69933cd1a19bd052d23f4f9f5b26e574.js"></script>
+
+<script type="text/javascript" src="../lib/rmbtws.min-63eaf85f1ca82425ef1b92cf4dbd5b8f.js"></script>
+<script type="text/javascript" src="../js/Test-7dfbec2d6ddfb3b2182a4b308e804e60.js"></script>
+<script type="text/javascript" src="../js/test/TestVisualization-dcf0b3760a3f6264f39dda29f5dea266.js"></script>
+
+
+
+</head>
+
+<body class=" green">
+
+<div class="tm-page">
+    <!-- Toolbar -->
+    <div class="tm-toolbar tm-toolbar-default">
+        <div class="uk-navbar-container"
+             uk-navbar="mode: click;boundary-align:true;dropbar:true;dropbar-anchor:!.uk-container;dropbar-mode:slide">
+            <div class="w100">
+                <div class="uk-container uk-container-large">
+                    <div id="icontoggle" class="uk-grid">
+                        <div class="uk-inline">
+                            <button class="uk-button uk-button-top" type="button">
+                                RTR
+                                <span class="uk-margin-small-right chevdown" uk-icon="chevron-down"></span><span
+                                    class="uk-margin-small-right chevup" uk-icon="chevron-up"></span></button>
+                            <div class="uk-navbar-dropdown"
+                                 uk-drop="mode:click;offset:0;duration:100;delay-show:0;boundary: !.uk-container; boundary-align: true; pos: bottom-justify;">
+                                <div class="uk-container uk-container-large">
+                                    <ul class="uk-subnav uk-list-divider">
+                                        <li><a href="https://www.rtr.at/TKP/startseite.de.html" class="area-switch">Telekommunikation und Post</a></li>
+                                        <li><a href="https://www.rtr.at/medien/startseite_medien.de.html" class="area-switch">Medien</a></li>
+                                        <li><a href="https://www.rtr.at/rtr/startseite.de.html" class="area-switch">RTR</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-inline">
+                            <button class="uk-button uk-button-top" type="button">DE<span
+                                    class="uk-margin-small-right chevdown" uk-icon="chevron-down"></span><span
+                                    class="uk-margin-small-right  chevup" uk-icon="chevron-up"></span></button>
+                            <div class="uk-navbar-dropdown"
+                                 uk-drop="mode:click;offset:0;duration:100;delay-show:0;boundary: !.uk-container; boundary-align: true; pos: bottom-justify;">
+                                <div class="uk-container uk-container-large">
+                                    <ul class="uk-subnav uk-list-divider">
+                                        <li>
+                                            <a href="/en">
+                                                English
+                                            </a>
+                                        <li>
+                                            <a href="/de">
+                                                Deutsch
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Mobiles -->
+    <div class="tm-header-mobile uk-hidden@l">
+        <div sel-target=".uk-navbar-container">
+            <div class="uk-navbar-container">
+                <nav uk-navbar="" class="uk-navbar">
+                    <div class="uk-navbar-left">
+                        <div class="uk-grid-small uk-text-center logos-mobile uk-grid uk-grid-stack" uk-grid="">
+                            <div class="uk-first-column">
+                                <a href="/de">
+                                    <picture>
+                                        <img src='/images/netztest_logo.svg' alt="Logo RTR - Netztest" title="RTR" style="height:50px;">
+                                    </picture>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-navbar-right">
+                        <a id="mobmenu" class="uk-navbar-toggle" href="#tm-mobile" uk-toggle="animation: true;">
+                            <div class="toggleopen uk-icon uk-navbar-toggle-icon" uk-navbar-toggle-icon="">
+                                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+                                     data-svg="navbar-toggle-icon">
+                                    <rect y="9" width="20" height="2"></rect>
+                                    <rect y="3" width="20" height="2"></rect>
+                                    <rect y="15" width="20" height="2"></rect>
+                                </svg>
+                            </div>
+                            <span class="menclose uk-icon" uk-icon="icon: close; ratio: 1.8">
+                            <svg width="36" height="36"
+                                 viewBox="0 0 20 20"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 data-svg="close"><path
+                                    fill="none" stroke="#000" stroke-width="1.06" d="M16,16 L4,4"></path><path
+                                    fill="none"
+                                    stroke="#000"
+                                    stroke-width="1.06"
+                                    d="M16,4 L4,16"></path></svg>
+                        </span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+            <div id="tm-mobile" class="" hidden="">
+                <div class="uk-background-default uk-padding">
+                    <div class="uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
+                        <div>
+                            <div class="uk-panel" id="module-menu-mobile">
+                                <ul class="uk-nav uk-nav-default uk-list uk-list-divider">
+                                    <li class="">
+                                        <a href="Verlauf">Verlauf</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="Karte">Karte</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="Statistik">Statistik</a>
+                                    </li>
+                                    <li class="uk-parent">
+                                        <div class="uk-navbar-container uk-navbar"
+                                             uk-navbar="dropbar: true; dropbar-mode: push;mode: click">
+                                            <ul class="uk-navbar-nav second-level-nav">
+                                                <li class="uk-parent">
+                                                    <a href="#" aria-expanded="false">Weiteres<span
+                                                            class="icon-drop uk-icon"
+                                                            uk-icon="icon: chevron-down; ratio: 1.5"><svg
+                                                            width="30" height="30" viewBox="0 0 20 20"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            data-svg="chevron-down"><polyline fill="none"
+                                                                                              stroke="#000"
+                                                                                              stroke-width="1.03"
+                                                                                              points="16 7 10 13 4 7"></polyline></svg></span></a>
+                                                    <div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left" style="left: 861.844px; top: 80px;">
+                                                        <div class="uk-navbar-dropdown-grid uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
+                                                            <div class="uk-first-column">
+                                                                <ul class="uk-nav uk-navbar-dropdown-nav">
+                                                                    <li><a href="Loop">Wiederholungsmodus</a></li>
+
+                                                                    <li><a href="ZertMessung">Zertifizierte Messung</a></li>
+
+                                                                    <li><a href="https://www.rtr.at/de/tk/rtrnetztest_tests">RTR-Netztest Apps</a></li>
+
+                                                                    <li><a href="Opentests">Open data</a></li>
+
+                                                                    <li><a href="Optionen">Optionen</a></li>
+
+                                                                    <li><a href="https://www.netztest.at/redirect/de/help">Hilfe</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    <li><a href="Test">Test starten</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-child-width-auto uk-grid-small uk-grid uk-margin-top-50 uk-grid-stack" uk-grid="">
+                        <div class="uk-first-column">
+                            <a class="el-link uk-icon-button uk-icon" rel="noreferrer" href="mailto:rtr@rtr.at"
+                               uk-icon="icon: mail;">
+                                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+                                     data-svg="mail">
+                                    <polyline fill="none" stroke="#000" points="1.4,6.5 10,11 18.6,6.5"></polyline>
+                                    <path d="M 1,4 1,16 19,16 19,4 1,4 Z M 18,15 2,15 2,5 18,5 18,15 Z"></path>
+                                </svg>
+                            </a>
+                        </div>
+                        <div>
+                            <a class="el-link uk-icon-button uk-icon" rel="noreferrer" href="https://twitter.com/rtrgmbh"
+                               uk-icon="icon: twitter;">
+                                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+                                     data-svg="twitter">
+                                    <path d="M19,4.74 C18.339,5.029 17.626,5.229 16.881,5.32 C17.644,4.86 18.227,4.139 18.503,3.28 C17.79,3.7 17.001,4.009 16.159,4.17 C15.485,3.45 14.526,3 13.464,3 C11.423,3 9.771,4.66 9.771,6.7 C9.771,6.99 9.804,7.269 9.868,7.539 C6.795,7.38 4.076,5.919 2.254,3.679 C1.936,4.219 1.754,4.86 1.754,5.539 C1.754,6.82 2.405,7.95 3.397,8.61 C2.79,8.589 2.22,8.429 1.723,8.149 L1.723,8.189 C1.723,9.978 2.997,11.478 4.686,11.82 C4.376,11.899 4.049,11.939 3.713,11.939 C3.475,11.939 3.245,11.919 3.018,11.88 C3.49,13.349 4.852,14.419 6.469,14.449 C5.205,15.429 3.612,16.019 1.882,16.019 C1.583,16.019 1.29,16.009 1,15.969 C2.635,17.019 4.576,17.629 6.662,17.629 C13.454,17.629 17.17,12 17.17,7.129 C17.17,6.969 17.166,6.809 17.157,6.649 C17.879,6.129 18.504,5.478 19,4.74"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Desktop -->
+    <!-- Desktop -->
+    <div class="tm-header uk-visible@l" uk-header="">
+        <div uk-sticky="" media="@l" cls-active="uk-navbar-sticky" sel-target=".uk-navbar-container" class="uk-sticky" style="">
+            <div class="uk-navbar-container">
+                <div class="uk-container uk-container-large">
+                    <nav uk-navbar="mode: click;boundary-align:true;dropbar:true;dropbar-anchor:!.uk-navbar-container;dropbar-mode:slide" class="uk-navbar">
+                        <div class="uk-navbar-left">
+                            <div class="uk-child-width-expand@s uk-text-center logos uk-grid-small uk-grid" uk-grid="">
+                                <div class="uk-first-column">
+                                    <a href="/de">
+                                        <picture>
+
+                                            <img src='/images/netztest_logo.svg' alt="Logo RTR" title="RTR" style="height:50px;">
+                                        </picture>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="uk-navbar-right">
+                            <ul class="uk-navbar-nav">
+
+                                <li class="">
+                                    <a href="Verlauf">Verlauf</a>
+                                </li>
+                                <li class="">
+                                    <a href="Karte">Karte</a>
+                                </li>
+                                <li class="">
+                                    <a href="Statistik">Statistik</a>
+                                </li>
+
+                                <li class="uk-parent">
+                                    <a href="#" aria-expanded="false">Weiteres
+                                        <span uk-icon="chevron-down"></span>
+                                    </a>
+                                    <div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left" style="left: 861.844px; top: 80px;">
+                                        <div class="uk-navbar-dropdown-grid uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
+                                            <div class="uk-first-column">
+                                                <ul class="uk-nav uk-navbar-dropdown-nav">
+
+                                                    <li><a href="Loop">Wiederholungsmodus</a></li>
+
+                                                    <li><a href="ZertMessung">Zertifizierte Messung</a></li>
+
+                                                    <li><a href="https://www.rtr.at/de/tk/rtrnetztest_tests">RTR-Netztest Apps</a></li>
+
+                                                    <li><a href="Opentests">Open data</a></li>
+
+                                                    <li><a href="Optionen">Optionen</a></li>
+
+                                                    <li><a href="https://www.netztest.at/redirect/de/help">Hilfe</a></li>
+
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </li>
+
+                                <li class="nav-button"><a href="Test" class="uk-button uk-button-default">Test starten</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="uk-sticky-placeholder" style="height: 70px; margin: 0px;" hidden=""></div>
+    </div>
+    <!-- Breadcrumbs -->
+    <div class="uk-section-default uk-section uk-section-xsmall" id="breadcrumbs">
+        <div class="uk-container uk-container-large">
+            <ul class="uk-breadcrumb">
+                <li><a href="/de">RTR-Netztest</a></li>
+                <li class="uk-disabled">
+                    <a>Test</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="uk-section-default uk-section">
+        
+<div id="test_container" class="uk-container">
+<div id="noJavaWarning"></div>
+<div id="androidApp"></div>
+<div id="iOSApp"></div>
+
+<div id="loading-placeholder">
+    <h2>Test framework is loading...</h2>
+</div>
+<noscript>
+    <div id="error-placeholder">
+        <h2>The test could not be loaded</h2>
+        Please activate JavaScript!
+    </div>
+</noscript>
+
+    <div id="inner-test-container" style="display: none" class="uk-grid-match" uk-grid>
+
+
+
+        <div class="gauge uk-width-1-2@s">
+
+            <!-- This code is based on the great Open Source code by CZ.NIC -->
+            <!-- You can find their repository here: https://gitlab.labs.nic.cz/websites/netmetr.cz -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path id="init" class="gauge active init" d="m216.4 87.5c12.638-25.427 33.09-46.28 58.22-59.42"></path>
+                <path id="ping" class="gauge active ping" d="m285.5 22.996c15.803-6.531 33.12-10.135 51.29-10.135 5.249 0 10.428.301 15.521.887"></path>
+                <path id="download" class="gauge active download" d="m364 15.617c61.16 12.578 107.15 66.72 107.15 131.6 0 15.07-2.48 29.555-7.05 43.08"></path>
+                <path id="upload" class="gauge active upload" d="m459.93 201.02c-20.747 47.42-68.08 80.55-123.15 80.55-28.353 0-54.655-8.783-76.33-23.776"></path>
+                <path id="speed" class="gauge speed" d="m299.35 352.53c.001.155.001.311.001.466 0 74.2-60.15 134.35-134.35 134.35-74.2 0-134.35-60.15-134.35-134.35 0-74.2 60.15-134.35 134.35-134.35 26.83 0 51.823 7.864 72.799 21.413"></path>
+                <text x="343.5" y="161.56" font-size="40" text-anchor="middle" id="percents"></text>
+                <text x="163.93" y="367.56" text-anchor="middle" font-size="40" id="speedtext"></text>
+                <text x="163.93" y="392" text-anchor="middle" font-size="14" id="speedunit"></text>
+            </svg>
+
+        </div>
+
+        <div id="infocurrent" class="uk-width-1-2@s uk-flex-bottom">
+            <div>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">Ping</div>
+                    <div class="uk-width-3-4" id="infoping">
+                        <div class="loader"></div>
+                        <span>-</span></div>
+                </div>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">Download</div>
+                    <div class="uk-width-3-4" id="infodown">
+                        <div class="loader"></div>
+                        <span>-</span></div>
+                </div>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">Upload</div>
+                    <div class="uk-width-3-4" id="infoup">
+                        <div class="loader"></div>
+                        <span>-</span></div>
+                </div>
+                <p></p>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">Standort</div>
+                    <div class="uk-width-3-4" id="infogeo">-</div>
+                </div>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">Testserver</div>
+                    <div class="uk-width-3-4" id="infoserver">-</div>
+                </div>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">IP</div>
+                    <div class="uk-width-3-4" id="infoip">-</div>
+                </div>
+                <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
+                    <div class="uk-width-1-4">Betreiber</div>
+                    <div class="uk-width-3-4" id="infoprovider">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div> <!-- test_container -->
+
+
+    </div>
+
+</div>
+
+
+
+
+<!-- Footer -->
+<div id="footer" class="uk-section-default uk-section uk-section-small">
+    <div class="uk-container uk-container-large">
+        <div class="uk-grid-margin uk-grid" uk-grid="" uk-height-match="target: .uk-card; row: false">
+            <div class="uk-flex-auto uk-width-1-2@s uk-first-column m1">
+                <div class="uk-margin"><p><b>RUNDFUNK UND TELEKOM<br/>REGULIERUNGS-GMBH</b><br/><br/>A-1060 Wien, Mariahilfer Straße 77-79<br/>Tel.: +<a target='_self' href="tel:+431580580">43 1 58058-0</a><br/>Fax: +43 1 58058-9191</p></div>
+                <div class="uk-margin">
+                    <div class="uk-child-width-auto uk-grid-small uk-grid" uk-grid="">
+
+                        <div class="uk-first-column">
+                            <a class="el-link uk-icon-button uk-icon" rel="noreferrer" href="mailto:rtr@rtr.at" uk-icon="icon: mail;">
+                                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="mail">
+                                    <polyline fill="none" stroke="#000" points="1.4,6.5 10,11 18.6,6.5"></polyline>
+                                    <path d="M 1,4 1,16 19,16 19,4 1,4 Z M 18,15 2,15 2,5 18,5 18,15 Z"></path>
+                                </svg>
+                            </a>
+                        </div>
+
+
+                        <div>
+                            <a class="el-link uk-icon-button uk-icon" rel="noreferrer" href="https://twitter.com/rtrgmbh" uk-icon="icon: twitter;">
+                                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="twitter">
+                                    <path d="M19,4.74 C18.339,5.029 17.626,5.229 16.881,5.32 C17.644,4.86 18.227,4.139 18.503,3.28 C17.79,3.7 17.001,4.009 16.159,4.17 C15.485,3.45 14.526,3 13.464,3 C11.423,3 9.771,4.66 9.771,6.7 C9.771,6.99 9.804,7.269 9.868,7.539 C6.795,7.38 4.076,5.919 2.254,3.679 C1.936,4.219 1.754,4.86 1.754,5.539 C1.754,6.82 2.405,7.95 3.397,8.61 C2.79,8.589 2.22,8.429 1.723,8.149 L1.723,8.189 C1.723,9.978 2.997,11.478 4.686,11.82 C4.376,11.899 4.049,11.939 3.713,11.939 C3.475,11.939 3.245,11.919 3.018,11.88 C3.49,13.349 4.852,14.419 6.469,14.449 C5.205,15.429 3.612,16.019 1.882,16.019 C1.583,16.019 1.29,16.009 1,15.969 C2.635,17.019 4.576,17.629 6.662,17.629 C13.454,17.629 17.17,12 17.17,7.129 C17.17,6.969 17.166,6.809 17.157,6.649 C17.879,6.129 18.504,5.478 19,4.74"></path>
+                                </svg>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="uk-flex-auto uk-width-1-2 uk-width-1-4@s m2 uk-hidden@l">
+                <ul class="uk-list">            <li>
+                    <a href="https://www.rtr.at/rtr/footer/Kontakt.de.html">Kontakt</a>
+                </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/Press.de.html">Press</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/Open_Data.de.html"><p>Open Data</p></a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/FAQ.de.html">FAQ</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/eRTR.de.html">eRTR</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="uk-flex-auto uk-width-1-2 uk-width-1-4@s m3 uk-hidden@l">
+                <ul class="uk-list">            <li>
+                    <a href="https://www.rtr.at/TKP/footer/Impressum.de.html">Impressum</a>
+                </li>
+                    <li>
+                        <a href="https://www.rtr.at/TKP/footer/Datenschutz.de.html">Datenschutz</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/TKP/footer/Barrierefreiheit.de.html">Barrierefreiheit</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/TKP/footer/Sitemap.de.html">Sitemap</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="uk-flex-auto uk-width-1-2 uk-width-1-4@s footer-large uk-visible@l">
+                <ul class="uk-list">            <li>
+                    <a href="https://www.rtr.at/TKP/footer/Impressum.de.html">Impressum</a>
+                </li>
+                    <li>
+                        <a href="https://www.rtr.at/TKP/footer/Datenschutz.de.html">Datenschutz</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/TKP/footer/Barrierefreiheit.de.html">Barrierefreiheit</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/TKP/footer/Sitemap.de.html">Sitemap</a>
+                    </li>
+                </ul>
+                <ul class="uk-list">            <li>
+                    <a href="https://www.rtr.at/rtr/footer/Kontakt.de.html">Kontakt</a>
+                </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/Press.de.html">Press</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/Open_Data.de.html"><p>Open Data</p></a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/FAQ.de.html">FAQ</a>
+                    </li>
+                    <li>
+                        <a href="https://www.rtr.at/rtr/footer/eRTR.de.html">eRTR</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<script id="modalTemplate" type="text/x-handlebars-template">
+<div id="{{ container-id }}" class="{{ container-modifier }}" uk-modal >
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        {{#if title}}
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">{{ title }}</h2>
+        </div>
+        {{/if}}
+        <div class="uk-modal-body" uk-overflow-auto>
+            {{{ content }}}</div>
+        <div class="uk-modal-footer uk-text-right">
+            {{#if cancel}}
+            <button id="modal-cancel" class="uk-button uk-button-default uk-modal-close" type="button">{{ cancel }}</button>
+            {{/if}}
+            <button id="modal-confirm" class="uk-button uk-button-primary" type="button">{{ confirm }}</button>
+        </div>
+    </div>
+</div>
+</script>
+
+
+<!-- <script src="/static/rtrwebsite/files/js/app.js"></script>
+<script src="/static/rtrwebsite/files/js/gtx-RTRWEB.js"></script>
+<script src="/static/rtrwebsite/files/js/iframeresizer.js"></script> -->
+<script type="text/javascript" src="../lib/uikit.min-879ad74a43ab250119157514a61491bc.js"></script>
+<script type="text/javascript" src="../lib/uikit-icons.min-b6a1fee766dc04ff5edf3c680eda2e59.js"></script>
+
+</body>
+</html>

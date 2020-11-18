@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="32" height="32" version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g transform="translate(0 -288.53)">
+  <g transform="matrix(.0055122 0 0 -.0055122 1.38 296.29)">
+   <g transform="matrix(90.006 0 0 -90.006 -569811 26544)" data-name="Gruppe 8691">
+    <path d="m6328 280v4.1992h2.7988v2.8008h1.4004v-7h-1.4004v2.8008h-1.4003v-2.8008zm6.5313 0c-0.7732 0-1.3985 0.62719-1.3985 1.4004v4.1992c0 0.77319 0.6253 1.4004 1.3985 1.4004h1.4004c0.7732 0 1.4004-0.62719 1.4004-1.4004v-2.7988h-2.0997v1.4004h0.6993v1.3984h-1.4004v-4.1992h2.8008v-1.4004z" fill="#5f6368" stroke-width=".46655"/>
+   </g>
+  </g>
+ </g>
+</svg>

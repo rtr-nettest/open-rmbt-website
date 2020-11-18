@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="32" height="32" version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g transform="translate(0 -288.53)">
+  <g transform="matrix(.47045 0 0 .47045 -2971.8 108.39)" data-name="Gruppe 8694">
+   <g transform="matrix(.94707 0 0 .94707 6313.8 380.09)" fill="#5f6368">
+    <path d="m20 10.78v9.22h-9.22l9.22-9.22m2-4.81-16 16.03h16z" opacity=".3" data-name="Pfad 2110"/>
+    <path d="m18 9.98-12 12.02h12zm-14.07-4.05 1.29 1.29a8.19 8.19 0 0 1 11.57 0l1.29-1.29a10 10 0 0 0-14.15 0zm5.14 5.14 1.93 1.93 1.93-1.93a2.74 2.74 0 0 0-3.86 0zm-2.57-2.57 1.29 1.29a4.557 4.557 0 0 1 6.43 0l1.28-1.29a6.374 6.374 0 0 0-9 0z" data-name="Pfad 2111"/>
+   </g>
+  </g>
+ </g>
+</svg>

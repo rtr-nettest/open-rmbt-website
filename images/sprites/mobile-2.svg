@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="32" height="32" version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g transform="translate(0 -288.53)">
+  <g transform="matrix(.0055122 0 0 -.0055122 1.38 296.29)">
+   <g transform="matrix(90.006 0 0 -90.006 -569811 26544)" fill="#5f6368" data-name="Gruppe 8691">
+    <path d="m6339.3 296.33h-1a1 1 0 0 1-1-1v-5.333a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v5.333a1 1 0 0 1-1 1z" opacity=".4"/>
+    <path d="m6334.7 296.33h-1a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1.001 1z"/>
+    <path d="m6330 296.33h-1a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-0.99999h1a1 1 0 0 1 1 0.99999v2a1 1 0 0 1-1 1z"/>
+    <path d="m6343 285.67h1a1 1 0 0 1 1 1v8.667a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-8.667a1 1 0 0 1 1-1z" opacity=".4" data-name="Cellular-Connection-path"/>
+   </g>
+  </g>
+ </g>
+</svg>

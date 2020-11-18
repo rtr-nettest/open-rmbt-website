@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="32" height="32" version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g transform="translate(-2.8222 .64054)">
+  <g transform="matrix(.52917 0 0 .52917 -2029.2 -58.838)" data-name="Gruppe 112">
+   <circle transform="translate(3841,111)" cx="7" cy="7" r="7" fill="#59b200" opacity=".1" data-name="Ellipse 18"/>
+  </g>
+  <path transform="matrix(.89516 0 0 .89516 -148.3 -1.354)" d="m175.38 4.2324c-0.0357 0-0.0721 0.013522-0.0996 0.041016l-2.3887 2.3906a0.11577 0.11577 0 0 1-0.16406 0l-1.1152-1.1152c-0.0549-0.054949-0.14243-0.054895-0.19726 0l-0.35938 0.35938c-0.0549 0.054969-0.0549 0.1423 0 0.19727l1.6562 1.6543c0.0555 0.055505 0.13993 0.055429 0.19531 0l2.9297-2.9297c0.0555-0.055524 0.0555-0.13979 0-0.19531l-0.35937-0.36133c-0.0275-0.027494-0.062-0.041016-0.0977-0.041016z" fill="#59b200" stroke-width=".0099521"/>
+ </g>
+</svg>
