@@ -2,7 +2,13 @@
 
 var controlProxy = "https://c01.netztest.at";
 var statisticProxy = "https://m-cloud.netztest.at";
-if (window.location.href.indexOf("https://www.netztest.at") !== 0) {
+if (window.location.href.indexOf("github") !== 0) {
+    //default for github pages
+} else if (window.location.href.indexOf("http://localhost") !== 0) {
+    //default for localhost -> change to your server!
+    statisticProxy = "";
+    controlProxy = "";
+} else if (window.location.href.indexOf("https://www.netztest.at") !== 0) {
     statisticProxy = "";
     controlProxy = "";
 }
