@@ -366,5 +366,8 @@ exports.strings = {
     "provider" : "Provider",
     "surrounding_tests": "Show surrounding measurements as open data",
     "land_cover": "Land cover",
-    "next": "Next"
+    "next": "Next",
+    "privacy": "Privacy",
+    "email_address": "netztest@rtr.at",
+    "accessibility": "Accessibility"
 }

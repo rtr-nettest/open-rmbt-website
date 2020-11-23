@@ -365,5 +365,8 @@ exports.strings = {
     "provider" : "Betreiber",
     "surrounding_tests": "Tests in der Umgebung als Open Data",
     "land_cover": "Bodenbedeckung",
-    "next": "Weiter"
+    "next": "Weiter",
+    "privacy": "Datenschutz",
+    "email_address": "netztest@rtr.at",
+    "accessibility": "Barrierefreiheit"
 }

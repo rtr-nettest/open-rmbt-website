@@ -67,6 +67,14 @@ $grey: #545454;
   }
 }
 
+@media (max-width: $breakpoint-small) {
+  .footer-large {
+    .uk-list {
+      float: left;
+    }
+  }
+}
+
 
 
 /* Test */
