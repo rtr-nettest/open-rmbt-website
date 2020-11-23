@@ -169,7 +169,7 @@ function makeMap() {
     //add marker with test position
     var iconStyle = new ol.style.Style({
         image: new ol.style.Icon({
-            src: '../img/speedtest/marker.png'
+            src: '../images/marker.png'
         })
     });
 
