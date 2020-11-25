@@ -350,7 +350,7 @@ function switchToFullscreenMap() {
     fullscreenMap = true;
     if (screenfull.isEnabled) {
         if (originalMapStyle === null) {
-            originalMapStyle = mapElem.attr("style");
+            originalMapStyle = mapElem.attr("style") || "";
         }
         mapElem.attr("style", "width:100%;height:100%;position:fixed");
         $("body").addClass("fullscreenMap");
@@ -366,6 +366,7 @@ function switchToFullscreenMap() {
                 $("body").removeClass("fullscreenMap")
                 map.updateSize();
                 fullscreenMap = false;
+                $("#fullscreenTestStatistics").hide();
                 
                 document.removeEventListener("fullscreenchange", onFullScreenChange, false);
                 document.removeEventListener("webkitfullscreenchange", onFullScreenChange, false);
@@ -388,6 +389,7 @@ function switchToFullscreenMap() {
 var currentTestStatisticsAdded = false;
 function addCurrentTestStatistics() {
     if (currentTestStatisticsAdded) {
+        $("#fullscreenTestStatistics").show();
         return;
     }
     currentTestStatisticsAdded = true;
