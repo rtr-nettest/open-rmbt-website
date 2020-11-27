@@ -88,9 +88,8 @@ function loadLastOpenDataResultsMap() {
                 preload: Infinity,
                 title: 'Bing Maps',
                 type: 'base',
-                source: new ol.source.BingMaps({
-                    key: bing_api_key,
-                    imagerySet: 'Road'
+                source: new ol.source.OSM({
+                    url: 'https://www.qostest.eu/tile/{z}/{x}/{y}.png'
                             // use maxZoom 19 to see stretched tiles instead of the BingMaps
                             // "no photos at this zoom level" tiles
                             // maxZoom: 19
