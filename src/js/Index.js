@@ -89,7 +89,7 @@ function loadLastOpenDataResultsMap() {
                 title: 'Bing Maps',
                 type: 'base',
                 source: new ol.source.OSM({
-                    url: 'https://www.qostest.eu/tile/{z}/{x}/{y}.png'
+                    url: 'https://cache.netztest.at/tile/osm/{z}/{x}/{y}.png'
                             // use maxZoom 19 to see stretched tiles instead of the BingMaps
                             // "no photos at this zoom level" tiles
                             // maxZoom: 19
