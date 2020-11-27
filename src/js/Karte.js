@@ -25,7 +25,7 @@
 var cloudmade = false;
 var useGoogle = true;
 var useBasemapAT = true;
-var useBingMaps = true;
+var useBingMaps = false;
 var useRTRTiles = true;
 
 //obsolete initialistation
@@ -242,10 +242,12 @@ function viewMapV3() {
     if (useRTRTiles) {
         bases.push(
             new ol.layer.Tile({
-                source: new ol.source.OSM(),
+                source: new ol.source.OSM({
+                    url: 'https://www.qostest.eu/tile/{z}/{x}/{y}.png'
+                }),
                 title: 'OpenStreetMap',
                 type: 'base',
-                visible: false
+                visible: true
             })
         );
     }
