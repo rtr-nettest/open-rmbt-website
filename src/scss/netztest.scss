@@ -112,11 +112,11 @@ svg .init,
 svg .ping,
 svg .download,
 svg .upload {
-  stroke: rgb(0, 94, 174);
+  stroke: $blue;
 }
 
 svg .speed {
-  stroke: rgb(89, 178, 0);
+  stroke: $green;
 }
 
 .loader {

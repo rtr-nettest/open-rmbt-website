@@ -4,7 +4,7 @@
 
 $white: #ffffff;
 $black: #222222;
-$green: #438700;
+$green: #2F5F00;
 $red: #cd1236;
 $red-light: rgba(205, 18, 54, 0.03);
 $red-medium: rgba(205, 18, 54, 0.1);
@@ -732,11 +732,11 @@ th {
   }
 }
 .uk-open > .uk-accordion-title::before {
-  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' data-svg='chevron-up'%3E%3Cpolyline fill='none' stroke='%23438700' stroke-width='2.03' points='4 13 10 7 16 13'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' data-svg='chevron-up'%3E%3Cpolyline fill='none' stroke='%232F5F00' stroke-width='2.03' points='4 13 10 7 16 13'%3E%3C/polyline%3E%3C/svg%3E");
 }
 
 .uk-accordion-title::before {
-  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' data-svg='chevron-down'%3E%3Cpolyline fill='none' stroke='%23438700' stroke-width='2.03' points='16 7 10 13 4 7'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' data-svg='chevron-down'%3E%3Cpolyline fill='none' stroke='%232F5F00' stroke-width='2.03' points='16 7 10 13 4 7'%3E%3C/polyline%3E%3C/svg%3E");
 }
 
 .uk-table th {
