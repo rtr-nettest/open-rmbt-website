@@ -250,13 +250,13 @@ function loadLastOpenDataResultsMap() {
     
     var refreshOpenTests = function(initial) {
         $.ajax({
-            url: statisticProxy + "/" + statisticpath + "/opentests/search",
+            url: statisticProxy + "/cache/recent",
             type: 'GET',
-            data: {
-                "max_results" : most_recent_tests,
-                "loc_accuracy": "<2000",
-                "additional_info": "download_classification"
-            },
+            //data: {
+            //    "max_results" : most_recent_tests,
+            //    "loc_accuracy": "<2000",
+            //    "additional_info": "download_classification"
+            //},
             dataType: 'json',
             cache: false,
 
