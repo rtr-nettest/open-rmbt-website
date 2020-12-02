@@ -2,9 +2,9 @@
 
 var controlProxy = "https://c01.netztest.at";
 var statisticProxy = "https://m-cloud.netztest.at";
-if (window.location.href.indexOf("github") !== 0) {
+if (window.location.href.indexOf("github") !== -1) {
     //default for github pages
-} else if (window.location.href.indexOf("http://localhost") !== 0) {
+} else if (window.location.href.indexOf("http://localhost") !== -1) {
     //default for localhost -> change to your server!
     statisticProxy = "";
     controlProxy = "";
