@@ -31,6 +31,9 @@ function hideMenu() {
     $(".tm-header-mobile").remove();
     $("#footer").remove();
     $("#breadcrumbs").remove();
+
+    //statistics page: hide opentests
+    $("#recent-tests-container").remove();
 }
 
 /**
