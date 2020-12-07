@@ -369,5 +369,6 @@ exports.strings = {
     "next": "Next",
     "privacy": "Privacy",
     "email_address": "netztest@rtr.at",
+    "email_subject": "Support%20request%20RTR-NetTest%20%28Web%29",
     "accessibility": "Accessibility"
 }
