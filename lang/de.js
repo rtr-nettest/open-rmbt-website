@@ -12,8 +12,11 @@ exports.strings = {
     "LANG": "DE",
     "template": {
         "RTR": "RTR",
+        "rtr_url" : "https://www.rtr.at/rtr/startseite.de.html",
         "tk_postal" : "Telekommunikation und Post",
-        "media": "Medien"
+        "tk_postal_url" : "https://www.rtr.at/TKP/startseite.de.html",
+        "media": "Medien",
+        "media_url" : "https://www.rtr.at/medien/startseite_medien.de.html"
     },
     "index_content": {
         "service_description": {
