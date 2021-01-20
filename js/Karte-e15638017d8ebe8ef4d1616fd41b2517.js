@@ -243,7 +243,7 @@ function viewMapV3() {
         bases.push(
             new ol.layer.Tile({
                 source: new ol.source.OSM({
-                    url: 'https://cache.netztest.at/tile/osm/{z}/{x}/{y}.png'
+                    url: osm_server + '/{z}/{x}/{y}.png'
                 }),
                 title: 'OpenStreetMap',
                 type: 'base',
