@@ -53,7 +53,7 @@ var test_networks;
 var client_name = "RMBTjs";
 var test_token, testUUID;
 var bing_api_key = "AhtZ2SmIKuAaKmtpxQksx2lFYBLkqF7xi-AXtnyrb7ocVo1DldoaGSpOtziHjytA";
-var osm_server = "https://tile.openstreetmap.org"; ///https://cache.netztest.at/tile/osm/
+var osm_server = "https://cache.netztest.at/tile/osm"; //"https://tile.openstreetmap.org";
 var fallbackOnJS = false;
 var terms_version = 6;
 
