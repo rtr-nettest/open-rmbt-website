@@ -570,8 +570,8 @@ function setLayersV3() {
     }
     else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() < points_heatmap_switch_level && typ == 'browser') {
         points.setVisible(false);
-        heatmap.setVisible(false);
-        shapes.setVisible(true);
+        heatmap.setVisible(true);
+        shapes.setVisible(false);
         onFeatureUnselect();
         allowClicking = false;
     }
@@ -584,8 +584,8 @@ function setLayersV3() {
     }
     else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() >= points_heatmap_switch_level && typ == 'browser') {
         points.setVisible(true);
-        heatmap.setVisible(false);
-        shapes.setVisible(true);
+        heatmap.setVisible(true);
+        shapes.setVisible(false);
         allowClicking = true;
     }
     else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() >= points_heatmap_switch_level) {
@@ -631,14 +631,14 @@ function displayZoom() {
         }
         else if (typ == 'browser' && $("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() < points_heatmap_switch_level) {
                 points.setVisible(false);
-                heatmap.setVisible(false);
-                shapes.setVisible(true);
+                heatmap.setVisible(true);
+                shapes.setVisible(false);
                 allowClicking = false;
         }
         else if (typ == 'browser' && $("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() >= points_heatmap_switch_level) {
                 points.setVisible(true);
-                heatmap.setVisible(false);
-                shapes.setVisible(true);
+                heatmap.setVisible(true);
+                shapes.setVisible(false);
                 allowClicking = true;
         }
 
@@ -823,8 +823,8 @@ function redrawOverlay() {
                         }
                         else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() < points_heatmap_switch_level && typ == 'browser') {
                                 points.setVisible(false);
-                                heatmap.setVisible(false);
-                                shapes.setVisible(true);
+                                heatmap.setVisible(true);
+                                shapes.setVisible(false);
                                 allowClicking = false;            
                                 //markers.setVisible(false);                                
 
@@ -840,7 +840,7 @@ function redrawOverlay() {
                         }
                         else if ($("input:radio:checked[name='check_layer']").val() == 'automatic' && map.getView().getZoom() >= points_heatmap_switch_level && typ == 'browser') {
                                 points.setVisible(true);
-                                heatmap.setVisible(false);
+                                heatmap.setVisible(true);
                                 shapes.setVisible(false);
                                 allowClicking = true;
                                 //click.activate();
