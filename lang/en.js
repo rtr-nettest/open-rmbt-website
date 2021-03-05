@@ -373,5 +373,11 @@ exports.strings = {
     "privacy": "Privacy",
     "email_address": "netztest@rtr.at",
     "email_subject": "Support%20request%20RTR-NetTest%20%28Web%29",
-    "accessibility": "Accessibility"
+    "accessibility": "Accessibility",
+    "down_max": "Download (max)",
+    "up_max": "Upload (max)",
+    "down_avg": "Download (normally available)",
+    "up_avg": "Upload (normally available)",
+    "last_updated": "Last updated",
+    "coverage": "Coverage"
 }
