@@ -63,8 +63,8 @@ exports.strings = {
 
     "map_content" : {
         "teaser" : {
-            "netztest" : 'In dieser Karte werden die Ergebnisse der bisherigen  RTR-Netztests dargestellt, sie lässt nicht in jedem Fall  Rückschlüsse auf die Breitbandversorgung zu. Weitere  Informationen finden Sie  <a href="https://www.rtr.at/de/tk/netztestfaq_karte#c25842">hier</a>.',
-            "qostest" : 'In dieser Karte werden die Ergebnisse der bisherigen Tests auf qostest.eu dargestellt, sie lässt nicht in jedem Fall  Rückschlüsse auf die Breitbandversorgung zu. Weitere  Informationen finden Sie  <a href="https://www.rtr.at/de/tk/netztestfaq_karte#c25842">hier</a>.'
+            "netztest" : 'In dieser Karte werden die Ergebnisse der bisherigen  RTR-Netztests dargestellt, sie lässt nicht in jedem Fall  Rückschlüsse auf die Breitbandversorgung zu. Weitere  Informationen finden Sie  <a href="https://www.rtr.at/TKP/service/rtr-nettest/help/map/netztestfaq_karte.de.html">hier</a>.',
+            "qostest" : 'In dieser Karte werden die Ergebnisse der bisherigen Tests auf qostest.eu dargestellt, sie lässt nicht in jedem Fall  Rückschlüsse auf die Breitbandversorgung zu. Weitere  Informationen finden Sie  <a href="https://www.rtr.at/TKP/service/rtr-nettest/help/map/netztestfaq_karte.de.html">hier</a>.'
         },
         "search_address" : "Suche nach einer Adresse oder einem Ort",
         "large_view" : "große Ansicht"
@@ -72,8 +72,8 @@ exports.strings = {
 
     "statistics_content" : {
         "teaser" : {
-            "netztest" : 'Diese Statistik stellt die Ergebnisse der bisherigen RTR-Netztests dar. Weitere Informationen zur Interpretation der Ergebnisse finden Sie <a href="https://www.rtr.at/de/rtr/netztestfaq_testergebnis#c26545">hier</a>.',
-            "qostest" : 'Diese Statistik stellt die Ergebnisse der bisherigen Tests auf qostest.eu dar. Weitere Informationen zur Interpretation der Ergebnisse finden Sie <a href="https://www.rtr.at/en/rtr/netztestfaq_testergebnis#c26545">here</a>.'
+            "netztest" : 'Diese Statistik stellt die Ergebnisse der bisherigen RTR-Netztests dar. Weitere Informationen zur Interpretation der Ergebnisse finden Sie <a href="https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_testergebnis.de.html">hier</a>.',
+            "qostest" : 'Diese Statistik stellt die Ergebnisse der bisherigen Tests auf qostest.eu dar. Weitere Informationen zur Interpretation der Ergebnisse finden Sie <a href="https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_testergebnis.de.html">here</a>.'
         },
         "operators_from" : "Betreiber aus",
         "disclaimer" : 'Bei der Erstellung der Statistik sind wiederholt durchgeführte Tests gefiltert.',

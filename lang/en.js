@@ -64,8 +64,8 @@ exports.strings = {
 
     "map_content" : {
         "teaser" : {
-            "netztest" : 'This map shows the existing RTR-NetTest results,  it is not always possible to draw conclusions on the broadband coverage. Additional information can be found  <a href="https://www.rtr.at/en/tk/netztestfaq_karte#c26190">here</a>.',
-            "qostest" : 'This map shows the existing qostest.eu results, it is not always possible to draw conclusions on the broadband coverage. Additional information can be found <a href="https://www.rtr.at/en/tk/netztestfaq_karte#c26190">here</a>.'
+            "netztest" : 'This map shows the existing RTR-NetTest results,  it is not always possible to draw conclusions on the broadband coverage. Additional information can be found  <a href="https://www.rtr.at/TKP/service/rtr-nettest/help/map/netztestfaq_karte.en.html">here</a>.',
+            "qostest" : 'This map shows the existing qostest.eu results, it is not always possible to draw conclusions on the broadband coverage. Additional information can be found <a href="https://www.rtr.at/TKP/service/rtr-nettest/help/map/netztestfaq_karte.en.html">here</a>.'
         },
         "search_address" : "Search for an address or city",
         "large_view" : "Large view"
@@ -73,8 +73,8 @@ exports.strings = {
 
     "statistics_content" : {
         "teaser" : {
-            "netztest" : 'The values listed here represent the RTR-NetTest results.     Additional information can be found <a href="https://www.rtr.at/en/rtr/netztestfaq_testergebnis#c26545">here</a>.',
-            "qostest" : 'The values listed here represent the qostest.eu results.     Additional information can be found <a href="https://www.rtr.at/en/rtr/netztestfaq_testergebnis#c26545">here</a>.'
+            "netztest" : 'The values listed here represent the RTR-NetTest results.     Additional information can be found <a href="https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_testergebnis.en.html">here</a>.',
+            "qostest" : 'The values listed here represent the qostest.eu results.     Additional information can be found <a href="https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_testergebnis.en.html">here</a>.'
         },
         "operators_from" : "Operators from",
         "disclaimer" : 'Repeated tests are filtered for the compilation of statistics.',
