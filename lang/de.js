@@ -106,7 +106,12 @@ exports.strings = {
     "opentest_content" : {
         "measurement_result_from" : "Testergebnis vom",
         "coverage_hint": "Bitte beachten Sie, dass diese Datenraten nicht Ergebnisse von Messungen des RTR-Netztests darstellen, sondern Veröffentlichungen der jeweiligen Betreiber. Die Information bezieht sich auf eine Fläche von 100m x 100m. Für Fragen - etwa mit welchen Tarif diese Bandbreiten erreicht werden bzw. ob für Ihren konkreten Standort eine Herstellung möglich ist, wenden Sie sich bitte an den jeweiligen Netzbetreiber.",
-        "coverage_unavailable": "Für diesen Standort sind keine Open Data Informationen der Betreiber verfügbar"
+        "coverage_unavailable": "Für diesen Standort sind keine Open Data Informationen der Betreiber verfügbar",
+        "coverage_intro": "Für diesen Standort wurden folgende Informationen als Open Data von Betreibern veröffentlicht.",
+        "down_avg": "Downlink (normalerweise verfügbar)",
+        "up_avg": "Uplink (normalerweise verfügbar)",
+        "down_max": "Downlink (maximale Geschwindigkeit)",
+        "up_max": "Uplink (maximale Geschwindigkeit)",
     },
 
     "opentests_content" : {
@@ -367,6 +372,7 @@ exports.strings = {
     "show_details": "Details einblenden",
 
     "coordinates": "Standort",
+    "location": "Standort",
     "provider" : "Betreiber",
     "surrounding_tests": "Tests in der Umgebung als Open Data",
     "land_cover": "Bodenbedeckung",
@@ -375,10 +381,10 @@ exports.strings = {
     "email_address": "netztest@rtr.at",
     "email_subject": "Supportanfrage%20RTR-Netztest%20%28Web%29",
     "accessibility": "Barrierefreiheit",
-    "down_max": "Download (max)",
-    "up_max": "Upload (max)",
-    "down_avg": "Download (normalerweise verfügbar)",
-    "up_avg": "Upload (normalerweise verfügbar)",
+    "down_max": "DL (max)",
+    "up_max": "UL (max)",
+    "down_avg": "DL (normal)",
+    "up_avg": "UL (normal)",
     "last_updated": "Datenstand",
     "coverage": "Versorgungsdaten"
 }

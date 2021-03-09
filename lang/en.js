@@ -107,7 +107,12 @@ exports.strings = {
     "opentest_content" : {
         "measurement_result_from" : "Measurement result from",
         "coverage_hint": "Please not that these data rate rates are not results of measurements with RTR-NetTest, but publications of the respective operators. The information refers to an area of 100m x 100m. For questions - such as the tariff with which bandwidths can be achvied or whether installation is possible on your specific location, please contact the respective network operator.",
-        "coverage_unavailable": "For this location, no operator open data is available."
+        "coverage_unavailable": "For this location, no operator open data is available.",
+        "coverage_intro": "No open data information provided by operators for this location.",
+        "down_avg": "Downlink (normally available speed)",
+        "up_avg": "Uplink (normally available speed)",
+        "down_max": "Downlink (maximum speed available)",
+        "up_max": "Uplink (maximum speed available)"
     },
 
     "opentests_content" : {
@@ -368,6 +373,7 @@ exports.strings = {
     "show_details": "Show details",
 
     "coordinates": "Coordinates",
+    "location": "Location",
     "provider" : "Provider",
     "surrounding_tests": "Show surrounding measurements as open data",
     "land_cover": "Land cover",
@@ -376,10 +382,10 @@ exports.strings = {
     "email_address": "netztest@rtr.at",
     "email_subject": "Support%20request%20RTR-NetTest%20%28Web%29",
     "accessibility": "Accessibility",
-    "down_max": "Download (max)",
-    "up_max": "Upload (max)",
-    "down_avg": "Download (normally available)",
-    "up_avg": "Upload (normally available)",
+    "down_max": "DL (max)",
+    "up_max": "UL (max)",
+    "down_avg": "DL (normal)",
+    "up_avg": "UL (normal)",
     "last_updated": "Last updated",
     "coverage": "Coverage"
 }
