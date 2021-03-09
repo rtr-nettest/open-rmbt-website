@@ -105,7 +105,9 @@ exports.strings = {
     },
 
     "opentest_content" : {
-        "measurement_result_from" : "Measurement result from"
+        "measurement_result_from" : "Measurement result from",
+        "coverage_hint": "Please not that these data rate rates are not results of measurements with RTR-NetTest, but publications of the respective operators. The information refers to an area of 100m x 100m. For questions - such as the tariff with which bandwidths can be achvied or whether installation is possible on your specific location, please contact the respective network operator.",
+        "coverage_unavailable": "For this location, no operator open data is available."
     },
 
     "opentests_content" : {

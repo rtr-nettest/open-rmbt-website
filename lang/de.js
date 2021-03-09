@@ -104,7 +104,9 @@ exports.strings = {
     },
 
     "opentest_content" : {
-        "measurement_result_from" : "Testergebnis vom"
+        "measurement_result_from" : "Testergebnis vom",
+        "coverage_hint": "Bitte beachten Sie, dass diese Datenraten nicht Ergebnisse von Messungen des RTR-Netztests darstellen, sondern Veröffentlichungen der jeweiligen Betreiber. Die Information bezieht sich auf eine Fläche von 100m x 100m. Für Fragen - etwa mit welchen Tarif diese Bandbreiten erreicht werden bzw. ob für Ihren konkreten Standort eine Herstellung möglich ist, wenden Sie sich bitte an den jeweiligen Netzbetreiber.",
+        "coverage_unavailable": "Für diesen Standort sind keine Open Data Informationen der Betreiber verfügbar"
     },
 
     "opentests_content" : {
@@ -377,6 +379,6 @@ exports.strings = {
     "up_max": "Upload (max)",
     "down_avg": "Download (normalerweise verfügbar)",
     "up_avg": "Upload (normalerweise verfügbar)",
-    "last_updated": "Stand der Daten",
+    "last_updated": "Datenstand",
     "coverage": "Versorgungsdaten"
 }
