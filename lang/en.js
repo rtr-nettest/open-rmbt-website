@@ -106,9 +106,9 @@ exports.strings = {
 
     "opentest_content" : {
         "measurement_result_from" : "Measurement result from",
-        "coverage_hint": "Please not that these data rate rates are not results of measurements with RTR-NetTest, but publications of the respective operators. The information refers to an area of 100m x 100m. For questions - such as the tariff with which bandwidths can be achvied or whether installation is possible on your specific location, please contact the respective network operator.",
+        "coverage_hint": "Please not that these data rate rates are not results of measurements with RTR-NetTest, but publications of the respective operators. The information refers to an area of 100m x 100m. For questions - such as the tariff with which bandwidths can be achvied or whether installation is possible on your specific location - please contact the respective network operator.",
         "coverage_unavailable": "For this location, no operator open data is available.",
-        "coverage_intro": "No open data information provided by operators for this location.",
+        "coverage_intro": "For this location the following information has been published by operators:",
         "down_avg": "Downlink (normally available speed)",
         "up_avg": "Uplink (normally available speed)",
         "down_max": "Downlink (maximum speed available)",
