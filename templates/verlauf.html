@@ -134,9 +134,66 @@
     <div class="test-map">
         <h3>{{ Lang.position }}</h3>
         <div>
-            <div style="height: 250px;" id="tmpmap" class="test-map-container"></div>
+            <div style="height: 250px;" id="tmpmap" class="test-map-container">
+                <input id="lightboxbutton" type="button" value="{{ Lang.coverage }}" class="uk-button uk-button-default uk-button-secondary uk-button-small uk-margin-top uk-margin-right open-data-coverage-link">
+            </div>
             <a href="Opentests" class="open-data-radius-link">{{ Lang.surrounding_tests }}</a>
         </div>
+        <script type="text/x-handlebars-template" id="coverageTemplate">
+            <div id="coverageModal" class="uk-modal-container" uk-modal>
+                <div class="uk-modal-dialog uk-modal-body ">
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                    <h2 class="uk-modal-title">{{Lang.coverage}}</h2>
+                    {% raw %}{{#if coverages}}{% endraw %}
+                    <p>
+                        {{ Lang.location }}: {% raw %}{{{ location }}}{% endraw %}
+                    </p>
+                    <p>
+                        {{ Lang.opentest_content.coverage_intro }}
+                    </p>
+                    <div class="uk-overflow-auto">
+                        <table class="uk-table uk-table-striped uk-table-small uk-margin-bottom">
+                            <thead>
+                            <tr>
+                                <th>{{ Lang.operator }}</th>
+                                <th>{{ Lang.technology }}</th>
+                                <th class="uk-text-right"><abbr title="{{Lang.opentest_content.down_max}}">{{ Lang.down_max }}</abbr></th>
+                                <th class="uk-text-right"><abbr title="{{Lang.opentest_content.up_max}}">{{ Lang.up_max }}</abbr></th>
+                                <th class="uk-text-right"><abbr title="{{Lang.opentest_content.down_avg}}">{{ Lang.down_avg }}</abbr></th>
+                                <th class="uk-text-right"><abbr title="{{ Lang.opentest_content.up_avg }}">{{Lang.up_avg }}</abbr>
+                                </th>
+                                <th class="uk-text-right">{{ Lang.last_updated }}</th>
+                            </tr>
+                            </thead>
+                            {% raw %}
+                            <tbody>
+                            {{#each coverages }}
+                                <tr>
+                                    <td>{{operator}}</td>
+                                    <td>{{technology}}</td>
+                                    <td class="uk-text-right">{{kbpsToMbps download_kbit_max}}</td>
+                                    <td class="uk-text-right">{{kbpsToMbps upload_kbit_max}}</td>
+                                    <td class="uk-text-right">{{kbpsToMbps download_kbit_normal}}</td>
+                                    <td class="uk-text-right">{{kbpsToMbps upload_kbit_normal}}</td>
+                                    <td class="uk-text-right">{{last_updated}}</td>
+                                </tr>
+                            {{/each}}
+                            </tbody>
+                            {% endraw %}
+                        </table>
+                    </div>
+                    <p>
+                        {{Lang.opentest_content.coverage_hint}}
+                    </p>
+                    {% raw %}{{else}}{% endraw %}
+                    <p>
+                        {{Lang.opentest_content.coverage_unavailable}}
+                    </p>
+                    {% raw %}{{/if}}{% endraw %}
+
+                </div>
+            </div>
+        </script>
         <ul uk-accordion="" class="uk-accordion ac-content">
             <li>
                 <a class="uk-accordion-title" href="#">{{ Lang.show_details }}</a>

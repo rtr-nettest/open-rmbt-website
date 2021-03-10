@@ -770,7 +770,7 @@ function loadOpenTestData(openTestUUID, testUUIDForZipPopup) {
             $("#verlauf-detailcontainer .speed-curve-table-upload").find("tr:gt(0)").remove();
             $("#verlauf-detailcontainer .signal-curve-graph").empty();
             $("#verlauf-detailcontainer .signal-curve-table").find("tr:gt(0)").remove();
-            $("#verlauf-detailcontainer .test-map-container").empty();
+            $("#verlauf-detailcontainer .test-map-container").find("*").not("#lightboxbutton").remove();
             $("#verlauf-detailcontainer .social").empty();
 
 
