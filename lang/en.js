@@ -106,7 +106,7 @@ exports.strings = {
 
     "opentest_content" : {
         "measurement_result_from" : "Measurement result from",
-        "coverage_hint": "Please not that these data rate rates are not results of measurements with RTR-NetTest, but publications of the respective operators. The information refers to an area of 100m x 100m. For questions - such as the tariff with which bandwidths can be achvied or whether installation is possible on your specific location - please contact the respective network operator.",
+        "coverage_hint": "Please not that these data rate rates are not results of measurements with RTR-NetTest, but publications of the respective operators. The information refers to an area of 100m x 100m. For questions - such as the tariff with which bandwidths can be achvied or whether installation is possible on your specific location - please contact the respective network operator. <a href='https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_coverage.en.html' target='_blank'>Further information</a>",
         "coverage_unavailable": "For this location, no operator open data is available.",
         "coverage_intro": "For this location the following information has been published by operators:",
         "down_avg": "Downlink (normally available speed)",
