@@ -391,10 +391,8 @@ function RMBTCertTest(uuid) {
 
 var results=[];
 
-function conductTests(retryCount) {
-    if (!retryCount) {
-        retryCount = 0;
-    }
+function conductTests() {
+    var retryCount = 0;
 
     var resultTemplate = Handlebars.compile($("#resultTemplate").html());
     var titleText = "# " + document.title;
@@ -453,8 +451,9 @@ function conductTests(retryCount) {
 
         //if the test failed, retry it
         if (retryCount < maxRetries) {
+            retryCount++;
             window.setTimeout(function () {
-                conductTests(retryCount + 1);
+                startSingleTest(tests, testSuccessCallback, testErrorCallback);
             }, retryTimeoutSeconds * 1e3 * (1 + retryCount));
             return;
         }
