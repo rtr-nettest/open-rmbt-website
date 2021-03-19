@@ -18,6 +18,8 @@
 
 var repetitions = 5;
 var waitingTime = 15*60;
+var maxRetries = 3;
+var retryTimeoutSeconds = 10;
 var lastKnownGeoPosition = null;
 
 var LoopTestVisualization = (function () {
@@ -389,7 +391,11 @@ function RMBTCertTest(uuid) {
 
 var results=[];
 
-function conductTests() {
+function conductTests(retryCount) {
+    if (!retryCount) {
+        retryCount = 0;
+    }
+
     var resultTemplate = Handlebars.compile($("#resultTemplate").html());
     var titleText = "# " + document.title;
 
@@ -443,6 +449,14 @@ function conductTests() {
         if (previousTestStart === null ||
             previousTestStart.date() !== currentTestStart.date()) {
             result.fullDate = true;
+        }
+
+        //if the test failed, retry it
+        if (retryCount < maxRetries) {
+            window.setTimeout(function () {
+                conductTests(retryCount + 1);
+            }, retryTimeoutSeconds * 1e3 * (1 + retryCount));
+            return;
         }
 
         //add error to table
