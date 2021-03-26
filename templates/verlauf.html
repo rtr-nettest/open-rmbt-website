@@ -185,12 +185,14 @@
                     <p>
                         {{Lang.opentest_content.coverage_hint}}
                     </p>
+                    <p>
+                    <div id="coverageMap" style="height: 250px"></div>
+                    </p>
                     {% raw %}{{else}}{% endraw %}
                     <p>
                         {{Lang.opentest_content.coverage_unavailable}}
                     </p>
                     {% raw %}{{/if}}{% endraw %}
-
                 </div>
             </div>
         </script>
