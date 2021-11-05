@@ -6,7 +6,8 @@
     "start": "node ./build.js"
   },
   "dependencies": {
-    "debug": "~2.1.1",
+    "cheerio": "^0.22.0",
+    "debug": ">=2.6.9",
     "git-describe": "^1.1.2",
     "metalsmith": "^1.0.0",
     "metalsmith-fingerprint-ignore": "cproof/metalsmith-fingerprint-ignore",
@@ -14,12 +15,11 @@
     "metalsmith-layouts": "^1.4.2",
     "metalsmith-permalinks": "^0.1.0",
     "metalsmith-sass": "^1.7.0",
-    "metalsmith-watch": "1.0.1",
+    "metalsmith-watch": "^1.0.3",
     "mkdirp": "^0.5.1",
     "nunjucks": "^2.0.0",
     "randomstring": "^1.0.7",
     "request": "^2.57",
-    "uikit": "3.5.8",
-    "cheerio": "^0.18.0"
+    "uikit": "3.5.8"
   }
 }
