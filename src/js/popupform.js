@@ -453,7 +453,7 @@ function show_errorPopup() {
 	var template = Handlebars.compile($("#modalTemplate").html());
 	var containerId = "modal-container-" + Math.round(Math.random() * 1024e4)
 	var html = template({
-		"content": $("#popuperror").text(),
+		"content": $("#popuperror").html(),
 		"confirm": 'OK',
 		"title": Lang.getString('Error'),
 		"container-modifier": "",
