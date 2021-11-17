@@ -117,41 +117,11 @@ function show_agb_popup(onAccept, onDecline, options) {
     //reset
     $(".ui-dialog, #popupform").empty();
 
-    var dialogButtons = [];
-
     //onClose will fire, even if a button is clicked -> check this
     var closeHandled = false;
 
-    dialogButtons.push({
-        text: (selectedLanguage === 'de') ? 'Abbruch' : 'Decline',
-        click: function () {
-        	closeHandled = true;
-            $(this).dialog("close");
-            onDecline();
-            return;
-        }
-    });
-
-    dialogButtons.push({
-        text: (selectedLanguage === 'de') ? 'Zustimmung' : 'Agree',
-        click: function () {
-        	if (cookieIdentifier) {
-                if (showCheckbox && $("#popupformCheckbox").is(":checked")) {
-                    setCookie(cookieIdentifier, true, cookieExpiresSecondsWithCheckbox);
-                }
-                else {
-                    setCookie(cookieIdentifier, true, cookieExpiresSeconds);
-				}
-            }
-            closeHandled = true;
-            $(this).dialog("close");
-            onAccept();
-            return;
-        }
-    });
-
     //load and add text
-	let popupText = $("<div>" +
+	var popupText = $("<div>" +
         '<div id="terms_check">' +
         '<div class="longtext">' +
         '<p>'+toc +'</p>' +
@@ -470,28 +440,34 @@ function show_zipform(run_Test, callback, options) {
 }
 
 function show_errorPopup() {
-	$("#popuperror").dialog({
+	//reset
+	$(".ui-dialog, #popupform").empty();
 
-		autoOpen : false,
+	var dialogButtons = [];
 
-		title : Lang.getString('Error'),
+	//onClose will fire, even if a button is clicked -> check this
+	var closeHandled = false;
 
-		modal : true,
-		draggable : false,
-		resize : false,
 
-		minHeight : 200,
-		minWidth : 350,
 
-		width : 500,
-		height : 200,
+	var template = Handlebars.compile($("#modalTemplate").html());
+	var containerId = "modal-container-" + Math.round(Math.random() * 1024e4)
+	var html = template({
+		"content": $("#popuperror").text(),
+		"confirm": 'OK',
+		"title": Lang.getString('Error'),
+		"container-modifier": "",
+		"container-id": containerId
+	});
+	$("body").append(html);
 
-		buttons : { Ok : function() {
-				$(this).dialog("close");
-			}
-		}
-		});
-	$("#popuperror").dialog("open");
+
+	UIkit.modal($("#" + containerId)[0]).show();
+	$("#" + containerId).find("#modal-confirm").click(function (e) {
+
+		UIkit.modal($("#" + containerId)[0]).hide();
+	})
+
 }
 function close_errorPopup() {
     try {
