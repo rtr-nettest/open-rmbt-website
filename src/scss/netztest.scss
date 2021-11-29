@@ -33,6 +33,10 @@ $grey: #545454;
 }
 
 /* General fixes */
+em {
+  color: $green;
+}
+
 .tm-header {
   z-index: 30; //will collide with breadcrumbs otherwise
 }
