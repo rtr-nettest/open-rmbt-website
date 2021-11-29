@@ -213,7 +213,7 @@ Lang.setStrings({
     'TestsInTheLastXHours' : 'Tests in den letzten % Stunden',
     'TestsInTheLastXMinutes' : 'Tests in den letzten % Minuten',
     'NoUUID' : 'Keine UUID vorhanden',
-    'SafariBroken' : 'Bitte verwenden Sie für die Durchführung des Netztests <a href="https://www.mozilla.org/de/firefox/new/">Mozilla Firefox</a> oder <a href="https://www.google.de/chrome/browser/desktop/">Google Chrome</a>. Weitere Informationen dazu finden Sie <a href="https://www.rtr.at/de/tk/netztestfaq_web_100">in den FAQ</a>.',
+    'SafariBroken' : 'Derzeit ist eine Durchführung des RTR-Netztest mit Safari nicht möglich. Bitte verwenden Sie einen anderen Browser wie <a href="https://www.mozilla.org/de/firefox/new/">Mozilla Firefox</a> oder <a href="https://www.google.de/chrome/browser/desktop/">Google Chrome</a>. Weitere Informationen dazu finden Sie <a href="https://www.rtr.at/de/tk/netztestfaq_web_100">in den FAQ</a>.',
     'FirefoxBroken' : 'Derzeit ist eine Durchführung des RTR-Netztest mit Firefox 82.0 nicht möglich. Wir arbeiten an der Fehlerbehebung. Bitte verwenden Sie zwischenzeitlich einen anderen Browser.',
     'LoopMode' : 'Wiederholungsmodus',
     'LoopModeTestsFinished' : 'Alle Tests abgeschlossen',
