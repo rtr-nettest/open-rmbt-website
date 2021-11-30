@@ -332,7 +332,7 @@
         <thead>
         <tr>
             <th scope="col">Zeit</th>
-            <th scope="col">Betreiber/
+            <th scope="col">Anbieter/
                 <wbr>
                 Gerät
             </th>
@@ -364,7 +364,7 @@
         <div class="uk-margin-bottom uk-container uk-card uk-card-muted">
         <form class="form-inline">
             <div class="form_line">
-                <label for="country">Betreiber aus </label>
+                <label for="country">Anbieter aus </label>
                 <select class="uk-select uk-width-auto" id="country" onchange="requestBrowserData('RMBTstatistics');">
                     <option value="null">Österreich</option>
                 </select>
@@ -589,7 +589,7 @@
                     <td class="uk-text-right quantile">
                         <div>{{ formatNumberSignificant (divideBy providers_sums.quantile_down 1000) }} Mbit/s
                             <div id="sum_down" class="quantile_details">
-                                Alle Betreiber <br/>
+                                Alle Anbieter <br/>
                                 Down: {{ formatNumberSignificant (divideBy providers_sums.quantile_down 1000) }} Mbit/s <br/>
                                 <span><i class="svg-icon svg14 svg-traffic-light-4"></i>{{ percent providers_sums.down_ultragreen }}</span>
                                 <span><i class="svg-icon svg14 svg-traffic-light-3"></i>{{ percent providers_sums.down_green }}</span>
@@ -601,7 +601,7 @@
                     <td class="uk-text-right quantile">
                         <div>{{ formatNumberSignificant (divideBy providers_sums.quantile_up 1000) }} Mbit/s
                             <div id="sum_up" class="quantile_details">
-                                Alle Betreiber <br/>
+                                Alle Anbieter <br/>
                                 Up: {{ formatNumberSignificant (divideBy providers_sums.quantile_up 1000)}} Mbit/s <br/>
                                 <span><i class="svg-icon svg14 svg-traffic-light-4"></i>{{ percent providers_sums.up_ultragreen }}</span>
                                 <span><i class="svg-icon svg14 svg-traffic-light-3"></i>{{ percent providers_sums.up_green }}</span>
@@ -613,7 +613,7 @@
                     <td class="uk-text-right quantile">
                         <div>{{ formatNumberSignificant (divideBy providers_sums.quantile_ping 1000000) }} ms
                             <div id="sum_ping" class="quantile_details">
-                                Alle Betreiber  <br/>
+                                Alle Anbieter  <br/>
                                 Ping: {{ formatNumberSignificant (divideBy providers_sums.quantile_ping 1000000) }} ms <br/>
                                 <span><i class="svg-icon svg14 svg-traffic-light-4"></i>{{ percent providers_sums.ping_ultragreen }}</span>
                                 <span><i class="svg-icon svg14 svg-traffic-light-3"></i>{{ percent providers_sums.ping_green }}</span>
@@ -626,7 +626,7 @@
                         <div>{{#if providers_sums.quantile_signal}}
                             {{ providers_sums.quantile_signal }} dBm
                             <div id="sum_signal" class="quantile_details">
-                                Alle Betreiber  <br/>
+                                Alle Anbieter  <br/>
                                 Signal: {{ providers_sums.quantile_signal }}<br/>
                                 <span><i class="svg-icon svg14 svg-traffic-light-4"></i>{{ percent providers_sums.signal_ultragreen }}</span>
                                 <span><i class="svg-icon svg14 svg-traffic-light-3"></i>{{ percent providers_sums.signal_green }}</span>
@@ -642,7 +642,7 @@
                 </tr>
                 {{else}}
                 <tr>
-                    <td colspan="{{#if onlyCaptions }}5{{ else }}6{{/if }}"> Keine Betreiber verfügbar in der aktuellen Filterung </td>
+                    <td colspan="{{#if onlyCaptions }}5{{ else }}6{{/if }}"> Keine Anbieter verfügbar in der aktuellen Filterung </td>
                 </tr>
                 {{/if }}
                 </tfoot>
