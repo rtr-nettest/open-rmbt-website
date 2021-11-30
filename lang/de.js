@@ -75,7 +75,7 @@ exports.strings = {
             "netztest" : 'Diese Statistik stellt die Ergebnisse der bisherigen RTR-Netztests dar. Weitere Informationen zur Interpretation der Ergebnisse finden Sie <a href="https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_testergebnis.de.html">hier</a>.',
             "qostest" : 'Diese Statistik stellt die Ergebnisse der bisherigen Tests auf qostest.eu dar. Weitere Informationen zur Interpretation der Ergebnisse finden Sie <a href="https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_testergebnis.de.html">here</a>.'
         },
-        "operators_from" : "Betreiber aus",
+        "operators_from" : "Anbieter aus",
         "disclaimer" : 'Bei der Erstellung der Statistik sind wiederholt durchgeführte Tests gefiltert.',
         "opendata_disclaimer" : 'Hinweis: <a href="Opendata.html">Testergebnisse als Opendata</a> verfügbar',
         "burgenland" : 'Burgenland',
@@ -89,8 +89,8 @@ exports.strings = {
         "vienna" : "Wien",
         "all_states" : "Alle Bundesländer",
         "enddate" : "Enddatum",
-        "all_operators" : "Alle Betreiber",
-        "no_operators": "Keine Betreiber verfügbar in der aktuellen Filterung",
+        "all_operators" : "Alle Anbieter",
+        "no_operators": "Keine Anbieter verfügbar in der aktuellen Filterung",
         "failure": "Derzeit ist keine Statistik verfügbar."
     },
 
@@ -105,9 +105,9 @@ exports.strings = {
 
     "opentest_content" : {
         "measurement_result_from" : "Testergebnis vom",
-        "coverage_hint": "Bitte beachten Sie, dass diese Datenraten nicht Ergebnisse von Messungen des RTR-Netztests darstellen, sondern Veröffentlichungen der jeweiligen Betreiber. Die Information bezieht sich auf eine Fläche von 100m x 100m. Für Fragen - etwa mit welchen Tarif diese Bandbreiten erreicht werden bzw. ob für Ihren konkreten Standort eine Herstellung möglich ist - wenden Sie sich bitte an den jeweiligen Netzbetreiber. <a href='https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_coverage.de.html' target='_blank'>Weitere Informationen</a>",
-        "coverage_unavailable": "Für diesen Standort sind keine Open Data Informationen der Betreiber verfügbar.",
-        "coverage_intro": "Für diesen Standort wurden folgende Informationen als Open Data von Betreibern veröffentlicht:",
+        "coverage_hint": "Bitte beachten Sie, dass diese Datenraten nicht Ergebnisse von Messungen des RTR-Netztests darstellen, sondern Veröffentlichungen der jeweiligen Anbieter. Die Information bezieht sich auf eine Fläche von 100m x 100m. Für Fragen - etwa mit welchen Tarif diese Bandbreiten erreicht werden bzw. ob für Ihren konkreten Standort eine Herstellung möglich ist - wenden Sie sich bitte an den jeweiligen Netzanbieter. <a href='https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_coverage.de.html' target='_blank'>Weitere Informationen</a>",
+        "coverage_unavailable": "Für diesen Standort sind keine Open Data Informationen der Anbieter verfügbar.",
+        "coverage_intro": "Für diesen Standort wurden folgende Informationen als Open Data von Anbietern veröffentlicht:",
         "down_avg": "Downlink (normalerweise verfügbar)",
         "up_avg": "Uplink (normalerweise verfügbar)",
         "down_max": "Downlink (maximale Geschwindigkeit)",
@@ -116,7 +116,7 @@ exports.strings = {
 
     "opentests_content" : {
         "network_name" : "Mobilfunknetz (Anzeige)",
-        "mobile_provider_name" : "Mobilfunkbetreiber",
+        "mobile_provider_name" : "Mobilfunkanbieter",
         "sim_home_country" : "SIM-Heimatland",
         "sim_mcc_mnc" : "SIM-MCC-MNC",
         "country_geoip" : "Land (IP)",
@@ -185,7 +185,7 @@ exports.strings = {
         "environment": "Messumfeld",
         "measurement": "Messung",
         "result": "Ergebnis",
-        "introduction_desc": "Die zertifizierte Messung ermöglicht es Ihnen, beweiskräftige Feststellungen über die Qualität Ihres Internetzuganges zu erheben. Bei Festnetz-Internetzugängen stellen die Ergebnisse die Grundlage für einen so genannten Anscheinsbeweis für bestimmte gewährleistungsrechtliche Aspekte Ihres Internetzuganges von einem österreichischen Betreiber dar. Die zertifizierte Messung stellt nur Tatsachen fest. Ob eine vertragskonforme Leistung erbracht wird oder nicht, obliegt daher immer der entscheidenden Stelle. Das kann etwa ein Gericht oder die <a href=\"https://www.rtr.at/de/tk/TKKS_Schlichtung01\">Schlichtungsstelle</a> bei der RTR-GmbH sein.",
+        "introduction_desc": "Die zertifizierte Messung ermöglicht es Ihnen, beweiskräftige Feststellungen über die Qualität Ihres Internetzuganges zu erheben. Bei Festnetz-Internetzugängen stellen die Ergebnisse die Grundlage für einen so genannten Anscheinsbeweis für bestimmte gewährleistungsrechtliche Aspekte Ihres Internetzuganges von einem österreichischen Anbieter dar. Die zertifizierte Messung stellt nur Tatsachen fest. Ob eine vertragskonforme Leistung erbracht wird oder nicht, obliegt daher immer der entscheidenden Stelle. Das kann etwa ein Gericht oder die <a href=\"https://www.rtr.at/de/tk/TKKS_Schlichtung01\">Schlichtungsstelle</a> bei der RTR-GmbH sein.",
         "introduction_instruction": "Hinweise zur Messung",
         "introduction_instruction_desc": "Bevor Sie die zertifizierte Messung starten, lesen Sie bitte die <a href=\"https://www.rtr.at/TKP/service/rtr-nettest/help/certified_measurement/Anleitung_zert_Messung.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Anleitung zur zertifizierten Messung</a> sorgfältig durch. Darin findet sich auch eine Checkliste, die Sie bei der Durchführung der zertifizierten Messung unterstützt. Weitere Informationen finden Sie in den <a href=\"https://www.rtr.at/de/tk/netztestfaq_certified_measurement\">FAQ</a>.",
         "please_note": "Bitte beachten Sie insbesondere:",
@@ -255,7 +255,7 @@ exports.strings = {
     "top" : "Seitenanfang",
     "print" : "Drucken",
     "time": "Zeit",
-    "operator": "Betreiber",
+    "operator": "Anbieter",
     "device": "Gerät",
     "up": "Up",
     "down": "Down",
@@ -373,7 +373,7 @@ exports.strings = {
 
     "coordinates": "Standort",
     "location": "Standort",
-    "provider" : "Betreiber",
+    "provider" : "Anbieter",
     "surrounding_tests": "Tests in der Umgebung als Open Data",
     "land_cover": "Bodenbedeckung",
     "next": "Weiter",
