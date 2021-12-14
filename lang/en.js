@@ -256,7 +256,7 @@ exports.strings = {
     "top" : "Top",
     "print" : "Print",
     "time": "Time",
-    "operator": "Pprovider",
+    "operator": "Provider",
     "device": "Device",
     "up": "Up",
     "down": "Down",
