@@ -76,7 +76,7 @@ exports.strings = {
             "netztest" : 'The values listed here represent the RTR-NetTest results.     Additional information can be found <a href="https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_testergebnis.en.html">here</a>.',
             "qostest" : 'The values listed here represent the qostest.eu results.     Additional information can be found <a href="https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_testergebnis.en.html">here</a>.'
         },
-        "operators_from" : "Operators from",
+        "operators_from" : "Pproviders from",
         "disclaimer" : 'Repeated tests are filtered for the compilation of statistics.',
         "opendata_disclaimer" : 'Please note: <a href="Opendata.html">measurement data available</a> as open data',
         "burgenland" : 'Burgenland',
@@ -90,8 +90,8 @@ exports.strings = {
         "vienna" : "Vienna",
         "all_states" : "All provinces",
         "enddate" : "End date",
-        "all_operators" : "All operators",
-        "no_operators": "No operators found for the current selection",
+        "all_operators" : "All providers",
+        "no_operators": "No providers found for the current selection",
         "failure": "Currently there are no statistics available."
     },
 
@@ -106,9 +106,9 @@ exports.strings = {
 
     "opentest_content" : {
         "measurement_result_from" : "Measurement result from",
-        "coverage_hint": "Please note that these data rates are not measurement results of the RTR-NetTest, but data rates published by the respective operators. The information refers to an area of 100m x 100m. For questions - such as the tariff with which bandwidths can be achieved or whether installation is possible at your specific location - please contact the respective network operator. <a href='https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_coverage.en.html' target='_blank'>Further information</a>",
-        "coverage_unavailable": "For this location, no operator open data is available.",
-        "coverage_intro": "For this location the following information has been published by operators:",
+        "coverage_hint": "Please note that these data rates are not measurement results of the RTR-NetTest, but data rates published by the respective providers. The information refers to an area of 100m x 100m. For questions - such as the tariff with which bandwidths can be achieved or whether installation is possible at your specific location - please contact the respective network provider. <a href='https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_coverage.en.html' target='_blank'>Further information</a>",
+        "coverage_unavailable": "For this location, no provider open data is available.",
+        "coverage_intro": "For this location the following information has been published by providers:",
         "down_avg": "Downlink (normally available speed)",
         "up_avg": "Uplink (normally available speed)",
         "down_max": "Downlink (maximum speed available)",
@@ -117,7 +117,7 @@ exports.strings = {
 
     "opentests_content" : {
         "network_name" : "Mobile network (Display)",
-        "mobile_provider_name" : "Mobile operator",
+        "mobile_provider_name" : "Mobile provider",
         "sim_home_country" : "SIM home country",
         "sim_mcc_mnc" : "SIM-MCC-MNC",
         "country_geoip" : "Country (IP)",
@@ -186,7 +186,7 @@ exports.strings = {
         "environment": "Environment",
         "measurement": "Measurement",
         "result": "Result",
-        "introduction_desc": "The certified measurement allows you to make conclusive statements about the quality of your Internet access. These findings serve as the basis for a so-called \"prima facie proof\" of certain warranty aspects in case of a fixed Internet access from an Austrian operator. The certified measurement only states facts. Whether a contract-compliant service is provided or not, is therefore always up to the deciding entity. This could be a court or the <a href=\"https://www.rtr.at/en/tk/TKKS_Schlichtung01\"> conciliation body </a> of RTR-GmbH.",
+        "introduction_desc": "The certified measurement allows you to make conclusive statements about the quality of your Internet access. These findings serve as the basis for a so-called \"prima facie proof\" of certain warranty aspects in case of a fixed Internet access from an Austrian provider. The certified measurement only states facts. Whether a contract-compliant service is provided or not, is therefore always up to the deciding entity. This could be a court or the <a href=\"https://www.rtr.at/en/tk/TKKS_Schlichtung01\"> conciliation body </a> of RTR-GmbH.",
         "introduction_instruction": "Notes on the measurement",
         "introduction_instruction_desc": "Before you start the certified measurement, please read the <a href=\"https://www.rtr.at/TKP/service/rtr-nettest/help/certified_measurement/Certified_measurement_guide.pdf\" target=\"_blank\" rel=\"noopener noreferrer\"> instructions for certified measurement </a> carefully. It also includes a checklist to assist you in performing the certified measurement. For more information, see the <a href=\"https://www.rtr.at/en/tk/netztestfaq_certified_measurement\"> FAQ </a>.",
         "please_note": "Please note in particular:",
@@ -256,7 +256,7 @@ exports.strings = {
     "top" : "Top",
     "print" : "Print",
     "time": "Time",
-    "operator": "Operator",
+    "operator": "Pprovider",
     "device": "Device",
     "up": "Up",
     "down": "Down",
