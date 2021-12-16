@@ -863,6 +863,9 @@ function loadOpenTestData(openTestUUID, testUUIDForZipPopup) {
             } else {
                 $("#verlauf-detailcontainer .testresult-qos").hide();
             }
+        },
+        error: function() {
+            $("#verlauf-detailcontainer .testresult-qos").hide();
         }
     });
 }
