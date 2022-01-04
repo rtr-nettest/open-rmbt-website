@@ -594,6 +594,7 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
         }
     });
     config.uuid = clientUUID;
+    config.doPingIntervalMilliseconds = ping_interval_milliseconds;
     config.additionalRegistrationParameters["loopmode_info"] = {
         max_delay: (waitingTime/60),
         test_counter: (i+1),
