@@ -56,6 +56,7 @@ var bing_api_key = "AhtZ2SmIKuAaKmtpxQksx2lFYBLkqF7xi-AXtnyrb7ocVo1DldoaGSpOtziH
 var osm_server = "https://cache.netztest.at/tile/osm"; //"https://tile.openstreetmap.org";
 var fallbackOnJS = false;
 var terms_version = 6;
+var ping_interval_milliseconds = 1000;
 
 test_timezone = "Europe/Vienna"; // ToDo Timezone dynamisch erzeugen.
 

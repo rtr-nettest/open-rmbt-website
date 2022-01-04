@@ -28,8 +28,8 @@
     <script type="text/javascript" src="../js/menu-6b6e52584621ede3cf568a5f264459e6.js"></script>
     <script type="text/javascript" src="../lib/jquery_ui/jquery-ui.min-1043f80cd6a5a8b2e82e1bde0f31b3a9.js"></script>
     <script type="text/javascript" src="../js/jquery.history-cc1c80297e02d927f9b07e82f7cfcaf8.js"></script>
-    <script type="text/javascript" src="../js/javaconf-6b917a26789f8afa0cda0ea15777ea68.js"></script>
-    <script type="text/javascript" src="../js/functions-30f6187c5eeafcfd7ebb1f862225a815.js"></script>
+    <script type="text/javascript" src="../js/javaconf-3fb79b5db09473aacc69925e1523215d.js"></script>
+    <script type="text/javascript" src="../js/functions-9344939f0abaf40443e2092be7174f70.js"></script>
     <script src="../lib/handlebars.min-fdc5dfd7ea2aca849de7ef99eaf9f807.js" type="text/javascript"></script>
 
     <script type="text/javascript" src="Lang.js"></script>
@@ -332,7 +332,7 @@
         <thead>
         <tr>
             <th scope="col">Time</th>
-            <th scope="col">Operator/
+            <th scope="col">Provider/
                 <wbr>
                 Device
             </th>
@@ -364,7 +364,7 @@
         <div class="uk-margin-bottom uk-container uk-card uk-card-muted">
         <form class="form-inline">
             <div class="form_line">
-                <label for="country">Operators from </label>
+                <label for="country">Pproviders from </label>
                 <select class="uk-select uk-width-auto" id="country" onchange="requestBrowserData('RMBTstatistics');">
                     <option value="null">Austria</option>
                 </select>
@@ -589,7 +589,7 @@
                     <td class="uk-text-right quantile">
                         <div>{{ formatNumberSignificant (divideBy providers_sums.quantile_down 1000) }} Mbps
                             <div id="sum_down" class="quantile_details">
-                                All operators <br/>
+                                All providers <br/>
                                 Down: {{ formatNumberSignificant (divideBy providers_sums.quantile_down 1000) }} Mbps <br/>
                                 <span><i class="svg-icon svg14 svg-traffic-light-4"></i>{{ percent providers_sums.down_ultragreen }}</span>
                                 <span><i class="svg-icon svg14 svg-traffic-light-3"></i>{{ percent providers_sums.down_green }}</span>
@@ -601,7 +601,7 @@
                     <td class="uk-text-right quantile">
                         <div>{{ formatNumberSignificant (divideBy providers_sums.quantile_up 1000) }} Mbps
                             <div id="sum_up" class="quantile_details">
-                                All operators <br/>
+                                All providers <br/>
                                 Up: {{ formatNumberSignificant (divideBy providers_sums.quantile_up 1000)}} Mbps <br/>
                                 <span><i class="svg-icon svg14 svg-traffic-light-4"></i>{{ percent providers_sums.up_ultragreen }}</span>
                                 <span><i class="svg-icon svg14 svg-traffic-light-3"></i>{{ percent providers_sums.up_green }}</span>
@@ -613,7 +613,7 @@
                     <td class="uk-text-right quantile">
                         <div>{{ formatNumberSignificant (divideBy providers_sums.quantile_ping 1000000) }} ms
                             <div id="sum_ping" class="quantile_details">
-                                All operators  <br/>
+                                All providers  <br/>
                                 Ping: {{ formatNumberSignificant (divideBy providers_sums.quantile_ping 1000000) }} ms <br/>
                                 <span><i class="svg-icon svg14 svg-traffic-light-4"></i>{{ percent providers_sums.ping_ultragreen }}</span>
                                 <span><i class="svg-icon svg14 svg-traffic-light-3"></i>{{ percent providers_sums.ping_green }}</span>
@@ -626,7 +626,7 @@
                         <div>{{#if providers_sums.quantile_signal}}
                             {{ providers_sums.quantile_signal }} dBm
                             <div id="sum_signal" class="quantile_details">
-                                All operators  <br/>
+                                All providers  <br/>
                                 Signal: {{ providers_sums.quantile_signal }}<br/>
                                 <span><i class="svg-icon svg14 svg-traffic-light-4"></i>{{ percent providers_sums.signal_ultragreen }}</span>
                                 <span><i class="svg-icon svg14 svg-traffic-light-3"></i>{{ percent providers_sums.signal_green }}</span>
@@ -642,7 +642,7 @@
                 </tr>
                 {{else}}
                 <tr>
-                    <td colspan="{{#if onlyCaptions }}5{{ else }}6{{/if }}"> No operators found for the current selection </td>
+                    <td colspan="{{#if onlyCaptions }}5{{ else }}6{{/if }}"> No providers found for the current selection </td>
                 </tr>
                 {{/if }}
                 </tfoot>

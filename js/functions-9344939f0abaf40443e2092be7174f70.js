@@ -1190,6 +1190,7 @@ function start_websocket() {
 function RMBTWebsocketTest(uuid) {
     var config = new RMBTTestConfig(selectedLanguage, controlProxy, wspath);
     config.uuid = uuid;
+    config.doPingIntervalMilliseconds = ping_interval_milliseconds;
 
     //explicit ip version
     if (UserConf.ipVersion === "ipv4" || UserConf.ipVersion === "ipv6") {
