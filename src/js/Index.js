@@ -55,15 +55,42 @@ $(document).ready(function() {
             $("body").append(mapContainer);
         }
         
-        loadLastOpenDataResultsMap();
+        loadLastOpenDataResultsMapAndIpConnectivity();
     }
 });
+
+/**
+ * Check, if connections over both IPv4 and IPv6 are possible
+ */
+function checkIPConnectivity (urls) {
+    var checkVersion = function(version, url) {
+        $.ajax({
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: JSON.stringify({
+                language: selectedLanguage
+            }),
+            contentType: "application/json",
+            success: function(data) {
+                console.log("success" + version);
+                $("#" + version).text(data.ip);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#" + version).text(Lang.getString("NotAvailable"));
+                console.log("error" + version);
+            }
+        })
+    };
+    checkVersion("ipv4", urls.url_ipv4_check);
+    checkVersion("ipv6", urls.url_ipv6_check);
+}
 
 var map;
 var vectorLayer, vectorLayerPan;
 var mapProxy;
 var markers;
-function loadLastOpenDataResultsMap() {
+function loadLastOpenDataResultsMapAndIpConnectivity() {
     //get map proxy url
     var json_data = {
         "type": test_type,
@@ -77,6 +104,7 @@ function loadLastOpenDataResultsMap() {
         data: JSON.stringify(json_data),
         success: function (data) {
             mapProxy = data.settings[0].urls.url_map_server;
+            checkIPConnectivity(data.settings[0].urls);
         }
     });
     

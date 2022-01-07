@@ -59,7 +59,8 @@ exports.strings = {
         "fullscreen" : "Full screen",
         "loop_mode_content": "Conduct repeated measurements",
         "opendata_content": "Explore open data test results",
-        "certified_content": "Conduct certified measurements"
+        "certified_content": "Conduct certified measurements",
+        "ip_info": "IP address information"
     },
 
     "map_content" : {

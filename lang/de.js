@@ -58,7 +58,8 @@ exports.strings = {
         "fullscreen" : "Vollbild",
         "loop_mode_content": "Sich automatisch wiederholende Tests durchführen",
         "opendata_content": "Testergebnisse als Open Data einsehen",
-        "certified_content": "Zertifizierte Messung durchführen"
+        "certified_content": "Zertifizierte Messung durchführen",
+        "ip_info": "IP-Adressinformation"
     },
 
     "map_content" : {

@@ -769,11 +769,15 @@ tr.median {
     }
   }
 
+  .uk-card.uk-card-nohover:hover {
+    transform: none ;
+  }
+
   .uk-card.uk-card-secondary {
     background: #fff;
     color: $black;
 
-    p {
+    p:first-of-type {
       color: $green;
     }
 
