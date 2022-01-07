@@ -59,7 +59,7 @@ exports.strings = {
         "loop_mode_content": "Sich automatisch wiederholende Tests durchführen",
         "opendata_content": "Testergebnisse als Open Data einsehen",
         "certified_content": "Zertifizierte Messung durchführen",
-        "ip_info": "IP-Adressinformation"
+        "ip_info": "Ihre IP-Adresse"
     },
 
     "map_content" : {

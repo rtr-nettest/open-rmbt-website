@@ -60,7 +60,7 @@ exports.strings = {
         "loop_mode_content": "Conduct repeated measurements",
         "opendata_content": "Explore open data test results",
         "certified_content": "Conduct certified measurements",
-        "ip_info": "IP address information"
+        "ip_info": "Your IP address"
     },
 
     "map_content" : {
