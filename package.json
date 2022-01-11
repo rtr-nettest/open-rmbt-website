@@ -13,7 +13,6 @@
     "metalsmith-fingerprint-ignore": "cproof/metalsmith-fingerprint-ignore",
     "metalsmith-ignore": "^1.0.0",
     "metalsmith-layouts": "^1.4.2",
-    "metalsmith-permalinks": "^0.1.0",
     "metalsmith-sass": "^1.7.0",
     "metalsmith-watch": "^1.0.3",
     "mkdirp": "^0.5.1",
