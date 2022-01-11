@@ -15,7 +15,7 @@
     "metalsmith-layouts": "^1.4.2",
     "metalsmith-sass": "2.0.0",
     "metalsmith-watch": "^1.0.3",
-    "node-sass": "4.14.1",
+    "node-sass": "6.0.1",
     "mkdirp": "^0.5.1",
     "nunjucks": "^2.0.0",
     "randomstring": "^1.0.7",
