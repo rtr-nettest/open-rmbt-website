@@ -156,9 +156,10 @@ function requestBrowserData(callback, options) {
 
                             //Mac os monterey won't let websocket upload work unless
                             if ((browser_agent.match(/Version\/10\.1.*Safari/) &&
-                                !browser_agent.match(/Version\/10\.1\.2.*Safari/)) ||
-                                browser_agent.match(/iPhone; CPU iPhone OS/) ||
-                                (browser_agent.match(/Version\/15\..*Safari/))){
+                                    !browser_agent.match(/Version\/10\.1\.2.*Safari/)) ||
+                                ((browser_agent.match(/iPhone; CPU iPhone OS/) ||
+                                        (browser_agent.match(/Version\/15\..*Safari/))) &&
+                                    !browser_agent.match(/Version\/15\.4.*Safari/))) {
                                 $("#popuperror").append(Lang.getString("SafariBroken"));
                                 show_errorPopup();
                                 return;
