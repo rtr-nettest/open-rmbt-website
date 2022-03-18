@@ -114,7 +114,7 @@ function requestBrowserData(callback, options) {
                         browser_product = data.product;
                         browser_url = data.url;
                         browser_header = data.headers;
-                        browser_agent = data.agent;  
+                        browser_agent = data.agent;
                         browser_country_geoip = data.country_geoip;
                         //if it is a mobile browser -> dont bother to inform user about
                         //missing javascript (regex from https://gist.github.com/dalethedeveloper/1503252 )
@@ -914,8 +914,13 @@ function RMBTstatistics() {
                                 $("#country").append('<option value="' + value + '">' + Lang.getString("countries")[value.toLowerCase()] + "</option>");
                             });
 
-                            if (browser_country_geoip.toUpperCase() !== 'AT' &&     data.countries.indexOf(browser_country_geoip.toUpperCase()) >= 0) {
-                                $("#country").val(browser_country_geoip.toUpperCase());
+                            if (browser_country_geoip) {
+                                if (browser_country_geoip.toUpperCase() !== 'AT' && data.countries.indexOf(browser_country_geoip.toUpperCase()) >= 0) {
+                                    $("#country").val(browser_country_geoip.toUpperCase());
+                                    RMBTstatistics();
+                                }
+                            }
+                            else {
                                 RMBTstatistics();
                             }
                         }
