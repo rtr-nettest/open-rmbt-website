@@ -69,6 +69,11 @@
                 document.location.href = statisticProxy + "/" + statisticpath + "/export/" + val;
             }
         });
+
+        //adjust link for recent tests
+        $("p.recentTests a").each(function(i, val) {
+            $(this).attr("href",statisticProxy + $(this).attr("href"));
+        })
     });
 </script>
 
@@ -342,9 +347,9 @@
             Die Messergebnisse des RTR-Netztests sind unter Einhaltung der RTR-Netztest Datenschutzerkl&auml;rung als Open Data verf&uuml;gbar. Die <a href="/en/OpenDataSpecification.html"> Spezifikation ist als HTML</a> und <a href="https://github.com/rtr-nettest/open-rmbt/blob/master/RMBTStatisticServer/doc/swagger.json">Swagger</a> abrufbar. Diese Spezifikation beschreibt die als Open-Data abrufbaren Informationen. Diese sind &uuml;ber JSON wie auch als CSV/XLSX-Datei (siehe unten) verf&uuml;gbar.
         </p>
         <h2>Download-Schnittstelle</h2>
-        <p>
+        <p class="recentTests">
             Die Ergebnisse der letzten 48 Stunden sind unter <a href="/RMBTStatisticServer/export/netztest-opendata_hours-048.zip" class="external-link-new-window" title="RTR-Netztest Open Data-ZIP 48h">netztest-opendata_hours-048.zip</a> als CSV, unter <a href="/RMBTStatisticServer/export/netztest-opendata_hours-048.xlsx" class="external-link-new-window" title="RTR-Netztest Open Data-ZIP 48h">netztest-opendata_hours-048.xlsx</a> als XLSX abrufbar.
-        <p>
+        <p class="recentTests">
             Die Ergebnisse der letzten 31 Tage sind unter <a href="/RMBTStatisticServer/export/netztest-opendata.zip" class="external-link-new-window" title="RTR-Netztest Open Data-ZIP">netztest-opendata.zip</a> als CSV, unter <a href="/RMBTStatisticServer/export/netztest-opendata.xlsx" class="external-link-new-window" title="RTR-Netztest Open Data-ZIP">netztest-opendata.xlsx</a> als XLSX abrufbar.
         <p>
             Weitere Ergebnisse sind auf monatlicher Basis verfügbar:
