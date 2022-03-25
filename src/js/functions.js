@@ -531,7 +531,7 @@ function RMBTtestresult(testUUID) {
                                     '<span class="align-right"><a href="https://www.netztest.at/redirect/' +
                                     selectedLanguage + '/help_result" target="_blank">&nbsp;?&nbsp;</a></span>');
 
-
+                                $("#verlauf-detail").empty();
                                 $.each(data.testresult[0].measurement, function(key,row){
                                         var sprite = null;
                                         if (row.classification >= 1 && row.classification <= 4) {
