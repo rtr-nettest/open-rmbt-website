@@ -34,6 +34,11 @@
                 document.location.href = statisticProxy + "/" + statisticpath + "/export/" + val;
             }
         });
+
+        //adjust link for recent tests
+        $("p.recentTests a").each(function(i, val) {
+            $(this).attr("href",statisticProxy + $(this).attr("href"));
+        })
     });
 </script>
 {% endblock %}
@@ -46,9 +51,9 @@
             {{ Lang.opendata_content.content_block }}
         </p>
         <h2>{{ Lang.opendata_content.csv_interface }}</h2>
-        <p>
+        <p class="recentTests">
             {{ Lang.opendata_content.recent_tests_hours }}
-        <p>
+        <p class="recentTests">
             {{ Lang.opendata_content.recent_tests }}
         <p>
             {{ Lang.opendata_content.further_results }}
