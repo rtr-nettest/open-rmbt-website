@@ -77,7 +77,7 @@ exports.strings = {
             "netztest" : 'The values listed here represent the RTR-NetTest results.     Additional information can be found <a href="https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_testergebnis.en.html">here</a>.',
             "qostest" : 'The values listed here represent the qostest.eu results.     Additional information can be found <a href="https://www.rtr.at/TKP/service/rtr-nettest/help/test_result/netztestfaq_testergebnis.en.html">here</a>.'
         },
-        "operators_from" : "Pproviders from",
+        "operators_from" : "Providers from",
         "disclaimer" : 'Repeated tests are filtered for the compilation of statistics.',
         "opendata_disclaimer" : 'Please note: <a href="Opendata.html">measurement data available</a> as open data',
         "burgenland" : 'Burgenland',
