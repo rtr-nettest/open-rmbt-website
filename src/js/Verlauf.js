@@ -717,7 +717,7 @@ var qosPrototypeHTML = null;
  * @param {String} openTestUUID
  * @param {uuid} testUUIDForZipPopup optional: the test uuid, IF a zip code-popup should be requested. 
  */
-function loadOpenTestData(openTestUUID, testUUIDForZipPopup) {
+function loadOpenTestData(openTestUUID, testUUIDForZipPopup, retryCount) {
     $.ajax({
         url: controlProxy + "/" + statisticpath + "/opentests/" + openTestUUID + "?" + getCapabilitiesAsQueryParam(),
         type: 'GET',
@@ -727,13 +727,15 @@ function loadOpenTestData(openTestUUID, testUUIDForZipPopup) {
                 //might be a slow replication, reload again
                 console.log("opendata timed out, trying again in 3sec")
                 self.setTimeout(function () {
-                    loadOpenTestData(openTestUUID, testUUIDForZipPopup);
+                    if (retryCount > 0) {
+                        loadOpenTestData(openTestUUID, testUUIDForZipPopup, retryCount - 1);
+                    }
                 }, 3000);
             }
         },
         success: function(testdata) {
             //request ZIP popup?
-            if (testUUIDForZipPopup !== undefined && testUUIDForZipPopup !== null & testUUIDForZipPopup.length > 1) {
+            if (testUUIDForZipPopup !== undefined && testUUIDForZipPopup !== null && testUUIDForZipPopup.length > 1) {
                 //request should be issued
                 //only if geoposition and IP are not in Austria
                 var requestPopup = true;
