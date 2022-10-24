@@ -510,10 +510,10 @@ function RMBTtestresult(testUUID) {
                                 
                                 //load data for open-test-uuid and request zip code there (so additional checks with geopositioning can be processed)
                                 if (requestZIPCode) {
-                                    loadOpenTestData(data.testresult[0].open_test_uuid, testUUID);
+                                    loadOpenTestData(data.testresult[0].open_test_uuid, testUUID, 60);
                                 }
                                 else {
-                                    loadOpenTestData(data.testresult[0].open_test_uuid);
+                                    loadOpenTestData(data.testresult[0].open_test_uuid, null, 60);
                                 }
                                 $("#verlauf-detailcontainer .shareMail").attr("href",
                                    "mailto:?subject=" +
