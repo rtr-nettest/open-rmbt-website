@@ -10,6 +10,15 @@
             dataType: 'json',
             success: function(data) {
                 $("#controlserver_version").html(data.version);
+                $("#controlserver_host").html(data.host);
+            }});
+        $.ajax({
+            url: controlProxy + "/" + statisticpath + "/version",
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $("#controlserver_statistics_version").html(data.version);
+                $("#controlserver_statistics_host").html(data.host);
             }});
 
         $.ajax({
@@ -39,6 +48,7 @@
                     dataType: 'json',
                     success: function(data) {
                         $("#mapserver_m01_version").html(data.version);
+                        $("#mapserver_m01_host").html(data.host);
                     }});
 
                 $.ajax({
@@ -47,6 +57,7 @@
                     dataType: 'json',
                     success: function(data) {
                         $("#mapserver_m02_version").html(data.version);
+                        $("#mapserver_m02_host").html(data.host);
                     }});
                 
                 $.ajax({
@@ -55,6 +66,7 @@
                     dataType: 'json',
                     success: function(data) {
                         $("#mapserver_m03_version").html(data.version);
+                        $("#mapserver_m03_host").html(data.host);
                     }});
 
                 $.ajax({
@@ -63,6 +75,7 @@
                     dataType: 'json',
                     success: function(data) {
                         $("#mapserver_m04_version").html(data.version);
+                        $("#mapserver_m04_host").html(data.host);
                     }});
 
             }
@@ -74,6 +87,7 @@
             dataType: 'json',
             success: function(data) {
                 $("#statisticserver_m01_version").html(data.version);
+                $("#statisticserver_m01_host").html(data.host);
             }});
 
         $.ajax({
@@ -82,6 +96,7 @@
             dataType: 'json',
             success: function(data) {
                 $("#statisticserver_m02_version").html(data.version);
+                $("#statisticserver_m02_host").html(data.host);
             }});
         
          $.ajax({
@@ -90,6 +105,7 @@
             dataType: 'json',
             success: function(data) {
                 $("#statisticserver_m03_version").html(data.version);
+                $("#statisticserver_m03_host").html(data.host);
             }});
 
         $.ajax({
@@ -98,6 +114,7 @@
             dataType: 'json',
             success: function(data) {
                 $("#statisticserver_m04_version").html(data.version);
+                $("#statisticserver_m04_host").html(data.host);
             }});
         
         
@@ -126,16 +143,17 @@
 </ul>
 
 <p>
-    Control Server c01 version: <span id="controlserver_version"></span> &middot; <a href="https://c01.netztest.at/RMBTControlServer/monitoring">Monitoring</a><br/>
+    Control Server c01 version: <span id="controlserver_version"></span>  (<span id="controlserver_host"></span>) &middot; <a href="https://c01.netztest.at/RMBTControlServer/monitoring">Monitoring</a><br/>
+    Control Server c01 version statistics: <span id="controlserver_statistics_version"></span>  (<span id="controlserver_statistics_host"></span>) &middot; <a href="https://c01.netztest.at/RMBTControlServer/monitoring">Monitoring</a><br/>
     Control Server c02 version: <span id="controlserver_c02_version"></span> &middot; <a href="https://c02.netztest.at/RMBTControlServer/monitoring">Monitoring</a><br/>
-    Map Server version m01: <span id="mapserver_m01_version"></span> &middot; <a href="https://m01.netztest.at/RMBTMapServer/monitoring">Monitoring</a><br/>
-    Map Server version m02: <span id="mapserver_m02_version"></span> &middot; <a href="https://m02.netztest.at/RMBTMapServer/monitoring">Monitoring</a><br/>
-    Map Server version m03: <span id="mapserver_m03_version"></span> &middot; <a href="https://m03.netztest.at/RMBTMapServer/monitoring">Monitoring</a><br/>
-    Map Server version m04: <span id="mapserver_m04_version"></span> &middot; <a href="https://m04.netztest.at/RMBTMapServer/monitoring">Monitoring</a><br/>
-    Statistic Server version m01: <span id="statisticserver_m01_version"></span> &middot; <a href="https://m01.netztest.at/RMBTStatisticServer/monitoring">Monitoring</a><br/>
-    Statistic Server version m02: <span id="statisticserver_m02_version"></span> &middot; <a href="https://m02.netztest.at/RMBTStatisticServer/monitoring">Monitoring</a><br/>
-    Statistic Server version m03: <span id="statisticserver_m03_version"></span> &middot; <a href="https://m03.netztest.at/RMBTStatisticServer/monitoring">Monitoring</a><br/>
-    Statistic Server version m04: <span id="statisticserver_m04_version"></span> &middot; <a href="https://m04.netztest.at/RMBTStatisticServer/monitoring">Monitoring</a><br/>
+    Map Server version m01: <span id="mapserver_m01_version"></span> (<span id="mapserver_m01_host"></span>) &middot; <a href="https://m01.netztest.at/RMBTMapServer/monitoring">Monitoring</a><br/>
+    Map Server version m02: <span id="mapserver_m02_version"></span> (<span id="mapserver_m02_host"></span>) &middot; <a href="https://m02.netztest.at/RMBTMapServer/monitoring">Monitoring</a><br/>
+    Map Server version m03: <span id="mapserver_m03_version"></span> (<span id="mapserver_m03_host"></span>) &middot; <a href="https://m03.netztest.at/RMBTMapServer/monitoring">Monitoring</a><br/>
+    Map Server version m04: <span id="mapserver_m04_version"></span> (<span id="mapserver_m04_host"></span>) &middot; <a href="https://m04.netztest.at/RMBTMapServer/monitoring">Monitoring</a><br/>
+    Statistic Server version m01: <span id="statisticserver_m01_version"></span> (<span id="statisticserver_m01_host"></span>) &middot; <a href="https://m01.netztest.at/RMBTStatisticServer/monitoring">Monitoring</a><br/>
+    Statistic Server version m02: <span id="statisticserver_m02_version"></span> (<span id="statisticserver_m02_host"></span>) &middot; <a href="https://m02.netztest.at/RMBTStatisticServer/monitoring">Monitoring</a><br/>
+    Statistic Server version m03: <span id="statisticserver_m03_version"></span> (<span id="statisticserver_m03_host"></span>) &middot; <a href="https://m03.netztest.at/RMBTStatisticServer/monitoring">Monitoring</a><br/>
+    Statistic Server version m04: <span id="statisticserver_m04_version"></span> (<span id="statisticserver_m04_host"></span>) &middot; <a href="https://m04.netztest.at/RMBTStatisticServer/monitoring">Monitoring</a><br/>
     Website version: {{ gitDescribe }}<br />
 </p>
 
