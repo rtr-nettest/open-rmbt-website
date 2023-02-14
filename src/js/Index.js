@@ -64,6 +64,7 @@ $(document).ready(function() {
  */
 function checkIPConnectivity (urls) {
     var checkVersion = function(version, url) {
+        $("#" + version + "-loader").show();
         $.ajax({
             url: url,
             type: "post",
@@ -75,9 +76,11 @@ function checkIPConnectivity (urls) {
             success: function(data) {
                 console.log("success" + version);
                 $("#" + version).text(data.ip);
+                $("#" + version + "-loader").hide();
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 $("#" + version).text(Lang.getString("NotAvailable"));
+                $("#" + version + "-loader").hide();
                 console.log("error" + version);
             }
         })
