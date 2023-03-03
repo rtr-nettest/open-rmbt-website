@@ -686,7 +686,12 @@ tr.median {
   input, textarea {
     border-color: $red !important;
   }
+
   span.error {
+    color: $red;
+  }
+
+  .checkbox label {
     color: $red;
   }
 }
@@ -872,6 +877,12 @@ tr.median {
   }
 }
 
-
+.iframe {
+  a.uk-link-muted,
+  .uk-link-muted a {
+    color: $link-muted-color;
+    @if(mixin-exists(hook-link-muted)) {@include hook-link-muted();}
+  }
+}
 
 @import 'netztest-icons.scss';

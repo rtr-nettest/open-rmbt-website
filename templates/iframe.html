@@ -36,6 +36,7 @@
     <script>
         var websocketTest = null;
         var openTestUuid = null;
+        var currentTestUuid = null;
         var iframeTest = true;
         var uuid = null;
 
@@ -88,6 +89,7 @@
         }
 
         function startTest(e) {
+            $(".share-container").addClass("uk-hidden")
 
             var beforeUnloadEventListener = function (e) {
                 var confirmationMessage = Lang.getString('CancelTest');
@@ -120,7 +122,14 @@
 
 
             var config = new RMBTTestConfig(selectedLanguage, controlProxy, wspath);
-            var ctrl = new RMBTControlServerCommunication(config);
+            var ctrl = new RMBTControlServerCommunication(config,
+                {
+                    register: function (registration) {
+                        //from the registration - get the uuid
+                        openTestUuid = registration.response["open_test_uuid"];
+                        currentTestUuid = registration.response["test_uuid"];
+                    }
+                });
             config.uuid = uuid;
             config.doPingIntervalMilliseconds = ping_interval_milliseconds;
 
@@ -157,7 +166,8 @@
             }
 
             //attach links
-            $("#openDataLink").attr("href", "https://www.netztest.at/de/Opentest?" + openTestUuid);
+            $(".button-result").attr("href", "https://www.netztest.at/de/Verlauf?" + currentTestUuid);
+            $(".button-opendata").attr("href", "https://www.netztest.at/de/Opentest?" + openTestUuid);
 
         }
 
@@ -166,7 +176,7 @@
             if (parent.window && typeof parent.window.postMessage === 'function') {
                 parent.window.postMessage({
                     type: "result",
-                    uri: "https://data.netztest.at/RMBTStatisticServer/opentests/" + openTestUuid
+                    uri: "https://data.netztest.at/RMBTStatisticServer/opentests/" + currentTestUuid
                 }, '*');
             }
             $("#passDataForm button").attr("disabled", "disabled");
@@ -174,8 +184,8 @@
         }
     </script>
 </head>
-<body class="green">
-<div class="tm-page uk-padding-small" style="border:1px solid black; width:400px; height:400px; margin: 2px">
+<body class="green iframe">
+<div class="tm-page uk-padding-small uk-margin-auto" style="max-width:600px;min-width:370px; min-height:400px; margin: 2px">
 
     <div class="uk-margin-medium-bottom uk-text-center">
         <a href="https://www.netztest.at/" target="_blank">
@@ -203,10 +213,16 @@
                 </div>
                 <button class="uk-button uk-button-primary" type="submit">Test starten</button>
             </form>
+            <p class="uk-text-muted uk-link-muted">
+                Weitere Infos:
+                <a href="https://www.rtr.at/rtr/footer/impressum.de.html" target="_blank">Impressum</a> &middot;
+                <a href="https://www.rtr.at/rtr/footer/Barrierefreiheit.de.html" target="_blank">Barrierefreiheit</a> &middot;
+                <a href="https://github.com/rtr-nettest" target="_blank">Open Source</a>
+            </p>
         </div>
 
         <div class="uk-grid current-test uk-hidden test-container">
-            <div class="progress uk-width-1-1">
+            <div class="progress uk-width-1-1 uk-overflow-auto">
                 <div id="testprogress" class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0"
                      aria-valuemax="100"
                      style="min-width: 3em;width: 0%">
@@ -258,11 +274,11 @@
                 </div>
 
             </div>
-            <form id="share-container uk-hidden" >
-                <a class="uk-button uk-button-default uk-button-secondary uk-button-small uk-margin-small-right" href="/">&nbsp;Test wiederholen&nbsp;</a>
-                <a class="uk-button uk-button-default uk-button-secondary uk-button-small  uk-margin-small-right" href="/">&nbsp;Mehr Details&nbsp;</a>
-                <a class="uk-button uk-button-default uk-button-secondary uk-button-small" href="/">&nbsp;Open Data&nbsp;</a>
-            </form>
+            <div class="uk-hidden share-container" >
+                <a class="uk-button uk-button-default uk-button-secondary uk-button-small uk-margin-small-right" href="/" onclick="startTest();return false;">&nbsp;Test wiederholen&nbsp;</a>
+                <a class="button-result uk-button uk-button-default uk-button-secondary uk-button-small  uk-margin-small-right" href="/" target="_blank">&nbsp;Mehr Details&nbsp;</a>
+                <a class="button-opendata uk-button uk-button-default uk-button-secondary uk-button-small " href="/" target="_blank">&nbsp;Open Data&nbsp;</a>
+            </div>
         </div>
 
 
