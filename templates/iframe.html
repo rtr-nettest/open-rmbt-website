@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>RTR-Netztest</title>
     <style>
 
 
@@ -39,51 +39,71 @@
         var currentTestUuid = null;
         var iframeTest = true;
         var uuid = null;
+        var exdays = 365*24*60*60;
+
+        $(document).ready(function() {
+            var terms_accepted = getCookie("RMBTTermsV6");
+            uuid = getCookie("RMBTuuid");
+            if (terms_accepted) {
+                $(".form-group-tc").hide();
+            }
+        })
 
         function submitTCForm() {
-            try {
-                //check checkbox
-                if ($("#acceptTCCheckbox:checked").length == 0) {
-                    $("#tcForm").addClass("has-error");
-                    $("#acceptTCCheckbox").addClass("has-error");
+            if (uuid) {
+                $(".intro-container").hide();
+                $(".test-container").show();
+                $(".test-container").removeClass("uk-hidden");
+                startTest()
+            }
+            else {
+                try {
+                    //check checkbox
+                    if ($("#acceptTCCheckbox:checked").length == 0) {
+                        $("#tcForm").addClass("has-error");
+                        $("#acceptTCCheckbox").addClass("has-error");
+                        return false;
+                    }
+
+                    //remove error classes
+                    $("#tcForm").removeClass("has-error");
+                    $("#acceptTCCheckbox").removeClass("has-error");
+
+                    //TODO: Settings request
+                    var json_data = {
+                        version_name: test_version_name,
+                        language: selectedLanguage,
+                        uuid: cookie_uuid,
+                        type: test_type,
+                        version_code: test_version_code,
+                        name: test_name,
+                        terms_and_conditions_accepted: true,
+                        terms_and_conditions_accepted_version: terms_version
+                    };
+
+
+                    $.ajax({
+                        url: controlProxy + "/" + wspath + "/settings",
+                        type: "post",
+                        dataType: "json",
+                        contentType: "application/json",
+                        data: JSON.stringify(json_data),
+                        success: function (data) {
+                            uuid = data.settings[0].uuid;
+                            $(".intro-container").hide();
+                            $(".test-container").show();
+                            $(".test-container").removeClass("uk-hidden");
+                            setCookie("RMBTuuid", uuid, exdays);
+                            setCookie("RMBTTermsV6", true, 365 * 20 * 24 * 3600);
+                            startTest();
+                        }
+                    });
+
+
+                } catch (e) {
+                    console.log(e);
                     return false;
                 }
-
-                //remove error classes
-                $("#tcForm").removeClass("has-error");
-                $("#acceptTCCheckbox").removeClass("has-error");
-
-                //TODO: Settings request
-                var json_data = {
-                    version_name: test_version_name,
-                    language: selectedLanguage,
-                    uuid: cookie_uuid,
-                    type: test_type,
-                    version_code: test_version_code,
-                    name: test_name,
-                    terms_and_conditions_accepted: true,
-                    terms_and_conditions_accepted_version : terms_version
-                };
-
-                $.ajax({
-                    url: controlProxy + "/" + wspath + "/settings",
-                    type: "post",
-                    dataType: "json",
-                    contentType: "application/json",
-                    data: JSON.stringify(json_data),
-                    success: function (data) {
-                        uuid = data.settings[0].uuid;
-                        $(".intro-container").hide();
-                        $(".test-container").show();
-                        $(".test-container").removeClass("uk-hidden");
-                        startTest();
-                    }
-                });
-
-
-            } catch (e) {
-                console.log(e);
-                return false;
             }
             return false;
         }
@@ -197,11 +217,16 @@
     <div class="uk-section-default uk-section uk-margin-remove-top uk-padding-remove-top uk-container uk-padding-remove">
 
         <div class="intro-container">
+            <p style="font-weight: 600">
+                Messen Sie jetzt mit dem RTR-Netztest die Geschwindigkeit Ihres Internetzugangs!
+            </p>
             <p>
-                Der RTR-Netztest stellt Nutzerinnen und Nutzern Informationen über die aktuelle Dienstequalität (ua. Upload, Download, Ping) ihres Internetzugangs zur Verfügung. TODO TODO
+                Der RTR-Netztest stellt Nutzerinnen und Nutzern Informationen über die aktuelle Dienstequalität
+                (ua. Upload, Download, Ping) ihres Internetzugangs zur Verfügung. Er wird von der Telekom-Regulierungsbehörde
+                RTR zur Verfügung gestellt.
             </p>
             <form id="tcForm" onsubmit="return submitTCForm()">
-                <div class="form-group">
+                <div class="form-group form-group-tc">
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" value="t" name="acceptTC" id="acceptTCCheckbox" class="uk-checkbox">
@@ -211,12 +236,12 @@
                         </label>
                     </div>
                 </div>
-                <button class="uk-button uk-button-primary" type="submit">Test starten</button>
+                <button class="uk-button uk-button-primary" type="submit">Messung starten</button>
             </form>
             <p class="uk-text-muted uk-link-muted">
-                Weitere Infos:
                 <a href="https://www.rtr.at/rtr/footer/impressum.de.html" target="_blank">Impressum</a> &middot;
                 <a href="https://www.rtr.at/rtr/footer/Barrierefreiheit.de.html" target="_blank">Barrierefreiheit</a> &middot;
+                <a href="https://www.rtr.at/de/tk/netztestprivacypolicyweb" target="_blank">Datenschutz</a> &middot;
                 <a href="https://github.com/rtr-nettest" target="_blank">Open Source</a>
             </p>
         </div>
@@ -275,9 +300,9 @@
 
             </div>
             <div class="uk-hidden share-container" >
-                <a class="uk-button uk-button-default uk-button-secondary uk-button-small uk-margin-small-right" href="/" onclick="startTest();return false;">&nbsp;Test wiederholen&nbsp;</a>
+                <a class="uk-button uk-button-default uk-button-secondary uk-button-small uk-margin-small-right" href="/" onclick="startTest();return false;">&nbsp;Neue Messung&nbsp;</a>
                 <a class="button-result uk-button uk-button-default uk-button-secondary uk-button-small  uk-margin-small-right" href="/" target="_blank">&nbsp;Mehr Details&nbsp;</a>
-                <a class="button-opendata uk-button uk-button-default uk-button-secondary uk-button-small " href="/" target="_blank">&nbsp;Open Data&nbsp;</a>
+                <!--<a class="button-opendata uk-button uk-button-default uk-button-secondary uk-button-small " href="/" target="_blank">&nbsp;Open Data&nbsp;</a>-->
             </div>
         </div>
 
