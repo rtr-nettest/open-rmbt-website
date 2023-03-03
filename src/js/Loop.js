@@ -319,12 +319,12 @@ function getSignificantDigits (number) {
 
 
 $(document).ready(function () {
-    if (typeof certTest === 'undefined') {
+    if (typeof certTest === 'undefined' && typeof iframeTest === 'undefined') {
         //1. check TOC
         //this will callback to RMBTLoopTest
         //via popupform ->
         show_agbform(false, 'RMBTsettings', 'loop');
-    } else {
+    } else if (typeof iframeTest === 'undefined') {
         show_agbform(false, 'RMBTsettings', 'certTest');
     }
 });
