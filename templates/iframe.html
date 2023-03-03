@@ -22,6 +22,7 @@
             display: none;
         }
 
+
     </style>
     <link rel="stylesheet" href="../{{ fingerprint['scss/app.css'] }}">
     <script type="text/javascript" src="../{{ fingerprint['js/jquery-1.8.2.min.js'] }}"></script>
@@ -36,6 +37,7 @@
         var websocketTest = null;
         var openTestUuid = null;
         var iframeTest = true;
+        var uuid = null;
 
         function submitTCForm() {
             try {
@@ -50,7 +52,33 @@
                 $("#tcForm").removeClass("has-error");
                 $("#acceptTCCheckbox").removeClass("has-error");
 
-                startTest();
+                //TODO: Settings request
+                var json_data = {
+                    version_name: test_version_name,
+                    language: selectedLanguage,
+                    uuid: cookie_uuid,
+                    type: test_type,
+                    version_code: test_version_code,
+                    name: test_name,
+                    terms_and_conditions_accepted: true,
+                    terms_and_conditions_accepted_version : terms_version
+                };
+
+                $.ajax({
+                    url: controlProxy + "/" + wspath + "/settings",
+                    type: "post",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(json_data),
+                    success: function (data) {
+                        uuid = data.settings[0].uuid;
+                        $(".intro-container").hide();
+                        $(".test-container").show();
+                        $(".test-container").removeClass("uk-hidden");
+                        startTest();
+                    }
+                });
+
 
             } catch (e) {
                 console.log(e);
@@ -60,8 +88,6 @@
         }
 
         function startTest(e) {
-
-            //TODO: Settings request
 
             var beforeUnloadEventListener = function (e) {
                 var confirmationMessage = Lang.getString('CancelTest');
@@ -84,6 +110,7 @@
 
                 //only do callback, if fallbackTimer has not fired yet
                 console.log("success")
+                testFinished(result);
             }, function (result) {
                 //window.removeEventListener("beforeunload", beforeUnloadEventListener);
                 window.removeEventListener("unload", unloadEventListener,false);
@@ -94,7 +121,7 @@
 
             var config = new RMBTTestConfig(selectedLanguage, controlProxy, wspath);
             var ctrl = new RMBTControlServerCommunication(config);
-            config.uuid = "5f295d6b-907a-4c67-b404-52779cc820d9";
+            config.uuid = uuid;
             config.doPingIntervalMilliseconds = ping_interval_milliseconds;
 
             var websocketTest = new RMBTTest(config, ctrl);
@@ -120,6 +147,7 @@
             //show form for data passing
             $("body").removeClass("test-running");
             $("body").addClass("test-finished");
+            $(".share-container").removeClass("uk-hidden")
 
             //inform about test finish
             if (parent.window && typeof parent.window.postMessage === 'function') {
@@ -158,12 +186,15 @@
     </div>
     <div class="uk-section-default uk-section uk-margin-remove-top uk-padding-remove-top uk-container uk-padding-remove">
 
-        <div class="uk-hidden">
+        <div class="intro-container">
+            <p>
+                Der RTR-Netztest stellt Nutzerinnen und Nutzern Informationen über die aktuelle Dienstequalität (ua. Upload, Download, Ping) ihres Internetzugangs zur Verfügung. TODO TODO
+            </p>
             <form id="tcForm" onsubmit="return submitTCForm()">
                 <div class="form-group">
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" value="t" name="acceptTC" id="acceptTCCheckbox">
+                            <input type="checkbox" value="t" name="acceptTC" id="acceptTCCheckbox" class="uk-checkbox">
                             Ich stimme den <a href="https://www.rtr.at/de/tk/rtrnetztesttermsofuse" target="_blank">Nutzungsbedingungen</a>
                             und <a href="https://www.rtr.at/de/tk/netztestprivacypolicyweb" target="_blank">Datenschutzbestimmungen</a>
                             zu.
@@ -174,15 +205,15 @@
             </form>
         </div>
 
-        <div class="uk-grid current-test">
-            <div class="progress uk-width-1-1 uk-margin-small-bottom">
+        <div class="uk-grid current-test uk-hidden test-container">
+            <div class="progress uk-width-1-1">
                 <div id="testprogress" class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0"
                      aria-valuemax="100"
                      style="min-width: 3em;width: 0%">
                     0%
                 </div>
             </div>
-            <div id="infocurrent" class="uk-width-1-1">
+            <div id="infocurrent" class="uk-width-1-1 uk-margin-small-top">
                 <div class="uk-grid uk-grid-row-collapse uk-grid-column-small" uk-grid>
                     <div class="uk-width-1-4">{{ Lang.state }}</div>
                     <div class="uk-width-3-4" id="infostatus">-</div>
@@ -227,13 +258,14 @@
                 </div>
 
             </div>
+            <form id="share-container uk-hidden" >
+                <a class="uk-button uk-button-default uk-button-secondary uk-button-small uk-margin-small-right" href="/">&nbsp;Test wiederholen&nbsp;</a>
+                <a class="uk-button uk-button-default uk-button-secondary uk-button-small  uk-margin-small-right" href="/">&nbsp;Mehr Details&nbsp;</a>
+                <a class="uk-button uk-button-default uk-button-secondary uk-button-small" href="/">&nbsp;Open Data&nbsp;</a>
+            </form>
         </div>
 
-        <form id="passDataForm" onsubmit="return passData()">
-            <button class="uk-button uk-button-default uk-button-secondary uk-button-small" type="submit">Test wiederholen</button>
-            <button class="uk-button uk-button-default uk-button-secondary uk-button-small" type="submit">Mehr Details</button>
-            <button class="uk-button uk-button-default uk-button-secondary uk-button-small" type="submit">Open Data</button>
-        </form>
+
     </div>
 </div>
 </body>
