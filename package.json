@@ -9,17 +9,18 @@
     "cheerio": "^0.22.0",
     "debug": ">=2.6.9",
     "git-describe": "^1.1.2",
-    "metalsmith": "^1.0.0",
+    "metalsmith": "^2.5.1",
     "metalsmith-fingerprint-ignore": "cproof/metalsmith-fingerprint-ignore",
     "metalsmith-ignore": "^1.0.0",
     "metalsmith-layouts": "^1.4.2",
-    "metalsmith-sass": "2.0.0",
-    "metalsmith-watch": "^1.0.3",
-    "node-sass": "6.0.1",
     "mkdirp": "^0.5.1",
     "nunjucks": "^2.0.0",
     "randomstring": "^1.0.7",
     "request": "^2.57",
     "uikit": "3.5.8"
+  },
+  "devDependencies": {
+    "@metalsmith/sass": "^1.3.0",
+    "metalsmith-watch": "github:doteco/metalsmith-watch#14ea22e1c01696959412067ad04bbebb0fc8a7a5"
   }
 }

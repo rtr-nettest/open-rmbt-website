@@ -17,7 +17,7 @@ var cheerio = require('cheerio');
 var randomstring = require('randomstring');
 var gitDescribe = require('git-describe');
 var mkdirp = require('mkdirp');
-var sass = require('metalsmith-sass');
+var sass = require('@metalsmith/sass');
 var ignore = require('metalsmith-ignore');
 
 var nunjucks = require('nunjucks');
