@@ -472,7 +472,7 @@ function conductTests() {
 
         //once again, check boundaries
         waitingTime = Math.min(waitingTime, 60*60*48);
-        waitingTime = Math.max(waitingTime, 60*10);
+        waitingTime = Math.max(waitingTime, 60*5);
         repetitions = Math.min(repetitions, 500);
         repetitions = Math.max(repetitions, 1);
 
