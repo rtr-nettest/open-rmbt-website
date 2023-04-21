@@ -387,5 +387,6 @@ exports.strings = {
     "down_avg": "DL (normal)",
     "up_avg": "UL (normal)",
     "last_updated": "Stand",
-    "coverage": "Versorgungsdaten"
+    "coverage": "Versorgungsdaten",
+    "download_pdf": "PDF herunterladen"
 }
