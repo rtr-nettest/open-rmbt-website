@@ -308,5 +308,7 @@ Lang.setStrings({
     'enter_last_name': 'Bitte geben Sie Ihren Nachnamen an.',
     'download_results_as_pdf': 'Ergebnisse als PDF herunterladen',
     'alert_close_tab': 'Wollen Sie die Messung abbrechen?',
-    'temperature': 'Temperatur des Geräts'
+    'temperature': 'Temperatur des Geräts',
+    'atraster100': 'Österreich-Raster 100m',
+    'atraster250': 'Österreich-Raster 250m'
 });

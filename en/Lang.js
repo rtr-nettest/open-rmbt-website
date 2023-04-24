@@ -311,5 +311,7 @@ Lang.setStrings({
     'enter_last_name': 'Please enter your last name.',
     'download_results_as_pdf': 'Download results as PDF',
     'alert_close_tab': 'Do you want to cancel the measurement?',
-    'temperature': 'Device temperature'
+    'temperature': 'Device temperature',
+    'atraster100': 'Austrian 100m grid ID',
+    'atraster250': 'Austrian 250m grid ID'
 });
