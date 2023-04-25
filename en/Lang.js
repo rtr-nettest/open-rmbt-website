@@ -313,5 +313,6 @@ Lang.setStrings({
     'alert_close_tab': 'Do you want to cancel the measurement?',
     'temperature': 'Device temperature',
     'atraster100': 'Austrian 100m grid ID',
-    'atraster250': 'Austrian 250m grid ID'
+    'atraster250': 'Austrian 250m grid ID',
+    'signal_noise_ratio': 'Signal to noise ratio'
 });
