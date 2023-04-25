@@ -310,5 +310,6 @@ Lang.setStrings({
     'alert_close_tab': 'Wollen Sie die Messung abbrechen?',
     'temperature': 'Temperatur des Geräts',
     'atraster100': 'Österreich-Raster 100m',
-    'atraster250': 'Österreich-Raster 250m'
+    'atraster250': 'Österreich-Raster 250m',
+    'signal_noise_ratio': 'Signal to noise ratio'
 });
