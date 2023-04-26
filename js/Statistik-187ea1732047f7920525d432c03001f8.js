@@ -206,10 +206,7 @@ function getLastOpenDataResults() {
 }
 
 function getSignificantDigits (number) {
-    if (number > 100) {
-        return -1;
-    }
-    else if (number >= 10) {
+    if (number >= 10) {
         return 0;
     }
     else if (number >= 1) {
