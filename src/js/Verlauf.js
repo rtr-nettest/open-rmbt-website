@@ -844,7 +844,7 @@ function loadOpenTestData(openTestUUID, testUUIDForZipPopup, retryCount) {
             });
 
             $(".pdfButton").click(function(e) {
-                triggerPdfDownload(openTestUUID, ".pdfButton")
+                triggerPdfDownload(openTestUUID, ".pdfButton", controlProxy)
                 e.preventDefault();
             })
         }
