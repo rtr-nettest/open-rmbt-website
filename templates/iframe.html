@@ -152,6 +152,12 @@
                 });
             config.uuid = uuid;
             config.doPingIntervalMilliseconds = ping_interval_milliseconds;
+            if (document.referrer) {
+                config.additionalRegistrationParameters["referrer"] = document.referrer;
+            }
+            else {
+                config.additionalRegistrationParameters["referrer"] = "https://unknown.invalid";
+            }
 
             var websocketTest = new RMBTTest(config, ctrl);
             TestEnvironment.getTestVisualization().setRMBTTest(websocketTest);
