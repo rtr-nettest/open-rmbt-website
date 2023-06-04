@@ -1,4 +1,4 @@
-RTR NetTest Website
+RTR-NetTest Website
 ===================
 
 This repository hosts the web page sources for ```www.netztest.at```
