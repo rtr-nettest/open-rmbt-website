@@ -87,10 +87,7 @@ function makeMap() {
         var templatepng =
             '{Layer}/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png';
         var urlsbmappng = [
-            '//maps1.wien.gv.at/basemap/' + templatepng,
-            '//maps2.wien.gv.at/basemap/' + templatepng,
-            '//maps3.wien.gv.at/basemap/' + templatepng,
-            '//maps4.wien.gv.at/basemap/' + templatepng
+            '//mapsneu.wien.gv.at/basemap/' + templatepng
         ];
         var IS_CROSS_ORIGIN = 'anonymous';
 
