@@ -126,19 +126,13 @@ function viewMapV3() {
         var templatepng =
             '{Layer}/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png';
         var urlsbmappng = [
-            '//maps1.wien.gv.at/basemap/' + templatepng,
-            '//maps2.wien.gv.at/basemap/' + templatepng,
-            '//maps3.wien.gv.at/basemap/' + templatepng,
-            '//maps4.wien.gv.at/basemap/' + templatepng
+            '//mapsneu.wien.gv.at/basemap/' + templatepng
         ];
 
         var templatejpeg =
             '{Layer}/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg';
         var urlsbmapjpeg = [
-            '//maps1.wien.gv.at/basemap/' + templatejpeg,
-            '//maps2.wien.gv.at/basemap/' + templatejpeg,
-            '//maps3.wien.gv.at/basemap/' + templatejpeg,
-            '//maps4.wien.gv.at/basemap/' + templatejpeg
+            '//mapsneu.wien.gv.at/basemap/' + templatejpeg
         ];
 
         var LayerTypes = {
