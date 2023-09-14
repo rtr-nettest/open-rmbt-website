@@ -389,5 +389,6 @@ exports.strings = {
     "up_avg": "UL (normal)",
     "last_updated": "Last updated",
     "coverage": "Coverage",
-    "download_pdf": "Download PDF"
+    "download_pdf": "Download PDF",
+    "source_code_github": "Source Code on GitHub"
 }
