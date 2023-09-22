@@ -532,7 +532,18 @@ function RMBTtestresult(testUUID) {
                                 $.each(data.testresult[0].measurement, function(key,row){
                                         var sprite = null;
                                         if (row.classification >= 1 && row.classification <= 4) {
-                                            sprite = 'svg-traffic-light-' + row.classification;
+                                            if (row.title.toLowerCase().indexOf('down') !== -1) {
+                                                sprite = 'svg-down-' + row.classification;
+                                            }
+                                            else if (row.title.toLowerCase().indexOf('upl') !== -1) {
+                                                sprite = 'svg-up-' + row.classification;
+                                            }
+                                            else if (row.title.toLowerCase().indexOf('ping') !== -1) {
+                                                sprite = 'svg-ping-' + row.classification;
+                                            }
+                                            else {
+                                                sprite = 'svg-traffic-light-' + row.classification;
+                                            }
                                         }
                                         else {
                                             sprite = 'svg-empty';
@@ -541,7 +552,7 @@ function RMBTtestresult(testUUID) {
                                         $('#verlauf-detail').append(
                                                 '<tr>' +
                                                 '<td class="uk-width-medium@s">'+row.title+'</td>' +
-                                                '<td><a href="https://www.netztest.at/redirect/' + selectedLanguage + '/help_result" target="_blank"><i class="svg-icon svg16 ' + sprite + '"></i></a> ' +row.value+'</td>' +
+                                                '<td><a class="svg-holder" href="https://www.netztest.at/redirect/' + selectedLanguage + '/help_result" target="_blank"><i class="svg-icon svg24 ' + sprite + '"></i></a> ' +row.value+'</td>' +
                                                 '</tr>'
                                         );
                                 });
