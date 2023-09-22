@@ -496,6 +496,14 @@ table#verlauf tr {
   }
 }
 
+a.svg-holder:hover {
+  background: initial !important;
+}
+
+a.svg-holder:hover i.svg-icon {
+  border-left: 1px solid $green;
+}
+
 /* Statistik: Quantile Popins */
 
 td.quantile>div,
