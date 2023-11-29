@@ -56,7 +56,7 @@ exports.strings = {
         "statistics_content" : "Statistiken zu den Testergebnissen",
         "enlarge_map" : "Karte vergrößern",
         "fullscreen" : "Vollbild",
-        "loop_mode_content": "Sich automatisch wiederholende Tests durchführen",
+        "loop_mode_content": "Wiederholte Tests durchführen",
         "opendata_content": "Testergebnisse als Open Data einsehen",
         "certified_content": "Zertifizierte Messung durchführen",
         "ip_info": "Ihre IP-Adresse"

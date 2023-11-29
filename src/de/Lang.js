@@ -208,7 +208,7 @@ Lang.setStrings({
     'NoOperatorsFound' : 'Keine Provider verfügbar in der aktuellen Filterung',
     'NoDevicesFound' : 'Keine Geräte verfügbar in der aktuellen Filterung',
     'QosTest' : 'Quality of Service',
-    'FastConnectionWarning' : 'Aufgrund des verwendeten Testtyps kann es bei Ihrer schnellen Internetanbindung zu technisch bedingten Messschwankungen kommen. Vermuten Sie, dass die Ergebnisse nicht die tatsächliche Leistung widerspiegeln, führen Sie bitte einen Test mit der <a href="https://www.rtr.at/de/tk/rtrnetztest_tests">Android/iOS-App</a> durch.',
+    'FastConnectionWarning' : 'Aufgrund des verwendeten Testtyps kann es bei Ihrer schnellen Internetanbindung zu technisch bedingten Messschwankungen kommen. Vermuten Sie, dass die Ergebnisse nicht die tatsächliche Leistung widerspiegeln, führen Sie bitte einen Test mit der <a href="/redirect/de/desktop">Desktop-App</a> durch.',
     'CheckConnection': "Bitte überprüfen Sie ihre Internetverbindung",
     'TestsInTheLastXHours' : 'Tests in den letzten % Stunden',
     'TestsInTheLastXMinutes' : 'Tests in den letzten % Minuten',
