@@ -30,7 +30,7 @@ exports.strings = {
                 "qostest": "https://www.netztest.at/redirect/de/terms"
             }
         },
-        "apps_content": '<a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">iOS-</a> oder <a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android">Android-App</a> herunterladen bzw. <a href="https://www.rtr.at/de/tk/rtrnetztest_tests">Browser-Test</a> durchführen',
+        "apps_content": '<a href="https://itunes.apple.com/at/app/rtr-netztest/id724321403">iOS-</a>, <a href="https://play.google.com/store/apps/details?id=at.alladin.rmbt.android">Android-App</a> oder <a href="https://www.rtr.at/de/tk/rtrnetztest_tests" class="desktop-client desktop-client-other">Desktop-App</a> <a href="https://apps.microsoft.com/detail/XP9K0TF8QNZSPV" class="desktop-client desktop-client-windows">Desktop-App</a> <a href="https://apps.apple.com/at/app/rtr-netztest-desktop/id6453160400" class="desktop-client desktop-client-mac">Desktop-App</a> <a href="https://github.com/rtr-nettest/open-rmbt-desktop/releases" class="desktop-client desktop-client-linux">Desktop-App</a> herunterladen bzw. <a href="https://www.rtr.at/de/tk/rtrnetztest_tests">Browser-Test</a> durchführen',
         "apps_url" : "https://www.rtr.at/de/tk/rtrnetztest_tests",
         "apps" : {
             "netztest" : "RTR-Netztest Apps",
