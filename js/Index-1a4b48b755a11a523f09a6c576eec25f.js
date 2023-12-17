@@ -41,7 +41,28 @@ $(document).ready(function() {
         $("#iOSApp").show();
         var url = 'https://itunes.apple.com/at/app/rtr-netztest/id724321403';
         $("a#teaserlink").attr("href",url);
-    } 
+    }
+
+
+
+    // Detects Windows (Note, doesn't differentiate between phone/pc)
+    $(".desktop-client").hide();
+    if (mobile_client.match(/Windows NT/)) {
+        // Handle Windows client
+        $(".desktop-client-windows").show();
+    }
+    // Detects MacOS
+    else if (mobile_client.match(/Mac OS X/)) {
+        // Handle Mac client
+        $(".desktop-client-mac").show();
+    }
+    // Detects Linux
+    else if (mobile_client.match(/Linux/)) {
+        // Handle Linux client
+        $(".desktop-client-linux").show();
+    } else {
+        $(".desktop-client-other").show();
+    }
 
     if (userServerSelection > 0) {
         getLastOpenDataResults();
