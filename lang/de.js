@@ -232,6 +232,16 @@ exports.strings = {
         "error_generating": "Fehler bei der Erstellung des PDFs.",
         "generate_new": "Erneut anfordern"
     },
+    "iframe": {
+        "intro_measure": "Messen Sie jetzt mit dem RTR-Netztest die Geschwindigkeit Ihres Internetzugangs!",
+        "intro_about": " Der RTR-Netztest stellt Nutzerinnen und Nutzern Informationen über die aktuelle Dienstequalität\n" +
+            "                (Upload, Download, Ping) ihres Internetzugangs zur Verfügung. Er wird von der <a href=\"https://www.rtr.at/TKP/startseite.de.html\" target=\"_blank\">Rundfunk und\n" +
+            "                Telekom Regulierungs-GmbH</a> zur Verfügung gestellt.",
+        "intro_tc": "Ich stimme den <a href=\"https://www.rtr.at/de/tk/rtrnetztesttermsofuse\" target=\"_blank\">Nutzungsbedingungen</a>\n" +
+            "                            und <a href=\"https://www.rtr.at/de/tk/netztestprivacypolicyweb\" target=\"_blank\">Datenschutzbestimmungen</a>\n" +
+            "                            zu.",
+        "start_measurement": "Messung starten"
+    },
     //Page titles and link descriptions
     "index" : "Startseite",
     "statistics" : "Statistik",
@@ -389,5 +399,6 @@ exports.strings = {
     "last_updated": "Stand",
     "coverage": "Versorgungsdaten",
     "download_pdf": "PDF herunterladen",
-    "source_code_github": "Quellcode auf GitHub"
+    "source_code_github": "Quellcode auf GitHub",
+    "open_source": "Open Source"
 }

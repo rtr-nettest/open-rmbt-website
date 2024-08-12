@@ -224,31 +224,27 @@
 
         <div class="intro-container">
             <p style="font-weight: 600">
-                Messen Sie jetzt mit dem RTR-Netztest die Geschwindigkeit Ihres Internetzugangs!
+                {{ Lang.iframe.intro_measure }}
             </p>
             <p>
-                Der RTR-Netztest stellt Nutzerinnen und Nutzern Informationen über die aktuelle Dienstequalität
-                (Upload, Download, Ping) ihres Internetzugangs zur Verfügung. Er wird von der <a href="https://www.rtr.at/TKP/startseite.{{Lang.lang}}.html" target="_blank">Rundfunk und
-                Telekom Regulierungs-GmbH</a> zur Verfügung gestellt.
+               {{ Lang.iframe.intro_about }}
             </p>
             <form id="tcForm" onsubmit="return submitTCForm()">
                 <div class="form-group form-group-tc">
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" value="t" name="acceptTC" id="acceptTCCheckbox" class="uk-checkbox">
-                            Ich stimme den <a href="https://www.rtr.at/de/tk/rtrnetztesttermsofuse" target="_blank">Nutzungsbedingungen</a>
-                            und <a href="https://www.rtr.at/de/tk/netztestprivacypolicyweb" target="_blank">Datenschutzbestimmungen</a>
-                            zu.
+                            {{ Lang.iframe.intro_tc }}
                         </label>
                     </div>
                 </div>
-                <button class="uk-button uk-button-primary" type="submit">Messung starten</button>
+                <button class="uk-button uk-button-primary" type="submit">{{ Lang.iframe.start_measurement }}</button>
             </form>
             <p class="uk-text-muted uk-link-muted">
-                <a href="https://www.rtr.at/rtr/footer/impressum.de.html" target="_blank">Impressum</a> &middot;
-                <a href="https://www.rtr.at/rtr/footer/Barrierefreiheit.de.html" target="_blank">Barrierefreiheit</a> &middot;
-                <a href="https://www.rtr.at/de/tk/netztestprivacypolicyweb" target="_blank">Datenschutz</a> &middot;
-                <a href="https://github.com/rtr-nettest" target="_blank">Open Source</a>
+                <a href="https://www.rtr.at/rtr/footer/impressum.de.html" target="_blank">{{ Lang.imprint }}</a> &middot;
+                <a href="https://www.rtr.at/rtr/footer/Barrierefreiheit.de.html" target="_blank">{{ Lang.accessibility }}</a> &middot;
+                <a href="https://www.rtr.at/de/tk/netztestprivacypolicyweb" target="_blank">{{ Lang.privacy }}</a> &middot;
+                <a href="https://github.com/rtr-nettest" target="_blank">{{ Lang.open_source }}</a>
             </p>
         </div>
 

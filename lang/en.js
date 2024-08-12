@@ -233,6 +233,16 @@ exports.strings = {
         "error_generating": "Error generating the document.",
         "generate_new": "Try again"
     },
+    "iframe": {
+        "intro_measure": "Measure the speed of your internet access with RTR-NetTest!",
+        "intro_about": "RTR-NetTest informs users about the current service quality " +
+            "(including upload, download, ping) of their Internet connection. It is provided by the <a href=\"https://www.rtr.at/TKP/startseite.en.html\" target=\"_blank\">Rundfunk und\n" +
+            "Telekom Regulierungs-GmbH</a>.",
+        "intro_tc": "I agree to the " +
+            "<a href=\"https://www.rtr.at/de/tk/rtrnetztesttermsofuse\" target=\"_blank\">terms of use</a>\n" +
+            "and <a href=\"https://www.rtr.at/de/tk/netztestprivacypolicyweb\" target=\"_blank\">privacy policy</a>.",
+        "start_measurement": "Start measurement"
+    },
     //Page titles and link descriptions
     "index": "Home",
     "statistics": "Statistics",
