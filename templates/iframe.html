@@ -208,6 +208,22 @@
             $("#passDataForm button").attr("disabled", "disabled");
             return false;
         }
+
+        function showWarning() {
+            $("body>div").empty();
+            $("body>div").html("<p>RTR-NetTest could not be loaded. Please check iframe tag.</p>")
+        }
+        $(document).ready(function() {
+            //check if in frame, referrer enabled
+            if (window !== window.parent) {
+                if (document.referrer) {
+
+                }
+                else {
+                    showWarning();
+                }
+            }
+        });
     </script>
 </head>
 <body class="green iframe">
