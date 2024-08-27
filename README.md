@@ -40,7 +40,19 @@ Building and running the Website
 	```
 	
 	Now, the website is ready to use: <http://localhost:8081/en>
+
+	For routing, the `.html` file extension is omitted. This can be done e.g. using a `.htaccess` file with the
+	following content in the `build` folder.
+
+    ```
+    Options +Includes
+	AddHandler server-parsed .html
 	
+	RewriteEngine On
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule (.*) $1.html [L]
+	```
 
 Get in Touch
 ------------
