@@ -2,7 +2,7 @@
 
 var controlProxy = "https://c01.netztest.at";
 var statisticProxy = "https://m-cloud.netztest.at";
-var statisticsProxyPrimary = "https://m01.netztest.at" //primary db, no replication delay
+var statisticsProxyPrimary = "https://app-cloud.netztest.at" //primary db, no replication delay
 if (window.location.href.indexOf("github") !== -1) {
     //default for github pages
 } else if (window.location.href.indexOf("http://localhost") !== -1) {
