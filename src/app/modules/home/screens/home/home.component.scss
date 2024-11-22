@@ -18,4 +18,16 @@
   app-card-button {
     width: 100%;
   }
+
+  @include screen-sm {
+    & > .app-col {
+      flex: 0 0 100%;
+    }
+  }
+
+  &--main {
+    @include screen-xs {
+      flex: 0 0 100%;
+    }
+  }
 }

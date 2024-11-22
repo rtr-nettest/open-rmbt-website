@@ -2,12 +2,11 @@
   max-width: none !important;
   width: 100%;
   left: 0;
-  right: 0;
   position: absolute;
 
   &-backdrop + .cdk-overlay-connected-position-bounding-box {
     left: 0 !important;
-    width: 100% !important;
+    width: calc(100% - 16px) !important;
   }
 
   .mat-mdc-menu-content {

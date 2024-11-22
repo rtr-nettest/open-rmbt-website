@@ -7,6 +7,7 @@
           class="app-button"
           [matMenuTriggerFor]="rtr"
           (onMenuOpen)="rtrOpen = true"
+          style="padding-left: 0"
         >
           RTR
           <mat-icon iconPositionEnd>{{
@@ -36,7 +37,7 @@
   (closed)="rtrOpen = false"
 >
   <nav class="app-wrapper">
-    <ul class="app-list" style="margin: 0 -12px">
+    <ul class="app-list">
       @for (link of rtrLinks$ | async; track $index) {
       <li>
         <a [href]="link.url" mat-button class="app-link" target="_blank">
@@ -55,7 +56,7 @@
   (closed)="langOpen = false"
 >
   <nav class="app-wrapper">
-    <ul class="app-list" style="margin: 0 -12px">
+    <ul class="app-list">
       @for (locale of availableLocales; track $index) {
       <li>
         <button (click)="setLocale(locale)" mat-button class="app-link">

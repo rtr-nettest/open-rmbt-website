@@ -1,13 +1,14 @@
 import { Component, Input } from "@angular/core"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { RouterModule } from "@angular/router"
+import { NgTemplateOutlet } from "@angular/common"
 
 @Component({
   selector: "app-card-button",
   templateUrl: "./card-button.component.html",
   styleUrls: ["./card-button.component.scss"],
   standalone: true,
-  imports: [TranslatePipe, RouterModule],
+  imports: [TranslatePipe, NgTemplateOutlet, RouterModule],
 })
 export class CardButtonComponent {
   @Input() iconImage?: string
@@ -15,4 +16,5 @@ export class CardButtonComponent {
   @Input({ required: true }) smallText!: string
   @Input() title?: string
   @Input() routerLink?: string
+  @Input() url?: string
 }

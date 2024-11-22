@@ -1,8 +1,22 @@
+@if (routerLink) {
 <a
   [routerLink]="routerLink"
   class="app-card"
   [class.app-card--primary]="primary"
 >
+  <ng-container *ngTemplateOutlet="card"></ng-container>
+</a>
+} @else if(url) {
+<div class="app-card" target="_blank">
+  <ng-container *ngTemplateOutlet="card"></ng-container>
+</div>
+} @else {
+<div class="app-card">
+  <ng-container *ngTemplateOutlet="card"></ng-container>
+</div>
+}
+
+<ng-template #card>
   @if (iconImage) {
   <div class="app-card-media-top">
     <span class="app-icon">
@@ -10,10 +24,16 @@
     </span>
   </div>
   }
-  <p>{{ smallText | translate }}</p>
+  <p class="app-small-text" [innerHTML]="smallText | translate"></p>
   @if (title) {
   <h3 class="app-card-title app-margin-top">
+    @if (url) {
+    <a class="app-link" [href]="url">{{ title | translate }}</a>
+    } @else {
     {{ title | translate }}
+    }
   </h3>
+  } @else {
+  <ng-content></ng-content>
   }
-</a>
+</ng-template>

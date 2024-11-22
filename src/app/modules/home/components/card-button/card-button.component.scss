@@ -3,13 +3,17 @@
 .app-card {
   display: block;
   height: rem(240);
-  padding: 40px 60px;
+  padding: 40px;
   transition: transform 0.15s ease-out;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.28);
   border: 2px solid $color-primary;
   border-radius: 7px;
   text-decoration: none;
   width: 100%;
+
+  &-title {
+    color: $color-dark;
+  }
 
   .app-icon {
     align-items: center;
@@ -29,6 +33,10 @@
     }
   }
 
+  .app-small-text {
+    color: $color-primary;
+  }
+
   &:hover {
     text-decoration: none;
     transform: translateY(0.4rem) scale(0.98);
@@ -36,10 +44,14 @@
 
   &--primary {
     background-color: $color-primary;
-    color: white;
 
     .app-icon {
       background: $color-primary;
+    }
+
+    .app-small-text,
+    .app-card-title {
+      color: white;
     }
   }
 
@@ -58,5 +70,18 @@
     font-weight: 700;
     line-height: 1.3;
     margin-top: rem(24);
+
+    @include screen-lg {
+      font-size: rem($font-size-h4);
+    }
+
+    @include screen-sm {
+      font-size: rem($font-size-h3);
+    }
   }
+}
+
+.app-link {
+  font-weight: inherit;
+  text-decoration: none;
 }

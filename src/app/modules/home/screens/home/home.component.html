@@ -2,13 +2,13 @@
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
 <div class="app-wrapper" [innerHTML]="text$ | async"></div>
-<div class="app-wrapper">
+<div class="app-wrapper" style="padding-bottom: 80px">
   <div class="app-row">
-    <div class="app-col">
+    <div class="app-col app-col--main">
       <div class="app-col app-col--padded">
         <app-card-button
           iconImage="/assets/images/start-button-icon.svg"
-          smallText="Start Test"
+          smallText="Start test"
           title="Start RTR-NetTest"
           [primary]="true"
           [routerLink]="eRoutes.TEST"
@@ -17,13 +17,53 @@
       <div class="app-col app-col--padded">
         <app-card-button
           iconImage="/assets/images/loop-button-icon.svg"
-          smallText="Conduct Repeated Measurements"
+          smallText="Conduct repeated measurements"
           title="Loop mode"
           [routerLink]="eRoutes.LOOP"
         ></app-card-button>
       </div>
+      <div class="app-col app-col--padded">
+        <app-card-button
+          smallText="Conduct certified measurements"
+          title="Certified measurement"
+          [routerLink]="eRoutes.CERTIFIED"
+        ></app-card-button>
+      </div>
+      <div class="app-col app-col--padded">
+        <app-card-button
+          smallText="Map with test results"
+          title="Map view"
+          [routerLink]="eRoutes.MAP"
+        ></app-card-button>
+      </div>
+      <div class="app-col app-col--padded">
+        <app-card-button
+          smallText="Statistics on the results"
+          title="Statistics"
+          [routerLink]="eRoutes.STATISTICS"
+        ></app-card-button>
+      </div>
+      <div class="app-col app-col--padded">
+        <app-card-button
+          smallText="Download iOS, Android or Desktop App or conduct the browser test."
+          title="App and Browser Test"
+          url="https://www.rtr.at/en/tk/rtrnetztest_tests"
+        ></app-card-button>
+      </div>
+      <div class="app-col app-col--padded">
+        <app-card-button
+          smallText="Explore open data test results"
+          title="Open data"
+          [routerLink]="eRoutes.OPEN_DATA"
+        ></app-card-button>
+      </div>
+      <div class="app-col app-col--padded">
+        <app-card-button smallText="Your IP address">
+          <div>;okfso;sfok;o</div>
+        </app-card-button>
+      </div>
     </div>
-    <div class="app-col app-col--padded"></div>
+    <div class="app-col app-col--main app-col--padded"></div>
   </div>
 </div>
 <app-footer></app-footer>
