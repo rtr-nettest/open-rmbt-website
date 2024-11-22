@@ -10,6 +10,9 @@ export class TranslatePipe implements PipeTransform {
   constructor(private readonly store: I18nStore) {}
 
   transform(key: string | null) {
-    return key ? this.store.translations[key] || key : key
+    if (!key) {
+      return ""
+    }
+    return this.store.translations[key] || key
   }
 }
