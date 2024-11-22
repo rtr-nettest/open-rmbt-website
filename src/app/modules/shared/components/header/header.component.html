@@ -1,0 +1,68 @@
+<header class="app-container app-container--primary">
+  <nav class="app-wrapper">
+    <ul class="app-list">
+      <li>
+        <button
+          mat-button
+          class="app-button"
+          [matMenuTriggerFor]="rtr"
+          (onMenuOpen)="rtrOpen = true"
+        >
+          RTR
+          <mat-icon iconPositionEnd>{{
+            !rtrOpen ? "keyboard_arrow_down" : "keyboard_arrow_up"
+          }}</mat-icon>
+        </button>
+        <button
+          mat-button
+          class="app-button"
+          [matMenuTriggerFor]="lang"
+          (onMenuOpen)="langOpen = true"
+        >
+          {{ activeLang }}
+          <mat-icon iconPositionEnd>{{
+            !langOpen ? "keyboard_arrow_down" : "keyboard_arrow_up"
+          }}</mat-icon>
+        </button>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<mat-menu
+  backdropClass="app-header-menu-backdrop"
+  class="app-header-menu"
+  #rtr
+  (closed)="rtrOpen = false"
+>
+  <nav class="app-wrapper">
+    <ul class="app-list" style="margin: 0 -12px">
+      @for (link of rtrLinks$ | async; track $index) {
+      <li>
+        <a [href]="link.url" mat-button class="app-link" target="_blank">
+          {{ link.label }}
+        </a>
+      </li>
+      }
+    </ul>
+  </nav>
+</mat-menu>
+
+<mat-menu
+  backdropClass="app-header-menu-backdrop"
+  class="app-header-menu"
+  #lang
+  (closed)="langOpen = false"
+>
+  <nav class="app-wrapper">
+    <ul class="app-list" style="margin: 0 -12px">
+      @for (locale of availableLocales; track $index) {
+      <li>
+        <button (click)="setLocale(locale)" mat-button class="app-link">
+          {{ locale.name }}
+        </button>
+      </li>
+      }
+    </ul>
+  </nav></mat-menu
+>

@@ -1,0 +1,25 @@
+/*------------------------------------
+    # ELEMENT HTML
+------------------------------------*/
+
+html {
+  --base-font-size: #{$base-font-size}px;
+
+  font-family: $base-font-family;
+  font-size: var(--base-font-size);
+  line-height: $base-line-height;
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  overflow-x: hidden;
+  position: relative;
+
+  @include screen-sm {
+    --base-font-size: #{$base-font-size * 0.8}px;
+    font-size: var(--base-font-size);
+  }
+}
+
+/*------------------------------------
+    # END ELEMENT HTML
+------------------------------------*/

@@ -1,0 +1,11 @@
+<div class="app-wrapper">
+  <ul class="app-list">
+    @if (breadcrumbs$ | async; as br) { @for (item of br; track $index) {
+    <li class="app-li">
+      <a class="app-link" [routerLink]="item.route">{{ item.label }}</a>
+      @if (br.length > 1 && $index < br.length - 1) {
+      <span class="app-span">></span> }
+    </li>
+    } }
+  </ul>
+</div>

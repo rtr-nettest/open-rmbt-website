@@ -1,0 +1,7 @@
+.app-button {
+  &--bold {
+    .mdc-button__label {
+      font-weight: 700;
+    }
+  }
+}

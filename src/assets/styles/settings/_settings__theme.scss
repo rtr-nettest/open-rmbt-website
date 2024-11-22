@@ -1,0 +1,26 @@
+$font-size-h1: 60;
+$font-size-h2: 44;
+$font-size-h3: 36;
+$font-size-m: 16;
+$font-size-sm: 14;
+$font-size-xs: 12;
+
+$screen-xxs: 599.98px;
+$screen-xs: 904.98px;
+$screen-sm: 1239.98px;
+$screen-md: 1439.98px;
+$screen-lg: 1599.98px;
+$screen-xl: 2559.98px;
+
+$base-font-family: "Open Sans", sans-serif;
+$base-font-size: $font-size-sm;
+$base-line-height: 1.5;
+
+$color-primary: #2f5f00;
+$color-secondary: black;
+$color-accent: #0071d7;
+$color-dark: black;
+$color-pale: mix(#000000, #ffffff, 33%);
+$color-link: #2f5f00;
+$color-link-contrast: white;
+$color-hover: rgb(206, 229, 199);

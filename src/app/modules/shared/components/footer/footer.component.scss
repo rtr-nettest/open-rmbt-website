@@ -1,0 +1,33 @@
+@import "core";
+
+.app-container {
+  border-top: 1px solid #c2c2c2;
+  padding: rem(48) 0;
+}
+
+.app-wrapper {
+  display: flex;
+  justify-content: space-between;
+
+  * {
+    font-size: rem(14);
+  }
+}
+
+.app-li,
+p {
+  margin-bottom: rem(24);
+}
+
+a {
+  text-decoration: underline !important;
+}
+
+.app-icon-button {
+  height: 52px;
+  width: 52px;
+  img {
+    height: 36px;
+    width: 36px;
+  }
+}

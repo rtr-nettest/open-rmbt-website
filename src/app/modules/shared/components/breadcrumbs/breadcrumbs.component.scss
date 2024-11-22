@@ -1,0 +1,21 @@
+@import "core";
+
+.app-wrapper {
+  font-size: rem(12);
+  padding-bottom: rem(24);
+  padding-top: rem(24);
+}
+
+.app-link {
+  font-size: rem(12);
+  text-decoration: none;
+}
+
+.app-list {
+  align-items: center;
+  display: flex;
+}
+
+.app-span {
+  margin: 0 rem(12);
+}

@@ -1,0 +1,18 @@
+.app-link {
+  color: $color-dark !important;
+
+  &:hover {
+    color: $color-link !important;
+  }
+
+  .mdc-button__ripple {
+    display: none;
+  }
+}
+
+app-header,
+app-top-nav {
+  .app-link {
+    font-size: rem(14);
+  }
+}

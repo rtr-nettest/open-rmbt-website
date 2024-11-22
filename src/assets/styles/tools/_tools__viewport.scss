@@ -1,0 +1,35 @@
+@mixin screen-xl {
+    @media (max-width: #{$screen-xl}) {
+        @content;
+    }
+}
+
+@mixin screen-lg {
+    @media (max-width: #{$screen-lg}) {
+        @content;
+    }
+}
+
+@mixin screen-md {
+    @media (max-width: #{$screen-md}) {
+        @content;
+    }
+}
+
+@mixin screen-sm {
+    @media (max-width: #{$screen-sm}) {
+        @content;
+    }
+}
+
+@mixin screen-sm-portrait {
+    @media (max-width: #{$screen-sm}) and (orientation: portrait) {
+        @content;
+    }
+}
+
+@mixin screen-xs {
+    @media (max-width: #{$screen-xs}) {
+        @content;
+    }
+}

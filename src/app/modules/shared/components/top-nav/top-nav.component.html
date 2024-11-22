@@ -1,0 +1,57 @@
+<header class="app-container">
+  <div class="app-wrapper">
+    <a [href]="'/' + activeLang" class="app-logo">
+      <img src="/assets/images/logo-header.svg" />
+    </a>
+    <nav class="app-main-nav">
+      <ul class="app-list">
+        @for (item of mainItems$ | async; track $index) {
+        <li>
+          @if (item.route) {
+          <a [routerLink]="item.route" mat-button class="app-link">{{
+            item.label
+          }}</a>
+          } @else {
+          <a class="app-link" mat-button [matMenuTriggerFor]="subMenu"
+            >{{ item.label
+            }}<mat-icon iconPositionEnd>keyboard_arrow_down</mat-icon></a
+          >
+          }
+        </li>
+        }
+      </ul>
+      @if (startButton$ | async; as btn) {
+      <a
+        [routerLink]="btn.route"
+        mat-stroked-button
+        class="app-button app-button--bold"
+        >{{ btn.label }}</a
+      >
+      }
+    </nav>
+  </div>
+</header>
+
+<mat-menu
+  #subMenu
+  backdropClass="app-header-menu-backdrop"
+  class="app-header-menu app-header-menu--primary"
+>
+  <div class="app-wrapper">
+    <nav class="app-sub-nav">
+      <ul class="app-list">
+        @for (item of subItems$ | async; track $index) {
+        <li class="app-li">
+          @if(item.route) {
+          <a class="app-link" [routerLink]="item.route">{{ item.label }}</a>
+          } @else {
+          <a class="app-link" [href]="item.url" target="_blank">{{
+            item.label
+          }}</a>
+          }
+        </li>
+        }
+      </ul>
+    </nav>
+  </div>
+</mat-menu>

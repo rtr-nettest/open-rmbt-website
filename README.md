@@ -1,48 +1,19 @@
-RTR-NetTest Website
-===================
+# Open RMBT Angular
 
-This repository hosts the web page sources for ```www.netztest.at```
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.12.
 
-Requirements
-------------
+## Development server
 
-For building the website, the following tools are needed
+Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-  * NodeJS
-  * NPM
-  * Git
+## Production server
 
+Run `npm run start:prod` to launch a prod version of the application on a local server. The application will automatically open in the default browser and reload if you change any of the source files.
 
-Building and running the Website
---------------------------------
+## Build
 
-1. Build
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-	```bash
-	npm install
-	node build netztest 
-	```
-	
-	It is possible to live-rebuild changed sources by running
-	
-	```bash
-	node build netztest watch
-	```
-	
-2. Deploy
+## Further help
 
-    Use the `build`-directory as the root directory for your
-	webserver, e.g.	in conjunction with the `http-server` 
-	node module (`npm install http-server -g`)
-	
-	```bash
-	http-server build -p 8081
-	```
-	
-	Now, the website is ready to use: <http://localhost:8081/en>
-	
-
-Get in Touch
-------------
-
-* [RTR-Netztest](https://www.netztest.at) on the web
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

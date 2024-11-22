@@ -1,0 +1,71 @@
+@import "core";
+
+:host {
+  width: 100%;
+}
+
+.app-logo {
+  height: rem(48);
+  width: auto;
+
+  img {
+    object-fit: contain;
+  }
+}
+
+.app-container {
+  border-bottom: 1px solid #c2c2c2;
+  display: flex;
+  justify-content: center;
+  height: rem(70);
+  width: 100%;
+}
+
+.app-wrapper {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.app-main-nav {
+  align-items: center;
+  display: flex;
+}
+
+.app-list {
+  display: flex;
+}
+
+.app-button {
+  border-width: 2px;
+  font-size: rem(14);
+  height: rem(48);
+}
+
+.app-link {
+  height: rem(70);
+
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: -1;
+    bottom: 0;
+    height: 4px;
+    background-color: rgba(0, 0, 0, 0);
+    transition: 0.25s ease-in-out;
+    transition-property: all;
+    transition-property: background-color, border-color, box-shadow, height,
+      right;
+    left: 12px;
+    right: calc(102% - 12px);
+  }
+
+  &[aria-expanded="true"]::before,
+  &:hover::before,
+  &:focus::before {
+    right: 12px;
+    background-color: #2f5f00;
+    height: 4px;
+  }
+}

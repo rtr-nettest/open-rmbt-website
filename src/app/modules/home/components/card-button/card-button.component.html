@@ -1,0 +1,19 @@
+<a
+  [routerLink]="routerLink"
+  class="app-card"
+  [class.app-card--primary]="primary"
+>
+  @if (iconImage) {
+  <div class="app-card-media-top">
+    <span class="app-icon">
+      <img [src]="iconImage" />
+    </span>
+  </div>
+  }
+  <p>{{ smallText | translate }}</p>
+  @if (title) {
+  <h3 class="app-card-title app-margin-top">
+    {{ title | translate }}
+  </h3>
+  }
+</a>

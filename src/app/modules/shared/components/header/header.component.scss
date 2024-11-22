@@ -1,0 +1,29 @@
+@import "core";
+
+.app-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  &--primary {
+    background: $color-primary;
+
+    .app-button {
+      color: $color-link-contrast;
+      font-size: rem(14);
+      font-weight: 700;
+      text-transform: uppercase;
+
+      mat-icon {
+        height: rem(24);
+        font-size: rem(24);
+        font-weight: 700;
+        width: rem(24);
+      }
+    }
+  }
+}
+
+.app-list {
+  margin: 0 rem(-16);
+}
