@@ -45,7 +45,7 @@
       </div>
       <div class="app-col app-col--padded">
         <app-card-button
-          smallText="Download iOS, Android or Desktop App or conduct the browser test."
+          [smallText]="(appLinksText$ | async)!"
           title="App and Browser Test"
           url="https://www.rtr.at/en/tk/rtrnetztest_tests"
         ></app-card-button>
