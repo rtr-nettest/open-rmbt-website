@@ -3,6 +3,9 @@
   "Accessibility": "Barrierefreiheit",
   "App and Browser Test": "RTR-Netztest Apps",
   "Certified measurement": "Zertifizierte Messung",
+  "Conduct repeated measurements": "Wiederholte Tests durchführen",
+  "Conduct certified measurements": "Zertifizierte Messung durchführen",
+  "Explore open data test results": "Testergebnisse als Open Data einsehen",
   "Further": "Weiteres",
   "Help": "Hilfe",
   "History": "Verlauf",
@@ -19,7 +22,9 @@
   "Loop mode": "Wiederholungsmodus",
   "mailto:netztest@rtr.at?subject=Supportanfrage%20RTR-Netztest%20%28Web%29": "mailto:netztest@rtr.at?subject=Supportanfrage%20RTR-Netztest%20%28Web%29",
   "Map view": "Karte",
+  "Map with test results": "Karte mit Testergebnissen",
   "Media": "Medien",
+  "Not available": "Nicht verfügbar",
   "Open data": "Open data",
   "Options": "Optionen",
   "Page Not Found": "Seite nicht gefunden",
@@ -28,7 +33,10 @@
   "RTR": "RTR",
   "RUNDFUNK UND TELEKOM REGULIERUNGS-GMBH": "RUNDFUNK UND TELEKOM\nREGULIERUNGS-GMBH",
   "Start test": "Test starten",
+  "Start RTR-NetTest": "RTR-Netztest starten",
   "Statistics": "Statistik",
+  "Statistics on the results": "Statistiken zu den Testergebnissen",
   "Tel.: +43 1 58058-0": "Tel.: +43 1 58058-0",
-  "Telecommunications and Postal Division": "Telekommunikation und Post"
+  "Telecommunications and Postal Division": "Telekommunikation und Post",
+  "Your IP address": "Ihre IP-Adresse"
 }
