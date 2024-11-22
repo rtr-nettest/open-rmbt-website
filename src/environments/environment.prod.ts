@@ -2,7 +2,9 @@ export const environment = {
   baseUrl: ".",
   deployedUrl: "", // TODO
   api: {
-    url: "", // TODO
+    baseUrl: "https://c01.netztest.at/",
+    ipv4: "https://c01v4.netztest.at",
+    ipv6: "https://c01v6.netztest.at",
   },
   projectTitle: "RTR-Nettest",
 }

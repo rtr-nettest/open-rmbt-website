@@ -8,6 +8,7 @@ import { Observable } from "rxjs"
 import { AsyncPipe } from "@angular/common"
 import { CardButtonComponent } from "../../components/card-button/card-button.component"
 import { ERoutes } from "../../../shared/constants/routes.enum"
+import { IpInfoComponent } from "../../components/ip-info/ip-info.component"
 
 @Component({
   selector: "app-landing",
@@ -17,6 +18,7 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
     BreadcrumbsComponent,
     CardButtonComponent,
     HeaderComponent,
+    IpInfoComponent,
     FooterComponent,
     TopNavComponent,
     BreadcrumbsComponent,
