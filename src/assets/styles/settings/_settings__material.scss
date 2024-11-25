@@ -5,8 +5,7 @@
 @use "sass:math";
 @use "sass:color";
 @use "@angular/material" as mat;
-@include mat.elevation-classes();
-@include mat.app-background();
+@include mat.core();
 @import "settings__theme";
 
 // Note: Color palettes are generated from primary: #47A4F5, secondary: #EAF547
