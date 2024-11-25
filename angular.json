@@ -34,10 +34,7 @@
               "entry": "server.ts"
             },
             "stylePreprocessorOptions": {
-              "includePaths": ["src/assets/styles"],
-              "sass": {
-                "silenceDeprecations": ["import"]
-              }
+              "includePaths": ["src/assets/styles"]
             }
           },
           "configurations": {

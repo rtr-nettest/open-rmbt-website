@@ -156,11 +156,9 @@ $light-theme: mat.define-theme(
 :root {
   @include mat.all-component-themes($light-theme);
 
-  & {
-    --mat-menu-container-color: white;
-    --mat-mdc-focus-indicator-border-radius: 9px;
-    --mdc-outlined-button-container-shape: 9px;
-  }
+  --mat-menu-container-color: white;
+  --mat-mdc-focus-indicator-border-radius: 9px;
+  --mdc-outlined-button-container-shape: 9px;
 }
 
 .mat-mdc-button .mat-mdc-button-ripple {
