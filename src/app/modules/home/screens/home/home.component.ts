@@ -1,4 +1,9 @@
-import { Component, inject, OnInit } from "@angular/core"
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  inject,
+} from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
@@ -34,7 +39,8 @@ import { IRecentMeasurementsResponse } from "../../interfaces/recent-measurement
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.scss",
 })
-export class HomeComponent extends SeoComponent implements OnInit {
+export class HomeComponent extends SeoComponent implements AfterViewInit {
+  mapContainerId = "mapContainer"
   text$: Observable<string> = this.i18nStore.getLocalizedHtml("home")
   appLinksText$: Observable<string> = this.i18nStore.getTranslations().pipe(
     map((t) => {
@@ -64,16 +70,18 @@ export class HomeComponent extends SeoComponent implements OnInit {
       return text
     })
   )
+  cdr = inject(ChangeDetectorRef)
   eRoutes = ERoutes
   measurements = inject(MeasurementsService)
   platform = inject(PlatformService)
   recentMeasurements$: Observable<IRecentMeasurementsResponse | null> = of(null)
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     if (globalThis.document) {
       this.recentMeasurements$ = interval(3000).pipe(
         concatMap(() => this.measurements.getRecentMeasurements())
       )
+      this.cdr.detectChanges()
     }
   }
 }

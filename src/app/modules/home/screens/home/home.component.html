@@ -3,7 +3,7 @@
 <app-breadcrumbs></app-breadcrumbs>
 <div class="app-wrapper" [innerHTML]="text$ | async"></div>
 <div class="app-wrapper" style="padding-bottom: 80px">
-  <div class="app-row">
+  <div class="app-row" [id]="mapContainerId">
     <div class="app-col app-col--main">
       <div class="app-col app-col--padded">
         <app-card-button
@@ -64,7 +64,10 @@
       </div>
     </div>
     <div class="app-col app-col--main app-col--padded">
-      <app-map [measurements]="recentMeasurements$ | async"></app-map>
+      <app-map
+        [measurements]="recentMeasurements$ | async"
+        [mapContainerId]="mapContainerId"
+      ></app-map>
     </div>
   </div>
 </div>
