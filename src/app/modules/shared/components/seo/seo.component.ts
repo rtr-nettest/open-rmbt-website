@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core"
 import { Title } from "@angular/platform-browser"
 import { I18nStore } from "../../../i18n/store/i18n.store"
-import { Subscription, tap } from "rxjs"
+import { Subject, Subscription, takeUntil, tap } from "rxjs"
 
 const SEP = " | "
 
@@ -12,11 +12,13 @@ const SEP = " | "
   template: "",
 })
 export class SeoComponent implements OnDestroy {
+  destroyed$: Subject<void> = new Subject()
   titleSub!: Subscription
   @Input() set title(t: string) {
     this.titleSub = this.i18nStore
       .getTranslations()
       .pipe(
+        takeUntil(this.destroyed$),
         tap((dict) => {
           const titleArr = this.ts.getTitle().split(SEP)
           const siteName = titleArr.length === 1 ? titleArr[0] : titleArr[1]
@@ -34,6 +36,7 @@ export class SeoComponent implements OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
-    this.titleSub.unsubscribe()
+    this.destroyed$.next()
+    this.destroyed$.complete()
   }
 }

@@ -63,7 +63,9 @@
         </app-card-button>
       </div>
     </div>
-    <div class="app-col app-col--main app-col--padded"></div>
+    <div class="app-col app-col--main app-col--padded">
+      <app-map [measurements]="recentMeasurements$ | async"></app-map>
+    </div>
   </div>
 </div>
 <app-footer></app-footer>

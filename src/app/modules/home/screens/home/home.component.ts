@@ -1,10 +1,10 @@
-import { Component, inject } from "@angular/core"
+import { Component, inject, OnInit } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
-import { map, Observable } from "rxjs"
+import { concatMap, interval, map, Observable, of } from "rxjs"
 import { AsyncPipe } from "@angular/common"
 import { CardButtonComponent } from "../../components/card-button/card-button.component"
 import { ERoutes } from "../../../shared/constants/routes.enum"
@@ -13,6 +13,9 @@ import {
   EPlatform,
   PlatformService,
 } from "../../../shared/services/platform.service"
+import { MeasurementsService } from "../../services/measurements.service"
+import { MapComponent } from "../../components/map/map.component"
+import { IRecentMeasurementsResponse } from "../../interfaces/recent-measurements-response.interface"
 
 @Component({
   selector: "app-landing",
@@ -24,13 +27,14 @@ import {
     HeaderComponent,
     IpInfoComponent,
     FooterComponent,
+    MapComponent,
     TopNavComponent,
     BreadcrumbsComponent,
   ],
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.scss",
 })
-export class HomeComponent extends SeoComponent {
+export class HomeComponent extends SeoComponent implements OnInit {
   text$: Observable<string> = this.i18nStore.getLocalizedHtml("home")
   appLinksText$: Observable<string> = this.i18nStore.getTranslations().pipe(
     map((t) => {
@@ -61,5 +65,15 @@ export class HomeComponent extends SeoComponent {
     })
   )
   eRoutes = ERoutes
+  measurements = inject(MeasurementsService)
   platform = inject(PlatformService)
+  recentMeasurements$: Observable<IRecentMeasurementsResponse | null> = of(null)
+
+  ngOnInit(): void {
+    if (globalThis.document) {
+      this.recentMeasurements$ = interval(3000).pipe(
+        concatMap(() => this.measurements.getRecentMeasurements())
+      )
+    }
+  }
 }
