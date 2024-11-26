@@ -1,9 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  inject,
-} from "@angular/core"
+import { AfterViewInit, Component, inject } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
@@ -80,7 +75,6 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
       return text
     })
   )
-  cdr = inject(ChangeDetectorRef)
   eRoutes = ERoutes
   measurements = inject(MeasurementsService)
   platform = inject(PlatformService)
@@ -93,7 +87,6 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
         takeUntil(this.destroyed$),
         concatMap(() => this.measurements.getRecentMeasurements())
       )
-      this.cdr.detectChanges()
     }
   }
 }

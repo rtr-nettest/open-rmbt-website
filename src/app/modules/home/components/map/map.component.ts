@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  inject,
   Input,
   OnChanges,
   OnDestroy,
@@ -10,6 +11,7 @@ import { IRecentMeasurementsResponse } from "../../interfaces/recent-measurement
 import {
   catchError,
   debounceTime,
+  firstValueFrom,
   fromEvent,
   of,
   Subject,
@@ -20,9 +22,15 @@ import {
 import { Marker, Map, StyleSpecification } from "maplibre-gl"
 import { bbox } from "@turf/bbox"
 import { lineString } from "@turf/helpers"
+import { HttpClient } from "@angular/common/http"
 
 const center: [number, number] = [13.786457000803567, 47.57838319858735]
+const baseMap = "https://mapsneu.wien.gv.at/basemapvectorneu/root.json"
 const style: StyleSpecification = {
+  sprite:
+    "https://mapsneu.wien.gv.at/basemapv/bmapv/3857/resources/sprites/sprite",
+  glyphs:
+    "https://mapsneu.wien.gv.at/basemapv/bmapv/3857/resources/fonts/{fontstack}/{range}.pbf",
   version: 8 as const,
   sources: {
     osm: {
@@ -30,11 +38,6 @@ const style: StyleSpecification = {
       tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
       tileSize: 256,
       attribution: "&copy; OpenStreetMap Contributors",
-      maxzoom: 19,
-    },
-    basemap: {
-      type: "vector" as const,
-      url: "https://mapsneu.wien.gv.at/basemapv/bmapv/3857/resources/styles/root.json",
       maxzoom: 19,
     },
   },
@@ -46,9 +49,6 @@ const style: StyleSpecification = {
     },
   ],
 }
-
-// https://mapsneu.wien.gv.at/basemapv/bmapv/3857/resources/styles/root.json
-// https://mapsneu.wien.gv.at/basemapvectorneu/root.json
 
 @Component({
   selector: "app-map",
@@ -63,6 +63,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input() mapContainerId?: string
   cachedMarkers: Marker[] = []
   destroyed$ = new Subject<void>()
+  http = inject(HttpClient)
   mapId = "map"
   map!: Map
   resizeSub!: Subscription
@@ -125,6 +126,23 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
     document
       .getElementById(this.mapId)!
       .setAttribute("style", `height:440px;width:${containerWidth - 24}px`)
+  }
+
+  // TODO: see if raster works
+  private async setBaseMap() {
+    try {
+      const style: StyleSpecification = await firstValueFrom(
+        this.http.get<StyleSpecification>(baseMap)
+      )
+      this.map.on("load", () => {
+        this.map.addSource("esri", style.sources["esri"])
+        for (const layer of style.layers) {
+          if (!this.map.getLayer(layer.id)) this.map.addLayer(layer)
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   private setMeasurements() {
