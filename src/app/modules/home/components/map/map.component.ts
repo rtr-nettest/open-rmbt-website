@@ -23,14 +23,11 @@ import { Marker, Map, StyleSpecification } from "maplibre-gl"
 import { bbox } from "@turf/bbox"
 import { lineString } from "@turf/helpers"
 import { HttpClient } from "@angular/common/http"
+import { PopupService } from "../../services/popup.service"
 
 const center: [number, number] = [13.786457000803567, 47.57838319858735]
 const baseMap = "https://mapsneu.wien.gv.at/basemapvectorneu/root.json"
 const style: StyleSpecification = {
-  sprite:
-    "https://mapsneu.wien.gv.at/basemapv/bmapv/3857/resources/sprites/sprite",
-  glyphs:
-    "https://mapsneu.wien.gv.at/basemapv/bmapv/3857/resources/fonts/{fontstack}/{range}.pbf",
   version: 8 as const,
   sources: {
     osm: {
@@ -66,6 +63,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   http = inject(HttpClient)
   mapId = "map"
   map!: Map
+  popup = inject(PopupService)
   resizeSub!: Subscription
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -161,7 +159,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
           i == this.measurements!.results.length - 1 ? `24px` : `18px`
 
         el.addEventListener("click", () => {
-          window.alert(`${m.long},${m.lat}`)
+          this.popup.addPopup(this.map, m)
         })
 
         const coordinates: [number, number] = [m.long, m.lat]
@@ -174,9 +172,9 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
       })
       const line = lineString(features)
       const box = bbox(line) as [number, number, number, number]
-      this.map.fitBounds(box, {
-        padding: { top: 12, bottom: 12, left: 12, right: 12 },
-      })
+      // this.map.fitBounds(box, {
+      //   padding: { top: 12, bottom: 12, left: 12, right: 12 },
+      // })
     }
   }
 

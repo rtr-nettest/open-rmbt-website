@@ -1,3 +1,26 @@
 .app-marker {
   background-size: contain;
 }
+.app-popup {
+  font-size: rem(14);
+  width: rem(220);
+
+  th {
+    font-weight: bold;
+  }
+
+  &-cell {
+    padding: rem(4) 0;
+    &:last-child {
+      text-align: right;
+    }
+    &:first-child,
+    &:only-child {
+      text-align: left;
+    }
+  }
+
+  &-group-title {
+    padding-top: rem(8);
+  }
+}
