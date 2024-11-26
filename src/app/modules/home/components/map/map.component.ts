@@ -10,9 +10,9 @@ import {
   takeUntil,
   tap,
 } from "rxjs"
-import { Map } from "maplibre-gl"
+import { Map, StyleSpecification } from "maplibre-gl"
 
-const style = {
+const style: StyleSpecification = {
   version: 8 as const,
   sources: {
     osm: {
@@ -20,6 +20,11 @@ const style = {
       tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
       tileSize: 256,
       attribution: "&copy; OpenStreetMap Contributors",
+      maxzoom: 19,
+    },
+    basemap: {
+      type: "vector" as const,
+      url: "https://mapsneu.wien.gv.at/basemapv/bmapv/3857/resources/styles/root.json",
       maxzoom: 19,
     },
   },
@@ -32,7 +37,8 @@ const style = {
   ],
 }
 
-//https://mapsneu.wien.gv.at/basemapvectorneu/root.json
+// https://mapsneu.wien.gv.at/basemapv/bmapv/3857/resources/styles/root.json
+// https://mapsneu.wien.gv.at/basemapvectorneu/root.json
 
 @Component({
   selector: "app-map",
