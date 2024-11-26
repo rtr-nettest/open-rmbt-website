@@ -32,6 +32,8 @@ const style = {
   ],
 }
 
+//https://mapsneu.wien.gv.at/basemapvectorneu/root.json
+
 @Component({
   selector: "app-map",
   standalone: true,
