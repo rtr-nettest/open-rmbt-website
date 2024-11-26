@@ -9,7 +9,15 @@ import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.comp
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
-import { concatMap, interval, map, Observable, of } from "rxjs"
+import {
+  concatMap,
+  interval,
+  map,
+  Observable,
+  of,
+  startWith,
+  takeUntil,
+} from "rxjs"
 import { AsyncPipe } from "@angular/common"
 import { CardButtonComponent } from "../../components/card-button/card-button.component"
 import { ERoutes } from "../../../shared/constants/routes.enum"
@@ -21,6 +29,8 @@ import {
 import { MeasurementsService } from "../../services/measurements.service"
 import { MapComponent } from "../../components/map/map.component"
 import { IRecentMeasurementsResponse } from "../../interfaces/recent-measurements-response.interface"
+
+const UPDATE_INTERVAL = 3000
 
 @Component({
   selector: "app-landing",
@@ -78,7 +88,9 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     if (globalThis.document) {
-      this.recentMeasurements$ = interval(3000).pipe(
+      this.recentMeasurements$ = interval(UPDATE_INTERVAL).pipe(
+        startWith(this.measurements.getRecentMeasurements()),
+        takeUntil(this.destroyed$),
         concatMap(() => this.measurements.getRecentMeasurements())
       )
       this.cdr.detectChanges()

@@ -1,4 +1,11 @@
-import { AfterViewInit, Component, Input, OnDestroy } from "@angular/core"
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+} from "@angular/core"
 import { IRecentMeasurementsResponse } from "../../interfaces/recent-measurements-response.interface"
 import {
   catchError,
@@ -10,8 +17,11 @@ import {
   takeUntil,
   tap,
 } from "rxjs"
-import { Map, StyleSpecification } from "maplibre-gl"
+import { Marker, Map, StyleSpecification } from "maplibre-gl"
+import { bbox } from "@turf/bbox"
+import { lineString } from "@turf/helpers"
 
+const center: [number, number] = [13.786457000803567, 47.57838319858735]
 const style: StyleSpecification = {
   version: 8 as const,
   sources: {
@@ -47,14 +57,21 @@ const style: StyleSpecification = {
   templateUrl: "./map.component.html",
   styleUrl: "./map.component.scss",
 })
-export class MapComponent implements AfterViewInit, OnDestroy {
+export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input({ required: true }) measurements: IRecentMeasurementsResponse | null =
     null
   @Input() mapContainerId?: string
+  cachedMarkers: Marker[] = []
   destroyed$ = new Subject<void>()
   mapId = "map"
   map!: Map
   resizeSub!: Subscription
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if ("measurements" in changes && this.map) {
+      this.setMeasurements()
+    }
+  }
 
   ngOnDestroy(): void {
     this.destroyed$.next()
@@ -73,7 +90,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.map = new Map({
       container: "map",
       style: style,
-      center: [1, 15],
+      center,
       zoom: 3,
     })
   }
@@ -105,9 +122,58 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (window.innerWidth > 904.98) {
       containerWidth = containerWidth / 2
     }
-    console.log(containerWidth)
     document
       .getElementById(this.mapId)!
       .setAttribute("style", `height:440px;width:${containerWidth - 24}px`)
+  }
+
+  private setMeasurements() {
+    if (this.measurements?.results?.length) {
+      this.cachedMarkers.forEach((m) => m.remove())
+      const features: [number, number][] = []
+      this.cachedMarkers = this.measurements.results.reverse().map((m, i) => {
+        const el = document.createElement("div")
+        el.className = "app-marker"
+        el.style.backgroundImage = `url(${this.getIconByClass(
+          m.download_classification
+        )})`
+        el.style.width =
+          i == this.measurements!.results.length - 1 ? `24px` : `18px`
+        el.style.height =
+          i == this.measurements!.results.length - 1 ? `24px` : `18px`
+
+        el.addEventListener("click", () => {
+          window.alert(`${m.long},${m.lat}`)
+        })
+
+        const coordinates: [number, number] = [m.long, m.lat]
+
+        features.push(coordinates)
+
+        return new Marker({ element: el })
+          .setLngLat(coordinates)
+          .addTo(this.map)
+      })
+      const line = lineString(features)
+      const box = bbox(line) as [number, number, number, number]
+      this.map.fitBounds(box, {
+        padding: { top: 12, bottom: 12, left: 12, right: 12 },
+      })
+    }
+  }
+
+  private getIconByClass(classification?: number) {
+    switch (classification) {
+      case 1:
+        return `/assets/images/map-icon-red.svg`
+      case 2:
+        return `/assets/images/map-icon-yellow.svg`
+      case 3:
+        return `/assets/images/map-icon-green.svg`
+      case 4:
+        return `/assets/images/map-icon-deep-green.svg`
+      default:
+        return ""
+    }
   }
 }
