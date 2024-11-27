@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core"
 
 export const THRESHOLD_UPLOAD = [50000, 5000, 2500]
 export const THRESHOLD_DOWNLOAD = [100000, 10000, 5000]
-export const THRESHOLD_PING = [10000000, 25000000, 75000000]
+export const THRESHOLD_PING = [10, 25, 75]
 export const THRESHOLD_SIGNAL_GSM = [-75, -85, -101]
 export const THRESHOLD_SIGNAL_LTE = [-85, -95, -111]
 export const THRESHOLD_SIGNAL_WLAN = [-51, -61, -76]
