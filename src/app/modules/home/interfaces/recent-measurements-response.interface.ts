@@ -21,3 +21,12 @@ export interface IRecentMeasurement {
   loc_accuracy: number
   download_classification: number
 }
+
+export interface IRecentStats {
+  "30min": number
+  "5min": number
+  "24h": number
+  "12h": number
+  "60min": number
+  "7d": number
+}

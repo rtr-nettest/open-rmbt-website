@@ -64,3 +64,15 @@
   font-size: 24px;
   font-weight: lighter;
 }
+
+.app-fullscreen-stats {
+  background-color: white;
+  font-size: rem(14);
+  padding: rem(10);
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  p {
+    margin: 0.5em;
+  }
+}

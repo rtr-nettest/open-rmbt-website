@@ -18,6 +18,11 @@ import {
   THRESHOLD_UPLOAD,
 } from "../../shared/services/classification.service"
 import { ERoutes } from "../../shared/constants/routes.enum"
+import utc from "dayjs/plugin/utc"
+import tz from "dayjs/plugin/timezone"
+
+dayjs.extend(utc)
+dayjs.extend(tz)
 
 type PopupData = {
   time: string
@@ -80,7 +85,10 @@ export class PopupService {
       }
     }
     const data: PopupData = {
-      time: dayjs(measurement.time).format(`HH:mm:ss`),
+      time: dayjs(measurement.time)
+        .utc(true)
+        .tz(dayjs.tz.guess())
+        .format(`HH:mm:ss`),
       detailsUrl: `${environment.deployedUrl}/${this.i18nStore.activeLang}/${ERoutes.RESULT}?open_test_uuid=${measurement.open_test_uuid}`,
       downloadClass: this.classification.classify(
         measurement.download_kbit,
@@ -111,7 +119,7 @@ export class PopupService {
         signalThreshold,
         "biggerBetter"
       ),
-      signal: signal ? `${signal} ${t["dBm"]}` : t[UNKNOWN],
+      signal: signal ? `${signal} ${t["dBm"]}` : "",
       connection: measurement.platform
         ? measurement.platform.trim()
         : t[UNKNOWN],

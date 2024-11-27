@@ -49,7 +49,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   text$: Observable<string> = this.i18nStore.getLocalizedHtml("home")
   appLinksText$: Observable<string> = this.i18nStore.getTranslations().pipe(
     map((t) => {
-      let text = t[`Download $ios, $android or $desktop or conduct $web.`]
+      let text = t[`Download %ios, %android or %desktop or conduct %web.`]
       const platform = this.platform.detectPlatform()
       if (
         new Set([EPlatform.ANDROID, EPlatform.IOS, EPlatform.WIN_PHONE]).has(
@@ -57,21 +57,21 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
         )
       ) {
         // We're on mobile, no reason to show the desktop links
-        text = t[`Download $ios or $androidApp or conduct $web.`]
+        text = t[`Download %ios or %androidApp or conduct %web.`]
       }
-      text = text.replace("$ios", t["iOS link"])
-      text = text.replace("$androidApp", t["AndroidApp link"])
-      text = text.replace("$android", t["Android link"])
+      text = text.replace("%ios", t["iOS link"])
+      text = text.replace("%androidApp", t["AndroidApp link"])
+      text = text.replace("%android", t["Android link"])
       if (platform == EPlatform.LINUX) {
-        text = text.replace("$desktop", t["Linux link"])
+        text = text.replace("%desktop", t["Linux link"])
       } else if (platform == EPlatform.MAC) {
-        text = text.replace("$desktop", t["Mac link"])
+        text = text.replace("%desktop", t["Mac link"])
       } else if (platform == EPlatform.WINDOWS) {
-        text = text.replace("$desktop", t["Windows link"])
+        text = text.replace("%desktop", t["Windows link"])
       } else {
-        text = text.replace("$desktop", t["Other desktop app link"])
+        text = text.replace("%desktop", t["Other desktop app link"])
       }
-      text = text.replace("$web", t["Browser test link"])
+      text = text.replace("%web", t["Browser test link"])
       return text
     })
   )

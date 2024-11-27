@@ -19,11 +19,18 @@ import {
   takeUntil,
   tap,
 } from "rxjs"
-import { Marker, Map, StyleSpecification } from "maplibre-gl"
+import {
+  Marker,
+  Map,
+  StyleSpecification,
+  NavigationControl,
+  FullscreenControl,
+} from "maplibre-gl"
 import { bbox } from "@turf/bbox"
 import { lineString } from "@turf/helpers"
 import { HttpClient } from "@angular/common/http"
 import { PopupService } from "../../services/popup.service"
+import { FullScreenService } from "../../services/full-screen.service"
 
 const center: [number, number] = [13.786457000803567, 47.57838319858735]
 const baseMap = "https://mapsneu.wien.gv.at/basemapvectorneu/root.json"
@@ -60,6 +67,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input() mapContainerId?: string
   cachedMarkers: Marker[] = []
   destroyed$ = new Subject<void>()
+  fullScreen = inject(FullScreenService)
   http = inject(HttpClient)
   mapId = "map"
   map!: Map
@@ -91,6 +99,15 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
       style: style,
       center,
       zoom: 3,
+    })
+    this.map.addControl(new NavigationControl())
+    this.map.addControl(new FullscreenControl())
+    this.map.on("resize", () => {
+      if (document.fullscreenElement) {
+        this.fullScreen.addPopup()
+      } else {
+        this.fullScreen.removePopup()
+      }
     })
   }
 

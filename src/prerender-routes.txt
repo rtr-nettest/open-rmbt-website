@@ -7,6 +7,7 @@
 /certified-step-1
 /opentests
 /options
+/result
 /de/
 /de/history
 /de/map
@@ -16,6 +17,7 @@
 /de/certified-step-1
 /de/opentests
 /de/options
+/de/result
 /en/
 /en/history
 /en/map
@@ -25,3 +27,4 @@
 /en/certified-step-1
 /en/opentests
 /en/options
+/en/result

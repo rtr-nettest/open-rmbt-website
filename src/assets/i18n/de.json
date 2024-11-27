@@ -39,8 +39,8 @@
   "Tel.: +43 1 58058-0": "Tel.: +43 1 58058-0",
   "Telecommunications and Postal Division": "Telekommunikation und Post",
   "Your IP address": "Ihre IP-Adresse",
-  "Download $ios, $android or $desktop or conduct $web.": "$ios, $android oder $desktop herunterladen bzw. $web durchführen",
-  "Download $ios or $androidApp or conduct $web.": "$ios oder $androidApp herunterladen bzw. $web durchführen",
+  "Download %ios, %android or %desktop or conduct %web.": "%ios, %android oder %desktop herunterladen bzw. %web durchführen",
+  "Download %ios or %androidApp or conduct %web.": "%ios oder %androidApp herunterladen bzw. %web durchführen",
   "iOS link": "<a href='https://itunes.apple.com/at/app/rtr-netztest/id724321403' target='_blank'>iOS-</a>",
   "AndroidApp link": "<a href='https://play.google.com/store/apps/details?id=at.alladin.rmbt.android' target='_blank'>Android-App</a>",
   "Android link": "<a href='https://play.google.com/store/apps/details?id=at.alladin.rmbt.android' target='_blank'>Android-</a>",
@@ -51,5 +51,6 @@
   "Browser test link": "<a href='https://www.rtr.at/en/tk/rtrnetztest_tests' target='_blank'>Browser-Test</a>",
   "Mbps": "Mb/s",
   "ms": "ms",
-  "dBm": "dBm"
+  "dBm": "dBm",
+  "Unknown": "Unknown"
 }
