@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   Input,
+  NgZone,
   OnChanges,
   OnDestroy,
   SimpleChanges,
@@ -74,6 +75,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   map!: Map
   popup = inject(PopupService)
   resizeSub!: Subscription
+  zone = inject(NgZone)
 
   ngOnChanges(changes: SimpleChanges): void {
     if ("measurements" in changes && this.map) {
@@ -84,6 +86,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   ngOnDestroy(): void {
     this.destroyed$.next()
     this.destroyed$.complete()
+    this.map?.off("resize", this.showStats)
   }
 
   ngAfterViewInit(): void {
@@ -94,21 +97,27 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
   }
 
-  private setMap() {
-    this.map = new Map({
-      container: "map",
-      style: style,
-      center,
-      zoom: 3,
-    })
-    this.map.addControl(new NavigationControl())
-    this.map.addControl(new FullscreenControl())
-    this.map.on("resize", () => {
+  private showStats = () => {
+    this.zone.runOutsideAngular(() => {
       if (document.fullscreenElement) {
         this.fullScreen.addPopup()
       } else {
         this.fullScreen.removePopup()
       }
+    })
+  }
+
+  private setMap() {
+    this.zone.runOutsideAngular(() => {
+      this.map = new Map({
+        container: "map",
+        style: style,
+        center,
+        zoom: 3,
+      })
+      this.map.addControl(new NavigationControl())
+      this.map.addControl(new FullscreenControl())
+      this.map.on("resize", this.showStats)
     })
   }
 
@@ -119,7 +128,9 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
         debounceTime(300),
         tap(() => this.setSize()),
         tap(() => {
-          setTimeout(() => this.map.resize(), 300)
+          setTimeout(() => {
+            this.zone.runOutsideAngular(() => this.map.resize())
+          }, 300)
         }),
         catchError((err) => {
           console.log(err)
@@ -130,18 +141,20 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   private setSize() {
-    if (!this.mapContainerId) {
-      return
-    }
-    let containerWidth = document
-      .getElementById(this.mapContainerId)!
-      .getBoundingClientRect().width
-    if (window.innerWidth > 904.98) {
-      containerWidth = containerWidth / 2
-    }
-    document
-      .getElementById(this.mapId)!
-      .setAttribute("style", `height:440px;width:${containerWidth - 24}px`)
+    this.zone.runOutsideAngular(() => {
+      if (!this.mapContainerId) {
+        return
+      }
+      let containerWidth = document
+        .getElementById(this.mapContainerId)!
+        .getBoundingClientRect().width
+      if (window.innerWidth > 904.98) {
+        containerWidth = containerWidth / 2
+      }
+      document
+        .getElementById(this.mapId)!
+        .setAttribute("style", `height:440px;width:${containerWidth - 24}px`)
+    })
   }
 
   // TODO: see if raster works
@@ -162,38 +175,40 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   private setMeasurements() {
-    if (this.measurements?.results?.length) {
-      this.cachedMarkers.forEach((m) => m.remove())
-      const features: [number, number][] = []
-      this.cachedMarkers = this.measurements.results.reverse().map((m, i) => {
-        const el = document.createElement("div")
-        el.className = "app-marker"
-        el.style.backgroundImage = `url(${this.getIconByClass(
-          m.download_classification
-        )})`
-        el.style.width =
-          i == this.measurements!.results.length - 1 ? `24px` : `18px`
-        el.style.height =
-          i == this.measurements!.results.length - 1 ? `24px` : `18px`
+    this.zone.runOutsideAngular(() => {
+      if (this.measurements?.results?.length) {
+        this.cachedMarkers.forEach((m) => m.remove())
+        const features: [number, number][] = []
+        this.cachedMarkers = this.measurements.results.reverse().map((m, i) => {
+          const el = document.createElement("div")
+          el.className = "app-marker"
+          el.style.backgroundImage = `url(${this.getIconByClass(
+            m.download_classification
+          )})`
+          el.style.width =
+            i == this.measurements!.results.length - 1 ? `24px` : `18px`
+          el.style.height =
+            i == this.measurements!.results.length - 1 ? `24px` : `18px`
 
-        el.addEventListener("click", () => {
-          this.popup.addPopup(this.map, m)
+          el.addEventListener("click", () => {
+            this.popup.addPopup(this.map, m)
+          })
+
+          const coordinates: [number, number] = [m.long, m.lat]
+
+          features.push(coordinates)
+
+          return new Marker({ element: el })
+            .setLngLat(coordinates)
+            .addTo(this.map)
         })
-
-        const coordinates: [number, number] = [m.long, m.lat]
-
-        features.push(coordinates)
-
-        return new Marker({ element: el })
-          .setLngLat(coordinates)
-          .addTo(this.map)
-      })
-      const line = lineString(features)
-      const box = bbox(line) as [number, number, number, number]
-      this.map.fitBounds(box, {
-        padding: { top: 12, bottom: 12, left: 12, right: 12 },
-      })
-    }
+        const line = lineString(features)
+        const box = bbox(line) as [number, number, number, number]
+        this.map.fitBounds(box, {
+          padding: { top: 12, bottom: 12, left: 12, right: 12 },
+        })
+      }
+    })
   }
 
   private getIconByClass(classification?: number) {

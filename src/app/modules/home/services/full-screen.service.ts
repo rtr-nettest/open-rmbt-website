@@ -64,6 +64,9 @@ export class FullScreenService {
   }
 
   removePopup() {
+    if (!this.popup) {
+      return
+    }
     this.dataSub?.unsubscribe()
     this.timeSub?.unsubscribe()
     document.getElementById(ID)?.remove()
