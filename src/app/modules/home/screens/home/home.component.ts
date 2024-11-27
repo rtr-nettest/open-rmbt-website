@@ -145,6 +145,11 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
           }
         })
       )
+      ;(
+        document.querySelector(
+          `a[href*="${ERoutes.TEST}"]`
+        ) as HTMLAnchorElement
+      )?.focus()
     }
   }
 }
