@@ -5,7 +5,7 @@ import { environment } from "../../../../environments/environment"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { firstValueFrom } from "rxjs"
 import dayjs from "dayjs"
-import { round } from "../../shared/util/math"
+import { roundToSignificantDigits } from "../../shared/util/math"
 import {
   ClassificationService,
   GSM_CONNECTION_TYPES,
@@ -96,7 +96,9 @@ export class PopupService {
         "biggerBetter"
       ),
       download: measurement.download_kbit
-        ? `${round(measurement.download_kbit / 1000)} ${t["Mbps"]}`
+        ? `${roundToSignificantDigits(measurement.download_kbit / 1000)} ${
+            t["Mbps"]
+          }`
         : t[UNKNOWN],
       uploadClass: this.classification.classify(
         measurement.upload_kbit,
@@ -104,7 +106,9 @@ export class PopupService {
         "biggerBetter"
       ),
       upload: measurement.upload_kbit
-        ? `${round(measurement.upload_kbit / 1000)} ${t["Mbps"]}`
+        ? `${roundToSignificantDigits(measurement.upload_kbit / 1000)} ${
+            t["Mbps"]
+          }`
         : t[UNKNOWN],
       pingClass: this.classification.classify(
         measurement.ping_ms,

@@ -63,11 +63,20 @@
         </app-card-button>
       </div>
     </div>
-    <div class="app-col app-col--main app-col--padded">
+    <div class="app-col app-col--main app-col--padded" style="display: block">
       <app-map
         [measurements]="recentMeasurements$ | async"
         [mapContainerId]="mapContainerId"
       ></app-map>
+      <div style="margin-top: 24px">
+        <app-table
+          [data]="tableData"
+          [columns]="tableColumns"
+          [sort]="{ active: 'time', direction: 'desc' }"
+          [tableClassNames]="['app-table--vertical']"
+          style="width: 100%"
+        ></app-table>
+      </div>
     </div>
   </div>
 </div>

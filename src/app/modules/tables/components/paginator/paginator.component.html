@@ -1,0 +1,36 @@
+<div style="position: relative">
+  <mat-paginator
+    [length]="length"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    (page)="page.emit($event)"
+    [pageSizeOptions]="pageSizeOptions"
+  >
+  </mat-paginator>
+  @if (isIOS) {
+  <button
+    style="
+      border-radius: 50%;
+      opacity: 0;
+      width: 48px;
+      height: 48px;
+      position: absolute;
+      bottom: 0;
+      right: 48px;
+    "
+    (click)="paginator.previousPage()"
+  ></button>
+  <button
+    style="
+      border-radius: 50%;
+      opacity: 0;
+      width: 48px;
+      height: 48px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    "
+    (click)="paginator.nextPage()"
+  ></button>
+  }
+</div>

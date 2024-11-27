@@ -11,7 +11,7 @@ import {
 import dayjs from "dayjs"
 import { MeasurementsService } from "./measurements.service"
 
-const DATA_UPDATE_INTERVAL = 3000
+const DATA_UPDATE_INTERVAL = 5000
 const ID = "fullScreenStats"
 
 type PopupData = {

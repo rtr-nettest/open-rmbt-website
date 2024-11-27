@@ -12,6 +12,7 @@ import {
   of,
   startWith,
   takeUntil,
+  tap,
 } from "rxjs"
 import { AsyncPipe } from "@angular/common"
 import { CardButtonComponent } from "../../components/card-button/card-button.component"
@@ -23,9 +24,17 @@ import {
 } from "../../../shared/services/platform.service"
 import { MeasurementsService } from "../../services/measurements.service"
 import { MapComponent } from "../../components/map/map.component"
-import { IRecentMeasurementsResponse } from "../../interfaces/recent-measurements-response.interface"
+import {
+  IRecentMeasurement,
+  IRecentMeasurementsResponse,
+} from "../../interfaces/recent-measurements-response.interface"
+import { TableComponent } from "../../../tables/components/table/table.component"
+import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
+import dayjs from "dayjs"
+import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
+import { roundToSignificantDigits } from "../../../shared/util/math"
 
-const UPDATE_INTERVAL = 3000
+const UPDATE_INTERVAL = 5000
 
 @Component({
   selector: "app-landing",
@@ -40,6 +49,7 @@ const UPDATE_INTERVAL = 3000
     MapComponent,
     TopNavComponent,
     BreadcrumbsComponent,
+    TableComponent,
   ],
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.scss",
@@ -79,13 +89,61 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   measurements = inject(MeasurementsService)
   platform = inject(PlatformService)
   recentMeasurements$: Observable<IRecentMeasurementsResponse | null> = of(null)
+  tableColumns: ITableColumn<IRecentMeasurement>[] = [
+    {
+      columnDef: "time",
+      header: "Time",
+      transformValue(value) {
+        return dayjs(value.time).utc().tz(dayjs.tz.guess()).format("HH:mm:ss")
+      },
+    },
+    {
+      columnDef: "platform",
+      header: "Provider/device",
+      transformValue(value) {
+        return `${value.provider_name}, ${value.model} (${value.platform})`
+      },
+    },
+    {
+      columnDef: "download",
+      header: "Down (Mbps)",
+      transformValue(value) {
+        return roundToSignificantDigits(value.download_kbit / 1000)
+      },
+      justify: "flex-end",
+    },
+    {
+      columnDef: "upload",
+      header: "Up (Mbps)",
+      transformValue(value) {
+        return roundToSignificantDigits(value.upload_kbit / 1000)
+      },
+      justify: "flex-end",
+    },
+    {
+      columnDef: "ping",
+      header: "Ping (ms)",
+      transformValue(value) {
+        return roundToSignificantDigits(value.ping_ms)
+      },
+      justify: "flex-end",
+    },
+  ]
+  tableData?: IBasicResponse<IRecentMeasurement>
 
   ngAfterViewInit(): void {
     if (globalThis.document) {
       this.recentMeasurements$ = interval(UPDATE_INTERVAL).pipe(
         startWith(this.measurements.getRecentMeasurements()),
         takeUntil(this.destroyed$),
-        concatMap(() => this.measurements.getRecentMeasurements())
+        concatMap(() => this.measurements.getRecentMeasurements()),
+        tap((resp) => {
+          const content = resp?.results.reverse().slice(0, 5) ?? []
+          this.tableData = {
+            content,
+            totalElements: content.length,
+          }
+        })
       )
     }
   }

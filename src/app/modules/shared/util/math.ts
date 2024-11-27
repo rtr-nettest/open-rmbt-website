@@ -1,4 +1,4 @@
-export const round = (result: number) => {
+export const roundToSignificantDigits = (result: number) => {
   const resultNum = Math.round(result)
   let rounder = 1
   if (resultNum < 1) {

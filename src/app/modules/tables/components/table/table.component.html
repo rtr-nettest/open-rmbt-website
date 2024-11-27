@@ -1,0 +1,230 @@
+<div class="app-table mat-table-wrap" [ngClass]="tableClassNames">
+  <mat-table
+    *ngIf="data && sort"
+    [dataSource]="data.content"
+    matSort
+    matSortDisableClear
+    multiTemplateDataRows
+    [trackBy]="identify"
+    (matSortChange)="changeSort($event)"
+    [matSortActive]="sort.active"
+    [matSortDirection]="sort.direction"
+  >
+    <ng-container
+      *ngFor="let column of columns"
+      matColumnDef="{{ column.columnDef }}"
+    >
+      <!-- MAT-HEADER-CELL -->
+      <ng-container *ngIf="column.isSortable">
+        <mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          [style]="justify(column)"
+          ><span [ngClass]="column.getNgClass?.('', column)">{{
+            column.header
+          }}</span></mat-header-cell
+        >
+      </ng-container>
+
+      <ng-container *ngIf="!column.isSortable">
+        <mat-header-cell *matHeaderCellDef [style]="justify(column)">
+          <div
+            class="sah-table__cell--ellipsis"
+            [ngClass]="column.getNgClass?.('', column)"
+          >
+            {{ column.header }}
+          </div>
+        </mat-header-cell>
+      </ng-container>
+      <!-- END MAT-HEADER-CELL-->
+
+      <ng-container
+        *ngIf="
+          column.component && column.getComponentParameters;
+          else defaultCell
+        "
+      >
+        <mat-cell
+          *matCellDef="let element; let i = dataIndex"
+          [style]="justify(column)"
+        >
+          @if(column.isExpandable) {
+          <div [@expandVertically]="isElementExpanded(element.id)">
+            <ng-template
+              [dynamicComponent]="column.component"
+              [parameters]="column.getComponentParameters(element)"
+            ></ng-template>
+          </div>
+          } @else {
+          <ng-template
+            [dynamicComponent]="column.component"
+            [parameters]="column.getComponentParameters(element)"
+          ></ng-template>
+          }
+        </mat-cell>
+      </ng-container>
+
+      <ng-container *ngIf="column.isHtml; else defaultCell">
+        <mat-cell
+          *matCellDef="let element; let i = dataIndex"
+          [style]="justify(column)"
+          [innerHtml]="element[column.columnDef]"
+        >
+        </mat-cell>
+      </ng-container>
+
+      <ng-container *ngIf="column.columnDef == 'arrowIndicator'">
+        <mat-cell *matCellDef="let element; let i = dataIndex">
+          <mat-icon [@arrowRotate]="isElementExpanded(element.id)">
+            arrow_drop_down
+          </mat-icon>
+        </mat-cell>
+      </ng-container>
+
+      <ng-template #defaultCell>
+        <mat-cell
+          *matCellDef="let element; let i = dataIndex"
+          [style]="justify(column)"
+        >
+          <a
+            *ngIf="!shouldShowText(column, element)"
+            [routerLink]="column.getLink?.(element, column)"
+            [matTooltip]="column.getTooltip?.(element, column) ?? ''"
+            [ngClass]="column.getNgClass && column.getNgClass(element, column)"
+            [class.app-table__cell--sortable]="column.isSortable"
+            class="app-link"
+          >
+            {{ getDefaultValue(column, element, i) }}
+          </a>
+          <span
+            *ngIf="shouldShowText(column, element)"
+            [matTooltip]="column.getTooltip?.(element, column) ?? ''"
+            [ngClass]="column.getNgClass?.(element, column)"
+            [class.app-table__cell--sortable]="column.isSortable"
+            [class.app-table__filter]="!!column.filterType"
+            (click)="
+              column.filterType &&
+                changeFilters(
+                  column.key || column.columnDef,
+                  getDefaultValue(column, element, i)
+                )
+            "
+          >
+            {{ getDefaultValue(column, element, i) }}
+          </span>
+          <ng-container
+            *ngIf="
+              column.getActions && column.getActions(element, column) as actions
+            "
+          >
+            <ng-container *ngFor="let action of actions">
+              @if ( !action.getInProgress || !action.getInProgress(element,
+              column) ) {
+              <button
+                *ngIf="!action.type"
+                mat-flat-button
+                [color]="action.color || 'primary'"
+                [disabled]="
+                  action.getDisabled && action.getDisabled(element, column)
+                "
+                [ngClass]="
+                  'app-table__action app-table__action--' +
+                  action.label.toLowerCase() + ' ' + (action.getNgClass?.(element,column) || '')
+                "
+                (click)="action.perform(element, column)"
+                [style]="action.style"
+              >
+                <mat-icon
+                  *ngIf="action.matIcon"
+                  [style.margin-right]="action.label ? 8 : 0"
+                  >{{ action.matIcon }}</mat-icon
+                >
+                {{ action.label }}
+              </button>
+
+              <button
+                *ngIf="action.type == 'icon'"
+                mat-icon-button
+                [color]="action.color || 'primary'"
+                [disabled]="
+                  action.getDisabled && action.getDisabled(element, column)
+                "
+                [ngClass]="
+                  'app-table__action app-table__action--' +
+                  action.label.toLowerCase() + ' ' + (action.getNgClass?.(element,column) || '')
+                "
+                (click)="action.perform(element, column)"
+                [style]="action.style"
+              >
+                <mat-icon
+                  fontSet="material-symbols-outlined"
+                  *ngIf="action.matIcon"
+                  >{{ action.matIcon }}</mat-icon
+                >
+              </button>
+              } @else if (action.getInProgress(element, column)) {
+              <mat-spinner [diameter]="18"></mat-spinner>
+              }
+            </ng-container>
+          </ng-container>
+        </mat-cell>
+      </ng-template>
+      <!-- END MAT-CELL -->
+    </ng-container>
+
+    <ng-container
+      *ngFor="let column of subHeaderColumns"
+      matColumnDef="{{ column.columnDef }}"
+    >
+      <mat-header-cell *matHeaderCellDef [style]="justify(column)">
+        <span class="app-table__mobile-label">{{ column.header }}</span>
+        <span *ngIf="column.subHeader">{{ column.subHeader }}</span>
+      </mat-header-cell>
+    </ng-container>
+
+    <mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      [class.mat-row--clickable]="rowsAreCLickable === true"
+      [class.mat-row--collapsed]="!isElementExpanded(row.id)"
+      [class.mat-row--expanded]="isElementExpanded(row.id)"
+      [class.mat-row--group-header]="row.groupHeader"
+      (click)="toggleExpandableRow.emit(row.id)"
+      (keydown.enter)="toggleExpandableRow.emit(row.id)"
+      tabindex="0"
+    >
+    </mat-row>
+
+    <ng-container *ngIf="expandableColumns?.length">
+      <mat-row
+        class="app-expandable-row"
+        *matRowDef="let expandableRow; columns: expandableColumns"
+        tabindex="1"
+      >
+      </mat-row>
+    </ng-container>
+
+    <ng-container *ngIf="!shouldHideHeader">
+      <mat-header-row
+        tabindex="0"
+        *matHeaderRowDef="displayedColumns; sticky: true"
+      ></mat-header-row>
+
+      <ng-container *ngIf="displayedSubHeaderColumns?.length">
+        <mat-header-row
+          tabindex="0"
+          class="app-table__subheader"
+          *matHeaderRowDef="displayedSubHeaderColumns"
+        ></mat-header-row>
+      </ng-container>
+    </ng-container>
+  </mat-table>
+  <app-paginator
+    *ngIf="paginator"
+    [length]="data?.totalElements ?? 0"
+    [pageSize]="paginator.limit ?? 0"
+    [pageIndex]="paginator.offset / (paginator.limit ?? 1)"
+    (page)="changePage($event)"
+    [pageSizeOptions]="AVAILABLE_SIZES"
+  >
+  </app-paginator>
+</div>
