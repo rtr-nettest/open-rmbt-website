@@ -52,5 +52,6 @@
   "Mbps": "Mb/s",
   "ms": "ms",
   "dBm": "dBm",
-  "Unknown": "Unknown"
+  "Unknown": "Unbekannt",
+  "Recent tests": "Aktuelle Tests"
 }

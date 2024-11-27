@@ -41,11 +41,11 @@ h3,
 
 h4,
 .app-h4 {
-  font-size: rem($font-size-m);
+  font-size: rem($font-size-h4);
   font-family: $base-font-family;
   font-weight: bold;
   line-height: $base-line-height;
-  margin: rem($font-size-m) auto rem(24);
+  margin: rem($font-size-h4) auto rem(24);
 
   &:first-child {
     margin-top: 0;
@@ -54,11 +54,11 @@ h4,
 
 h5,
 .app-h5 {
-  font-size: rem($font-size-sm);
+  font-size: rem($font-size-h5);
   font-family: $base-font-family;
   font-weight: bold;
   line-height: $base-line-height;
-  margin: rem($font-size-sm) auto rem(24);
+  margin: rem($font-size-h5) auto rem(24);
 
   &:first-child {
     margin-top: 0;

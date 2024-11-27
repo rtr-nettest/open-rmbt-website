@@ -31,6 +31,7 @@ import { lineString } from "@turf/helpers"
 import { HttpClient } from "@angular/common/http"
 import { PopupService } from "../../services/popup.service"
 import { FullScreenService } from "../../services/full-screen.service"
+import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 const center: [number, number] = [13.786457000803567, 47.57838319858735]
 const baseMap = "https://mapsneu.wien.gv.at/basemapvectorneu/root.json"
@@ -57,7 +58,7 @@ const style: StyleSpecification = {
 @Component({
   selector: "app-map",
   standalone: true,
-  imports: [],
+  imports: [TranslatePipe],
   templateUrl: "./map.component.html",
   styleUrl: "./map.component.scss",
 })
