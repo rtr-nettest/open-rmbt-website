@@ -47,5 +47,8 @@
   "Mac link": "<a href='https://apps.apple.com/at/app/rtr-netztest-desktop/id6453160400' target='_blank'>Desktop App</a>",
   "Windows link": "<a href='https://apps.microsoft.com/detail/XP9K0TF8QNZSPV' target='_blank'>Desktop App</a>",
   "Other desktop app link": "<a href='https://www.rtr.at/en/tk/rtrnetztest_tests' target='_blank'>Desktop App</a>",
-  "Browser test link": "<a href='https://www.rtr.at/en/tk/rtrnetztest_tests' target='_blank'>browser test</a>"
+  "Browser test link": "<a href='https://www.rtr.at/en/tk/rtrnetztest_tests' target='_blank'>browser test</a>",
+  "Mbps": "Mbps",
+  "ms": "ms",
+  "dBm": "dBm"
 }

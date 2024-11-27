@@ -8,4 +8,5 @@ export enum ERoutes {
   CERTIFIED = "certified-step-1",
   OPEN_DATA = "opentests",
   OPTIONS = "options",
+  RESULT = "result",
 }
