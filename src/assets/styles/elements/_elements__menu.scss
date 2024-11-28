@@ -9,6 +9,12 @@
     width: calc(100% - 16px) !important;
   }
 
+  &-mobile-backdrop + .cdk-overlay-connected-position-bounding-box {
+    left: 0 !important;
+    width: calc(100% - 16px) !important;
+    margin-top: rem(13);
+  }
+
   .mat-mdc-menu-content {
     padding: 0;
   }

@@ -29,8 +29,85 @@
       >
       }
     </nav>
+    <nav class="app-mobile-nav">
+      <button mat-icon-button [matMenuTriggerFor]="mobileMenu">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </nav>
   </div>
 </header>
+
+<mat-menu
+  #mobileMenu
+  backdropClass="app-header-menu-mobile-backdrop"
+  class="app-header-menu app-header-menu--primary"
+>
+  <ul class="app-list">
+    @for (item of mainItems$ | async; track $index) {
+    <li class="app-row">
+      @if (item.route) {
+      <a [routerLink]="item.route" mat-button class="app-link">{{
+        item.label
+      }}</a>
+      } @else {
+      <a class="app-link" mat-button (click)="toggleMobileSubmenu($event)"
+        >{{ item.label
+        }}<mat-icon [@arrowRotate]="mobileSubmenuOpen" iconPositionEnd
+          >keyboard_arrow_down</mat-icon
+        ></a
+      >
+      <ul
+        [@expandVertically]="{
+          value: mobileSubmenuOpen,
+          params: {
+            finalHeight: 200
+          }
+        }"
+        class="app-list app-list--expandable"
+      >
+        @for (item of subItems$ | async; track $index) {
+        <li class="app-li">
+          @if(item.route) {
+          <a class="app-link" [routerLink]="item.route">{{ item.label }}</a>
+          } @else {
+          <a class="app-link" [href]="item.url" target="_blank">{{
+            item.label
+          }}</a>
+          }
+        </li>
+        }
+      </ul>
+      }
+    </li>
+    }@if (startButton$ | async; as btn) {
+    <li class="app-row">
+      <a class="app-link" mat-button [routerLink]="btn.route">{{
+        btn.label
+      }}</a>
+    </li>
+    }
+    <li class="app-social">
+      <a
+        [href]="
+          'mailto:netztest@rtr.at?subject=Supportanfrage%20RTR-Netztest%20%28Web%29'
+            | translate
+        "
+        mat-icon-button
+        class="app-icon-button"
+      >
+        <img src="/assets/images/mailto.svg" />
+      </a>
+      <a
+        [href]="'https://twitter.com/rtrgmbh' | translate"
+        mat-icon-button
+        class="app-icon-button"
+        target="_blank"
+      >
+        <img src="/assets/images/twitter.svg" />
+      </a>
+    </li>
+  </ul>
+</mat-menu>
 
 <mat-menu
   #subMenu

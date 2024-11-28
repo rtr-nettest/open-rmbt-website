@@ -8,16 +8,21 @@ import { MatButtonModule } from "@angular/material/button"
 import { MatIconModule } from "@angular/material/icon"
 import { RouterModule } from "@angular/router"
 import { MatMenuModule } from "@angular/material/menu"
+import { expandVertically } from "../../animations/detail-expand.animation"
+import { arrowRotate } from "../../animations/arrow-rotate.animation"
+import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 @Component({
   selector: "app-top-nav",
   standalone: true,
+  animations: [expandVertically, arrowRotate],
   imports: [
     AsyncPipe,
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
     RouterModule,
+    TranslatePipe,
   ],
   templateUrl: "./top-nav.component.html",
   styleUrl: "./top-nav.component.scss",
@@ -26,6 +31,7 @@ export class TopNavComponent {
   mainItems$!: Observable<ILink[]>
   subItems$!: Observable<ILink[]>
   startButton$!: Observable<ILink>
+  mobileSubmenuOpen = false
 
   get activeLang() {
     return this.i18nStore.activeLang
@@ -86,5 +92,10 @@ export class TopNavComponent {
         route: ERoutes.TEST,
       }))
     )
+  }
+
+  toggleMobileSubmenu(event: MouseEvent) {
+    event.stopPropagation()
+    this.mobileSubmenuOpen = !this.mobileSubmenuOpen
   }
 }

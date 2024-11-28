@@ -1,13 +1,11 @@
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-} from '@angular/animations';
+import { trigger, state, style, transition, animate } from "@angular/animations"
 
-export const expandVertically = trigger('expandVertically', [
-  state('false', style({ height: '0px' })),
-  state('true', style({ height: '414px' })),
-  transition('true <=> false', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-]);
+export const expandVertically = trigger("expandVertically", [
+  state("false", style({ height: "0px" })),
+  state("true", style({ height: "{{finalHeight}}px" }), {
+    params: {
+      finalHeight: 0,
+    },
+  }),
+  transition("true <=> false", animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")),
+])
