@@ -152,11 +152,10 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
           }
         })
       )
-      ;(
-        document.querySelector(
-          `a[href*="${ERoutes.TEST}"]`
-        ) as HTMLAnchorElement
-      )?.focus()
+      const testCard = document.querySelector(
+        `a.app-card[href*="${ERoutes.TEST}"]`
+      ) as HTMLAnchorElement
+      testCard.focus()
     }
   }
 }
