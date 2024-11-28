@@ -1,0 +1,22 @@
+@if (settings$ | async; as settings) {
+<div class="app-wrapper">
+  <h1 class="app-h1">{{ "Privacy Policy and Terms of Use" | translate }}</h1>
+  <div class="app-article" [innerHTML]="terms$ | async"></div>
+  <app-scroll-bottom [isVisible]="!isRead"></app-scroll-bottom>
+  <footer class="app-footer">
+    <button mat-button color="primary" (click)="cancel()">
+      {{ "Cancel" | translate }}
+    </button>
+    <button
+      [disabled]="!isRead"
+      mat-flat-button
+      type="submit"
+      color="primary"
+      (click)="agree(settings.settings[0].terms_and_conditions.version)"
+    >
+      {{ "Agree" | translate }}
+    </button>
+  </footer>
+</div>
+
+}

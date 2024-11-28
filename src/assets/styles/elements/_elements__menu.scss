@@ -53,4 +53,14 @@
       }
     }
   }
+
+  .mat-mdc-button .mat-mdc-button-ripple {
+    border-radius: 0;
+  }
+}
+
+app-top-nav {
+  .mat-mdc-button .mat-mdc-button-ripple {
+    border-radius: 0;
+  }
 }

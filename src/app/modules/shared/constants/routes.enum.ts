@@ -9,4 +9,5 @@ export enum ERoutes {
   OPEN_DATA = "opentests",
   OPTIONS = "options",
   RESULT = "result",
+  TERMS = "terms-and-conditions",
 }
