@@ -8,6 +8,7 @@
 /opentests
 /options
 /result
+/terms-and-conditions
 /de/
 /de/history
 /de/map
@@ -18,6 +19,7 @@
 /de/opentests
 /de/options
 /de/result
+/de/terms-and-conditions
 /en/
 /en/history
 /en/map
@@ -28,3 +30,4 @@
 /en/opentests
 /en/options
 /en/result
+/en/terms-and-conditions
