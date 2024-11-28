@@ -148,7 +148,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
       let containerWidth = document
         .getElementById(this.mapContainerId)!
         .getBoundingClientRect().width
-      if (window.innerWidth > 904.98) {
+      if (window.innerWidth > 1239.98) {
         containerWidth = containerWidth / 2
       }
       document

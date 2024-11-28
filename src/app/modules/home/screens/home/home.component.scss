@@ -19,7 +19,7 @@
     width: 100%;
   }
 
-  @include screen-sm {
+  @include screen-xs {
     & > .app-col {
       flex: 0 0 100%;
     }
