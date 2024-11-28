@@ -83,4 +83,8 @@ export class I18nStore {
       })
     )
   }
+
+  translate(text: string) {
+    return this.translations[text] || text
+  }
 }

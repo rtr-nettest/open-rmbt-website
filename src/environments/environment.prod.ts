@@ -8,4 +8,8 @@ export const environment = {
     map: "https://m-cloud.netztest.at",
   },
   projectTitle: "RTR-Nettest",
+  certifiedTests: {
+    count: 5,
+    interval: 1,
+  },
 }
