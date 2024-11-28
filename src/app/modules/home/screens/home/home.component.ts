@@ -93,15 +93,22 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
     {
       columnDef: "time",
       header: "Time",
+      isHtml: true,
       transformValue(value) {
-        return dayjs(value.time).utc().tz(dayjs.tz.guess()).format("HH:mm:ss")
+        const retVal = dayjs(value.time)
+          .utc()
+          .tz(dayjs.tz.guess())
+          .format("HH:mm:ss")
+        return `<i class="app-icon app-icon--browser"></i><span>${retVal}</span>`
       },
     },
     {
       columnDef: "platform",
       header: "Provider/device",
+      isHtml: true,
       transformValue(value) {
-        return `${value.provider_name}, ${value.model} (${value.platform})`
+        const retVal = `${value.provider_name}, ${value.model} (${value.platform})`
+        return `<i class="app-icon app-icon--marker"></i><span>${retVal}</span>`
       },
     },
     {

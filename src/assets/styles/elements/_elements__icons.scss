@@ -1,0 +1,21 @@
+.app-icon {
+  align-items: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-flex;
+  justify-content: center;
+  height: rem(20);
+  width: rem(20);
+  flex: 0 0 rem(20);
+
+  &--browser {
+    background-image: url("/assets/images/browser.svg");
+    margin-right: rem(8);
+  }
+
+  &--marker {
+    background-image: url("/assets/images/marker.svg");
+    margin-right: rem(8);
+  }
+}

@@ -68,7 +68,7 @@
         <mat-cell
           *matCellDef="let element; let i = dataIndex"
           [style]="justify(column)"
-          [innerHtml]="element[column.columnDef]"
+          [innerHtml]="getDefaultValue(column, element, i)"
         >
         </mat-cell>
       </ng-container>

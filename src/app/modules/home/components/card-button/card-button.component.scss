@@ -16,14 +16,11 @@
   }
 
   .app-icon {
-    align-items: center;
     background: white;
     border-radius: 500px;
     border: 2px solid $color-primary;
     bottom: 15px;
-    display: inline-flex;
     height: 50px;
-    justify-content: center;
     position: absolute;
     right: -10px;
     transition: all 0.1s ease-in-out;

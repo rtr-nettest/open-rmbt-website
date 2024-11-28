@@ -27,6 +27,7 @@ import { MatIconModule } from "@angular/material/icon"
 import { MatProgressSpinner } from "@angular/material/progress-spinner"
 import { PaginatorComponent } from "../paginator/paginator.component"
 import { DynamicComponentDirective } from "../../../shared/directives/dynamic-component.directive"
+import { I18nStore } from "../../../i18n/store/i18n.store"
 
 export const APP_DATE_TIME_FORMAT = "DD.MM.YYYY HH:mm"
 
@@ -76,7 +77,10 @@ export class TableComponent implements OnInit, OnChanges {
   displayedSubHeaderColumns: string[] = []
   filters: ITableColumn[] = []
 
-  constructor(private tableSortService: TableSortService) {}
+  constructor(
+    private tableSortService: TableSortService,
+    private i18nStore: I18nStore
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if ("data" in changes) {
@@ -102,7 +106,7 @@ export class TableComponent implements OnInit, OnChanges {
     if (column.transformValue) {
       const transformed = column.transformValue(element, column, i)
       if (typeof transformed === "number") {
-        return transformed.toLocaleString("de")
+        return transformed.toLocaleString(this.i18nStore.activeLang)
       }
       return transformed
     }
@@ -111,7 +115,7 @@ export class TableComponent implements OnInit, OnChanges {
     const date = Date.parse(value)
 
     if (typeof value === "number") {
-      return value.toLocaleString("de")
+      return value.toLocaleString(this.i18nStore.activeLang)
     } else if (!isNaN(date) && column.isDate) {
       return dayjs(date).format(APP_DATE_TIME_FORMAT)
     }
