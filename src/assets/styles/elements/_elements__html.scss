@@ -15,7 +15,7 @@ html {
   position: relative;
 
   @include screen-sm {
-    --base-font-size: #{$base-font-size * 0.8}px;
+    --base-font-size: #{$base-font-size * 0.9}px;
     font-size: var(--base-font-size);
   }
 }

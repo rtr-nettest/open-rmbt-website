@@ -48,6 +48,7 @@
           *matCellDef="let element; let i = dataIndex"
           [style]="justify(column)"
         >
+          <span class="app-table__mobile-label">{{ column.header }}</span>
           @if(column.isExpandable) {
           <div [@expandVertically]="isElementExpanded(element.id)">
             <ng-template
@@ -65,11 +66,13 @@
       </ng-container>
 
       <ng-container *ngIf="column.isHtml; else defaultCell">
-        <mat-cell
-          *matCellDef="let element; let i = dataIndex"
-          [style]="justify(column)"
-          [innerHtml]="getDefaultValue(column, element, i)"
-        >
+        <mat-cell *matCellDef="let element; let i = dataIndex">
+          <span class="app-table__mobile-label">{{ column.header }}</span>
+          <div
+            class="app-flex-wrapper"
+            [style]="justify(column)"
+            [innerHtml]="getDefaultValue(column, element, i)"
+          ></div>
         </mat-cell>
       </ng-container>
 
@@ -86,6 +89,7 @@
           *matCellDef="let element; let i = dataIndex"
           [style]="justify(column)"
         >
+          <span class="app-table__mobile-label">{{ column.header }}</span>
           <a
             *ngIf="!shouldShowText(column, element)"
             [routerLink]="column.getLink?.(element, column)"
