@@ -158,7 +158,8 @@ mat-paginator {
 .mat-column {
   &-download,
   &-upload,
-  &-ping {
+  &-ping,
+  &-time {
     flex: 0 0 rem(120);
     width: rem(120);
 
