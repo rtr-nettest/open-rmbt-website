@@ -1,0 +1,40 @@
+@import "core.scss";
+
+.app-wrapper {
+  display: block;
+}
+
+.app-title {
+  display: flex;
+  font-size: rem($font-size-h5);
+  font-weight: bold;
+  margin-bottom: 1vh;
+
+  & > * {
+    margin-right: 1ex;
+  }
+}
+
+.app-spinner {
+  align-self: center;
+  mat-spinner {
+    height: rem($font-size-h4) !important;
+    width: rem($font-size-h4) !important;
+    overflow: visible;
+  }
+}
+
+.app-chart {
+  position: relative;
+
+  app-test-chart {
+    height: 18vh;
+    width: 40vw;
+  }
+
+  &--ping {
+    app-test-chart {
+      height: 14vh;
+    }
+  }
+}

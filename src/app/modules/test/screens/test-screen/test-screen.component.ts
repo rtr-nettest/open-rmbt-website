@@ -1,11 +1,11 @@
 import { Component, inject, OnInit } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
-import { TestService } from "../../services/test.service"
 import { Router } from "@angular/router"
 import {
   BehaviorSubject,
   distinctUntilChanged,
   map,
+  Observable,
   Subject,
   tap,
   withLatestFrom,
@@ -27,6 +27,11 @@ import {
 } from "../../constants/strings"
 import { MessageService } from "../../../shared/services/message.service"
 import { HistoryStore } from "../../store/history.store"
+import { SpacerComponent } from "../../../shared/components/spacer/spacer.component"
+import { GaugeComponent } from "../../components/gauge/gauge.component"
+import { InterimResultsComponent } from "../../components/interim-results/interim-results.component"
+import { RecentHistoryComponent } from "../../components/recent-history/recent-history.component"
+import { TestService } from "../../services/test.service"
 
 @Component({
   selector: "app-test-screen",
@@ -36,10 +41,14 @@ import { HistoryStore } from "../../store/history.store"
     DatePipe,
     HeaderComponent,
     FooterComponent,
+    GaugeComponent,
+    InterimResultsComponent,
     MatProgressBarModule,
     NgIf,
+    RecentHistoryComponent,
     TopNavComponent,
     TranslatePipe,
+    SpacerComponent,
   ],
   templateUrl: "./test-screen.component.html",
   styleUrl: "./test-screen.component.scss",
@@ -53,17 +62,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   enableLoopMode$ = this.store.enableLoopMode$
   loopCount$ = this.store.loopCounter$
   stopped$: Subject<void> = new Subject()
-  visualization$ = this.store.visualization$.pipe(
-    withLatestFrom(this.store.error$, this.loopCount$),
-    distinctUntilChanged(),
-    tap(([state, error]) => {
-      if (error) {
-        this.openErrorDialog(state)
-      } else if (state.currentPhaseName === EMeasurementStatus.END) {
-        this.goToResult(state)
-      }
-    })
-  )
+  visualization$!: Observable<ITestVisualizationState>
   loopWaiting$ = new BehaviorSubject(false)
   result$ = this.historyStore.getFormattedHistory({
     grouped: false,
@@ -88,6 +87,18 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
             this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS])
             return false
           }
+          this.visualization$ = this.store.visualization$.pipe(
+            withLatestFrom(this.store.error$, this.loopCount$),
+            distinctUntilChanged(),
+            map(([state, error]) => {
+              if (error) {
+                this.openErrorDialog(state)
+              } else if (state.currentPhaseName === EMeasurementStatus.END) {
+                this.goToResult(state)
+              }
+              return state
+            })
+          )
           return true
         })
       )

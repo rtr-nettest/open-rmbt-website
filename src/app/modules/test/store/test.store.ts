@@ -26,6 +26,7 @@ import { ICertifiedDataForm } from "../interfaces/certified-data-form.interface"
 import { ICertifiedEnvForm } from "../interfaces/certified-env-form.interface"
 import { environment } from "../../../../environments/environment"
 import { HistoryStore } from "./history.store"
+import { TestService } from "../services/test.service"
 
 export const STATE_UPDATE_TIMEOUT = 175
 
@@ -59,53 +60,56 @@ export class TestStore {
     private historyStore: HistoryStore,
     private message: MessageService,
     private ngZone: NgZone,
-    private router: Router
+    private router: Router,
+    private service: TestService
   ) {
-    window.electronAPI.onRestartMeasurement((loopCounter) => {
-      this.ngZone.run(() => {
-        this.loopCounter$.next(loopCounter)
-      })
-    })
-    window.electronAPI.onLoopModeExpired(() => {
-      this.ngZone.run(() => {
-        const message = this.i18nStore.translate(
-          "The loop measurement has expired"
-        )
-        this.message.openConfirmDialog(message, () => {
-          this.router.navigate([
-            "/",
-            ERoutes.LOOP.split("/")[0],
-            this.loopUuid$.value,
-          ])
-        })
-      })
-    })
+    // TODO: Loop mode
+    // window.electronAPI.onRestartMeasurement((loopCounter) => {
+    //   this.ngZone.run(() => {
+    //     this.loopCounter$.next(loopCounter)
+    //   })
+    // })
+    // window.electronAPI.onLoopModeExpired(() => {
+    //   this.ngZone.run(() => {
+    //     const message = this.i18nStore.translate(
+    //       "The loop measurement has expired"
+    //     )
+    //     this.message.openConfirmDialog(message, () => {
+    //       this.router.navigate([
+    //         "/",
+    //         ERoutes.LOOP.split("/")[0],
+    //         this.loopUuid$.value,
+    //       ])
+    //     })
+    //   })
+    // })
 
     window.addEventListener("focus", this.setLatestTestState)
 
-    window.electronAPI.onAppSuspended(() => {
-      this.ngZone.run(() => {
-        const message =
-          "The app was suspended. The last running measurement was aborted"
-        this.loopCounter$.next(this.loopCounter$.value + 1)
-        this.message.openConfirmDialog(message, () => {
-          if (!this.enableLoopMode$.value) {
-            this.router.navigate(["/"])
-          } else if (!this.isCertifiedMeasurement$.value) {
-            this.router.navigate([ERoutes.LOOP])
-          }
-        })
-      })
-    })
+    // TODO: is this needed?
+    // window.electronAPI.onAppSuspended(() => {
+    //   this.ngZone.run(() => {
+    //     const message =
+    //       "The app was suspended. The last running measurement was aborted"
+    //     this.loopCounter$.next(this.loopCounter$.value + 1)
+    //     this.message.openConfirmDialog(message, () => {
+    //       if (!this.enableLoopMode$.value) {
+    //         this.router.navigate(["/"])
+    //       } else if (!this.isCertifiedMeasurement$.value) {
+    //         this.router.navigate([ERoutes.LOOP])
+    //       }
+    //     })
+    //   })
+    // })
   }
 
   launchTest() {
     this.resetState()
     if (!this.enableLoopMode$.value) {
-      window.electronAPI.runMeasurement()
+      this.service.launchTest()
     }
     return interval(STATE_UPDATE_TIMEOUT).pipe(
-      concatMap(() => from(window.electronAPI.getMeasurementState())),
+      concatMap(() => from(this.service.getMeasurementState())),
       withLatestFrom(this.visualization$),
       map(([state, vis]) => this.setTestState(state, vis))
     )
@@ -146,8 +150,9 @@ export class TestStore {
       test_counter: loopCounter,
       loop_uuid: loopUuid,
     }
-    window.electronAPI.onMaxTestsReached(() => this.maxTestsReached$.next(true))
-    window.electronAPI.scheduleLoop(this.fullTestIntervalMs, loopModeInfo)
+    // TODO: Certified measurements
+    // window.electronAPI.onMaxTestsReached(() => this.maxTestsReached$.next(true))
+    // window.electronAPI.scheduleLoop(this.fullTestIntervalMs, loopModeInfo)
     return loopModeInfo
   }
 
@@ -163,7 +168,8 @@ export class TestStore {
       test_counter: loopCounter,
       loop_uuid: loopUuid,
     }
-    window.electronAPI.scheduleLoop(this.fullTestIntervalMs, loopModeInfo)
+    // TODO: Loop mode
+    // window.electronAPI.scheduleLoop(this.fullTestIntervalMs, loopModeInfo)
     this.router.navigate(["/", ERoutes.LOOP])
   }
 
@@ -174,7 +180,7 @@ export class TestStore {
     ) {
       return
     }
-    window.electronAPI.getMeasurementState().then((state) => {
+    this.service.getMeasurementState().then((state) => {
       const v = this.visualization$.value
       this.setTestState(state, v)
       v.phases[EMeasurementStatus.DOWN].setChartFromPings?.(state.pings)
@@ -203,7 +209,7 @@ export class TestStore {
     if (!testUuid || this.error$.value) {
       return of(null)
     }
-    return from(window.electronAPI.getMeasurementResult(testUuid)).pipe(
+    return from(this.service.getMeasurementResult(testUuid)).pipe(
       map((result) => {
         this.simpleHistoryResult$.next(result)
         const newPhase = new TestPhaseState({

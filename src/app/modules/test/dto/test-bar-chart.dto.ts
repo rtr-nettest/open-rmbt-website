@@ -1,0 +1,59 @@
+import { ITestPhaseState } from "../interfaces/test-phase-state.interface"
+import {
+  BarOptions,
+  ChartPhase,
+  TestRTRChartDataset,
+} from "./test-rtr-chart-dataset.dto"
+import { TestChart } from "./test-chart.dto"
+import { I18nStore } from "../../i18n/store/i18n.store"
+import { TestBarChartOptions } from "./test-bar-chart-options.dto"
+
+export class TestBarChart extends TestChart {
+  private barOptions?: BarOptions
+
+  constructor(
+    context: CanvasRenderingContext2D,
+    i18nStore: I18nStore,
+    private phase: ChartPhase
+  ) {
+    super(
+      context,
+      i18nStore,
+      "bar",
+      {
+        datasets: [],
+        labels: [],
+      },
+      new TestBarChartOptions(i18nStore)
+    )
+  }
+
+  override setData(data: ITestPhaseState) {
+    const allData = this.getAllData(data)
+    this.barOptions = {
+      barThickness: 6 * (10 / allData.length),
+    }
+    this.resetDatasets()
+    if (!this.finished) {
+      const padder = { ...allData[allData.length - 1] }
+      padder.x += 10
+      padder.y = 0
+      allData.push(padder)
+    }
+    this.data.datasets[0].data = allData
+    this.finished = true
+    this.update()
+  }
+
+  protected override resetDatasets(): void {
+    this.data.datasets = [new TestRTRChartDataset(this.phase, this.barOptions)]
+  }
+
+  protected override resetLabels(): void {
+    this.data.labels = []
+  }
+
+  protected override getAllData(testItem: ITestPhaseState) {
+    return testItem.chart?.length ? testItem.chart : []
+  }
+}

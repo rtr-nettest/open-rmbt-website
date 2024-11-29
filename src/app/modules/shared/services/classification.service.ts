@@ -22,6 +22,8 @@ export const WLAN_CONNECTION_TYPES = ["CLI", "LAN", "WLAN"]
   providedIn: "root",
 })
 export class ClassificationService {
+  static readonly I = new ClassificationService()
+
   classify(
     value: number,
     threshold: number[],

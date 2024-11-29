@@ -4,11 +4,11 @@ import { Observable } from "rxjs"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { AsyncPipe } from "@angular/common"
-import { TestService } from "../../services/test.service"
 import { IUserSetingsResponse } from "../../interfaces/user-settings-response.interface"
 import { ScrollBottomComponent } from "../../../shared/components/scroll-bottom/scroll-bottom.component"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { MatButtonModule } from "@angular/material/button"
+import { TestService } from "../../services/test.service"
 
 export const TC_VERSION = "RTR_NETZTEST_TC_VERSION"
 
