@@ -30,10 +30,24 @@ export const DEFAULT_STYLE: StyleSpecification = {
   ],
 }
 
-export type MapSourceOptions = {
-  networkMeasurementType: NetworkMeasurementType
-  filterType?: { [key: string]: string }
+export enum ETileTypes {
+  automatic = "automatic",
+  heatmap = "heatmap",
+  points = "points",
+  cadastral = "cadastral",
 }
+
+export type MapSourceOptions = Partial<{
+  networkMeasurementType: NetworkMeasurementType | null
+  tiles: ETileTypes | null
+  filters: Partial<{
+    statistical_method: string | null
+    period: number | null
+    provider: string | null
+    operator: string | null
+    technology: string | null
+  }>
+}>
 
 @Injectable({
   providedIn: "root",
@@ -80,11 +94,13 @@ export class MapService {
   }
 
   private getSource(path: string, options: MapSourceOptions) {
-    const { networkMeasurementType, filterType } = options
+    const { networkMeasurementType, filters } = options
     let retVal = `${this.tileServer}${path}?null&map_options=${networkMeasurementType}`
-    if (filterType) {
-      for (const [key, val] of Object.values(filterType)) {
-        retVal += `&${key}=${val}`
+    if (filters) {
+      for (const [key, val] of Object.entries(filters)) {
+        if (val) {
+          retVal += `&${key}=${val}`
+        }
       }
     }
     return retVal

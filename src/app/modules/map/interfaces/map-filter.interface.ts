@@ -1,10 +1,12 @@
 export interface IMapFilterOption {
   statistical_method?: string
-  summary: string
+  summary?: string
   period: number
-  title: string
+  title?: string
   default?: boolean
   provider?: string
+  operator?: string
+  technology?: string
 }
 
 export interface IMapFilter {

@@ -3,6 +3,7 @@ import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import {
   DEFAULT_CENTER,
   DEFAULT_STYLE,
+  ETileTypes,
   MapService,
   MapSourceOptions,
 } from "../../services/map.service"
@@ -22,6 +23,7 @@ import {
 } from "rxjs"
 import { Map, NavigationControl, FullscreenControl } from "maplibre-gl"
 import { AsyncPipe } from "@angular/common"
+import { FiltersComponent } from "../../components/filters/filters.component"
 
 @Component({
   selector: "app-map-screen",
@@ -32,6 +34,7 @@ import { AsyncPipe } from "@angular/common"
     TopNavComponent,
     BreadcrumbsComponent,
     FooterComponent,
+    FiltersComponent,
   ],
   templateUrl: "./map-screen.component.html",
   styleUrl: "./map-screen.component.scss",
@@ -47,12 +50,16 @@ export class MapScreenComponent extends SeoComponent implements AfterViewInit {
   zone = inject(NgZone)
 
   ngAfterViewInit(): void {
-    this.mapService.getFilters().subscribe()
     if (globalThis.document) {
       this.setSize()
       this.setResizeSub()
       this.setMap()
     }
+  }
+
+  switchLayers(event: MapSourceOptions) {
+    this.mapSourceOptions = event
+    this.setTiles()
   }
 
   private setMap() {
@@ -66,7 +73,7 @@ export class MapScreenComponent extends SeoComponent implements AfterViewInit {
       this.map.addControl(new NavigationControl())
       this.map.addControl(new FullscreenControl())
       this.map.on("load", () => {
-        this.setMeasurements()
+        this.setTiles()
       })
     })
   }
@@ -104,19 +111,31 @@ export class MapScreenComponent extends SeoComponent implements AfterViewInit {
     })
   }
 
-  private setMeasurements() {
+  private setTiles() {
     let tiles: string = ""
-    const networkMeasurementType = "mobile/download"
-    if (!this.mapSourceOptions) {
-      tiles = this.mapService.getHeatmapSource({
-        networkMeasurementType,
-      })
-      console.log("layer", tiles)
+    const defaultOptions: MapSourceOptions = {
+      networkMeasurementType: "mobile/download",
     }
+    switch (this.mapSourceOptions?.tiles) {
+      case ETileTypes.points:
+        tiles = this.mapService.getPointSource(this.mapSourceOptions)
+        break
+      case ETileTypes.cadastral:
+        tiles = this.mapService.getShapeSource(this.mapSourceOptions)
+        break
+      case ETileTypes.automatic:
+      case ETileTypes.heatmap:
+        tiles = this.mapService.getHeatmapSource(this.mapSourceOptions)
+        break
+      default:
+        tiles = this.mapService.getHeatmapSource(defaultOptions)
+        break
+    }
+    const tilesId = JSON.stringify(tiles)
     this.zone.runOutsideAngular(() => {
       if (tiles) {
         try {
-          this.map.addSource(networkMeasurementType, {
+          this.map.addSource(tilesId, {
             type: "raster",
             tiles: [tiles],
             tileSize: 256,
@@ -127,9 +146,9 @@ export class MapScreenComponent extends SeoComponent implements AfterViewInit {
         }
         try {
           this.map.addLayer({
-            id: networkMeasurementType,
+            id: tilesId,
             type: "raster" as const,
-            source: networkMeasurementType,
+            source: tilesId,
           })
         } catch (e) {
           console.log(e)

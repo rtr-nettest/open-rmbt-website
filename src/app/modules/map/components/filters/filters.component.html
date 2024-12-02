@@ -1,0 +1,25 @@
+@if (filters$ | async) {
+<form [formGroup]="this.form">
+  <mat-radio-group formControlName="tiles">
+    @for (item of tilesTypes; track $index) {
+    <mat-radio-button [value]="item">{{ item | translate }}</mat-radio-button>
+    }
+  </mat-radio-group>
+  @for (item of mapTypes; track $index) {
+  <div>
+    <h4>{{ item.title }}</h4>
+    @for (option of item.options; track $index) {
+    <mat-radio-button
+      name="networkMeasurementType"
+      [value]="option.map_options"
+      [checked]="
+        this.form.controls.networkMeasurementType.value == option.map_options
+      "
+      (change)="changeNetworkMeasurementType(option.map_options)"
+      >{{ option.title }}</mat-radio-button
+    >
+    }
+  </div>
+  }
+</form>
+}
