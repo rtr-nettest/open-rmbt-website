@@ -5,17 +5,34 @@ import { NetworkMeasurementType } from "../interfaces/map-type.interface"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { IMapInfo } from "../interfaces/map-info.interface"
 import { UUID } from "../../shared/constants/strings"
+import { StyleSpecification } from "maplibre-gl"
 
-export type FilterType =
-  | "statistical_method"
-  | "operator"
-  | "period"
-  | "provider"
-  | "technology"
+export const DEFAULT_CENTER: [number, number] = [
+  13.786457000803567, 47.57838319858735,
+]
+export const DEFAULT_STYLE: StyleSpecification = {
+  version: 8 as const,
+  sources: {
+    osm: {
+      type: "raster" as const,
+      tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
+      tileSize: 256,
+      attribution: "&copy; OpenStreetMap Contributors",
+      maxzoom: 19,
+    },
+  },
+  layers: [
+    {
+      id: "osm",
+      type: "raster" as const,
+      source: "osm", // This must match the source key above
+    },
+  ],
+}
 
 export type MapSourceOptions = {
   networkMeasurementType: NetworkMeasurementType
-  filterType?: { [key: string]: FilterType }
+  filterType?: { [key: string]: string }
 }
 
 @Injectable({

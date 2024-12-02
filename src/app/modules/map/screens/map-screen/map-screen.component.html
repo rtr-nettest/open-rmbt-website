@@ -1,4 +1,10 @@
 <app-header></app-header>
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
+<div class="app-wrapper" [innerHTML]="text$ | async"></div>
+<div class="app-wrapper" style="padding-bottom: 80px">
+  <div class="app-row" [id]="mapContainerId">
+    <div [id]="mapId"></div>
+  </div>
+</div>
 <app-footer></app-footer>
