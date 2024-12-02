@@ -20,6 +20,7 @@ import { IPing } from "../interfaces/measurement-result.interface"
 import { IOverallResult } from "../interfaces/overall-result.interface"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
+import { IPaginator } from "../../tables/interfaces/paginator.interface"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -222,6 +223,33 @@ export class TestService {
       openTestsResponse,
       testResultDetail
     )
+  }
+
+  async getMeasurementHistory(paginator?: IPaginator) {
+    const body: { [key: string]: any } = {
+      language: this.i18nStore.activeLang,
+      timezone: dayjs.tz.guess(),
+      uuid: localStorage.getItem(UUID),
+      result_offset: paginator?.offset,
+      include_failed_tests: true,
+    }
+    if (paginator?.limit) {
+      body["result_limit"] = paginator.limit
+    }
+    const resp: any = await firstValueFrom(
+      this.http.post(
+        `${environment.api.baseUrl}/RMBTControlServer/history`,
+        body
+      )
+    )
+    if (resp?.error.length) {
+      throw new Error(resp.error)
+    }
+    if (resp?.history.length) {
+      return resp.history.map((hi: any) =>
+        SimpleHistoryResult.fromRTRHistoryResult(hi)
+      )
+    }
   }
 
   updateStartTime() {

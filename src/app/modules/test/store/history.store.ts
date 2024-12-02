@@ -8,7 +8,6 @@ import {
   switchMap,
   take,
   tap,
-  withLatestFrom,
 } from "rxjs"
 import { DatePipe } from "@angular/common"
 import { I18nStore, Translation } from "../../i18n/store/i18n.store"
@@ -22,6 +21,7 @@ import {
   IHistoryRowRTR,
 } from "../interfaces/history-row.interface"
 import { ExpandArrowComponent } from "../../shared/components/expand-arrow/expand-arrow.component"
+import { TestService } from "../services/test.service"
 
 @Injectable({
   providedIn: "root",
@@ -41,7 +41,8 @@ export class HistoryStore {
     private classification: ClassificationService,
     private conversion: ConversionService,
     private datePipe: DatePipe,
-    private i18nStore: I18nStore
+    private i18nStore: I18nStore,
+    private service: TestService
   ) {}
 
   getFormattedHistory(options?: {
@@ -76,14 +77,10 @@ export class HistoryStore {
   getMeasurementHistory() {
     return this.historyPaginator$.pipe(
       take(1),
-      withLatestFrom(this.historySort$),
-      switchMap(([paginator, sort]) => {
-        return window.electronAPI.getMeasurementHistory(
-          {
-            offset: paginator.offset,
-          },
-          sort
-        )
+      switchMap((paginator) => {
+        return this.service.getMeasurementHistory({
+          offset: paginator.offset,
+        })
       }),
       tap((history) => {
         if (history) {
@@ -120,12 +117,7 @@ export class HistoryStore {
     if (!paginator.limit) {
       return of([])
     }
-    return from(
-      window.electronAPI.getMeasurementHistory(
-        paginator,
-        sort ?? this.historySort$.value
-      )
-    ).pipe(
+    return from(this.service.getMeasurementHistory(paginator)).pipe(
       take(1),
       tap((history) => {
         this.history$.next(history)
