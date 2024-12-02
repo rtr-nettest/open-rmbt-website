@@ -30,27 +30,31 @@ export class BreadcrumbsComponent {
     this.breadcrumbs$ = this.i18nStore.getTranslations().pipe(
       withLatestFrom(this.activatedRoute.url),
       map(([t, segments]) => {
+        let retVal = [
+          {
+            label: t["Home"],
+            route: `/${this.i18nStore.activeLang}/${ERoutes.HOME}`,
+          },
+        ]
         if (!segments.length) {
-          return [
-            {
-              label: t["Home"],
-              route: `/${this.i18nStore.activeLang}/${ERoutes.HOME}`,
-            },
-          ]
+          return retVal
         }
         const flatRoutes = this.flattenRoutes(routes)
-        return segments
-          .map((s: UrlSegment) => {
-            const route = flatRoutes.get(s.path)
-            if (route) {
-              return {
-                label: t[route.data?.["title"]],
-                route: s.path,
+        return [
+          ...retVal,
+          ...segments
+            .map((s: UrlSegment) => {
+              const route = flatRoutes.get(s.path)
+              if (route) {
+                return {
+                  label: t[route.data?.["title"]],
+                  route: `/${this.i18nStore.activeLang}/${s.path}`,
+                }
               }
-            }
-            return null
-          })
-          .filter((v) => v != null)
+              return null
+            })
+            .filter((v) => v != null),
+        ]
       })
     )
   }
