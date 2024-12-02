@@ -62,12 +62,6 @@ export class TestService {
   }
 
   getSettings(uuid?: string): Observable<IUserSetingsResponse> {
-    if (environment.baseUrl.includes("localhost")) {
-      return of({
-        error: [],
-        settings: [{ terms_and_conditions: { version: 5 } }],
-      })
-    }
     return this.http
       .post<IUserSetingsResponse>(
         `${environment.api.baseUrl}/RMBTControlServer/settings`,
@@ -84,36 +78,29 @@ export class TestService {
 
   launchTest() {
     this.resetState()
-    if (!isPlatformBrowser(this.platformId)) {
-      return of(null)
+    if (!isPlatformBrowser(this.platformId) || !this.rmbtws) {
+      return
     }
     const uuid = localStorage.getItem(UUID)
     if (!uuid) {
-      return of(null)
+      return
     }
-    return this.getSettings(uuid).pipe(
-      tap(() => {
-        if (!this.rmbtws) {
-          return
-        }
-        this.ngZone.runOutsideAngular(() => {
-          this.rmbtws.TestEnvironment.init(this, null)
-          const config = new this.rmbtws.RMBTTestConfig(
-            "en",
-            environment.api.baseUrl,
-            ""
-          )
-          config.uuid = uuid
-          config.timezone = dayjs.tz.guess()
-          config.additionalSubmissionParameters = { network_type: 0 }
-          const ctrl = new this.rmbtws.RMBTControlServerCommunication(config)
+    return this.ngZone.runOutsideAngular(() => {
+      this.rmbtws.TestEnvironment.init(this, null)
+      const config = new this.rmbtws.RMBTTestConfig(
+        "en",
+        environment.api.baseUrl,
+        ""
+      )
+      config.uuid = uuid
+      config.timezone = dayjs.tz.guess()
+      config.additionalSubmissionParameters = { network_type: 0 }
+      const ctrl = new this.rmbtws.RMBTControlServerCommunication(config)
 
-          this.startTimeMs = Date.now()
-          const websocketTest = new this.rmbtws.RMBTTest(config, ctrl)
-          websocketTest.startTest()
-        })
-      })
-    )
+      this.startTimeMs = Date.now()
+      const websocketTest = new this.rmbtws.RMBTTest(config, ctrl)
+      websocketTest.startTest()
+    })
   }
 
   async getMeasurementState(): Promise<

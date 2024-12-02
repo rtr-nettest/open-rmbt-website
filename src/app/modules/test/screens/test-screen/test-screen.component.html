@@ -1,5 +1,6 @@
 <app-header></app-header>
 <app-top-nav></app-top-nav>
+@defer {
 <main *ngIf="visualization$ | async">
   <ng-container *ngIf="(enableLoopMode$ | async) === true">
     <ng-container *ngIf="loopCount$ | async as loopCount">
@@ -39,6 +40,7 @@
     ></app-recent-history>
   </ng-container>
 </main>
+}
 <app-footer></app-footer>
 
 <ng-template #loopWaitProgressBar>
@@ -58,5 +60,3 @@
     ></mat-progress-bar>
   </div>
 </ng-template>
-
-<app-footer></app-footer>

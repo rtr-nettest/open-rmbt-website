@@ -10,20 +10,17 @@ import { provideClientHydration } from "@angular/platform-browser"
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async"
 import { provideHttpClient, withFetch } from "@angular/common/http"
 import { provideI18n } from "./modules/i18n/i18n.module"
-import {
-  MAT_RIPPLE_GLOBAL_OPTIONS,
-  RippleGlobalOptions,
-} from "@angular/material/core"
-
-const globalRippleConfig: RippleGlobalOptions = {
-  disabled: true,
-  animation: {
-    enterDuration: 0,
-    exitDuration: 0,
-  },
-}
+import localeCs from "@angular/common/locales/cs"
+import localeDe from "@angular/common/locales/de"
+import localeEs from "@angular/common/locales/es"
+import localeFr from "@angular/common/locales/fr"
+import localeIt from "@angular/common/locales/it"
+import { DatePipe, registerLocaleData } from "@angular/common"
 
 export async function provideConfig(): Promise<ApplicationConfig> {
+  ;[localeCs, localeDe, localeEs, localeFr, localeIt].forEach((locale) =>
+    registerLocaleData(locale)
+  )
   return {
     providers: [
       provideZoneChangeDetection({ eventCoalescing: true }),
@@ -32,7 +29,7 @@ export async function provideConfig(): Promise<ApplicationConfig> {
       provideAnimationsAsync(),
       provideHttpClient(withFetch()),
       await provideI18n(),
-      // { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: globalRippleConfig },
+      { provide: DatePipe },
     ],
   }
 }

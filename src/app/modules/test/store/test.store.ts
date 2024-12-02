@@ -83,9 +83,7 @@ export class TestStore {
     //     })
     //   })
     // })
-
-    window.addEventListener("focus", this.setLatestTestState)
-
+    // window.addEventListener("focus", this.setLatestTestState)
     // TODO: is this needed?
     // window.electronAPI.onAppSuspended(() => {
     //   this.ngZone.run(() => {

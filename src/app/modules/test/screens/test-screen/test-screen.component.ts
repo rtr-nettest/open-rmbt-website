@@ -99,6 +99,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
               return state
             })
           )
+          this.store.launchTest()
           return true
         })
       )
