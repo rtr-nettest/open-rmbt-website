@@ -27,24 +27,30 @@ mat-icon {
 }
 
 .app-footer {
-  background: white;
+  background: var(
+    --mat-bottom-sheet-container-background-color,
+    var(--mat-app-surface-container-low)
+  );
   display: flex;
   justify-content: center;
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: rem(16);
+  padding: rem(4);
   z-index: 2;
 }
 
 .app-filters {
-  height: rem(228);
+  height: 244px;
   overflow: auto;
 }
 
 h6 {
-  background: white;
+  background: var(
+    --mat-bottom-sheet-container-background-color,
+    var(--mat-app-surface-container-low)
+  );
   position: sticky;
   padding: rem(10);
   top: 0;

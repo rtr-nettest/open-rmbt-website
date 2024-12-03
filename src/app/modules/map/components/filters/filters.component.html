@@ -1,4 +1,3 @@
-@if (filters$ | async; as filters) {
 <div class="app-container">
   <mat-tab-group class="app-single-tab-group" #tabs>
     <mat-tab class="app-tab" label="">
@@ -9,11 +8,11 @@
     </mat-tab>
   </mat-tab-group>
 </div>
-}
 
 <!-- Menu template -->
 
 <ng-template #menuTpl>
+  <h6>{{ "Options" | translate }}</h6>
   <ul class="app-list">
     <li class="app-li">
       <button
@@ -25,7 +24,7 @@
           ><mat-icon fontSet="material-symbols-outlined">layers</mat-icon
           >{{ "Layers" | translate }}</span
         ><span class="app-filter-value">{{
-          this.form.controls.tiles.value! | translate | titlecase
+          this.form.controls.tiles.value! | titlecase | translate
         }}</span>
       </button>
     </li>
@@ -151,11 +150,11 @@
     <mat-radio-group formControlName="tiles">
       @for (item of tilesTypes; track $index) {
       <mat-radio-button [value]="item">{{
-        item | translate | titlecase
+        item | titlecase | translate
       }}</mat-radio-button>
       }
     </mat-radio-group>
-    } @if (activeControlGroup == "networkMeasurementType") { @for (item of
+    } @else if (activeControlGroup == "networkMeasurementType") { @for (item of
     mapInfo.mapfilter.mapTypes; track $index) {
     <div>
       <h6>{{ item.title }}</h6>
@@ -171,7 +170,7 @@
       >
       }
     </div>
-    } }
+    } } @else {
     <div class="app-filters" formGroupName="filters">
       @if (activeControlGroup=="statisticalOptions") {
       <h6>{{ statisticalOptions?.title }}</h6>
@@ -235,6 +234,7 @@
       </mat-radio-group>
       }
     </div>
+    }
     <footer class="app-footer">
       <button mat-flat-button class="app-button">
         {{ "Accept" | translate }}

@@ -55,5 +55,12 @@
   "Unknown": "Unbekannt",
   "Recent tests": "Aktuelle Tests",
   "Privacy Policy and Terms of Use": "Datenschutzerklärung und Nutzungsbedingungen",
-  "Test": "Test"
+  "Test": "Test",
+  "Layers": "Schichten",
+  "Map type": "Kartentyp",
+  "Automatic": "Automatisch",
+  "Heatmap": "Heatmap",
+  "Points": "Punkte",
+  "Cadastral": "Katastralgemeinden",
+  "Accept": "Akzeptieren"
 }

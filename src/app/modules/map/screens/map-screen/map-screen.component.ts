@@ -14,6 +14,7 @@ import { FooterComponent } from "../../../shared/components/footer/footer.compon
 import {
   catchError,
   debounceTime,
+  firstValueFrom,
   fromEvent,
   Observable,
   of,
@@ -21,9 +22,23 @@ import {
   takeUntil,
   tap,
 } from "rxjs"
-import { Map, NavigationControl, FullscreenControl } from "maplibre-gl"
+import {
+  Map,
+  NavigationControl,
+  FullscreenControl,
+  IControl,
+} from "maplibre-gl"
 import { AsyncPipe } from "@angular/common"
-import { FiltersComponent } from "../../components/filters/filters.component"
+import {
+  FiltersComponent,
+  FilterSheetData,
+} from "../../components/filters/filters.component"
+import {
+  MatBottomSheet,
+  MatBottomSheetModule,
+} from "@angular/material/bottom-sheet"
+import { I18nStore } from "../../../i18n/store/i18n.store"
+import { IMapInfo } from "../../interfaces/map-info.interface"
 
 @Component({
   selector: "app-map-screen",
@@ -34,7 +49,7 @@ import { FiltersComponent } from "../../components/filters/filters.component"
     TopNavComponent,
     BreadcrumbsComponent,
     FooterComponent,
-    FiltersComponent,
+    MatBottomSheetModule,
   ],
   templateUrl: "./map-screen.component.html",
   styleUrl: "./map-screen.component.scss",
@@ -49,6 +64,7 @@ export class MapScreenComponent extends SeoComponent implements AfterViewInit {
   text$: Observable<string> = this.i18nStore.getLocalizedHtml("map")
   zone = inject(NgZone)
   activeLayer?: string
+  private readonly bottomSheet = inject(MatBottomSheet)
 
   ngAfterViewInit(): void {
     if (globalThis.document) {
@@ -64,15 +80,30 @@ export class MapScreenComponent extends SeoComponent implements AfterViewInit {
   }
 
   private setMap() {
-    this.zone.runOutsideAngular(() => {
+    this.zone.runOutsideAngular(async () => {
       this.map = new Map({
         container: this.mapId,
         style: DEFAULT_STYLE,
         center: DEFAULT_CENTER,
         zoom: 6,
       })
-      this.map.addControl(new NavigationControl())
       this.map.addControl(new FullscreenControl())
+      this.map.addControl(new NavigationControl())
+      this.map.addControl(
+        new FiltersControl(this.i18nStore, () => {
+          this.zone.run(() => {
+            firstValueFrom(this.mapService.getFilters()).then((mapInfo) => {
+              this.bottomSheet.open(FiltersComponent, {
+                data: {
+                  mapInfo,
+                  onFiltersChange: (filters: MapSourceOptions) =>
+                    this.switchLayers(filters),
+                } as FilterSheetData,
+              })
+            })
+          })
+        })
+      )
       this.map.on("load", () => {
         this.setTiles()
       })
@@ -160,5 +191,32 @@ export class MapScreenComponent extends SeoComponent implements AfterViewInit {
         }
       }
     })
+  }
+}
+
+export class FiltersControl implements IControl {
+  private map: Map | undefined
+  private container!: HTMLElement
+
+  constructor(private i18nStore: I18nStore, private onClick: () => void) {}
+
+  onAdd(map: Map) {
+    this.map = map
+    this.container = document.createElement("div")
+    this.container.className = "maplibregl-ctrl maplibregl-ctrl-group"
+    this.container.innerHTML = `<button class="maplibregl-ctrl-filters" type="button" aria-label="${this.i18nStore.translate(
+      "Show filters"
+    )}" title="${this.i18nStore.translate(
+      "Show filters"
+    )}"><mat-icon role="img" fontset="material-symbols-outlined" class="mat-icon notranslate material-symbols-outlined mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font" data-mat-icon-namespace="material-symbols-outlined">tune</mat-icon></button>`
+    this.container.onclick = () => {
+      this.onClick()
+    }
+    return this.container
+  }
+
+  onRemove() {
+    this.container.parentNode?.removeChild(this.container)
+    this.map = undefined
   }
 }

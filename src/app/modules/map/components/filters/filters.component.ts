@@ -1,16 +1,12 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  EventEmitter,
+  Inject,
   inject,
   OnDestroy,
-  Output,
   ViewChild,
 } from "@angular/core"
-import {
-  ETileTypes,
-  MapService,
-  MapSourceOptions,
-} from "../../services/map.service"
+import { ETileTypes, MapSourceOptions } from "../../services/map.service"
 import {
   FormBuilder,
   FormControl,
@@ -19,12 +15,9 @@ import {
 } from "@angular/forms"
 import { MatRadioModule } from "@angular/material/radio"
 import { MatButtonModule } from "@angular/material/button"
-import { Subject, takeUntil, tap } from "rxjs"
+import { Observable, Subject, takeUntil, tap } from "rxjs"
 import { MatTabGroup, MatTabsModule } from "@angular/material/tabs"
-import {
-  IMapType,
-  NetworkMeasurementType,
-} from "../../interfaces/map-type.interface"
+import { NetworkMeasurementType } from "../../interfaces/map-type.interface"
 import { IMapInfo } from "../../interfaces/map-info.interface"
 import { MatIconModule } from "@angular/material/icon"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
@@ -33,12 +26,14 @@ import {
   NgIf,
   NgTemplateOutlet,
   TitleCasePipe,
-  UpperCasePipe,
 } from "@angular/common"
-import {
-  IMapFilter,
-  IMapFilterOption,
-} from "../../interfaces/map-filter.interface"
+import { IMapFilter } from "../../interfaces/map-filter.interface"
+import { MAT_BOTTOM_SHEET_DATA } from "@angular/material/bottom-sheet"
+
+export type FilterSheetData = {
+  mapInfo: IMapInfo
+  onFiltersChange: (filters: MapSourceOptions) => void
+}
 
 type ActiveControlGroup =
   | "networkMeasurementType"
@@ -65,7 +60,6 @@ export type FiltersForm = {
   selector: "app-filters",
   standalone: true,
   imports: [
-    AsyncPipe,
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
@@ -78,53 +72,52 @@ export type FiltersForm = {
   ],
   templateUrl: "./filters.component.html",
   styleUrl: "./filters.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FiltersComponent implements OnDestroy {
   @ViewChild("tabs") tabs: MatTabGroup | undefined
-  @Output() filtersChange = new EventEmitter<MapSourceOptions>()
   private readonly fb = inject(FormBuilder)
-  private readonly mapService = inject(MapService)
   activeControlGroup?: ActiveControlGroup
   destroyed$ = new Subject<void>()
   form!: FormGroup<FiltersForm>
   mapInfo!: IMapInfo
   mapTypesTitles = new Map<NetworkMeasurementType, string>()
   tilesTypes = Object.values(ETileTypes)
-  filters$ = this.mapService.getFilters().pipe(
-    tap((mapInfo) => {
-      this.mapInfo = mapInfo
-      for (const t of mapInfo.mapfilter.mapTypes) {
-        let title = t.title
-        for (const o of t.options) {
-          this.mapTypesTitles.set(o.map_options, `${title}/${o.title}`)
-        }
-      }
-      this.form = this.fb.group({
-        networkMeasurementType: new FormControl<NetworkMeasurementType>(
-          "mobile/download"
-        ),
-        tiles: new FormControl<ETileTypes>(this.tilesTypes[0]),
-        filters: this.getMobileForm(mapInfo),
-      })
-      this.form.controls.tiles.valueChanges
-        .pipe(
-          takeUntil(this.destroyed$),
-          tap((value) => {
-            if (value === ETileTypes.points) {
-              this.form.controls.filters.controls.statistical_method.disable()
-            } else {
-              this.form.controls.filters.controls.statistical_method.enable()
-            }
-          })
-        )
-        .subscribe()
-    })
-  )
+  filters$!: Observable<IMapInfo>
   statisticalOptions?: IMapFilter
   periodOptions?: IMapFilter
   technologyOptions?: IMapFilter
   operatorOptions?: IMapFilter
   providerOptions?: IMapFilter
+
+  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: FilterSheetData) {
+    this.mapInfo = data.mapInfo
+    for (const t of data.mapInfo.mapfilter.mapTypes) {
+      let title = t.title
+      for (const o of t.options) {
+        this.mapTypesTitles.set(o.map_options, `${title}/${o.title}`)
+      }
+    }
+    this.form = this.fb.group({
+      networkMeasurementType: new FormControl<NetworkMeasurementType>(
+        "mobile/download"
+      ),
+      tiles: new FormControl<ETileTypes>(this.tilesTypes[0]),
+      filters: this.getMobileForm(data.mapInfo),
+    })
+    this.form.controls.tiles.valueChanges
+      .pipe(
+        takeUntil(this.destroyed$),
+        tap((value) => {
+          if (value === ETileTypes.points) {
+            this.form.controls.filters.controls.statistical_method.disable()
+          } else {
+            this.form.controls.filters.controls.statistical_method.enable()
+          }
+        })
+      )
+      .subscribe()
+  }
 
   ngOnDestroy(): void {
     this.destroyed$.next()
@@ -157,7 +150,7 @@ export class FiltersComponent implements OnDestroy {
       this.tabs.selectedIndex = 0
     }
     this.activeControlGroup = undefined
-    this.filtersChange.emit(this.form.value)
+    this.data.onFiltersChange(this.form.value)
   }
 
   getFilterTitleFromValue(
