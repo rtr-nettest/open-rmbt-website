@@ -1,12 +1,14 @@
 @if (filters$ | async; as filters) {
-<mat-tab-group #tabs>
-  <mat-tab label="">
-    <ng-container *ngTemplateOutlet="menuTpl"></ng-container>
-  </mat-tab>
-  <mat-tab label="">
-    <ng-container *ngTemplateOutlet="formTpl"></ng-container>
-  </mat-tab>
-</mat-tab-group>
+<div class="app-container">
+  <mat-tab-group class="app-single-tab-group" #tabs>
+    <mat-tab class="app-tab" label="">
+      <ng-container *ngTemplateOutlet="menuTpl"></ng-container>
+    </mat-tab>
+    <mat-tab class="app-tab" label="">
+      <ng-container *ngTemplateOutlet="formTpl"></ng-container>
+    </mat-tab>
+  </mat-tab-group>
+</div>
 }
 
 <!-- Menu template -->
@@ -113,7 +115,13 @@
         }}</span>
       </button>
     </li>
-    <li *ngIf="statisticalOptions" class="app-li">
+    <li
+      *ngIf="
+        statisticalOptions &&
+        this.form.controls.filters.controls.statistical_method.enabled
+      "
+      class="app-li"
+    >
       <button
         mat-button
         class="app-link app-link--flexible"
@@ -164,8 +172,9 @@
       }
     </div>
     } }
-    <div formGroupName="filters">
+    <div class="app-filters" formGroupName="filters">
       @if (activeControlGroup=="statisticalOptions") {
+      <h6>{{ statisticalOptions?.title }}</h6>
       <mat-radio-group
         *ngIf="statisticalOptions?.options?.length"
         formControlName="statistical_method"
@@ -177,6 +186,7 @@
         }
       </mat-radio-group>
       } @if (activeControlGroup == "providerOptions") {
+      <h6>{{ providerOptions?.title }}</h6>
       <mat-radio-group
         *ngIf="providerOptions?.options?.length"
         formControlName="provider"
@@ -188,6 +198,7 @@
         }
       </mat-radio-group>
       } @if (activeControlGroup == "operatorOptions") {
+      <h6>{{ operatorOptions?.title }}</h6>
       <mat-radio-group
         *ngIf="operatorOptions?.options?.length"
         formControlName="operator"
@@ -199,6 +210,7 @@
         }
       </mat-radio-group>
       } @if (activeControlGroup == "periodOptions") {
+      <h6>{{ periodOptions?.title }}</h6>
       <mat-radio-group
         *ngIf="periodOptions?.options?.length"
         formControlName="period"
@@ -210,6 +222,7 @@
         }
       </mat-radio-group>
       } @if (activeControlGroup == "technologyOptions") {
+      <h6>{{ technologyOptions?.title }}</h6>
       <mat-radio-group
         *ngIf="technologyOptions?.options?.length"
         formControlName="technology"
@@ -222,8 +235,10 @@
       </mat-radio-group>
       }
     </div>
-    <button mat-flat-button class="app-button">
-      {{ "Accept" | translate }}
-    </button>
+    <footer class="app-footer">
+      <button mat-flat-button class="app-button">
+        {{ "Accept" | translate }}
+      </button>
+    </footer>
   </form>
 </ng-template>

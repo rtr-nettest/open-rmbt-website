@@ -1,5 +1,10 @@
 @import "core";
 
+.app-container {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 mat-radio-group,
 mat-radio-button {
   display: block;
@@ -19,4 +24,30 @@ mat-radio-button {
 
 mat-icon {
   margin-right: rem(8);
+}
+
+.app-footer {
+  background: white;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: rem(16);
+  z-index: 2;
+}
+
+.app-filters {
+  height: rem(228);
+  overflow: auto;
+}
+
+h6 {
+  background: white;
+  position: sticky;
+  padding: rem(10);
+  top: 0;
+  left: 0;
+  z-index: 1;
 }

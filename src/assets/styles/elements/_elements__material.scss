@@ -1,0 +1,18 @@
+.app-single-tab-group {
+  max-width: none !important;
+  width: 200%;
+
+  .mat-mdc-tab-header {
+    display: none;
+  }
+
+  .mat-mdc-tab-body-wrapper {
+    display: block;
+  }
+
+  .mat-mdc-tab-body {
+    float: left;
+    width: 50%;
+    height: rem(300);
+  }
+}
