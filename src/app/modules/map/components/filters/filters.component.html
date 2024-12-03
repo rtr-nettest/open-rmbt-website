@@ -21,6 +21,49 @@
     }
   </div>
   }
+  <div formGroupName="filters">
+    <mat-radio-group
+      *ngIf="statisticalOptions.length"
+      formControlName="statistical_method"
+    >
+      @for (item of statisticalOptions; track $index) {
+      <mat-radio-button [value]="item.statistical_method">{{
+        item.title
+      }}</mat-radio-button>
+      }
+    </mat-radio-group>
+    <mat-radio-group *ngIf="providerOptions.length" formControlName="provider">
+      @for (item of providerOptions; track $index) {
+      <mat-radio-button [value]="item.provider">{{
+        item.title
+      }}</mat-radio-button>
+      }
+    </mat-radio-group>
+    <mat-radio-group *ngIf="operatorOptions.length" formControlName="operator">
+      @for (item of operatorOptions; track $index) {
+      <mat-radio-button [value]="item.operator">{{
+        item.title
+      }}</mat-radio-button>
+      }
+    </mat-radio-group>
+    <mat-radio-group *ngIf="periodOptions.length" formControlName="period">
+      @for (item of periodOptions; track $index) {
+      <mat-radio-button [value]="item.period">{{
+        item.title
+      }}</mat-radio-button>
+      }
+    </mat-radio-group>
+    <mat-radio-group
+      *ngIf="technologyOptions.length"
+      formControlName="technology"
+    >
+      @for (item of technologyOptions; track $index) {
+      <mat-radio-button [value]="item.technology">{{
+        item.title
+      }}</mat-radio-button>
+      }
+    </mat-radio-group>
+  </div>
   <button mat-flat-button class="app-button">{{ "Apply" | translate }}</button>
 </form>
 }

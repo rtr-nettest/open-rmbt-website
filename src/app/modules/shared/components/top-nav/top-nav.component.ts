@@ -42,15 +42,15 @@ export class TopNavComponent {
       map((v) => [
         {
           label: v["History"],
-          route: ERoutes.HISTORY,
+          route: this.localiseRoute(ERoutes.HISTORY),
         },
         {
           label: v["Map view"],
-          route: ERoutes.MAP,
+          route: this.localiseRoute(ERoutes.MAP),
         },
         {
           label: v["Statistics"],
-          route: ERoutes.STATISTICS,
+          route: this.localiseRoute(ERoutes.STATISTICS),
         },
         {
           label: v["Further"],
@@ -62,11 +62,11 @@ export class TopNavComponent {
       map((v) => [
         {
           label: v["Loop mode"],
-          route: ERoutes.LOOP,
+          route: this.localiseRoute(ERoutes.LOOP),
         },
         {
           label: v["Certified measurement"],
-          route: ERoutes.CERTIFIED,
+          route: this.localiseRoute(ERoutes.CERTIFIED),
         },
         {
           label: v["App and Browser Test"],
@@ -74,11 +74,11 @@ export class TopNavComponent {
         },
         {
           label: v["Open data"],
-          route: ERoutes.OPEN_DATA,
+          route: this.localiseRoute(ERoutes.OPEN_DATA),
         },
         {
           label: v["Options"],
-          route: ERoutes.OPTIONS,
+          route: this.localiseRoute(ERoutes.OPTIONS),
         },
         {
           label: v["Help"],
@@ -89,9 +89,13 @@ export class TopNavComponent {
     this.startButton$ = this.i18nStore.getTranslations().pipe(
       map((v) => ({
         label: v["Start test"],
-        route: ERoutes.TEST,
+        route: this.localiseRoute(ERoutes.TEST),
       }))
     )
+  }
+
+  localiseRoute(route: string) {
+    return `/${this.activeLang}/${route}`
   }
 
   toggleMobileSubmenu(event: MouseEvent) {
