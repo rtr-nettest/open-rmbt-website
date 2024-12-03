@@ -48,6 +48,7 @@ export class MapScreenComponent extends SeoComponent implements AfterViewInit {
   resizeSub!: Subscription
   text$: Observable<string> = this.i18nStore.getLocalizedHtml("map")
   zone = inject(NgZone)
+  activeLayer?: string
 
   ngAfterViewInit(): void {
     if (globalThis.document) {
@@ -145,11 +146,15 @@ export class MapScreenComponent extends SeoComponent implements AfterViewInit {
           console.log(e)
         }
         try {
+          if (this.activeLayer && this.map.getLayer(this.activeLayer)) {
+            this.map.removeLayer(this.activeLayer)
+          }
           this.map.addLayer({
             id: tilesId,
             type: "raster" as const,
             source: tilesId,
           })
+          this.activeLayer = tilesId
         } catch (e) {
           console.log(e)
         }

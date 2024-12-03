@@ -81,6 +81,9 @@ export class FiltersComponent {
     } else {
       this.form.setControl("filters", this.getAllForm(this.mapInfo))
     }
+  }
+
+  applyFilters() {
     this.filtersChange.emit(this.form.value)
   }
 
