@@ -4,3 +4,19 @@ mat-radio-group,
 mat-radio-button {
   display: block;
 }
+
+.app-link {
+  width: 100%;
+}
+
+.app-filter-label {
+  font-size: 1rem;
+}
+
+.app-filter-value {
+  color: $color-pale;
+}
+
+mat-icon {
+  margin-right: rem(8);
+}

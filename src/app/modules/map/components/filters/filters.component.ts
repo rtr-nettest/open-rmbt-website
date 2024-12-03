@@ -4,6 +4,7 @@ import {
   inject,
   OnDestroy,
   Output,
+  ViewChild,
 } from "@angular/core"
 import {
   ETileTypes,
@@ -19,6 +20,7 @@ import {
 import { MatRadioModule } from "@angular/material/radio"
 import { MatButtonModule } from "@angular/material/button"
 import { Subject, takeUntil, tap } from "rxjs"
+import { MatTabGroup, MatTabsModule } from "@angular/material/tabs"
 import {
   IMapType,
   NetworkMeasurementType,
@@ -26,8 +28,26 @@ import {
 import { IMapInfo } from "../../interfaces/map-info.interface"
 import { MatIconModule } from "@angular/material/icon"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
-import { AsyncPipe, NgIf } from "@angular/common"
-import { IMapFilterOption } from "../../interfaces/map-filter.interface"
+import {
+  AsyncPipe,
+  NgIf,
+  NgTemplateOutlet,
+  TitleCasePipe,
+  UpperCasePipe,
+} from "@angular/common"
+import {
+  IMapFilter,
+  IMapFilterOption,
+} from "../../interfaces/map-filter.interface"
+
+type ActiveControlGroup =
+  | "networkMeasurementType"
+  | "tiles"
+  | "statisticalOptions"
+  | "periodOptions"
+  | "technologyOptions"
+  | "operatorOptions"
+  | "providerOptions"
 
 export type FiltersForm = {
   networkMeasurementType: FormControl<NetworkMeasurementType | null>
@@ -50,29 +70,35 @@ export type FiltersForm = {
     MatButtonModule,
     MatIconModule,
     MatRadioModule,
+    MatTabsModule,
+    NgTemplateOutlet,
     NgIf,
     TranslatePipe,
+    TitleCasePipe,
   ],
   templateUrl: "./filters.component.html",
   styleUrl: "./filters.component.scss",
 })
 export class FiltersComponent implements OnDestroy {
-  ngOnDestroy(): void {
-    this.destroyed$.next()
-  }
-
+  @ViewChild("tabs") tabs: MatTabGroup | undefined
   @Output() filtersChange = new EventEmitter<MapSourceOptions>()
   private readonly fb = inject(FormBuilder)
   private readonly mapService = inject(MapService)
+  activeControlGroup?: ActiveControlGroup
   destroyed$ = new Subject<void>()
   form!: FormGroup<FiltersForm>
   mapInfo!: IMapInfo
-  mapTypes!: IMapType[]
+  mapTypesTitles = new Map<NetworkMeasurementType, string>()
   tilesTypes = Object.values(ETileTypes)
   filters$ = this.mapService.getFilters().pipe(
     tap((mapInfo) => {
       this.mapInfo = mapInfo
-      this.mapTypes = mapInfo.mapfilter.mapTypes
+      for (const t of mapInfo.mapfilter.mapTypes) {
+        let title = t.title
+        for (const o of t.options) {
+          this.mapTypesTitles.set(o.map_options, `${title}/${o.title}`)
+        }
+      }
       this.form = this.fb.group({
         networkMeasurementType: new FormControl<NetworkMeasurementType>(
           "mobile/download"
@@ -94,11 +120,15 @@ export class FiltersComponent implements OnDestroy {
         .subscribe()
     })
   )
-  statisticalOptions: IMapFilterOption[] = []
-  periodOptions: IMapFilterOption[] = []
-  technologyOptions: IMapFilterOption[] = []
-  operatorOptions: IMapFilterOption[] = []
-  providerOptions: IMapFilterOption[] = []
+  statisticalOptions?: IMapFilter
+  periodOptions?: IMapFilter
+  technologyOptions?: IMapFilter
+  operatorOptions?: IMapFilter
+  providerOptions?: IMapFilter
+
+  ngOnDestroy(): void {
+    this.destroyed$.next()
+  }
 
   changeNetworkMeasurementType(v: NetworkMeasurementType) {
     this.form.controls.networkMeasurementType.setValue(v)
@@ -113,25 +143,46 @@ export class FiltersComponent implements OnDestroy {
     }
   }
 
+  changeTab(index: number, activeControlGroup?: ActiveControlGroup) {
+    if (this.tabs) {
+      this.tabs.selectedIndex = index
+    }
+    if (activeControlGroup) {
+      this.activeControlGroup = activeControlGroup
+    }
+  }
+
   applyFilters() {
+    if (this.tabs) {
+      this.tabs.selectedIndex = 0
+    }
+    this.activeControlGroup = undefined
     this.filtersChange.emit(this.form.value)
+  }
+
+  getFilterTitleFromValue(
+    filter: IMapFilter,
+    field: string,
+    value: string | number
+  ) {
+    return filter.options.find((o: any) => o[field] === value)?.title
   }
 
   private getAllForm(mapInfo: IMapInfo) {
     const options = mapInfo.mapfilter.mapFilters.wifi
-    this.statisticalOptions = options[0].options
-    this.periodOptions = options[1].options
-    this.technologyOptions = []
-    this.providerOptions = []
-    this.operatorOptions = []
+    this.statisticalOptions = options[0]
+    this.periodOptions = options[1]
+    this.technologyOptions = undefined
+    this.providerOptions = undefined
+    this.operatorOptions = undefined
     return this.fb.group({
       statistical_method: new FormControl({
-        value: this.statisticalOptions.find((o) => !!o.default)!
+        value: this.statisticalOptions.options.find((o) => !!o.default)!
           .statistical_method!,
         disabled: this.form?.controls.tiles.value == ETileTypes.points,
       }),
       period: new FormControl(
-        this.periodOptions.find((o) => !!o.default)!.period!
+        this.periodOptions.options.find((o) => !!o.default)!.period!
       ),
       technology: new FormControl({ value: "", disabled: true }),
       operator: new FormControl({ value: "", disabled: true }),
@@ -141,22 +192,22 @@ export class FiltersComponent implements OnDestroy {
 
   private getWlanForm(mapInfo: IMapInfo) {
     const options = mapInfo.mapfilter.mapFilters.wifi
-    this.statisticalOptions = options[0].options
-    this.periodOptions = options[2].options
-    this.technologyOptions = []
-    this.providerOptions = options[1].options
-    this.operatorOptions = []
+    this.statisticalOptions = options[0]
+    this.periodOptions = options[2]
+    this.technologyOptions = undefined
+    this.providerOptions = options[1]
+    this.operatorOptions = undefined
     return this.fb.group({
       statistical_method: new FormControl({
-        value: this.statisticalOptions.find((o) => !!o.default)!
+        value: this.statisticalOptions.options.find((o) => !!o.default)!
           .statistical_method!,
         disabled: this.form?.controls.tiles.value == ETileTypes.points,
       }),
       period: new FormControl(
-        this.periodOptions.find((o) => !!o.default)!.period!
+        this.periodOptions.options.find((o) => !!o.default)!.period!
       ),
       provider: new FormControl(
-        this.providerOptions.find((o) => !!o.default)!.provider!
+        this.providerOptions.options.find((o) => !!o.default)!.provider!
       ),
       technology: new FormControl({ value: "", disabled: true }),
       operator: new FormControl({ value: "", disabled: true }),
@@ -165,22 +216,22 @@ export class FiltersComponent implements OnDestroy {
 
   private getBrowserForm(mapInfo: IMapInfo) {
     const options = mapInfo.mapfilter.mapFilters.browser
-    this.statisticalOptions = options[0].options
-    this.periodOptions = options[2].options
-    this.technologyOptions = []
-    this.providerOptions = options[1].options
-    this.operatorOptions = []
+    this.statisticalOptions = options[0]
+    this.periodOptions = options[2]
+    this.technologyOptions = undefined
+    this.providerOptions = options[1]
+    this.operatorOptions = undefined
     return this.fb.group({
       statistical_method: new FormControl({
-        value: this.statisticalOptions.find((o) => !!o.default)!
+        value: this.statisticalOptions.options.find((o) => !!o.default)!
           .statistical_method!,
         disabled: this.form?.controls.tiles.value == ETileTypes.points,
       }),
       period: new FormControl(
-        this.periodOptions.find((o) => !!o.default)!.period!
+        this.periodOptions.options.find((o) => !!o.default)!.period!
       ),
       provider: new FormControl(
-        this.providerOptions.find((o) => !!o.default)!.provider!
+        this.providerOptions.options.find((o) => !!o.default)!.provider!
       ),
       technology: new FormControl({ value: "", disabled: true }),
       operator: new FormControl({ value: "", disabled: true }),
@@ -189,25 +240,25 @@ export class FiltersComponent implements OnDestroy {
 
   private getMobileForm(mapInfo: IMapInfo) {
     const options = mapInfo.mapfilter.mapFilters.mobile
-    this.statisticalOptions = options[0].options
-    this.periodOptions = options[2].options
-    this.technologyOptions = options[3].options
-    this.providerOptions = []
-    this.operatorOptions = options[1].options
+    this.statisticalOptions = options[0]
+    this.periodOptions = options[2]
+    this.technologyOptions = options[3]
+    this.providerOptions = undefined
+    this.operatorOptions = options[1]
     return this.fb.group({
       statistical_method: new FormControl({
-        value: this.statisticalOptions.find((o) => !!o.default)!
+        value: this.statisticalOptions.options.find((o) => !!o.default)!
           .statistical_method!,
         disabled: this.form?.controls.tiles.value == ETileTypes.points,
       }),
       operator: new FormControl(
-        this.operatorOptions.find((o) => !!o.default)!.operator!
+        this.operatorOptions.options.find((o) => !!o.default)!.operator!
       ),
       period: new FormControl(
-        this.periodOptions.find((o) => !!o.default)!.period!
+        this.periodOptions.options.find((o) => !!o.default)!.period!
       ),
       technology: new FormControl(
-        this.technologyOptions.find((o) => !!o.default)!.technology!
+        this.technologyOptions.options.find((o) => !!o.default)!.technology!
       ),
       provider: new FormControl({ value: "", disabled: true }),
     })

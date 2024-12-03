@@ -108,7 +108,7 @@ export class MapScreenComponent extends SeoComponent implements AfterViewInit {
         .getBoundingClientRect().width
       document
         .getElementById(this.mapId)!
-        .setAttribute("style", `height:440px;width:${containerWidth}px`)
+        .setAttribute("style", `height:440px;width:${containerWidth - 16}px`)
     })
   }
 

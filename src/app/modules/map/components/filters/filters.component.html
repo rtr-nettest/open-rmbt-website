@@ -1,69 +1,229 @@
-@if (filters$ | async) {
-<form [formGroup]="this.form" (submit)="applyFilters()">
-  <mat-radio-group formControlName="tiles">
-    @for (item of tilesTypes; track $index) {
-    <mat-radio-button [value]="item">{{ item | translate }}</mat-radio-button>
-    }
-  </mat-radio-group>
-  @for (item of mapTypes; track $index) {
-  <div>
-    <h4>{{ item.title }}</h4>
-    @for (option of item.options; track $index) {
-    <mat-radio-button
-      name="networkMeasurementType"
-      [value]="option.map_options"
-      [checked]="
-        this.form.controls.networkMeasurementType.value == option.map_options
-      "
-      (change)="changeNetworkMeasurementType(option.map_options)"
-      >{{ option.title }}</mat-radio-button
-    >
-    }
-  </div>
-  }
-  <div formGroupName="filters">
-    <mat-radio-group
-      *ngIf="statisticalOptions.length"
-      formControlName="statistical_method"
-    >
-      @for (item of statisticalOptions; track $index) {
-      <mat-radio-button [value]="item.statistical_method">{{
-        item.title
-      }}</mat-radio-button>
-      }
-    </mat-radio-group>
-    <mat-radio-group *ngIf="providerOptions.length" formControlName="provider">
-      @for (item of providerOptions; track $index) {
-      <mat-radio-button [value]="item.provider">{{
-        item.title
-      }}</mat-radio-button>
-      }
-    </mat-radio-group>
-    <mat-radio-group *ngIf="operatorOptions.length" formControlName="operator">
-      @for (item of operatorOptions; track $index) {
-      <mat-radio-button [value]="item.operator">{{
-        item.title
-      }}</mat-radio-button>
-      }
-    </mat-radio-group>
-    <mat-radio-group *ngIf="periodOptions.length" formControlName="period">
-      @for (item of periodOptions; track $index) {
-      <mat-radio-button [value]="item.period">{{
-        item.title
-      }}</mat-radio-button>
-      }
-    </mat-radio-group>
-    <mat-radio-group
-      *ngIf="technologyOptions.length"
-      formControlName="technology"
-    >
-      @for (item of technologyOptions; track $index) {
-      <mat-radio-button [value]="item.technology">{{
-        item.title
-      }}</mat-radio-button>
-      }
-    </mat-radio-group>
-  </div>
-  <button mat-flat-button class="app-button">{{ "Apply" | translate }}</button>
-</form>
+@if (filters$ | async; as filters) {
+<mat-tab-group #tabs>
+  <mat-tab label="">
+    <ng-container *ngTemplateOutlet="menuTpl"></ng-container>
+  </mat-tab>
+  <mat-tab label="">
+    <ng-container *ngTemplateOutlet="formTpl"></ng-container>
+  </mat-tab>
+</mat-tab-group>
 }
+
+<!-- Menu template -->
+
+<ng-template #menuTpl>
+  <ul class="app-list">
+    <li class="app-li">
+      <button
+        mat-button
+        class="app-link app-link--flexible"
+        (click)="changeTab(1, 'tiles')"
+      >
+        <span class="app-filter-label"
+          ><mat-icon fontSet="material-symbols-outlined">layers</mat-icon
+          >{{ "Layers" | translate }}</span
+        ><span class="app-filter-value">{{
+          this.form.controls.tiles.value! | translate | titlecase
+        }}</span>
+      </button>
+    </li>
+    <li class="app-li">
+      <button
+        mat-button
+        class="app-link app-link--flexible"
+        (click)="changeTab(1, 'networkMeasurementType')"
+      >
+        <span class="app-filter-label"
+          ><mat-icon fontSet="material-symbols-outlined">map</mat-icon
+          >{{ "Map type" | translate }}</span
+        ><span class="app-filter-value">{{
+          mapTypesTitles.get(this.form.controls.networkMeasurementType.value!)
+        }}</span>
+      </button>
+    </li>
+    <li *ngIf="periodOptions" class="app-li">
+      <button
+        mat-button
+        class="app-link app-link--flexible"
+        (click)="changeTab(1, 'periodOptions')"
+      >
+        <span class="app-filter-label"
+          ><mat-icon fontSet="material-symbols-outlined">date_range</mat-icon
+          >{{ periodOptions.title }}</span
+        ><span class="app-filter-value">{{
+          getFilterTitleFromValue(
+            periodOptions!,
+            "period",
+            this.form.controls.filters.controls.period.value!
+          )
+        }}</span>
+      </button>
+    </li>
+    <li *ngIf="operatorOptions" class="app-li">
+      <button
+        mat-button
+        class="app-link app-link--flexible"
+        (click)="changeTab(1, 'operatorOptions')"
+      >
+        <span class="app-filter-label"
+          ><mat-icon fontSet="material-symbols-outlined">domain</mat-icon
+          >{{ operatorOptions.title }}</span
+        ><span class="app-filter-value">{{
+          getFilterTitleFromValue(
+            operatorOptions!,
+            "operator",
+            this.form.controls.filters.controls.operator.value!
+          )
+        }}</span>
+      </button>
+    </li>
+    <li *ngIf="providerOptions" class="app-li">
+      <button
+        mat-button
+        class="app-link app-link--flexible"
+        (click)="changeTab(1, 'providerOptions')"
+      >
+        <span class="app-filter-label"
+          ><mat-icon fontSet="material-symbols-outlined">domain</mat-icon
+          >{{ providerOptions.title }}</span
+        ><span class="app-filter-value">{{
+          getFilterTitleFromValue(
+            providerOptions!,
+            "provider",
+            this.form.controls.filters.controls.provider.value!
+          )
+        }}</span>
+      </button>
+    </li>
+    <li *ngIf="technologyOptions" class="app-li">
+      <button
+        mat-button
+        class="app-link app-link--flexible"
+        (click)="changeTab(1, 'technologyOptions')"
+      >
+        <span class="app-filter-label"
+          ><mat-icon fontSet="material-symbols-outlined">cell_wifi</mat-icon
+          >{{ technologyOptions.title }}</span
+        ><span class="app-filter-value">{{
+          getFilterTitleFromValue(
+            technologyOptions!,
+            "technology",
+            this.form.controls.filters.controls.technology.value!
+          )
+        }}</span>
+      </button>
+    </li>
+    <li *ngIf="statisticalOptions" class="app-li">
+      <button
+        mat-button
+        class="app-link app-link--flexible"
+        (click)="changeTab(1, 'statisticalOptions')"
+      >
+        <span class="app-filter-label"
+          ><mat-icon fontSet="material-symbols-outlined">bar_chart</mat-icon
+          >{{ statisticalOptions.title }}</span
+        ><span class="app-filter-value">{{
+          getFilterTitleFromValue(
+            statisticalOptions!,
+            "statistical_method",
+            this.form.controls.filters.controls.statistical_method.value!
+          )
+        }}</span>
+      </button>
+    </li>
+  </ul>
+</ng-template>
+
+<!-- Form Template -->
+
+<ng-template #formTpl>
+  <form [formGroup]="this.form" (submit)="applyFilters()">
+    @if (activeControlGroup == "tiles") {
+    <h6>{{ "Layers" | translate }}</h6>
+    <mat-radio-group formControlName="tiles">
+      @for (item of tilesTypes; track $index) {
+      <mat-radio-button [value]="item">{{
+        item | translate | titlecase
+      }}</mat-radio-button>
+      }
+    </mat-radio-group>
+    } @if (activeControlGroup == "networkMeasurementType") { @for (item of
+    mapInfo.mapfilter.mapTypes; track $index) {
+    <div>
+      <h6>{{ item.title }}</h6>
+      @for (option of item.options; track $index) {
+      <mat-radio-button
+        name="networkMeasurementType"
+        [value]="option.map_options"
+        [checked]="
+          this.form.controls.networkMeasurementType.value == option.map_options
+        "
+        (change)="changeNetworkMeasurementType(option.map_options)"
+        >{{ option.title }}</mat-radio-button
+      >
+      }
+    </div>
+    } }
+    <div formGroupName="filters">
+      @if (activeControlGroup=="statisticalOptions") {
+      <mat-radio-group
+        *ngIf="statisticalOptions?.options?.length"
+        formControlName="statistical_method"
+      >
+        @for (item of statisticalOptions!.options; track $index) {
+        <mat-radio-button [value]="item.statistical_method">{{
+          item.title
+        }}</mat-radio-button>
+        }
+      </mat-radio-group>
+      } @if (activeControlGroup == "providerOptions") {
+      <mat-radio-group
+        *ngIf="providerOptions?.options?.length"
+        formControlName="provider"
+      >
+        @for (item of providerOptions!.options; track $index) {
+        <mat-radio-button [value]="item.provider">{{
+          item.title
+        }}</mat-radio-button>
+        }
+      </mat-radio-group>
+      } @if (activeControlGroup == "operatorOptions") {
+      <mat-radio-group
+        *ngIf="operatorOptions?.options?.length"
+        formControlName="operator"
+      >
+        @for (item of operatorOptions!.options; track $index) {
+        <mat-radio-button [value]="item.operator">{{
+          item.title
+        }}</mat-radio-button>
+        }
+      </mat-radio-group>
+      } @if (activeControlGroup == "periodOptions") {
+      <mat-radio-group
+        *ngIf="periodOptions?.options?.length"
+        formControlName="period"
+      >
+        @for (item of periodOptions!.options; track $index) {
+        <mat-radio-button [value]="item.period">{{
+          item.title
+        }}</mat-radio-button>
+        }
+      </mat-radio-group>
+      } @if (activeControlGroup == "technologyOptions") {
+      <mat-radio-group
+        *ngIf="technologyOptions?.options?.length"
+        formControlName="technology"
+      >
+        @for (item of technologyOptions?.options; track $index) {
+        <mat-radio-button [value]="item.technology">{{
+          item.title
+        }}</mat-radio-button>
+        }
+      </mat-radio-group>
+      }
+    </div>
+    <button mat-flat-button class="app-button">
+      {{ "Accept" | translate }}
+    </button>
+  </form>
+</ng-template>
