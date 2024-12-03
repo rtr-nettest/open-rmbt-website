@@ -4,7 +4,13 @@
 <div class="app-wrapper" [innerHTML]="text$ | async"></div>
 <div class="app-wrapper" style="padding-bottom: 80px">
   <div class="app-row" [id]="mapContainerId">
-    <div [id]="mapId"></div>
+    <div class="app-map" [id]="mapId"></div>
   </div>
+  @if (activeLayer && mapInfo) {
+  <app-heatmap-legend
+    [activeLayer]="activeLayer"
+    [mapInfo]="mapInfo"
+  ></app-heatmap-legend>
+  }
 </div>
 <app-footer></app-footer>

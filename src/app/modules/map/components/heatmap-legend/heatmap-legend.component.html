@@ -1,0 +1,18 @@
+<div class="app-container">
+  <h4>{{ "Map key" | translate }}</h4>
+  <div class="app-container-bar" [style.background]="colorStops"></div>
+  <div class="app-container" style="display: flex">
+    <ul class="app-container-captions">
+      @for (item of activeOption?.heatmap_captions; track $index) {
+      <li class="app-li">{{ item }}</li>
+      }
+    </ul>
+    <p class="app-container-units">{{ activeOption?.unit }}</p>
+  </div>
+  <p
+    [innerHTML]="
+      'Sources: RTR, basemap.at, ArcData, Statistik Austria, BEV 2012'
+        | translate
+    "
+  ></p>
+</div>

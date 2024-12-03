@@ -39,6 +39,7 @@ import {
 } from "@angular/material/bottom-sheet"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { IMapInfo } from "../../interfaces/map-info.interface"
+import { HeatmapLegendComponent } from "../../components/heatmap-legend/heatmap-legend.component"
 
 @Component({
   selector: "app-map-screen",
@@ -46,6 +47,7 @@ import { IMapInfo } from "../../interfaces/map-info.interface"
   imports: [
     AsyncPipe,
     HeaderComponent,
+    HeatmapLegendComponent,
     TopNavComponent,
     BreadcrumbsComponent,
     FooterComponent,
@@ -54,25 +56,31 @@ import { IMapInfo } from "../../interfaces/map-info.interface"
   templateUrl: "./map-screen.component.html",
   styleUrl: "./map-screen.component.scss",
 })
-export class MapScreenComponent extends SeoComponent implements AfterViewInit {
+export class MapScreenComponent extends SeoComponent {
   map!: Map
   mapContainerId = "mapContainer"
   mapId = "map"
   mapService = inject(MapService)
+  mapInfo!: IMapInfo
   mapSourceOptions?: MapSourceOptions
   resizeSub!: Subscription
-  text$: Observable<string> = this.i18nStore.getLocalizedHtml("map")
+  text$: Observable<string> = this.i18nStore.getLocalizedHtml("map").pipe(
+    tap(() => {
+      firstValueFrom(this.mapService.getFilters()).then((mapInfo) => {
+        if (globalThis.document) {
+          this.mapInfo = mapInfo
+          this.setSize()
+          this.setResizeSub()
+          this.setMap()
+        }
+      })
+    })
+  )
   zone = inject(NgZone)
-  activeLayer?: string
+  activeLayer = this.mapService.getHeatmapSource({
+    networkMeasurementType: "mobile/download",
+  })
   private readonly bottomSheet = inject(MatBottomSheet)
-
-  ngAfterViewInit(): void {
-    if (globalThis.document) {
-      this.setSize()
-      this.setResizeSub()
-      this.setMap()
-    }
-  }
 
   switchLayers(event: MapSourceOptions) {
     this.mapSourceOptions = event
@@ -92,14 +100,12 @@ export class MapScreenComponent extends SeoComponent implements AfterViewInit {
       this.map.addControl(
         new FiltersControl(this.i18nStore, () => {
           this.zone.run(() => {
-            firstValueFrom(this.mapService.getFilters()).then((mapInfo) => {
-              this.bottomSheet.open(FiltersComponent, {
-                data: {
-                  mapInfo,
-                  onFiltersChange: (filters: MapSourceOptions) =>
-                    this.switchLayers(filters),
-                } as FilterSheetData,
-              })
+            this.bottomSheet.open(FiltersComponent, {
+              data: {
+                mapInfo: this.mapInfo,
+                onFiltersChange: (filters: MapSourceOptions) =>
+                  this.switchLayers(filters),
+              } as FilterSheetData,
             })
           })
         })
@@ -144,10 +150,7 @@ export class MapScreenComponent extends SeoComponent implements AfterViewInit {
   }
 
   private setTiles() {
-    let tiles: string = ""
-    const defaultOptions: MapSourceOptions = {
-      networkMeasurementType: "mobile/download",
-    }
+    let tiles: string = this.activeLayer
     switch (this.mapSourceOptions?.tiles) {
       case ETileTypes.points:
         tiles = this.mapService.getPointSource(this.mapSourceOptions)
@@ -159,15 +162,11 @@ export class MapScreenComponent extends SeoComponent implements AfterViewInit {
       case ETileTypes.heatmap:
         tiles = this.mapService.getHeatmapSource(this.mapSourceOptions)
         break
-      default:
-        tiles = this.mapService.getHeatmapSource(defaultOptions)
-        break
     }
-    const tilesId = JSON.stringify(tiles)
     this.zone.runOutsideAngular(() => {
       if (tiles) {
         try {
-          this.map.addSource(tilesId, {
+          this.map.addSource(tiles, {
             type: "raster",
             tiles: [tiles],
             tileSize: 256,
@@ -181,11 +180,11 @@ export class MapScreenComponent extends SeoComponent implements AfterViewInit {
             this.map.removeLayer(this.activeLayer)
           }
           this.map.addLayer({
-            id: tilesId,
+            id: tiles,
             type: "raster" as const,
-            source: tilesId,
+            source: tiles,
           })
-          this.activeLayer = tilesId
+          this.activeLayer = tiles
         } catch (e) {
           console.log(e)
         }
