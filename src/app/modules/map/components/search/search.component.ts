@@ -1,4 +1,10 @@
-import { Component, HostListener, inject, Input } from "@angular/core"
+import {
+  Component,
+  HostListener,
+  Input,
+  NgZone,
+  OnDestroy,
+} from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input"
@@ -6,11 +12,13 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { NgFor, NgIf } from "@angular/common"
 import {
   BehaviorSubject,
+  catchError,
   debounceTime,
   distinctUntilChanged,
   from,
   map,
   of,
+  Subject,
   switchMap,
   tap,
 } from "rxjs"
@@ -34,17 +42,23 @@ import { MatButtonModule } from "@angular/material/button"
   templateUrl: "./search.component.html",
   styleUrl: "./search.component.scss",
 })
-export class SearchComponent {
+export class SearchComponent implements OnDestroy {
   @Input({ required: true }) map!: Map
   activeCandidate = 0
+  destroyed$ = new Subject<void>()
   geocodeResponse?: IGeocodingFeature[]
   geocodeRequest?: string
   geocodeRequestChanged = new BehaviorSubject<string | undefined>(undefined)
   geocoder!: google.maps.Geocoder
   marker?: Marker
 
-  constructor() {
+  constructor(private readonly zone: NgZone) {
     this.initGeocoder()
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next()
+    this.destroyed$.complete()
   }
 
   async initGeocoder(): Promise<void> {
@@ -67,34 +81,36 @@ export class SearchComponent {
     .subscribe()
 
   flyTo(evt: IGeocodingFeature, zoom?: number) {
-    const { lng, lat } = evt.geometry.location
-    if (!zoom && evt.geometry.bounds) {
-      const southwest = evt.geometry.bounds.getSouthWest()
-      const northeast = evt.geometry.bounds.getNorthEast()
-      this.map.fitBounds([
-        southwest.lng(),
-        southwest.lat(),
-        northeast.lng(),
-        northeast.lat(),
-      ])
-    } else {
-      this.map.flyTo({
-        center: { lat: lat(), lng: lng() },
-        zoom: zoom || this.map.getZoom(),
+    this.zone.runOutsideAngular(() => {
+      const { lng, lat } = evt.geometry.location
+      if (!zoom && evt.geometry.bounds) {
+        const southwest = evt.geometry.bounds.getSouthWest()
+        const northeast = evt.geometry.bounds.getNorthEast()
+        this.map.fitBounds([
+          southwest.lng(),
+          southwest.lat(),
+          northeast.lng(),
+          northeast.lat(),
+        ])
+      } else {
+        this.map.flyTo({
+          center: { lat: lat(), lng: lng() },
+          zoom: zoom || this.map.getZoom(),
+        })
+      }
+      this.marker?.remove()
+      this.marker = new Marker({
+        color: "#4668F2",
       })
-    }
-    this.marker?.remove()
-    this.marker = new Marker({
-      color: "#4668F2",
+        .setLngLat({ lat: lat(), lng: lng() })
+        .addTo(this.map)
     })
-      .setLngLat({ lat: lat(), lng: lng() })
-      .addTo(this.map)
     this.geocodeRequest = evt.formatted_address
     this.resetGeocoder()
   }
 
-  flyToActiveCandidate() {
-    const location = this.geocodeResponse?.[this.activeCandidate]
+  flyToCandidate(index?: number) {
+    const location = this.geocodeResponse?.[index ?? this.activeCandidate]
     if (location) {
       this.flyTo(location)
     }
@@ -105,6 +121,9 @@ export class SearchComponent {
       return from(this.geocoder.geocode({ address: q })).pipe(
         map((res) => {
           return res.results
+        }),
+        catchError(() => {
+          return of([])
         })
       )
     }
@@ -112,20 +131,9 @@ export class SearchComponent {
   }
 
   @HostListener("keyup.esc")
-  @HostListener("document:mousedown", ["$event"])
   private resetGeocoder(evt?: MouseEvent) {
-    const el = evt?.target as HTMLElement
-    if (el?.className === "app-geocoder--suggestion-title") {
-      this.flyToActiveCandidate()
-    }
-    if (
-      el?.className !== "app-geocoder--suggestion-title" &&
-      el?.className !== "app-geocoder--suggestion-address" &&
-      el?.className !== "app-geocoder--suggestion"
-    ) {
-      this.geocodeResponse = undefined
-      this.activeCandidate = 0
-    }
+    this.geocodeResponse = undefined
+    this.activeCandidate = 0
   }
 
   @HostListener("keyup.arrowdown")

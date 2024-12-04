@@ -4,4 +4,13 @@
       font-weight: 700;
     }
   }
+  &--li {
+    border-radius: 0 !important;
+    font-size: 1rem !important;
+    justify-content: flex-start !important;
+    text-align: left;
+    & > * {
+      border-radius: 0 !important;
+    }
+  }
 }
