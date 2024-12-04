@@ -199,8 +199,10 @@ export class TestService {
 
     let openTestsResponse: any
     if (response && response.status != "error") {
-      openTestsResponse = await this.http.get(
-        `${environment.baseUrl}/RMBTStatisticServer/opentests/${response.open_test_uuid}?capabilities={"classification":{"count":4}}`
+      openTestsResponse = await firstValueFrom(
+        this.http.get(
+          `${environment.baseUrl}/RMBTStatisticServer/opentests/${response.open_test_uuid}?capabilities={"classification":{"count":4}}`
+        )
       )
     }
 
