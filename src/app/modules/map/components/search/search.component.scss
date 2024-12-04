@@ -1,0 +1,61 @@
+@import "core";
+
+.app {
+  &-geocoder {
+    position: relative;
+    width: 100%;
+
+    mat-form-field {
+      width: 100%;
+    }
+
+    @include screen-sm {
+      max-width: none;
+      min-width: 0;
+    }
+
+    &-suggestions {
+      background: white;
+      list-style: none;
+      width: 100%;
+      position: absolute;
+      z-index: 1000;
+
+      @include screen-sm {
+        border-radius: 0;
+
+        & > li > a {
+          padding: rem(5) rem(24);
+        }
+
+        .app {
+          &--suggestion {
+            align-items: center;
+            display: flex;
+
+            &:before {
+              color: rgba(0, 0, 0, 0.33);
+              content: "place";
+              display: block;
+              font-family: "Material Icons";
+              font-size: rem(24);
+              margin-right: rem(12);
+            }
+
+            &-address {
+              color: rgba(0, 0, 0, 0.5);
+            }
+
+            &-title {
+              font-weight: normal;
+              margin-right: 0.5em;
+            }
+          }
+        }
+      }
+    }
+  }
+  &-button {
+    width: 100%;
+  }
+}

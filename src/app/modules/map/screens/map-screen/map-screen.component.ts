@@ -40,6 +40,7 @@ import {
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { IMapInfo } from "../../interfaces/map-info.interface"
 import { HeatmapLegendComponent } from "../../components/heatmap-legend/heatmap-legend.component"
+import { SearchComponent } from "../../components/search/search.component"
 
 @Component({
   selector: "app-map-screen",
@@ -52,6 +53,7 @@ import { HeatmapLegendComponent } from "../../components/heatmap-legend/heatmap-
     BreadcrumbsComponent,
     FooterComponent,
     MatBottomSheetModule,
+    SearchComponent,
   ],
   templateUrl: "./map-screen.component.html",
   styleUrl: "./map-screen.component.scss",
@@ -145,7 +147,7 @@ export class MapScreenComponent extends SeoComponent {
         .getBoundingClientRect().width
       document
         .getElementById(this.mapId)!
-        .setAttribute("style", `height:440px;width:${containerWidth - 16}px`)
+        .setAttribute("style", `height:440px;width:${containerWidth}px`)
     })
   }
 

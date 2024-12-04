@@ -3,6 +3,9 @@
 <app-breadcrumbs></app-breadcrumbs>
 <div class="app-wrapper" [innerHTML]="text$ | async"></div>
 <div class="app-wrapper" style="padding-bottom: 80px">
+  @if (map) {
+  <app-search [map]="map"></app-search>
+  }
   <div class="app-row" [id]="mapContainerId">
     <div class="app-map" [id]="mapId"></div>
   </div>

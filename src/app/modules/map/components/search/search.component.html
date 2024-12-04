@@ -1,0 +1,40 @@
+<div class="app-geocoder">
+  <mat-form-field appearance="outline">
+    <input
+      matInput
+      type="text"
+      class="app-geocoder-input"
+      [ngModel]="geocodeRequest"
+      (ngModelChange)="this.geocodeRequestChanged.next($event)"
+      (keyup.enter)="flyToActiveCandidate()"
+      [placeholder]="'Search for an address or city' | translate"
+    />
+  </mat-form-field>
+  <div *ngIf="geocodeResponse" class="suggestions-wrapper">
+    <ul class="app-geocoder-suggestions" role="menu">
+      <li *ngIf="!geocodeResponse?.length">
+        <div class="app-geocoder--error app-geocoder--no-results">
+          {{ "No results" | translate }}
+        </div>
+      </li>
+      <ng-container *ngIf="geocodeResponse?.length">
+        <li
+          *ngFor="let candidate of geocodeResponse; let i = index"
+          [class.active]="i === activeCandidate"
+        >
+          <button
+            class="app-button"
+            mat-button
+            (mouseover)="activeCandidate = i"
+          >
+            <dl class="app-geocoder--suggestion">
+              <dt class="app-geocoder--suggestion-title">
+                {{ candidate.formatted_address }}
+              </dt>
+            </dl>
+          </button>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</div>

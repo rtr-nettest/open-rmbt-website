@@ -20,7 +20,6 @@ export class HeatmapLegendComponent {
     effect(() => {
       const searchParams = new URLSearchParams(this.activeLayer().split("?")[1])
       const mapType = searchParams.get("map_options")
-      console.log("mapType", mapType)
       for (const tech of this.mapInfo().mapfilter.mapTypes) {
         this.activeOption = tech.options.find(
           (option) => option.map_options === mapType
@@ -29,7 +28,6 @@ export class HeatmapLegendComponent {
           this.colorStops = `linear-gradient(to right, ${this.activeOption?.heatmap_colors.join(
             ","
           )})`
-          console.log("this.colorStops", this.colorStops)
           break
         }
       }
