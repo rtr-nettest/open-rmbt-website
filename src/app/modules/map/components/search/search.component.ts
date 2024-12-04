@@ -24,7 +24,6 @@ import {
 } from "rxjs"
 import { IGeocodingFeature } from "../../interfaces/geocoding-feature.interface"
 import { Map, Marker } from "maplibre-gl"
-import { MapGeocoder } from "@angular/google-maps"
 import { MatButtonModule } from "@angular/material/button"
 
 @Component({
