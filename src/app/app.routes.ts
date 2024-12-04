@@ -7,6 +7,7 @@ import { PageNotFoundComponent } from "./modules/error/screens/page-not-found/pa
 import { TermsConditionsScreenComponent } from "./modules/test/screens/terms-conditions-screen/terms-conditions-screen.component"
 import { TestScreenComponent } from "./modules/test/screens/test-screen/test-screen.component"
 import { MapScreenComponent } from "./modules/map/screens/map-screen/map-screen.component"
+import { StatisticsScreenComponent } from "./modules/statistics/screens/statistics-screen/statistics-screen.component"
 
 export const routes: Routes = [
   {
@@ -52,6 +53,15 @@ export const routes: Routes = [
         resolve: [localeResolver],
         data: {
           title: "Map view",
+        },
+      },
+      {
+        path: ERoutes.STATISTICS,
+        pathMatch: "full",
+        component: StatisticsScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Statitics",
         },
       },
       {

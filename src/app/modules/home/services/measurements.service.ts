@@ -14,13 +14,13 @@ export class MeasurementsService {
 
   getRecentMeasurements() {
     return this.http.get<IRecentMeasurementsResponse>(
-      `${environment.api.map}/cache/recent?_=${Date.now()}`
+      `${environment.api.cloud}/cache/recent?_=${Date.now()}`
     )
   }
 
   getRecentStats() {
     return this.http.get<IRecentStats>(
-      `${environment.api.map}/RMBTStatisticServer/opentests/statistics`
+      `${environment.api.cloud}/RMBTStatisticServer/opentests/statistics`
     )
   }
 }

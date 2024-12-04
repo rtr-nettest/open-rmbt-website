@@ -54,7 +54,7 @@ export type MapSourceOptions = Partial<{
 })
 export class MapService {
   get tileServer() {
-    return `${environment.api.map}/RMBTMapServer/tiles`
+    return `${environment.api.cloud}/RMBTMapServer/tiles`
   }
 
   constructor(
