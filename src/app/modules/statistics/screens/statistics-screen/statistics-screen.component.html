@@ -1,3 +1,9 @@
-@if (statistics$ | async; as statistics) {
-<p>{{ statistics }}</p>
-}
+<app-header></app-header>
+<app-top-nav></app-top-nav>
+<app-breadcrumbs></app-breadcrumbs>
+<div class="app-wrapper">
+  @if (statistics$ | async; as statistics) {
+  <p>{{ statistics }}</p>
+  }
+</div>
+<app-footer></app-footer>

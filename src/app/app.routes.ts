@@ -61,7 +61,7 @@ export const routes: Routes = [
         component: StatisticsScreenComponent,
         resolve: [localeResolver],
         data: {
-          title: "Statitics",
+          title: "Statistics",
         },
       },
       {

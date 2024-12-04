@@ -138,7 +138,11 @@
 <!-- Form Template -->
 
 <ng-template #formTpl>
-  <form [formGroup]="this.form" (submit)="applyFilters()">
+  <form
+    [formGroup]="this.form"
+    (submit)="applyFilters()"
+    style="padding-bottom: 56px"
+  >
     @if (activeControlGroup == "tiles") {
     <h6>{{ "Layers" | translate }}</h6>
     <mat-radio-group formControlName="tiles">
