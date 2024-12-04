@@ -3,6 +3,21 @@ a {
   text-decoration: underline;
 }
 
-.app-link.mdc-button {
-  text-decoration: none;
+.app-link {
+  &.mdc-button {
+    text-decoration: none;
+  }
+  &--flexible {
+    .mdc-button__label {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      * {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
 }

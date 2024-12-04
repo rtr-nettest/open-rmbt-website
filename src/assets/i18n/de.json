@@ -55,5 +55,14 @@
   "Unknown": "Unbekannt",
   "Recent tests": "Aktuelle Tests",
   "Privacy Policy and Terms of Use": "Datenschutzerklärung und Nutzungsbedingungen",
-  "Test": "Test"
+  "Test": "Test",
+  "Layers": "Schichten",
+  "Map type": "Kartentyp",
+  "Automatic": "Automatisch",
+  "Heatmap": "Heatmap",
+  "Points": "Punkte",
+  "Cadastral": "Katastralgemeinden",
+  "Accept": "Akzeptieren",
+  "Map key": "Legende",
+  "Sources: RTR, basemap.at, ArcData, Statistik Austria, BEV 2012": "Quellen: RTR, <a href='http://www.basemap.at/' target='_blank'>basemap.at</a>, ArcData, Statistik Austria, BEV 2012"
 }

@@ -1,0 +1,41 @@
+@import "core";
+
+.app {
+  &-geocoder {
+    position: relative;
+    width: 100%;
+
+    mat-form-field {
+      width: 100%;
+    }
+
+    @include screen-sm {
+      max-width: none;
+      min-width: 0;
+    }
+
+    &-suggestions {
+      border-bottom-left-radius: rem(9);
+      border-bottom-right-radius: rem(9);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.28);
+      background: white;
+      list-style: none;
+      width: 100%;
+      position: absolute;
+      top: rem(57);
+      z-index: 1000;
+    }
+
+    &--no-results {
+      padding: rem(10) rem(16);
+    }
+  }
+  &-button {
+    width: 100%;
+  }
+  &-li {
+    &--active {
+      background-color: #004f1435;
+    }
+  }
+}

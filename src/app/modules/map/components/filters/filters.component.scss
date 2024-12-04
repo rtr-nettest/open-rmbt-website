@@ -1,0 +1,59 @@
+@import "core";
+
+.app-container {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+mat-radio-group,
+mat-radio-button {
+  display: block;
+}
+
+.app-link {
+  width: 100%;
+}
+
+.app-filter-label {
+  font-size: 1rem;
+}
+
+.app-filter-value {
+  color: $color-pale;
+}
+
+mat-icon {
+  margin-right: rem(8);
+}
+
+.app-footer {
+  background: var(
+    --mat-bottom-sheet-container-background-color,
+    var(--mat-app-surface-container-low)
+  );
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: rem(4);
+  z-index: 2;
+}
+
+.app-filters {
+  height: 244px;
+  overflow: auto;
+}
+
+h6 {
+  background: var(
+    --mat-bottom-sheet-container-background-color,
+    var(--mat-app-surface-container-low)
+  );
+  position: sticky;
+  padding: rem(10);
+  top: 0;
+  left: 0;
+  z-index: 1;
+}

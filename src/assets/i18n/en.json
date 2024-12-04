@@ -54,5 +54,14 @@
   "Unknown": "Unknown",
   "Recent tests": "Recent tests",
   "Privacy Policy and Terms of Use": "Privacy Policy and Terms of Use",
-  "Test": "Test"
+  "Test": "Test",
+  "Layers": "Layers",
+  "Map type": "Map type",
+  "Automatic": "Automatic",
+  "Heatmap": "Heatmap",
+  "Points": "Points",
+  "Cadastral": "Cadastral communities",
+  "Accept": "Accept",
+  "Map key": "Map key",
+  "Sources: RTR, basemap.at, ArcData, Statistik Austria, BEV 2012": "Sources: RTR, <a href='http://www.basemap.at/' target='_blank'>basemap.at</a>, ArcData, Statistik Austria, BEV 2012"
 }

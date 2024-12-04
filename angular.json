@@ -19,7 +19,7 @@
           "options": {
             "allowedCommonJsDependencies": ["dayjs", "maplibre-gl", "rmbtws"],
             "outputPath": "dist/open-rmbt-angular",
-            "index": "src/index.html",
+            "index": "src/index.dev.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
@@ -41,6 +41,7 @@
           },
           "configurations": {
             "production": {
+              "index": "src/index.html",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -62,6 +63,7 @@
               "outputHashing": "all"
             },
             "preprod": {
+              "index": "src/index.html",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
