@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from "@angular/core"
 import { FormBuilder, FormControl, ReactiveFormsModule } from "@angular/forms"
 import { MatButtonModule } from "@angular/material/button"
-import { MatOptionModule } from "@angular/material/core"
+import { MatNativeDateModule, MatOptionModule } from "@angular/material/core"
 import { MatIconModule } from "@angular/material/icon"
 import { MatSelectModule } from "@angular/material/select"
 import { StatisticsStoreService } from "../../store/statistics-store.service"
@@ -15,6 +15,10 @@ import { I18nStore } from "../../../i18n/store/i18n.store"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
+import { AsyncPipe } from "@angular/common"
+import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
+import { COUNTRIES } from "../../constants/countries"
+import { PROVINCES } from "../../constants/provinces"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -33,16 +37,21 @@ type FiltersForm = {
   selector: "app-filters",
   standalone: true,
   imports: [
+    AsyncPipe,
     ReactiveFormsModule,
     MatButtonModule,
+    MatNativeDateModule,
     MatSelectModule,
     MatIconModule,
     MatOptionModule,
+    TranslatePipe,
   ],
   templateUrl: "./filters.component.html",
   styleUrl: "./filters.component.scss",
 })
 export class FiltersComponent implements OnInit {
+  countries = new Map(Object.entries(COUNTRIES))
+  provinces = new Map(Object.entries(PROVINCES))
   i18nStore = inject(I18nStore)
   platform = inject(PlatformService)
   service = inject(StatisticsService)
