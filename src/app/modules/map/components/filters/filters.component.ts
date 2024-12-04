@@ -29,6 +29,7 @@ import {
 } from "@angular/common"
 import { IMapFilter } from "../../interfaces/map-filter.interface"
 import { MAT_BOTTOM_SHEET_DATA } from "@angular/material/bottom-sheet"
+import { MapStoreService } from "../../store/map-store.service"
 
 export type FilterSheetData = {
   mapInfo: IMapInfo
@@ -90,7 +91,14 @@ export class FiltersComponent implements OnDestroy {
   operatorOptions?: IMapFilter
   providerOptions?: IMapFilter
 
-  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: FilterSheetData) {
+  get showStatistics() {
+    return this.form.controls.tiles.value !== ETileTypes.points
+  }
+
+  constructor(
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: FilterSheetData,
+    private readonly store: MapStoreService
+  ) {
     this.mapInfo = data.mapInfo
     for (const t of data.mapInfo.mapfilter.mapTypes) {
       let title = t.title
@@ -100,23 +108,13 @@ export class FiltersComponent implements OnDestroy {
     }
     this.form = this.fb.group({
       networkMeasurementType: new FormControl<NetworkMeasurementType>(
-        "mobile/download"
+        this.store.filters()?.networkMeasurementType ?? "mobile/download"
       ),
-      tiles: new FormControl<ETileTypes>(this.tilesTypes[0]),
+      tiles: new FormControl<ETileTypes>(
+        this.store.filters()?.tiles ?? this.tilesTypes[0]
+      ),
       filters: this.getMobileForm(data.mapInfo),
     })
-    this.form.controls.tiles.valueChanges
-      .pipe(
-        takeUntil(this.destroyed$),
-        tap((value) => {
-          if (value === ETileTypes.points) {
-            this.form.controls.filters.controls.statistical_method.disable()
-          } else {
-            this.form.controls.filters.controls.statistical_method.enable()
-          }
-        })
-      )
-      .subscribe()
   }
 
   ngOnDestroy(): void {
@@ -150,7 +148,8 @@ export class FiltersComponent implements OnDestroy {
       this.tabs.selectedIndex = 0
     }
     this.activeControlGroup = undefined
-    this.data.onFiltersChange(this.form.value)
+    this.store.filters.set({ ...this.form.value })
+    this.data.onFiltersChange(this.store.filters()!)
   }
 
   getFilterTitleFromValue(
@@ -170,12 +169,15 @@ export class FiltersComponent implements OnDestroy {
     this.operatorOptions = undefined
     return this.fb.group({
       statistical_method: new FormControl({
-        value: this.statisticalOptions.options.find((o) => !!o.default)!
-          .statistical_method!,
+        value:
+          this.store.filters()?.filters?.statistical_method ??
+          this.statisticalOptions.options.find((o) => !!o.default)!
+            .statistical_method!,
         disabled: this.form?.controls.tiles.value == ETileTypes.points,
       }),
       period: new FormControl(
-        this.periodOptions.options.find((o) => !!o.default)!.period!
+        this.store.filters()?.filters?.period ??
+          this.periodOptions.options.find((o) => !!o.default)!.period!
       ),
       technology: new FormControl({ value: "", disabled: true }),
       operator: new FormControl({ value: "", disabled: true }),
@@ -192,15 +194,19 @@ export class FiltersComponent implements OnDestroy {
     this.operatorOptions = undefined
     return this.fb.group({
       statistical_method: new FormControl({
-        value: this.statisticalOptions.options.find((o) => !!o.default)!
-          .statistical_method!,
+        value:
+          this.store.filters()?.filters?.statistical_method ??
+          this.statisticalOptions.options.find((o) => !!o.default)!
+            .statistical_method!,
         disabled: this.form?.controls.tiles.value == ETileTypes.points,
       }),
       period: new FormControl(
-        this.periodOptions.options.find((o) => !!o.default)!.period!
+        this.store.filters()?.filters?.period ??
+          this.periodOptions.options.find((o) => !!o.default)!.period!
       ),
       provider: new FormControl(
-        this.providerOptions.options.find((o) => !!o.default)!.provider!
+        this.store.filters()?.filters?.provider ??
+          this.providerOptions.options.find((o) => !!o.default)!.provider!
       ),
       technology: new FormControl({ value: "", disabled: true }),
       operator: new FormControl({ value: "", disabled: true }),
@@ -216,15 +222,19 @@ export class FiltersComponent implements OnDestroy {
     this.operatorOptions = undefined
     return this.fb.group({
       statistical_method: new FormControl({
-        value: this.statisticalOptions.options.find((o) => !!o.default)!
-          .statistical_method!,
+        value:
+          this.store.filters()?.filters?.statistical_method ??
+          this.statisticalOptions.options.find((o) => !!o.default)!
+            .statistical_method!,
         disabled: this.form?.controls.tiles.value == ETileTypes.points,
       }),
       period: new FormControl(
-        this.periodOptions.options.find((o) => !!o.default)!.period!
+        this.store.filters()?.filters?.period ??
+          this.periodOptions.options.find((o) => !!o.default)!.period!
       ),
       provider: new FormControl(
-        this.providerOptions.options.find((o) => !!o.default)!.provider!
+        this.store.filters()?.filters?.provider ??
+          this.providerOptions.options.find((o) => !!o.default)!.provider!
       ),
       technology: new FormControl({ value: "", disabled: true }),
       operator: new FormControl({ value: "", disabled: true }),
@@ -240,18 +250,23 @@ export class FiltersComponent implements OnDestroy {
     this.operatorOptions = options[1]
     return this.fb.group({
       statistical_method: new FormControl({
-        value: this.statisticalOptions.options.find((o) => !!o.default)!
-          .statistical_method!,
+        value:
+          this.store.filters()?.filters?.statistical_method ??
+          this.statisticalOptions.options.find((o) => !!o.default)!
+            .statistical_method!,
         disabled: this.form?.controls.tiles.value == ETileTypes.points,
       }),
       operator: new FormControl(
-        this.operatorOptions.options.find((o) => !!o.default)!.operator!
+        this.store.filters()?.filters?.operator ??
+          this.operatorOptions.options.find((o) => !!o.default)!.operator!
       ),
       period: new FormControl(
-        this.periodOptions.options.find((o) => !!o.default)!.period!
+        this.store.filters()?.filters?.period ??
+          this.periodOptions.options.find((o) => !!o.default)!.period!
       ),
       technology: new FormControl(
-        this.technologyOptions.options.find((o) => !!o.default)!.technology!
+        this.store.filters()?.filters?.technology ??
+          this.technologyOptions.options.find((o) => !!o.default)!.technology!
       ),
       provider: new FormControl({ value: "", disabled: true }),
     })

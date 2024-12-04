@@ -1,3 +1,5 @@
+/// <reference types="@types/google.maps" />
+
 export interface LatLng {
   lat: number
   lng: number

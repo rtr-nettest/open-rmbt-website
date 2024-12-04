@@ -114,13 +114,7 @@
         }}</span>
       </button>
     </li>
-    <li
-      *ngIf="
-        statisticalOptions &&
-        this.form.controls.filters.controls.statistical_method.enabled
-      "
-      class="app-li"
-    >
+    <li *ngIf="statisticalOptions && showStatistics" class="app-li">
       <button
         mat-button
         class="app-link app-link--flexible"
