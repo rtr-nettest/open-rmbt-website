@@ -24,39 +24,8 @@
       position: absolute;
       top: rem(57);
       z-index: 1000;
-
-      @include screen-sm {
-        border-radius: 0;
-
-        & > li > a {
-          padding: rem(5) rem(24);
-        }
-
-        .app {
-          &--suggestion {
-            align-items: center;
-            display: flex;
-
-            &:before {
-              color: rgba(0, 0, 0, 0.33);
-              content: "place";
-              display: block;
-              font-family: "Material Icons";
-              font-size: rem(24);
-              margin-right: rem(12);
-            }
-
-            &-address {
-              color: rgba(0, 0, 0, 0.5);
-            }
-
-            &-title {
-              margin-right: 0.5em;
-            }
-          }
-        }
-      }
     }
+
     &--no-results {
       padding: rem(10) rem(16);
     }
