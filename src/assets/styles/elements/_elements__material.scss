@@ -16,3 +16,19 @@
     height: 300px;
   }
 }
+
+.app-wrapper {
+  .app-form-field {
+    min-height: 0;
+    .mat-mdc-form-field-infix {
+      min-height: 0;
+      z-index: 1;
+    }
+    .mat-mdc-notch-piece {
+      background-color: white;
+    }
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+  }
+}

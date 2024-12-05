@@ -2,79 +2,160 @@
 <div class="app-container">
   <form [formGroup]="form">
     <div class="app-row">
-      @if (form.controls.type.value === 'mobile') {
-      <button class="app-button" (click)="changeType('mobile')" mat-flat-button>
-        {{ "Mobile" | translate }}
-      </button>
-      } @else {<button
-        class="app-button"
-        (click)="changeType('mobile')"
-        mat-stroked-button
-      >
-        {{ "Mobile" | translate }}</button
-      >} @if (form.controls.type.value === 'wifi') {
-      <button class="app-button" (click)="changeType('wifi')" mat-flat-button>
-        {{ "Wlan App" | translate }}
-      </button>
-      } @else {<button
-        class="app-button"
-        (click)="changeType('wifi')"
-        mat-stroked-button
-      >
-        {{ "Wlan App" | translate }}</button
-      >} @if (form.controls.type.value === 'browser') {
-      <button
-        class="app-button"
-        (click)="changeType('browser')"
-        mat-flat-button
-      >
-        {{ "Browser" | translate }}
-      </button>
-      } @else {<button
-        class="app-button"
-        (click)="changeType('browser')"
-        mat-stroked-button
-      >
-        {{ "Browser" | translate }}</button
-      >}
+      <div class="app-col">
+        @if (form.controls.type.value === 'mobile') {
+        <button
+          class="app-button"
+          (click)="changeType('mobile')"
+          mat-flat-button
+        >
+          {{ "Mobile" | translate }}
+        </button>
+        } @else {<button
+          class="app-button"
+          (click)="changeType('mobile')"
+          mat-stroked-button
+        >
+          {{ "Mobile" | translate }}</button
+        >} @if (form.controls.type.value === 'wifi') {
+        <button class="app-button" (click)="changeType('wifi')" mat-flat-button>
+          {{ "Wlan App" | translate }}
+        </button>
+        } @else {<button
+          class="app-button"
+          (click)="changeType('wifi')"
+          mat-stroked-button
+        >
+          {{ "Wlan App" | translate }}</button
+        >} @if (form.controls.type.value === 'browser') {
+        <button
+          class="app-button"
+          (click)="changeType('browser')"
+          mat-flat-button
+        >
+          {{ "Browser" | translate }}
+        </button>
+        } @else {<button
+          class="app-button"
+          (click)="changeType('browser')"
+          mat-stroked-button
+        >
+          {{ "Browser" | translate }}</button
+        >}
+      </div>
     </div>
     <div class="app-row">
-      <label class="app-label">{{ "Providers from" | translate }}</label>
-      <mat-select
-        class="app-select"
-        formControlName="country"
-        panelWidth=""
-        style="margin-right: 8px"
-      >
-        @for (item of countries; track $index) {
-        <mat-option class="app-option" [value]="item[0]">{{
-          item[1] | translate
-        }}</mat-option>
-        }
-      </mat-select>
+      <div class="app-col">
+        <label class="app-label">{{ "Providers from" | translate }}</label>
+        <mat-select class="app-select" formControlName="country" panelWidth="">
+          @for (item of countries; track $index) {
+          <mat-option class="app-option" [value]="item[0]">{{
+            item[1] | translate
+          }}</mat-option>
+          }
+        </mat-select>
+      </div>
       @if (form.controls.country.value === 'AT') {
-      <mat-select class="app-select" formControlName="province" panelWidth="">
-        <mat-option class="app-option" [value]="0">{{
-          "All provinces" | translate
-        }}</mat-option>
-        @for (item of provinces; track $index) {
-        <mat-option class="app-option" [value]="$index + 1">{{
-          item[1] | translate
-        }}</mat-option>
-        }
-      </mat-select>
+      <div class="app-spacer--small"></div>
+      <div class="app-col">
+        <mat-select class="app-select" formControlName="province" panelWidth="">
+          <mat-option class="app-option" [value]="0">{{
+            "All provinces" | translate
+          }}</mat-option>
+          @for (item of provinces; track $index) {
+          <mat-option class="app-option" [value]="$index + 1">{{
+            item[1] | translate
+          }}</mat-option>
+          }
+        </mat-select>
+      </div>
       }
-      <label class="app-label" style="margin-left: 24px">{{
-        "Time span" | translate
-      }}</label>
-      <mat-select class="app-select" formControlName="duration" panelWidth="">
-        @for (item of durationOptions; track $index) {
-        <mat-option class="app-option" [value]="item[0]">{{
-          item[1] | translate
-        }}</mat-option>
-        }
-      </mat-select>
+      <div class="app-spacer"></div>
+      <div class="app-col">
+        <label class="app-label">{{ "Time span" | translate }}</label>
+        <mat-select class="app-select" formControlName="duration" panelWidth="">
+          @for (item of durations; track $index) {
+          <mat-option class="app-option" [value]="item[0]">{{
+            item[1] | translate
+          }}</mat-option>
+          }
+        </mat-select>
+      </div>
+      <div class="app-spacer"></div>
+      <div class="app-col">
+        <a (click)="setShowMore()" class="app-link" iconPositionEnd>
+          @if (!showMore) {
+          <span>{{ "More" | translate }}</span
+          ><mat-icon>arrow_drop_down</mat-icon>
+          } @else {
+          <span>{{ "Less" | translate }}</span
+          ><mat-icon>arrow_drop_up</mat-icon>
+          }
+        </a>
+      </div>
     </div>
+    @if (showMore) {
+    <div class="app-row">
+      <div class="app-col">
+        <label class="app-label">{{ "Technology" | translate }}</label>
+        <mat-select
+          class="app-select"
+          formControlName="network_type_group"
+          panelWidth=""
+        >
+          @for (item of tecnologies; track $index) {
+          <mat-option class="app-option" [value]="item[0]">{{
+            item[1] | translate
+          }}</mat-option>
+          }
+        </mat-select>
+      </div>
+      <div class="app-spacer"></div>
+      <div class="app-col">
+        <label class="app-label">{{ "Quantile" | translate }}</label>
+        <mat-select class="app-select" formControlName="quantile" panelWidth="">
+          @for (item of quantiles; track $index) {
+          <mat-option class="app-option" [value]="item[0]">{{
+            item[1] | translate
+          }}</mat-option>
+          }
+        </mat-select>
+      </div>
+      <div class="app-spacer"></div>
+      <div class="app-col">
+        <label class="app-label">{{ "Location accuracy" | translate }}</label>
+        <mat-select
+          class="app-select"
+          formControlName="location_accuracy"
+          panelWidth=""
+        >
+          @for (item of locationAccuracies; track $index) {
+          <mat-option class="app-option" [value]="item[0]">{{
+            item[1] | translate
+          }}</mat-option>
+          }
+        </mat-select>
+      </div>
+      <div class="app-spacer"></div>
+      <div class="app-col">
+        <label class="app-label">{{ "End date" | translate }}</label>
+        <mat-form-field class="app-form-field" appearance="outline">
+          <input
+            matInput
+            [matDatepicker]="picker"
+            [min]="minDate"
+            formControlName="end_date"
+            placeholder="MM/DD/YYYY"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    }
   </form>
 </div>
 }

@@ -10,7 +10,6 @@ import { provideClientHydration } from "@angular/platform-browser"
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async"
 import { provideHttpClient, withFetch } from "@angular/common/http"
 import { provideI18n } from "./modules/i18n/i18n.module"
-import { provideAppDateAdapter } from "./modules/shared/adapters/app-date.adapter"
 
 export async function provideConfig(): Promise<ApplicationConfig> {
   return {
@@ -21,7 +20,6 @@ export async function provideConfig(): Promise<ApplicationConfig> {
       provideAnimationsAsync(),
       provideHttpClient(withFetch()),
       await provideI18n(),
-      provideAppDateAdapter(),
     ],
   }
 }

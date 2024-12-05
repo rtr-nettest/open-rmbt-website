@@ -1,11 +1,28 @@
-import { Component, inject, OnInit } from "@angular/core"
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from "@angular/core"
 import { FormBuilder, FormControl, ReactiveFormsModule } from "@angular/forms"
 import { MatButtonModule } from "@angular/material/button"
 import { MatNativeDateModule, MatOptionModule } from "@angular/material/core"
 import { MatIconModule } from "@angular/material/icon"
 import { MatSelectModule } from "@angular/material/select"
 import { StatisticsStoreService } from "../../store/statistics-store.service"
-import { map, Observable, tap } from "rxjs"
+import {
+  debounce,
+  debounceTime,
+  filter,
+  map,
+  pairwise,
+  skipWhile,
+  Subject,
+  Subscription,
+  takeUntil,
+  tap,
+} from "rxjs"
 import {
   EPlatform,
   PlatformService,
@@ -20,6 +37,9 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { COUNTRIES } from "../../constants/countries"
 import { PROVINCES } from "../../constants/provinces"
 import { StatisticsNetworkType } from "../../interfaces/statistics-request.interface"
+import { MatDatepickerModule } from "@angular/material/datepicker"
+import { MatFormFieldModule } from "@angular/material/form-field"
+import { MatInputModule } from "@angular/material/input"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -32,6 +52,7 @@ type FiltersForm = {
   location_accuracy: FormControl<string | null>
   end_date: FormControl<string | null>
   province: FormControl<number | null>
+  network_type_group: FormControl<string | null>
 }
 
 @Component({
@@ -40,7 +61,10 @@ type FiltersForm = {
   imports: [
     AsyncPipe,
     ReactiveFormsModule,
+    MatFormFieldModule,
     MatButtonModule,
+    MatDatepickerModule,
+    MatInputModule,
     MatNativeDateModule,
     MatSelectModule,
     MatIconModule,
@@ -50,13 +74,14 @@ type FiltersForm = {
   templateUrl: "./filters.component.html",
   styleUrl: "./filters.component.scss",
 })
-export class FiltersComponent implements OnInit {
+export class FiltersComponent implements OnInit, OnDestroy {
+  cdr = inject(ChangeDetectorRef)
   countries = Object.entries(COUNTRIES).map(([code, name]) => [
     code.toUpperCase(),
     name,
   ])
   provinces = Object.entries(PROVINCES)
-  durationOptions = [
+  durations = [
     ["1", "24 hours"],
     ["7", "1 week"],
     ["30", "1 month"],
@@ -68,6 +93,25 @@ export class FiltersComponent implements OnInit {
     ["1460", "4 years"],
     ["2920", "8 years"],
   ]
+  tecnologies = [
+    ["all", "All"],
+    ["2G", "2G"],
+    ["3G", "3G"],
+    ["4G", "4G"],
+    ["5G", "5G"],
+    ["mixed", "Mixed"],
+  ]
+  quantiles = [
+    ["0.2", "20%"],
+    ["0.5", "50%"],
+    ["0.8", "80%"],
+  ]
+  locationAccuracies = [
+    ["-1", "Any"],
+    ["10000", "< 10 km"],
+    ["2000", "< 2 km"],
+    ["100", "< 100 m"],
+  ]
   i18nStore = inject(I18nStore)
   platform = inject(PlatformService)
   service = inject(StatisticsService)
@@ -76,7 +120,7 @@ export class FiltersComponent implements OnInit {
   form$ = this.store.filters$.pipe(
     map((filters) => {
       if (!filters) return null
-      this.adjustTimePeriods()
+      this.adjustTimePeriods(filters.end_date)
       const form = this.fb.group<FiltersForm>({
         country: new FormControl(filters.country),
         duration: new FormControl(filters.duration),
@@ -85,19 +129,48 @@ export class FiltersComponent implements OnInit {
         location_accuracy: new FormControl(filters.location_accuracy),
         end_date: new FormControl(filters.end_date),
         province: new FormControl(filters.province),
+        network_type_group: new FormControl(filters.network_type_group),
       })
-      form.valueChanges.subscribe((value) => {
-        this.store.filters$.next({
-          ...this.store.filters$.value!,
-          ...value!,
+      this.subscription?.unsubscribe()
+      this.subscription = form.valueChanges
+        .pipe(
+          takeUntil(this.destroyed$),
+          skipWhile(() => form.controls.end_date.invalid)
+        )
+        .subscribe((next) => {
+          if (next.end_date !== this.store.filters$.value?.end_date) {
+            const durationIndex = this.durations.findIndex(
+              (v) => v[0] === next.duration
+            )
+            this.adjustTimePeriods(next.end_date)
+            this.store.filters$.next({
+              ...this.store.filters$.value!,
+              ...next,
+              duration: this.durations[durationIndex][0],
+            })
+            return
+          }
+          this.store.filters$.next({
+            ...this.store.filters$.value!,
+            ...next,
+          })
         })
-      })
       return form
     })
   )
+  showMore = false
+  minDate = dayjs().add(1, "day").toDate()
+  destroyed$ = new Subject<void>()
+  subscription?: Subscription
+  dateSubscription?: Subscription
 
   ngOnInit(): void {
     this.initForm()
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next()
+    this.destroyed$.complete()
   }
 
   changeType(type: StatisticsNetworkType) {
@@ -105,6 +178,11 @@ export class FiltersComponent implements OnInit {
       ...this.store.filters$.value!,
       type,
     })
+  }
+
+  setShowMore() {
+    this.showMore = !this.showMore
+    this.cdr.detectChanges()
   }
 
   private initForm() {
@@ -143,7 +221,7 @@ export class FiltersComponent implements OnInit {
    */
   private adjustTimePeriods(endDateString?: string | null) {
     let enddate = endDateString ? dayjs(endDateString) : dayjs()
-    for (const option of this.durationOptions) {
+    for (const option of this.durations) {
       const val = parseInt(option[0], 10)
       const spans = [
         {
