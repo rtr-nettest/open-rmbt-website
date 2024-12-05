@@ -21,10 +21,11 @@ import { IOverallResult } from "../interfaces/overall-result.interface"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
 import { IPaginator } from "../../tables/interfaces/paginator.interface"
+import { v4 } from "uuid"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
-export const UUID = "RTR_NETZTEST_UUID"
+export const UUID = "RMBTuuid"
 
 @Injectable({
   providedIn: "root",
@@ -33,8 +34,6 @@ export class TestService {
   private downs: IOverallResult[] = []
   private ups: IOverallResult[] = []
   private pings: IPing[] = []
-  private lastProgress = -1
-  private lastStatus: EMeasurementStatus = EMeasurementStatus.NOT_STARTED
   private rmbtws: any
   private rmbtTest: any
   private startTimeMs = 0
@@ -61,17 +60,27 @@ export class TestService {
     }
   }
 
-  getSettings(uuid?: string): Observable<IUserSetingsResponse> {
+  getSettings(): Observable<IUserSetingsResponse> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return of({ settings: [] } as unknown as IUserSetingsResponse)
+    }
+    const uuid = localStorage.getItem(UUID) ?? v4()
     return this.http
       .post<IUserSetingsResponse>(
         `${environment.api.baseUrl}/RMBTControlServer/settings`,
-        { type: "DESKTOP", name: "RTR-Netztest", uuid }
+        {
+          language: "en",
+          name: "RTR-Netztest",
+          terms_and_conditions_accepted: "true",
+          terms_and_conditions_accepted_version: 6,
+          type: "DESKTOP",
+          version_code: "1",
+          version_name: "0.1",
+        }
       )
       .pipe(
         tap((settings) => {
-          if (globalThis.localStorage && settings?.settings[0]?.uuid) {
-            localStorage.setItem(UUID, settings?.settings[0]?.uuid)
-          }
+          localStorage.setItem(UUID, settings?.settings[0]?.uuid ?? uuid)
         })
       )
   }
@@ -79,20 +88,17 @@ export class TestService {
   launchTest() {
     this.resetState()
     if (!isPlatformBrowser(this.platformId) || !this.rmbtws) {
-      return
-    }
-    const uuid = localStorage.getItem(UUID)
-    if (!uuid) {
+      console.error("RMBTws not loaded")
       return
     }
     return this.ngZone.runOutsideAngular(() => {
       this.rmbtws.TestEnvironment.init(this, null)
       const config = new this.rmbtws.RMBTTestConfig(
         "en",
-        environment.api.baseUrl,
+        `${environment.api.baseUrl}/RMBTControlServer`,
         ""
       )
-      config.uuid = uuid
+      config.uuid = localStorage.getItem(UUID)
       config.timezone = dayjs.tz.guess()
       config.additionalSubmissionParameters = { network_type: 0 }
       const ctrl = new this.rmbtws.RMBTControlServerCommunication(config)
@@ -143,9 +149,6 @@ export class TestService {
       })
     }
     const progress = Math.round(result.progress * 100)
-
-    this.lastProgress = result?.progress
-    this.lastStatus = phase
 
     return {
       duration: result.diffTime,
@@ -254,8 +257,6 @@ export class TestService {
     this.downs = []
     this.ups = []
     this.pings = []
-    this.lastProgress = -1
-    this.lastStatus = EMeasurementStatus.NOT_STARTED
     this.startTimeMs = 0
     this.endTimeMs = 0
     this.serverName = undefined
