@@ -1,5 +1,5 @@
 export const COUNTRIES = {
-  eu: "Europe",
+  at: "Austria",
   af: "Afghanistan",
   al: "Albania",
   dz: "Algeria",
@@ -13,7 +13,6 @@ export const COUNTRIES = {
   am: "Armenia",
   aw: "Aruba",
   au: "Australia",
-  at: "Austria",
   az: "Azerbaijan",
   bs: "Bahamas",
   bh: "Bahrain",

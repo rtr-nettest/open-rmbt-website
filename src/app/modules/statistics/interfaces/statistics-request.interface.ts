@@ -10,7 +10,7 @@ export interface IStatisticsRequest {
   max_devices: number | null
   location_accuracy: string | null
   country: string | null
-  province: string | null
+  province: number | null
   end_date: string | null
   capabilities: { classification: { count: 4 } } | null
 }

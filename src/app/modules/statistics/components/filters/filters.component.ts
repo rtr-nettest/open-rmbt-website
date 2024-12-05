@@ -31,7 +31,7 @@ type FiltersForm = {
   quantile: FormControl<string | null>
   location_accuracy: FormControl<string | null>
   end_date: FormControl<string | null>
-  province: FormControl<string | null>
+  province: FormControl<number | null>
 }
 
 @Component({
@@ -51,8 +51,23 @@ type FiltersForm = {
   styleUrl: "./filters.component.scss",
 })
 export class FiltersComponent implements OnInit {
-  countries = Object.entries(COUNTRIES)
+  countries = Object.entries(COUNTRIES).map(([code, name]) => [
+    code.toUpperCase(),
+    name,
+  ])
   provinces = Object.entries(PROVINCES)
+  durationOptions = [
+    ["1", "24 hours"],
+    ["7", "1 week"],
+    ["30", "1 month"],
+    ["90", "3 months"],
+    ["180", "6 months"],
+    ["365", "1 year"],
+    ["730", "2 years"],
+    ["1095", "3 years"],
+    ["1460", "4 years"],
+    ["2920", "8 years"],
+  ]
   i18nStore = inject(I18nStore)
   platform = inject(PlatformService)
   service = inject(StatisticsService)
@@ -61,6 +76,7 @@ export class FiltersComponent implements OnInit {
   form$ = this.store.filters$.pipe(
     map((filters) => {
       if (!filters) return null
+      this.adjustTimePeriods()
       const form = this.fb.group<FiltersForm>({
         country: new FormControl(filters.country),
         duration: new FormControl(filters.duration),
@@ -68,10 +84,7 @@ export class FiltersComponent implements OnInit {
         quantile: new FormControl(filters.quantile),
         location_accuracy: new FormControl(filters.location_accuracy),
         end_date: new FormControl(filters.end_date),
-        province: new FormControl({
-          value: filters.province,
-          disabled: filters.country !== "AT",
-        }),
+        province: new FormControl(filters.province),
       })
       form.valueChanges.subscribe((value) => {
         this.store.filters$.next({
@@ -109,9 +122,9 @@ export class FiltersComponent implements OnInit {
             ]).has(p)
               ? "mobile"
               : "browser",
-            country: data.country_geoip.toLowerCase(),
+            country: data.country_geoip,
             duration: "30",
-            province: null,
+            province: 0,
             end_date: null,
             quantile: "0.5",
             location_accuracy: data.country_geoip == "AT" ? "2000" : "-1",
@@ -123,5 +136,43 @@ export class FiltersComponent implements OnInit {
         })
       )
       .subscribe()
+  }
+
+  /**
+   * Adjust time periods to represent calendar dates (e.g. 1 month should be 28-31 days)
+   */
+  private adjustTimePeriods(endDateString?: string | null) {
+    let enddate = endDateString ? dayjs(endDateString) : dayjs()
+    for (const option of this.durationOptions) {
+      const val = parseInt(option[0], 10)
+      const spans = [
+        {
+          count: 30,
+          unit: "months" as const,
+        },
+        {
+          count: 365,
+          unit: "years" as const,
+        },
+      ]
+      for (let i = 0; i < spans.length; i++) {
+        const timespan = spans[i]
+        if (val > 7 && val % timespan.count <= 6) {
+          var units = Math.round(val / timespan.count)
+          var then = dayjs(enddate).subtract(units, timespan.unit)
+
+          //if the end of a month is selected - then should also be the end of a month!
+          if (
+            timespan.unit === "months" &&
+            dayjs(enddate).format("YYYY-MM-DD") ===
+              dayjs(enddate).endOf("month").format("YYYY-MM-DD")
+          ) {
+            then = then.endOf("month").startOf("day")
+          }
+
+          option[0] = dayjs(enddate).diff(then, "days").toString()
+        }
+      }
+    }
   }
 }

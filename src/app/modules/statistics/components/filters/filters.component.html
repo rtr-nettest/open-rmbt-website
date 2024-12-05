@@ -40,9 +40,38 @@
     </div>
     <div class="app-row">
       <label class="app-label">{{ "Providers from" | translate }}</label>
-      <mat-select class="app-select" formControlName="country" panelWidth="">
+      <mat-select
+        class="app-select"
+        formControlName="country"
+        panelWidth=""
+        style="margin-right: 8px"
+      >
         @for (item of countries; track $index) {
-        <mat-option [value]="item[0]">{{ item[1] }}</mat-option>
+        <mat-option class="app-option" [value]="item[0]">{{
+          item[1] | translate
+        }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.country.value === 'AT') {
+      <mat-select class="app-select" formControlName="province" panelWidth="">
+        <mat-option class="app-option" [value]="0">{{
+          "All provinces" | translate
+        }}</mat-option>
+        @for (item of provinces; track $index) {
+        <mat-option class="app-option" [value]="$index + 1">{{
+          item[1] | translate
+        }}</mat-option>
+        }
+      </mat-select>
+      }
+      <label class="app-label" style="margin-left: 24px">{{
+        "Time span" | translate
+      }}</label>
+      <mat-select class="app-select" formControlName="duration" panelWidth="">
+        @for (item of durationOptions; track $index) {
+        <mat-option class="app-option" [value]="item[0]">{{
+          item[1] | translate
+        }}</mat-option>
         }
       </mat-select>
     </div>

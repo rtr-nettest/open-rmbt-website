@@ -3,14 +3,13 @@ import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { StatisticsService } from "../../services/statistics.service"
 import { AsyncPipe } from "@angular/common"
 import { StatisticsStoreService } from "../../store/statistics-store.service"
-import { finalize, switchMap, tap } from "rxjs"
+import { catchError, switchMap, tap } from "rxjs"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { FiltersComponent } from "../../components/filters/filters.component"
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
-import { HttpEventType } from "@angular/common/http"
 
 @Component({
   selector: "app-statistics-screen",
@@ -48,6 +47,10 @@ export class StatisticsScreenComponent extends SeoComponent {
       this.progress = 0
       clearInterval(this.progressInterval)
       this.progressInterval = undefined
+    }),
+    catchError(() => {
+      this.loading = false
+      return []
     })
   )
 }
