@@ -5,7 +5,7 @@ import { MatNativeDateModule, MatOptionModule } from "@angular/material/core"
 import { MatIconModule } from "@angular/material/icon"
 import { MatSelectModule } from "@angular/material/select"
 import { StatisticsStoreService } from "../../store/statistics-store.service"
-import { map, tap } from "rxjs"
+import { map, Observable, tap } from "rxjs"
 import {
   EPlatform,
   PlatformService,
@@ -19,6 +19,7 @@ import { AsyncPipe } from "@angular/common"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { COUNTRIES } from "../../constants/countries"
 import { PROVINCES } from "../../constants/provinces"
+import { StatisticsNetworkType } from "../../interfaces/statistics-request.interface"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -26,7 +27,7 @@ dayjs.extend(tz)
 type FiltersForm = {
   country: FormControl<string | null>
   duration: FormControl<string | null>
-  type: FormControl<string | null>
+  type: FormControl<StatisticsNetworkType | null>
   quantile: FormControl<string | null>
   location_accuracy: FormControl<string | null>
   end_date: FormControl<string | null>
@@ -50,8 +51,8 @@ type FiltersForm = {
   styleUrl: "./filters.component.scss",
 })
 export class FiltersComponent implements OnInit {
-  countries = new Map(Object.entries(COUNTRIES))
-  provinces = new Map(Object.entries(PROVINCES))
+  countries = Object.entries(COUNTRIES)
+  provinces = Object.entries(PROVINCES)
   i18nStore = inject(I18nStore)
   platform = inject(PlatformService)
   service = inject(StatisticsService)
@@ -60,23 +61,37 @@ export class FiltersComponent implements OnInit {
   form$ = this.store.filters$.pipe(
     map((filters) => {
       if (!filters) return null
-      return this.fb.group({
-        country: new FormControl<string>(filters.country),
-        duration: new FormControl<string>(filters.duration),
-        type: new FormControl<string>(filters.type),
-        quantile: new FormControl<string>(filters.quantile),
-        location_accuracy: new FormControl<string>(filters.location_accuracy),
-        end_date: new FormControl<string | null>(filters.end_date),
-        province: new FormControl<string | null>({
+      const form = this.fb.group<FiltersForm>({
+        country: new FormControl(filters.country),
+        duration: new FormControl(filters.duration),
+        type: new FormControl(filters.type),
+        quantile: new FormControl(filters.quantile),
+        location_accuracy: new FormControl(filters.location_accuracy),
+        end_date: new FormControl(filters.end_date),
+        province: new FormControl({
           value: filters.province,
           disabled: filters.country !== "AT",
         }),
       })
+      form.valueChanges.subscribe((value) => {
+        this.store.filters$.next({
+          ...this.store.filters$.value!,
+          ...value!,
+        })
+      })
+      return form
     })
   )
 
   ngOnInit(): void {
     this.initForm()
+  }
+
+  changeType(type: StatisticsNetworkType) {
+    this.store.filters$.next({
+      ...this.store.filters$.value!,
+      type,
+    })
   }
 
   private initForm() {
@@ -94,7 +109,7 @@ export class FiltersComponent implements OnInit {
             ]).has(p)
               ? "mobile"
               : "browser",
-            country: data.country_geoip,
+            country: data.country_geoip.toLowerCase(),
             duration: "30",
             province: null,
             end_date: null,

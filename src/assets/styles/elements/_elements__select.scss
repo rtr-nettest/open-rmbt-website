@@ -1,0 +1,22 @@
+.app-wrapper {
+  .app-select {
+    background-color: white;
+    border: 2px solid $color-primary;
+    border-radius: var(--mdc-outlined-button-container-shape);
+    font-size: 1rem;
+    height: var(--mdc-outlined-button-container-height);
+    padding: 0 12px;
+    width: auto;
+
+    .mat-mdc-select-trigger {
+      height: 100%;
+
+      .mat-mdc-select-arrow-wrapper {
+        border-radius: 1000px;
+        background-color: #eef3e9;
+        margin-left: rem(16);
+        padding: rem(6);
+      }
+    }
+  }
+}

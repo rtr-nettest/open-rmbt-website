@@ -2,8 +2,17 @@
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
 <div class="app-wrapper">
+  <app-filters></app-filters>
   @if (statistics$ | async; as statistics) {
   <p>{{ statistics }}</p>
+  } @if (loading) {
+  <div class="app-loading-overlay">
+    @if (progressInterval && progress < 1) {
+    <mat-progress-spinner [value]="progress * 100"></mat-progress-spinner>
+    } @else {
+    <mat-spinner></mat-spinner>
+    }
+  </div>
   }
 </div>
 <app-footer></app-footer>

@@ -1,10 +1,12 @@
+import { StatisticsNetworkType } from "./statistics-request.interface"
+
 export interface IStatisticsResponse {
   duration: number
   devices: IStatisticsDevice[]
   quantile: number
   devices_sums: IStatisticsDevice
   countries: string[]
-  type: "mobile" | "wifi" | "browser"
+  type: StatisticsNetworkType
   providers_sums: IStatisticsProvider
   providers: IStatisticsProvider[]
 }

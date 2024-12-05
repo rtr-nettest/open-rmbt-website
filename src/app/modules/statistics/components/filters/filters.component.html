@@ -1,5 +1,51 @@
 @if (form$ | async; as form) {
 <div class="app-container">
-  <form [formGroup]="form"></form>
+  <form [formGroup]="form">
+    <div class="app-row">
+      @if (form.controls.type.value === 'mobile') {
+      <button class="app-button" (click)="changeType('mobile')" mat-flat-button>
+        {{ "Mobile" | translate }}
+      </button>
+      } @else {<button
+        class="app-button"
+        (click)="changeType('mobile')"
+        mat-stroked-button
+      >
+        {{ "Mobile" | translate }}</button
+      >} @if (form.controls.type.value === 'wifi') {
+      <button class="app-button" (click)="changeType('wifi')" mat-flat-button>
+        {{ "Wlan App" | translate }}
+      </button>
+      } @else {<button
+        class="app-button"
+        (click)="changeType('wifi')"
+        mat-stroked-button
+      >
+        {{ "Wlan App" | translate }}</button
+      >} @if (form.controls.type.value === 'browser') {
+      <button
+        class="app-button"
+        (click)="changeType('browser')"
+        mat-flat-button
+      >
+        {{ "Browser" | translate }}
+      </button>
+      } @else {<button
+        class="app-button"
+        (click)="changeType('browser')"
+        mat-stroked-button
+      >
+        {{ "Browser" | translate }}</button
+      >}
+    </div>
+    <div class="app-row">
+      <label class="app-label">{{ "Providers from" | translate }}</label>
+      <mat-select class="app-select" formControlName="country" panelWidth="">
+        @for (item of countries; track $index) {
+        <mat-option [value]="item[0]">{{ item[1] }}</mat-option>
+        }
+      </mat-select>
+    </div>
+  </form>
 </div>
 }

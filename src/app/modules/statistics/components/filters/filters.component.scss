@@ -1,1 +1,31 @@
 @import "core";
+
+.app-container {
+  background-color: #f8f8f8;
+  border: 1px solid #c2c2c2;
+  border-radius: rem(9);
+  padding: rem(24);
+}
+
+.app-button {
+  margin-right: rem(16);
+}
+
+.app-row {
+  align-items: center;
+  display: flex;
+  margin-bottom: rem(24);
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.app-label {
+  margin-right: rem(8);
+  white-space: nowrap;
+}
+
+.app-select {
+  margin-right: rem(24);
+}
