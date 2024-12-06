@@ -3,13 +3,14 @@ import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { StatisticsService } from "../../services/statistics.service"
 import { AsyncPipe } from "@angular/common"
 import { StatisticsStoreService } from "../../store/statistics-store.service"
-import { catchError, switchMap, tap } from "rxjs"
+import { catchError, Observable, switchMap, tap } from "rxjs"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { FiltersComponent } from "../../components/filters/filters.component"
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
+import { HtmlWrapperComponent } from "../../../shared/components/html-wrapper/html-wrapper.component"
 
 @Component({
   selector: "app-statistics-screen",
@@ -18,6 +19,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
     BreadcrumbsComponent,
     FiltersComponent,
     HeaderComponent,
+    HtmlWrapperComponent,
     TopNavComponent,
     FooterComponent,
     MatProgressSpinnerModule,
@@ -53,4 +55,6 @@ export class StatisticsScreenComponent extends SeoComponent {
       return []
     })
   )
+  statisticsText$: Observable<string> =
+    this.i18nStore.getLocalizedHtml("statistics")
 }
