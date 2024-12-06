@@ -5,7 +5,14 @@
   <ng-container header>
     <app-filters></app-filters>
     @if (statistics$ | async; as statistics) {
-    <p>{{ statistics }}</p>
+    <div style="margin-top: 24px">
+      <app-table
+        [data]="statistics"
+        [columns]="statisticsColumns"
+        [sort]="statisticsSort"
+        [tableClassNames]="['app-table--vertical']"
+      ></app-table>
+    </div>
     }
   </ng-container>
   <ng-container body>

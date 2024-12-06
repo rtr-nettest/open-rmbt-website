@@ -59,7 +59,7 @@
       <div class="app-spacer--small"></div>
       <div class="app-col">
         <mat-select class="app-select" formControlName="province" panelWidth="">
-          <mat-option class="app-option" [value]="0">{{
+          <mat-option class="app-option" [value]="null">{{
             "All provinces" | translate
           }}</mat-option>
           @for (item of provinces; track $index) {
@@ -143,7 +143,6 @@
           <input
             matInput
             [matDatepicker]="picker"
-            [min]="minDate"
             formControlName="end_date"
             placeholder="MM/DD/YYYY"
           />

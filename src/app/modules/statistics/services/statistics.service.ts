@@ -2,8 +2,18 @@ import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { environment } from "../../../../environments/environment"
 import { IStatisticsRequest } from "../interfaces/statistics-request.interface"
-import { of } from "rxjs"
+import { map, Observable, of } from "rxjs"
 import { IBrowserData } from "../interfaces/browser-data.interface"
+import utc from "dayjs/plugin/utc"
+import timezone from "dayjs/plugin/timezone"
+import dayjs from "dayjs"
+import {
+  IStatisticsProvider,
+  IStatisticsResponse,
+} from "../interfaces/statistics-response.interface.interface"
+import { IBasicResponse } from "../../tables/interfaces/basic-response.interface"
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 @Injectable({
   providedIn: "root",
@@ -17,13 +27,36 @@ export class StatisticsService {
     )
   }
 
-  getStatistics(body: IStatisticsRequest | null) {
+  getStatistics(
+    body: IStatisticsRequest | null
+  ): Observable<IBasicResponse<IStatisticsProvider>> {
     if (!body) {
-      return of(null)
+      return of({ content: [], totalElements: 0 })
     }
-    return this.http.post(
-      `${environment.api.cloud}/RMBTStatisticServer/statistics`,
-      body
-    )
+    return this.http
+      .post<IStatisticsResponse>(
+        `${environment.api.cloud}/RMBTStatisticServer/statistics`,
+        {
+          body: {
+            ...body,
+            ...(body.end_date
+              ? {
+                  end_date: dayjs(body.end_date)
+                    .endOf("day")
+                    .utc()
+                    .format("YYYY-MM-DD HH:mm:ss"),
+                }
+              : {}),
+          },
+        }
+      )
+      .pipe(
+        map((response) => {
+          return {
+            content: response.providers,
+            totalElements: response.providers.length,
+          }
+        })
+      )
   }
 }

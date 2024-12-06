@@ -159,7 +159,8 @@ mat-paginator {
   &-download,
   &-upload,
   &-ping,
-  &-time {
+  &-time,
+  &-count {
     flex: 0 0 rem(120);
     width: rem(120);
 

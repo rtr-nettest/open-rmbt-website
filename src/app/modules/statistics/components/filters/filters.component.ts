@@ -40,6 +40,7 @@ import { StatisticsNetworkType } from "../../interfaces/statistics-request.inter
 import { MatDatepickerModule } from "@angular/material/datepicker"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input"
+import { adjustTimePeriod } from "../../../shared/util/time"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -159,7 +160,6 @@ export class FiltersComponent implements OnInit, OnDestroy {
     })
   )
   showMore = false
-  minDate = dayjs().add(1, "day").toDate()
   destroyed$ = new Subject<void>()
   subscription?: Subscription
   dateSubscription?: Subscription
@@ -202,7 +202,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
               : "browser",
             country: data.country_geoip,
             duration: "30",
-            province: 0,
+            province: null,
             end_date: null,
             quantile: "0.5",
             location_accuracy: data.country_geoip == "AT" ? "2000" : "-1",
@@ -220,37 +220,9 @@ export class FiltersComponent implements OnInit, OnDestroy {
    * Adjust time periods to represent calendar dates (e.g. 1 month should be 28-31 days)
    */
   private adjustTimePeriods(endDateString?: string | null) {
-    let enddate = endDateString ? dayjs(endDateString) : dayjs()
+    let enddate = endDateString ? dayjs(endDateString).utc() : dayjs().utc()
     for (const option of this.durations) {
-      const val = parseInt(option[0], 10)
-      const spans = [
-        {
-          count: 30,
-          unit: "months" as const,
-        },
-        {
-          count: 365,
-          unit: "years" as const,
-        },
-      ]
-      for (let i = 0; i < spans.length; i++) {
-        const timespan = spans[i]
-        if (val > 7 && val % timespan.count <= 6) {
-          var units = Math.round(val / timespan.count)
-          var then = dayjs(enddate).subtract(units, timespan.unit)
-
-          //if the end of a month is selected - then should also be the end of a month!
-          if (
-            timespan.unit === "months" &&
-            dayjs(enddate).format("YYYY-MM-DD") ===
-              dayjs(enddate).endOf("month").format("YYYY-MM-DD")
-          ) {
-            then = then.endOf("month").startOf("day")
-          }
-
-          option[0] = dayjs(enddate).diff(then, "days").toString()
-        }
-      }
+      adjustTimePeriod(option, enddate)
     }
   }
 }

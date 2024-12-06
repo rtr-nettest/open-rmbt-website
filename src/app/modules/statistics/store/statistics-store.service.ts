@@ -9,4 +9,8 @@ import { IBrowserData } from "../interfaces/browser-data.interface"
 export class StatisticsStoreService {
   browserData$ = new BehaviorSubject<IBrowserData | null>(null)
   filters$ = new BehaviorSubject<IStatisticsRequest | null>(null)
+
+  get filters() {
+    return this.filters$.value
+  }
 }

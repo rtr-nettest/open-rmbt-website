@@ -20,6 +20,7 @@ export interface IStatisticsDevice {
 }
 
 export interface IStatisticsProvider {
+  name: string
   down_red: number
   ping_green: number
   up_ultragreen: number
