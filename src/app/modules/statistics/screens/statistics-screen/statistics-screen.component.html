@@ -16,7 +16,26 @@
     }
   </ng-container>
   <ng-container body>
-    <p>devices</p>
+    @if (devicesSlice()) {
+    <div style="margin-top: 24px">
+      <app-table
+        [data]="devicesSlice()"
+        [columns]="deviceColumns"
+        [sort]="statisticsSort"
+        [tableClassNames]="['app-table--vertical']"
+      ></app-table>
+    </div>
+    @if ( devices() && devicesSlice()!.totalElements < devices()!.totalElements)
+    {
+    <button
+      (click)="devicesCount.set(devices()!.totalElements)"
+      class="app-button"
+      style="margin-top: 24px"
+      mat-stroked-button
+    >
+      {{ "Further devices" | translate }}
+    </button>
+    } }
   </ng-container>
 </app-html-wrapper>
 @if (loading) {

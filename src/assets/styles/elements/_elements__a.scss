@@ -1,6 +1,10 @@
 a {
-  color: $color_link;
+  color: $color-link;
   text-decoration: underline;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .app-link {

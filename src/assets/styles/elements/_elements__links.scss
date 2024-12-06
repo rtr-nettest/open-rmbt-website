@@ -1,8 +1,10 @@
 .app-link {
-  color: $color-dark !important;
+  &--dark {
+    color: $color-dark !important;
 
-  &:hover {
-    color: $color-link !important;
+    &:hover {
+      color: $color-link !important;
+    }
   }
 
   .mdc-button__ripple {

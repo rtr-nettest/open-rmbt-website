@@ -8,11 +8,17 @@
         @for (item of mainItems$ | async; track $index) {
         <li>
           @if (item.route) {
-          <a [routerLink]="item.route" mat-button class="app-link">{{
-            item.label
-          }}</a>
+          <a
+            [routerLink]="item.route"
+            mat-button
+            class="app-link app-link--dark"
+            >{{ item.label }}</a
+          >
           } @else {
-          <a class="app-link" mat-button [matMenuTriggerFor]="subMenu"
+          <a
+            class="app-link app-link--dark"
+            mat-button
+            [matMenuTriggerFor]="subMenu"
             >{{ item.label
             }}<mat-icon iconPositionEnd>keyboard_arrow_down</mat-icon></a
           >

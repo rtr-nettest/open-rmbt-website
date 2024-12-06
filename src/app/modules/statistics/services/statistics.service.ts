@@ -27,36 +27,25 @@ export class StatisticsService {
     )
   }
 
-  getStatistics(
-    body: IStatisticsRequest | null
-  ): Observable<IBasicResponse<IStatisticsProvider>> {
+  getStatistics(body: IStatisticsRequest | null) {
     if (!body) {
-      return of({ content: [], totalElements: 0 })
+      return of({} as IStatisticsResponse)
     }
-    return this.http
-      .post<IStatisticsResponse>(
-        `${environment.api.cloud}/RMBTStatisticServer/statistics`,
-        {
-          body: {
-            ...body,
-            ...(body.end_date
-              ? {
-                  end_date: dayjs(body.end_date)
-                    .endOf("day")
-                    .utc()
-                    .format("YYYY-MM-DD HH:mm:ss"),
-                }
-              : {}),
-          },
-        }
-      )
-      .pipe(
-        map((response) => {
-          return {
-            content: response.providers,
-            totalElements: response.providers.length,
-          }
-        })
-      )
+    return this.http.post<IStatisticsResponse>(
+      `${environment.api.cloud}/RMBTStatisticServer/statistics`,
+      {
+        body: {
+          ...body,
+          ...(body.end_date
+            ? {
+                end_date: dayjs(body.end_date)
+                  .endOf("day")
+                  .utc()
+                  .format("YYYY-MM-DD HH:mm:ss"),
+              }
+            : {}),
+        },
+      }
+    )
   }
 }

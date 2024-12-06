@@ -40,7 +40,12 @@
     <ul class="app-list">
       @for (link of rtrLinks$ | async; track $index) {
       <li>
-        <a [href]="link.url" mat-button class="app-link" target="_blank">
+        <a
+          [href]="link.url"
+          mat-button
+          class="app-link app-link--dark"
+          target="_blank"
+        >
           {{ link.label }}
         </a>
       </li>
@@ -59,7 +64,11 @@
     <ul class="app-list">
       @for (locale of availableLocales; track $index) {
       <li>
-        <button (click)="setLocale(locale)" mat-button class="app-link">
+        <button
+          (click)="setLocale(locale)"
+          mat-button
+          class="app-link app-link--dark"
+        >
           {{ locale.name }}
         </button>
       </li>
