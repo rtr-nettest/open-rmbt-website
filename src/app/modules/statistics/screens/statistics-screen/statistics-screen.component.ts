@@ -81,6 +81,8 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
         green: provider.down_green,
         deepGreen: provider.down_ultragreen,
         label: roundToSignificantDigits(provider.quantile_down / 1000),
+        provider: provider.name,
+        units: "Mbps",
       }),
       justify: "flex-end",
     },
@@ -94,6 +96,8 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
         green: provider.up_green,
         deepGreen: provider.up_ultragreen,
         label: roundToSignificantDigits(provider.quantile_up / 1000),
+        provider: provider.name,
+        units: "Mbps",
       }),
       justify: "flex-end",
     },
@@ -107,6 +111,8 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
         green: provider.ping_green,
         deepGreen: provider.ping_ultragreen,
         label: Math.round(provider.quantile_ping / 1e6),
+        provider: provider.name,
+        units: "ms",
       }),
       justify: "flex-end",
     },
@@ -177,7 +183,6 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
     {
       header: "Down (Mbps)",
       columnDef: "down",
-      component: PercentileComponent,
       transformValue: (value) =>
         roundToSignificantDigits(value.quantile_down / 1000),
       justify: "flex-end",
@@ -185,7 +190,6 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
     {
       header: "Up (Mbps)",
       columnDef: "up",
-      component: PercentileComponent,
       transformValue: (value) =>
         roundToSignificantDigits(value.quantile_up / 1000),
       justify: "flex-end",
@@ -193,7 +197,6 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
     {
       header: "Ping (ms)",
       columnDef: "latency",
-      component: PercentileComponent,
       transformValue: (value) => Math.round(value.quantile_ping / 1e6),
       justify: "flex-end",
     },

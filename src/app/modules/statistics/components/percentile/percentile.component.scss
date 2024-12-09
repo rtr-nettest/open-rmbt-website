@@ -1,4 +1,33 @@
+@import "core";
+
 :host {
   display: block;
   width: 100%;
+}
+
+.app-container {
+  cursor: pointer;
+}
+
+.app-menu {
+  padding: rem(8) rem(16);
+
+  p {
+    margin: rem(0) auto rem(8);
+  }
+}
+
+.app-popup-icon {
+  margin-right: rem(2);
+  position: static;
+}
+
+.app-list {
+  display: flex;
+  list-style: none;
+}
+
+.app-li {
+  display: flex;
+  margin-right: rem(8);
 }
