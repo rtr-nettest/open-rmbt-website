@@ -8,7 +8,6 @@
 
 .app-link {
   font-size: rem(12);
-  text-decoration: none;
 }
 
 .app-list {
@@ -18,4 +17,11 @@
 
 .app-span {
   margin: 0 rem(12);
+}
+
+.app-li {
+  &:last-of-type .app-link {
+    color: $color-dark;
+    text-decoration: none;
+  }
 }

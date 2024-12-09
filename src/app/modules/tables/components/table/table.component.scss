@@ -159,7 +159,8 @@ mat-paginator {
   &-download,
   &-upload,
   &-ping,
-  &-time {
+  &-time,
+  &-count {
     flex: 0 0 rem(120);
     width: rem(120);
 
@@ -203,6 +204,7 @@ mat-paginator {
     .app-table__mobile-label {
       display: inline-block;
       font-weight: 700 !important;
+      text-align: left;
     }
   }
 }

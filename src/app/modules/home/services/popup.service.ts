@@ -4,7 +4,6 @@ import { IRecentMeasurement } from "../interfaces/recent-measurements-response.i
 import { environment } from "../../../../environments/environment"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { firstValueFrom } from "rxjs"
-import dayjs from "dayjs"
 import {
   ClassificationService,
   GSM_CONNECTION_TYPES,
@@ -17,6 +16,7 @@ import {
   THRESHOLD_UPLOAD,
 } from "../../shared/services/classification.service"
 import { ERoutes } from "../../shared/constants/routes.enum"
+import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
 import { ConversionService } from "../../shared/services/conversion.service"

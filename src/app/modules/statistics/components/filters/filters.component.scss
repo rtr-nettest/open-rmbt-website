@@ -1,0 +1,84 @@
+@import "core";
+
+.app-container {
+  background-color: #f8f8f8;
+  border: 1px solid #c2c2c2;
+  border-radius: rem(9);
+  padding: rem(24);
+}
+
+.app-button {
+  white-space: nowrap;
+  margin-right: rem(16);
+
+  &:last-of-type {
+    margin-right: 0;
+
+    @include screen-xs {
+      margin-top: rem(16);
+    }
+  }
+}
+
+.app-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: rem(24);
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  @include screen-xs {
+    margin-bottom: 0;
+
+    .app-col {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: rem(24);
+      width: 100%;
+    }
+  }
+}
+
+.app-label {
+  margin-right: rem(8);
+  white-space: nowrap;
+}
+
+.app-link {
+  align-items: center;
+  display: inline-flex;
+  font-size: 1rem;
+  text-decoration: none;
+
+  span {
+    text-decoration: underline;
+  }
+
+  mat-icon {
+    border-radius: 1000px;
+    background-color: #eef3e9;
+    margin-left: rem(16);
+    padding: 1px;
+  }
+}
+
+.app-spacer {
+  width: rem(24);
+
+  &--small {
+    width: rem(8);
+
+    @include screen-xs {
+      display: none;
+    }
+  }
+
+  @include screen-xs {
+    display: none;
+  }
+}

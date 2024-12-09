@@ -1,0 +1,50 @@
+<app-header></app-header>
+<app-top-nav></app-top-nav>
+<app-breadcrumbs></app-breadcrumbs>
+<app-html-wrapper [html]="statisticsText$ | async">
+  <ng-container header>
+    <app-filters></app-filters>
+    @if (statistics$ | async; as statistics) {
+    <div style="margin-top: 24px">
+      <app-table
+        [data]="statistics"
+        [columns]="statisticsColumns"
+        [sort]="statisticsSort"
+        [tableClassNames]="['app-table--vertical']"
+      ></app-table>
+    </div>
+    }
+  </ng-container>
+  <ng-container body>
+    @if (devicesSlice()) {
+    <div style="margin-top: 24px">
+      <app-table
+        [data]="devicesSlice()"
+        [columns]="deviceColumns"
+        [sort]="statisticsSort"
+        [tableClassNames]="['app-table--vertical']"
+      ></app-table>
+    </div>
+    @if ( devices() && devicesSlice()!.totalElements < devices()!.totalElements)
+    {
+    <button
+      (click)="devicesCount.set(devices()!.totalElements)"
+      class="app-button"
+      style="margin-top: 24px"
+      mat-stroked-button
+    >
+      {{ "Further devices" | translate }}
+    </button>
+    } }
+  </ng-container>
+</app-html-wrapper>
+@if (loading) {
+<div class="app-loading-overlay">
+  @if (progressInterval && progress < 1) {
+  <mat-progress-spinner [value]="progress * 100"></mat-progress-spinner>
+  } @else {
+  <mat-spinner></mat-spinner>
+  }
+</div>
+}
+<app-footer></app-footer>

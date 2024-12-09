@@ -1,0 +1,14 @@
+<div class="app-wrapper">
+  @if (headerHtml) {
+  <div [innerHTML]="headerHtml"></div>
+  }
+  <ng-content select="[header]"></ng-content>
+  @if (bodyHtml) {
+  <div [innerHTML]="bodyHtml"></div>
+  }
+  <ng-content select="[body]"></ng-content>
+  @if (footerHtml) {
+  <div [innerHTML]="footerHtml"></div>
+  }
+  <ng-content select="[footer]"></ng-content>
+</div>

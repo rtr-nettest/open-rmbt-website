@@ -55,7 +55,6 @@ export class TestService {
         : import("rmbtws" as any)
       promise.then((rmbtws) => {
         this.rmbtws = rmbtws
-        this.rmbtTest = rmbtws.RMBTTest
       })
     }
   }
@@ -95,8 +94,8 @@ export class TestService {
       this.rmbtws.TestEnvironment.init(this, null)
       const config = new this.rmbtws.RMBTTestConfig(
         "en",
-        `${environment.api.baseUrl}/RMBTControlServer`,
-        ""
+        environment.api.baseUrl,
+        `RMBTControlServer`
       )
       config.uuid = localStorage.getItem(UUID)
       config.timezone = dayjs.tz.guess()
@@ -104,8 +103,8 @@ export class TestService {
       const ctrl = new this.rmbtws.RMBTControlServerCommunication(config)
 
       this.startTimeMs = Date.now()
-      const websocketTest = new this.rmbtws.RMBTTest(config, ctrl)
-      websocketTest.startTest()
+      this.rmbtTest = new this.rmbtws.RMBTTest(config, ctrl)
+      this.rmbtTest.startTest()
     })
   }
 
@@ -138,7 +137,7 @@ export class TestService {
       })
     }
     const ping =
-      result.pingNano && result.pingNano !== -1
+      result?.pingNano && result?.pingNano !== -1
         ? Math.round((result.pingNano as number) / 1e6)
         : -1
     if (ping >= 0) {
@@ -148,11 +147,10 @@ export class TestService {
         time_ns: result.diffTime * 1e9,
       })
     }
-    const progress = Math.round(result.progress * 100)
 
     return {
       duration: result.diffTime,
-      progress,
+      progress: result.progress,
       time: Date.now(),
       ping,
       pings: this.pings,
@@ -277,6 +275,9 @@ export class TestService {
     this.remoteIp = remoteIp
     this.providerName = providerName
     this.testUuid = testUuid
+  }
+  setLocation(lat: number, lon: number) {
+    console.log("Location", lat, lon)
   }
   /** End RMBTws delegate */
 }

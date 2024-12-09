@@ -1,0 +1,24 @@
+@if(label) {
+<div class="app-container" [matMenuTriggerFor]="legend">
+  <div style="margin-bottom: 8px; text-align: right">{{ label }}</div>
+  <div
+    [style.background]="colorStops"
+    [style.height.px]="8"
+    [style.width]="'100%'"
+  ></div>
+</div>
+}
+
+<mat-menu #legend>
+  <div class="app-menu">
+    <p>{{ provider }}</p>
+    <p>{{ label }} {{ units }}</p>
+    <ul class="app-list">
+      @for (percent of percents; track $index) {
+      <li class="app-li">
+        <i [className]="percent.icon"></i><span>{{ percent.value }}%</span>
+      </li>
+      }
+    </ul>
+  </div>
+</mat-menu>

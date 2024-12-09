@@ -45,7 +45,7 @@ type ActiveControlGroup =
   | "operatorOptions"
   | "providerOptions"
 
-export type FiltersForm = {
+type FiltersForm = {
   networkMeasurementType: FormControl<NetworkMeasurementType | null>
   tiles: FormControl<ETileTypes | null>
   filters: FormGroup<{
@@ -106,14 +106,16 @@ export class FiltersComponent implements OnDestroy {
         this.mapTypesTitles.set(o.map_options, `${title}/${o.title}`)
       }
     }
+    const networkMeasurementType =
+      this.store.filters()?.networkMeasurementType ?? "mobile/download"
     this.form = this.fb.group({
       networkMeasurementType: new FormControl<NetworkMeasurementType>(
-        this.store.filters()?.networkMeasurementType ?? "mobile/download"
+        networkMeasurementType
       ),
       tiles: new FormControl<ETileTypes>(
         this.store.filters()?.tiles ?? this.tilesTypes[0]
       ),
-      filters: this.getMobileForm(data.mapInfo),
+      filters: this.getFiltersByType(networkMeasurementType),
     })
   }
 
@@ -123,15 +125,7 @@ export class FiltersComponent implements OnDestroy {
 
   changeNetworkMeasurementType(v: NetworkMeasurementType) {
     this.form.controls.networkMeasurementType.setValue(v)
-    if (v?.startsWith("mobile")) {
-      this.form.setControl("filters", this.getMobileForm(this.mapInfo))
-    } else if (v?.startsWith("wifi")) {
-      this.form.setControl("filters", this.getWlanForm(this.mapInfo))
-    } else if (v?.startsWith("browser")) {
-      this.form.setControl("filters", this.getBrowserForm(this.mapInfo))
-    } else {
-      this.form.setControl("filters", this.getAllForm(this.mapInfo))
-    }
+    this.form.setControl("filters", this.getFiltersByType(v))
   }
 
   changeTab(index: number, activeControlGroup?: ActiveControlGroup) {
@@ -158,6 +152,18 @@ export class FiltersComponent implements OnDestroy {
     value: string | number
   ) {
     return filter.options.find((o: any) => o[field] === value)?.title
+  }
+
+  private getFiltersByType(type: NetworkMeasurementType) {
+    if (type?.startsWith("mobile")) {
+      return this.getMobileForm(this.mapInfo)
+    } else if (type?.startsWith("wifi")) {
+      return this.getWlanForm(this.mapInfo)
+    } else if (type?.startsWith("browser")) {
+      return this.getBrowserForm(this.mapInfo)
+    } else {
+      return this.getAllForm(this.mapInfo)
+    }
   }
 
   private getAllForm(mapInfo: IMapInfo) {

@@ -6,7 +6,10 @@ import {
   distinctUntilChanged,
   map,
   Observable,
+  of,
   Subject,
+  switchMap,
+  takeUntil,
   tap,
   withLatestFrom,
 } from "rxjs"
@@ -75,17 +78,19 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   )
 
   ngOnInit(): void {
+    if (!globalThis.localStorage) {
+      return
+    }
     this.service
       .getSettings()
       .pipe(
-        map((settings) => {
+        switchMap((settings) => {
           if (
-            globalThis.localStorage &&
             settings.settings[0].terms_and_conditions.version.toString() !=
-              localStorage.getItem(TC_VERSION)
+            localStorage.getItem(TC_VERSION)
           ) {
             this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS])
-            return false
+            return of(null)
           }
           this.visualization$ = this.store.visualization$.pipe(
             withLatestFrom(this.store.error$, this.loopCount$),
@@ -99,9 +104,9 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
               return state
             })
           )
-          this.store.launchTest()
-          return true
-        })
+          return this.store.launchTest()
+        }),
+        takeUntil(this.stopped$)
       )
       .subscribe()
   }
@@ -122,6 +127,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   }
 
   protected goToResult = (state: ITestVisualizationState) => {
+    this.stopped$.next()
     this.router.navigate([
       this.i18nStore.activeLang,
       ERoutes.RESULT,

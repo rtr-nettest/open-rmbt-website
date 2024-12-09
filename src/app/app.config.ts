@@ -1,8 +1,4 @@
-import {
-  ApplicationConfig,
-  ChangeDetectorRef,
-  provideZoneChangeDetection,
-} from "@angular/core"
+import { ApplicationConfig, provideZoneChangeDetection } from "@angular/core"
 import { provideRouter, withComponentInputBinding } from "@angular/router"
 
 import { routes } from "./app.routes"
@@ -16,6 +12,30 @@ import localeEs from "@angular/common/locales/es"
 import localeFr from "@angular/common/locales/fr"
 import localeIt from "@angular/common/locales/it"
 import { DatePipe, registerLocaleData } from "@angular/common"
+import {
+  BarController,
+  BarElement,
+  CategoryScale,
+  Chart,
+  Filler,
+  LinearScale,
+  LineController,
+  LineElement,
+  PointElement,
+  TimeScale,
+} from "chart.js"
+
+Chart.register(
+  BarElement,
+  BarController,
+  LineElement,
+  PointElement,
+  LineController,
+  CategoryScale,
+  LinearScale,
+  TimeScale,
+  Filler
+)
 
 export async function provideConfig(): Promise<ApplicationConfig> {
   ;[localeCs, localeDe, localeEs, localeFr, localeIt].forEach((locale) =>
