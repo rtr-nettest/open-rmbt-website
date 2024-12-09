@@ -1,46 +1,46 @@
 <app-header></app-header>
 <app-top-nav></app-top-nav>
-@defer {
-<main *ngIf="visualization$ | async">
-  <ng-container *ngIf="(enableLoopMode$ | async) === true">
-    <ng-container *ngIf="loopCount$ | async as loopCount">
-      <h1
-        *ngIf="(loopWaiting$ | async) !== true"
-        class="app-title"
-        aria-live="polite"
-      >
-        {{ ("Measurement" | translate) + " " + loopCount }}
-      </h1>
-      <h1
-        *ngIf="(loopWaiting$ | async) === true"
-        class="app-title"
-        aria-live="polite"
-      >
-        {{ "Result of measurement %number - waiting" | translate }}
-      </h1>
-    </ng-container>
+<app-breadcrumbs></app-breadcrumbs>
+@defer { @if(visualization$ | async; as visualization) {
+
+<ng-container *ngIf="(enableLoopMode$ | async) === true">
+  <ng-container *ngIf="loopCount$ | async as loopCount">
+    <h1
+      *ngIf="(loopWaiting$ | async) !== true"
+      class="app-title"
+      aria-live="polite"
+    >
+      {{ ("Measurement" | translate) + " " + loopCount }}
+    </h1>
+    <h1
+      *ngIf="(loopWaiting$ | async) === true"
+      class="app-title"
+      aria-live="polite"
+    >
+      {{ "Result of measurement %number - waiting" | translate }}
+    </h1>
   </ng-container>
-  <div class="app-main">
-    <div class="app-progress-bar-wrapper">
-      <app-gauge
-        *ngIf="(loopWaiting$ | async) !== true; else loopWaitProgressBar"
-      ></app-gauge>
-    </div>
-    <app-spacer></app-spacer>
-    <app-interim-results></app-interim-results>
+</ng-container>
+<div class="app-main">
+  <div class="app-progress-bar-wrapper">
+    <app-gauge
+      *ngIf="(loopWaiting$ | async) !== true; else loopWaitProgressBar"
+    ></app-gauge>
   </div>
-  <ng-container *ngIf="(enableLoopMode$ | async) === true">
-    <app-recent-history
-      *ngIf="result$ | async as result"
-      class="app-padding"
-      [result]="result"
-      [excludeColumns]="['details']"
-      [interruptsTests]="true"
-      title="Recent measurements"
-    ></app-recent-history>
-  </ng-container>
-</main>
-}
+  <app-spacer></app-spacer>
+  <app-interim-results></app-interim-results>
+</div>
+<ng-container *ngIf="(enableLoopMode$ | async) === true">
+  <app-recent-history
+    *ngIf="result$ | async as result"
+    class="app-padding"
+    [result]="result"
+    [excludeColumns]="['details']"
+    [interruptsTests]="true"
+    title="Recent measurements"
+  ></app-recent-history>
+</ng-container>
+} }
 <app-footer></app-footer>
 
 <ng-template #loopWaitProgressBar>

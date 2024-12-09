@@ -5,17 +5,11 @@ import { RouterModule } from "@angular/router"
 import { ErrorStore } from "../../store/error-store.service"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Title } from "@angular/platform-browser"
-import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 
 @Component({
   selector: "app-page-not-found",
   standalone: true,
-  imports: [
-    BreadcrumbsComponent,
-    MatButtonModule,
-    RouterModule,
-    BreadcrumbsComponent,
-  ],
+  imports: [MatButtonModule, RouterModule],
   templateUrl: "./page-not-found.component.html",
   styleUrl: "./page-not-found.component.scss",
 })

@@ -35,12 +35,14 @@ import { GaugeComponent } from "../../components/gauge/gauge.component"
 import { InterimResultsComponent } from "../../components/interim-results/interim-results.component"
 import { RecentHistoryComponent } from "../../components/recent-history/recent-history.component"
 import { TestService } from "../../services/test.service"
+import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 
 @Component({
   selector: "app-test-screen",
   standalone: true,
   imports: [
     AsyncPipe,
+    BreadcrumbsComponent,
     DatePipe,
     HeaderComponent,
     FooterComponent,
@@ -52,6 +54,7 @@ import { TestService } from "../../services/test.service"
     TopNavComponent,
     TranslatePipe,
     SpacerComponent,
+    BreadcrumbsComponent,
   ],
   templateUrl: "./test-screen.component.html",
   styleUrl: "./test-screen.component.scss",

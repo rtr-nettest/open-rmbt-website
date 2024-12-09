@@ -42,6 +42,7 @@ export class TestService {
   private remoteIp?: string
   private providerName?: string
   private testUuid?: string
+  private stateChangeMs = 0
 
   constructor(
     private readonly http: HttpClient,
@@ -105,6 +106,9 @@ export class TestService {
       this.startTimeMs = Date.now()
       this.rmbtTest = new this.rmbtws.RMBTTest(config, ctrl)
       this.rmbtTest.startTest()
+      this.rmbtTest.onStateChange(() => {
+        this.stateChangeMs = Date.now()
+      })
     })
   }
 
@@ -112,28 +116,29 @@ export class TestService {
     IMeasurementPhaseState & IBasicNetworkInfo
   > {
     const result = this.rmbtTest?.getIntermediateResult()
+    const diffTimeMs = Date.now() - this.stateChangeMs
     const phase: EMeasurementStatus =
       result?.status?.toString() ?? EMeasurementStatus.NOT_STARTED
     const down =
       result?.downBitPerSec && result.downBitPerSec !== -1
         ? (result.downBitPerSec as number) / 1e6
         : -1
-    if (down >= 0) {
+    if (down >= 0 && phase === EMeasurementStatus.DOWN) {
       this.downs.push({
         speed: result.downBitPerSec,
         bytes: 0,
-        nsec: result.diffTime * 1e9,
+        nsec: diffTimeMs * 1e6,
       })
     }
     const up =
       result?.upBitPerSec && result.upBitPerSec !== -1
         ? (result.upBitPerSec as number) / 1e6
         : -1
-    if (up >= 0) {
+    if (up >= 0 && phase === EMeasurementStatus.UP) {
       this.ups.push({
         speed: result.upBitPerSec,
         bytes: 0,
-        nsec: result.diffTime * 1e9,
+        nsec: diffTimeMs * 1e6,
       })
     }
     const ping =
@@ -144,12 +149,12 @@ export class TestService {
       this.pings.push({
         value_server: result.pingNano,
         value: result.pingNano,
-        time_ns: result.diffTime * 1e9,
+        time_ns: diffTimeMs * 1e6,
       })
     }
 
     return {
-      duration: result.diffTime,
+      duration: diffTimeMs / 1e3,
       progress: result.progress,
       time: Date.now(),
       ping,

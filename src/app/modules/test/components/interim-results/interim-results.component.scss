@@ -28,13 +28,19 @@
   position: relative;
 
   app-test-chart {
-    height: 18vh;
+    height: rem(130);
     width: 40vw;
   }
 
   &--ping {
     app-test-chart {
-      height: 14vh;
+      height: rem(90);
+    }
+  }
+
+  @include screen-sm {
+    app-test-chart {
+      width: 80vw;
     }
   }
 }

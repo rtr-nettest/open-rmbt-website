@@ -28,9 +28,8 @@ import { TestService } from "../../services/test.service"
   standalone: true,
   imports: [NgIf, AsyncPipe],
 })
-export class TestChartComponent implements OnInit, OnDestroy {
+export class TestChartComponent {
   @Input() phase: ChartPhase = "download"
-  @Input() type: "line" | "bar" = "line"
 
   chart: TestChart | undefined
   visualization$!: Observable<ITestVisualizationState>
@@ -65,36 +64,6 @@ export class TestChartComponent implements OnInit, OnDestroy {
         return s
       })
     )
-  }
-
-  ngOnDestroy(): void {
-    window.removeEventListener("focus", this.setChartOnFocus)
-  }
-
-  ngOnInit(): void {
-    window.addEventListener("focus", this.setChartOnFocus)
-  }
-
-  private setChartOnFocus = () => {
-    if (
-      this.store.visualization$.value.currentPhaseName ===
-      EMeasurementStatus.SHOWING_RESULTS
-    ) {
-      return
-    }
-    this.service.getMeasurementState().then((state) => {
-      this.initChart()
-      const phaseTestState = new TestPhaseState()
-      if (this.phase === "ping") {
-        phaseTestState.setChartFromPings(state.pings)
-      } else {
-        const phaseResultsKey = this.phase === "download" ? "downs" : "ups"
-        phaseTestState.setRTRChartFromOverallSpeed(state[phaseResultsKey])
-      }
-      try {
-        this.chart?.setData(phaseTestState)
-      } catch (_) {}
-    })
   }
 
   private handleChanges(visualization: ITestVisualizationState) {
@@ -169,7 +138,7 @@ export class TestChartComponent implements OnInit, OnDestroy {
           this.chart = new TestLogChart(ctx!, this.i18nStore, this.phase)
         }
       } catch (e) {
-        console.warn(e)
+        console.warn(this.phase, e)
       }
     }
   }
