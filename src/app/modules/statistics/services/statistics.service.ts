@@ -34,17 +34,21 @@ export class StatisticsService {
     return this.http.post<IStatisticsResponse>(
       `${environment.api.cloud}/RMBTStatisticServer/statistics`,
       {
-        body: {
-          ...body,
-          ...(body.end_date
-            ? {
-                end_date: dayjs(body.end_date)
-                  .endOf("day")
-                  .utc()
-                  .format("YYYY-MM-DD HH:mm:ss"),
-              }
-            : {}),
-        },
+        ...body,
+        ...(body.end_date
+          ? {
+              end_date: dayjs(body.end_date)
+                .endOf("day")
+                .utc()
+                .format("YYYY-MM-DD HH:mm:ss"),
+            }
+          : {}),
+        ...(body.province && body.province < 0
+          ? { province: null }
+          : { province: body.province }),
+        ...(body.country === "AT"
+          ? { country: null }
+          : { country: body.country }),
       }
     )
   }

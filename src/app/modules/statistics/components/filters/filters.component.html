@@ -59,7 +59,7 @@
       <div class="app-spacer--small"></div>
       <div class="app-col">
         <mat-select class="app-select" formControlName="province" panelWidth="">
-          <mat-option class="app-option" [value]="null">{{
+          <mat-option class="app-option" [value]="-1">{{
             "All provinces" | translate
           }}</mat-option>
           @for (item of provinces; track $index) {

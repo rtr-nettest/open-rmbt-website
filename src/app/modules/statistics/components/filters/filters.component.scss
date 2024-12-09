@@ -13,6 +13,10 @@
 
   &:last-of-type {
     margin-right: 0;
+
+    @include screen-xs {
+      margin-top: rem(16);
+    }
   }
 }
 
