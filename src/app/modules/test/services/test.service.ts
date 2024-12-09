@@ -145,7 +145,7 @@ export class TestService {
       result?.pingNano && result?.pingNano !== -1
         ? Math.round((result.pingNano as number) / 1e6)
         : -1
-    if (ping >= 0) {
+    if (ping >= 0 && phase === EMeasurementStatus.PING) {
       this.pings.push({
         value_server: result.pingNano,
         value: result.pingNano,
