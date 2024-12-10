@@ -17,7 +17,6 @@ import {
   IStatisticsProvider,
 } from "../../interfaces/statistics-response.interface.interface"
 import { PercentileComponent } from "../../components/percentile/percentile.component"
-import { roundToSignificantDigits } from "../../../shared/util/math"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import dayjs from "dayjs"
 import { adjustTimePeriod } from "../../../shared/util/time"
@@ -30,6 +29,7 @@ import {
 } from "../../../shared/services/platform.service"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatButtonModule } from "@angular/material/button"
+import { ConversionService } from "../../../shared/services/conversion.service"
 
 @Component({
   selector: "app-statistics-screen",
@@ -51,6 +51,7 @@ import { MatButtonModule } from "@angular/material/button"
   styleUrl: "./statistics-screen.component.scss",
 })
 export class StatisticsScreenComponent extends SeoComponent implements OnInit {
+  conversion = inject(ConversionService)
   loading = false
   progress = 0
   progressInterval?: NodeJS.Timeout
@@ -184,14 +185,14 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
       header: "Down (Mbps)",
       columnDef: "down",
       transformValue: (value) =>
-        roundToSignificantDigits(value.quantile_down / 1000),
+        this.conversion.getSignificantDigits(value.quantile_down / 1000),
       justify: "flex-end",
     },
     {
       header: "Up (Mbps)",
       columnDef: "up",
       transformValue: (value) =>
-        roundToSignificantDigits(value.quantile_up / 1000),
+        this.conversion.getSignificantDigits(value.quantile_up / 1000),
       justify: "flex-end",
     },
     {

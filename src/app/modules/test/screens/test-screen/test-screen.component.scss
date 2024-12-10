@@ -1,0 +1,37 @@
+@import "core";
+
+.app-main {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  & > * {
+    flex: 0 0 44%;
+  }
+
+  app-spacer {
+    flex: 0 0 rem(10);
+  }
+
+  .app-progress-bar-wrapper {
+    margin: rem(80) 0;
+    width: rem(235);
+  }
+
+  @include screen-sm {
+    flex-direction: column;
+
+    app-spacer {
+      display: none;
+    }
+
+    .app-progress-bar-wrapper {
+      height: rem(248);
+    }
+
+    app-interim-results {
+      flex: 0 0 rem(400);
+    }
+  }
+}

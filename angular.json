@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "allowedCommonJsDependencies": ["maplibre-gl", "dayjs"],
+            "allowedCommonJsDependencies": ["dayjs", "maplibre-gl", "rmbtws"],
             "outputPath": "dist/open-rmbt-angular",
             "index": "src/index.dev.html",
             "browser": "src/main.ts",

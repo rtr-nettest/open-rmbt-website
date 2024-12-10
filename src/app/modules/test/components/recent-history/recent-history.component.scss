@@ -1,0 +1,21 @@
+@import "core.scss";
+
+:host.app-padding {
+  .app-title {
+    margin: rem(64) rem(32) rem(32);
+  }
+  app-table {
+    display: block;
+    margin: rem(32);
+  }
+}
+
+:host.app-padding--hidden-menu {
+  .app-title {
+    margin: rem(64) 0 rem(32);
+  }
+  app-table {
+    display: block;
+    margin: rem(32) 0;
+  }
+}

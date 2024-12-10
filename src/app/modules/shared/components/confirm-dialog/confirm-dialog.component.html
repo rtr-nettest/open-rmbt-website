@@ -1,0 +1,24 @@
+<div class="app-dialog">
+  <p [innerHTML]="text | translate"></p>
+  <footer class="app-footer">
+    <ng-container *ngIf="canCancel; else simpleOk">
+      <button mat-button color="primary" (click)="close()">
+        {{ cancelButtonText | translate }}
+      </button>
+      <button
+        mat-flat-button
+        type="submit"
+        color="primary"
+        (click)="close(true)"
+      >
+        {{ proceedButtonText | translate }}
+      </button>
+    </ng-container>
+  </footer>
+</div>
+
+<ng-template #simpleOk>
+  <button *transloco="let t" mat-button color="primary" (click)="close(true)">
+    {{ okButtonText | translate }}
+  </button>
+</ng-template>
