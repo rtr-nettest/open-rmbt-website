@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from "@angular/core"
+import { Injectable } from "@angular/core"
 import {
   BehaviorSubject,
   concatMap,
@@ -17,8 +17,6 @@ import { IBasicNetworkInfo } from "../interfaces/basic-network-info.interface"
 import { ITestVisualizationState } from "../interfaces/test-visualization-state.interface"
 import { IMeasurementPhaseState } from "../interfaces/measurement-phase-state.interface"
 import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interface"
-import { MessageService } from "../../shared/services/message.service"
-import { I18nStore } from "../../i18n/store/i18n.store"
 import { TestVisualizationState } from "../dto/test-visualization-state.dto"
 import { TestPhaseState } from "../dto/test-phase-state.dto"
 import { BasicNetworkInfo } from "../dto/basic-network-info.dto"
@@ -56,10 +54,7 @@ export class TestStore {
   }
 
   constructor(
-    private i18nStore: I18nStore,
     private historyStore: HistoryStore,
-    private message: MessageService,
-    private ngZone: NgZone,
     private router: Router,
     private service: TestService
   ) {

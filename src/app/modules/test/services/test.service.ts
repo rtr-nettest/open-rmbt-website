@@ -145,12 +145,16 @@ export class TestService {
       result?.pingNano && result?.pingNano !== -1
         ? Math.round((result.pingNano as number) / 1e6)
         : -1
-    if (ping >= 0 && phase === EMeasurementStatus.PING) {
-      this.pings.push({
-        value_server: result.pingNano,
-        value: result.pingNano,
-        time_ns: diffTimeMs * 1e6,
-      })
+    const pings = []
+    if (phase === EMeasurementStatus.DOWN && result.pings) {
+      const startTimeNs = result.pings[0]?.timeNs || 0
+      for (const p of result.pings) {
+        pings.push({
+          value_server: p.server,
+          value: p.client,
+          time_ns: p.timeNs - startTimeNs,
+        })
+      }
     }
 
     return {
@@ -158,7 +162,7 @@ export class TestService {
       progress: result.progress,
       time: Date.now(),
       ping,
-      pings: this.pings,
+      pings,
       down,
       downs: this.downs ?? [],
       up,
