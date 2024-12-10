@@ -15,6 +15,7 @@ import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import {
   IStatisticsDevice,
   IStatisticsProvider,
+  IStatisticsResponse,
 } from "../../interfaces/statistics-response.interface.interface"
 import { PercentileComponent } from "../../components/percentile/percentile.component"
 import { ERoutes } from "../../../shared/constants/routes.enum"
@@ -52,6 +53,7 @@ import { ConversionService } from "../../../shared/services/conversion.service"
 })
 export class StatisticsScreenComponent extends SeoComponent implements OnInit {
   conversion = inject(ConversionService)
+  footerColumns = ["name", "down", "up", "latency", "count"]
   loading = false
   progress = 0
   progressInterval?: NodeJS.Timeout
@@ -131,8 +133,11 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
             country,
           } = this.store.filters
           let params = "pinned=true"
+
           if (type == "mobile") {
-            params += `&mobile_provider_name=${provider.name}`
+            if (provider) {
+              params += `&mobile_provider_name=${provider.name}`
+            }
             if (
               network_type_group &&
               network_type_group != "all" &&
@@ -141,7 +146,9 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
               params += `&cat_technology=${network_type_group}`
             }
           } else {
-            params += `&provider_name=${provider.name}`
+            if (provider) {
+              params += `&provider_name=${provider.name}`
+            }
             if (type == "browser") {
               params += `&cat_technology=LAN`
             } else {
@@ -307,6 +314,15 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
                 content: response.devices,
                 totalElements: response.devices.length,
               })
+              this.statisticsColumns = this.statisticsColumns.map((c) => {
+                return {
+                  ...c,
+                  footer: this.getFooterValueByColumnName(
+                    c,
+                    response
+                  )?.toString(),
+                }
+              })
               this.devicesCount.set(10)
               return {
                 content: response.providers,
@@ -321,5 +337,28 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
         })
       )
       .subscribe()
+  }
+
+  private getFooterValueByColumnName(
+    col: ITableColumn<IStatisticsProvider>,
+    data: IStatisticsResponse
+  ) {
+    switch (col.columnDef) {
+      case "down":
+        return this.conversion.getSignificantDigits(
+          data.providers_sums.quantile_down / 1000
+        )
+      case "up":
+        return this.conversion.getSignificantDigits(
+          data.providers_sums.quantile_up / 1000
+        )
+      case "latency":
+        return Math.round(data.providers_sums.quantile_ping / 1e6)
+      case "count":
+        return data.providers_sums.count
+      case "name":
+      default:
+        return ""
+    }
   }
 }

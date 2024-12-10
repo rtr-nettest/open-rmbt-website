@@ -67,6 +67,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() shouldHideHeader: boolean = false
   @Input({ required: true }) sort?: ISort
   @Input() subHeaderColumns: ITableColumn[] = []
+  @Input() footerColumns: string[] = []
 
   @Output() toggleExpandableRow = new EventEmitter<string | number>()
 
