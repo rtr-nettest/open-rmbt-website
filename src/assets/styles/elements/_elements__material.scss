@@ -13,7 +13,14 @@
   .mat-mdc-tab-body {
     float: left;
     width: 50%;
-    height: 300px;
+
+    &-content {
+      max-height: rem(400);
+
+      &::-webkit-scrollbar {
+        visibility: hidden;
+      }
+    }
   }
 }
 

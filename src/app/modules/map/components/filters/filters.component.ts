@@ -15,21 +15,16 @@ import {
 } from "@angular/forms"
 import { MatRadioModule } from "@angular/material/radio"
 import { MatButtonModule } from "@angular/material/button"
-import { Observable, Subject, takeUntil, tap } from "rxjs"
+import { Observable, Subject } from "rxjs"
 import { MatTabGroup, MatTabsModule } from "@angular/material/tabs"
 import { NetworkMeasurementType } from "../../interfaces/map-type.interface"
 import { IMapInfo } from "../../interfaces/map-info.interface"
 import { MatIconModule } from "@angular/material/icon"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
-import {
-  AsyncPipe,
-  NgIf,
-  NgTemplateOutlet,
-  TitleCasePipe,
-} from "@angular/common"
+import { NgIf, NgTemplateOutlet, TitleCasePipe } from "@angular/common"
 import { IMapFilter } from "../../interfaces/map-filter.interface"
-import { MAT_BOTTOM_SHEET_DATA } from "@angular/material/bottom-sheet"
 import { MapStoreService } from "../../store/map-store.service"
+import { MAT_DIALOG_DATA } from "@angular/material/dialog"
 
 export type FilterSheetData = {
   mapInfo: IMapInfo
@@ -96,7 +91,7 @@ export class FiltersComponent implements OnDestroy {
   }
 
   constructor(
-    @Inject(MAT_BOTTOM_SHEET_DATA) public data: FilterSheetData,
+    @Inject(MAT_DIALOG_DATA) public data: FilterSheetData,
     private readonly store: MapStoreService
   ) {
     this.mapInfo = data.mapInfo

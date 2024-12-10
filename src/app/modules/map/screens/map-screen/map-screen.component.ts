@@ -33,14 +33,12 @@ import {
   FiltersComponent,
   FilterSheetData,
 } from "../../components/filters/filters.component"
-import {
-  MatBottomSheet,
-  MatBottomSheetModule,
-} from "@angular/material/bottom-sheet"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { IMapInfo } from "../../interfaces/map-info.interface"
 import { HeatmapLegendComponent } from "../../components/heatmap-legend/heatmap-legend.component"
 import { SearchComponent } from "../../components/search/search.component"
+import { MatDialog, MatDialogModule } from "@angular/material/dialog"
+import { ScrollStrategyOptions } from "@angular/cdk/overlay"
 
 @Component({
   selector: "app-map-screen",
@@ -52,7 +50,7 @@ import { SearchComponent } from "../../components/search/search.component"
     TopNavComponent,
     BreadcrumbsComponent,
     FooterComponent,
-    MatBottomSheetModule,
+    MatDialogModule,
     SearchComponent,
   ],
   templateUrl: "./map-screen.component.html",
@@ -82,7 +80,8 @@ export class MapScreenComponent extends SeoComponent {
   activeLayer = this.mapService.getHeatmapSource({
     networkMeasurementType: "mobile/download",
   })
-  private readonly bottomSheet = inject(MatBottomSheet)
+  private readonly dialog = inject(MatDialog)
+  private readonly scrollStrategyOptions = inject(ScrollStrategyOptions)
 
   switchLayers(event: MapSourceOptions) {
     this.mapSourceOptions = event
@@ -102,12 +101,13 @@ export class MapScreenComponent extends SeoComponent {
       this.map.addControl(
         new FiltersControl(this.i18nStore, () => {
           this.zone.run(() => {
-            this.bottomSheet.open(FiltersComponent, {
+            this.dialog.open(FiltersComponent, {
               data: {
                 mapInfo: this.mapInfo,
                 onFiltersChange: (filters: MapSourceOptions) =>
                   this.switchLayers(filters),
               } as FilterSheetData,
+              scrollStrategy: this.scrollStrategyOptions.noop(),
             })
           })
         })

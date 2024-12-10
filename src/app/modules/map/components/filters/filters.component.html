@@ -7,6 +7,13 @@
       <ng-container *ngTemplateOutlet="formTpl"></ng-container>
     </mat-tab>
   </mat-tab-group>
+  @if (tabs.selectedIndex == 1) {
+  <footer class="app-footer">
+    <button (click)="applyFilters()" mat-flat-button class="app-button">
+      {{ "Accept" | translate }}
+    </button>
+  </footer>
+  }
 </div>
 
 <!-- Menu template -->
@@ -138,11 +145,7 @@
 <!-- Form Template -->
 
 <ng-template #formTpl>
-  <form
-    [formGroup]="this.form"
-    (submit)="applyFilters()"
-    style="padding-bottom: 56px"
-  >
+  <form [formGroup]="this.form">
     @if (activeControlGroup == "tiles") {
     <h6>{{ "Layers" | translate }}</h6>
     <mat-radio-group formControlName="tiles">
@@ -233,10 +236,5 @@
       }
     </div>
     }
-    <footer class="app-footer">
-      <button mat-flat-button class="app-button">
-        {{ "Accept" | translate }}
-      </button>
-    </footer>
   </form>
 </ng-template>

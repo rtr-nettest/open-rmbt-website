@@ -1,6 +1,13 @@
 @import "core";
 
+:host {
+  display: block;
+  padding: 1rem;
+}
+
 .app-container {
+  display: flex;
+  flex-direction: column;
   overflow-x: hidden;
   width: 100%;
 }
@@ -27,33 +34,25 @@ mat-icon {
 }
 
 .app-footer {
-  background: var(
-    --mat-bottom-sheet-container-background-color,
-    var(--mat-app-surface-container-low)
-  );
+  align-items: center;
+  background: var(--mdc-dialog-container-color, var(--mat-app-surface, white));
   display: flex;
   justify-content: center;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: rem(4);
+  flex: 0 0 rem(64);
+  padding: rem(16) 0 0;
   z-index: 2;
 }
 
-.app-filters {
-  height: 244px;
-  overflow: auto;
-}
-
 h6 {
-  background: var(
-    --mat-bottom-sheet-container-background-color,
-    var(--mat-app-surface-container-low)
-  );
+  background: var(--mdc-dialog-container-color, var(--mat-app-surface, white));
   position: sticky;
   padding: rem(10);
   top: 0;
   left: 0;
   z-index: 1;
+  width: min(320px, calc(100vw - 5rem));
+}
+
+.app-single-tab-group {
+  flex: 1 0 calc(100% - 64px);
 }
