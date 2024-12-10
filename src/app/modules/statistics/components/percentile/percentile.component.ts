@@ -1,6 +1,6 @@
-import { Component, Input } from "@angular/core"
+import { Component, Input, ViewChild } from "@angular/core"
 import { IDynamicComponent } from "../../../shared/interfaces/dynamic-component.interface"
-import { MatMenuModule } from "@angular/material/menu"
+import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu"
 
 export type PercentileParametes = {
   red: number | undefined
@@ -22,6 +22,7 @@ export type PercentileParametes = {
 export class PercentileComponent
   implements IDynamicComponent<PercentileParametes>
 {
+  @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger
   @Input() set parameters(value: PercentileParametes) {
     this.label = value.label
     this.provider = value.provider
@@ -103,4 +104,12 @@ export class PercentileComponent
   percents: { value: number; icon: string }[] = []
   provider: string = ""
   units: string = ""
+
+  openMenu() {
+    this.trigger.openMenu()
+  }
+
+  closeMenu() {
+    this.trigger.closeMenu()
+  }
 }

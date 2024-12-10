@@ -1,5 +1,10 @@
 @if(label) {
-<div class="app-container" [matMenuTriggerFor]="legend">
+<div
+  class="app-container"
+  [matMenuTriggerFor]="legend"
+  (mouseenter)="openMenu()"
+  (mouseleave)="closeMenu()"
+>
   <div style="margin-bottom: 8px; text-align: right">{{ label }}</div>
   <div
     [style.background]="colorStops"
@@ -9,7 +14,7 @@
 </div>
 }
 
-<mat-menu #legend>
+<mat-menu #legend [hasBackdrop]="false">
   <div class="app-menu">
     <p>{{ provider }}</p>
     <p>{{ label }} {{ units }}</p>
