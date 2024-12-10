@@ -107,7 +107,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
               return state
             })
           )
-          return this.store.launchTest()
+          return this.service.launchTest()
         }),
         takeUntil(this.stopped$)
       )

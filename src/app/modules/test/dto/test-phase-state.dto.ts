@@ -1,11 +1,11 @@
 import dayjs from "dayjs"
-import { STATE_UPDATE_TIMEOUT } from "../store/test.store"
 import { ITestPhaseState } from "../interfaces/test-phase-state.interface"
 import { ETestStatuses } from "../constants/test-statuses.enum"
 import { EMeasurementStatus } from "../constants/measurement-status.enum"
 import { IPing } from "../interfaces/measurement-result.interface"
 import { IOverallResult } from "../interfaces/overall-result.interface"
 import { ConversionService } from "../../shared/services/conversion.service"
+import { STATE_UPDATE_TIMEOUT } from "../constants/numbers"
 
 export class TestPhaseState implements ITestPhaseState {
   counter: number = -1

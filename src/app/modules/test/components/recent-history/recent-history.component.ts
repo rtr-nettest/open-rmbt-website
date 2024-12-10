@@ -106,7 +106,7 @@ export class RecentHistoryComponent implements OnChanges {
     if (!loopUuid.startsWith("L")) {
       const navFunc = () => {
         this.testService.abortMeasurement()
-        this.testStore.disableLoopMode()
+        this.testService.disableLoopMode()
         this.router.navigateByUrl(
           "/" + ERoutes.RESULT.replace(":testUuid", loopUuid)
         )

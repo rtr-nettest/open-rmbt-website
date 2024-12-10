@@ -8,6 +8,9 @@ import { AsyncPipe, NgIf } from "@angular/common"
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 import { TestChartComponent } from "../test-chart/test-chart.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
+import { LonlatPipe } from "../../../shared/pipes/lonlat.pipe"
+import { IBasicNetworkInfo } from "../../interfaces/basic-network-info.interface"
+import { ITestVisualizationState } from "../../interfaces/test-visualization-state.interface"
 
 @Component({
   selector: "app-interim-results",
@@ -17,6 +20,7 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
   standalone: true,
   imports: [
     AsyncPipe,
+    LonlatPipe,
     MatProgressSpinnerModule,
     NgIf,
     TestChartComponent,
@@ -24,7 +28,8 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
   ],
 })
 export class InterimResultsComponent {
-  visualization$!: Observable<any>
+  basicNetworkInfo$!: Observable<IBasicNetworkInfo>
+  visualization$!: Observable<ITestVisualizationState>
 
   ping: string = "-"
   download: string = "-"
@@ -37,6 +42,7 @@ export class InterimResultsComponent {
     private i18nStore: I18nStore,
     private store: TestStore
   ) {
+    this.basicNetworkInfo$ = this.store.basicNetworkInfo$
     this.visualization$ = this.store.visualization$.pipe(
       tap((state) => {
         const locale = this.i18nStore.activeLang

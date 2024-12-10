@@ -63,5 +63,32 @@
         ></app-test-chart>
       </div>
     </div>
+    @if (basicNetworkInfo$ | async; as info) {
+    <div class="app-container">
+      <table class="app-table">
+        <tr class="app-row">
+          <th>{{ "Coordinates" | translate }}</th>
+          <td>
+            @if (info.coordinates) {
+            {{ info.coordinates | lonlat }}} @else {
+            {{ "Not avaialable" | translate }}
+            }
+          </td>
+        </tr>
+        <tr class="app-row">
+          <th class="app-cell">{{ "Testserver" | translate }}</th>
+          <td class="app-cell">{{ info.serverName }}</td>
+        </tr>
+        <tr class="app-row">
+          <th class="app-cell">{{ "IP" | translate }}</th>
+          <td class="app-cell">{{ info.ipAddress }}</td>
+        </tr>
+        <tr class="app-row">
+          <th class="app-cell">{{ "Provider" | translate }}</th>
+          <td class="app-cell">{{ info.providerName }}</td>
+        </tr>
+      </table>
+    </div>
+    }
   </ng-container>
 </div>

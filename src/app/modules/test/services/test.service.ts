@@ -8,7 +8,15 @@ import {
 } from "@angular/core"
 import { IUserSetingsResponse } from "../interfaces/user-settings-response.interface"
 import { environment } from "../../../../environments/environment"
-import { firstValueFrom, Observable, of, tap } from "rxjs"
+import {
+  concatMap,
+  from,
+  interval,
+  map,
+  Observable,
+  of,
+  withLatestFrom,
+} from "rxjs"
 import { isPlatformBrowser } from "@angular/common"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
@@ -19,18 +27,27 @@ import { EMeasurementStatus } from "../constants/measurement-status.enum"
 import { IPing } from "../interfaces/measurement-result.interface"
 import { IOverallResult } from "../interfaces/overall-result.interface"
 import { I18nStore } from "../../i18n/store/i18n.store"
-import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
 import { IPaginator } from "../../tables/interfaces/paginator.interface"
 import { v4 } from "uuid"
+import { TestStore } from "../store/test.store"
+import { ITestVisualizationState } from "../interfaces/test-visualization-state.interface"
+import { TestVisualizationState } from "../dto/test-visualization-state.dto"
+import { ILoopModeInfo } from "../interfaces/measurement-registration-request.interface"
+import { Router } from "@angular/router"
+import { ERoutes } from "../../shared/constants/routes.enum"
+import { TestPhaseState } from "../dto/test-phase-state.dto"
+import { BasicNetworkInfo } from "../dto/basic-network-info.dto"
+import { TestRepositoryService } from "../repository/test-repository.service"
+import { UUID } from "../constants/strings"
+import { STATE_UPDATE_TIMEOUT } from "../constants/numbers"
 dayjs.extend(utc)
 dayjs.extend(tz)
-
-export const UUID = "RMBTuuid"
 
 @Injectable({
   providedIn: "root",
 })
 export class TestService {
+  private coordinates?: [number, number]
   private downs: IOverallResult[] = []
   private ups: IOverallResult[] = []
   private pings: IPing[] = []
@@ -48,6 +65,9 @@ export class TestService {
     private readonly http: HttpClient,
     private readonly i18nStore: I18nStore,
     private readonly ngZone: NgZone,
+    private readonly repo: TestRepositoryService,
+    private readonly router: Router,
+    private readonly testStore: TestStore,
     @Inject(PLATFORM_ID) private readonly platformId: object
   ) {
     if (isPlatformBrowser(this.platformId)) {
@@ -60,56 +80,128 @@ export class TestService {
     }
   }
 
-  getSettings(): Observable<IUserSetingsResponse> {
-    if (!isPlatformBrowser(this.platformId)) {
-      return of({ settings: [] } as unknown as IUserSetingsResponse)
-    }
-    const uuid = localStorage.getItem(UUID) ?? v4()
-    return this.http
-      .post<IUserSetingsResponse>(
-        `${environment.api.baseUrl}/RMBTControlServer/settings`,
-        {
-          language: "en",
-          name: "RTR-Netztest",
-          terms_and_conditions_accepted: "true",
-          terms_and_conditions_accepted_version: 6,
-          type: "DESKTOP",
-          version_code: "1",
-          version_name: "0.1",
-        }
-      )
-      .pipe(
-        tap((settings) => {
-          localStorage.setItem(UUID, settings?.settings[0]?.uuid ?? uuid)
-        })
-      )
-  }
-
   launchTest() {
     this.resetState()
     if (!isPlatformBrowser(this.platformId) || !this.rmbtws) {
       console.error("RMBTws not loaded")
-      return
+      return of(null)
     }
-    return this.ngZone.runOutsideAngular(() => {
-      this.rmbtws.TestEnvironment.init(this, null)
-      const config = new this.rmbtws.RMBTTestConfig(
-        "en",
-        environment.api.baseUrl,
-        `RMBTControlServer`
-      )
-      config.uuid = localStorage.getItem(UUID)
-      config.timezone = dayjs.tz.guess()
-      config.additionalSubmissionParameters = { network_type: 0 }
-      const ctrl = new this.rmbtws.RMBTControlServerCommunication(config)
+    if (!this.testStore.enableLoopMode$.value) {
+      this.ngZone.runOutsideAngular(() => {
+        this.rmbtws.TestEnvironment.init(this, null)
+        const config = new this.rmbtws.RMBTTestConfig(
+          "en",
+          environment.api.baseUrl,
+          `RMBTControlServer`
+        )
+        config.uuid = localStorage.getItem(UUID)
+        config.timezone = dayjs.tz.guess()
+        config.additionalSubmissionParameters = { network_type: 0 }
+        const ctrl = new this.rmbtws.RMBTControlServerCommunication(config)
 
-      this.startTimeMs = Date.now()
-      this.rmbtTest = new this.rmbtws.RMBTTest(config, ctrl)
-      this.rmbtTest.startTest()
-      this.rmbtTest.onStateChange(() => {
-        this.stateChangeMs = Date.now()
+        this.startTimeMs = Date.now()
+        this.rmbtTest = new this.rmbtws.RMBTTest(config, ctrl)
+        this.rmbtTest.startTest()
+        this.rmbtTest.onStateChange(() => {
+          this.stateChangeMs = Date.now()
+        })
       })
-    })
+    }
+    return interval(STATE_UPDATE_TIMEOUT).pipe(
+      concatMap(() => from(this.getMeasurementState())),
+      withLatestFrom(this.testStore.visualization$),
+      map(([state, vis]) => this.setTestState(state, vis))
+    )
+  }
+
+  private setTestState = (
+    phaseState: IMeasurementPhaseState & IBasicNetworkInfo,
+    oldVisualization: ITestVisualizationState
+  ) => {
+    const oldPhaseName = oldVisualization.currentPhaseName
+    const oldPhaseIsOfFinishType =
+      oldPhaseName === EMeasurementStatus.END ||
+      oldPhaseName === EMeasurementStatus.ERROR ||
+      oldPhaseName === EMeasurementStatus.ABORTED
+    let newState
+    if (phaseState.phase !== oldPhaseName && oldPhaseIsOfFinishType) {
+      newState = new TestVisualizationState()
+    } else {
+      newState = oldVisualization
+    }
+    newState = TestVisualizationState.from(newState, phaseState)
+    this.testStore.visualization$.next(newState)
+    this.testStore.basicNetworkInfo$.next(phaseState)
+    return newState
+  }
+
+  launchCertifiedTest() {
+    const loopUuid = v4()
+    const loopCounter = 1
+    this.testStore.loopUuid$.next(loopUuid)
+    this.testStore.loopCounter$.next(loopCounter)
+    this.testStore.enableLoopMode$.next(true)
+    this.testStore.isCertifiedMeasurement$.next(true)
+    this.testStore.testIntervalMinutes$.next(
+      environment.certifiedTests.interval
+    )
+    const loopModeInfo: ILoopModeInfo | undefined = {
+      max_delay: this.testStore.testIntervalMinutes$.value ?? 0,
+      max_tests: environment.certifiedTests.count,
+      test_counter: loopCounter,
+      loop_uuid: loopUuid,
+    }
+    // TODO: Certified measurements
+    // window.electronAPI.onMaxTestsReached(() => this.maxTestsReached$.next(true))
+    // window.electronAPI.scheduleLoop(this.fullTestIntervalMs, loopModeInfo)
+    return loopModeInfo
+  }
+
+  launchLoopTest(interval: number) {
+    const loopUuid = v4()
+    const loopCounter = 1
+    this.testStore.loopUuid$.next(loopUuid)
+    this.testStore.loopCounter$.next(loopCounter)
+    this.testStore.enableLoopMode$.next(true)
+    this.testStore.testIntervalMinutes$.next(interval)
+    const loopModeInfo: ILoopModeInfo | undefined = {
+      max_delay: this.testStore.testIntervalMinutes$.value ?? 0,
+      test_counter: loopCounter,
+      loop_uuid: loopUuid,
+    }
+    // TODO: Loop mode
+    // window.electronAPI.scheduleLoop(this.fullTestIntervalMs, loopModeInfo)
+    this.router.navigate(["/", ERoutes.LOOP])
+  }
+
+  disableLoopMode() {
+    this.testStore.enableLoopMode$.next(false)
+    this.testStore.isCertifiedMeasurement$.next(false)
+    this.testStore.maxTestsReached$.next(false)
+    this.testStore.loopCounter$.next(1)
+  }
+
+  private resetState() {
+    this.testStore.basicNetworkInfo$.next(new BasicNetworkInfo())
+    this.testStore.visualization$.next(new TestVisualizationState())
+    this.testStore.simpleHistoryResult$.next(null)
+    this.testStore.error$.next(null)
+    this.downs = []
+    this.ups = []
+    this.pings = []
+    this.startTimeMs = 0
+    this.endTimeMs = 0
+    this.serverName = undefined
+    this.remoteIp = undefined
+    this.providerName = undefined
+    this.testUuid = undefined
+  }
+
+  getSettings(): Observable<IUserSetingsResponse> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return of({ settings: [] } as unknown as IUserSetingsResponse)
+    }
+    return this.repo.getSettings()
   }
 
   async getMeasurementState(): Promise<
@@ -172,83 +264,44 @@ export class TestService {
       ipAddress: this.remoteIp ?? "-",
       serverName: this.serverName ?? "-",
       providerName: this.providerName ?? "-",
+      coordinates: this.coordinates,
       startTimeMs: this.startTimeMs,
       endTimeMs: this.endTimeMs,
     }
   }
 
-  async getMeasurementResult(uuid: string) {
-    const body = {
-      test_uuid: uuid,
-      timezone: dayjs.tz.guess(),
-      capabilities: { classification: { count: 4 } },
+  getMeasurementResult(testUuid: string | null) {
+    if (!testUuid || this.testStore.error$.value) {
+      return of(null)
     }
-    let response = (await firstValueFrom(
-      this.http.post(
-        `${environment.api.baseUrl}/RMBTControlServer/testresult`,
-        body
-      )
-    )) as any
-    if (response?.testresult?.length) {
-      response = response.testresult[0]
-    }
-
-    // Test metadata
-
-    let testResultDetail = (await firstValueFrom(
-      this.http.post(
-        `${environment.api.baseUrl}/RMBTControlServer/testresultdetail`,
-        {
-          ...body,
-          language: this.i18nStore.activeLang,
-        }
-      )
-    )) as any
-
-    // Graphs
-
-    let openTestsResponse: any
-    if (response && response.status != "error") {
-      openTestsResponse = await firstValueFrom(
-        this.http.get(
-          `${environment.baseUrl}/RMBTStatisticServer/opentests/${response.open_test_uuid}?capabilities={"classification":{"count":4}}`
+    return from(this.repo.getResult(testUuid)).pipe(
+      map((result) => {
+        this.testStore.simpleHistoryResult$.next(result)
+        const newPhase = new TestPhaseState({
+          phase: EMeasurementStatus.SHOWING_RESULTS,
+          down: result.downloadKbit / 1000,
+          up: result.uploadKbit / 1000,
+          ping: result.ping / 1e6,
+        })
+        const newState = TestVisualizationState.fromHistoryResult(
+          result,
+          this.testStore.visualization$.value,
+          newPhase
         )
-      )
-    }
-
-    return SimpleHistoryResult.fromRTRMeasurementResult(
-      uuid,
-      response,
-      openTestsResponse,
-      testResultDetail
+        this.testStore.visualization$.next(newState)
+        this.testStore.basicNetworkInfo$.next({
+          serverName: result.measurementServerName,
+          ipAddress: result.ipAddress,
+          providerName: result.providerName,
+          coordinates: result.coordinates,
+        })
+        return result
+      })
     )
   }
 
   async getMeasurementHistory(paginator?: IPaginator) {
-    const body: { [key: string]: any } = {
-      language: this.i18nStore.activeLang,
-      timezone: dayjs.tz.guess(),
-      uuid: localStorage.getItem(UUID),
-      result_offset: paginator?.offset,
-      include_failed_tests: true,
-    }
-    if (paginator?.limit) {
-      body["result_limit"] = paginator.limit
-    }
-    const resp: any = await firstValueFrom(
-      this.http.post(
-        `${environment.api.baseUrl}/RMBTControlServer/history`,
-        body
-      )
-    )
-    if (resp?.error.length) {
-      throw new Error(resp.error)
-    }
-    if (resp?.history.length) {
-      return resp.history.map((hi: any) =>
-        SimpleHistoryResult.fromRTRHistoryResult(hi)
-      )
-    }
+    return this.repo.getHistory(paginator)
   }
 
   updateStartTime() {
@@ -260,20 +313,9 @@ export class TestService {
     // TODO:
   }
 
-  private resetState() {
-    this.downs = []
-    this.ups = []
-    this.pings = []
-    this.startTimeMs = 0
-    this.endTimeMs = 0
-    this.serverName = undefined
-    this.remoteIp = undefined
-    this.providerName = undefined
-    this.testUuid = undefined
-  }
-
   /** RMBTws delegate */
   draw() {}
+
   updateInfo(
     serverName: string,
     remoteIp: string,
@@ -285,8 +327,9 @@ export class TestService {
     this.providerName = providerName
     this.testUuid = testUuid
   }
+
   setLocation(lat: number, lon: number) {
-    console.log("Location", lat, lon)
+    this.coordinates = [lon, lat]
   }
   /** End RMBTws delegate */
 }

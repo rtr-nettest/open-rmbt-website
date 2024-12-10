@@ -139,7 +139,10 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
           THRESHOLD_PING,
           "smallerBetter"
         ),
-      testResultDetail?.testresultdetail
+      testResultDetail?.testresultdetail,
+      response?.geo_long && response?.geo_lat
+        ? [response.geo_long, response.geo_lat]
+        : undefined
     )
   }
 
@@ -160,6 +163,7 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
     public downloadClass?: number,
     public uploadClass?: number,
     public pingClass?: number,
-    public detailedHistoryResult?: IDetailedHistoryResultItem[]
+    public detailedHistoryResult?: IDetailedHistoryResultItem[],
+    public coordinates?: [number, number]
   ) {}
 }

@@ -4,4 +4,5 @@ export class BasicNetworkInfo implements IBasicNetworkInfo {
   serverName = "-"
   providerName = "-"
   ipAddress = "-"
+  coordinates?: [number, number]
 }

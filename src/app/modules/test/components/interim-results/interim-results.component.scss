@@ -44,3 +44,18 @@
     }
   }
 }
+
+.app-table {
+  font-size: rem(16);
+  margin-bottom: rem(40);
+  .app-row {
+    padding-bottom: rem(10);
+  }
+  .app-cell {
+    text-align: left;
+  }
+  th {
+    color: $color-primary;
+    padding-right: rem(12);
+  }
+}
