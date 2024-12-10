@@ -56,3 +56,8 @@ h6 {
 .app-single-tab-group {
   flex: 1 0 calc(100% - 64px);
 }
+
+.app-list,
+mat-radio-group {
+  padding-bottom: 4px;
+}

@@ -16,6 +16,8 @@
 
     &-content {
       max-height: rem(400);
+      overflow-x: hidden;
+      scrollbar-width: none;
 
       &::-webkit-scrollbar {
         visibility: hidden;
