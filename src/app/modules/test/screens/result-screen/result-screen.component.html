@@ -4,36 +4,47 @@
 <app-scroll-top></app-scroll-top>
 @if (result$ | async; as result) {
 <div class="app-wrapper">
-  <div class="app-title">
-    <h1 *ngIf="result.measurementDate" aria-live="polite">
+  <h1>{{ "History" | translate }}</h1>
+  <div class="app-header">
+    <h2 *ngIf="result.measurementDate" aria-live="polite">
       {{ "Measurement result from" | translate }}
-      {{ result.measurementDate | date : "medium" : undefined : locale }}
-    </h1>
-    <h1 *ngIf="!result.measurementDate" aria-live="polite">
+      {{ result.measurementDate | date : "medium" : undefined : activeLang }}
+    </h2>
+    <h2 *ngIf="!result.measurementDate" aria-live="polite">
       {{ "Measurement result" | translate }}
-    </h1>
+    </h2>
+    <a
+      [routerLink]="'/' + activeLang + '/' + routes.TEST"
+      class="app-button"
+      mat-flat-button
+    >
+      {{ "Run test again" | translate }}
+    </a>
   </div>
   <div class="app-container">
     <app-table
       [columns]="columns"
       [data]="getBasicResults(result)"
       [sort]="sort"
+      [shouldHideHeader]="true"
+      [tableClassNames]="['app-table--bordered']"
       aria-live="polite"
     ></app-table>
   </div>
   <ng-container *ngIf="getDetailedResults(result) as detailedResult">
     @defer () {
-    <div class="app-container app-charts">
-      <div class="app-charts__col">
-        <h3 class="app-title">{{ "Ping" | translate }}</h3>
+    <h3 class="app-title">{{ "Speed curve" | translate }}</h3>
+    <div class="app-charts">
+      <div class="app-charts__row">
+        <h4>{{ "Ping" | translate }}</h4>
         <app-test-chart phase="ping"></app-test-chart>
       </div>
-      <div class="app-charts__col">
-        <h3 class="app-title">{{ "Download" | translate }}</h3>
+      <div class="app-charts__row">
+        <h4>{{ "Download" | translate }}</h4>
         <app-test-chart phase="download"></app-test-chart>
       </div>
-      <div class="app-charts__col">
-        <h3 class="app-title">{{ "Upload" | translate }}</h3>
+      <div class="app-charts__row">
+        <h4>{{ "Upload" | translate }}</h4>
         <app-test-chart phase="upload"></app-test-chart>
       </div>
     </div>
@@ -43,6 +54,8 @@
       <app-table
         [columns]="columns"
         [data]="detailedResult"
+        [shouldHideHeader]="true"
+        [tableClassNames]="['app-table--bordered']"
         [sort]="sort"
       ></app-table>
     </div>

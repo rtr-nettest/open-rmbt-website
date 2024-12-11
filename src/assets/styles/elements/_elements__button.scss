@@ -20,3 +20,10 @@
     font-size: 1rem;
   }
 }
+
+.app-button,
+.mdc-button {
+  &:hover {
+    text-decoration: none;
+  }
+}

@@ -71,7 +71,7 @@ export const routes: Routes = [
         component: ResultScreenComponent,
         resolve: [localeResolver],
         data: {
-          title: "Result",
+          title: "History",
         },
       },
       {

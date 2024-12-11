@@ -20,18 +20,18 @@
           *matHeaderCellDef
           mat-sort-header
           [style]="justify(column)"
-          ><span [ngClass]="column.getNgClass?.('', column)">{{
-            column.header
-          }}</span></mat-header-cell
+          [ngClass]="column.getNgClass?.('', column)"
+          ><span>{{ column.header }}</span></mat-header-cell
         >
       </ng-container>
 
       <ng-container *ngIf="!column.isSortable">
-        <mat-header-cell *matHeaderCellDef [style]="justify(column)">
-          <div
-            class="sah-table__cell--ellipsis"
-            [ngClass]="column.getNgClass?.('', column)"
-          >
+        <mat-header-cell
+          *matHeaderCellDef
+          [style]="justify(column)"
+          [ngClass]="column.getNgClass?.('', column)"
+        >
+          <div class="sah-table__cell--ellipsis">
             {{ column.header }}
           </div>
         </mat-header-cell>
@@ -88,13 +88,13 @@
         <mat-cell
           *matCellDef="let element; let i = dataIndex"
           [style]="justify(column)"
+          [ngClass]="column.getNgClass && column.getNgClass(element, column)"
         >
           <span class="app-table__mobile-label">{{ column.header }}</span>
           <a
             *ngIf="!shouldShowText(column, element)"
             [routerLink]="column.getLink?.(element, column)"
             [matTooltip]="column.getTooltip?.(element, column) ?? ''"
-            [ngClass]="column.getNgClass && column.getNgClass(element, column)"
             [class.app-table__cell--sortable]="column.isSortable"
             class="app-link"
           >
@@ -103,7 +103,6 @@
           <span
             *ngIf="shouldShowText(column, element)"
             [matTooltip]="column.getTooltip?.(element, column) ?? ''"
-            [ngClass]="column.getNgClass?.(element, column)"
             [class.app-table__cell--sortable]="column.isSortable"
             [class.app-table__filter]="!!column.filterType"
             (click)="

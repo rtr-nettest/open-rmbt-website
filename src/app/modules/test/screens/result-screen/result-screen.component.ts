@@ -16,7 +16,7 @@ import { IDetailedHistoryResultItem } from "../../interfaces/detailed-history-re
 import { ClassificationService } from "../../../shared/services/classification.service"
 import { ConversionService } from "../../../shared/services/conversion.service"
 import { I18nStore } from "../../../i18n/store/i18n.store"
-import { ActivatedRoute, Router } from "@angular/router"
+import { ActivatedRoute, Router, RouterModule } from "@angular/router"
 import { TestStore } from "../../store/test.store"
 import { HistoryExportService } from "../../services/history-export.service"
 import { ISort } from "../../../tables/interfaces/sort.interface"
@@ -37,6 +37,7 @@ import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/bre
     HeaderComponent,
     MatButtonModule,
     NgIf,
+    RouterModule,
     TableComponent,
     TestChartComponent,
     TopNavComponent,
@@ -53,6 +54,7 @@ export class ResultScreenComponent {
     {
       columnDef: "title",
       header: "",
+      getNgClass: () => "app-cell--30",
     },
     {
       columnDef: "value",
@@ -76,8 +78,9 @@ export class ResultScreenComponent {
         this.exporter.exportAsPdf([this.store.simpleHistoryResult$.value!]),
     },
   ]
+  routes = ERoutes
 
-  get locale() {
+  get activeLang() {
     return this.i18nStore.activeLang
   }
 
