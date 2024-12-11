@@ -1,0 +1,67 @@
+<app-header></app-header>
+<app-top-nav></app-top-nav>
+<app-breadcrumbs></app-breadcrumbs>
+<app-scroll-top></app-scroll-top>
+@if (result$ | async; as result) {
+<div class="app-wrapper">
+  <div class="app-title">
+    <h1 *ngIf="result.measurementDate" aria-live="polite">
+      {{ "Measurement result from" | translate }}
+      {{ result.measurementDate | date : "medium" : undefined : locale }}
+    </h1>
+    <h1 *ngIf="!result.measurementDate" aria-live="polite">
+      {{ "Measurement result" | translate }}
+    </h1>
+  </div>
+  <div class="app-container">
+    <app-table
+      [columns]="columns"
+      [data]="getBasicResults(result)"
+      [sort]="sort"
+      aria-live="polite"
+    ></app-table>
+  </div>
+  <ng-container *ngIf="getDetailedResults(result) as detailedResult">
+    @defer () {
+    <div class="app-container app-charts">
+      <div class="app-charts__col">
+        <h3 class="app-title">{{ "Ping" | translate }}</h3>
+        <app-test-chart phase="ping"></app-test-chart>
+      </div>
+      <div class="app-charts__col">
+        <h3 class="app-title">{{ "Download" | translate }}</h3>
+        <app-test-chart phase="download"></app-test-chart>
+      </div>
+      <div class="app-charts__col">
+        <h3 class="app-title">{{ "Upload" | translate }}</h3>
+        <app-test-chart phase="upload"></app-test-chart>
+      </div>
+    </div>
+    }
+    <h3 class="app-title">{{ "Detailed results" | translate }}</h3>
+    <div class="app-container">
+      <app-table
+        [columns]="columns"
+        [data]="detailedResult"
+        [sort]="sort"
+      ></app-table>
+    </div>
+  </ng-container>
+</div>
+}
+<app-footer></app-footer>
+
+<ng-template #noResult>
+  <main
+    *ngIf="error$ | async as error"
+    class="app-wrapper app-wrapper--no-result"
+  >
+    {{ "Measurement failed." | translate }} {{ error.message }}
+  </main>
+  <main
+    *ngIf="(error$ | async) === null"
+    class="app-wrapper app-wrapper--no-result"
+  >
+    {{ "Fetching the result..." | translate }}
+  </main>
+</ng-template>

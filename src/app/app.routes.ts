@@ -8,6 +8,7 @@ import { TermsConditionsScreenComponent } from "./modules/test/screens/terms-con
 import { TestScreenComponent } from "./modules/test/screens/test-screen/test-screen.component"
 import { MapScreenComponent } from "./modules/map/screens/map-screen/map-screen.component"
 import { StatisticsScreenComponent } from "./modules/statistics/screens/statistics-screen/statistics-screen.component"
+import { ResultScreenComponent } from "./modules/test/screens/result-screen/result-screen.component"
 
 export const routes: Routes = [
   {
@@ -62,6 +63,24 @@ export const routes: Routes = [
         resolve: [localeResolver],
         data: {
           title: "Statistics",
+        },
+      },
+      {
+        path: ERoutes.RESULT,
+        pathMatch: "full",
+        component: ResultScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Result",
+        },
+      },
+      {
+        path: ERoutes.PAGE_NOT_FOUND,
+        pathMatch: "full",
+        component: PageNotFoundComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Page Not Found",
         },
       },
       {

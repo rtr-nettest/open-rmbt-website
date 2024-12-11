@@ -13,6 +13,7 @@ export interface IMeasurementPhaseState {
   ups: IOverallResult[]
   phase: EMeasurementStatus
   testUuid: string
+  openTestUuid: string
   time: number
   startTimeMs: number
   endTimeMs: number

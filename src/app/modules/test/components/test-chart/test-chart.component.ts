@@ -53,8 +53,7 @@ export class TestChartComponent {
   constructor(
     private i18nStore: I18nStore,
     private ngZone: NgZone,
-    private store: TestStore,
-    private service: TestService
+    private store: TestStore
   ) {
     this.visualization$ = this.store.visualization$.pipe(
       map((s) => {

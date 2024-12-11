@@ -25,6 +25,7 @@ export class TestPhaseState implements ITestPhaseState {
   ups: IOverallResult[] = []
   startTimeMs: number = 0
   endTimeMs: number = 0
+  openTestUuid: string = ""
 
   private conversion = new ConversionService()
 

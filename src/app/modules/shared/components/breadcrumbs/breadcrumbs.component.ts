@@ -47,7 +47,7 @@ export class BreadcrumbsComponent {
               const route = flatRoutes.get(s.path)
               if (route) {
                 return {
-                  label: t[route.data?.["title"]],
+                  label: t[route.data?.["title"]] || route.data?.["title"],
                   route: `/${this.i18nStore.activeLang}/${s.path}`,
                 }
               }

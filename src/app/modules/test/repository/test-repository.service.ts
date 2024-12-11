@@ -11,6 +11,10 @@ import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
 import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
 import { IPaginator } from "../../tables/interfaces/paginator.interface"
+import {
+  IOpenTestResultRequest,
+  ITestResultRequest,
+} from "../interfaces/measurement-result.interface"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -45,9 +49,25 @@ export class TestRepositoryService {
       )
   }
 
-  async getResult(uuid: string) {
+  async getOpenResult(params: IOpenTestResultRequest) {
+    const { openTestUuid } = params
+    if (!openTestUuid) {
+      throw new Error("Open Test UUID is required")
+    }
+    return await firstValueFrom(
+      this.http.get(
+        `${environment.api.cloud}/RMBTStatisticServer/opentests/${openTestUuid}`
+      )
+    )
+  }
+
+  async getResult(params: ITestResultRequest) {
+    const { testUuid } = params
+    if (!testUuid) {
+      throw new Error("Test UUID is required")
+    }
     const body = {
-      test_uuid: uuid,
+      test_uuid: testUuid,
       timezone: dayjs.tz.guess(),
       capabilities: { classification: { count: 4 } },
     }
@@ -73,23 +93,7 @@ export class TestRepositoryService {
       )
     )) as any
 
-    // Graphs
-
-    let openTestsResponse: any
-    if (response && response.status != "error") {
-      openTestsResponse = await firstValueFrom(
-        this.http.get(
-          `${environment.baseUrl}/RMBTStatisticServer/opentests/${response.open_test_uuid}?capabilities={"classification":{"count":4}}`
-        )
-      )
-    }
-
-    return SimpleHistoryResult.fromRTRMeasurementResult(
-      uuid,
-      response,
-      openTestsResponse,
-      testResultDetail
-    )
+    return [response, testResultDetail]
   }
 
   async getHistory(paginator?: IPaginator) {

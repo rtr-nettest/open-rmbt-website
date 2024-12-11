@@ -5,9 +5,11 @@ export enum ERoutes {
   STATISTICS = "statistics",
   TEST = "test",
   LOOP = "series",
+  LOOP_RESULT = "series/:loopUuid",
   CERTIFIED = "certified-step-1",
   OPEN_DATA = "opentests",
   OPTIONS = "options",
   RESULT = "result",
   TERMS = "terms-and-conditions",
+  PAGE_NOT_FOUND = "page-not-found",
 }

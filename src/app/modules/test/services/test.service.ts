@@ -9,7 +9,9 @@ import {
 import { IUserSetingsResponse } from "../interfaces/user-settings-response.interface"
 import { environment } from "../../../../environments/environment"
 import {
+  catchError,
   concatMap,
+  forkJoin,
   from,
   interval,
   map,
@@ -24,7 +26,10 @@ import tz from "dayjs/plugin/timezone"
 import { IMeasurementPhaseState } from "../interfaces/measurement-phase-state.interface"
 import { IBasicNetworkInfo } from "../interfaces/basic-network-info.interface"
 import { EMeasurementStatus } from "../constants/measurement-status.enum"
-import { IPing } from "../interfaces/measurement-result.interface"
+import {
+  IPing,
+  ITestResultRequest,
+} from "../interfaces/measurement-result.interface"
 import { IOverallResult } from "../interfaces/overall-result.interface"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { IPaginator } from "../../tables/interfaces/paginator.interface"
@@ -40,6 +45,8 @@ import { BasicNetworkInfo } from "../dto/basic-network-info.dto"
 import { TestRepositoryService } from "../repository/test-repository.service"
 import { UUID } from "../constants/strings"
 import { STATE_UPDATE_TIMEOUT } from "../constants/numbers"
+import { MainStore } from "../../shared/store/main.store"
+import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -50,7 +57,6 @@ export class TestService {
   private coordinates?: [number, number]
   private downs: IOverallResult[] = []
   private ups: IOverallResult[] = []
-  private pings: IPing[] = []
   private rmbtws: any
   private rmbtTest: any
   private startTimeMs = 0
@@ -60,10 +66,11 @@ export class TestService {
   private providerName?: string
   private testUuid?: string
   private stateChangeMs = 0
+  private openTestUuid?: string
 
   constructor(
-    private readonly http: HttpClient,
     private readonly i18nStore: I18nStore,
+    private readonly mainStore: MainStore,
     private readonly ngZone: NgZone,
     private readonly repo: TestRepositoryService,
     private readonly router: Router,
@@ -185,10 +192,9 @@ export class TestService {
     this.testStore.basicNetworkInfo$.next(new BasicNetworkInfo())
     this.testStore.visualization$.next(new TestVisualizationState())
     this.testStore.simpleHistoryResult$.next(null)
-    this.testStore.error$.next(null)
+    this.mainStore.error$.next(null)
     this.downs = []
     this.ups = []
-    this.pings = []
     this.startTimeMs = 0
     this.endTimeMs = 0
     this.serverName = undefined
@@ -261,6 +267,7 @@ export class TestService {
       ups: this.ups ?? [],
       phase,
       testUuid: this.testUuid ?? "",
+      openTestUuid: this.openTestUuid ?? "",
       ipAddress: this.remoteIp ?? "-",
       serverName: this.serverName ?? "-",
       providerName: this.providerName ?? "-",
@@ -270,32 +277,48 @@ export class TestService {
     }
   }
 
-  getMeasurementResult(testUuid: string | null) {
-    if (!testUuid || this.testStore.error$.value) {
+  getMeasurementResult(params: ITestResultRequest) {
+    if (!params || this.mainStore.error$.value) {
       return of(null)
     }
-    return from(this.repo.getResult(testUuid)).pipe(
-      map((result) => {
-        this.testStore.simpleHistoryResult$.next(result)
+    return forkJoin([
+      from(this.repo.getResult(params)),
+      from(this.repo.getOpenResult(params)),
+    ]).pipe(
+      map(([[response, testResultDetail], openTestsResponse]) => {
+        const historyResult = SimpleHistoryResult.fromRTRMeasurementResult(
+          params.testUuid!,
+          response,
+          openTestsResponse,
+          testResultDetail
+        )
+        this.testStore.simpleHistoryResult$.next(historyResult)
         const newPhase = new TestPhaseState({
           phase: EMeasurementStatus.SHOWING_RESULTS,
-          down: result.downloadKbit / 1000,
-          up: result.uploadKbit / 1000,
-          ping: result.ping / 1e6,
+          down: historyResult.downloadKbit / 1000,
+          up: historyResult.uploadKbit / 1000,
+          ping: historyResult.ping / 1e6,
         })
         const newState = TestVisualizationState.fromHistoryResult(
-          result,
+          historyResult,
           this.testStore.visualization$.value,
           newPhase
         )
         this.testStore.visualization$.next(newState)
         this.testStore.basicNetworkInfo$.next({
-          serverName: result.measurementServerName,
-          ipAddress: result.ipAddress,
-          providerName: result.providerName,
-          coordinates: result.coordinates,
+          serverName: historyResult.measurementServerName,
+          ipAddress: historyResult.ipAddress,
+          providerName: historyResult.providerName,
+          coordinates: historyResult.coordinates,
         })
-        return result
+        return historyResult
+      }),
+      catchError(() => {
+        this.router.navigate([
+          this.i18nStore.activeLang,
+          ERoutes.PAGE_NOT_FOUND,
+        ])
+        return of(null)
       })
     )
   }
@@ -320,12 +343,14 @@ export class TestService {
     serverName: string,
     remoteIp: string,
     providerName: string,
-    testUuid: string
+    testUuid: string,
+    openTestUuid: string
   ) {
     this.serverName = serverName
     this.remoteIp = remoteIp
     this.providerName = providerName
     this.testUuid = testUuid
+    this.openTestUuid = openTestUuid
   }
 
   setLocation(lat: number, lon: number) {

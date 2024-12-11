@@ -1,0 +1,73 @@
+@import "core.scss";
+
+$container-width: 100%;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app-wrapper {
+  align-self: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
+  &--no-result {
+    text-align: center;
+  }
+}
+
+.app-title {
+  align-items: center;
+  display: flex;
+  margin-bottom: 1em;
+}
+
+.app-container {
+  display: flex;
+  width: $container-width;
+
+  & > * {
+    flex: 1;
+  }
+
+  &:not(:last-of-type) {
+    margin-bottom: 1.5em;
+  }
+}
+
+.app-btn {
+  background: $color-primary;
+  border-radius: rem(4);
+  color: white;
+  display: block;
+  margin-top: rem(40);
+  padding: rem(14) rem(12);
+  text-decoration: none !important;
+}
+
+.app-link {
+  color: $color-primary;
+  font-weight: bold;
+  text-decoration: none !important;
+}
+
+.app-charts {
+  margin: rem(20) 0 rem(40) rem(-10);
+
+  &__col {
+    height: rem(200);
+    padding: 0 rem(10);
+    width: 33%;
+  }
+
+  @include screen-sm {
+    display: block;
+
+    &__col {
+      width: auto;
+    }
+  }
+}

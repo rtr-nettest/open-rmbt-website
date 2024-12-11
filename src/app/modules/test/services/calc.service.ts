@@ -30,11 +30,20 @@ export class CalcService {
     if (!pings?.length) {
       return []
     }
-    return pings.map((p) => ({
-      time_ns: p.time_elapsed * 1e6,
-      value: p.ping_ms * 1e6,
-      value_server: p.ping_ms * 1e6,
-    }))
+    let startX = 0
+    return pings
+      .map((p) => ({
+        time_ns: p.time_elapsed * 1e6,
+        value: p.ping_ms * 1e6,
+        value_server: p.ping_ms * 1e6,
+      }))
+      .filter((p) => p.time_ns > 0)
+      .reduce((acc, p, i) => {
+        if (i === 0) {
+          startX = p.time_ns
+        }
+        return [...acc, { ...p, time_ns: p.time_ns - startX }]
+      }, [] as IPing[])
   }
 
   getOverallResultsFromSpeedCurve(

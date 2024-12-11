@@ -36,6 +36,7 @@ import { InterimResultsComponent } from "../../components/interim-results/interi
 import { RecentHistoryComponent } from "../../components/recent-history/recent-history.component"
 import { TestService } from "../../services/test.service"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
+import { MainStore } from "../../../shared/store/main.store"
 
 @Component({
   selector: "app-test-screen",
@@ -62,6 +63,7 @@ import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/bre
 export class TestScreenComponent extends SeoComponent implements OnInit {
   historyStore = inject(HistoryStore)
   router = inject(Router)
+  mainStore = inject(MainStore)
   message = inject(MessageService)
   service = inject(TestService)
   store = inject(TestStore)
@@ -96,7 +98,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
             return of(null)
           }
           this.visualization$ = this.store.visualization$.pipe(
-            withLatestFrom(this.store.error$, this.loopCount$),
+            withLatestFrom(this.mainStore.error$, this.loopCount$),
             distinctUntilChanged(),
             map(([state, error]) => {
               if (error) {
@@ -122,7 +124,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
     }
     this.stopped$.next()
     this.message.openConfirmDialog(message, () => {
-      this.store.error$.next(null)
+      this.mainStore.error$.next(null)
       state.currentPhaseName === EMeasurementStatus.SUBMITTING_RESULTS
         ? this.goToResult(state)
         : this.router.navigate(["/"])
@@ -131,10 +133,11 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
 
   protected goToResult = (state: ITestVisualizationState) => {
     this.stopped$.next()
-    this.router.navigate([
-      this.i18nStore.activeLang,
-      ERoutes.RESULT,
-      state.phases[state.currentPhaseName].testUuid,
-    ])
+    this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
+      queryParams: {
+        test_uuid: "T" + state.phases[state.currentPhaseName].testUuid,
+        open_test_uuid: state.phases[state.currentPhaseName].openTestUuid,
+      },
+    })
   }
 }

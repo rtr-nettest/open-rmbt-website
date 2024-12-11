@@ -1,5 +1,13 @@
 import { EMeasurementFinalStatus } from "../constants/measurement-final-status"
 
+export interface IOpenTestResultRequest {
+  openTestUuid: string | null
+}
+
+export interface ITestResultRequest extends IOpenTestResultRequest {
+  testUuid: string | null
+}
+
 export interface IMeasurementResult {
   client_language?: string
   client_uuid: string

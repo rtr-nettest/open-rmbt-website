@@ -15,7 +15,6 @@ export class TestStore {
   basicNetworkInfo$ = new BehaviorSubject<IBasicNetworkInfo>(
     new BasicNetworkInfo()
   )
-  error$ = new BehaviorSubject<Error | null>(null)
   visualization$ = new BehaviorSubject<ITestVisualizationState>(
     new TestVisualizationState()
   )
