@@ -22,39 +22,6 @@ import { CalcService } from "../services/calc.service"
 export const RESULT_DATE_FORMAT = "YYYY-MM-DD HH:mm:ss"
 
 export class SimpleHistoryResult implements ISimpleHistoryResult {
-  static fromLocalMeasurementResult(result: IMeasurementResult) {
-    return new SimpleHistoryResult(
-      dayjs(result.time).format(RESULT_DATE_FORMAT),
-      result.measurement_server ?? "-",
-      result.test_speed_download,
-      result.test_speed_upload,
-      result.test_ping_shortest / 1e6,
-      result.provider_name ?? "-",
-      result.ip_address ?? "-",
-      result.test_uuid ?? "",
-      result.loop_uuid ?? "",
-      true,
-      [],
-      [],
-      [],
-      ClassificationService.I.classify(
-        result.test_speed_download,
-        THRESHOLD_DOWNLOAD,
-        "biggerBetter"
-      ),
-      ClassificationService.I.classify(
-        result.test_speed_upload,
-        THRESHOLD_UPLOAD,
-        "biggerBetter"
-      ),
-      ClassificationService.I.classify(
-        result.test_ping_shortest,
-        THRESHOLD_PING,
-        "smallerBetter"
-      )
-    )
-  }
-
   static fromRTRHistoryResult(response: any) {
     const downKbit = response.speed_download
       ? parseFloat(response.speed_download.replace(",", "")) * 1e3
@@ -97,18 +64,29 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
     )
   }
 
-  static fromRTRMeasurementResult(
+  static fromOpenTestResult(
     uuid: string,
     response: any,
     openTestsResponse: any,
     testResultDetail: any
   ) {
+    let trd: IDetailedHistoryResultItem[] = testResultDetail?.testresultdetail
+      ? [...testResultDetail?.testresultdetail]
+      : []
+    trd = SimpleHistoryResult.fillDetailsFromOpenTestResult(
+      trd,
+      openTestsResponse
+    )
     return new SimpleHistoryResult(
-      response?.time ? dayjs(response.time).format(RESULT_DATE_FORMAT) : "",
+      openTestsResponse?.time
+        ? dayjs(openTestsResponse.time, RESULT_DATE_FORMAT)
+            .utc()
+            .format(RESULT_DATE_FORMAT)
+        : "",
       openTestsResponse?.server_name,
-      response?.measurement_result?.download_kbit || 0,
-      response?.measurement_result?.upload_kbit || 0,
-      response?.measurement_result?.ping_ms || 0,
+      openTestsResponse?.download_kbit || 0,
+      openTestsResponse?.upload_kbit || 0,
+      openTestsResponse?.ping_ms || 0,
       openTestsResponse?.public_ip_as_name,
       openTestsResponse?.ip_anonym,
       uuid,
@@ -121,29 +99,87 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
         openTestsResponse?.speed_curve.upload
       ),
       CalcService.I.getOverallPings(openTestsResponse?.speed_curve.ping),
-      response?.measurement_result?.download_classification ??
+      openTestsResponse?.download_classification ??
         ClassificationService.I.classify(
-          response?.measurement_result?.download_kbit,
+          openTestsResponse?.download_kbit,
           THRESHOLD_DOWNLOAD,
           "biggerBetter"
         ),
-      response?.measurement_result?.upload_classification ??
+      openTestsResponse?.upload_classification ??
         ClassificationService.I.classify(
-          response?.measurement_result?.upload_kbit,
+          openTestsResponse?.upload_kbit,
           THRESHOLD_UPLOAD,
           "biggerBetter"
         ),
-      response?.measurement_result?.ping_classification ??
+      openTestsResponse?.ping_classification ??
         ClassificationService.I.classify(
-          response?.measurement_result?.ping_ms * 1e6,
+          openTestsResponse?.ping_ms * 1e6,
           THRESHOLD_PING,
           "smallerBetter"
         ),
-      testResultDetail?.testresultdetail,
-      response?.geo_long && response?.geo_lat
-        ? [response.geo_long, response.geo_lat]
-        : undefined
+      openTestsResponse?.long && openTestsResponse?.lat
+        ? [openTestsResponse.long, openTestsResponse.lat]
+        : undefined,
+      trd
     )
+  }
+
+  static fillDetailsFromOpenTestResult(
+    trd: IDetailedHistoryResultItem[],
+    openTestsResponse: any
+  ) {
+    const skippedKeys = new Set([
+      "time",
+      "server_name",
+      "download_kbit",
+      "upload_kbit",
+      "ping_ms",
+      "public_ip_as_name",
+      "ip_anonym",
+      "speed_curve",
+      "download_classification",
+      "upload_classification",
+      "ping_classification",
+      "long",
+      "lat",
+    ])
+    const searchableKeys: {
+      [key: string]: null | ((testData: any) => string)
+    } = {
+      cat_technology: null,
+      radio_band: null,
+      network_name: null,
+      provider_name: null,
+      network_country: null,
+      country_sim: (testData: any) => testData["sim_country"],
+      country_geoip: (testData: any) => testData.country_geoip.toLowerCase(),
+      public_ip_as_name: null,
+      country_asn: (testData: any) => testData.country_asn.toLowerCase(),
+      platform: null,
+      model: null,
+      client_version: null,
+    }
+    for (const [key, value] of Object.entries(openTestsResponse)) {
+      if (skippedKeys.has(key) || value === null) {
+        continue
+      }
+      if (key in searchableKeys) {
+        trd.push({
+          title: key,
+          value: `${value}`,
+          searchable: true,
+          searchTerm: searchableKeys[key]
+            ? searchableKeys[key](openTestsResponse)
+            : null,
+        })
+        continue
+      }
+      trd.push({
+        title: key,
+        value: `${value}`,
+      })
+    }
+    return trd
   }
 
   constructor(
@@ -163,7 +199,7 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
     public downloadClass?: number,
     public uploadClass?: number,
     public pingClass?: number,
-    public detailedHistoryResult?: IDetailedHistoryResultItem[],
-    public coordinates?: [number, number]
+    public coordinates?: [number, number],
+    public detailedHistoryResult?: IDetailedHistoryResultItem[]
   ) {}
 }

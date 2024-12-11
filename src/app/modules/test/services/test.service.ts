@@ -286,7 +286,7 @@ export class TestService {
       from(this.repo.getOpenResult(params)),
     ]).pipe(
       map(([[response, testResultDetail], openTestsResponse]) => {
-        const historyResult = SimpleHistoryResult.fromRTRMeasurementResult(
+        const historyResult = SimpleHistoryResult.fromOpenTestResult(
           params.testUuid!,
           response,
           openTestsResponse,

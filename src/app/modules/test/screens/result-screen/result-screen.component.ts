@@ -193,7 +193,7 @@ export class ResultScreenComponent {
           }
           if (this.openResultURL && isOpenResultId) {
             return {
-              title: item.title,
+              title: this.i18nStore.translate(item.title),
               value: `<a href="${this.openResultURL}" target="_blank">${item.value}</a>`,
             }
           }
@@ -202,11 +202,14 @@ export class ResultScreenComponent {
             item.value === UNKNOWN
           ) {
             return {
-              title: item.title,
+              title: this.i18nStore.translate(item.title),
               value: "LAN",
             }
           }
-          return item
+          return {
+            title: this.i18nStore.translate(item.title),
+            value: item.value,
+          }
         }) ?? [],
       totalElements: result.detailedHistoryResult?.length ?? 0,
     }
