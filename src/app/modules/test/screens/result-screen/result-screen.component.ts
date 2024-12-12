@@ -7,7 +7,7 @@ import { TableComponent } from "../../../tables/components/table/table.component
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { AsyncPipe, DatePipe, NgIf } from "@angular/common"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
-import { Observable, of, tap } from "rxjs"
+import { Observable, of, switchMap, tap } from "rxjs"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { UNKNOWN } from "../../constants/strings"
 import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.interface"
@@ -79,6 +79,13 @@ export class ResultScreenComponent {
     },
   ]
   routes = ERoutes
+  showFullDetails = false
+  initialDetails: IBasicResponse<IDetailedHistoryResultItem> = {
+    content: [],
+    get totalElements() {
+      return this.content.length
+    },
+  }
 
   get activeLang() {
     return this.i18nStore.activeLang
@@ -94,12 +101,17 @@ export class ResultScreenComponent {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.result$ = this.service.getMeasurementResult({
-      openTestUuid: this.route.snapshot.queryParamMap.get("open_test_uuid"),
-      testUuid:
-        this.route.snapshot.queryParamMap.get("test_uuid")?.replace("T", "") ??
-        null,
-    })
+    this.result$ = this.i18nStore.getTranslations().pipe(
+      switchMap(() =>
+        this.service.getMeasurementResult({
+          openTestUuid: this.route.snapshot.queryParamMap.get("open_test_uuid"),
+          testUuid:
+            this.route.snapshot.queryParamMap
+              .get("test_uuid")
+              ?.replace("T", "") ?? null,
+        })
+      )
+    )
     this.error$ = this.mainStore.error$
   }
 
@@ -185,21 +197,21 @@ export class ResultScreenComponent {
     return {
       content:
         result.detailedHistoryResult?.map((item) => {
+          let retVal: IDetailedHistoryResultItem
           if (item.searchable) {
             const search = Array.isArray(item.searchTerm)
               ? item.searchTerm.map((term) => `${item.title}=${term}`).join("&")
               : `${item.title}=${item.searchTerm || item.value}`
             const values =
               item.title === "time" ? item.value.split(" ") : [item.value]
-            return {
+            retVal = {
               title: this.i18nStore.translate(item.title),
               value: `<a href="/${this.i18nStore.activeLang}/${
                 ERoutes.OPEN_DATA
               }?${search}">${values[0]}</a>&nbsp;${values[1] ?? ""}`,
             }
-          }
-          if (item.mappable) {
-            return {
+          } else if (item.mappable) {
+            retVal = {
               title: this.i18nStore.translate(item.title),
               value: `<a href="/${this.i18nStore.activeLang}/${
                 ERoutes.MAP
@@ -207,11 +219,16 @@ export class ResultScreenComponent {
                 item.value
               }</a>`,
             }
+          } else {
+            retVal = {
+              title: this.i18nStore.translate(item.title),
+              value: item.value,
+            }
           }
-          return {
-            title: this.i18nStore.translate(item.title),
-            value: item.value,
+          if (item.initial) {
+            this.initialDetails.content.push(retVal)
           }
+          return retVal
         }) ?? [],
       totalElements: result.detailedHistoryResult?.length ?? 0,
     }

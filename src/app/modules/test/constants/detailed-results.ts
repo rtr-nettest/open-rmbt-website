@@ -9,8 +9,24 @@ import { roundToSignificantDigits } from "../../shared/util/math"
 export const RESULT_DATE_FORMAT = "YYYY-MM-DD HH:mm:ss"
 
 export const INITIAL_KEYS = new Set([
+  "open_uuid",
+  "open_test_uuid",
+  "time",
+  "timezone",
+  "download_kbit",
+  "upload_kbit",
+  "ping_ms",
+  "test_duration",
+  "duration_download_ms",
+  "duration_upload_ms",
   "network_type",
   "cat_technology",
+  "network_name",
+  "provider_name",
+  "network_mcc_mnc",
+  "network_country",
+  "sim_mcc_mnc",
+  "sim_country",
   "location",
   "distance",
   "gkz",
@@ -18,23 +34,23 @@ export const INITIAL_KEYS = new Set([
   "community",
   "district",
   "province",
-  "network_name",
-  "provider_name",
-  "network_mcc_mnc",
-  "network_country",
   "roaming_type",
-  "sim_mcc_mnc",
-  "sim_country",
   "lte_rsrq",
+  "client_public_ip",
+  "client_public_ip_as_name",
+  "client_public_ip_as",
+  "client_public_ip_rdns",
   "connection",
+  "country_asn",
   "country_geoip",
   "public_ip_as_name",
   "platform",
   "model",
-  "duration_download_ms",
-  "duration_upload_ms",
   "server_name",
-  "open_uuid",
+  "client_software_version",
+  "client_version",
+  "num_threads",
+  "num_threads_ul",
 ])
 
 export const SKIPPED_KEYS = new Set([
@@ -60,9 +76,9 @@ export const SEARCHED_KEYS: {
   provider_name: null,
   network_country: null,
   country_sim: (testData: any) => testData["sim_country"],
-  country_geoip: (testData: any) => testData.country_geoip.toLowerCase(),
+  country_geoip: (testData: any) => testData.country_geoip?.toLowerCase(),
   public_ip_as_name: null,
-  country_asn: (testData: any) => testData.country_asn.toLowerCase(),
+  country_asn: (testData: any) => testData.country_asn?.toLowerCase(),
   platform: null,
   model: null,
   client_version: null,
@@ -155,15 +171,15 @@ export const FORMATTED_KEYS: {
     return ip
   },
   network_country: (testData: any, t: any) =>
-    t[testData.network_country.toLowerCase()] || testData.network_country,
+    t[testData.network_country?.toLowerCase()] || testData.network_country,
   sim_country: (testData: any, t: any) =>
-    t[testData.sim_country.toLowerCase()] || testData.sim_country,
+    t[testData.sim_country?.toLowerCase()] || testData.sim_country,
   country_geoip: (testData: any, t: any) =>
-    t[testData.country_geoip.toLowerCase()] || testData.country_geoip,
+    t[testData.country_geoip?.toLowerCase()] || testData.country_geoip,
   country_asn: (testData: any, t: any) =>
-    t[testData.country_asn.toLowerCase()] || testData.country_asn,
+    t[testData.country_asn?.toLowerCase()] || testData.country_asn,
   country_location: (testData: any, t: any) =>
-    t[testData.country_location.toLowerCase()] || testData.country_location,
+    t[testData.country_location?.toLowerCase()] || testData.country_location,
 
   lte_rsrq: (testData: any, t: any) =>
     `${testData.lte_rsrq} ${t["dB"] || "dB"}`,
@@ -186,4 +202,8 @@ export const FORMATTED_KEYS: {
 
   temperature: (testData: any) =>
     testData.temperature ? testData.temperature + " °C" : "",
+  time: (testData: any) => {
+    const d = dayjs(testData.time, RESULT_DATE_FORMAT).utc(true)
+    return d.tz(dayjs.tz.guess()).format(RESULT_DATE_FORMAT)
+  },
 }

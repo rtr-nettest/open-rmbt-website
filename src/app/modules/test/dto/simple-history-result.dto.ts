@@ -83,7 +83,8 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
     return new SimpleHistoryResult(
       openTestsResponse?.time
         ? dayjs(openTestsResponse.time, RESULT_DATE_FORMAT)
-            .utc()
+            .utc(true)
+            .tz(dayjs.tz.guess())
             .format(RESULT_DATE_FORMAT)
         : "",
       openTestsResponse?.server_name,
@@ -129,7 +130,15 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
 
   static fillDetailsFromOpenTestResult(openTestsResponse: any, t: Translation) {
     const trd: IDetailedHistoryResultItem[] = []
-    for (const [key, value] of Object.entries(openTestsResponse)) {
+    let entries = new Array(Object.entries(openTestsResponse).length)
+    const entriesMap = new Map(Object.entries(openTestsResponse))
+    const initialKeys = [...INITIAL_KEYS]
+    for (let i = 0; i < initialKeys.length; i++) {
+      entries[i] = [initialKeys[i], openTestsResponse[initialKeys[i]]]
+      entriesMap.delete(initialKeys[i])
+    }
+    entries = [...entries, ...entriesMap].filter((v) => !!v)
+    for (const [key, value] of entries) {
       if (SKIPPED_KEYS.has(key) || !value) {
         continue
       }

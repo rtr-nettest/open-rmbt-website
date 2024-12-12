@@ -303,7 +303,11 @@ export class TestService {
           )
           for (const item of testResultDetail.testresultdetail) {
             if (!trdSet.has(item.title)) {
-              historyResult.detailedHistoryResult.push(item)
+              historyResult.detailedHistoryResult.push({
+                title: item.title,
+                value: item.value,
+                initial: true,
+              })
             }
           }
         }

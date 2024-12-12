@@ -51,6 +51,7 @@
     }
     <h3 class="app-title">{{ "Detailed results" | translate }}</h3>
     <div class="app-container">
+      @if (showFullDetails) {
       <app-table
         [columns]="columns"
         [data]="detailedResult"
@@ -58,6 +59,23 @@
         [tableClassNames]="['app-table--bordered']"
         [sort]="sort"
       ></app-table>
+      } @else {
+      <app-table
+        [columns]="columns"
+        [data]="initialDetails"
+        [shouldHideHeader]="true"
+        [tableClassNames]="['app-table--bordered']"
+        [sort]="sort"
+      ></app-table>
+      <button
+        (click)="showFullDetails = true"
+        class="app-button"
+        style="margin-top: 24px"
+        mat-stroked-button
+      >
+        {{ "Show additional information..." | translate }}
+      </button>
+      }
     </div>
   </ng-container>
 </div>

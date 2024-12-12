@@ -52,7 +52,7 @@ export const APP_DATE_TIME_FORMAT = "DD.MM.YYYY HH:mm"
     RouterLink,
   ],
 })
-export class TableComponent implements OnInit, OnChanges {
+export class TableComponent implements OnInit {
   @Input() action?: (...ars: any[]) => any
   @Input() rowsAreCLickable = false
   @Input({ required: true }) columns: ITableColumn[] = []
@@ -82,12 +82,6 @@ export class TableComponent implements OnInit, OnChanges {
     private tableSortService: TableSortService,
     private i18nStore: I18nStore
   ) {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if ("data" in changes) {
-      // this.table?.removeHeaderRowDef()
-    }
-  }
 
   ngOnInit() {
     this.displayedColumns = this.columns
