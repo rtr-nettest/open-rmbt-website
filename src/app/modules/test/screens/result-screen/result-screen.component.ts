@@ -80,15 +80,20 @@ export class ResultScreenComponent {
   ]
   routes = ERoutes
   showFullDetails = false
-  initialDetails: IBasicResponse<IDetailedHistoryResultItem> = {
-    content: [],
-    get totalElements() {
-      return this.content.length
-    },
-  }
+  initialDetails: IBasicResponse<IDetailedHistoryResultItem> =
+    this.defaultInitialDetails
 
   get activeLang() {
     return this.i18nStore.activeLang
+  }
+
+  private get defaultInitialDetails() {
+    return {
+      content: [],
+      get totalElements() {
+        return this.content.length
+      },
+    }
   }
 
   constructor(
@@ -194,6 +199,7 @@ export class ResultScreenComponent {
     if (!result.detailedHistoryResult) {
       return null
     }
+    this.initialDetails = this.defaultInitialDetails
     return {
       content:
         result.detailedHistoryResult?.map((item) => {
