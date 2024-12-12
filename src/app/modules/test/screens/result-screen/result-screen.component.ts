@@ -121,7 +121,7 @@ export class ResultScreenComponent {
     return (
       Math.round(ping).toLocaleString(locale) +
       " " +
-      this.i18nStore.translate("ms")
+      this.i18nStore.translate("millis")
     )
   }
 
@@ -186,22 +186,26 @@ export class ResultScreenComponent {
       content:
         result.detailedHistoryResult?.map((item) => {
           if (item.searchable) {
+            const search = Array.isArray(item.searchTerm)
+              ? item.searchTerm.map((term) => `${item.title}=${term}`).join("&")
+              : `${item.title}=${item.searchTerm || item.value}`
+            const values =
+              item.title === "time" ? item.value.split(" ") : [item.value]
             return {
               title: this.i18nStore.translate(item.title),
               value: `<a href="/${this.i18nStore.activeLang}/${
                 ERoutes.OPEN_DATA
-              }?${item.title}=${item.searchTerm || item.value}">${
-                item.value
-              }</a>`,
+              }?${search}">${values[0]}</a>&nbsp;${values[1] ?? ""}`,
             }
           }
-          if (
-            item.title.toLowerCase().includes("net") &&
-            item.value === UNKNOWN
-          ) {
+          if (item.mappable) {
             return {
               title: this.i18nStore.translate(item.title),
-              value: "LAN",
+              value: `<a href="/${this.i18nStore.activeLang}/${
+                ERoutes.MAP
+              }?lat=${item.coordinates![1]}&lon=${item.coordinates![0]}">${
+                item.value
+              }</a>`,
             }
           }
           return {

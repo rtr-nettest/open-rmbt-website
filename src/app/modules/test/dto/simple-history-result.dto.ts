@@ -130,7 +130,7 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
   static fillDetailsFromOpenTestResult(openTestsResponse: any, t: Translation) {
     const trd: IDetailedHistoryResultItem[] = []
     for (const [key, value] of Object.entries(openTestsResponse)) {
-      if (SKIPPED_KEYS.has(key) || value === null) {
+      if (SKIPPED_KEYS.has(key) || !value) {
         continue
       }
       const v = FORMATTED_KEYS[key]

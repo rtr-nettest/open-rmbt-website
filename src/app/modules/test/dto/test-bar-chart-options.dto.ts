@@ -71,7 +71,7 @@ export class TestBarChartOptions {
         },
         maxTicksLimit: 6,
         callback: (value: any) => {
-          return `${value} ${this.t.translate("ms")}`
+          return `${value} ${this.t.translate("millis")}`
         },
       },
     },

@@ -114,7 +114,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
         deepGreen: provider.ping_ultragreen,
         label: Math.round(provider.quantile_ping / 1e6),
         provider: provider.name,
-        units: "ms",
+        units: "millis",
       }),
       justify: "flex-end",
     },

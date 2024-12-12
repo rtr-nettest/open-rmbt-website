@@ -116,7 +116,7 @@ export class PopupService {
         "smallerBetter"
       ),
       ping: measurement.ping_ms
-        ? `${Math.round(measurement.ping_ms)} ${t["ms"]}`
+        ? `${Math.round(measurement.ping_ms)} ${t["millis"]}`
         : t[UNKNOWN],
       signalClass: this.classification.classify(
         signal,

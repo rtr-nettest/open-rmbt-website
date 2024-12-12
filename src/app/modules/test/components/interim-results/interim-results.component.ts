@@ -48,7 +48,9 @@ export class InterimResultsComponent {
         this.ping =
           ping < 0
             ? "-"
-            : ping.toLocaleString(locale) + " " + this.i18nStore.translate("ms")
+            : ping.toLocaleString(locale) +
+              " " +
+              this.i18nStore.translate("millis")
         const download = roundToSignificantDigits(
           state.phases[EMeasurementStatus.DOWN].down
         )

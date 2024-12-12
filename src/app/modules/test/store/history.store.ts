@@ -191,7 +191,7 @@ export class HistoryStore {
           this.classification.getPhaseIconByClass("ping", hi.pingClass) +
           hi.ping.toLocaleString(locale) +
           " " +
-          t["ms"],
+          t["millis"],
         loopUuid: hi.loopUuid,
         hidden: hi.hidden,
       }
