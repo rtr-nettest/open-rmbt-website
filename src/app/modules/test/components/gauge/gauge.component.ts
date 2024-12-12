@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, NgZone } from "@angular/core"
 import { Observable, tap } from "rxjs"
-import { ConversionService } from "../../../shared/services/conversion.service"
 import { TestStore } from "../../store/test.store"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { EMeasurementStatus } from "../../constants/measurement-status.enum"
@@ -8,6 +7,7 @@ import { ITestPhaseState } from "../../interfaces/test-phase-state.interface"
 import { AsyncPipe, NgIf } from "@angular/common"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { ITestVisualizationState } from "../../interfaces/test-visualization-state.interface"
+import { roundToSignificantDigits, speedLog } from "../../../shared/util/math"
 
 @Component({
   selector: "app-gauge",
@@ -22,7 +22,6 @@ export class GaugeComponent {
   measurementProgress: string = ""
 
   constructor(
-    private conversion: ConversionService,
     private i18nStore: I18nStore,
     private store: TestStore,
     private ngZone: NgZone
@@ -195,13 +194,13 @@ export class GaugeComponent {
     }
     //if speed information is available - set text
     if (speedMbit !== null && speedMbit > 0) {
-      this.setBarPercentage("#speed", this.conversion.speedLog(speedMbit))
+      this.setBarPercentage("#speed", speedLog(speedMbit))
 
       speedTextEl.innerHTML =
         '<tspan style="fill:#59b200">' +
         directionSymbol +
         "</tspan>\u200a" +
-        this.conversion.getSignificantDigits(speedMbit).toLocaleString(locale)
+        roundToSignificantDigits(speedMbit).toLocaleString(locale)
       speedUnitEl.textContent = this.i18nStore.translate("Mbps")
 
       //enable smoothing animations on speed gauge, as soon as initial speed value is set

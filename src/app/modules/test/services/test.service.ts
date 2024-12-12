@@ -282,16 +282,31 @@ export class TestService {
       return of(null)
     }
     return forkJoin([
-      from(this.repo.getResult(params)),
       from(this.repo.getOpenResult(params)),
+      from(this.repo.getResult(params)),
     ]).pipe(
-      map(([[response, testResultDetail], openTestsResponse]) => {
+      map(([openTestsResponse, [response, testResultDetail]]) => {
         const historyResult = SimpleHistoryResult.fromOpenTestResult(
           params.testUuid!,
           response,
           openTestsResponse,
-          testResultDetail
+          this.i18nStore.translations
         )
+        if (
+          historyResult.detailedHistoryResult &&
+          testResultDetail?.testresultdetail.length
+        ) {
+          const trdSet = new Set(
+            historyResult.detailedHistoryResult.map((item) =>
+              this.i18nStore.translate(item.title)
+            )
+          )
+          for (const item of testResultDetail.testresultdetail) {
+            if (!trdSet.has(item.title)) {
+              historyResult.detailedHistoryResult.push(item)
+            }
+          }
+        }
         this.testStore.simpleHistoryResult$.next(historyResult)
         const newPhase = new TestPhaseState({
           phase: EMeasurementStatus.SHOWING_RESULTS,
@@ -313,7 +328,8 @@ export class TestService {
         })
         return historyResult
       }),
-      catchError(() => {
+      catchError((e) => {
+        console.log(e)
         this.router.navigate([
           this.i18nStore.activeLang,
           ERoutes.PAGE_NOT_FOUND,

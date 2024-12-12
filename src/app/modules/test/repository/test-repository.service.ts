@@ -64,7 +64,7 @@ export class TestRepositoryService {
   async getResult(params: ITestResultRequest) {
     const { testUuid } = params
     if (!testUuid) {
-      throw new Error("Test UUID is required")
+      return [null, null]
     }
     const body = {
       test_uuid: testUuid,

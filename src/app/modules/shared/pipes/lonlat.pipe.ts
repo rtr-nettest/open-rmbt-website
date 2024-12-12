@@ -1,6 +1,8 @@
 import { Pipe, PipeTransform } from "@angular/core"
 import formatcoords from "formatcoords"
 
+export const LOC_FORMAT = "X DDmm"
+
 @Pipe({
   name: "lonlat",
   standalone: true,
@@ -10,7 +12,6 @@ export class LonlatPipe implements PipeTransform {
     if (!value) {
       return null
     }
-    const coords = formatcoords(value[0], value[1])
-    return coords.format("X DDmm")
+    return formatcoords(value[0], value[1]).format(LOC_FORMAT)
   }
 }

@@ -3,4 +3,7 @@ export interface IDetailedHistoryResultItem {
   value: string
   searchable?: boolean
   searchTerm?: string | null
+  mappable?: boolean
+  coordinates?: [number, number]
+  initial?: boolean
 }

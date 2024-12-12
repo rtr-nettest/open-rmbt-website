@@ -14,7 +14,6 @@ import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.int
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { IDetailedHistoryResultItem } from "../../interfaces/detailed-history-result-item.interface"
 import { ClassificationService } from "../../../shared/services/classification.service"
-import { ConversionService } from "../../../shared/services/conversion.service"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { ActivatedRoute, Router, RouterModule } from "@angular/router"
 import { TestStore } from "../../store/test.store"
@@ -27,6 +26,7 @@ import { MainStore } from "../../../shared/store/main.store"
 import { TestChartComponent } from "../../components/test-chart/test-chart.component"
 import { MatButtonModule } from "@angular/material/button"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
+import { roundMs, roundToSignificantDigits } from "../../../shared/util/math"
 
 @Component({
   selector: "app-result-screen",
@@ -86,7 +86,6 @@ export class ResultScreenComponent {
 
   constructor(
     private classification: ClassificationService,
-    private conversion: ConversionService,
     private exporter: HistoryExportService,
     private i18nStore: I18nStore,
     private mainStore: MainStore,
@@ -111,7 +110,7 @@ export class ResultScreenComponent {
   getSpeedInMbps(speed: number) {
     const locale = this.i18nStore.activeLang
     return (
-      this.conversion.getSignificantDigits(speed / 1e3).toLocaleString(locale) +
+      roundToSignificantDigits(speed / 1e3).toLocaleString(locale) +
       " " +
       this.i18nStore.translate("Mbps")
     )
@@ -120,7 +119,7 @@ export class ResultScreenComponent {
   getPingInMs(ping: number) {
     const locale = this.i18nStore.activeLang
     return (
-      this.conversion.getSignificantDigits(ping).toLocaleString(locale) +
+      Math.round(ping).toLocaleString(locale) +
       " " +
       this.i18nStore.translate("ms")
     )
@@ -186,15 +185,14 @@ export class ResultScreenComponent {
     return {
       content:
         result.detailedHistoryResult?.map((item) => {
-          const isOpenResultId = /^O[-0-9a-zA-Z]+$/.test(item.value)
-          if (this.openResultBaseURL && isOpenResultId && !this.openResultURL) {
-            this.openResultURL = `${this.openResultBaseURL}${item.value}`
-            this.addOpenResultButton()
-          }
-          if (this.openResultURL && isOpenResultId) {
+          if (item.searchable) {
             return {
               title: this.i18nStore.translate(item.title),
-              value: `<a href="${this.openResultURL}" target="_blank">${item.value}</a>`,
+              value: `<a href="/${this.i18nStore.activeLang}/${
+                ERoutes.OPEN_DATA
+              }?${item.title}=${item.searchTerm || item.value}">${
+                item.value
+              }</a>`,
             }
           }
           if (
@@ -230,18 +228,5 @@ export class ResultScreenComponent {
     } else {
       this.router.navigate(["/"])
     }
-  }
-
-  private addOpenResultButton() {
-    this.actionButtons.push({
-      label: "Open in browser",
-      icon: "new-window",
-      action: () => {
-        if (this.openResultURL) {
-          window.open(this.openResultURL, "_blank")
-        }
-        return of(null)
-      },
-    })
   }
 }

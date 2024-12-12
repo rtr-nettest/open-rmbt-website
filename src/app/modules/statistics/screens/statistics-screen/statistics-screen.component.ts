@@ -30,7 +30,7 @@ import {
 } from "../../../shared/services/platform.service"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatButtonModule } from "@angular/material/button"
-import { ConversionService } from "../../../shared/services/conversion.service"
+import { roundToSignificantDigits } from "../../../shared/util/math"
 
 @Component({
   selector: "app-statistics-screen",
@@ -52,7 +52,6 @@ import { ConversionService } from "../../../shared/services/conversion.service"
   styleUrl: "./statistics-screen.component.scss",
 })
 export class StatisticsScreenComponent extends SeoComponent implements OnInit {
-  conversion = inject(ConversionService)
   footerColumns = ["name", "down", "up", "latency", "count"]
   loading = false
   progress = 0
@@ -192,14 +191,14 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
       header: "Down (Mbps)",
       columnDef: "down",
       transformValue: (value) =>
-        this.conversion.getSignificantDigits(value.quantile_down / 1000),
+        roundToSignificantDigits(value.quantile_down / 1000),
       justify: "flex-end",
     },
     {
       header: "Up (Mbps)",
       columnDef: "up",
       transformValue: (value) =>
-        this.conversion.getSignificantDigits(value.quantile_up / 1000),
+        roundToSignificantDigits(value.quantile_up / 1000),
       justify: "flex-end",
     },
     {
@@ -345,13 +344,11 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
   ) {
     switch (col.columnDef) {
       case "down":
-        return this.conversion.getSignificantDigits(
+        return roundToSignificantDigits(
           data.providers_sums.quantile_down / 1000
         )
       case "up":
-        return this.conversion.getSignificantDigits(
-          data.providers_sums.quantile_up / 1000
-        )
+        return roundToSignificantDigits(data.providers_sums.quantile_up / 1000)
       case "latency":
         return Math.round(data.providers_sums.quantile_ping / 1e6)
       case "count":

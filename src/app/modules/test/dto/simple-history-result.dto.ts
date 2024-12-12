@@ -4,10 +4,7 @@ import timezone from "dayjs/plugin/timezone" // dependent on utc plugin
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-import {
-  IMeasurementResult,
-  IPing,
-} from "../interfaces/measurement-result.interface"
+import { IPing } from "../interfaces/measurement-result.interface"
 import { IOverallResult } from "../interfaces/overall-result.interface"
 import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interface"
 import { IDetailedHistoryResultItem } from "../interfaces/detailed-history-result-item.interface"
@@ -18,8 +15,16 @@ import {
   THRESHOLD_UPLOAD,
 } from "../../shared/services/classification.service"
 import { CalcService } from "../services/calc.service"
-
-export const RESULT_DATE_FORMAT = "YYYY-MM-DD HH:mm:ss"
+import formatcoords from "formatcoords"
+import { LOC_FORMAT } from "../../shared/pipes/lonlat.pipe"
+import { Translation } from "../../i18n/store/i18n.store"
+import {
+  FORMATTED_KEYS,
+  INITIAL_KEYS,
+  RESULT_DATE_FORMAT,
+  SEARCHED_KEYS,
+  SKIPPED_KEYS,
+} from "../constants/detailed-results"
 
 export class SimpleHistoryResult implements ISimpleHistoryResult {
   static fromRTRHistoryResult(response: any) {
@@ -68,15 +73,13 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
     uuid: string,
     response: any,
     openTestsResponse: any,
-    testResultDetail: any
+    translations: Translation
   ) {
-    let trd: IDetailedHistoryResultItem[] = testResultDetail?.testresultdetail
-      ? [...testResultDetail?.testresultdetail]
-      : []
-    trd = SimpleHistoryResult.fillDetailsFromOpenTestResult(
-      trd,
-      openTestsResponse
-    )
+    const trd: IDetailedHistoryResultItem[] =
+      SimpleHistoryResult.fillDetailsFromOpenTestResult(
+        openTestsResponse,
+        translations
+      )
     return new SimpleHistoryResult(
       openTestsResponse?.time
         ? dayjs(openTestsResponse.time, RESULT_DATE_FORMAT)
@@ -124,61 +127,41 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
     )
   }
 
-  static fillDetailsFromOpenTestResult(
-    trd: IDetailedHistoryResultItem[],
-    openTestsResponse: any
-  ) {
-    const skippedKeys = new Set([
-      "time",
-      "server_name",
-      "download_kbit",
-      "upload_kbit",
-      "ping_ms",
-      "public_ip_as_name",
-      "ip_anonym",
-      "speed_curve",
-      "download_classification",
-      "upload_classification",
-      "ping_classification",
-      "long",
-      "lat",
-    ])
-    const searchableKeys: {
-      [key: string]: null | ((testData: any) => string)
-    } = {
-      cat_technology: null,
-      radio_band: null,
-      network_name: null,
-      provider_name: null,
-      network_country: null,
-      country_sim: (testData: any) => testData["sim_country"],
-      country_geoip: (testData: any) => testData.country_geoip.toLowerCase(),
-      public_ip_as_name: null,
-      country_asn: (testData: any) => testData.country_asn.toLowerCase(),
-      platform: null,
-      model: null,
-      client_version: null,
-    }
+  static fillDetailsFromOpenTestResult(openTestsResponse: any, t: Translation) {
+    const trd: IDetailedHistoryResultItem[] = []
     for (const [key, value] of Object.entries(openTestsResponse)) {
-      if (skippedKeys.has(key) || value === null) {
+      if (SKIPPED_KEYS.has(key) || value === null) {
         continue
       }
-      if (key in searchableKeys) {
-        trd.push({
-          title: key,
-          value: `${value}`,
-          searchable: true,
-          searchTerm: searchableKeys[key]
-            ? searchableKeys[key](openTestsResponse)
-            : null,
-        })
-        continue
-      }
+      const v = FORMATTED_KEYS[key]
+        ? FORMATTED_KEYS[key](openTestsResponse, t)
+        : value
+      const initial = INITIAL_KEYS.has(key)
+      const searchable = SEARCHED_KEYS[key] !== undefined
+      const searchTerm = SEARCHED_KEYS[key]
+        ? SEARCHED_KEYS[key](openTestsResponse)
+        : undefined
       trd.push({
         title: key,
-        value: `${value}`,
+        value: `${v}`,
+        searchable,
+        searchTerm,
+        initial,
       })
     }
+
+    trd.push({
+      title: "location",
+      value: `${formatcoords(
+        openTestsResponse.lat,
+        openTestsResponse.long
+      ).format(LOC_FORMAT)} (${openTestsResponse.loc_src}, +/- ${
+        openTestsResponse.loc_accuracy
+      }m)`,
+      mappable: true,
+      coordinates: [openTestsResponse.long, openTestsResponse.lat],
+      initial: true,
+    })
     return trd
   }
 

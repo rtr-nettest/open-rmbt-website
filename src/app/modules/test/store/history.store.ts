@@ -15,13 +15,13 @@ import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interf
 import { IPaginator } from "../../tables/interfaces/paginator.interface"
 import { ISort } from "../../tables/interfaces/sort.interface"
 import { ClassificationService } from "../../shared/services/classification.service"
-import { ConversionService } from "../../shared/services/conversion.service"
 import {
   IHistoryGroupItem,
   IHistoryRowRTR,
 } from "../interfaces/history-row.interface"
 import { ExpandArrowComponent } from "../../shared/components/expand-arrow/expand-arrow.component"
 import { TestService } from "../services/test.service"
+import { roundToSignificantDigits } from "../../shared/util/math"
 
 @Injectable({
   providedIn: "root",
@@ -39,7 +39,6 @@ export class HistoryStore {
 
   constructor(
     private classification: ClassificationService,
-    private conversion: ConversionService,
     private datePipe: DatePipe,
     private i18nStore: I18nStore,
     private service: TestService
@@ -178,16 +177,14 @@ export class HistoryStore {
         measurementDate,
         download:
           this.classification.getPhaseIconByClass("down", hi.downloadClass) +
-          this.conversion
-            .getSignificantDigits(hi.downloadKbit / 1e3)
-            .toLocaleString(locale) +
+          roundToSignificantDigits(hi.downloadKbit / 1e3).toLocaleString(
+            locale
+          ) +
           " " +
           t["Mbps"],
         upload:
           this.classification.getPhaseIconByClass("up", hi.uploadClass) +
-          this.conversion
-            .getSignificantDigits(hi.uploadKbit / 1e3)
-            .toLocaleString(locale) +
+          roundToSignificantDigits(hi.uploadKbit / 1e3).toLocaleString(locale) +
           " " +
           t["Mbps"],
         ping:

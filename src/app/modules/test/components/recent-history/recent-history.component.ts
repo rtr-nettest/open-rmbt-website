@@ -107,9 +107,10 @@ export class RecentHistoryComponent implements OnChanges {
       const navFunc = () => {
         this.testService.abortMeasurement()
         this.testService.disableLoopMode()
-        this.router.navigateByUrl(
-          "/" + ERoutes.RESULT.replace(":testUuid", loopUuid)
-        )
+        // TODO: navigate to result page
+        // this.router.navigateByUrl(
+        //   "/" + ERoutes.RESULT.replace(":testUuid", loopUuid)
+        // )
       }
       if (this.interruptsTests) {
         this.message.openConfirmDialog(THIS_INTERRUPTS_ACTION, navFunc, {

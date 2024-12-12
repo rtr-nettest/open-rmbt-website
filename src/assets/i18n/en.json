@@ -135,7 +135,7 @@
   "country_sim": "SIM home country",
   "platform": "Platform",
   "ip_anonym": "IP (anonymized)",
-  "open_uuid": "Open-User-UUID",
+  "open_uuid": "Open User ID",
   "network_country": "Country of network",
   "distance": "Movement",
   "lte_rsrp": "Signal strength (RSRP)",
@@ -151,8 +151,8 @@
   "asn": "AS number",
   "num_threads_requested": "Connections requested",
   "sim_mcc_mnc": "Home network MCC-MNC",
-  "duration_download_ms": "Download duration",
-  "duration_upload_ms": "Upload duration",
+  "duration_download_ms": "Duration download",
+  "duration_upload_ms": "Duration upload",
   "network_mcc_mnc": "Mobile network MCC-MNC",
   "bytes_download": "Data volume download",
   "bytes_upload": "Data volume upload",
@@ -162,5 +162,9 @@
   "public_ip_as_name": "IP network name",
   "roaming_international": "international roaming",
   "roaming_national": "national roaming",
-  "roaming_none": "not roaming"
+  "roaming_none": "not roaming",
+  "test_duration": "Nominal test duration",
+  "download_kbit": "Download speed",
+  "upload_kbit": "Upload speed",
+  "ping_ms": "Ping"
 }

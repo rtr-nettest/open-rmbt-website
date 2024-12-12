@@ -4,8 +4,8 @@ import { ETestStatuses } from "../constants/test-statuses.enum"
 import { EMeasurementStatus } from "../constants/measurement-status.enum"
 import { IPing } from "../interfaces/measurement-result.interface"
 import { IOverallResult } from "../interfaces/overall-result.interface"
-import { ConversionService } from "../../shared/services/conversion.service"
 import { STATE_UPDATE_TIMEOUT } from "../constants/numbers"
+import { speedLog } from "../../shared/util/math"
 
 export class TestPhaseState implements ITestPhaseState {
   counter: number = -1
@@ -27,8 +27,6 @@ export class TestPhaseState implements ITestPhaseState {
   endTimeMs: number = 0
   openTestUuid: string = ""
 
-  private conversion = new ConversionService()
-
   constructor(options?: Partial<ITestPhaseState>) {
     if (options) {
       Object.assign(this, options)
@@ -42,7 +40,7 @@ export class TestPhaseState implements ITestPhaseState {
         ...acc,
         {
           x: msec / 1e3,
-          y: this.conversion.speedLog(r.speed / 1e6),
+          y: speedLog(r.speed / 1e6),
         },
       ]
     }, [] as { x: number; y: number }[])
@@ -67,7 +65,7 @@ export class TestPhaseState implements ITestPhaseState {
       ...(this.chart || []),
       {
         x: Math.max(this.duration - STATE_UPDATE_TIMEOUT / 1000, 0),
-        y: this.conversion.speedLog(this.counter),
+        y: speedLog(this.counter),
       },
     ]
   }

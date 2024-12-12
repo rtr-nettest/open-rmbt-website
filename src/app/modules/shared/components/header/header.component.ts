@@ -8,6 +8,7 @@ import { firstValueFrom, map, Observable } from "rxjs"
 import { Router } from "@angular/router"
 import { ILink } from "../../interfaces/link.interface"
 import { AsyncPipe } from "@angular/common"
+import { TranslationService } from "../../../i18n/services/translation.service"
 
 @Component({
   selector: "app-header",
@@ -31,7 +32,7 @@ export class HeaderComponent {
 
   constructor(
     private readonly i18nStore: I18nStore,
-    private readonly router: Router
+    private readonly translation: TranslationService
   ) {
     this.rtrLinks$ = this.i18nStore.getTranslations().pipe(
       map((v) => [
@@ -54,13 +55,6 @@ export class HeaderComponent {
   }
 
   setLocale(locale: ILocale) {
-    const paths = globalThis.location.pathname.split("/").filter(Boolean)
-    if (paths.length == 0 || this.i18nStore.availableLangs.includes(paths[0])) {
-      paths[0] = locale.code
-    } else {
-      paths.unshift(locale.code)
-    }
-
-    this.router.navigate(paths)
+    this.translation.setLocale(locale)
   }
 }

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core"
 import { Observable, tap } from "rxjs"
 import { EMeasurementStatus } from "../../constants/measurement-status.enum"
-import { ConversionService } from "../../../shared/services/conversion.service"
 import { TestStore } from "../../store/test.store"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { AsyncPipe, NgIf } from "@angular/common"
@@ -11,6 +10,7 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { LonlatPipe } from "../../../shared/pipes/lonlat.pipe"
 import { IBasicNetworkInfo } from "../../interfaces/basic-network-info.interface"
 import { ITestVisualizationState } from "../../interfaces/test-visualization-state.interface"
+import { roundToSignificantDigits } from "../../../shared/util/math"
 
 @Component({
   selector: "app-interim-results",
@@ -37,23 +37,19 @@ export class InterimResultsComponent {
 
   phases = EMeasurementStatus
 
-  constructor(
-    private conversionService: ConversionService,
-    private i18nStore: I18nStore,
-    private store: TestStore
-  ) {
+  constructor(private i18nStore: I18nStore, private store: TestStore) {
     this.basicNetworkInfo$ = this.store.basicNetworkInfo$
     this.visualization$ = this.store.visualization$.pipe(
       tap((state) => {
         const locale = this.i18nStore.activeLang
-        const ping = this.conversionService.getSignificantDigits(
+        const ping = roundToSignificantDigits(
           state.phases[EMeasurementStatus.DOWN].ping
         )
         this.ping =
           ping < 0
             ? "-"
             : ping.toLocaleString(locale) + " " + this.i18nStore.translate("ms")
-        const download = this.conversionService.getSignificantDigits(
+        const download = roundToSignificantDigits(
           state.phases[EMeasurementStatus.DOWN].down
         )
         this.download =
@@ -62,7 +58,7 @@ export class InterimResultsComponent {
             : download.toLocaleString(locale) +
               " " +
               this.i18nStore.translate("Mbps")
-        const upload = this.conversionService.getSignificantDigits(
+        const upload = roundToSignificantDigits(
           state.phases[EMeasurementStatus.UP].up
         )
         this.upload =

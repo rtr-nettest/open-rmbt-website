@@ -150,8 +150,8 @@
   "asn": "AS-Nummer",
   "num_threads_requested": "Anzahl angef. Verbindungen",
   "sim_mcc_mnc": "Heimatnetz MCC-MNC",
-  "duration_download_ms": "Downloaddauer",
-  "duration_upload_ms": "Uploaddauer",
+  "duration_download_ms": "Dauer Download",
+  "duration_upload_ms": "Dauer Upload",
   "network_mcc_mnc": "Mobilfunknetz MCC-MNC",
   "bytes_download": "Datenmenge Download",
   "bytes_upload": "Datenmenge Upload",
@@ -161,5 +161,9 @@
   "public_ip_as_name": "Name des IP-Netzwerks",
   "roaming_international": "internationales Roaming",
   "roaming_national": "nationales Roaming",
-  "roaming_none": "kein Roaming"
+  "roaming_none": "kein Roaming",
+  "test_duration": "Nominelle Testdauer",
+  "download_kbit": "Download",
+  "upload_kbit": "Upload",
+  "ping_ms": "Ping"
 }

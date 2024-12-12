@@ -19,7 +19,7 @@ import { ERoutes } from "../../shared/constants/routes.enum"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
-import { ConversionService } from "../../shared/services/conversion.service"
+import { roundToSignificantDigits } from "../../shared/util/math"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -49,8 +49,7 @@ export class PopupService {
 
   constructor(
     private readonly i18nStore: I18nStore,
-    private readonly classification: ClassificationService,
-    private readonly conversion: ConversionService
+    private readonly classification: ClassificationService
   ) {}
 
   async addPopup(mapContainer: Map, measurement: IRecentMeasurement) {
@@ -97,9 +96,9 @@ export class PopupService {
         "biggerBetter"
       ),
       download: measurement.download_kbit
-        ? `${this.conversion.getSignificantDigits(
-            measurement.download_kbit / 1000
-          )} ${t["Mbps"]}`
+        ? `${roundToSignificantDigits(measurement.download_kbit / 1000)} ${
+            t["Mbps"]
+          }`
         : t[UNKNOWN],
       uploadClass: this.classification.classify(
         measurement.upload_kbit,
@@ -107,9 +106,9 @@ export class PopupService {
         "biggerBetter"
       ),
       upload: measurement.upload_kbit
-        ? `${this.conversion.getSignificantDigits(
-            measurement.upload_kbit / 1000
-          )} ${t["Mbps"]}`
+        ? `${roundToSignificantDigits(measurement.upload_kbit / 1000)} ${
+            t["Mbps"]
+          }`
         : t[UNKNOWN],
       pingClass: this.classification.classify(
         measurement.ping_ms,

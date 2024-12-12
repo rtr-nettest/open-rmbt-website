@@ -32,7 +32,7 @@ import { TableComponent } from "../../../tables/components/table/table.component
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import dayjs from "dayjs"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
-import { ConversionService } from "../../../shared/services/conversion.service"
+import { roundToSignificantDigits } from "../../../shared/util/math"
 
 const UPDATE_INTERVAL = 5000
 
@@ -55,7 +55,6 @@ const UPDATE_INTERVAL = 5000
   styleUrl: "./home.component.scss",
 })
 export class HomeComponent extends SeoComponent implements AfterViewInit {
-  conversion = inject(ConversionService)
   mapContainerId = "mapContainer"
   text$: Observable<string> = this.i18nStore.getLocalizedHtml("home")
   appLinksText$: Observable<string> = this.i18nStore.getTranslations().pipe(
@@ -116,7 +115,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
       columnDef: "download",
       header: "Down (Mbps)",
       transformValue: (value) => {
-        return this.conversion.getSignificantDigits(value.download_kbit / 1000)
+        return roundToSignificantDigits(value.download_kbit / 1000)
       },
       justify: "flex-end",
     },
@@ -124,7 +123,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
       columnDef: "upload",
       header: "Up (Mbps)",
       transformValue: (value) => {
-        return this.conversion.getSignificantDigits(value.upload_kbit / 1000)
+        return roundToSignificantDigits(value.upload_kbit / 1000)
       },
       justify: "flex-end",
     },
@@ -132,7 +131,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
       columnDef: "ping",
       header: "Ping (ms)",
       transformValue: (value) => {
-        return this.conversion.convertMs(value.ping_ms)
+        return Math.round(value.ping_ms)
       },
       justify: "flex-end",
     },
