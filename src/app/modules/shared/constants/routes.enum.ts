@@ -5,7 +5,7 @@ export enum ERoutes {
   STATISTICS = "statistics",
   TEST = "test",
   LOOP = "series",
-  LOOP_RESULT = "series/:loopUuid",
+  LOOP_RESULT = "series-result",
   CERTIFIED = "certified-step-1",
   OPEN_DATA = "opentests",
   OPTIONS = "options",

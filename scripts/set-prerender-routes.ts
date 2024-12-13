@@ -8,6 +8,9 @@ function main() {
     path.resolve(__dirname, "..", "src", "prerender-routes.txt")
   )
   for (const route of Object.values(ERoutes)) {
+    if (route.includes(":")) {
+      continue
+    }
     const path = "/" + route
     out.push(path)
     ws.write(path + "\n")

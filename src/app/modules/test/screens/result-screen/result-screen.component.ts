@@ -262,21 +262,4 @@ export class ResultScreenComponent {
       totalElements: result.detailedHistoryResult?.length ?? 0,
     }
   }
-
-  weHaveToGoBack() {
-    if (this.mainStore.referrer$.value?.includes(ERoutes.HISTORY)) {
-      this.router.navigate(["/", ERoutes.HISTORY])
-    } else if (
-      this.mainStore.referrer$.value?.includes(
-        ERoutes.LOOP_RESULT.split("/")[0]
-      )
-    ) {
-      const parts = this.mainStore.referrer$.value.split("/")
-      this.router.navigateByUrl(
-        ERoutes.LOOP_RESULT.replace(":loopUuid", parts[parts.length - 1])
-      )
-    } else {
-      this.router.navigate(["/"])
-    }
-  }
 }
