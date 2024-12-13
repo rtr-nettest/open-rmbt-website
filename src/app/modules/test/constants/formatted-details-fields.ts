@@ -4,109 +4,10 @@ import tz from "dayjs/plugin/timezone"
 dayjs.extend(utc)
 dayjs.extend(tz)
 import { Translation } from "../../i18n/store/i18n.store"
-import { roundToSignificantDigits } from "../../shared/util/math"
+import { formatBytes, roundToSignificantDigits } from "../../shared/util/math"
+import { RESULT_DATE_FORMAT } from "./strings"
 
-export const RESULT_DATE_FORMAT = "YYYY-MM-DD HH:mm:ss"
-
-export const INITIAL_KEYS = new Set([
-  "open_uuid",
-  "open_test_uuid",
-  "time",
-  "timezone",
-  "download_kbit",
-  "upload_kbit",
-  "ping_ms",
-  "test_duration",
-  "duration_download_ms",
-  "duration_upload_ms",
-  "network_type",
-  "cat_technology",
-  "network_name",
-  "provider_name",
-  "network_mcc_mnc",
-  "network_country",
-  "sim_mcc_mnc",
-  "sim_country",
-  "location",
-  "distance",
-  "gkz",
-  "locality",
-  "community",
-  "district",
-  "province",
-  "roaming_type",
-  "lte_rsrq",
-  "client_public_ip",
-  "client_public_ip_as_name",
-  "client_public_ip_as",
-  "client_public_ip_rdns",
-  "connection",
-  "country_asn",
-  "country_geoip",
-  "public_ip_as_name",
-  "platform",
-  "model",
-  "server_name",
-  "client_software_version",
-  "client_version",
-  "num_threads",
-  "num_threads_ul",
-])
-
-export const SKIPPED_KEYS = new Set([
-  "speed_curve",
-  "download_classification",
-  "upload_classification",
-  "ping_classification",
-  "long",
-  "lat",
-  "loc_accuracy",
-  "loc_src",
-  "implausible",
-  "pinned",
-  "product",
-])
-
-export const SEARCHED_KEYS: {
-  [key: string]: null | ((testData: any) => string | string[])
-} = {
-  cat_technology: null,
-  radio_band: null,
-  network_name: null,
-  provider_name: null,
-  network_country: null,
-  country_sim: (testData: any) => testData["sim_country"],
-  country_geoip: (testData: any) => testData.country_geoip?.toLowerCase(),
-  public_ip_as_name: null,
-  country_asn: (testData: any) => testData.country_asn?.toLowerCase(),
-  platform: null,
-  model: null,
-  client_version: null,
-  open_uuid: null,
-  time: (testData: any) => {
-    const d = dayjs(testData.time, RESULT_DATE_FORMAT)
-    return [
-      `>${d.startOf("day").utc().format(RESULT_DATE_FORMAT)}`,
-      `<${d.endOf("day").utc().format(RESULT_DATE_FORMAT)}`,
-    ]
-  },
-}
-
-const formatBytes = (bytes: any, t: any) => {
-  if (bytes === null) return ""
-  var unit = t["bytes"]
-  if (bytes > 1000) {
-    bytes = bytes / 1000
-    unit = t["KB"]
-  }
-  if (bytes > 1000) {
-    bytes = bytes / 1000
-    unit = t["MB"]
-  }
-  return roundToSignificantDigits(bytes) + "&nbsp;" + unit
-}
-
-export const FORMATTED_KEYS: {
+export const FORMATTED_FIELDS: {
   [key: string]: null | ((testData: any, translations?: Translation) => string)
 } = {
   test_duration: (testData: any) => `${testData.test_duration} s`,
@@ -206,4 +107,20 @@ export const FORMATTED_KEYS: {
     const d = dayjs(testData.time, RESULT_DATE_FORMAT).utc(true)
     return d.tz(dayjs.tz.guess()).format(RESULT_DATE_FORMAT)
   },
+
+  // land_cover
+  land_cover: (testData: any, t: any) =>
+    `${testData.land_cover} - ${t[`corine_${testData.land_cover}`]}`,
+  land_cover_cat1: (testData: any, t: any) =>
+    `${Math.round(testData.land_cover / 100)} - ${
+      t[`corine_${testData.land_cover - (testData.land_cover % 100)}`]
+    }`,
+  land_cover_cat2: (testData: any, t: any) =>
+    `${Math.round(testData.land_cover / 10)} - ${
+      t[`corine_${testData.land_cover - (testData.land_cover % 10)}`]
+    }`,
+  settlement_type: (testData: any, t: any) =>
+    `${testData.settlement_type} - ${
+      t[`settlement_type_${testData.settlement_type}`]
+    }`,
 }

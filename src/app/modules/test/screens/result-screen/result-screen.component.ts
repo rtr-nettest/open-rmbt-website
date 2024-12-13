@@ -146,41 +146,64 @@ export class ResultScreenComponent {
     result: ISimpleHistoryResult
   ): IBasicResponse<IDetailedHistoryResultItem> {
     const content = Object.entries(result).reduce((acc, [key, value]) => {
+      const t = (key: string) => this.i18nStore.translate(key)
       switch (key) {
-        case "downloadKbit":
+        case "download":
           return [
             ...acc,
             {
-              title: "Download",
+              title: t("Download"),
               value:
                 this.classification.getPhaseIconByClass(
                   "down",
-                  result.downloadClass
-                ) + this.getSpeedInMbps(value),
+                  result.download?.classification
+                ) + this.getSpeedInMbps(value.value),
             },
           ]
-        case "uploadKbit":
+        case "upload":
           return [
             ...acc,
             {
-              title: "Upload",
+              title: t("Upload"),
               value:
                 this.classification.getPhaseIconByClass(
                   "up",
-                  result.uploadClass
-                ) + this.getSpeedInMbps(value),
+                  result.upload?.classification
+                ) + this.getSpeedInMbps(value.value),
             },
           ]
         case "ping":
           return [
             ...acc,
             {
-              title: "Ping",
+              title: t("Ping"),
               value:
                 this.classification.getPhaseIconByClass(
                   "ping",
-                  result.pingClass
-                ) + this.getPingInMs(value),
+                  result.ping?.classification
+                ) + this.getPingInMs(value.value),
+            },
+          ]
+        case "signal":
+          if (!result.signal) {
+            return acc
+          }
+          return [
+            ...acc,
+            {
+              title: t(
+                result.signal?.tags?.includes("lte_rsrp")
+                  ? "lte_rsrp"
+                  : "signal_strength"
+              ),
+              value:
+                this.classification.getSignalIconByClass(
+                  result.signal.classification,
+                  result.signal.metric
+                ) +
+                result.signal.value +
+                " " +
+                this.i18nStore.translate("dBm"),
             },
           ]
         default:

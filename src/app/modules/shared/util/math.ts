@@ -30,3 +30,17 @@ export function speedLog(speedMbps?: number) {
   yPercent = Math.min(1, yPercent)
   return yPercent
 }
+
+export function formatBytes(bytes: any, t: any) {
+  if (bytes === null) return ""
+  var unit = t["bytes"]
+  if (bytes > 1000) {
+    bytes = bytes / 1000
+    unit = t["KB"]
+  }
+  if (bytes > 1000) {
+    bytes = bytes / 1000
+    unit = t["MB"]
+  }
+  return roundToSignificantDigits(bytes) + "&nbsp;" + unit
+}

@@ -56,4 +56,21 @@ export class ClassificationService {
         return `<i class="app-icon--phase app-icon--phase-${phase}"`
     }
   }
+
+  getSignalIconByClass(classification?: number, metric?: string) {
+    if (!classification) {
+      return `<i class="svg-icon svg24 svg-empty"`
+    }
+    var sprite = null
+    if (classification >= 1 && classification <= 4) {
+      if (metric) {
+        sprite = "svg-" + metric + "-" + classification
+      } else {
+        sprite = "svg-traffic-light-" + classification
+      }
+    } else {
+      sprite = "svg-empty"
+    }
+    return `<i class="svg-icon svg24 ${sprite}"></i>`
+  }
 }

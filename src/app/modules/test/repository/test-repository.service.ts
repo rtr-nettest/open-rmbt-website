@@ -117,8 +117,11 @@ export class TestRepositoryService {
       throw new Error(resp.error)
     }
     if (resp?.history.length) {
-      return resp.history.map((hi: any) =>
-        SimpleHistoryResult.fromRTRHistoryResult(hi)
+      return resp.history.map(
+        (hi: any) =>
+          // TODO: Implement this
+          // SimpleHistoryResult.fromRTRHistoryResult(hi)
+          void 0
       )
     }
   }

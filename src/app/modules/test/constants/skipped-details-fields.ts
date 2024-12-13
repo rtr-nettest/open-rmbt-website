@@ -1,0 +1,16 @@
+export const SKIPPED_FIELDS = new Set([
+  "speed_curve",
+  "download_classification",
+  "upload_classification",
+  "ping_classification",
+  "long",
+  "lat",
+  "loc_accuracy",
+  "loc_src",
+  "implausible",
+  "pinned",
+  "product",
+  "kg_nr",
+  "gkz_sa",
+  "signal_classification",
+])

@@ -6,3 +6,4 @@ export const ERROR_OCCURED_SENDING_RESULTS =
   "An error occurred while sending the results"
 export const TERMS_AND_CONDITIONS = "Terms and conditions text"
 export const UUID = "RMBTuuid"
+export const RESULT_DATE_FORMAT = "YYYY-MM-DD HH:mm:ss"
