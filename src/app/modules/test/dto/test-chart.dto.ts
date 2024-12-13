@@ -16,12 +16,14 @@ export class TestChart extends Chart {
       datasets: [new TestChartDataset(context)],
       labels: generateIndexesOfLength(100),
     },
-    options: { [key: string]: any } = new TestChartOptions(i18nStore)
+    options: { [key: string]: any } = new TestChartOptions(i18nStore),
+    plugins: any[] = []
   ) {
     super(context, {
       type,
       data,
       options,
+      plugins,
     })
   }
 

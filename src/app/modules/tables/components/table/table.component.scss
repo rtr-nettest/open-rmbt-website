@@ -189,7 +189,29 @@ mat-paginator {
 }
 
 @include screen-xs {
-  .app-table {
+  .app-table--bordered {
+    mat-cell {
+      border-right: none;
+
+      :not(:only-child):last-child {
+        border-left: none;
+      }
+
+      &:first-of-type {
+        :not(:only-child):last-child {
+          justify-content: flex-start !important;
+          padding-left: 0;
+        }
+      }
+      &:last-of-type {
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+
+@include screen-xs {
+  .app-table--vertical {
     mat-header-row {
       display: none;
     }

@@ -112,6 +112,14 @@ export class TestService {
         this.rmbtTest.onStateChange(() => {
           this.stateChangeMs = Date.now()
         })
+        this.rmbtTest.onError((error: any) => {
+          this.ngZone.run(() => {
+            this.mainStore.error$.next(error)
+          })
+        })
+        // To not trigger console errors
+        this.rmbtTest._registrationCallback = () => {}
+        this.rmbtTest._submissionCallback = () => {}
       })
     }
     return interval(STATE_UPDATE_TIMEOUT).pipe(
