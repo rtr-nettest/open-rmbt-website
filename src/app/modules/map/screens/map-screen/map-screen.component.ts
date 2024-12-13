@@ -40,6 +40,8 @@ import { SearchComponent } from "../../components/search/search.component"
 import { MatDialog, MatDialogModule } from "@angular/material/dialog"
 import { ScrollStrategyOptions } from "@angular/cdk/overlay"
 
+export const POINTS_HEATMAP_SWITCH_LEVEL = 12
+
 @Component({
   selector: "app-map-screen",
   standalone: true,
@@ -72,14 +74,20 @@ export class MapScreenComponent extends SeoComponent {
           this.setSize()
           this.setResizeSub()
           this.setMap()
+          this.setCoordinatesAndZoom()
         }
       })
     })
   )
   zone = inject(NgZone)
-  activeLayer = this.mapService.getHeatmapSource({
-    networkMeasurementType: "mobile/download",
-  })
+  activeLayers: string[] = [
+    this.mapService.getHeatmapSource({
+      networkMeasurementType: "mobile/download",
+    }),
+    this.mapService.getPointSource({
+      networkMeasurementType: "mobile/download",
+    }),
+  ]
   private readonly dialog = inject(MatDialog)
   private readonly scrollStrategyOptions = inject(ScrollStrategyOptions)
 
@@ -114,6 +122,28 @@ export class MapScreenComponent extends SeoComponent {
       )
       this.map.on("load", () => {
         this.setTiles()
+        this.map.on("zoom", () => {
+          if (
+            !this.mapSourceOptions?.tiles ||
+            this.mapSourceOptions?.tiles === ETileTypes.automatic
+          ) {
+            if (this.map.getZoom() < POINTS_HEATMAP_SWITCH_LEVEL) {
+              // Points
+              this.map.setLayoutProperty(
+                this.activeLayers[1],
+                "visibility",
+                "none"
+              )
+            } else {
+              // Points
+              this.map.setLayoutProperty(
+                this.activeLayers[1],
+                "visibility",
+                "visible"
+              )
+            }
+          }
+        })
       })
     })
   }
@@ -152,44 +182,83 @@ export class MapScreenComponent extends SeoComponent {
   }
 
   private setTiles() {
-    let tiles: string = this.activeLayer
+    let tiles: string[] = [...this.activeLayers]
     switch (this.mapSourceOptions?.tiles) {
       case ETileTypes.points:
-        tiles = this.mapService.getPointSource(this.mapSourceOptions)
+        tiles = [this.mapService.getPointSource(this.mapSourceOptions)]
         break
       case ETileTypes.cadastral:
-        tiles = this.mapService.getShapeSource(this.mapSourceOptions)
+        tiles = [this.mapService.getShapeSource(this.mapSourceOptions)]
+        break
+      case ETileTypes.heatmap:
+        tiles = [this.mapService.getHeatmapSource(this.mapSourceOptions)]
         break
       case ETileTypes.automatic:
-      case ETileTypes.heatmap:
-        tiles = this.mapService.getHeatmapSource(this.mapSourceOptions)
+        tiles = [
+          this.mapService.getHeatmapSource(this.mapSourceOptions),
+          this.mapService.getPointSource(this.mapSourceOptions),
+        ]
         break
     }
     this.zone.runOutsideAngular(() => {
       if (tiles) {
-        try {
-          this.map.addSource(tiles, {
-            type: "raster",
-            tiles: [tiles],
-            tileSize: 256,
-            maxzoom: 19,
-          })
-        } catch (e) {
-          console.log(e)
-        }
-        try {
-          if (this.activeLayer && this.map.getLayer(this.activeLayer)) {
-            this.map.removeLayer(this.activeLayer)
+        if (this.activeLayers) {
+          for (const layer of this.activeLayers) {
+            if (this.map.getLayer(layer)) {
+              this.map.removeLayer(layer)
+            }
           }
-          this.map.addLayer({
-            id: tiles,
-            type: "raster" as const,
-            source: tiles,
-          })
-          this.activeLayer = tiles
-        } catch (e) {
-          console.log(e)
+          this.activeLayers = []
         }
+        for (const layer of tiles) {
+          try {
+            this.map.addSource(layer, {
+              type: "raster",
+              tiles: [layer],
+              tileSize: 256,
+              maxzoom: 19,
+            })
+          } catch (e) {
+            console.log(e)
+          }
+          try {
+            this.map.addLayer({
+              id: layer,
+              type: "raster" as const,
+              source: layer,
+            })
+            this.activeLayers.push(layer)
+          } catch (e) {
+            console.log(e)
+          }
+        }
+      }
+    })
+  }
+
+  private setCoordinatesAndZoom() {
+    this.zone.runOutsideAngular(() => {
+      const params = new URLSearchParams(globalThis.location.search)
+      if (params.has("lat") && params.has("lon")) {
+        this.map.setCenter([
+          parseFloat(params.get("lon")!),
+          parseFloat(params.get("lat")!),
+        ])
+      }
+      if (params.has("accuracy")) {
+        let zoom = 11
+        const accuracy = parseInt(params.get("accuracy")!)
+        const distance = params.get("distance")!
+        if (accuracy !== null) {
+          let totalAccuracy =
+            accuracy + (distance !== null ? parseInt(distance) : 0)
+          if (totalAccuracy < 100) {
+            zoom = 17
+          } else if (totalAccuracy < 1000) {
+            zoom = 13
+          }
+        }
+        this.map.setZoom(zoom)
       }
     })
   }

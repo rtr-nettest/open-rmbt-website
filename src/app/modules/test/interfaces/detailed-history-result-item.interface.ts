@@ -4,6 +4,10 @@ export interface IDetailedHistoryResultItem {
   searchable?: boolean
   searchTerm?: string | null | string[]
   mappable?: boolean
-  coordinates?: [number, number]
+  mapProps?: {
+    coordinates: [number, number]
+    accuracy?: number
+    distance?: number
+  }
   initial?: boolean
 }

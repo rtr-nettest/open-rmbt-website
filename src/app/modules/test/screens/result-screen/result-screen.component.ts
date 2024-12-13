@@ -244,9 +244,9 @@ export class ResultScreenComponent {
               title: this.i18nStore.translate(item.title),
               value: `<a href="/${this.i18nStore.activeLang}/${
                 ERoutes.MAP
-              }?lat=${item.coordinates![1]}&lon=${item.coordinates![0]}">${
-                item.value
-              }</a>`,
+              }?lat=${item.mapProps?.coordinates![1]}&lon=${
+                item.mapProps?.coordinates![0]
+              }&accuracy=${item.mapProps?.accuracy}">${item.value}</a>`,
             }
           } else {
             retVal = {

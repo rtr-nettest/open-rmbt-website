@@ -9,9 +9,9 @@
   <div class="app-row" [id]="mapContainerId">
     <div class="app-map" [id]="mapId"></div>
   </div>
-  @if (activeLayer && mapInfo) {
+  @if (activeLayers && mapInfo) {
   <app-heatmap-legend
-    [activeLayer]="activeLayer"
+    [activeLayer]="activeLayers[0]"
     [mapInfo]="mapInfo"
   ></app-heatmap-legend>
   }

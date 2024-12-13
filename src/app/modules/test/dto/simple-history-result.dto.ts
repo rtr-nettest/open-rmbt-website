@@ -179,7 +179,11 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
         openTestsResponse.loc_accuracy
       }m)`,
       mappable: true,
-      coordinates: [openTestsResponse.long, openTestsResponse.lat],
+      mapProps: {
+        coordinates: [openTestsResponse.long, openTestsResponse.lat],
+        accuracy: openTestsResponse.loc_accuracy,
+        distance: openTestsResponse.distance,
+      },
       initial: true,
     })
 
