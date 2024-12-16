@@ -72,8 +72,8 @@ export class MapScreenComponent extends SeoComponent {
         if (globalThis.document) {
           this.mapInfo = mapInfo
           this.setSize()
-          this.setResizeSub()
           this.setMap().then(() => {
+            this.setResizeSub()
             this.mapService.setCoordinatesAndZoom(
               this.map,
               new URLSearchParams(globalThis.location.search)

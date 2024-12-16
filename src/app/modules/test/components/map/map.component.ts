@@ -26,8 +26,8 @@ export class MapComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     if (globalThis.document) {
       this.setSize()
-      this.setResizeSub()
       this.setMap().then(() => {
+        this.setResizeSub()
         this.mapService.setCoordinatesAndZoom(this.map, this.params)
         this.addMarker()
       })

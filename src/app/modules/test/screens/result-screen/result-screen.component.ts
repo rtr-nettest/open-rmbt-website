@@ -28,6 +28,8 @@ import { MatButtonModule } from "@angular/material/button"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { roundToSignificantDigits } from "../../../shared/util/math"
 import { MapComponent } from "../../components/map/map.component"
+import { SeoComponent } from "../../../shared/components/seo/seo.component"
+import { Title } from "@angular/platform-browser"
 
 @Component({
   selector: "app-result-screen",
@@ -51,7 +53,7 @@ import { MapComponent } from "../../components/map/map.component"
   templateUrl: "./result-screen.component.html",
   styleUrl: "./result-screen.component.scss",
 })
-export class ResultScreenComponent {
+export class ResultScreenComponent extends SeoComponent {
   columns: ITableColumn[] = [
     {
       columnDef: "title",
@@ -101,15 +103,16 @@ export class ResultScreenComponent {
   }
 
   constructor(
+    i18nStore: I18nStore,
+    title: Title,
     private classification: ClassificationService,
     private exporter: HistoryExportService,
-    private i18nStore: I18nStore,
     private mainStore: MainStore,
     private service: TestService,
     private store: TestStore,
-    private route: ActivatedRoute,
-    private router: Router
+    private route: ActivatedRoute
   ) {
+    super(title, i18nStore)
     this.result$ = this.i18nStore.getTranslations().pipe(
       switchMap(() =>
         this.service.getMeasurementResult({
@@ -124,7 +127,9 @@ export class ResultScreenComponent {
     this.error$ = this.mainStore.error$
   }
 
-  ngOnDestroy(): void {
+  override ngOnDestroy(): void {
+    this.destroyed$.next()
+    this.destroyed$.complete()
     this.mainStore.error$.next(null)
   }
 

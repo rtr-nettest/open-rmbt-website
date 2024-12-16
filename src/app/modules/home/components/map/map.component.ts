@@ -58,8 +58,9 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   ngAfterViewInit(): void {
     if (globalThis.document) {
       this.setSize()
-      this.setResizeSub()
-      this.setMap()
+      this.setMap().then(() => {
+        this.setResizeSub()
+      })
     }
   }
 
