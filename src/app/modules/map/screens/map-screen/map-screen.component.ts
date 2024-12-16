@@ -128,27 +128,9 @@ export class MapScreenComponent extends SeoComponent {
       this.map.on("load", () => {
         this.setTiles()
         this.map.on("zoom", () => {
-          if (
-            !this.mapSourceOptions?.tiles ||
-            this.mapSourceOptions?.tiles === ETileTypes.automatic
-          ) {
-            if (this.map.getZoom() < POINTS_HEATMAP_SWITCH_LEVEL) {
-              // Points
-              this.map.setLayoutProperty(
-                this.activeLayers[1],
-                "visibility",
-                "none"
-              )
-            } else {
-              // Points
-              this.map.setLayoutProperty(
-                this.activeLayers[1],
-                "visibility",
-                "visible"
-              )
-            }
-          }
+          this.setTilesVisibility()
         })
+        this.setTilesVisibility()
       })
     })
   }
@@ -172,6 +154,25 @@ export class MapScreenComponent extends SeoComponent {
         .getElementById(this.mapId)!
         .setAttribute("style", `height:440px;width:${containerWidth}px`)
     })
+  }
+
+  private setTilesVisibility() {
+    if (
+      !this.mapSourceOptions?.tiles ||
+      this.mapSourceOptions?.tiles === ETileTypes.automatic
+    ) {
+      if (this.map.getZoom() < POINTS_HEATMAP_SWITCH_LEVEL) {
+        // Points
+        this.map.setLayoutProperty(this.activeLayers[1], "visibility", "none")
+      } else {
+        // Points
+        this.map.setLayoutProperty(
+          this.activeLayers[1],
+          "visibility",
+          "visible"
+        )
+      }
+    }
   }
 
   private setTiles() {
