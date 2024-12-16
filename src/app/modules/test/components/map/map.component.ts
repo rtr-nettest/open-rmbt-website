@@ -2,11 +2,15 @@ import { AfterViewInit, Component, Input, NgZone } from "@angular/core"
 import { firstValueFrom, Subject, Subscription } from "rxjs"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
 import { Map, NavigationControl } from "maplibre-gl"
+import { MatButtonModule } from "@angular/material/button"
+import { MatDialog } from "@angular/material/dialog"
+import { CoverageDialogComponent } from "../coverage-dialog/coverage-dialog.component"
+import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 @Component({
   selector: "app-map",
   standalone: true,
-  imports: [],
+  imports: [MatButtonModule, TranslatePipe],
   templateUrl: "./map.component.html",
   styleUrl: "./map.component.scss",
 })
@@ -19,6 +23,7 @@ export class MapComponent implements AfterViewInit {
   resizeSub!: Subscription
 
   constructor(
+    private readonly dialog: MatDialog,
     private readonly mapService: MapService,
     private readonly zone: NgZone
   ) {}
@@ -32,6 +37,13 @@ export class MapComponent implements AfterViewInit {
         this.addMarker()
       })
     }
+  }
+
+  showCoverageDialog() {
+    this.dialog.open(CoverageDialogComponent, {
+      data: this.params,
+      panelClass: "app-coverage-dialog",
+    })
   }
 
   private setResizeSub() {

@@ -8,6 +8,7 @@ import { Component, Input } from "@angular/core"
   styleUrl: "./html-wrapper.component.scss",
 })
 export class HtmlWrapperComponent {
+  @Input() id = ""
   @Input({ required: true }) set html(value: string | null) {
     if (!value) {
       return

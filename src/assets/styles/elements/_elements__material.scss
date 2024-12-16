@@ -48,3 +48,20 @@
     display: inline-flex;
   }
 }
+
+.cdk-global-overlay-wrapper .app-coverage-dialog.mat-mdc-dialog-panel {
+  max-width: calc(100vw - 80px);
+
+  .app-wrapper {
+    overflow-x: hidden;
+    padding-bottom: rem(20);
+  }
+}
+
+.cdk-global-overlay-wrapper {
+  display: flex;
+  position: absolute;
+  z-index: 1000;
+  overflow: auto;
+  pointer-events: auto;
+}

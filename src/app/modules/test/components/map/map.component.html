@@ -1,3 +1,6 @@
 @if (mapContainerId) {
+<button class="app-button" mat-stroked-button (click)="showCoverageDialog()">
+  {{ "Coverage" | translate }}
+</button>
 <div [id]="mapId"></div>
 }

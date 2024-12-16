@@ -1,0 +1,12 @@
+@import "core";
+
+:host {
+  position: relative;
+}
+
+.app-button {
+  position: absolute;
+  top: rem(10);
+  left: rem(10);
+  z-index: 1;
+}

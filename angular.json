@@ -21,7 +21,8 @@
               "dayjs",
               "maplibre-gl",
               "rmbtws",
-              "formatcoords"
+              "formatcoords",
+              "file-saver"
             ],
             "outputPath": "dist/open-rmbt-angular",
             "index": "src/index.dev.html",

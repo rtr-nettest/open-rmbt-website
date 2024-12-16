@@ -2,19 +2,20 @@ import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { IUserSetingsResponse } from "../interfaces/user-settings-response.interface"
 import { environment } from "../../../../environments/environment"
-import { firstValueFrom, tap } from "rxjs"
+import { firstValueFrom, map, Observable, tap } from "rxjs"
 import { UUID } from "../constants/strings"
 import { v4 } from "uuid"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
-import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
 import { IPaginator } from "../../tables/interfaces/paginator.interface"
 import {
   IOpenTestResultRequest,
   ITestResultRequest,
 } from "../interfaces/measurement-result.interface"
+import { ICoverage, ICoverageResponse } from "../interfaces/coverage.interface"
+import { IBasicResponse } from "../../tables/interfaces/basic-response.interface"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -124,5 +125,11 @@ export class TestRepositoryService {
           void 0
       )
     }
+  }
+
+  getCoverages(lon: number, lat: number) {
+    return this.http.get<ICoverageResponse>(
+      `${environment.api.cloud}/RMBTStatisticServer/coverage?long=${lon}&lat=${lat}`
+    )
   }
 }
