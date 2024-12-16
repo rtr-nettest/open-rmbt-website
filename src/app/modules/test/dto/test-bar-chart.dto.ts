@@ -7,7 +7,7 @@ import {
 import { TestChart } from "./test-chart.dto"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { TestBarChartOptions } from "./test-bar-chart-options.dto"
-import { BAR_WIDTH, TestBarChartPlugin } from "./test-bar-chart-plugin.dto"
+import { getBarWidth, TestBarChartPlugin } from "./test-bar-chart-plugin.dto"
 
 export class TestBarChart extends TestChart {
   private barOptions?: BarOptions
@@ -33,7 +33,7 @@ export class TestBarChart extends TestChart {
   override setData(data: ITestPhaseState) {
     const allData = this.getAllData(data)
     this.barOptions = {
-      barThickness: BAR_WIDTH * (10 / allData.length), // the more bars the thinner they are
+      barThickness: getBarWidth(allData), // the more bars the thinner they are
     }
     this.resetDatasets()
     this.data.datasets[0].data = allData

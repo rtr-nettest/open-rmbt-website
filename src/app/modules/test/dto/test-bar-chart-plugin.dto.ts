@@ -1,6 +1,7 @@
 import { Chart } from "chart.js"
 
 export const BAR_WIDTH = 20
+export const getBarWidth = (data: any[]) => BAR_WIDTH * (10 / data.length)
 
 export class TestBarChartPlugin {
   // Starts drawing the bars from the left edge of the first bar
@@ -10,9 +11,10 @@ export class TestBarChartPlugin {
       chartArea: { left, width },
     } = chart
     const { data } = chart.getDatasetMeta(0)
+    const barWidth = getBarWidth(data)
     for (const [i, dp] of data.entries()) {
-      const gap = ((width - BAR_WIDTH) / (data.length - 1)) * i
-      dp.x = left + BAR_WIDTH / 2 + gap
+      const gap = ((width - barWidth) / (data.length - 1)) * i
+      dp.x = left + barWidth / 2 + gap
     }
   }
 }

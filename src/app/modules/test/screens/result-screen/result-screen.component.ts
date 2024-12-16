@@ -185,7 +185,7 @@ export class ResultScreenComponent {
             },
           ]
         case "signal":
-          if (!result.signal) {
+          if (!result.signal?.value) {
             return acc
           }
           return [
