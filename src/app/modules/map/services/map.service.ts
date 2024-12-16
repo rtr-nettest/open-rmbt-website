@@ -10,6 +10,7 @@ import {
   catchError,
   debounceTime,
   fromEvent,
+  map,
   of,
   Subject,
   takeUntil,
@@ -38,6 +39,8 @@ export const DEFAULT_STYLE: StyleSpecification = {
     },
   ],
 }
+export const BASEMAP_AT_STYLE =
+  "https://mapsneu.wien.gv.at/basemapvectorneu/root.json"
 
 export enum ETileTypes {
   automatic = "automatic",
@@ -71,6 +74,43 @@ export class MapService {
     private readonly i18nStore: I18nStore,
     private readonly zone: NgZone
   ) {}
+
+  createMap(options: {
+    container: string
+    style: StyleSpecification
+    center?: [number, number]
+    zoom?: number
+  }) {
+    return new Map({
+      ...options,
+      transformRequest: (url) => {
+        // The Basemap vector style uses relative URLs, which are not supported by Mabox standard
+        if (url.startsWith("tile")) {
+          return {
+            // from https://github.com/trafficon/basemap-at-maplibre/blob/40e36cda1f55e03d8698d5d658037cc2a15c3484/basemapv-bmapv-3857.json#L8
+            url: `https://mapsneu.wien.gv.at/basemapv/bmapv/3857/${url}`,
+          }
+        }
+        return {
+          url,
+        }
+      },
+    })
+  }
+
+  getBasemapAtStyle() {
+    return this.http.get<StyleSpecification>(BASEMAP_AT_STYLE).pipe(
+      map((style) => {
+        style.sources["osm"] = DEFAULT_STYLE.sources["osm"]
+        if (style.sources["esri"]) {
+          ;(style.sources["esri"] as any)["attribution"] =
+            "&copy; <a href='https://basemap.at' target='_blank'>basemap.at</a>"
+        }
+        style.layers.unshift(DEFAULT_STYLE.layers[0])
+        return style
+      })
+    )
+  }
 
   getFilters() {
     const body: { [key: string]: any } = {

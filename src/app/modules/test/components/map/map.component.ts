@@ -1,10 +1,6 @@
 import { AfterViewInit, Component, Input, NgZone } from "@angular/core"
-import { Subject, Subscription } from "rxjs"
-import {
-  DEFAULT_CENTER,
-  DEFAULT_STYLE,
-  MapService,
-} from "../../../map/services/map.service"
+import { firstValueFrom, Subject, Subscription } from "rxjs"
+import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
 import { Map, NavigationControl } from "maplibre-gl"
 
 @Component({
@@ -31,9 +27,10 @@ export class MapComponent implements AfterViewInit {
     if (globalThis.document) {
       this.setSize()
       this.setResizeSub()
-      this.setMap()
-      this.mapService.setCoordinatesAndZoom(this.map, this.params)
-      this.addMarker()
+      this.setMap().then(() => {
+        this.mapService.setCoordinatesAndZoom(this.map, this.params)
+        this.addMarker()
+      })
     }
   }
 
@@ -58,13 +55,13 @@ export class MapComponent implements AfterViewInit {
     })
   }
 
-  private setMap() {
-    this.zone.runOutsideAngular(async () => {
-      this.map = new Map({
+  private async setMap() {
+    const style = await firstValueFrom(this.mapService.getBasemapAtStyle())
+    this.zone.runOutsideAngular(() => {
+      this.map = this.mapService.createMap({
         container: this.mapId,
-        style: DEFAULT_STYLE,
+        style: style,
         center: DEFAULT_CENTER,
-        zoom: 6,
       })
       this.map.addControl(new NavigationControl())
     })

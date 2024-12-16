@@ -73,11 +73,12 @@ export class MapScreenComponent extends SeoComponent {
           this.mapInfo = mapInfo
           this.setSize()
           this.setResizeSub()
-          this.setMap()
-          this.mapService.setCoordinatesAndZoom(
-            this.map,
-            new URLSearchParams(globalThis.location.search)
-          )
+          this.setMap().then(() => {
+            this.mapService.setCoordinatesAndZoom(
+              this.map,
+              new URLSearchParams(globalThis.location.search)
+            )
+          })
         }
       })
     })
@@ -99,11 +100,12 @@ export class MapScreenComponent extends SeoComponent {
     this.setTiles()
   }
 
-  private setMap() {
+  private async setMap() {
+    const style = await firstValueFrom(this.mapService.getBasemapAtStyle())
     this.zone.runOutsideAngular(async () => {
-      this.map = new Map({
+      this.map = this.mapService.createMap({
         container: this.mapId,
-        style: DEFAULT_STYLE,
+        style,
         center: DEFAULT_CENTER,
         zoom: 6,
       })

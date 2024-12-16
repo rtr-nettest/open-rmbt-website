@@ -9,16 +9,7 @@ import {
   SimpleChanges,
 } from "@angular/core"
 import { IRecentMeasurementsResponse } from "../../interfaces/recent-measurements-response.interface"
-import {
-  catchError,
-  debounceTime,
-  fromEvent,
-  of,
-  Subject,
-  Subscription,
-  takeUntil,
-  tap,
-} from "rxjs"
+import { firstValueFrom, Subject, Subscription } from "rxjs"
 import { Marker, Map, NavigationControl, FullscreenControl } from "maplibre-gl"
 import { bbox } from "@turf/bbox"
 import { lineString } from "@turf/helpers"
@@ -82,11 +73,12 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
     })
   }
 
-  private setMap() {
+  private async setMap() {
+    const style = await firstValueFrom(this.mapService.getBasemapAtStyle())
     this.zone.runOutsideAngular(() => {
-      this.map = new Map({
+      this.map = this.mapService.createMap({
         container: this.mapId,
-        style: DEFAULT_STYLE,
+        style,
         center: DEFAULT_CENTER,
         zoom: 3,
       })
