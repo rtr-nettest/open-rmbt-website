@@ -175,9 +175,9 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
       value: `${formatcoords(
         openTestsResponse.lat,
         openTestsResponse.long
-      ).format(LOC_FORMAT)} (${openTestsResponse.loc_src}, +/- ${
-        openTestsResponse.loc_accuracy
-      }m)`,
+      ).format(LOC_FORMAT)} (${
+        openTestsResponse.loc_src ? `${openTestsResponse.loc_src}, ` : ""
+      } +/- ${Math.round(openTestsResponse.loc_accuracy)}m)`,
       mappable: true,
       mapProps: {
         coordinates: [openTestsResponse.long, openTestsResponse.lat],
