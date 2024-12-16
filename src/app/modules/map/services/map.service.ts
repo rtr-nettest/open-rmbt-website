@@ -1,11 +1,20 @@
 import { HttpClient } from "@angular/common/http"
-import { Injectable } from "@angular/core"
+import { Injectable, NgZone } from "@angular/core"
 import { environment } from "../../../../environments/environment"
 import { NetworkMeasurementType } from "../interfaces/map-type.interface"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { IMapInfo } from "../interfaces/map-info.interface"
 import { UUID } from "../../shared/constants/strings"
-import { StyleSpecification } from "maplibre-gl"
+import { Map, Marker, StyleSpecification } from "maplibre-gl"
+import {
+  catchError,
+  debounceTime,
+  fromEvent,
+  of,
+  Subject,
+  takeUntil,
+  tap,
+} from "rxjs"
 
 export const DEFAULT_CENTER: [number, number] = [
   13.786457000803567, 47.57838319858735,
@@ -59,7 +68,8 @@ export class MapService {
 
   constructor(
     private readonly http: HttpClient,
-    private i18nStore: I18nStore
+    private readonly i18nStore: I18nStore,
+    private readonly zone: NgZone
   ) {}
 
   getFilters() {
@@ -104,5 +114,95 @@ export class MapService {
       }
     }
     return retVal
+  }
+
+  getResizeSub(
+    map: Map,
+    options: {
+      takeUntil: Subject<void>
+      onResize: () => any
+    }
+  ) {
+    return fromEvent(window, "resize")
+      .pipe(
+        takeUntil(options.takeUntil),
+        debounceTime(300),
+        tap(() => options.onResize()),
+        tap(() => {
+          setTimeout(() => {
+            this.zone.runOutsideAngular(() => map.resize())
+          }, 300)
+        }),
+        catchError((err) => {
+          console.log(err)
+          return of(err)
+        })
+      )
+      .subscribe()
+  }
+
+  setCoordinatesAndZoom(map: Map, params: URLSearchParams) {
+    this.zone.runOutsideAngular(() => {
+      if (params.has("lat") && params.has("lon")) {
+        map.setCenter([
+          parseFloat(params.get("lon")!),
+          parseFloat(params.get("lat")!),
+        ])
+      }
+      if (params.has("accuracy")) {
+        let zoom = 11
+        const accuracy = parseInt(params.get("accuracy")!)
+        const distance = params.get("distance")!
+        if (accuracy !== null) {
+          let totalAccuracy =
+            accuracy + (distance !== null ? parseInt(distance) : 0)
+          if (totalAccuracy < 100) {
+            zoom = 17
+          } else if (totalAccuracy < 1000) {
+            zoom = 13
+          }
+        }
+        map.setZoom(zoom)
+      }
+    })
+  }
+
+  addMarker(
+    map: Map,
+    options: {
+      lon: number
+      lat: number
+      diameter: number
+      classification?: number
+      onClick?: () => any
+    }
+  ) {
+    const { lon, lat, diameter, classification, onClick } = options
+    const el = document.createElement("div")
+    el.className = "app-marker"
+    el.style.backgroundImage = `url(${this.getIconByClass(classification)})`
+    el.style.width = `${diameter}px`
+    el.style.height = `${diameter}px`
+    if (onClick) {
+      el.addEventListener("click", () => {
+        onClick()
+      })
+    }
+    return new Marker({ element: el }).setLngLat([lon, lat]).addTo(map)
+  }
+
+  private getIconByClass(classification?: number) {
+    switch (classification) {
+      case 1:
+        return `/assets/images/map-icon-red.svg`
+      case 2:
+        return `/assets/images/map-icon-yellow.svg`
+      case 3:
+        return `/assets/images/map-icon-green.svg`
+      case 4:
+        return `/assets/images/map-icon-deep-green.svg`
+      default:
+        return `/assets/images/map-icon-blue.svg`
+    }
   }
 }

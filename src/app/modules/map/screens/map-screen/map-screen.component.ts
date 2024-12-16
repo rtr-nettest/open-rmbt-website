@@ -74,7 +74,10 @@ export class MapScreenComponent extends SeoComponent {
           this.setSize()
           this.setResizeSub()
           this.setMap()
-          this.setCoordinatesAndZoom()
+          this.mapService.setCoordinatesAndZoom(
+            this.map,
+            new URLSearchParams(globalThis.location.search)
+          )
         }
       })
     })
@@ -149,22 +152,10 @@ export class MapScreenComponent extends SeoComponent {
   }
 
   private setResizeSub() {
-    this.resizeSub = fromEvent(window, "resize")
-      .pipe(
-        takeUntil(this.destroyed$),
-        debounceTime(300),
-        tap(() => this.setSize()),
-        tap(() => {
-          setTimeout(() => {
-            this.zone.runOutsideAngular(() => this.map.resize())
-          }, 300)
-        }),
-        catchError((err) => {
-          console.log(err)
-          return of(err)
-        })
-      )
-      .subscribe()
+    this.resizeSub = this.mapService.getResizeSub(this.map, {
+      takeUntil: this.destroyed$,
+      onResize: () => this.setSize(),
+    })
   }
 
   private setSize() {
@@ -232,33 +223,6 @@ export class MapScreenComponent extends SeoComponent {
             console.log(e)
           }
         }
-      }
-    })
-  }
-
-  private setCoordinatesAndZoom() {
-    this.zone.runOutsideAngular(() => {
-      const params = new URLSearchParams(globalThis.location.search)
-      if (params.has("lat") && params.has("lon")) {
-        this.map.setCenter([
-          parseFloat(params.get("lon")!),
-          parseFloat(params.get("lat")!),
-        ])
-      }
-      if (params.has("accuracy")) {
-        let zoom = 11
-        const accuracy = parseInt(params.get("accuracy")!)
-        const distance = params.get("distance")!
-        if (accuracy !== null) {
-          let totalAccuracy =
-            accuracy + (distance !== null ? parseInt(distance) : 0)
-          if (totalAccuracy < 100) {
-            zoom = 17
-          } else if (totalAccuracy < 1000) {
-            zoom = 13
-          }
-        }
-        this.map.setZoom(zoom)
       }
     })
   }

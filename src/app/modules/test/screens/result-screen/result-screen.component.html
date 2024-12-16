@@ -33,6 +33,10 @@
   </div>
   <ng-container *ngIf="getDetailedResults(result) as detailedResult">
     @defer () {
+    <div class="app-container" [id]="mapContainerId" style="margin-top: 24px">
+      <h4>{{ "Position" | translate }}</h4>
+      <app-map [params]="mapParams" [mapContainerId]="mapContainerId"></app-map>
+    </div>
     <h3 class="app-title">{{ "Speed curve" | translate }}</h3>
     <div class="app-charts">
       <div class="app-charts__row">

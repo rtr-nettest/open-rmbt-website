@@ -26,7 +26,8 @@ import { MainStore } from "../../../shared/store/main.store"
 import { TestChartComponent } from "../../components/test-chart/test-chart.component"
 import { MatButtonModule } from "@angular/material/button"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
-import { roundMs, roundToSignificantDigits } from "../../../shared/util/math"
+import { roundToSignificantDigits } from "../../../shared/util/math"
+import { MapComponent } from "../../components/map/map.component"
 
 @Component({
   selector: "app-result-screen",
@@ -35,6 +36,7 @@ import { roundMs, roundToSignificantDigits } from "../../../shared/util/math"
     AsyncPipe,
     DatePipe,
     HeaderComponent,
+    MapComponent,
     MatButtonModule,
     NgIf,
     RouterModule,
@@ -78,6 +80,8 @@ export class ResultScreenComponent {
         this.exporter.exportAsPdf([this.store.simpleHistoryResult$.value!]),
     },
   ]
+  mapContainerId = "mapContainer"
+  mapParams!: URLSearchParams
   routes = ERoutes
   showFullDetails = false
   initialDetails: IBasicResponse<IDetailedHistoryResultItem> =
@@ -240,13 +244,13 @@ export class ResultScreenComponent {
               }?${search}">${values[0]}</a>&nbsp;${values[1] ?? ""}`,
             }
           } else if (item.mappable) {
+            const search = `lat=${item.mapProps?.coordinates![1]}&lon=${
+              item.mapProps?.coordinates![0]
+            }&accuracy=${item.mapProps?.accuracy}`
+            this.mapParams = new URLSearchParams(search)
             retVal = {
               title: this.i18nStore.translate(item.title),
-              value: `<a href="/${this.i18nStore.activeLang}/${
-                ERoutes.MAP
-              }?lat=${item.mapProps?.coordinates![1]}&lon=${
-                item.mapProps?.coordinates![0]
-              }&accuracy=${item.mapProps?.accuracy}">${item.value}</a>`,
+              value: `<a href="/${this.i18nStore.activeLang}/${ERoutes.MAP}?${search}">${item.value}</a>`,
             }
           } else {
             retVal = {

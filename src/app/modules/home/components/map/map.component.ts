@@ -28,6 +28,7 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import {
   DEFAULT_CENTER,
   DEFAULT_STYLE,
+  MapService,
 } from "../../../map/services/map.service"
 
 @Component({
@@ -46,6 +47,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   fullScreen = inject(FullScreenService)
   mapId = "map"
   map!: Map
+  mapService = inject(MapService)
   popup = inject(PopupService)
   resizeSub!: Subscription
   zone = inject(NgZone)
@@ -95,22 +97,10 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   private setResizeSub() {
-    this.resizeSub = fromEvent(window, "resize")
-      .pipe(
-        takeUntil(this.destroyed$),
-        debounceTime(300),
-        tap(() => this.setSize()),
-        tap(() => {
-          setTimeout(() => {
-            this.zone.runOutsideAngular(() => this.map.resize())
-          }, 300)
-        }),
-        catchError((err) => {
-          console.log(err)
-          return of(err)
-        })
-      )
-      .subscribe()
+    this.resizeSub = this.mapService.getResizeSub(this.map, {
+      takeUntil: this.destroyed$,
+      onResize: () => this.setSize(),
+    })
   }
 
   private setSize() {
@@ -136,27 +126,17 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.cachedMarkers.forEach((m) => m.remove())
         const features: [number, number][] = []
         this.cachedMarkers = this.measurements.results.reverse().map((m, i) => {
-          const el = document.createElement("div")
-          el.className = "app-marker"
-          el.style.backgroundImage = `url(${this.getIconByClass(
-            m.download_classification
-          )})`
-          el.style.width =
-            i == this.measurements!.results.length - 1 ? `24px` : `18px`
-          el.style.height =
-            i == this.measurements!.results.length - 1 ? `24px` : `18px`
-
-          el.addEventListener("click", () => {
-            this.popup.addPopup(this.map, m)
-          })
-
           const coordinates: [number, number] = [m.long, m.lat]
-
           features.push(coordinates)
-
-          return new Marker({ element: el })
-            .setLngLat(coordinates)
-            .addTo(this.map)
+          return this.mapService.addMarker(this.map, {
+            lon: m.long,
+            lat: m.lat,
+            diameter: i == this.measurements!.results.length - 1 ? 24 : 18,
+            classification: m.download_classification,
+            onClick: () => {
+              this.popup.addPopup(this.map, m)
+            },
+          })
         })
         const line = lineString(features)
         const box = bbox(line) as [number, number, number, number]
@@ -165,20 +145,5 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
         })
       }
     })
-  }
-
-  private getIconByClass(classification?: number) {
-    switch (classification) {
-      case 1:
-        return `/assets/images/map-icon-red.svg`
-      case 2:
-        return `/assets/images/map-icon-yellow.svg`
-      case 3:
-        return `/assets/images/map-icon-green.svg`
-      case 4:
-        return `/assets/images/map-icon-deep-green.svg`
-      default:
-        return ""
-    }
   }
 }
