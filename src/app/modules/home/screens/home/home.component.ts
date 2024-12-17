@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject } from "@angular/core"
+import { AfterViewInit, Component, signal } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
@@ -33,6 +33,8 @@ import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import dayjs from "dayjs"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { roundToSignificantDigits } from "../../../shared/util/math"
+import { Title } from "@angular/platform-browser"
+import { I18nStore } from "../../../i18n/store/i18n.store"
 
 const UPDATE_INTERVAL = 5000
 
@@ -86,8 +88,6 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
     })
   )
   eRoutes = ERoutes
-  measurements = inject(MeasurementsService)
-  platform = inject(PlatformService)
   recentMeasurements$: Observable<IRecentMeasurementsResponse | null> = of(null)
   tableColumns: ITableColumn<IRecentMeasurement>[] = [
     {
@@ -137,6 +137,16 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
     },
   ]
   tableData?: IBasicResponse<IRecentMeasurement>
+  initMap = signal<boolean>(true)
+
+  constructor(
+    i18nStore: I18nStore,
+    title: Title,
+    private readonly measurements: MeasurementsService,
+    private readonly platform: PlatformService
+  ) {
+    super(title, i18nStore)
+  }
 
   ngAfterViewInit(): void {
     if (globalThis.document) {

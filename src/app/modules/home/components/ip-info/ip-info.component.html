@@ -1,8 +1,16 @@
 <ul class="app-list">
   <li class="app-li">
-    {{ "IPv4" | translate }}: {{ ipV4$ | async | translate }}
+    {{ "IPv4" | translate }}: @if (ipV4Loading()) {
+    <mat-spinner></mat-spinner>
+    } @else {
+    {{ ipV4() | translate }}
+    }
   </li>
   <li class="app-li">
-    {{ "IPv6" | translate }}: {{ ipV6$ | async | translate }}
+    {{ "IPv6" | translate }}: @if(ipV6Loading()) {
+    <mat-spinner></mat-spinner>
+    } @else {
+    {{ ipV6() | translate }}
+    }
   </li>
 </ul>

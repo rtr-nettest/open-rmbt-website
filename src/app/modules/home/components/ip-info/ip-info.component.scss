@@ -1,5 +1,14 @@
 @import "core";
 
 .app-li {
+  align-items: center;
+  display: flex;
   margin-bottom: rem(8);
+}
+
+mat-spinner {
+  height: rem($font-size-m) !important;
+  width: rem($font-size-m) !important;
+  --mdc-circular-progress-size: rem($font-size-m) !important;
+  --mdc-circular-progress-active-indicator-width: rem($font-size-m) !important;
 }
