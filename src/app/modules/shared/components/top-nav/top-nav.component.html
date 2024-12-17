@@ -17,10 +17,12 @@
           } @else {
           <a
             class="app-link app-link--dark"
+            (click)="toggleSubmenu($event)"
             mat-button
-            [matMenuTriggerFor]="subMenu"
             >{{ item.label
-            }}<mat-icon iconPositionEnd>keyboard_arrow_down</mat-icon></a
+            }}<mat-icon iconPositionEnd>{{
+              submenuOpen ? "keyboard_arrow_up" : "keyboard_arrow_down"
+            }}</mat-icon></a
           >
           }
         </li>
@@ -42,11 +44,33 @@
     </nav>
   </div>
 </header>
+<div
+  [@expandVertically]="submenuOpen"
+  class="app-header-menu app-header-menu--primary app-dropdown"
+>
+  <div class="app-wrapper">
+    <nav class="app-sub-nav">
+      <ul class="app-list">
+        @for (item of subItems$ | async; track $index) {
+        <li class="app-li">
+          @if(item.route) {
+          <a class="app-link" [routerLink]="item.route">{{ item.label }}</a>
+          } @else {
+          <a class="app-link" [href]="item.url" target="_blank">{{
+            item.label
+          }}</a>
+          }
+        </li>
+        }
+      </ul>
+    </nav>
+  </div>
+</div>
 
 <mat-menu
   #mobileMenu
   backdropClass="app-header-menu-mobile-backdrop"
-  class="app-header-menu app-header-menu--primary"
+  class="app-header-menu app-header-menu--primary app-header-menu--mobile"
 >
   <ul class="app-list">
     @for (item of mainItems$ | async; track $index) {
@@ -63,7 +87,7 @@
         ></a
       >
       <ul
-        [@expandVertically]="{
+        [@expandToFixedHeight]="{
           value: mobileSubmenuOpen,
           params: {
             finalHeight: 200
@@ -113,28 +137,4 @@
       </a>
     </li>
   </ul>
-</mat-menu>
-
-<mat-menu
-  #subMenu
-  backdropClass="app-header-menu-backdrop"
-  class="app-header-menu app-header-menu--primary"
->
-  <div class="app-wrapper">
-    <nav class="app-sub-nav">
-      <ul class="app-list">
-        @for (item of subItems$ | async; track $index) {
-        <li class="app-li">
-          @if(item.route) {
-          <a class="app-link" [routerLink]="item.route">{{ item.label }}</a>
-          } @else {
-          <a class="app-link" [href]="item.url" target="_blank">{{
-            item.label
-          }}</a>
-          }
-        </li>
-        }
-      </ul>
-    </nav>
-  </div>
 </mat-menu>

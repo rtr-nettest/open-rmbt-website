@@ -1,4 +1,4 @@
-import { Component } from "@angular/core"
+import { Component, HostListener } from "@angular/core"
 import { map, Observable } from "rxjs"
 import { ILink } from "../../interfaces/link.interface"
 import { I18nStore } from "../../../i18n/store/i18n.store"
@@ -8,14 +8,17 @@ import { MatButtonModule } from "@angular/material/button"
 import { MatIconModule } from "@angular/material/icon"
 import { RouterModule } from "@angular/router"
 import { MatMenuModule } from "@angular/material/menu"
-import { expandVertically } from "../../animations/detail-expand.animation"
+import {
+  expandToFixedHeight,
+  expandVertically,
+} from "../../animations/detail-expand.animation"
 import { arrowRotate } from "../../animations/arrow-rotate.animation"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 @Component({
   selector: "app-top-nav",
   standalone: true,
-  animations: [expandVertically, arrowRotate],
+  animations: [expandToFixedHeight, expandVertically, arrowRotate],
   imports: [
     AsyncPipe,
     MatButtonModule,
@@ -31,6 +34,7 @@ export class TopNavComponent {
   mainItems$!: Observable<ILink[]>
   subItems$!: Observable<ILink[]>
   startButton$!: Observable<ILink>
+  submenuOpen = false
   mobileSubmenuOpen = false
 
   get activeLang() {
@@ -98,8 +102,18 @@ export class TopNavComponent {
     return `/${this.activeLang}/${route}`
   }
 
+  toggleSubmenu(event: MouseEvent) {
+    event.stopPropagation()
+    this.submenuOpen = !this.submenuOpen
+  }
+
   toggleMobileSubmenu(event: MouseEvent) {
     event.stopPropagation()
     this.mobileSubmenuOpen = !this.mobileSubmenuOpen
+  }
+
+  @HostListener("document:click")
+  hideMenu() {
+    this.submenuOpen = false
   }
 }

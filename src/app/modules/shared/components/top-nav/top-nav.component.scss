@@ -48,7 +48,6 @@
   overflow: hidden;
 
   &--expandable {
-    height: 0px;
     margin-bottom: 0;
     margin-top: 0;
   }
@@ -109,5 +108,11 @@
 
   &:last-child {
     margin-left: rem(16);
+  }
+}
+
+.app-dropdown {
+  @include screen-xs {
+    display: none;
   }
 }

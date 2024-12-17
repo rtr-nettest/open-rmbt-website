@@ -3,6 +3,7 @@
   width: 100%;
   left: 0;
   position: absolute;
+  z-index: 1000;
 
   &-backdrop + .cdk-overlay-connected-position-bounding-box {
     left: 0 !important;
@@ -32,7 +33,9 @@
   &--primary {
     background-color: $color-primary !important;
     border-radius: 0 !important;
-    top: -1px;
+    box-shadow: var(--mat-app-elevation-shadow-level-2);
+    margin-top: -1px;
+    overflow: hidden;
 
     .app-list {
       flex-direction: column;
@@ -52,6 +55,10 @@
         }
       }
     }
+  }
+
+  &--mobile {
+    transform-origin: right top !important;
   }
 
   .mat-mdc-button .mat-mdc-button-ripple {
