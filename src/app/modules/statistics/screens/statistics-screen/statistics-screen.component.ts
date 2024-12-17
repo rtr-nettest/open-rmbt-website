@@ -276,13 +276,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
           const p = this.platform.detectPlatform()
           this.store.filters$.next({
             language: this.i18nStore.activeLang,
-            type: new Set([
-              EPlatform.WIN_PHONE,
-              EPlatform.ANDROID,
-              EPlatform.IOS,
-            ]).has(p)
-              ? "mobile"
-              : "browser",
+            type: "mobile",
             country: data.country_geoip,
             duration: "30",
             province: -1,
