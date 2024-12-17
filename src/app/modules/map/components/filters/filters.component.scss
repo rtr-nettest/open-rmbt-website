@@ -1,14 +1,9 @@
 @import "core";
 
-:host {
-  display: block;
-  padding: 1rem;
-}
-
 .app-container {
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  overflow: hidden;
   width: 100%;
 }
 
@@ -39,8 +34,12 @@ mat-icon {
   display: flex;
   justify-content: center;
   flex: 0 0 rem(64);
-  padding: rem(16) 0 0;
+  padding: rem(16) 0;
   z-index: 2;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 20px;
 }
 
 h6 {
@@ -60,4 +59,18 @@ h6 {
 .app-list,
 mat-radio-group {
   padding-bottom: 4px;
+}
+
+.app-close {
+  background-color: var(--mdc-dialog-container-color);
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  z-index: 1000;
+}
+
+form {
+  & > div:last-of-type {
+    margin-bottom: rem(52);
+  }
 }

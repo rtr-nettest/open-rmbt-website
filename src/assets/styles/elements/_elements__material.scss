@@ -15,13 +15,7 @@
     width: 50%;
 
     &-content {
-      max-height: rem(400);
-      overflow-x: hidden;
-      scrollbar-width: none;
-
-      &::-webkit-scrollbar {
-        visibility: hidden;
-      }
+      overflow: hidden;
     }
   }
 }
@@ -54,7 +48,7 @@
 
   .app-wrapper {
     overflow-x: hidden;
-    padding-bottom: rem(20);
+    padding: 0;
   }
 }
 

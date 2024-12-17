@@ -19,7 +19,7 @@
     width: rem(235);
   }
 
-  @include screen-sm {
+  @include screen-xs {
     flex-direction: column;
 
     app-spacer {

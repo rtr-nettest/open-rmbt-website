@@ -24,7 +24,11 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { NgIf, NgTemplateOutlet, TitleCasePipe } from "@angular/common"
 import { IMapFilter } from "../../interfaces/map-filter.interface"
 import { MapStoreService } from "../../store/map-store.service"
-import { MAT_DIALOG_DATA } from "@angular/material/dialog"
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from "@angular/material/dialog"
 
 export type FilterSheetData = {
   mapInfo: IMapInfo
@@ -58,6 +62,7 @@ type FiltersForm = {
   imports: [
     ReactiveFormsModule,
     MatButtonModule,
+    MatDialogModule,
     MatIconModule,
     MatRadioModule,
     MatTabsModule,
@@ -92,6 +97,7 @@ export class FiltersComponent implements OnDestroy {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: FilterSheetData,
+    private readonly dialogRef: MatDialogRef<FiltersComponent>,
     private readonly store: MapStoreService
   ) {
     this.mapInfo = data.mapInfo
@@ -116,6 +122,11 @@ export class FiltersComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.destroyed$.next()
+    this.destroyed$.complete()
+  }
+
+  close() {
+    this.dialogRef.close()
   }
 
   changeNetworkMeasurementType(v: NetworkMeasurementType) {

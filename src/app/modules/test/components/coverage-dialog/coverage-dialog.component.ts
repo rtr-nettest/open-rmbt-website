@@ -23,7 +23,12 @@ import {
   ICoverageResponse,
 } from "../../interfaces/coverage.interface"
 import { TestRepositoryService } from "../../repository/test-repository.service"
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog"
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+} from "@angular/material/dialog"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { roundToSignificantDigits } from "../../../shared/util/math"
@@ -45,6 +50,7 @@ import bbox from "@turf/bbox"
     AsyncPipe,
     HtmlWrapperComponent,
     MatButtonModule,
+    MatDialogModule,
     MatIconModule,
     TableComponent,
     TranslatePipe,
@@ -147,9 +153,9 @@ export class CoverageDialogComponent implements OnDestroy {
         if (res.coverages[0]?.raster_geo_json) {
           this.setMap().then(() => {
             this.map?.on("load", () => {
-              this.setSize()
               this.setResizeSub()
               this.addPolygon(res.coverages[0].raster_geo_json!)
+              setTimeout(() => this.setSize(), 0)
             })
           })
         }
@@ -193,7 +199,7 @@ export class CoverageDialogComponent implements OnDestroy {
         .getBoundingClientRect().width
       document
         .getElementById(this.mapId)!
-        .setAttribute("style", `height:250px;width:${containerWidth - 64}px`)
+        .setAttribute("style", `height:250px;width:${containerWidth - 16}px`)
     })
   }
 

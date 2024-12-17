@@ -1,31 +1,32 @@
-<div class="app-container" style="display: flex; justify-content: flex-end">
-  <button
-    mat-icon-button
-    (click)="close()"
-    style="margin-right: 20px; margin-top: 20px"
-  >
-    <mat-icon>close</mat-icon>
-  </button>
-</div>
-<app-html-wrapper [id]="mapContainerId" [html]="coverageText$ | async">
-  <ng-container header>
-    @if (coverages$ | async; as data) {
-    <div style="margin-top: 24px">
-      <app-table
-        [data]="data"
-        [columns]="columns"
-        [sort]="sort"
-        [tableClassNames]="['app-table--bordered']"
-      ></app-table>
-    </div>
-    } @else {
+<mat-dialog-content>
+  <div class="app-close">
+    <button mat-icon-button (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  @if (coverages$ | async; as data) {
+  <app-html-wrapper [id]="mapContainerId" [html]="coverageText$ | async">
+    <ng-container header>
+      <div style="margin-top: 24px">
+        <app-table
+          [data]="data"
+          [columns]="columns"
+          [sort]="sort"
+          [tableClassNames]="['app-table--bordered']"
+        ></app-table>
+      </div>
+    </ng-container>
+    <ng-container body>
+      <div [id]="mapId"></div>
+    </ng-container>
+  </app-html-wrapper>
+  } @else {
+  <div class="app-wrapper">
     <h3>{{ "Coverage" | translate }}</h3>
     <p>
       {{ "For this location, no provider open data is available." | translate }}
     </p>
-    }
-  </ng-container>
-  <ng-container body>
-    <div [id]="mapId"></div>
-  </ng-container>
-</app-html-wrapper>
+  </div>
+  }
+</mat-dialog-content>
