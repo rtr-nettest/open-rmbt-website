@@ -1,19 +1,24 @@
 <app-header></app-header>
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
-<div class="app-wrapper" [innerHTML]="text$ | async"></div>
+<div class="app-wrapper">
+  <div class="app-row app-row--main">
+    <div class="app-col app-col--padded">
+      <div [innerHTML]="text$ | async"></div>
+      <a
+        [routerLink]="eRoutes.TEST"
+        mat-flat-button
+        class="app-button app-button--large"
+      >
+        {{ "Start test" | translate }}
+      </a>
+    </div>
+  </div>
+</div>
+<div class="app-separator"></div>
 <div class="app-wrapper" style="padding-bottom: 80px">
   <div class="app-row" [id]="mapContainerId">
     <div class="app-col app-col--main">
-      <div class="app-col app-col--padded">
-        <app-card-button
-          iconImage="/assets/images/start-button-icon.svg"
-          smallText="Start test"
-          title="Start RTR-NetTest"
-          [primary]="true"
-          [routerLink]="eRoutes.TEST"
-        ></app-card-button>
-      </div>
       <div class="app-col app-col--padded">
         <app-card-button
           iconImage="/assets/images/loop-button-icon.svg"
@@ -65,17 +70,19 @@
     </div>
     <div class="app-col app-col--main app-col--padded" style="display: block">
       <app-map
-        [measurements]="recentMeasurements$ | async"
+        [measurements]="recentMeasurements()"
         [mapContainerId]="mapContainerId"
       ></app-map>
       <div style="margin-top: 24px">
+        @if(tableData()) {
         <app-table
-          [data]="tableData"
+          [data]="tableData()!"
           [columns]="tableColumns"
           [sort]="{ active: 'time', direction: 'desc' }"
           [tableClassNames]="['app-table--vertical']"
           style="width: 100%"
         ></app-table>
+        }
       </div>
     </div>
   </div>

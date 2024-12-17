@@ -4,16 +4,7 @@ import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.comp
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
-import {
-  concatMap,
-  interval,
-  map,
-  Observable,
-  of,
-  startWith,
-  takeUntil,
-  tap,
-} from "rxjs"
+import { firstValueFrom, interval, map, Observable, takeUntil } from "rxjs"
 import { AsyncPipe } from "@angular/common"
 import { CardButtonComponent } from "../../components/card-button/card-button.component"
 import { ERoutes } from "../../../shared/constants/routes.enum"
@@ -35,6 +26,9 @@ import { IBasicResponse } from "../../../tables/interfaces/basic-response.interf
 import { roundToSignificantDigits } from "../../../shared/util/math"
 import { Title } from "@angular/platform-browser"
 import { I18nStore } from "../../../i18n/store/i18n.store"
+import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
+import { MatButtonModule } from "@angular/material/button"
+import { RouterModule } from "@angular/router"
 
 const UPDATE_INTERVAL = 5000
 
@@ -49,9 +43,12 @@ const UPDATE_INTERVAL = 5000
     IpInfoComponent,
     FooterComponent,
     MapComponent,
+    MatButtonModule,
+    RouterModule,
     TopNavComponent,
     BreadcrumbsComponent,
     TableComponent,
+    TranslatePipe,
   ],
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.scss",
@@ -88,7 +85,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
     })
   )
   eRoutes = ERoutes
-  recentMeasurements$: Observable<IRecentMeasurementsResponse | null> = of(null)
+  recentMeasurements = signal<IRecentMeasurementsResponse | null>(null)
   tableColumns: ITableColumn<IRecentMeasurement>[] = [
     {
       columnDef: "time",
@@ -136,8 +133,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
       justify: "flex-end",
     },
   ]
-  tableData?: IBasicResponse<IRecentMeasurement>
-  initMap = signal<boolean>(true)
+  tableData = signal<IBasicResponse<IRecentMeasurement> | null>(null)
 
   constructor(
     i18nStore: I18nStore,
@@ -150,22 +146,27 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     if (globalThis.document) {
-      this.recentMeasurements$ = interval(UPDATE_INTERVAL).pipe(
-        startWith(this.measurements.getRecentMeasurements()),
-        takeUntil(this.destroyed$),
-        concatMap(() => this.measurements.getRecentMeasurements()),
-        tap((resp) => {
-          const content = resp?.results.reverse().slice(0, 5) ?? []
-          this.tableData = {
-            content,
-            totalElements: content.length,
-          }
+      this.setMeasurements()
+      interval(UPDATE_INTERVAL)
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe(() => {
+          this.setMeasurements()
         })
-      )
       const testCard = document.querySelector(
-        `a.app-card[href*="${ERoutes.TEST}"]`
+        `a.app-button--large`
       ) as HTMLAnchorElement
       testCard.focus()
     }
+  }
+
+  private setMeasurements() {
+    firstValueFrom(this.measurements.getRecentMeasurements()).then((resp) => {
+      const content = resp?.results.reverse().slice(0, 5) ?? []
+      this.tableData.set({
+        content,
+        totalElements: content.length,
+      })
+      this.recentMeasurements.set(resp)
+    })
   }
 }
