@@ -61,6 +61,13 @@
         <app-test-chart phase="upload"></app-test-chart>
         <app-speed-details [details]="uploadTable()"></app-speed-details>
       </div>
+      @if (signalTable().length) {
+      <div class="app-charts-row">
+        <h4>{{ "Signal" | translate }}</h4>
+        <app-signal-chart [details]="signalTable()"></app-signal-chart>
+        <!-- <app-speed-details [details]="uploadTable()"></app-speed-details> -->
+      </div>
+      }
     </div>
     }
     <h3 class="app-title">{{ "Detailed results" | translate }}</h3>

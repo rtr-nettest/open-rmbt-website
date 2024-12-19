@@ -135,6 +135,9 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
           openTestsResponse?.cat_technology !== null
             ? openTestsResponse.lte_rsrp
             : openTestsResponse.signal_strength,
+        chart: openTestsResponse?.speed_curve?.signal?.length
+          ? openTestsResponse?.speed_curve?.signal
+          : undefined,
         classification: openTestsResponse?.signal_classification,
         metric: openTestsResponse?.cat_technology
           ? openTestsResponse?.cat_technology

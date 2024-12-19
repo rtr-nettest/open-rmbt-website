@@ -33,7 +33,7 @@ export class TestPhaseState implements ITestPhaseState {
     }
   }
 
-  setRTRChartFromOverallSpeed(overallResults: IOverallResult[]) {
+  setChartFromOverallSpeed(overallResults: IOverallResult[]) {
     this.chart = overallResults.reduce((acc, r, i) => {
       const msec = r.nsec / 1e6
       return [
@@ -57,7 +57,7 @@ export class TestPhaseState implements ITestPhaseState {
     }))
   }
 
-  extendRTRSpeedChart() {
+  extendSpeedChart() {
     if (this.counter < 0) {
       return
     }

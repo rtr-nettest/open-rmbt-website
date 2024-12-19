@@ -2,18 +2,17 @@ import { I18nStore } from "../../i18n/store/i18n.store"
 import { generateIndexesOfLength } from "../../shared/util/array"
 import { ITestPhaseState } from "../interfaces/test-phase-state.interface"
 import { Chart, ChartData } from "chart.js"
-import { TestChartDataset } from "./test-chart-dataset.dto"
 import { TestChartOptions } from "./test-chart-options.dto"
 
 export class TestChart extends Chart {
   finished = false
 
   constructor(
-    private context: CanvasRenderingContext2D,
+    context: CanvasRenderingContext2D,
     i18nStore: I18nStore,
     type: "line" | "bar" = "line",
     data: ChartData = {
-      datasets: [new TestChartDataset(context)],
+      datasets: [],
       labels: generateIndexesOfLength(100),
     },
     options: { [key: string]: any } = new TestChartOptions(i18nStore),
@@ -74,7 +73,7 @@ export class TestChart extends Chart {
   }
 
   protected resetDatasets() {
-    this.data.datasets = [new TestChartDataset(this.context)]
+    this.data.datasets = []
   }
 
   protected getAllData(testItem: ITestPhaseState) {

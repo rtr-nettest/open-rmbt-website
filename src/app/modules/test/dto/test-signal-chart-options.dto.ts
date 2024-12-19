@@ -1,0 +1,87 @@
+import dayjs from "dayjs"
+import { EColors } from "../constants/colors.enum"
+import { I18nStore } from "../../i18n/store/i18n.store"
+
+export class TestSignalChartOptions {
+  private startTime = dayjs().startOf("day").toDate().getTime()
+  animation = {
+    duration: 0,
+  }
+  layout = {
+    padding: {
+      left: 0,
+      right: 0,
+    },
+  }
+  maintainAspectRatio = false
+  normalized = true
+  parsing = false as const
+  scales = {
+    x: {
+      min: this.startTime,
+      type: "time",
+      grid: {
+        offset: false,
+      },
+      title: {
+        display: true,
+        color: EColors.SECONDARY_50,
+        font: {
+          size: 12,
+        },
+      },
+      time: {
+        unit: "millisecond",
+      },
+      offset: false,
+      ticks: {
+        color: EColors.SECONDARY_50,
+        font: {
+          size: 12,
+        },
+        stepSize: 2000,
+        callback: (value: any) => {
+          const duration = (value - this.startTime) / 1000
+          if (duration % 2 === 0) {
+            return `${duration} ${this.t.translate("s")}`
+          }
+          return ""
+        },
+      },
+    },
+    y: {
+      beginAtZero: true,
+      max: 80,
+      minRotation: 0,
+      maxRotation: 0,
+      grid: {
+        color: EColors.SECONDARY_10,
+      },
+      title: {
+        display: true,
+        color: EColors.SECONDARY_50,
+        font: {
+          size: 12,
+        },
+      },
+      ticks: {
+        color: EColors.SECONDARY_50,
+        font: {
+          size: 12,
+        },
+        stepSize: 20,
+        callback: (value: number) => -(this.minSignal - value),
+      },
+    },
+  }
+  plugins = {
+    legend: {
+      display: false,
+    },
+    tooltip: {
+      enabled: false,
+    },
+  }
+
+  constructor(private t: I18nStore, private minSignal: number) {}
+}

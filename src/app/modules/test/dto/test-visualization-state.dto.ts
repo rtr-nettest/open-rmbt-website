@@ -66,10 +66,10 @@ export class TestVisualizationState implements ITestVisualizationState {
     phaseState: IMeasurementPhaseState
   ) {
     const newState = TestVisualizationState.from(initialState, phaseState)
-    newState.phases[EMeasurementStatus.DOWN].setRTRChartFromOverallSpeed?.(
+    newState.phases[EMeasurementStatus.DOWN].setChartFromOverallSpeed?.(
       result.download?.chart ?? []
     )
-    newState.phases[EMeasurementStatus.UP].setRTRChartFromOverallSpeed?.(
+    newState.phases[EMeasurementStatus.UP].setChartFromOverallSpeed?.(
       result.upload?.chart ?? []
     )
     newState.phases[EMeasurementStatus.PING].setChartFromPings?.(
@@ -138,6 +138,6 @@ export class TestVisualizationState implements ITestVisualizationState {
 
   extendChart(newPhaseName: EMeasurementStatus) {
     const newPhase = this.phases[newPhaseName]
-    newPhase.extendRTRSpeedChart()
+    newPhase.extendSpeedChart()
   }
 }

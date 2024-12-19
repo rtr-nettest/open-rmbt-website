@@ -1,5 +1,5 @@
 import { ITestPhaseState } from "../interfaces/test-phase-state.interface"
-import { ChartPhase, TestRTRChartDataset } from "./test-rtr-chart-dataset.dto"
+import { ChartPhase, TestChartDataset } from "./test-chart-dataset.dto"
 import { TestChart } from "./test-chart.dto"
 import { Point } from "chart.js"
 import { I18nStore } from "../../i18n/store/i18n.store"
@@ -17,7 +17,7 @@ export class TestLogChart extends TestChart {
       i18nStore,
       "line",
       {
-        datasets: [new TestRTRChartDataset(phase)],
+        datasets: [new TestChartDataset(phase)],
         labels: generateIndexesOfLength(8),
       },
       new TestLogChartOptions(i18nStore)
@@ -56,7 +56,7 @@ export class TestLogChart extends TestChart {
   }
 
   protected override resetDatasets(): void {
-    this.data.datasets = [new TestRTRChartDataset(this.phase)]
+    this.data.datasets = [new TestChartDataset(this.phase)]
   }
 
   protected override resetLabels(): void {

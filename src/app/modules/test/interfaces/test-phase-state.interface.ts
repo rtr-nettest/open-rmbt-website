@@ -9,7 +9,7 @@ export interface ITestPhaseState extends IMeasurementPhaseState {
   container?: ETestStatuses
   label?: string
 
-  setRTRChartFromOverallSpeed?(overallResults: IOverallResult[]): void
+  setChartFromOverallSpeed?(overallResults: IOverallResult[]): void
   setChartFromPings?(pings: IPing[]): void
-  extendRTRSpeedChart(): void
+  extendSpeedChart(): void
 }

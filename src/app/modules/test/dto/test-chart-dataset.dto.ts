@@ -1,21 +1,42 @@
-import { EColors } from "../constants/colors.enum"
+import { Point } from "chart.js"
+
+export type ChartPhase = "download" | "upload" | "ping" | "signal"
+export type BarOptions = {
+  barPercentage?: number
+  barThickness: number | string
+}
 
 export class TestChartDataset {
   fill = true
-  backgroundColor: CanvasGradient
-  borderColor = EColors.PRIMARY_100
+  backgroundColor!: string
+  borderColor!: string
   borderCapStyle: "round" = "round"
-  lineTension = 0
   pointBackgroundColor = "transparent"
   pointBorderColor = "transparent"
   pointHoverBackgroundColor = "transparent"
   pointHoverBorderColor = "transparent"
-  data: number[] = []
+  data: Point[] = []
 
-  constructor(context: CanvasRenderingContext2D) {
-    const gradient = context.createLinearGradient(0, 0, 0, 150)
-    gradient.addColorStop(0, EColors.GRADIENT_100)
-    gradient.addColorStop(1, EColors.GRADIENT_0)
-    this.backgroundColor = gradient
+  constructor(
+    phase: ChartPhase,
+    barOptions: BarOptions = {
+      barPercentage: 0.3,
+      barThickness: "flex",
+    }
+  ) {
+    if (phase === "download") {
+      this.backgroundColor = "rgba(108, 209, 95, 0.33)"
+      this.borderColor = "rgba(108, 209, 95, 1)"
+    } else if (phase === "upload") {
+      this.backgroundColor = "rgba(0, 128, 193, 0.33)"
+      this.borderColor = "rgba(0, 128, 193, 1)"
+    } else if (phase === "signal") {
+      this.backgroundColor = "rgba(209, 144, 16, 0.33)"
+      this.borderColor = "rgba(209, 144, 16, 1)"
+    } else {
+      this.backgroundColor = "rgb(39, 177, 220)"
+      this.borderColor = "transparent"
+      Object.assign(this, barOptions)
+    }
   }
 }

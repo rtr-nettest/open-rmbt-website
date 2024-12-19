@@ -7,10 +7,13 @@ import { TableComponent } from "../../../tables/components/table/table.component
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { AsyncPipe, DatePipe, NgIf } from "@angular/common"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
-import { Observable, of, switchMap, tap } from "rxjs"
+import { Observable, switchMap, tap } from "rxjs"
 import { ERoutes } from "../../../shared/constants/routes.enum"
-import { UNKNOWN } from "../../constants/strings"
-import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.interface"
+import {
+  ISimpleHistoryResult,
+  ISimpleHistorySignal,
+  ISimpleHistoryTestLocation,
+} from "../../interfaces/simple-history-result.interface"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { IDetailedHistoryResultItem } from "../../interfaces/detailed-history-result-item.interface"
 import { ClassificationService } from "../../../shared/services/classification.service"
@@ -35,6 +38,7 @@ import { IOverallResult } from "../../interfaces/overall-result.interface"
 import { IPing } from "../../interfaces/measurement-result.interface"
 import { PingDetailsComponent } from "../../components/ping-details/ping-details.component"
 import { LocationDetailsComponent } from "../../components/location-details/location-details.component"
+import { SignalChartComponent } from "../../components/signal-chart/signal-chart.component"
 
 @Component({
   selector: "app-result-screen",
@@ -55,6 +59,7 @@ import { LocationDetailsComponent } from "../../components/location-details/loca
     TranslatePipe,
     FooterComponent,
     ScrollTopComponent,
+    SignalChartComponent,
     SpeedDetailsComponent,
     BreadcrumbsComponent,
   ],
@@ -103,7 +108,8 @@ export class ResultScreenComponent extends SeoComponent {
   downloadTable = signal<IOverallResult[]>([])
   uploadTable = signal<IOverallResult[]>([])
   pingTable = signal<IPing[]>([])
-  locationTable = signal<any[]>([])
+  locationTable = signal<ISimpleHistoryTestLocation[]>([])
+  signalTable = signal<ISimpleHistorySignal[]>([])
 
   get activeLang() {
     // TODO: signal
@@ -182,6 +188,7 @@ export class ResultScreenComponent extends SeoComponent {
     if (result.download?.chart)
       this.downloadTable.set(result.download.chart.slice(1))
     if (result.upload?.chart) this.uploadTable.set(result.upload.chart.slice(1))
+    if (result.signal?.chart) this.signalTable.set(result.signal.chart)
     const content = Object.entries(result).reduce((acc, [key, value]) => {
       const t = (key: string) => this.i18nStore.translate(key)
       switch (key) {

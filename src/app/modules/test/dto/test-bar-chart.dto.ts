@@ -2,8 +2,8 @@ import { ITestPhaseState } from "../interfaces/test-phase-state.interface"
 import {
   BarOptions,
   ChartPhase,
-  TestRTRChartDataset,
-} from "./test-rtr-chart-dataset.dto"
+  TestChartDataset,
+} from "./test-chart-dataset.dto"
 import { TestChart } from "./test-chart.dto"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { TestBarChartOptions } from "./test-bar-chart-options.dto"
@@ -42,7 +42,7 @@ export class TestBarChart extends TestChart {
   }
 
   protected override resetDatasets(): void {
-    this.data.datasets = [new TestRTRChartDataset(this.phase, this.barOptions)]
+    this.data.datasets = [new TestChartDataset(this.phase, this.barOptions)]
   }
 
   protected override resetLabels(): void {
