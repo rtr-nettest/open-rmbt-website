@@ -21,41 +21,51 @@
       {{ "Run test again" | translate }}
     </a>
   </div>
-  <div class="app-container">
+  <div *ngIf="basicResults() as basicResults" class="app-container">
     <app-table
       [columns]="columns"
-      [data]="getBasicResults(result)"
+      [data]="basicResults"
       [sort]="sort"
       [shouldHideHeader]="true"
       [tableClassNames]="['app-table--bordered']"
       aria-live="polite"
     ></app-table>
   </div>
-  <ng-container *ngIf="getDetailedResults(result) as detailedResult">
+  <ng-container *ngIf="detailedResults() as detailedResult">
     @defer () {
     <div class="app-container" [id]="mapContainerId" style="margin-top: 24px">
       <h4>{{ "Position" | translate }}</h4>
-      <app-map [params]="mapParams" [mapContainerId]="mapContainerId"></app-map>
+      <app-map
+        [params]="mapParams()"
+        [mapContainerId]="mapContainerId"
+      ></app-map>
+      <app-location-details
+        [details]="locationTable()"
+        style="display: block; margin-top: 24px"
+      ></app-location-details>
     </div>
     <h3 class="app-title">{{ "Speed curve" | translate }}</h3>
     <div class="app-charts">
-      <div class="app-charts__row">
+      <div class="app-charts-row">
         <h4>{{ "Ping" | translate }}</h4>
         <app-test-chart phase="ping"></app-test-chart>
+        <app-ping-details [details]="pingTable()"></app-ping-details>
       </div>
-      <div class="app-charts__row">
+      <div class="app-charts-row">
         <h4>{{ "Download" | translate }}</h4>
         <app-test-chart phase="download"></app-test-chart>
+        <app-speed-details [details]="downloadTable()"></app-speed-details>
       </div>
-      <div class="app-charts__row">
+      <div class="app-charts-row">
         <h4>{{ "Upload" | translate }}</h4>
         <app-test-chart phase="upload"></app-test-chart>
+        <app-speed-details [details]="uploadTable()"></app-speed-details>
       </div>
     </div>
     }
     <h3 class="app-title">{{ "Detailed results" | translate }}</h3>
     <div class="app-container">
-      @if (showFullDetails) {
+      @if (showFullDetails()) {
       <app-table
         [columns]="columns"
         [data]="detailedResult"
@@ -66,13 +76,13 @@
       } @else {
       <app-table
         [columns]="columns"
-        [data]="initialDetails"
+        [data]="initialDetails()"
         [shouldHideHeader]="true"
         [tableClassNames]="['app-table--bordered']"
         [sort]="sort"
       ></app-table>
       <button
-        (click)="showFullDetails = true"
+        (click)="showFullDetails.set(true)"
         class="app-button"
         style="margin-top: 24px"
         mat-stroked-button

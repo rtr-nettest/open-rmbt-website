@@ -1,0 +1,12 @@
+@import "core";
+
+.app-expansion-panel {
+  background: white;
+  border: 1px solid $color-primary;
+  box-shadow: none !important;
+}
+
+app-table {
+  display: block;
+  width: min(rem(480), 100%);
+}

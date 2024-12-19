@@ -1,0 +1,11 @@
+<mat-expansion-panel class="app-expansion-panel">
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{ "Show details" | translate }}</mat-panel-title>
+  </mat-expansion-panel-header>
+  <app-table
+    [data]="data()"
+    [columns]="columns"
+    [sort]="sort"
+    [tableClassNames]="['app-table--bordered']"
+  ></app-table>
+</mat-expansion-panel>

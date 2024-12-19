@@ -8,6 +8,7 @@ import { IPing } from "../interfaces/measurement-result.interface"
 import { IOverallResult } from "../interfaces/overall-result.interface"
 import {
   ISimpleHistoryResult,
+  ISimpleHistoryTestLocation,
   ISimpleHistoryTestMetric,
 } from "../interfaces/simple-history-result.interface"
 import { IDetailedHistoryResultItem } from "../interfaces/detailed-history-result-item.interface"
@@ -155,6 +156,7 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
       openTestsResponse?.long && openTestsResponse?.lat
         ? [openTestsResponse.long, openTestsResponse.lat]
         : undefined,
+      openTestsResponse.speed_curve?.location,
       trd
     )
   }
@@ -233,6 +235,7 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
     public loopUuid?: string,
     public isLocal?: boolean,
     public coordinates?: [number, number],
+    public locationTable?: ISimpleHistoryTestLocation[],
     public detailedHistoryResult?: IDetailedHistoryResultItem[]
   ) {}
 }

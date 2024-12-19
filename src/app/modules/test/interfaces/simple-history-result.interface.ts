@@ -1,6 +1,4 @@
 import { IDetailedHistoryResultItem } from "./detailed-history-result-item.interface"
-import { IPing } from "./measurement-result.interface"
-import { IOverallResult } from "./overall-result.interface"
 
 export interface ISimpleHistoryPaginator {
   totalPages: number
@@ -13,6 +11,13 @@ export interface ISimpleHistoryTestMetric {
   chart?: any[]
   tags?: string[]
   metric?: string
+}
+
+export interface ISimpleHistoryTestLocation {
+  lat: number
+  loc_accuracy: number
+  long: number
+  time_elapsed: number
 }
 
 export interface ISimpleHistoryResult {
@@ -29,4 +34,5 @@ export interface ISimpleHistoryResult {
   upload?: ISimpleHistoryTestMetric
   ping?: ISimpleHistoryTestMetric
   signal?: ISimpleHistoryTestMetric
+  locationTable?: ISimpleHistoryTestLocation[]
 }

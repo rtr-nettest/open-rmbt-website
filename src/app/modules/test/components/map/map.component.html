@@ -1,5 +1,9 @@
 @if (mapContainerId) {
-<button class="app-button" mat-stroked-button (click)="showCoverageDialog()">
+<button
+  class="app-button app-button--outlined"
+  mat-stroked-button
+  (click)="showCoverageDialog()"
+>
   {{ "Coverage" | translate }}
 </button>
 <div [id]="mapId"></div>

@@ -127,10 +127,16 @@ $color-border: rgba(0, 0, 0, 0.1);
     display: none;
   }
 
-  .mat-mdc-cell.app-cell {
+  .mat-mdc-cell.app-cell,
+  .mat-mdc-header-cell.app-cell,
+  .mat-mdc-footer-cell.app-cell {
     &--20 {
       flex: 0 0 20%;
       width: 20%;
+    }
+    &--25 {
+      flex: 0 0 25%;
+      width: 25%;
     }
     &--30 {
       flex: 0 0 30%;

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core"
+import { Component, signal } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
@@ -30,6 +30,11 @@ import { roundToSignificantDigits } from "../../../shared/util/math"
 import { MapComponent } from "../../components/map/map.component"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Title } from "@angular/platform-browser"
+import { SpeedDetailsComponent } from "../../components/speed-details/speed-details.component"
+import { IOverallResult } from "../../interfaces/overall-result.interface"
+import { IPing } from "../../interfaces/measurement-result.interface"
+import { PingDetailsComponent } from "../../components/ping-details/ping-details.component"
+import { LocationDetailsComponent } from "../../components/location-details/location-details.component"
 
 @Component({
   selector: "app-result-screen",
@@ -38,9 +43,11 @@ import { Title } from "@angular/platform-browser"
     AsyncPipe,
     DatePipe,
     HeaderComponent,
+    LocationDetailsComponent,
     MapComponent,
     MatButtonModule,
     NgIf,
+    PingDetailsComponent,
     RouterModule,
     TableComponent,
     TestChartComponent,
@@ -48,6 +55,7 @@ import { Title } from "@angular/platform-browser"
     TranslatePipe,
     FooterComponent,
     ScrollTopComponent,
+    SpeedDetailsComponent,
     BreadcrumbsComponent,
   ],
   templateUrl: "./result-screen.component.html",
@@ -67,8 +75,6 @@ export class ResultScreenComponent extends SeoComponent {
     },
   ]
   error$!: Observable<Error | null>
-  openResultBaseURL = ""
-  openResultURL = ""
   result$!: Observable<SimpleHistoryResult | null>
   sort: ISort = {
     active: "",
@@ -83,13 +89,24 @@ export class ResultScreenComponent extends SeoComponent {
     },
   ]
   mapContainerId = "mapContainer"
-  mapParams!: URLSearchParams
+  mapParams = signal<URLSearchParams>(new URLSearchParams())
   routes = ERoutes
-  showFullDetails = false
-  initialDetails: IBasicResponse<IDetailedHistoryResultItem> =
+  showFullDetails = signal<boolean>(false)
+  initialDetails = signal<IBasicResponse<IDetailedHistoryResultItem>>(
     this.defaultInitialDetails
+  )
+  basicResults = signal<IBasicResponse<IDetailedHistoryResultItem> | null>(null)
+  detailedResults = signal<IBasicResponse<IDetailedHistoryResultItem> | null>(
+    null
+  )
+
+  downloadTable = signal<IOverallResult[]>([])
+  uploadTable = signal<IOverallResult[]>([])
+  pingTable = signal<IPing[]>([])
+  locationTable = signal<any[]>([])
 
   get activeLang() {
+    // TODO: signal
     return this.i18nStore.activeLang
   }
 
@@ -122,7 +139,13 @@ export class ResultScreenComponent extends SeoComponent {
               .get("test_uuid")
               ?.replace("T", "") ?? null,
         })
-      )
+      ),
+      tap((result) => {
+        if (result) {
+          this.basicResults.set(this.getBasicResults(result))
+          this.detailedResults.set(this.getDetailedResults(result))
+        }
+      })
     )
     this.error$ = this.mainStore.error$
   }
@@ -151,9 +174,14 @@ export class ResultScreenComponent extends SeoComponent {
     )
   }
 
-  getBasicResults(
+  private getBasicResults(
     result: ISimpleHistoryResult
   ): IBasicResponse<IDetailedHistoryResultItem> {
+    if (result.locationTable) this.locationTable.set(result.locationTable)
+    if (result.ping?.chart) this.pingTable.set(result.ping.chart)
+    if (result.download?.chart)
+      this.downloadTable.set(result.download.chart.slice(1))
+    if (result.upload?.chart) this.uploadTable.set(result.upload.chart.slice(1))
     const content = Object.entries(result).reduce((acc, [key, value]) => {
       const t = (key: string) => this.i18nStore.translate(key)
       switch (key) {
@@ -225,13 +253,13 @@ export class ResultScreenComponent extends SeoComponent {
     }
   }
 
-  getDetailedResults(
+  private getDetailedResults(
     result: ISimpleHistoryResult
   ): IBasicResponse<IDetailedHistoryResultItem> | null {
     if (!result.detailedHistoryResult) {
       return null
     }
-    this.initialDetails = this.defaultInitialDetails
+    this.initialDetails.set(this.defaultInitialDetails)
     return {
       content:
         result.detailedHistoryResult?.map((item) => {
@@ -252,7 +280,7 @@ export class ResultScreenComponent extends SeoComponent {
             const search = `lat=${item.mapProps?.coordinates![1]}&lon=${
               item.mapProps?.coordinates![0]
             }&accuracy=${item.mapProps?.accuracy}`
-            this.mapParams = new URLSearchParams(search)
+            this.mapParams.set(new URLSearchParams(search))
             retVal = {
               title: this.i18nStore.translate(item.title),
               value: `<a href="/${this.i18nStore.activeLang}/${ERoutes.MAP}?${search}">${item.value}</a>`,
@@ -264,7 +292,7 @@ export class ResultScreenComponent extends SeoComponent {
             }
           }
           if (item.initial) {
-            this.initialDetails.content.push(retVal)
+            this.initialDetails().content.push(retVal)
           }
           return retVal
         }) ?? [],
