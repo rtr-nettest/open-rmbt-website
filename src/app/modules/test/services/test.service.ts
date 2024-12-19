@@ -294,28 +294,23 @@ export class TestService {
       from(this.repo.getResult(params)),
     ]).pipe(
       map(([openTestsResponse, [response, testResultDetail]]) => {
-        const historyResult = SimpleHistoryResult.fromOpenTestResult(
+        const historyResult = SimpleHistoryResult.fromOpenTestResponse(
           params.testUuid!,
           response,
-          openTestsResponse,
-          this.i18nStore.translations
+          openTestsResponse
         )
         if (
-          historyResult.detailedHistoryResult &&
+          historyResult.openTestResponse &&
           testResultDetail?.testresultdetail.length
         ) {
           const trdSet = new Set(
-            historyResult.detailedHistoryResult.map((item) =>
-              this.i18nStore.translate(item.title)
+            Object.entries(historyResult.openTestResponse).map(([key, value]) =>
+              this.i18nStore.translate(key)
             )
           )
           for (const item of testResultDetail.testresultdetail) {
             if (!trdSet.has(item.title)) {
-              historyResult.detailedHistoryResult.push({
-                title: item.title,
-                value: item.value,
-                initial: true,
-              })
+              historyResult.openTestResponse[item.title] = item.value
             }
           }
         }
@@ -336,7 +331,12 @@ export class TestService {
           serverName: historyResult.measurementServerName,
           ipAddress: historyResult.ipAddress,
           providerName: historyResult.providerName,
-          coordinates: historyResult.coordinates,
+          coordinates: historyResult.openTestResponse
+            ? [
+                historyResult.openTestResponse["long"],
+                historyResult.openTestResponse["lat"],
+              ]
+            : undefined,
         })
         return historyResult
       }),

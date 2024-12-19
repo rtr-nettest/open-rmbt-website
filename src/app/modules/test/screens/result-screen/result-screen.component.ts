@@ -38,7 +38,16 @@ import { IOverallResult } from "../../interfaces/overall-result.interface"
 import { IPing } from "../../interfaces/measurement-result.interface"
 import { PingDetailsComponent } from "../../components/ping-details/ping-details.component"
 import { LocationDetailsComponent } from "../../components/location-details/location-details.component"
-import { SignalChartComponent } from "../../components/signal-chart/signal-chart.component"
+import {
+  PhaseDurations,
+  SignalChartComponent,
+} from "../../components/signal-chart/signal-chart.component"
+import formatcoords from "formatcoords"
+import { LOC_FORMAT } from "../../../shared/pipes/lonlat.pipe"
+import { SKIPPED_FIELDS } from "../../constants/skipped-details-fields"
+import { FORMATTED_FIELDS } from "../../constants/formatted-details-fields"
+import { INITIAL_FIELDS } from "../../constants/initial-details-fields"
+import { SEARCHED_FIELDS } from "../../constants/searched-details-fields"
 
 @Component({
   selector: "app-result-screen",
@@ -110,6 +119,7 @@ export class ResultScreenComponent extends SeoComponent {
   pingTable = signal<IPing[]>([])
   locationTable = signal<ISimpleHistoryTestLocation[]>([])
   signalTable = signal<ISimpleHistorySignal[]>([])
+  phaseDurations = signal<PhaseDurations>({})
 
   get activeLang() {
     // TODO: signal
@@ -183,7 +193,8 @@ export class ResultScreenComponent extends SeoComponent {
   private getBasicResults(
     result: ISimpleHistoryResult
   ): IBasicResponse<IDetailedHistoryResultItem> {
-    if (result.locationTable) this.locationTable.set(result.locationTable)
+    if (result.openTestResponse?.["speed_curve"]?.location)
+      this.locationTable.set(result.openTestResponse?.["speed_curve"]?.location)
     if (result.ping?.chart) this.pingTable.set(result.ping.chart)
     if (result.download?.chart)
       this.downloadTable.set(result.download.chart.slice(1))
@@ -263,47 +274,115 @@ export class ResultScreenComponent extends SeoComponent {
   private getDetailedResults(
     result: ISimpleHistoryResult
   ): IBasicResponse<IDetailedHistoryResultItem> | null {
-    if (!result.detailedHistoryResult) {
+    if (!result.openTestResponse) {
       return null
     }
-    this.initialDetails.set(this.defaultInitialDetails)
+    const { openTestResponse } = result
+    let entries = new Array(Object.entries(openTestResponse).length)
+    const entriesMap = new Map(Object.entries(openTestResponse))
+    const initialKeys = [...INITIAL_FIELDS]
+    for (let i = 0; i < initialKeys.length; i++) {
+      entries[i] = [initialKeys[i], openTestResponse[initialKeys[i]]]
+      entriesMap.delete(initialKeys[i])
+    }
+    entries = [...entries, ...entriesMap].filter((v) => !!v)
+
+    let content = [this.formatLocation("location", openTestResponse)]
+    this.initialDetails().content = [...content]
+
+    for (const [key, value] of entries) {
+      this.setPhaseDurations({ title: key, value })
+      if (SKIPPED_FIELDS.has(key) || !value) {
+        continue
+      }
+      if (key == "land_cover") {
+        content = [...content, ...this.formatLandCovers(openTestResponse)]
+      }
+      const item = this.formatSearchableItem(openTestResponse, key, value)
+      content.push(item)
+      if (INITIAL_FIELDS.has(key)) {
+        this.initialDetails().content.push(item)
+      }
+    }
+
     return {
-      content:
-        result.detailedHistoryResult?.map((item) => {
-          let retVal: IDetailedHistoryResultItem
-          if (item.searchable) {
-            const search = Array.isArray(item.searchTerm)
-              ? item.searchTerm.map((term) => `${item.title}=${term}`).join("&")
-              : `${item.title}=${item.searchTerm || item.value}`
-            const values =
-              item.title === "time" ? item.value.split(" ") : [item.value]
-            retVal = {
-              title: this.i18nStore.translate(item.title),
-              value: `<a href="/${this.i18nStore.activeLang}/${
-                ERoutes.OPEN_DATA
-              }?${search}">${values[0]}</a>&nbsp;${values[1] ?? ""}`,
-            }
-          } else if (item.mappable) {
-            const search = `lat=${item.mapProps?.coordinates![1]}&lon=${
-              item.mapProps?.coordinates![0]
-            }&accuracy=${item.mapProps?.accuracy}`
-            this.mapParams.set(new URLSearchParams(search))
-            retVal = {
-              title: this.i18nStore.translate(item.title),
-              value: `<a href="/${this.i18nStore.activeLang}/${ERoutes.MAP}?${search}">${item.value}</a>`,
-            }
-          } else {
-            retVal = {
-              title: this.i18nStore.translate(item.title),
-              value: item.value,
-            }
-          }
-          if (item.initial) {
-            this.initialDetails().content.push(retVal)
-          }
-          return retVal
-        }) ?? [],
-      totalElements: result.detailedHistoryResult?.length ?? 0,
+      content,
+      totalElements: content.length ?? 0,
+    }
+  }
+
+  private formatSearchableItem(openTestResponse: any, key: string, value: any) {
+    const searchable = SEARCHED_FIELDS[key] !== undefined
+    let v = FORMATTED_FIELDS[key]
+      ? FORMATTED_FIELDS[key](openTestResponse, this.i18nStore.translations)
+      : value
+    if (!searchable) {
+      return {
+        title: this.i18nStore.translate(key),
+        value: v,
+      }
+    }
+    const searchTerm = SEARCHED_FIELDS[key]
+      ? SEARCHED_FIELDS[key](openTestResponse)
+      : undefined
+    const search = Array.isArray(searchTerm)
+      ? searchTerm.map((term) => `${key}=${term}`).join("&")
+      : `${key}=${searchTerm || value}`
+    const values = key === "time" ? v.split(" ") : [v]
+    return {
+      title: this.i18nStore.translate(key),
+      value: `<a href="/${this.i18nStore.activeLang}/${
+        ERoutes.OPEN_DATA
+      }?${search}">${values[0]}</a>&nbsp;${values[1] ?? ""}`,
+    }
+  }
+
+  private formatLocation(title: string, openTestResponse: any) {
+    const value = `${formatcoords(
+      openTestResponse["lat"],
+      openTestResponse["long"]
+    ).format(LOC_FORMAT)} (${
+      openTestResponse["loc_src"] ? `${openTestResponse["loc_src"]}, ` : ""
+    } +/- ${Math.round(openTestResponse["loc_accuracy"])}m)`
+    const search = `lat=${openTestResponse["lat"]}&lon=${openTestResponse["long"]}&accuracy=${openTestResponse["loc_accuracy"]}&distance=${openTestResponse["distance"]}`
+    this.mapParams.set(new URLSearchParams(search))
+    return {
+      title: this.i18nStore.translate(title),
+      value: `<a href="/${this.i18nStore.activeLang}/${ERoutes.MAP}?${search}">${value}</a>`,
+    }
+  }
+
+  private formatLandCovers(openTestResponse: any) {
+    return [
+      {
+        title: this.i18nStore.translate("land_cover_cat1"),
+        value: FORMATTED_FIELDS["land_cover_cat1"]!(
+          openTestResponse,
+          this.i18nStore.translations
+        ),
+      },
+      {
+        title: this.i18nStore.translate("land_cover_cat2"),
+        value: FORMATTED_FIELDS["land_cover_cat2"]!(
+          openTestResponse,
+          this.i18nStore.translations
+        ),
+      },
+    ]
+  }
+
+  private setPhaseDurations(item: IDetailedHistoryResultItem) {
+    if (item.title == "time_dl_ms") {
+      this.phaseDurations().downStart = parseFloat(item.value)
+    }
+    if (item.title == "duration_download_ms") {
+      this.phaseDurations().downDuration = parseFloat(item.value)
+    }
+    if (item.title == "time_ul_ms") {
+      this.phaseDurations().upStart = parseFloat(item.value)
+    }
+    if (item.title == "duration_upload_ms") {
+      this.phaseDurations().upDuration = parseFloat(item.value)
     }
   }
 }

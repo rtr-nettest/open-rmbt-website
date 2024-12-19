@@ -64,7 +64,10 @@
       @if (signalTable().length) {
       <div class="app-charts-row">
         <h4>{{ "Signal" | translate }}</h4>
-        <app-signal-chart [details]="signalTable()"></app-signal-chart>
+        <app-signal-chart
+          [signal]="signalTable()"
+          [phaseDurations]="phaseDurations()"
+        ></app-signal-chart>
         <!-- <app-speed-details [details]="uploadTable()"></app-speed-details> -->
       </div>
       }

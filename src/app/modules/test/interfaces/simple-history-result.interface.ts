@@ -1,5 +1,3 @@
-import { IDetailedHistoryResultItem } from "./detailed-history-result-item.interface"
-
 export interface ISimpleHistoryPaginator {
   totalPages: number
   totalElements: number
@@ -45,12 +43,10 @@ export interface ISimpleHistoryResult {
   ipAddress: string
   testUuid?: string
   loopUuid?: string
-  isLocal?: boolean
-  detailedHistoryResult?: IDetailedHistoryResultItem[]
   paginator?: ISimpleHistoryPaginator
   download?: ISimpleHistoryTestMetric
   upload?: ISimpleHistoryTestMetric
   ping?: ISimpleHistoryTestMetric
   signal?: ISimpleHistoryTestMetric
-  locationTable?: ISimpleHistoryTestLocation[]
+  openTestResponse?: { [key: string]: any }
 }
