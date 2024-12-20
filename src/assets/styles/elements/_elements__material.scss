@@ -59,3 +59,6 @@
   overflow: auto;
   pointer-events: auto;
 }
+.mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
+  top: 50% !important;
+}

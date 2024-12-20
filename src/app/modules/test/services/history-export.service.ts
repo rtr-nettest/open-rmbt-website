@@ -18,7 +18,7 @@ export class HistoryExportService {
   lastCertifiedPdfUrl$ = new BehaviorSubject("")
 
   private get exportUrl() {
-    return `${environment.api.baseUrl}/RMBTStatisticServer/export`
+    return `${environment.api.cloud}/RMBTStatisticServer/export`
   }
 
   private get pdfUrl() {
@@ -167,7 +167,9 @@ export class HistoryExportService {
   private getExportParams(format: string, results: ISimpleHistoryResult[]) {
     return new HttpParams({
       fromObject: {
-        test_uuid: results.map((hi) => "T" + hi.testUuid).join(","),
+        open_test_uuid: results
+          .map((hi) => hi.openTestResponse?.["open_test_uuid"])
+          .join(","),
         format,
         max_results: 1000,
       },

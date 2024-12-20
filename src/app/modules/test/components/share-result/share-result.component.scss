@@ -1,0 +1,18 @@
+@import "core";
+
+.app-container {
+  display: flex;
+}
+
+.app-button {
+  margin-right: rem(8);
+}
+
+.app-image {
+  max-width: 100%;
+}
+
+mat-form-field {
+  display: block;
+  max-width: rem(480);
+}

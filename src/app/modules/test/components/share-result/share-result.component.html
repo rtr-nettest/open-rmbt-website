@@ -1,0 +1,36 @@
+<div class="app-container">
+  <button mat-flat-button class="app-button" (click)="getForumBanner()">
+    {{ "Get forum banner" | translate }}
+  </button>
+  <button
+    mat-flat-button
+    class="app-button"
+    (click)="getPdf()"
+    [disabled]="pdfButtonDisabled()"
+  >
+    {{ "Download PDF" | translate }}
+  </button>
+</div>
+@if (forumBanner()) {
+<div>
+  <p><img [src]="forumBanner()" alt="Forum banner" class="app-image" /></p>
+  <mat-form-field appearance="outline">
+    <mat-label>HTML</mat-label>
+    <input
+      matInput
+      type="text"
+      [value]="bannerHtml()"
+      (click)="selectText($event)"
+    />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>BBCode</mat-label>
+    <input
+      matInput
+      type="text"
+      [value]="bannerBBCode()"
+      (click)="selectText($event)"
+    />
+  </mat-form-field>
+</div>
+}
