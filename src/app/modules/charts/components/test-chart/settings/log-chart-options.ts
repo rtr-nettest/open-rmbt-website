@@ -1,9 +1,7 @@
-import dayjs from "dayjs"
-import { EColors } from "../constants/colors.enum"
-import { I18nStore } from "../../i18n/store/i18n.store"
+import { I18nStore } from "../../../../i18n/store/i18n.store"
+import { EColors } from "../../../../shared/constants/colors.enum"
 
-export class TestSignalChartOptions {
-  private startTime = dayjs().startOf("day").toDate().getTime()
+export class LogChartOptions {
   animation = {
     duration: 0,
   }
@@ -18,10 +16,8 @@ export class TestSignalChartOptions {
   parsing = false as const
   scales = {
     x: {
-      min: this.startTime,
-      type: "time",
       grid: {
-        offset: false,
+        color: EColors.SECONDARY_10,
       },
       title: {
         display: true,
@@ -30,28 +26,14 @@ export class TestSignalChartOptions {
           size: 12,
         },
       },
-      time: {
-        unit: "millisecond",
-      },
-      offset: false,
       ticks: {
-        color: EColors.SECONDARY_50,
-        font: {
-          size: 12,
-        },
-        stepSize: 2000,
-        callback: (value: any) => {
-          const duration = (value - this.startTime) / 1000
-          if (duration % 2 === 0) {
-            return `${duration} ${this.t.translate("s")}`
-          }
-          return ""
-        },
+        callback: (value: any) => `${value} ${this.t.translate("s")}`,
       },
     },
     y: {
       beginAtZero: true,
-      max: 80,
+      min: 0,
+      max: 1,
       minRotation: 0,
       maxRotation: 0,
       grid: {
@@ -69,8 +51,18 @@ export class TestSignalChartOptions {
         font: {
           size: 12,
         },
-        stepSize: 20,
-        callback: (value: number) => -(this.minSignal - value),
+        stepSize: 0.2,
+        autoSkip: false,
+        callback: (value: any, index: number) => {
+          let retVal = 0.1
+          if (index > 0) {
+            retVal = 10 ** (index - 1)
+          }
+          if (retVal >= 1000) {
+            return `${retVal / 1000} ${this.t.translate("Gbps")}`
+          }
+          return `${retVal} ${this.t.translate("Mbps")}`
+        },
       },
     },
   }
@@ -83,5 +75,5 @@ export class TestSignalChartOptions {
     },
   }
 
-  constructor(private t: I18nStore, private minSignal: number) {}
+  constructor(private t: I18nStore) {}
 }

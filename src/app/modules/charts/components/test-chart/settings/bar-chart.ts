@@ -1,15 +1,15 @@
-import { ITestPhaseState } from "../interfaces/test-phase-state.interface"
+import { TestChart } from "../../../models/test-chart"
+import { BarChartOptions } from "./bar-chart-options"
+import { I18nStore } from "../../../../i18n/store/i18n.store"
 import {
   BarOptions,
   ChartPhase,
   TestChartDataset,
-} from "./test-chart-dataset.dto"
-import { TestChart } from "./test-chart.dto"
-import { I18nStore } from "../../i18n/store/i18n.store"
-import { TestBarChartOptions } from "./test-bar-chart-options.dto"
-import { getBarWidth, TestBarChartPlugin } from "./test-bar-chart-plugin.dto"
+} from "../../../models/test-chart-dataset"
+import { ITestPhaseState } from "../../../../test/interfaces/test-phase-state.interface"
+import { BarChartPlugin, getBarWidth } from "../../../plugins/bar-chart-plugin"
 
-export class TestBarChart extends TestChart {
+export class BarChart extends TestChart {
   private barOptions?: BarOptions
 
   constructor(
@@ -25,8 +25,8 @@ export class TestBarChart extends TestChart {
         datasets: [],
         labels: [],
       },
-      new TestBarChartOptions(i18nStore),
-      [new TestBarChartPlugin()]
+      new BarChartOptions(i18nStore),
+      [new BarChartPlugin()]
     )
   }
 

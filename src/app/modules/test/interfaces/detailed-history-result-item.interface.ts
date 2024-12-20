@@ -1,6 +1,6 @@
 export interface IDetailedHistoryResultItem {
   title: string
-  value: string
+  value: any
   searchable?: boolean
   searchTerm?: string | null | string[]
   mappable?: boolean

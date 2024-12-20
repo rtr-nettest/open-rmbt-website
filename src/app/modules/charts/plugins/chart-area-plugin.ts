@@ -1,16 +1,9 @@
 import { Chart } from "chart.js"
-import { EChartBgColor } from "./test-chart-dataset.dto"
+import { ITestChartPluginOptions } from "../../charts/interfaces/test-chart-plugin.interface"
 
-export type TestChartBgPluginOptions = {
-  id: string
-  color: EChartBgColor
-  start: number
-  duration?: number
-}
-
-export class TestChartBgPlugin {
+export class ChartAreaPlugin {
   id!: string
-  constructor(private readonly options: TestChartBgPluginOptions) {
+  constructor(private readonly options: ITestChartPluginOptions) {
     this.id = options.id
   }
 
@@ -22,10 +15,10 @@ export class TestChartBgPlugin {
       },
       ctx,
     } = chart
-    const { color, start, duration } = this.options
-    ctx.fillStyle = color
+    const { color, x, duration } = this.options
+    ctx.fillStyle = color || "rgba(0, 0, 0, 0.1)"
     const fullTime = max - min
-    const timeFromStartPercent = start / fullTime
+    const timeFromStartPercent = x / fullTime
     const xLeft = left + timeFromStartPercent * width
 
     const durationPercent = duration ? duration / fullTime : 0

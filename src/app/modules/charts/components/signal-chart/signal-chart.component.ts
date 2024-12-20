@@ -4,19 +4,15 @@ import {
   Component,
   input,
 } from "@angular/core"
-import { ISimpleHistorySignal } from "../../interfaces/simple-history-result.interface"
-import { TestSignalChart } from "../../dto/test-signal-chart.dto"
+import { ISimpleHistorySignal } from "../../../test/interfaces/simple-history-result.interface"
 import { I18nStore } from "../../../i18n/store/i18n.store"
-import {
-  EChartBgColor,
-  TestChartDataset,
-} from "../../dto/test-chart-dataset.dto"
+import { EChartColor, TestChartDataset } from "../../models/test-chart-dataset"
 import dayjs from "dayjs"
-import { TestSignalChartOptions } from "../../dto/test-signal-chart-options.dto"
-import {
-  TestChartBgPlugin,
-  TestChartBgPluginOptions,
-} from "../../dto/test-chart-bg-plugin.dto"
+import { ITestChartPluginOptions } from "../../interfaces/test-chart-plugin.interface"
+import { TestSignalChart } from "./settings/signal-chart"
+import { TestSignalChartOptions } from "./settings/signal-chart-options"
+import { ChartAreaPlugin } from "../../plugins/chart-area-plugin"
+import { ChartTextPlugin } from "../../plugins/chart-text-plugin"
 
 export type PhaseDurations = {
   downStart?: number
@@ -50,10 +46,11 @@ export class SignalChartComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const ctx = this.canvas?.getContext("2d")
     if (ctx) {
-      const ltePeriods: TestChartBgPluginOptions[] = []
+      const ltePeriods: ITestChartPluginOptions[] = []
+      const networkChanges: ITestChartPluginOptions[] = []
       const minSignal = this.getMinSignal()
-      const datasets = this.getDatasets(minSignal, ltePeriods)
-      const plugins = this.getPlugins(ltePeriods)
+      const datasets = this.getDatasets(minSignal, ltePeriods, networkChanges)
+      const plugins = this.getPlugins(ltePeriods, networkChanges)
       const options = new TestSignalChartOptions(this.i18nStore, minSignal)
       this.chart = new TestSignalChart(
         ctx,
@@ -84,7 +81,8 @@ export class SignalChartComponent implements AfterViewInit {
 
   private getDatasets(
     minSignal: number,
-    ltePeriods: TestChartBgPluginOptions[]
+    ltePeriods: ITestChartPluginOptions[],
+    networkChanges: ITestChartPluginOptions[]
   ) {
     const datasets: TestChartDataset[] = []
     let currentNetworkType = ""
@@ -93,19 +91,29 @@ export class SignalChartComponent implements AfterViewInit {
       if (signal.network_type != currentNetworkType) {
         currentNetworkType = signal.network_type
         currentDataset = new TestChartDataset("signal")
+        networkChanges.push({
+          id: `network-${signal.time_elapsed}`,
+          x: signal.time_elapsed - 20,
+          duration: 20,
+          color: EChartColor.SIGNAL_BORDER,
+          text:
+            signal.network_type === "LTE" || signal.network_type === "LTE CA"
+              ? "LTE\nRSRP"
+              : signal.network_type,
+        })
         datasets.push(currentDataset)
         if (signal.network_type === "LTE" || signal.network_type === "LTE CA") {
           ltePeriods.push({
             id: `lte-${signal.time_elapsed}`,
-            start: signal.time_elapsed,
-            color: EChartBgColor.SIGNAL,
+            x: signal.time_elapsed,
+            color: EChartColor.SIGNAL,
           })
         } else if (
           currentNetworkType === "LTE" ||
           currentNetworkType === "LTE CA"
         ) {
           ltePeriods[ltePeriods.length - 1].duration =
-            signal.time_elapsed - ltePeriods[ltePeriods.length - 1].start
+            signal.time_elapsed - ltePeriods[ltePeriods.length - 1].x
         }
       }
       currentDataset!.data.push({
@@ -128,15 +136,38 @@ export class SignalChartComponent implements AfterViewInit {
     return datasets
   }
 
-  private getPlugins(ltePeriods: TestChartBgPluginOptions[]) {
-    const plugins: TestChartBgPlugin[] = []
+  private getPlugins(
+    ltePeriods: ITestChartPluginOptions[],
+    networkChanges: ITestChartPluginOptions[]
+  ) {
+    const plugins: any[] = []
+    if (networkChanges.length) {
+      for (const p of networkChanges) {
+        plugins.push(
+          new ChartAreaPlugin({
+            id: p.id,
+            color: p.color,
+            x: p.x,
+            duration: p.duration,
+          })
+        )
+        plugins.push(
+          new ChartTextPlugin({
+            id: `text-${p.id}`,
+            text: p.text,
+            x: p.x,
+            y: 12,
+          })
+        )
+      }
+    }
     if (ltePeriods.length) {
       for (const p of ltePeriods) {
         plugins.push(
-          new TestChartBgPlugin({
+          new ChartAreaPlugin({
             id: p.id,
             color: p.color,
-            start: p.start,
+            x: p.x,
             duration: p.duration,
           })
         )
@@ -144,31 +175,55 @@ export class SignalChartComponent implements AfterViewInit {
     }
     if (this.phaseDurations()?.downStart) {
       plugins.push(
-        new TestChartBgPlugin({
+        new ChartAreaPlugin({
           id: "download",
-          color: EChartBgColor.DOWNLOAD,
-          start: this.phaseDurations()!.downStart!,
+          color: EChartColor.DOWNLOAD,
+          x: this.phaseDurations()!.downStart!,
           duration: this.phaseDurations()!.downDuration,
+        })
+      )
+      plugins.push(
+        new ChartTextPlugin({
+          id: "text-download",
+          text: this.i18nStore.translate("Download"),
+          x: this.phaseDurations()!.downStart!,
+          y: 84,
         })
       )
     }
     if (this.phaseDurations()?.upStart) {
       plugins.push(
-        new TestChartBgPlugin({
+        new ChartAreaPlugin({
           id: "upload",
-          color: EChartBgColor.UPLOAD,
-          start: this.phaseDurations()!.upStart!,
+          color: EChartColor.UPLOAD,
+          x: this.phaseDurations()!.upStart!,
           duration: this.phaseDurations()!.upDuration,
+        })
+      )
+      plugins.push(
+        new ChartTextPlugin({
+          id: "text-upload",
+          text: this.i18nStore.translate("Upload"),
+          x: this.phaseDurations()!.upStart!,
+          y: 84,
         })
       )
     }
     if (this.phaseDurations()?.pingStart) {
       plugins.push(
-        new TestChartBgPlugin({
+        new ChartAreaPlugin({
           id: "ping",
-          color: EChartBgColor.PING,
-          start: this.phaseDurations()!.pingStart!,
+          color: EChartColor.PING,
+          x: this.phaseDurations()!.pingStart!,
           duration: this.phaseDurations()!.pingDuration,
+        })
+      )
+      plugins.push(
+        new ChartTextPlugin({
+          id: "text-ping",
+          text: this.i18nStore.translate("Ping"),
+          x: this.phaseDurations()!.pingStart!,
+          y: 72,
         })
       )
     }

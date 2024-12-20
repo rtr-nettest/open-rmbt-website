@@ -1,8 +1,8 @@
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { generateIndexesOfLength } from "../../shared/util/array"
-import { ITestPhaseState } from "../interfaces/test-phase-state.interface"
 import { Chart, ChartData } from "chart.js"
-import { TestChartOptions } from "./test-chart-options.dto"
+import { TestChartOptions } from "./test-chart-options"
+import { ITestPhaseState } from "../../test/interfaces/test-phase-state.interface"
 
 export class TestChart extends Chart {
   finished = false

@@ -3,7 +3,7 @@ import { Chart } from "chart.js"
 export const BAR_WIDTH = 20
 export const getBarWidth = (data: any[]) => BAR_WIDTH * (10 / data.length)
 
-export class TestBarChartPlugin {
+export class BarChartPlugin {
   // Starts drawing the bars from the left edge of the first bar
   // and ends them at the right edge of the last bar
   beforeDatasetsDraw(chart: Chart): boolean | void {

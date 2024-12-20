@@ -1,8 +1,7 @@
-import { I18nStore } from "../../i18n/store/i18n.store"
-import { TestChartBgPlugin } from "./test-chart-bg-plugin.dto"
-import { TestChartDataset } from "./test-chart-dataset.dto"
-import { TestChart } from "./test-chart.dto"
-import { TestSignalChartOptions } from "./test-signal-chart-options.dto"
+import { I18nStore } from "../../../../i18n/store/i18n.store"
+import { TestChartDataset } from "../../../models/test-chart-dataset"
+import { TestChart } from "../../../models/test-chart"
+import { TestSignalChartOptions } from "./signal-chart-options"
 
 export class TestSignalChart extends TestChart {
   constructor(
@@ -10,7 +9,7 @@ export class TestSignalChart extends TestChart {
     i18nStore: I18nStore,
     datasets: TestChartDataset[],
     options: TestSignalChartOptions,
-    plugins: TestChartBgPlugin[]
+    plugins: any[] = []
   ) {
     super(
       context,

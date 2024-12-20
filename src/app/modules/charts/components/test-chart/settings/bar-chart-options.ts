@@ -1,7 +1,9 @@
-import { I18nStore } from "../../i18n/store/i18n.store"
-import { EColors } from "../constants/colors.enum"
+import dayjs from "dayjs"
+import { EColors } from "../../../../shared/constants/colors.enum"
+import { I18nStore } from "../../../../i18n/store/i18n.store"
 
-export class TestLogChartOptions {
+export class BarChartOptions {
+  private startTime = dayjs().startOf("day").toDate().getTime()
   animation = {
     duration: 0,
   }
@@ -16,8 +18,10 @@ export class TestLogChartOptions {
   parsing = false as const
   scales = {
     x: {
+      min: this.startTime,
+      type: "time",
       grid: {
-        color: EColors.SECONDARY_10,
+        offset: false,
       },
       title: {
         display: true,
@@ -26,14 +30,28 @@ export class TestLogChartOptions {
           size: 12,
         },
       },
+      time: {
+        unit: "millisecond",
+      },
+      offset: false,
       ticks: {
-        callback: (value: any) => `${value} ${this.t.translate("s")}`,
+        color: EColors.SECONDARY_50,
+        font: {
+          size: 12,
+        },
+        stepSize: 500,
+        callback: (value: any) => {
+          const duration = (value - this.startTime) / 1000
+          if (duration % 0.5 === 0) {
+            return `${duration} ${this.t.translate("s")}`
+          }
+          return ""
+        },
       },
     },
     y: {
       beginAtZero: true,
       min: 0,
-      max: 1,
       minRotation: 0,
       maxRotation: 0,
       grid: {
@@ -51,17 +69,9 @@ export class TestLogChartOptions {
         font: {
           size: 12,
         },
-        stepSize: 0.2,
-        autoSkip: false,
-        callback: (value: any, index: number) => {
-          let retVal = 0.1
-          if (index > 0) {
-            retVal = 10 ** (index - 1)
-          }
-          if (retVal >= 1000) {
-            return `${retVal / 1000} ${this.t.translate("Gbps")}`
-          }
-          return `${retVal} ${this.t.translate("Mbps")}`
+        maxTicksLimit: 6,
+        callback: (value: any) => {
+          return `${value} ${this.t.translate("millis")}`
         },
       },
     },

@@ -26,7 +26,7 @@ import { TestService } from "../../services/test.service"
 import { SimpleHistoryResult } from "../../dto/simple-history-result.dto"
 import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interface"
 import { MainStore } from "../../../shared/store/main.store"
-import { TestChartComponent } from "../../components/test-chart/test-chart.component"
+import { TestChartComponent } from "../../../charts/components/test-chart/test-chart.component"
 import { MatButtonModule } from "@angular/material/button"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { roundToSignificantDigits } from "../../../shared/util/math"
@@ -41,7 +41,7 @@ import { LocationDetailsComponent } from "../../components/location-details/loca
 import {
   PhaseDurations,
   SignalChartComponent,
-} from "../../components/signal-chart/signal-chart.component"
+} from "../../../charts/components/signal-chart/signal-chart.component"
 import formatcoords from "formatcoords"
 import { LOC_FORMAT } from "../../../shared/pipes/lonlat.pipe"
 import { SKIPPED_FIELDS } from "../../constants/skipped-details-fields"
@@ -122,7 +122,6 @@ export class ResultScreenComponent extends SeoComponent {
   phaseDurations = signal<PhaseDurations>({})
 
   get activeLang() {
-    // TODO: signal
     return this.i18nStore.activeLang
   }
 
@@ -287,7 +286,11 @@ export class ResultScreenComponent extends SeoComponent {
     }
     entries = [...entries, ...entriesMap].filter((v) => !!v)
 
-    let content = [this.formatLocation("location", openTestResponse)]
+    let content: IDetailedHistoryResultItem[] = []
+    const location = this.formatLocation("location", openTestResponse)
+    if (location) {
+      content.push(location)
+    }
     this.initialDetails().content = [...content]
 
     for (const [key, value] of entries) {
@@ -338,6 +341,9 @@ export class ResultScreenComponent extends SeoComponent {
   }
 
   private formatLocation(title: string, openTestResponse: any) {
+    if (!openTestResponse?.["lat"] || !openTestResponse?.["long"]) {
+      return null
+    }
     const value = `${formatcoords(
       openTestResponse["lat"],
       openTestResponse["long"]
@@ -383,6 +389,12 @@ export class ResultScreenComponent extends SeoComponent {
     }
     if (item.title == "duration_upload_ms") {
       this.phaseDurations().upDuration = parseFloat(item.value)
+    }
+    if (item.title == "speed_curve") {
+      const pings = item.value["ping"]
+      this.phaseDurations().pingStart = pings[0].time_elapsed
+      this.phaseDurations().pingDuration =
+        pings[pings.length - 1].time_elapsed - pings[0].time_elapsed
     }
   }
 }

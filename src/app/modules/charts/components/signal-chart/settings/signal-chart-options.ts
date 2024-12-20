@@ -1,8 +1,8 @@
 import dayjs from "dayjs"
-import { EColors } from "../constants/colors.enum"
-import { I18nStore } from "../../i18n/store/i18n.store"
+import { EColors } from "../../../../shared/constants/colors.enum"
+import { I18nStore } from "../../../../i18n/store/i18n.store"
 
-export class TestBarChartOptions {
+export class TestSignalChartOptions {
   private startTime = dayjs().startOf("day").toDate().getTime()
   animation = {
     duration: 0,
@@ -39,10 +39,10 @@ export class TestBarChartOptions {
         font: {
           size: 12,
         },
-        stepSize: 500,
+        stepSize: 2000,
         callback: (value: any) => {
           const duration = (value - this.startTime) / 1000
-          if (duration % 0.5 === 0) {
+          if (duration % 2 === 0) {
             return `${duration} ${this.t.translate("s")}`
           }
           return ""
@@ -51,28 +51,19 @@ export class TestBarChartOptions {
     },
     y: {
       beginAtZero: true,
-      min: 0,
+      max: 80,
       minRotation: 0,
       maxRotation: 0,
       grid: {
         color: EColors.SECONDARY_10,
-      },
-      title: {
-        display: true,
-        color: EColors.SECONDARY_50,
-        font: {
-          size: 12,
-        },
       },
       ticks: {
         color: EColors.SECONDARY_50,
         font: {
           size: 12,
         },
-        maxTicksLimit: 6,
-        callback: (value: any) => {
-          return `${value} ${this.t.translate("millis")}`
-        },
+        stepSize: 20,
+        callback: (value: number) => -(this.minSignal - value),
       },
     },
   }
@@ -85,5 +76,5 @@ export class TestBarChartOptions {
     },
   }
 
-  constructor(private t: I18nStore) {}
+  constructor(private t: I18nStore, private minSignal: number) {}
 }

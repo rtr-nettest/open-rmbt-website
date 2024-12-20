@@ -7,18 +7,16 @@ import {
   OnDestroy,
 } from "@angular/core"
 import { Observable } from "rxjs"
-import { ITestVisualizationState } from "../../interfaces/test-visualization-state.interface"
-import { withLatestFrom, map } from "rxjs/operators"
-import { EMeasurementStatus } from "../../constants/measurement-status.enum"
-import { TestPhaseState } from "../../dto/test-phase-state.dto"
+import { ITestVisualizationState } from "../../../test/interfaces/test-visualization-state.interface"
+import { map } from "rxjs/operators"
+import { EMeasurementStatus } from "../../../test/constants/measurement-status.enum"
 import { I18nStore } from "../../../i18n/store/i18n.store"
-import { TestStore } from "../../store/test.store"
-import { ChartPhase } from "../../dto/test-chart-dataset.dto"
-import { TestChart } from "../../dto/test-chart.dto"
-import { TestBarChart } from "../../dto/test-bar-chart.dto"
-import { TestLogChart } from "../../dto/test-log-chart.dto"
+import { TestStore } from "../../../test/store/test.store"
+import { ChartPhase } from "../../models/test-chart-dataset"
+import { TestChart } from "../../models/test-chart"
 import { AsyncPipe, NgIf } from "@angular/common"
-import { TestService } from "../../services/test.service"
+import { BarChart } from "./settings/bar-chart"
+import { LogChart } from "./settings/log-chart"
 
 @Component({
   selector: "app-test-chart",
@@ -132,9 +130,9 @@ export class TestChartComponent {
     if (ctx && (options?.force || this.isCanvasEmpty)) {
       try {
         if (this.phase === "ping") {
-          this.chart = new TestBarChart(ctx!, this.i18nStore, this.phase)
+          this.chart = new BarChart(ctx!, this.i18nStore, this.phase)
         } else {
-          this.chart = new TestLogChart(ctx!, this.i18nStore, this.phase)
+          this.chart = new LogChart(ctx!, this.i18nStore, this.phase)
         }
       } catch (e) {
         console.warn(this.phase, e)

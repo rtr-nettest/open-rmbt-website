@@ -1,5 +1,5 @@
 import { I18nStore } from "../../i18n/store/i18n.store"
-import { EColors } from "../constants/colors.enum"
+import { EColors } from "../../shared/constants/colors.enum"
 
 export class TestChartOptions {
   animation = {

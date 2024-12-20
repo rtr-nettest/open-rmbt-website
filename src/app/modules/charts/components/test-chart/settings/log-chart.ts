@@ -1,12 +1,15 @@
-import { ITestPhaseState } from "../interfaces/test-phase-state.interface"
-import { ChartPhase, TestChartDataset } from "./test-chart-dataset.dto"
-import { TestChart } from "./test-chart.dto"
 import { Point } from "chart.js"
-import { I18nStore } from "../../i18n/store/i18n.store"
-import { generateIndexesOfLength } from "../../shared/util/array"
-import { TestLogChartOptions } from "./test-log-chart-options.dto"
+import { I18nStore } from "../../../../i18n/store/i18n.store"
+import { generateIndexesOfLength } from "../../../../shared/util/array"
+import {
+  ChartPhase,
+  TestChartDataset,
+} from "../../../models/test-chart-dataset"
+import { TestChart } from "../../../models/test-chart"
+import { ITestPhaseState } from "../../../../test/interfaces/test-phase-state.interface"
+import { LogChartOptions } from "./log-chart-options"
 
-export class TestLogChart extends TestChart {
+export class LogChart extends TestChart {
   constructor(
     context: CanvasRenderingContext2D,
     i18nStore: I18nStore,
@@ -20,7 +23,7 @@ export class TestLogChart extends TestChart {
         datasets: [new TestChartDataset(phase)],
         labels: generateIndexesOfLength(8),
       },
-      new TestLogChartOptions(i18nStore)
+      new LogChartOptions(i18nStore)
     )
   }
 
