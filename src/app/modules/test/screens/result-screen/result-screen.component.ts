@@ -48,6 +48,7 @@ import { SKIPPED_FIELDS } from "../../constants/skipped-details-fields"
 import { FORMATTED_FIELDS } from "../../constants/formatted-details-fields"
 import { INITIAL_FIELDS } from "../../constants/initial-details-fields"
 import { SEARCHED_FIELDS } from "../../constants/searched-details-fields"
+import { SignalDetailsComponent } from "../../components/signal-details/signal-details.component"
 
 const MIN_ACCURACY_FOR_SHOWING_MAP = 2000
 
@@ -71,6 +72,7 @@ const MIN_ACCURACY_FOR_SHOWING_MAP = 2000
     FooterComponent,
     ScrollTopComponent,
     SignalChartComponent,
+    SignalDetailsComponent,
     SpeedDetailsComponent,
     BreadcrumbsComponent,
   ],

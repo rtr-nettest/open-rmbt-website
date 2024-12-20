@@ -1,0 +1,18 @@
+@import "core";
+
+:host {
+  margin-left: rem(-16);
+  margin-right: rem(-16);
+}
+
+.app-list {
+  list-style: none;
+}
+
+.app-li {
+  padding: rem(8) rem(16);
+
+  &:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+}

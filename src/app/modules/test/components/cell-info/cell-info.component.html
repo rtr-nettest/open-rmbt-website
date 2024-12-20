@@ -1,0 +1,7 @@
+@if (rows.length) {
+<ul class="app-list">
+  @for (item of rows; track $index) {
+  <li class="app-li" [innerHTML]="item"></li>
+  }
+</ul>
+}

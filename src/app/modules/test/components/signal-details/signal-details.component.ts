@@ -1,0 +1,41 @@
+import { ChangeDetectionStrategy, Component } from "@angular/core"
+import { TableComponent } from "../../../tables/components/table/table.component"
+import { MatExpansionModule } from "@angular/material/expansion"
+import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
+import { ShowDetailsComponent } from "../../../shared/components/show-details/show-details.component"
+import { ISimpleHistorySignal } from "../../interfaces/simple-history-result.interface"
+import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
+import { roundMs } from "../../../shared/util/math"
+import { CellInfoComponent } from "../cell-info/cell-info.component"
+
+@Component({
+  selector: "app-signal-details",
+  standalone: true,
+  imports: [TableComponent, MatExpansionModule, TranslatePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl:
+    "../../../shared/components/show-details/show-details.component.html",
+  styleUrl:
+    "../../../shared/components/show-details/show-details.component.scss",
+})
+export class SignalDetailsComponent extends ShowDetailsComponent<ISimpleHistorySignal> {
+  override columns: ITableColumn<ISimpleHistorySignal>[] = [
+    {
+      columnDef: "time_elapsed",
+      header: "Time, s",
+      transformValue: (row) => roundMs(row.time_elapsed / 1e3),
+      getNgClass: () => "app-cell--20",
+    },
+    {
+      columnDef: "signal_strength",
+      header: "Signal strength",
+      component: CellInfoComponent,
+      getComponentParameters: (row) => row,
+    },
+    {
+      columnDef: "cat_technology",
+      header: "Technology",
+      getNgClass: () => "app-cell--20",
+    },
+  ]
+}

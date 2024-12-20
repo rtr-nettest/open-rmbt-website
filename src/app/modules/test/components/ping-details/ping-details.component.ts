@@ -9,8 +9,6 @@ import { IPing } from "../../interfaces/measurement-result.interface"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { MatExpansionModule } from "@angular/material/expansion"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
-import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
-import { ISort } from "../../../tables/interfaces/sort.interface"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { roundMs } from "../../../shared/util/math"
 
