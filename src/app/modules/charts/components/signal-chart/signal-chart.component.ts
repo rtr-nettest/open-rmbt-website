@@ -64,7 +64,7 @@ export class SignalChartComponent implements AfterViewInit {
 
   private getMinSignal() {
     let containsLTE = false
-    const minSignal = Math.min(
+    let minSignal = Math.min(
       ...this.signal().map((signal) => {
         if (signal.network_type === "LTE" || signal.network_type === "LTE CA") {
           containsLTE = true
@@ -76,7 +76,8 @@ export class SignalChartComponent implements AfterViewInit {
           : signal.signal_strength
       })
     )
-    return Math.abs(Math.min(minSignal, containsLTE ? -140 : -120))
+    minSignal = Math.abs(minSignal - (minSignal % 25) - 50)
+    return Math.min(minSignal, containsLTE ? 140 : 120)
   }
 
   private getDatasets(

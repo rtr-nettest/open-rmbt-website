@@ -756,5 +756,6 @@
   "Christmas Island": "Weihnachtsinsel",
   "Western Sahara": "Westsahara",
   "Central African Republic": "Zentralafrikanische Republik",
-  "Cyprus": "Zypern"
+  "Cyprus": "Zypern",
+  "implausibleResult": "Anmerkung: Implausibles Testergebnis, Test wird ignoriert."
 }

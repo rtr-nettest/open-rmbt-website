@@ -49,6 +49,8 @@ import { FORMATTED_FIELDS } from "../../constants/formatted-details-fields"
 import { INITIAL_FIELDS } from "../../constants/initial-details-fields"
 import { SEARCHED_FIELDS } from "../../constants/searched-details-fields"
 
+const MIN_ACCURACY_FOR_SHOWING_MAP = 2000
+
 @Component({
   selector: "app-result-screen",
   standalone: true,
@@ -192,8 +194,13 @@ export class ResultScreenComponent extends SeoComponent {
   private getBasicResults(
     result: ISimpleHistoryResult
   ): IBasicResponse<IDetailedHistoryResultItem> {
-    if (result.openTestResponse?.["speed_curve"]?.location)
+    if (
+      result.openTestResponse?.["speed_curve"]?.location &&
+      result.openTestResponse?.["loc_accuracy"] !== null &&
+      result.openTestResponse?.["loc_accuracy"] <= MIN_ACCURACY_FOR_SHOWING_MAP
+    ) {
       this.locationTable.set(result.openTestResponse?.["speed_curve"]?.location)
+    }
     if (result.ping?.chart) this.pingTable.set(result.ping.chart)
     if (result.download?.chart)
       this.downloadTable.set(result.download.chart.slice(1))
@@ -350,11 +357,19 @@ export class ResultScreenComponent extends SeoComponent {
     ).format(LOC_FORMAT)} (${
       openTestResponse["loc_src"] ? `${openTestResponse["loc_src"]}, ` : ""
     } +/- ${Math.round(openTestResponse["loc_accuracy"])}m)`
-    const search = `lat=${openTestResponse["lat"]}&lon=${openTestResponse["long"]}&accuracy=${openTestResponse["loc_accuracy"]}&distance=${openTestResponse["distance"]}`
-    this.mapParams.set(new URLSearchParams(search))
+    const search = [
+      `lat=${openTestResponse["lat"]}`,
+      `lon=${openTestResponse["long"]}`,
+      `accuracy=${openTestResponse["loc_accuracy"]}`,
+    ]
+    if (openTestResponse["distance"]) {
+      search.push(`distance=${openTestResponse["distance"]}`)
+    }
+    const searchString = search.join("&")
+    this.mapParams.set(new URLSearchParams(searchString))
     return {
       title: this.i18nStore.translate(title),
-      value: `<a href="/${this.i18nStore.activeLang}/${ERoutes.MAP}?${search}">${value}</a>`,
+      value: `<a href="/${this.i18nStore.activeLang}/${ERoutes.MAP}?${searchString}">${value}</a>`,
     }
   }
 

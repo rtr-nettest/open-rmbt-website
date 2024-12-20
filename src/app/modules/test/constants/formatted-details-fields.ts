@@ -123,4 +123,5 @@ export const FORMATTED_FIELDS: {
     `${testData.settlement_type} - ${
       t[`settlement_type_${testData.settlement_type}`]
     }`,
+  implausible: (_: any, t: any) => t["implausibleResult"],
 }

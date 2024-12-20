@@ -756,5 +756,6 @@
   "Western Sahara": "Western Sahara",
   "Yemen": "Yemen",
   "Zambia": "Zambia",
-  "Zimbabwe": "Zimbabwe"
+  "Zimbabwe": "Zimbabwe",
+  "implausibleResult": "Comment: Implausible test result. Test is ignored."
 }

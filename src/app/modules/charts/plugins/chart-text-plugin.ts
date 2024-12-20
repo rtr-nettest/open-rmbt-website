@@ -20,7 +20,7 @@ export class ChartTextPlugin {
       ctx,
     } = chart
     const { x, y, text } = this.options
-    ctx.font = "12px Arial"
+    ctx.font = "12px 'Open Sans'"
     ctx.fillStyle = EColors.SECONDARY_60
     const fullTime = max - min
     const timeFromStartPercent = x / fullTime

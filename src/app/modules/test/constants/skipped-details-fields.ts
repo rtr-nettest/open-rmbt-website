@@ -7,7 +7,6 @@ export const SKIPPED_FIELDS = new Set([
   "lat",
   "loc_accuracy",
   "loc_src",
-  "implausible",
   "pinned",
   "product",
   "kg_nr",
