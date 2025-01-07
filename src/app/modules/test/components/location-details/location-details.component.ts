@@ -28,7 +28,9 @@ export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistor
   override columns: ITableColumn<ISimpleHistoryTestLocation>[] = [
     {
       columnDef: "time_elapsed",
-      header: "Time, s",
+      header: `${this.i18nStore.translate("Time")}, ${this.i18nStore.translate(
+        "s"
+      )}`,
       transformValue: (row) => roundMs(row.time_elapsed / 1e3),
       getNgClass: () => "app-cell--20",
     },
@@ -40,7 +42,9 @@ export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistor
     },
     {
       columnDef: "loc_accuracy",
-      header: "Accuracy, m",
+      header: `${this.i18nStore.translate(
+        "Accuracy"
+      )}, ${this.i18nStore.translate("m")}`,
       transformValue: (row) => `+/-${Math.round(row.loc_accuracy)}`,
       getNgClass: () => "app-cell--25",
     },

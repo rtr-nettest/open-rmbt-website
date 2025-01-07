@@ -14,6 +14,7 @@ import { CoverageDialogComponent } from "../coverage-dialog/coverage-dialog.comp
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { ERoutes } from "../../../shared/constants/routes.enum"
+import { ScrollStrategyOptions } from "@angular/cdk/overlay"
 
 @Component({
   selector: "app-map",
@@ -47,6 +48,7 @@ export class MapComponent implements AfterViewInit {
     private readonly dialog: MatDialog,
     private readonly i18nStore: I18nStore,
     private readonly mapService: MapService,
+    private readonly scrollStrategyOptions: ScrollStrategyOptions,
     private readonly zone: NgZone
   ) {}
 
@@ -65,6 +67,7 @@ export class MapComponent implements AfterViewInit {
     this.dialog.open(CoverageDialogComponent, {
       data: this.params,
       panelClass: "app-coverage-dialog",
+      scrollStrategy: this.scrollStrategyOptions.noop(),
     })
   }
 

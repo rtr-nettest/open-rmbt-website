@@ -32,12 +32,16 @@ export class PingDetailsComponent extends ShowDetailsComponent<IPing> {
     },
     {
       columnDef: "time_ns",
-      header: "Time, s",
+      header: `${this.i18nStore.translate("Time")}, ${this.i18nStore.translate(
+        "s"
+      )}`,
       transformValue: (row) => roundMs(row.time_ns / 1e9),
     },
     {
       columnDef: "value_server",
-      header: "Ping, ms",
+      header: `${this.i18nStore.translate("Ping")}, ${this.i18nStore.translate(
+        "millis"
+      )}`,
       transformValue: (row) => roundMs(row.value_server / 1e6),
     },
   ]

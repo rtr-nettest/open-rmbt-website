@@ -5,6 +5,7 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { ISort } from "../../../tables/interfaces/sort.interface"
+import { I18nStore } from "../../../i18n/store/i18n.store"
 
 @Component({
   selector: "app-show-details",
@@ -27,4 +28,6 @@ export class ShowDetailsComponent<T> {
     direction: "asc",
     active: "",
   }
+
+  constructor(protected readonly i18nStore: I18nStore) {}
 }
