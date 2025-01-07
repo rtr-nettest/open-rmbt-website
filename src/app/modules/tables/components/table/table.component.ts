@@ -88,6 +88,7 @@ export class TableComponent implements OnInit, OnChanges {
 
   ngOnChanges(): void {
     this.cdr.detectChanges()
+    this.table?.removeFooterRowDef(null as any)
   }
 
   ngOnInit() {
