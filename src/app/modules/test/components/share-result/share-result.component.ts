@@ -1,25 +1,30 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   input,
   signal,
-  ViewChild,
 } from "@angular/core"
 import { MatButtonModule } from "@angular/material/button"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatFormField, MatInputModule } from "@angular/material/input"
 import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.interface"
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome"
 import { environment } from "../../../../../environments/environment"
 import { I18nStore } from "../../../i18n/store/i18n.store"
-import { ERoutes } from "../../../shared/constants/routes.enum"
-import { HttpClient } from "@angular/common/http"
 import { HistoryExportService } from "../../services/history-export.service"
+import { MatFormFieldModule } from "@angular/material/form-field"
 
 @Component({
   selector: "app-share-result",
   standalone: true,
-  imports: [MatButtonModule, MatFormField, MatInputModule, TranslatePipe],
+  imports: [
+    MatButtonModule,
+    MatFormFieldModule,
+    MatFormField,
+    MatInputModule,
+    TranslatePipe,
+    FontAwesomeModule,
+  ],
   templateUrl: "./share-result.component.html",
   styleUrl: "./share-result.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,6 +35,28 @@ export class ShareResultComponent {
   bannerHtml = signal<string>("")
   bannerBBCode = signal<string>("")
   pdfButtonDisabled = signal<boolean>(false)
+  get socialMedia() {
+    if (!globalThis.document) {
+      return []
+    }
+    return [
+      {
+        icon: "twitter",
+        url: `whatsapp://send?text=RTR-NetTest%20${document.URL}`,
+        label: "twitter",
+      },
+      {
+        icon: "facebook",
+        url: `whatsapp://send?text=RTR-NetTest%20${document.URL}`,
+        label: "facebook",
+      },
+      {
+        icon: "whatsapp",
+        url: `whatsapp://send?text=RTR-NetTest%20${document.URL}`,
+        label: "share",
+      },
+    ]
+  }
 
   constructor(
     private readonly i18nStore: I18nStore,
@@ -53,6 +80,10 @@ export class ShareResultComponent {
     this.history.exportAsPdf([this.result()!]).subscribe(() => {
       this.pdfButtonDisabled.set(false)
     })
+  }
+
+  print() {
+    window.print()
   }
 
   selectText(event: MouseEvent) {

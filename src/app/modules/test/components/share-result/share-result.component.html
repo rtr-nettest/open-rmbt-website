@@ -1,3 +1,24 @@
+<div class="app-container" style="margin-bottom: 20px">
+  @for (item of socialMedia; track $index) {
+  <a
+    mat-stroked-button
+    class="app-button app-button--outlined"
+    [href]="item.url"
+    target="_blank"
+  >
+    <i class="fa-brands fa-{{ item.icon }}"> </i>
+    {{ item.label | translate }}
+  </a>
+  }
+  <button
+    mat-stroked-button
+    class="app-button app-button--outlined"
+    (click)="print()"
+  >
+    <i class="fa-solid fa-print"> </i>
+    {{ "print" | translate }}
+  </button>
+</div>
 <div class="app-container">
   <button mat-flat-button class="app-button" (click)="getForumBanner()">
     {{ "Get forum banner" | translate }}
