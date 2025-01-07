@@ -2,9 +2,13 @@
   @for (item of socialMedia; track $index) {
   <a
     mat-stroked-button
-    class="app-button app-button--outlined"
+    class="app-button app-button--outlined app-button--{{ item.icon }}"
     [href]="item.url"
     target="_blank"
+    rel="nofollow"
+    role="button"
+    [title]="item.title | translate"
+    [attr.aria-label]="item.title | translate"
   >
     <i class="fa-brands fa-{{ item.icon }}"> </i>
     {{ item.label | translate }}

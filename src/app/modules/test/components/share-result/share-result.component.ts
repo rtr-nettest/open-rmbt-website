@@ -42,18 +42,21 @@ export class ShareResultComponent {
     return [
       {
         icon: "twitter",
-        url: `whatsapp://send?text=RTR-NetTest%20${document.URL}`,
-        label: "twitter",
+        url: `https://twitter.com/intent/tweet?text=RTR-NetTest&url=${document.URL}`,
+        label: "Twitter",
+        title: "Share on Twitter",
       },
       {
         icon: "facebook",
-        url: `whatsapp://send?text=RTR-NetTest%20${document.URL}`,
-        label: "facebook",
+        url: `https://www.facebook.com/sharer/sharer.php?u=${document.URL}`,
+        label: "Facebook",
+        title: "Share on Facebook",
       },
       {
         icon: "whatsapp",
         url: `whatsapp://send?text=RTR-NetTest%20${document.URL}`,
-        label: "share",
+        label: "WhatsApp",
+        title: "Share via WhatsApp",
       },
     ]
   }

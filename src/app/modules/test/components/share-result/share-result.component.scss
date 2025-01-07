@@ -16,3 +16,29 @@ mat-form-field {
   display: block;
   max-width: rem(480);
 }
+
+.app-button--outlined {
+  border: 1px solid #ddd;
+  color: #999;
+}
+
+.fa-brands,
+.fa-solid {
+  margin-left: rem(-6);
+  margin-right: rem(6);
+}
+
+.fa-facebook,
+.app-button--facebook {
+  color: #3b5998;
+}
+
+.fa-twitter,
+.app-button--twitter {
+  color: #55acee;
+}
+
+.fa-whatsapp,
+.app-button--whatsapp {
+  color: #5cbe4a;
+}
