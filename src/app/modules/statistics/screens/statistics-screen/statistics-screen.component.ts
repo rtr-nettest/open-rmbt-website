@@ -82,7 +82,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
         yellow: provider.down_yellow,
         green: provider.down_green,
         deepGreen: provider.down_ultragreen,
-        label: Math.round(provider.quantile_down / 1000),
+        label: roundToSignificantDigits(provider.quantile_down / 1000),
         provider: provider.name,
         units: "Mbps",
       }),
@@ -97,7 +97,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
         yellow: provider.up_yellow,
         green: provider.up_green,
         deepGreen: provider.up_ultragreen,
-        label: Math.round(provider.quantile_up / 1000),
+        label: roundToSignificantDigits(provider.quantile_up / 1000),
         provider: provider.name,
         units: "Mbps",
       }),
@@ -273,12 +273,12 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
       .getBrowserData()
       .pipe(
         tap((data) => {
-          const p = this.platform.detectPlatform()
+          this.store.adjustTimePeriods()
           this.store.filters$.next({
             language: this.i18nStore.activeLang,
             type: "mobile",
             country: data.country_geoip,
-            duration: "30",
+            duration: this.store.durations()[2][0],
             province: -1,
             end_date: null,
             quantile: "0.5",
@@ -310,10 +310,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
               this.statisticsColumns = this.statisticsColumns.map((c) => {
                 return {
                   ...c,
-                  footer: this.getFooterValueByColumnName(
-                    c,
-                    response
-                  )?.toString(),
+                  footer: this.getFooterValueByColumnName(c, response),
                 }
               })
               this.devicesCount.set(10)
@@ -349,7 +346,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
         return data.providers_sums.count
       case "name":
       default:
-        return ""
+        return undefined
     }
   }
 }

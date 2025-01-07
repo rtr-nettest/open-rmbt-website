@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -52,7 +53,7 @@ export const APP_DATE_TIME_FORMAT = "DD.MM.YYYY HH:mm"
     RouterLink,
   ],
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, OnChanges {
   @Input() action?: (...ars: any[]) => any
   @Input() rowsAreCLickable = false
   @Input({ required: true }) columns: ITableColumn[] = []
@@ -80,8 +81,13 @@ export class TableComponent implements OnInit {
 
   constructor(
     private tableSortService: TableSortService,
-    private i18nStore: I18nStore
+    private i18nStore: I18nStore,
+    private cdr: ChangeDetectorRef
   ) {}
+
+  ngOnChanges(): void {
+    this.cdr.detectChanges()
+  }
 
   ngOnInit() {
     this.displayedColumns = this.columns
@@ -107,8 +113,11 @@ export class TableComponent implements OnInit {
     }
 
     const value = element[column.key || column.columnDef]
-    const date = Date.parse(value)
+    return this.toString(value, column)
+  }
 
+  toString(value: any, column: ITableColumn): string {
+    const date = Date.parse(value)
     if (typeof value === "number") {
       return value.toLocaleString(this.i18nStore.activeLang)
     } else if (!isNaN(date) && column.isDate) {

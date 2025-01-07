@@ -19,7 +19,6 @@ import { StatisticsNetworkType } from "../../interfaces/statistics-request.inter
 import { MatDatepickerModule } from "@angular/material/datepicker"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input"
-import { adjustTimePeriod } from "../../../shared/util/time"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -61,18 +60,6 @@ export class FiltersComponent implements OnDestroy {
     name,
   ])
   provinces = Object.entries(PROVINCES)
-  durations = [
-    ["1", "24 hours"],
-    ["7", "1 week"],
-    ["30", "1 month"],
-    ["90", "3 months"],
-    ["180", "6 months"],
-    ["365", "1 year"],
-    ["730", "2 years"],
-    ["1095", "3 years"],
-    ["1460", "4 years"],
-    ["2920", "8 years"],
-  ]
   tecnologies = [
     ["all", "All"],
     ["2G", "2G"],
@@ -99,7 +86,7 @@ export class FiltersComponent implements OnDestroy {
   form$ = this.store.filters$.pipe(
     map((filters) => {
       if (!filters) return null
-      this.adjustTimePeriods(filters.end_date)
+      this.store.adjustTimePeriods(filters.end_date)
       const form = this.fb.group<FiltersForm>({
         country: new FormControl(filters.country),
         duration: new FormControl(filters.duration),
@@ -118,14 +105,14 @@ export class FiltersComponent implements OnDestroy {
         )
         .subscribe((next) => {
           if (next.end_date !== this.store.filters$.value?.end_date) {
-            const durationIndex = this.durations.findIndex(
-              (v) => v[0] === next.duration
-            )
-            this.adjustTimePeriods(next.end_date)
+            const durationIndex = this.store
+              .durations()
+              .findIndex((v) => v[0] === next.duration)
+            this.store.adjustTimePeriods(next.end_date)
             this.store.filters$.next({
               ...this.store.filters$.value!,
               ...next,
-              duration: this.durations[durationIndex][0],
+              duration: this.store.durations()[durationIndex][0],
             })
             return
           }
@@ -142,6 +129,10 @@ export class FiltersComponent implements OnDestroy {
   subscription?: Subscription
   dateSubscription?: Subscription
 
+  get durations() {
+    return this.store.durations()
+  }
+
   ngOnDestroy(): void {
     this.destroyed$.next()
     this.destroyed$.complete()
@@ -157,15 +148,5 @@ export class FiltersComponent implements OnDestroy {
   setShowMore() {
     this.showMore = !this.showMore
     this.cdr.detectChanges()
-  }
-
-  /**
-   * Adjust time periods to represent calendar dates (e.g. 1 month should be 28-31 days)
-   */
-  private adjustTimePeriods(endDateString?: string | null) {
-    let enddate = endDateString ? dayjs(endDateString).utc() : dayjs().utc()
-    for (const option of this.durations) {
-      adjustTimePeriod(option, enddate)
-    }
   }
 }

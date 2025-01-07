@@ -181,10 +181,10 @@
         <span class="app-table__mobile-label">{{ column.header }}</span>
         @if (column.getLink) {
         <a [href]="column.getLink(null, column)" class="app-link">{{
-          column.footer
+          toString(column.footer, column)
         }}</a>
         } @else {
-        <span>{{ column.footer }}</span>
+        <span>{{ toString(column.footer, column) }}</span>
         } }
       </mat-footer-cell>
     </ng-container>
