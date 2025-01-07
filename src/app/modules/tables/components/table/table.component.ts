@@ -6,10 +6,9 @@ import {
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChild,
 } from "@angular/core"
-import { MatSort, MatSortModule, Sort } from "@angular/material/sort"
+import { MatSortModule, Sort } from "@angular/material/sort"
 import { MatTable, MatTableModule } from "@angular/material/table"
 import { PageEvent } from "@angular/material/paginator"
 import { arrowRotate } from "../../../shared/animations/arrow-rotate.animation"
@@ -29,6 +28,7 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner"
 import { PaginatorComponent } from "../paginator/paginator.component"
 import { DynamicComponentDirective } from "../../../shared/directives/dynamic-component.directive"
 import { I18nStore } from "../../../i18n/store/i18n.store"
+import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 export const APP_DATE_TIME_FORMAT = "DD.MM.YYYY HH:mm"
 
@@ -51,6 +51,7 @@ export const APP_DATE_TIME_FORMAT = "DD.MM.YYYY HH:mm"
     MatProgressSpinner,
     PaginatorComponent,
     RouterLink,
+    TranslatePipe,
   ],
 })
 export class TableComponent implements OnInit, OnChanges {

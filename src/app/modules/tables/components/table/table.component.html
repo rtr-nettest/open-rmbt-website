@@ -21,7 +21,7 @@
           mat-sort-header
           [style]="justify(column)"
           [ngClass]="column.getNgClass?.('', column)"
-          ><span>{{ column.header }}</span></mat-header-cell
+          ><span>{{ column.header | translate }}</span></mat-header-cell
         >
       </ng-container>
 
@@ -32,7 +32,7 @@
           [ngClass]="column.getNgClass?.('', column)"
         >
           <div class="sah-table__cell--ellipsis">
-            {{ column.header }}
+            {{ column.header | translate }}
           </div>
         </mat-header-cell>
       </ng-container>
