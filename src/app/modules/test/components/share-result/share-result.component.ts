@@ -8,7 +8,6 @@ import { MatButtonModule } from "@angular/material/button"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatFormField, MatInputModule } from "@angular/material/input"
 import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.interface"
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome"
 import { environment } from "../../../../../environments/environment"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { HistoryExportService } from "../../services/history-export.service"
@@ -23,7 +22,6 @@ import { MatFormFieldModule } from "@angular/material/form-field"
     MatFormField,
     MatInputModule,
     TranslatePipe,
-    FontAwesomeModule,
   ],
   templateUrl: "./share-result.component.html",
   styleUrl: "./share-result.component.scss",
