@@ -14,6 +14,18 @@
     margin-right: rem(8);
   }
 
+  &--filetype-csv {
+    background-image: url("/assets/images/filetype-csv-icon.svg");
+  }
+
+  &--filetype-pdf {
+    background-image: url("/assets/images/filetype-pdf-icon.svg");
+  }
+
+  &--filetype-xlsx {
+    background-image: url("/assets/images/filetype-xlsx-icon.svg");
+  }
+
   &--marker {
     background-image: url("/assets/images/marker.svg");
     margin-right: rem(8);
@@ -43,7 +55,7 @@
         background-image: url("/assets/images/down-3.svg");
       }
 
-      &-greenest {
+      &-deep-green {
         background-image: url("/assets/images/down-4.svg");
       }
     }
@@ -63,7 +75,7 @@
         background-image: url("/assets/images/up-3.svg");
       }
 
-      &-greenest {
+      &-deep-green {
         background-image: url("/assets/images/up-4.svg");
       }
     }
@@ -83,7 +95,7 @@
         background-image: url("/assets/images/ping-3.svg");
       }
 
-      &-greenest {
+      &-deep-green {
         background-image: url("/assets/images/ping-4.svg");
       }
     }

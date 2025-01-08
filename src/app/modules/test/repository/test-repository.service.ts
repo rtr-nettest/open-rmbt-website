@@ -18,7 +18,7 @@ export class TestRepositoryService {
   constructor(private readonly http: HttpClient) {}
 
   getSettings() {
-    const uuid = localStorage.getItem(UUID) ?? v4()
+    let uuid = localStorage.getItem(UUID) ?? undefined
     return this.http
       .post<IUserSetingsResponse>(
         `${environment.api.baseUrl}/RMBTControlServer/settings`,
@@ -28,13 +28,17 @@ export class TestRepositoryService {
           terms_and_conditions_accepted: "true",
           terms_and_conditions_accepted_version: 6,
           type: "DESKTOP",
+          uuid,
           version_code: "1",
           version_name: "0.1",
         }
       )
       .pipe(
         tap((settings) => {
-          localStorage.setItem(UUID, settings?.settings[0]?.uuid ?? uuid)
+          uuid = settings?.settings[0]?.uuid
+          if (uuid) {
+            localStorage.setItem(UUID, uuid)
+          }
         })
       )
   }

@@ -2,6 +2,7 @@ import { NgIf } from "@angular/common"
 import { Component, Inject } from "@angular/core"
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
+import { MatButtonModule } from "@angular/material/button"
 
 export type ConfirmDialogOpts = {
   canCancel: boolean
@@ -15,7 +16,7 @@ export type ConfirmDialogOpts = {
   templateUrl: "./confirm-dialog.component.html",
   styleUrls: ["./confirm-dialog.component.scss"],
   standalone: true,
-  imports: [NgIf, TranslatePipe],
+  imports: [NgIf, MatButtonModule, TranslatePipe],
 })
 export class ConfirmDialogComponent {
   get text() {

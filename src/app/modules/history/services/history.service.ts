@@ -18,28 +18,19 @@ import { IPaginator } from "../../tables/interfaces/paginator.interface"
 import { ITestResultRequest } from "../interfaces/measurement-result.interface"
 import { HistoryRepositoryService } from "../repository/history-repository.service"
 import { TestStore } from "../../test/store/test.store"
-import { HistoryStore } from "../store/history.store"
-import { I18nStore, Translation } from "../../i18n/store/i18n.store"
+import { HISTORY_LIMIT, HistoryStore } from "../store/history.store"
+import { I18nStore } from "../../i18n/store/i18n.store"
 import { Router } from "@angular/router"
 import { MainStore } from "../../shared/store/main.store"
 import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interface"
-import {
-  IHistoryGroupItem,
-  IHistoryRowRTR,
-} from "../interfaces/history-row.interface"
+import { IHistoryGroupItem } from "../interfaces/history-row.interface"
 import { ISort } from "../../tables/interfaces/sort.interface"
-import { ExpandArrowComponent } from "../../shared/components/expand-arrow/expand-arrow.component"
-import { roundToSignificantDigits } from "../../shared/util/math"
-import { ClassificationService } from "../../shared/services/classification.service"
-import { DatePipe } from "@angular/common"
 
 @Injectable({
   providedIn: "root",
 })
 export class HistoryService {
   constructor(
-    private classification: ClassificationService,
-    private datePipe: DatePipe,
     private historyStore: HistoryStore,
     private repo: HistoryRepositoryService,
     private testStore: TestStore,
@@ -115,29 +106,28 @@ export class HistoryService {
   }
 
   async getMeasurementHistory(paginator?: IPaginator) {
-    return this.repo.getHistory(paginator)
+    const history = await this.repo.getHistory(paginator)
+    this.historyStore.history$.next(history)
+    return history
   }
 
-  getFormattedHistory(options?: {
+  getHistoryGroupedByLoop(options?: {
     grouped?: boolean
     loopUuid?: string | null
   }) {
     return combineLatest([
       this.historyStore.history$,
       this.i18nStore.getTranslations(),
-      this.historyStore.historyPaginator$,
       this.historyStore.openLoops$,
     ]).pipe(
-      map(([history, t, paginator, openLoops]) => {
+      map(([history, t, openLoops]) => {
         if (!history.length) {
           return { content: [], totalElements: 0 }
         }
         const loopHistory = this.getLoopResults(history, options?.loopUuid)
-        const countedHistory = this.countResults(loopHistory, paginator)
-        const h = options?.grouped
-          ? this.groupResults(countedHistory, openLoops)
-          : countedHistory
-        const content = h.map(this.historyItemToRowRTR(t, openLoops))
+        const content = options?.grouped
+          ? this.groupResults(loopHistory, openLoops)
+          : loopHistory
         const totalElements = history[0].paginator?.totalElements
         return {
           content,
@@ -184,12 +174,12 @@ export class HistoryService {
 
   resetMeasurementHistory() {
     this.historyStore.history$.next([])
-    this.historyStore.historyPaginator$.next({ offset: 0 })
+    this.historyStore.paginator.set({ offset: 0, limit: HISTORY_LIMIT })
   }
 
   sortMeasurementHistory(sort: ISort, callback: () => any) {
     this.resetMeasurementHistory()
-    this.historyStore.historySort$.next(sort)
+    this.historyStore.sort.set(sort)
     callback()
   }
 
@@ -199,70 +189,4 @@ export class HistoryService {
     }
     return history.filter((hi) => hi.loopUuid === "L" + loopUuid)
   }
-
-  private countResults(history: ISimpleHistoryResult[], paginator: IPaginator) {
-    return history.map((hi, index) => ({
-      ...hi,
-      count: paginator.limit ? index + 1 : history.length - index,
-    }))
-  }
-
-  private historyItemToRowRTR =
-    (t: Translation, openLoops: string[]) =>
-    (hi: ISimpleHistoryResult & IHistoryGroupItem): IHistoryRowRTR => {
-      const locale = this.i18nStore.activeLang
-      const measurementDate = this.datePipe.transform(
-        hi.measurementDate,
-        "medium",
-        undefined,
-        locale
-      )!
-      if (hi.groupHeader) {
-        return {
-          id: hi.loopUuid!,
-          measurementDate,
-          groupHeader: hi.groupHeader,
-          details: ExpandArrowComponent,
-          componentField: "details",
-          parameters: {
-            expanded: openLoops.includes(hi.loopUuid!),
-          },
-        }
-      }
-      return {
-        id: hi.testUuid!,
-        count: hi.count,
-        measurementDate,
-        download:
-          this.classification.getPhaseIconByClass(
-            "down",
-            hi.download?.classification
-          ) +
-          roundToSignificantDigits(
-            hi.download?.value || 0 / 1e3
-          ).toLocaleString(locale) +
-          " " +
-          t["Mbps"],
-        upload:
-          this.classification.getPhaseIconByClass(
-            "up",
-            hi.upload?.classification
-          ) +
-          roundToSignificantDigits(hi.upload?.value || 0 / 1e3).toLocaleString(
-            locale
-          ) +
-          " " +
-          t["Mbps"],
-        ping:
-          this.classification.getPhaseIconByClass(
-            "ping",
-            hi.ping?.classification
-          ) +
-          hi.ping?.value.toLocaleString(locale) +
-          " " +
-          t["millis"],
-        loopUuid: hi.loopUuid,
-        hidden: hi.hidden,
-      }
-    }
 }

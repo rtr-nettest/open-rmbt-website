@@ -31,11 +31,11 @@ import { MessageService } from "../../../shared/services/message.service"
 import { SpacerComponent } from "../../../shared/components/spacer/spacer.component"
 import { GaugeComponent } from "../../components/gauge/gauge.component"
 import { InterimResultsComponent } from "../../components/interim-results/interim-results.component"
-import { RecentHistoryComponent } from "../../components/recent-history/recent-history.component"
 import { TestService } from "../../services/test.service"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { MainStore } from "../../../shared/store/main.store"
 import { HistoryService } from "../../../history/services/history.service"
+import { RecentHistoryComponent } from "../../../history/components/recent-history/recent-history.component"
 
 @Component({
   selector: "app-test-screen",
@@ -71,7 +71,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   stopped$: Subject<void> = new Subject()
   visualization$!: Observable<ITestVisualizationState>
   loopWaiting$ = new BehaviorSubject(false)
-  result$ = this.historyService.getFormattedHistory({
+  result$ = this.historyService.getHistoryGroupedByLoop({
     grouped: false,
     loopUuid: this.store.loopUuid$.value ?? undefined,
   })

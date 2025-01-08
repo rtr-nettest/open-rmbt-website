@@ -13,6 +13,7 @@ import { ICoverageResponse } from "../interfaces/coverage.interface"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
+import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -73,10 +74,14 @@ export class HistoryRepositoryService {
   }
 
   async getHistory(paginator?: IPaginator) {
+    const uuid = localStorage.getItem(UUID)
+    if (!uuid) {
+      return null
+    }
     const body: { [key: string]: any } = {
       language: this.i18nStore.activeLang,
       timezone: dayjs.tz.guess(),
-      uuid: localStorage.getItem(UUID),
+      uuid,
       result_offset: paginator?.offset,
       include_failed_tests: true,
     }
@@ -93,11 +98,8 @@ export class HistoryRepositoryService {
       throw new Error(resp.error)
     }
     if (resp?.history.length) {
-      return resp.history.map(
-        (hi: any) =>
-          // TODO: Implement this
-          // SimpleHistoryResult.fromRTRHistoryResult(hi)
-          void 0
+      return resp.history.map((hi: any) =>
+        SimpleHistoryResult.fromHistoryResponse(hi)
       )
     }
   }

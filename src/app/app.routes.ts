@@ -9,6 +9,7 @@ import { TestScreenComponent } from "./modules/test/screens/test-screen/test-scr
 import { MapScreenComponent } from "./modules/map/screens/map-screen/map-screen.component"
 import { StatisticsScreenComponent } from "./modules/statistics/screens/statistics-screen/statistics-screen.component"
 import { ResultScreenComponent } from "./modules/history/screens/result-screen/result-screen.component"
+import { HistoryScreenComponent } from "./modules/history/screens/history-screen/history-screen.component"
 
 export const routes: Routes = [
   {
@@ -69,6 +70,15 @@ export const routes: Routes = [
         path: ERoutes.RESULT,
         pathMatch: "full",
         component: ResultScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "History",
+        },
+      },
+      {
+        path: ERoutes.HISTORY,
+        pathMatch: "full",
+        component: HistoryScreenComponent,
         resolve: [localeResolver],
         data: {
           title: "History",

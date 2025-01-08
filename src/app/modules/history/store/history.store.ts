@@ -1,8 +1,10 @@
-import { Injectable } from "@angular/core"
+import { Injectable, signal } from "@angular/core"
 import { BehaviorSubject } from "rxjs"
 import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interface"
 import { IPaginator } from "../../tables/interfaces/paginator.interface"
 import { ISort } from "../../tables/interfaces/sort.interface"
+
+export const HISTORY_LIMIT = 10
 
 @Injectable({
   providedIn: "root",
@@ -10,10 +12,11 @@ import { ISort } from "../../tables/interfaces/sort.interface"
 export class HistoryStore {
   simpleHistoryResult$ = new BehaviorSubject<ISimpleHistoryResult | null>(null)
   history$ = new BehaviorSubject<Array<ISimpleHistoryResult>>([])
-  historyPaginator$ = new BehaviorSubject<IPaginator>({
+  paginator = signal<IPaginator>({
     offset: 0,
+    limit: HISTORY_LIMIT,
   })
-  historySort$ = new BehaviorSubject<ISort>({
+  sort = signal<ISort>({
     active: "measurementDate",
     direction: "desc",
   })

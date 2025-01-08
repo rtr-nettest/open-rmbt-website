@@ -18,6 +18,54 @@ import { CalcService } from "../services/calc.service"
 import { RESULT_DATE_FORMAT } from "../../test/constants/strings"
 
 export class SimpleHistoryResult implements ISimpleHistoryResult {
+  static fromHistoryResponse(response: any) {
+    return new SimpleHistoryResult(
+      response?.time
+        ? dayjs(response.time)
+            .utc(true)
+            .tz(dayjs.tz.guess())
+            .format(RESULT_DATE_FORMAT)
+        : "",
+      "",
+      {
+        value: response?.speed_download
+          ? parseFloat(response.speed_download)
+          : 0,
+        classification: ClassificationService.I.classify(
+          parseFloat(response.speed_download) * 1e3,
+          THRESHOLD_DOWNLOAD,
+          "biggerBetter"
+        ),
+      },
+      {
+        value: response?.speed_upload ? parseFloat(response.speed_upload) : 0,
+        classification: ClassificationService.I.classify(
+          parseFloat(response.speed_upload) * 1e3,
+          THRESHOLD_UPLOAD,
+          "biggerBetter"
+        ),
+      },
+      {
+        value: response?.ping ? parseFloat(response.ping) : 0,
+        classification: ClassificationService.I.classify(
+          parseFloat(response.ping),
+          THRESHOLD_PING,
+          "smallerBetter"
+        ),
+      },
+      {
+        value: response?.signal_strength
+          ? parseFloat(response.signal_strength)
+          : 0,
+        classification: response?.signal_classification,
+      },
+      "",
+      "",
+      response?.test_uuid,
+      response?.loop_uuid
+    )
+  }
+
   static fromOpenTestResponse(
     uuid: string,
     response: any,

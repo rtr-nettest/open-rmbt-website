@@ -1,0 +1,15 @@
+<ng-container *ngIf="data && data.totalElements > 0">
+  <h3 *ngIf="title" class="app-title" style="margin-bottom: 1em">
+    {{ title | translate }}
+  </h3>
+  <app-table
+    [action]="changeSort"
+    [columns]="columns"
+    [data]="data"
+    [rowsAreCLickable]="true"
+    [sort]="sort"
+    [shouldHideHeader]="false"
+    [tableClassNames]="tableClassNames ?? []"
+    (toggleExpandableRow)="toggleLoopResults($event.toString())"
+  ></app-table>
+</ng-container>
