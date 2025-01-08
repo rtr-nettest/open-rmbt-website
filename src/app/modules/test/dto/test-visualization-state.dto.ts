@@ -4,7 +4,7 @@ import { TestPhaseState } from "./test-phase-state.dto"
 import { EMeasurementStatus } from "../constants/measurement-status.enum"
 import { IMeasurementPhaseState } from "../interfaces/measurement-phase-state.interface"
 import { extend } from "../../shared/util/extend"
-import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interface"
+import { ISimpleHistoryResult } from "../../history/interfaces/simple-history-result.interface"
 import { ETestStatuses } from "../constants/test-statuses.enum"
 import { ETestLabels } from "../constants/test-labels.enum"
 

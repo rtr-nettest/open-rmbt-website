@@ -10,8 +10,8 @@ import { MatFormField, MatInputModule } from "@angular/material/input"
 import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.interface"
 import { environment } from "../../../../../environments/environment"
 import { I18nStore } from "../../../i18n/store/i18n.store"
-import { HistoryExportService } from "../../services/history-export.service"
 import { MatFormFieldModule } from "@angular/material/form-field"
+import { HistoryExportService } from "../../services/history-export.service"
 
 @Component({
   selector: "app-share-result",

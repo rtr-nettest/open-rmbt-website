@@ -4,7 +4,6 @@ import { environment } from "../../../../environments/environment"
 import { NetworkMeasurementType } from "../interfaces/map-type.interface"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { IMapInfo } from "../interfaces/map-info.interface"
-import { UUID } from "../../shared/constants/strings"
 import { Map, Marker, StyleSpecification } from "maplibre-gl"
 import {
   catchError,
@@ -16,6 +15,7 @@ import {
   takeUntil,
   tap,
 } from "rxjs"
+import { UUID } from "../../test/constants/strings"
 
 export const DEFAULT_CENTER: [number, number] = [
   13.786457000803567, 47.57838319858735,

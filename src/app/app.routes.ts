@@ -8,7 +8,7 @@ import { TermsConditionsScreenComponent } from "./modules/test/screens/terms-con
 import { TestScreenComponent } from "./modules/test/screens/test-screen/test-screen.component"
 import { MapScreenComponent } from "./modules/map/screens/map-screen/map-screen.component"
 import { StatisticsScreenComponent } from "./modules/statistics/screens/statistics-screen/statistics-screen.component"
-import { ResultScreenComponent } from "./modules/test/screens/result-screen/result-screen.component"
+import { ResultScreenComponent } from "./modules/history/screens/result-screen/result-screen.component"
 
 export const routes: Routes = [
   {

@@ -10,7 +10,6 @@ import {
   Subject,
   switchMap,
   takeUntil,
-  tap,
   withLatestFrom,
 } from "rxjs"
 import { TC_VERSION } from "../terms-conditions-screen/terms-conditions-screen.component"
@@ -29,7 +28,6 @@ import {
   ERROR_OCCURED_SENDING_RESULTS,
 } from "../../constants/strings"
 import { MessageService } from "../../../shared/services/message.service"
-import { HistoryStore } from "../../store/history.store"
 import { SpacerComponent } from "../../../shared/components/spacer/spacer.component"
 import { GaugeComponent } from "../../components/gauge/gauge.component"
 import { InterimResultsComponent } from "../../components/interim-results/interim-results.component"
@@ -37,6 +35,7 @@ import { RecentHistoryComponent } from "../../components/recent-history/recent-h
 import { TestService } from "../../services/test.service"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { MainStore } from "../../../shared/store/main.store"
+import { HistoryService } from "../../../history/services/history.service"
 
 @Component({
   selector: "app-test-screen",
@@ -61,7 +60,7 @@ import { MainStore } from "../../../shared/store/main.store"
   styleUrl: "./test-screen.component.scss",
 })
 export class TestScreenComponent extends SeoComponent implements OnInit {
-  historyStore = inject(HistoryStore)
+  historyService = inject(HistoryService)
   router = inject(Router)
   mainStore = inject(MainStore)
   message = inject(MessageService)
@@ -72,7 +71,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   stopped$: Subject<void> = new Subject()
   visualization$!: Observable<ITestVisualizationState>
   loopWaiting$ = new BehaviorSubject(false)
-  result$ = this.historyStore.getFormattedHistory({
+  result$ = this.historyService.getFormattedHistory({
     grouped: false,
     loopUuid: this.store.loopUuid$.value ?? undefined,
   })

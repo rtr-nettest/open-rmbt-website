@@ -1,58 +1,132 @@
 import { Injectable } from "@angular/core"
 import {
-  BehaviorSubject,
+  catchError,
   combineLatest,
+  forkJoin,
   from,
   map,
   of,
-  switchMap,
   take,
   tap,
 } from "rxjs"
-import { DatePipe } from "@angular/common"
-import { I18nStore, Translation } from "../../i18n/store/i18n.store"
-import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interface"
+import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
+import { TestPhaseState } from "../../test/dto/test-phase-state.dto"
+import { EMeasurementStatus } from "../../test/constants/measurement-status.enum"
+import { TestVisualizationState } from "../../test/dto/test-visualization-state.dto"
+import { ERoutes } from "../../shared/constants/routes.enum"
 import { IPaginator } from "../../tables/interfaces/paginator.interface"
-import { ISort } from "../../tables/interfaces/sort.interface"
-import { ClassificationService } from "../../shared/services/classification.service"
+import { ITestResultRequest } from "../interfaces/measurement-result.interface"
+import { HistoryRepositoryService } from "../repository/history-repository.service"
+import { TestStore } from "../../test/store/test.store"
+import { HistoryStore } from "../store/history.store"
+import { I18nStore, Translation } from "../../i18n/store/i18n.store"
+import { Router } from "@angular/router"
+import { MainStore } from "../../shared/store/main.store"
+import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interface"
 import {
   IHistoryGroupItem,
   IHistoryRowRTR,
 } from "../interfaces/history-row.interface"
+import { ISort } from "../../tables/interfaces/sort.interface"
 import { ExpandArrowComponent } from "../../shared/components/expand-arrow/expand-arrow.component"
-import { TestService } from "../services/test.service"
 import { roundToSignificantDigits } from "../../shared/util/math"
+import { ClassificationService } from "../../shared/services/classification.service"
+import { DatePipe } from "@angular/common"
 
 @Injectable({
   providedIn: "root",
 })
-export class HistoryStore {
-  history$ = new BehaviorSubject<Array<ISimpleHistoryResult>>([])
-  historyPaginator$ = new BehaviorSubject<IPaginator>({
-    offset: 0,
-  })
-  historySort$ = new BehaviorSubject<ISort>({
-    active: "measurementDate",
-    direction: "desc",
-  })
-  openLoops$ = new BehaviorSubject<string[]>([])
-
+export class HistoryService {
   constructor(
     private classification: ClassificationService,
     private datePipe: DatePipe,
+    private historyStore: HistoryStore,
+    private repo: HistoryRepositoryService,
+    private testStore: TestStore,
     private i18nStore: I18nStore,
-    private service: TestService
+    private router: Router,
+    private mainStore: MainStore
   ) {}
+
+  getMeasurementResult(params: ITestResultRequest) {
+    if (!params || this.mainStore.error$.value) {
+      return of(null)
+    }
+    return forkJoin([
+      from(this.repo.getOpenResult(params)),
+      from(this.repo.getResult(params)),
+    ]).pipe(
+      map(([openTestsResponse, [response, testResultDetail]]) => {
+        const historyResult = SimpleHistoryResult.fromOpenTestResponse(
+          params.testUuid!,
+          response,
+          openTestsResponse
+        )
+        if (
+          historyResult.openTestResponse &&
+          testResultDetail?.testresultdetail.length
+        ) {
+          const trdSet = new Set(
+            Object.entries(historyResult.openTestResponse).map(([key, value]) =>
+              this.i18nStore.translate(key)
+            )
+          )
+          for (const item of testResultDetail.testresultdetail) {
+            if (!trdSet.has(item.title)) {
+              historyResult.openTestResponse[item.title] = item.value
+            }
+          }
+        }
+        this.historyStore.simpleHistoryResult$.next(historyResult)
+        const newPhase = new TestPhaseState({
+          phase: EMeasurementStatus.SHOWING_RESULTS,
+          down: historyResult.download.value / 1000,
+          up: historyResult.upload.value / 1000,
+          ping: historyResult.ping.value / 1e6,
+        })
+        const newState = TestVisualizationState.fromHistoryResult(
+          historyResult,
+          this.testStore.visualization$.value,
+          newPhase
+        )
+        this.testStore.visualization$.next(newState)
+        this.testStore.basicNetworkInfo$.next({
+          serverName: historyResult.measurementServerName,
+          ipAddress: historyResult.ipAddress,
+          providerName: historyResult.providerName,
+          coordinates: historyResult.openTestResponse
+            ? [
+                historyResult.openTestResponse["long"],
+                historyResult.openTestResponse["lat"],
+              ]
+            : undefined,
+        })
+        return historyResult
+      }),
+      catchError((e) => {
+        console.log(e)
+        this.router.navigate([
+          this.i18nStore.activeLang,
+          ERoutes.PAGE_NOT_FOUND,
+        ])
+        return of(null)
+      })
+    )
+  }
+
+  async getMeasurementHistory(paginator?: IPaginator) {
+    return this.repo.getHistory(paginator)
+  }
 
   getFormattedHistory(options?: {
     grouped?: boolean
     loopUuid?: string | null
   }) {
     return combineLatest([
-      this.history$,
+      this.historyStore.history$,
       this.i18nStore.getTranslations(),
-      this.historyPaginator$,
-      this.openLoops$,
+      this.historyStore.historyPaginator$,
+      this.historyStore.openLoops$,
     ]).pipe(
       map(([history, t, paginator, openLoops]) => {
         if (!history.length) {
@@ -68,22 +142,6 @@ export class HistoryStore {
         return {
           content,
           totalElements: totalElements ?? content.length,
-        }
-      })
-    )
-  }
-
-  getMeasurementHistory() {
-    return this.historyPaginator$.pipe(
-      take(1),
-      switchMap((paginator) => {
-        return this.service.getMeasurementHistory({
-          offset: paginator.offset,
-        })
-      }),
-      tap((history) => {
-        if (history) {
-          this.history$.next(history)
         }
       })
     )
@@ -112,26 +170,26 @@ export class HistoryStore {
     return retVal
   }
 
-  getRecentMeasurementHistory(paginator: IPaginator, sort?: ISort) {
+  getRecentMeasurementHistory(paginator: IPaginator) {
     if (!paginator.limit) {
       return of([])
     }
-    return from(this.service.getMeasurementHistory(paginator)).pipe(
+    return from(this.getMeasurementHistory(paginator)).pipe(
       take(1),
       tap((history) => {
-        this.history$.next(history)
+        this.historyStore.history$.next(history)
       })
     )
   }
 
   resetMeasurementHistory() {
-    this.history$.next([])
-    this.historyPaginator$.next({ offset: 0 })
+    this.historyStore.history$.next([])
+    this.historyStore.historyPaginator$.next({ offset: 0 })
   }
 
   sortMeasurementHistory(sort: ISort, callback: () => any) {
     this.resetMeasurementHistory()
-    this.historySort$.next(sort)
+    this.historyStore.historySort$.next(sort)
     callback()
   }
 

@@ -18,11 +18,7 @@ import {
 import { HtmlWrapperComponent } from "../../../shared/components/html-wrapper/html-wrapper.component"
 import { AsyncPipe } from "@angular/common"
 import { TableComponent } from "../../../tables/components/table/table.component"
-import {
-  ICoverage,
-  ICoverageResponse,
-} from "../../interfaces/coverage.interface"
-import { TestRepositoryService } from "../../repository/test-repository.service"
+import { ICoverage } from "../../interfaces/coverage.interface"
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -42,6 +38,7 @@ import { MatButtonModule } from "@angular/material/button"
 import { MatIconModule } from "@angular/material/icon"
 import { lineString } from "@turf/helpers"
 import bbox from "@turf/bbox"
+import { HistoryRepositoryService } from "../../repository/history-repository.service"
 
 @Component({
   selector: "app-coverage-dialog",
@@ -131,7 +128,7 @@ export class CoverageDialogComponent implements OnDestroy {
   constructor(
     @Inject(MAT_DIALOG_DATA) private readonly data: URLSearchParams,
     private readonly dialogRef: MatDialogRef<CoverageDialogComponent>,
-    private readonly repo: TestRepositoryService,
+    private readonly repo: HistoryRepositoryService,
     private readonly i18nStore: I18nStore,
     private readonly mapService: MapService,
     private readonly zone: NgZone

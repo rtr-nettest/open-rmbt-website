@@ -49,8 +49,12 @@
     style="width: 100%; padding: 0.5em"
   >
     <ng-container *ngIf="progressMode === 'determinate'">
-      <h2 *transloco="let t" class="app-title">
-        {{ t("Next measurement in") + " " + (ms$ | async | date : "mm:ss") }}
+      <h2 class="app-title">
+        {{
+          ("Next measurement in" | translate) +
+            " " +
+            (ms$ | async | date : "mm:ss")
+        }}
       </h2>
     </ng-container>
     <mat-progress-bar

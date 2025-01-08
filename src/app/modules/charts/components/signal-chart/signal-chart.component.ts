@@ -4,7 +4,7 @@ import {
   Component,
   input,
 } from "@angular/core"
-import { ISimpleHistorySignal } from "../../../test/interfaces/simple-history-result.interface"
+import { ISimpleHistorySignal } from "../../../history/interfaces/simple-history-result.interface"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { EChartColor, TestChartDataset } from "../../models/test-chart-dataset"
 import dayjs from "dayjs"

@@ -6,12 +6,12 @@ import {
   Output,
 } from "@angular/core"
 import { BehaviorSubject } from "rxjs"
-import { IHistoryRowRTR } from "../../interfaces/history-row.interface"
+import { IHistoryRowRTR } from "../../../history/interfaces/history-row.interface"
 import { ISort } from "../../../tables/interfaces/sort.interface"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { MessageService } from "../../../shared/services/message.service"
 import { Router } from "@angular/router"
-import { HistoryStore } from "../../store/history.store"
+import { HistoryStore } from "../../../history/store/history.store"
 import { TestStore } from "../../store/test.store"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { THIS_INTERRUPTS_ACTION } from "../../constants/strings"
@@ -81,9 +81,7 @@ export class RecentHistoryComponent implements OnChanges {
 
   constructor(
     private message: MessageService,
-    private router: Router,
     private store: HistoryStore,
-    private testStore: TestStore,
     private testService: TestService
   ) {
     this.sort$ = this.store.historySort$

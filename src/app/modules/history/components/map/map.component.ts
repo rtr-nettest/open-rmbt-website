@@ -10,11 +10,11 @@ import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
 import { Map, NavigationControl } from "maplibre-gl"
 import { MatButtonModule } from "@angular/material/button"
 import { MatDialog } from "@angular/material/dialog"
-import { CoverageDialogComponent } from "../coverage-dialog/coverage-dialog.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { ScrollStrategyOptions } from "@angular/cdk/overlay"
+import { CoverageDialogComponent } from "../coverage-dialog/coverage-dialog.component"
 
 @Component({
   selector: "app-map",

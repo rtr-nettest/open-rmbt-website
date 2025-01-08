@@ -2,14 +2,14 @@ import { Injectable } from "@angular/core"
 import { BehaviorSubject, catchError, concatMap, map, of, tap } from "rxjs"
 import { HttpClient, HttpParams } from "@angular/common/http"
 import saveAs from "file-saver"
-import { ERROR_OCCURED } from "../constants/strings"
-import { ECertifiedLocationType } from "../interfaces/certified-env-form.interface"
-import { TestStore } from "../store/test.store"
 import { I18nStore } from "../../i18n/store/i18n.store"
-import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interface"
+import { ISimpleHistoryResult } from "../../history/interfaces/simple-history-result.interface"
 import { environment } from "../../../../environments/environment"
 import { MessageService } from "../../shared/services/message.service"
 import { MainStore } from "../../shared/store/main.store"
+import { TestStore } from "../../test/store/test.store"
+import { ECertifiedLocationType } from "../../test/interfaces/certified-env-form.interface"
+import { ERROR_OCCURED } from "../../test/constants/strings"
 
 @Injectable({
   providedIn: "root",

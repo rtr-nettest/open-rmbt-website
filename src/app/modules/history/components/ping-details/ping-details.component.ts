@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  input,
-} from "@angular/core"
+import { ChangeDetectionStrategy, Component } from "@angular/core"
 import { ShowDetailsComponent } from "../../../shared/components/show-details/show-details.component"
 import { IPing } from "../../interfaces/measurement-result.interface"
 import { TableComponent } from "../../../tables/components/table/table.component"

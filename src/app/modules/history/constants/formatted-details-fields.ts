@@ -5,7 +5,7 @@ dayjs.extend(utc)
 dayjs.extend(tz)
 import { Translation } from "../../i18n/store/i18n.store"
 import { formatBytes, roundToSignificantDigits } from "../../shared/util/math"
-import { RESULT_DATE_FORMAT } from "./strings"
+import { RESULT_DATE_FORMAT } from "../../test/constants/strings"
 
 export const FORMATTED_FIELDS: {
   [key: string]: null | ((testData: any, translations?: Translation) => string)

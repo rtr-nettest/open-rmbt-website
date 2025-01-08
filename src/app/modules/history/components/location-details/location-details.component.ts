@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  input,
-} from "@angular/core"
+import { ChangeDetectionStrategy, Component } from "@angular/core"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { MatExpansionModule } from "@angular/material/expansion"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
@@ -12,7 +7,7 @@ import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { roundMs } from "../../../shared/util/math"
 import formatcoords from "formatcoords"
 import { LOC_FORMAT } from "../../../shared/pipes/lonlat.pipe"
-import { ISimpleHistoryTestLocation } from "../../interfaces/simple-history-result.interface"
+import { ISimpleHistoryTestLocation } from "../../../history/interfaces/simple-history-result.interface"
 
 @Component({
   selector: "app-location-details",

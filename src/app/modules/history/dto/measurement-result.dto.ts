@@ -1,6 +1,6 @@
-import { EMeasurementFinalStatus } from "../constants/measurement-final-status"
-import { IMeasurementRegistrationRequest } from "../interfaces/measurement-registration-request.interface"
-import { IMeasurementRegistrationResponse } from "../interfaces/measurement-registration-response.interface"
+import { EMeasurementFinalStatus } from "../../test/constants/measurement-final-status"
+import { IMeasurementRegistrationRequest } from "../../test/interfaces/measurement-registration-request.interface"
+import { IMeasurementRegistrationResponse } from "../../test/interfaces/measurement-registration-response.interface"
 import {
   IMeasurementResult,
   IMeasurementThreadResult,

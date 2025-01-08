@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core"
 import { BehaviorSubject } from "rxjs"
 import { IBasicNetworkInfo } from "../interfaces/basic-network-info.interface"
 import { ITestVisualizationState } from "../interfaces/test-visualization-state.interface"
-import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interface"
 import { TestVisualizationState } from "../dto/test-visualization-state.dto"
 import { BasicNetworkInfo } from "../dto/basic-network-info.dto"
 import { ICertifiedDataForm } from "../interfaces/certified-data-form.interface"
@@ -18,7 +17,6 @@ export class TestStore {
   visualization$ = new BehaviorSubject<ITestVisualizationState>(
     new TestVisualizationState()
   )
-  simpleHistoryResult$ = new BehaviorSubject<ISimpleHistoryResult | null>(null)
   testIntervalMinutes$ = new BehaviorSubject<number | null>(null)
   enableLoopMode$ = new BehaviorSubject<boolean>(false)
   isCertifiedMeasurement$ = new BehaviorSubject<boolean>(false)

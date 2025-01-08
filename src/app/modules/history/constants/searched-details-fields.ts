@@ -1,4 +1,4 @@
-import { RESULT_DATE_FORMAT } from "./strings"
+import { RESULT_DATE_FORMAT } from "../../test/constants/strings"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"

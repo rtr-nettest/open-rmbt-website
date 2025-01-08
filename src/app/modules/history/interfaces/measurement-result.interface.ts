@@ -1,4 +1,4 @@
-import { EMeasurementFinalStatus } from "../constants/measurement-final-status"
+import { EMeasurementFinalStatus } from "../../test/constants/measurement-final-status"
 
 export interface IOpenTestResultRequest {
   openTestUuid: string | null

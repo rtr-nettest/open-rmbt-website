@@ -9,21 +9,12 @@ import { AsyncPipe, DatePipe, NgIf } from "@angular/common"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { Observable, switchMap, tap } from "rxjs"
 import { ERoutes } from "../../../shared/constants/routes.enum"
-import {
-  ISimpleHistoryResult,
-  ISimpleHistorySignal,
-  ISimpleHistoryTestLocation,
-} from "../../interfaces/simple-history-result.interface"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { IDetailedHistoryResultItem } from "../../interfaces/detailed-history-result-item.interface"
 import { ClassificationService } from "../../../shared/services/classification.service"
 import { I18nStore } from "../../../i18n/store/i18n.store"
-import { ActivatedRoute, Router, RouterModule } from "@angular/router"
-import { TestStore } from "../../store/test.store"
-import { HistoryExportService } from "../../services/history-export.service"
+import { ActivatedRoute, RouterModule } from "@angular/router"
 import { ISort } from "../../../tables/interfaces/sort.interface"
-import { TestService } from "../../services/test.service"
-import { SimpleHistoryResult } from "../../dto/simple-history-result.dto"
 import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interface"
 import { MainStore } from "../../../shared/store/main.store"
 import { TestChartComponent } from "../../../charts/components/test-chart/test-chart.component"
@@ -35,7 +26,6 @@ import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Title } from "@angular/platform-browser"
 import { SpeedDetailsComponent } from "../../components/speed-details/speed-details.component"
 import { IOverallResult } from "../../interfaces/overall-result.interface"
-import { IPing } from "../../interfaces/measurement-result.interface"
 import { PingDetailsComponent } from "../../components/ping-details/ping-details.component"
 import { LocationDetailsComponent } from "../../components/location-details/location-details.component"
 import {
@@ -44,12 +34,22 @@ import {
 } from "../../../charts/components/signal-chart/signal-chart.component"
 import formatcoords from "formatcoords"
 import { LOC_FORMAT } from "../../../shared/pipes/lonlat.pipe"
-import { SKIPPED_FIELDS } from "../../constants/skipped-details-fields"
-import { FORMATTED_FIELDS } from "../../constants/formatted-details-fields"
 import { INITIAL_FIELDS } from "../../constants/initial-details-fields"
 import { SEARCHED_FIELDS } from "../../constants/searched-details-fields"
 import { SignalDetailsComponent } from "../../components/signal-details/signal-details.component"
 import { ShareResultComponent } from "../../components/share-result/share-result.component"
+import { SKIPPED_FIELDS } from "../../constants/skipped-details-fields"
+import { FORMATTED_FIELDS } from "../../constants/formatted-details-fields"
+import {
+  ISimpleHistoryResult,
+  ISimpleHistorySignal,
+  ISimpleHistoryTestLocation,
+} from "../../interfaces/simple-history-result.interface"
+import { HistoryStore } from "../../store/history.store"
+import { HistoryExportService } from "../../services/history-export.service"
+import { SimpleHistoryResult } from "../../dto/simple-history-result.dto"
+import { IPing } from "../../interfaces/measurement-result.interface"
+import { HistoryService } from "../../services/history.service"
 
 const MIN_ACCURACY_FOR_SHOWING_MAP = 2000
 
@@ -58,13 +58,11 @@ const MIN_ACCURACY_FOR_SHOWING_MAP = 2000
   standalone: true,
   imports: [
     AsyncPipe,
+    BreadcrumbsComponent,
     DatePipe,
     HeaderComponent,
-    LocationDetailsComponent,
-    MapComponent,
     MatButtonModule,
     NgIf,
-    PingDetailsComponent,
     RouterModule,
     TableComponent,
     TestChartComponent,
@@ -76,7 +74,9 @@ const MIN_ACCURACY_FOR_SHOWING_MAP = 2000
     SignalDetailsComponent,
     ShareResultComponent,
     SpeedDetailsComponent,
-    BreadcrumbsComponent,
+    LocationDetailsComponent,
+    MapComponent,
+    PingDetailsComponent,
   ],
   templateUrl: "./result-screen.component.html",
   styleUrl: "./result-screen.component.scss",
@@ -146,8 +146,8 @@ export class ResultScreenComponent extends SeoComponent {
     private classification: ClassificationService,
     private exporter: HistoryExportService,
     private mainStore: MainStore,
-    private service: TestService,
-    private store: TestStore,
+    private service: HistoryService,
+    private store: HistoryStore,
     private route: ActivatedRoute
   ) {
     super(title, i18nStore)

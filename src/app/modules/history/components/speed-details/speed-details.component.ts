@@ -1,12 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  input,
-} from "@angular/core"
+import { ChangeDetectionStrategy, Component } from "@angular/core"
 import { IOverallResult } from "../../interfaces/overall-result.interface"
-import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
-import { ISort } from "../../../tables/interfaces/sort.interface"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { roundMs, roundToSignificantDigits } from "../../../shared/util/math"
 import { ShowDetailsComponent } from "../../../shared/components/show-details/show-details.component"

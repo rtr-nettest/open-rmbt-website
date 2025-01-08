@@ -1,6 +1,6 @@
 import { EMeasurementStatus } from "../constants/measurement-status.enum"
-import { IPing } from "./measurement-result.interface"
-import { IOverallResult } from "./overall-result.interface"
+import { IPing } from "../../history/interfaces/measurement-result.interface"
+import { IOverallResult } from "../../history/interfaces/overall-result.interface"
 
 export interface IMeasurementPhaseState {
   duration: number

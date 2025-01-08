@@ -1,9 +1,4 @@
-import { MeasurementThreadResult } from "../dto/measurement-thread-result.dto"
-import {
-  IMeasurementThreadResult,
-  IPing,
-  ISpeedItem,
-} from "../interfaces/measurement-result.interface"
+import { IPing } from "../interfaces/measurement-result.interface"
 import { IOverallResult } from "../interfaces/overall-result.interface"
 
 type CurveItem = {

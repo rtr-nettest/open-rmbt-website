@@ -15,7 +15,7 @@ import {
   THRESHOLD_UPLOAD,
 } from "../../shared/services/classification.service"
 import { CalcService } from "../services/calc.service"
-import { RESULT_DATE_FORMAT } from "../constants/strings"
+import { RESULT_DATE_FORMAT } from "../../test/constants/strings"
 
 export class SimpleHistoryResult implements ISimpleHistoryResult {
   static fromOpenTestResponse(

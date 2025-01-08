@@ -1,4 +1,3 @@
-import { HttpClient } from "@angular/common/http"
 import {
   Inject,
   Injectable,
@@ -9,9 +8,7 @@ import {
 import { IUserSetingsResponse } from "../interfaces/user-settings-response.interface"
 import { environment } from "../../../../environments/environment"
 import {
-  catchError,
   concatMap,
-  forkJoin,
   from,
   interval,
   map,
@@ -26,13 +23,7 @@ import tz from "dayjs/plugin/timezone"
 import { IMeasurementPhaseState } from "../interfaces/measurement-phase-state.interface"
 import { IBasicNetworkInfo } from "../interfaces/basic-network-info.interface"
 import { EMeasurementStatus } from "../constants/measurement-status.enum"
-import {
-  IPing,
-  ITestResultRequest,
-} from "../interfaces/measurement-result.interface"
-import { IOverallResult } from "../interfaces/overall-result.interface"
-import { I18nStore } from "../../i18n/store/i18n.store"
-import { IPaginator } from "../../tables/interfaces/paginator.interface"
+import { IOverallResult } from "../../history/interfaces/overall-result.interface"
 import { v4 } from "uuid"
 import { TestStore } from "../store/test.store"
 import { ITestVisualizationState } from "../interfaces/test-visualization-state.interface"
@@ -40,13 +31,12 @@ import { TestVisualizationState } from "../dto/test-visualization-state.dto"
 import { ILoopModeInfo } from "../interfaces/measurement-registration-request.interface"
 import { Router } from "@angular/router"
 import { ERoutes } from "../../shared/constants/routes.enum"
-import { TestPhaseState } from "../dto/test-phase-state.dto"
 import { BasicNetworkInfo } from "../dto/basic-network-info.dto"
 import { TestRepositoryService } from "../repository/test-repository.service"
 import { UUID } from "../constants/strings"
 import { STATE_UPDATE_TIMEOUT } from "../constants/numbers"
 import { MainStore } from "../../shared/store/main.store"
-import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
+import { HistoryStore } from "../../history/store/history.store"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -69,7 +59,7 @@ export class TestService {
   private openTestUuid?: string
 
   constructor(
-    private readonly i18nStore: I18nStore,
+    private readonly historyStore: HistoryStore,
     private readonly mainStore: MainStore,
     private readonly ngZone: NgZone,
     private readonly repo: TestRepositoryService,
@@ -199,7 +189,7 @@ export class TestService {
   private resetState() {
     this.testStore.basicNetworkInfo$.next(new BasicNetworkInfo())
     this.testStore.visualization$.next(new TestVisualizationState())
-    this.testStore.simpleHistoryResult$.next(null)
+    this.historyStore.simpleHistoryResult$.next(null)
     this.mainStore.error$.next(null)
     this.downs = []
     this.ups = []
@@ -283,76 +273,6 @@ export class TestService {
       startTimeMs: this.startTimeMs,
       endTimeMs: this.endTimeMs,
     }
-  }
-
-  getMeasurementResult(params: ITestResultRequest) {
-    if (!params || this.mainStore.error$.value) {
-      return of(null)
-    }
-    return forkJoin([
-      from(this.repo.getOpenResult(params)),
-      from(this.repo.getResult(params)),
-    ]).pipe(
-      map(([openTestsResponse, [response, testResultDetail]]) => {
-        const historyResult = SimpleHistoryResult.fromOpenTestResponse(
-          params.testUuid!,
-          response,
-          openTestsResponse
-        )
-        if (
-          historyResult.openTestResponse &&
-          testResultDetail?.testresultdetail.length
-        ) {
-          const trdSet = new Set(
-            Object.entries(historyResult.openTestResponse).map(([key, value]) =>
-              this.i18nStore.translate(key)
-            )
-          )
-          for (const item of testResultDetail.testresultdetail) {
-            if (!trdSet.has(item.title)) {
-              historyResult.openTestResponse[item.title] = item.value
-            }
-          }
-        }
-        this.testStore.simpleHistoryResult$.next(historyResult)
-        const newPhase = new TestPhaseState({
-          phase: EMeasurementStatus.SHOWING_RESULTS,
-          down: historyResult.download.value / 1000,
-          up: historyResult.upload.value / 1000,
-          ping: historyResult.ping.value / 1e6,
-        })
-        const newState = TestVisualizationState.fromHistoryResult(
-          historyResult,
-          this.testStore.visualization$.value,
-          newPhase
-        )
-        this.testStore.visualization$.next(newState)
-        this.testStore.basicNetworkInfo$.next({
-          serverName: historyResult.measurementServerName,
-          ipAddress: historyResult.ipAddress,
-          providerName: historyResult.providerName,
-          coordinates: historyResult.openTestResponse
-            ? [
-                historyResult.openTestResponse["long"],
-                historyResult.openTestResponse["lat"],
-              ]
-            : undefined,
-        })
-        return historyResult
-      }),
-      catchError((e) => {
-        console.log(e)
-        this.router.navigate([
-          this.i18nStore.activeLang,
-          ERoutes.PAGE_NOT_FOUND,
-        ])
-        return of(null)
-      })
-    )
-  }
-
-  async getMeasurementHistory(paginator?: IPaginator) {
-    return this.repo.getHistory(paginator)
   }
 
   updateStartTime() {
