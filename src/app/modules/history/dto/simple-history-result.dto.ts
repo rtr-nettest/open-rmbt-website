@@ -62,7 +62,10 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
       "",
       "",
       response?.test_uuid,
-      response?.loop_uuid
+      response?.loop_uuid,
+      {
+        openTestUuid: response?.open_test_uuid,
+      }
     )
   }
 

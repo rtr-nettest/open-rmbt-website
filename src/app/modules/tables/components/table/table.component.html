@@ -205,8 +205,8 @@
       [class.mat-row--collapsed]="!isElementExpanded(row.id)"
       [class.mat-row--expanded]="isElementExpanded(row.id)"
       [class.mat-row--group-header]="row.groupHeader"
-      (click)="toggleExpandableRow.emit(row.id)"
-      (keydown.enter)="toggleExpandableRow.emit(row.id)"
+      (click)="toggleExpandableRow.emit(row)"
+      (keydown.enter)="toggleExpandableRow.emit(row)"
       tabindex="0"
     >
     </mat-row>

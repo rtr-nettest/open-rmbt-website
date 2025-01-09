@@ -131,7 +131,6 @@ export class HistoryService {
           ? this.groupResults(loopHistory, openLoops)
           : loopHistory
         const totalElements = history[0].paginator?.totalElements
-        console.log(content)
         return {
           content,
           totalElements: totalElements ?? content.length,
@@ -159,15 +158,20 @@ export class HistoryService {
           grouped.add(history[i].loopUuid!)
           retVal.push({
             ...history[i],
+            id: history[i].loopUuid!,
             groupHeader: true,
           })
         }
         retVal.push({
           ...history[i],
+          id: history[i].testUuid!,
           hidden: !openLoops.includes(history[i].loopUuid!),
         })
       } else {
-        retVal.push(history[i])
+        retVal.push({
+          ...history[i],
+          id: history[i].testUuid!,
+        })
       }
     }
     return retVal

@@ -71,7 +71,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() subHeaderColumns: ITableColumn[] = []
   @Input() footerColumns: string[] = []
 
-  @Output() toggleExpandableRow = new EventEmitter<string | number>()
+  @Output() toggleExpandableRow = new EventEmitter<any>()
 
   @ViewChild(MatTable) table?: MatTable<any>
 

@@ -7,7 +7,7 @@ import {
 } from "@angular/core"
 import {
   IHistoryGroupItem,
-  IHistoryRowRTR,
+  IHistoryRow,
 } from "../../../history/interfaces/history-row.interface"
 import { ISort } from "../../../tables/interfaces/sort.interface"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
@@ -23,6 +23,8 @@ import { I18nStore, Translation } from "../../../i18n/store/i18n.store"
 import { ClassificationService } from "../../../shared/services/classification.service"
 import { roundToSignificantDigits } from "../../../shared/util/math"
 import { ExpandArrowComponent } from "../../../shared/components/expand-arrow/expand-arrow.component"
+import { Router } from "@angular/router"
+import { ERoutes } from "../../../shared/constants/routes.enum"
 
 @Component({
   selector: "app-recent-history",
@@ -33,7 +35,7 @@ import { ExpandArrowComponent } from "../../../shared/components/expand-arrow/ex
 })
 export class RecentHistoryComponent implements OnChanges {
   @Input({ required: true }) set result(result: {
-    content: ISimpleHistoryResult[]
+    content: Array<ISimpleHistoryResult & IHistoryGroupItem>
     totalElements: number
   }) {
     this.data = {
@@ -51,8 +53,8 @@ export class RecentHistoryComponent implements OnChanges {
   @Input() excludeColumns?: string[]
   @Input() interruptsTests = false
   @Output() sortChange: EventEmitter<ISort> = new EventEmitter()
-  columns: ITableColumn<IHistoryRowRTR>[] = (() => {
-    let cols: ITableColumn<IHistoryRowRTR>[] = []
+  columns: ITableColumn<IHistoryRow>[] = (() => {
+    let cols: ITableColumn<IHistoryRow>[] = []
     cols = [
       {
         columnDef: "measurementDate",
@@ -77,7 +79,7 @@ export class RecentHistoryComponent implements OnChanges {
     return cols.filter((c) => !this.excludeColumns?.includes(c.columnDef))
   })()
   data!: {
-    content: IHistoryRowRTR[]
+    content: IHistoryRow[]
     totalElements: number
   }
   tableClassNames?: string[]
@@ -92,6 +94,7 @@ export class RecentHistoryComponent implements OnChanges {
     private datePipe: DatePipe,
     private i18nStore: I18nStore,
     private message: MessageService,
+    private router: Router,
     private store: HistoryStore,
     private testService: TestService
   ) {}
@@ -109,15 +112,14 @@ export class RecentHistoryComponent implements OnChanges {
     this.sortChange.emit(sort)
   }
 
-  toggleLoopResults(loopUuid: string) {
-    if (!loopUuid.startsWith("L")) {
+  handleRowClick = (row: IHistoryRow) => {
+    if (!row.id.startsWith("L")) {
       const navFunc = () => {
         this.testService.abortMeasurement()
         this.testService.disableLoopMode()
-        // TODO: navigate to result page
-        // this.router.navigateByUrl(
-        //   "/" + ERoutes.RESULT.replace(":testUuid", loopUuid)
-        // )
+        this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
+          queryParams: { test_uuid: row.id, open_test_uuid: row.openUuid },
+        })
       }
       if (this.interruptsTests) {
         this.message.openConfirmDialog(THIS_INTERRUPTS_ACTION, navFunc, {
@@ -128,6 +130,10 @@ export class RecentHistoryComponent implements OnChanges {
       }
       return
     }
+    this.toggleLoopResults(row.id)
+  }
+
+  toggleLoopResults(loopUuid: string) {
     const openLoops = this.store.openLoops$.value
     const index = openLoops.indexOf(loopUuid)
     if (index >= 0) {
@@ -140,7 +146,7 @@ export class RecentHistoryComponent implements OnChanges {
 
   private historyItemToRow =
     (t: Translation, openLoops: string[]) =>
-    (hi: ISimpleHistoryResult & IHistoryGroupItem): IHistoryRowRTR => {
+    (hi: ISimpleHistoryResult & IHistoryGroupItem): IHistoryRow => {
       const locale = this.i18nStore.activeLang
       const measurementDate = this.datePipe.transform(
         hi.measurementDate,
@@ -164,8 +170,8 @@ export class RecentHistoryComponent implements OnChanges {
       const up = roundToSignificantDigits(hi.upload?.value || 0)
       const ping = hi.ping?.value
       return {
-        id: hi.testUuid!,
-        count: hi.count,
+        ...hi,
+        openUuid: hi.openTestResponse?.["openTestUuid"],
         measurementDate,
         download:
           this.classification.getPhaseIconByClass(
@@ -191,8 +197,6 @@ export class RecentHistoryComponent implements OnChanges {
           ping?.toLocaleString(locale) +
           " " +
           t["millis"],
-        loopUuid: hi.loopUuid,
-        hidden: hi.hidden,
       }
     }
 }
