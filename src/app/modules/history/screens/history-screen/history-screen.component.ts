@@ -1,4 +1,9 @@
-import { ChangeDetectorRef, Component, inject } from "@angular/core"
+import {
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  inject,
+} from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { UUID } from "../../../test/constants/strings"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
@@ -20,6 +25,7 @@ import { ISort } from "../../../tables/interfaces/sort.interface"
 import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.interface"
 import { IHistoryGroupItem } from "../../interfaces/history-row.interface"
 import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
+import { ScrollNLoadService } from "../../../shared/services/scroll-n-load.service"
 
 @Component({
   selector: "app-history-screen",
@@ -45,7 +51,6 @@ export class HistoryScreenComponent extends SeoComponent {
   service = inject(HistoryService)
   store = inject(HistoryStore)
 
-  allLoaded = false
   actionButtons: IMainMenuItem[] = [
     {
       label: "Export as CSV",
@@ -63,11 +68,26 @@ export class HistoryScreenComponent extends SeoComponent {
       action: () => this.exporter.exportAs("xlsx", this.store.history$.value),
     },
   ]
-  loading = true
   shouldGroupHistory = true
-  result$: Observable<
-    IBasicResponse<ISimpleHistoryResult & IHistoryGroupItem>
-  > = this.service.getHistoryGroupedByLoop({ grouped: this.shouldGroupHistory })
+  result$: Observable<IBasicResponse<
+    ISimpleHistoryResult & IHistoryGroupItem
+  > | null> = this.service.getHistoryGroupedByLoop({
+    grouped: this.shouldGroupHistory,
+  })
+  scrollNLoad = new ScrollNLoadService(
+    async () => {
+      if (!this.uuid) {
+        return
+      }
+      return this.service.getMeasurementHistory(this.store.paginator())
+    },
+    this.store.paginator,
+    HISTORY_LIMIT
+  )
+
+  get loading() {
+    return this.scrollNLoad.loading
+  }
 
   get uuid() {
     if (!globalThis.localStorage) {
@@ -81,41 +101,21 @@ export class HistoryScreenComponent extends SeoComponent {
   }
 
   ngOnInit(): void {
-    this.allLoaded = false
-    this.load()
+    if (!this.store.history$.value.length && this.uuid) {
+      this.scrollNLoad.load({ reset: true })
+    } else {
+      this.scrollNLoad.loading = false
+    }
   }
 
   changeSort = (sort: ISort) => {
-    this.allLoaded = false
-    this.service.sortMeasurementHistory(sort, this.load.bind(this))
+    this.service.sortMeasurementHistory(sort, () => {
+      this.scrollNLoad.load({ reset: true })
+    })
   }
 
-  async loadMore() {
-    if (this.loading) {
-      return
-    }
-    await this.load()
-  }
-
-  async load() {
-    if (this.allLoaded || !this.uuid) {
-      return
-    }
-    this.loading = true
-    try {
-      const history = await this.service.getMeasurementHistory(
-        this.store.paginator()
-      )
-      if (!history || !history.length || history.length < HISTORY_LIMIT) {
-        this.allLoaded = true
-      } else {
-        this.store.paginator.set({
-          offset: this.store.paginator().offset + HISTORY_LIMIT,
-          limit: HISTORY_LIMIT,
-        })
-      }
-    } finally {
-      this.loading = false
-    }
+  @HostListener("body:scroll", ["$event"])
+  onScroll(event: any) {
+    this.scrollNLoad.onScroll(event)
   }
 }

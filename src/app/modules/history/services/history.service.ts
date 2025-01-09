@@ -109,8 +109,12 @@ export class HistoryService {
     const history = (await this.repo.getHistory(paginator))?.map((hi: any) =>
       SimpleHistoryResult.fromHistoryResponse(hi)
     )
-    this.historyStore.history$.next(history)
-    return history
+    if (!history?.length) {
+      return []
+    }
+    const mergedHistory = [...this.historyStore.history$.value, ...history]
+    this.historyStore.history$.next(mergedHistory)
+    return mergedHistory
   }
 
   getHistoryGroupedByLoop(options?: {
@@ -124,7 +128,7 @@ export class HistoryService {
     ]).pipe(
       map(([history, t, openLoops]) => {
         if (!history.length) {
-          return { content: [], totalElements: 0 }
+          return null
         }
         const loopHistory = this.getLoopResults(history, options?.loopUuid)
         const content = options?.grouped

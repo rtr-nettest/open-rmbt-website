@@ -7,9 +7,9 @@
     <h1>{{ "History" | translate }}</h1>
     <app-action-buttons [items]="actionButtons"></app-action-buttons>
   </header>
-  @if (uuid && (result$ | async)?.totalElements) {
+  @if (result$ | async; as result) {
   <app-recent-history
-    [result]="(result$ | async)!"
+    [result]="result"
     [grouped]="shouldGroupHistory"
     (sortChange)="changeSort($event)"
   ></app-recent-history>
