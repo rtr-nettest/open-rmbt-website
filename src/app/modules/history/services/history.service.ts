@@ -106,7 +106,9 @@ export class HistoryService {
   }
 
   async getMeasurementHistory(paginator?: IPaginator) {
-    const history = await this.repo.getHistory(paginator)
+    const history = (await this.repo.getHistory(paginator))?.map((hi: any) =>
+      SimpleHistoryResult.fromHistoryResponse(hi)
+    )
     this.historyStore.history$.next(history)
     return history
   }
@@ -129,12 +131,23 @@ export class HistoryService {
           ? this.groupResults(loopHistory, openLoops)
           : loopHistory
         const totalElements = history[0].paginator?.totalElements
+        console.log(content)
         return {
           content,
           totalElements: totalElements ?? content.length,
         }
       })
     )
+  }
+
+  private getLoopResults(
+    history: ISimpleHistoryResult[],
+    loopUuid?: string | null
+  ) {
+    if (!loopUuid) {
+      return history
+    }
+    return history.filter((hi) => hi.loopUuid === "L" + loopUuid)
   }
 
   private groupResults(history: ISimpleHistoryResult[], openLoops: string[]) {
@@ -181,12 +194,5 @@ export class HistoryService {
     this.resetMeasurementHistory()
     this.historyStore.sort.set(sort)
     callback()
-  }
-
-  getLoopResults(history: ISimpleHistoryResult[], loopUuid?: string | null) {
-    if (!loopUuid) {
-      return history
-    }
-    return history.filter((hi) => hi.loopUuid === "L" + loopUuid)
   }
 }

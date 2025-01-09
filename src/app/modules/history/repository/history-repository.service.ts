@@ -97,11 +97,7 @@ export class HistoryRepositoryService {
     if (resp?.error.length) {
       throw new Error(resp.error)
     }
-    if (resp?.history.length) {
-      return resp.history.map((hi: any) =>
-        SimpleHistoryResult.fromHistoryResponse(hi)
-      )
-    }
+    return resp?.history
   }
 
   getCoverages(lon: number, lat: number) {

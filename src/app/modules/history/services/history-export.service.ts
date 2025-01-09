@@ -165,11 +165,22 @@ export class HistoryExportService {
   }
 
   private getExportParams(format: string, results: ISimpleHistoryResult[]) {
+    const openTestUuid = results
+      .map((hi) => hi.openTestResponse?.["open_test_uuid"])
+      .filter((v) => !!v)
+    if (openTestUuid.length !== 0) {
+      return new HttpParams({
+        fromObject: {
+          open_test_uuid: openTestUuid.join(","),
+          format,
+          max_results: 1000,
+        },
+      })
+    }
+    const testUuid = results.map((hi) => "T" + hi.testUuid)
     return new HttpParams({
       fromObject: {
-        open_test_uuid: results
-          .map((hi) => hi.openTestResponse?.["open_test_uuid"])
-          .join(","),
+        test_uuid: testUuid.join(","),
         format,
         max_results: 1000,
       },
