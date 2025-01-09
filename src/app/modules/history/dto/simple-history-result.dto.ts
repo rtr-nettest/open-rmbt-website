@@ -87,39 +87,33 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
         chart: CalcService.I.getOverallResultsFromSpeedCurve(
           openTestResponse?.speed_curve.download
         ),
-        classification:
-          openTestResponse?.download_classification ??
-          ClassificationService.I.classify(
-            openTestResponse?.download_kbit,
-            THRESHOLD_DOWNLOAD,
-            "biggerBetter"
-          ),
+        classification: ClassificationService.I.classify(
+          openTestResponse?.download_kbit,
+          THRESHOLD_DOWNLOAD,
+          "biggerBetter"
+        ),
       },
       {
         value: openTestResponse?.upload_kbit || 0,
         chart: CalcService.I.getOverallResultsFromSpeedCurve(
           openTestResponse?.speed_curve.upload
         ),
-        classification:
-          openTestResponse?.upload_classification ??
-          ClassificationService.I.classify(
-            openTestResponse?.upload_kbit,
-            THRESHOLD_UPLOAD,
-            "biggerBetter"
-          ),
+        classification: ClassificationService.I.classify(
+          openTestResponse?.upload_kbit,
+          THRESHOLD_UPLOAD,
+          "biggerBetter"
+        ),
       },
       {
         value: openTestResponse?.ping_ms || 0,
         chart: CalcService.I.getOverallPings(
           openTestResponse?.speed_curve.ping
         ),
-        classification:
-          openTestResponse?.ping_classification ??
-          ClassificationService.I.classify(
-            openTestResponse?.ping_ms * 1e6,
-            THRESHOLD_PING,
-            "smallerBetter"
-          ),
+        classification: ClassificationService.I.classify(
+          openTestResponse?.ping_ms,
+          THRESHOLD_PING,
+          "smallerBetter"
+        ),
       },
       {
         value:
