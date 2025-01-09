@@ -57,21 +57,32 @@ export class RecentHistoryComponent implements OnChanges {
     let cols: ITableColumn<IHistoryRow>[] = []
     cols = [
       {
+        columnDef: "device",
+        header: "Device",
+      },
+      {
+        columnDef: "networkType",
+        header: "Access",
+      },
+      {
         columnDef: "measurementDate",
         header: "Time",
       },
       {
-        columnDef: "download",
+        columnDef: "down",
+        key: "download",
         header: "Download",
         isHtml: true,
       },
       {
-        columnDef: "upload",
+        columnDef: "up",
+        key: "upload",
         header: "Upload",
         isHtml: true,
       },
       {
-        columnDef: "ping",
+        columnDef: "latency",
+        key: "ping",
         header: "Ping",
         isHtml: true,
       },
@@ -172,6 +183,8 @@ export class RecentHistoryComponent implements OnChanges {
       return {
         ...hi,
         openUuid: hi.openTestResponse?.["openTestUuid"],
+        device: hi.openTestResponse?.["device"],
+        networkType: hi.openTestResponse?.["networkType"],
         measurementDate,
         download:
           this.classification.getPhaseIconByClass(

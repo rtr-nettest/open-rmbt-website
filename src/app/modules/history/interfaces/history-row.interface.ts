@@ -1,9 +1,11 @@
 export interface IHistoryRow extends IHistoryGroupItem {
+  device?: string
   download?: string
   upload?: string
   ping?: string
   details?: any
   loopUuid?: string
+  networkType?: string
   openUuid?: string
   componentField?: string
   parameters?: { [key: string]: any }

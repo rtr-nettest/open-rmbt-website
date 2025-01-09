@@ -65,6 +65,8 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
       response?.loop_uuid,
       {
         openTestUuid: response?.open_test_uuid,
+        device: response?.model,
+        networkType: response?.network_type,
       }
     )
   }
