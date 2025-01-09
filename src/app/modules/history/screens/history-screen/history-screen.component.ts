@@ -18,6 +18,8 @@ import { IBasicResponse } from "../../../tables/interfaces/basic-response.interf
 import { HistoryService } from "../../services/history.service"
 import { ISort } from "../../../tables/interfaces/sort.interface"
 import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.interface"
+import { IHistoryGroupItem } from "../../interfaces/history-row.interface"
+import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
 
 @Component({
   selector: "app-history-screen",
@@ -28,6 +30,7 @@ import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.int
     BreadcrumbsComponent,
     FooterComponent,
     HeaderComponent,
+    LoadingOverlayComponent,
     RecentHistoryComponent,
     ScrollTopComponent,
     TopNavComponent,
@@ -60,10 +63,11 @@ export class HistoryScreenComponent extends SeoComponent {
       action: () => this.exporter.exportAs("xlsx", this.store.history$.value),
     },
   ]
-  loading = false
+  loading = true
   shouldGroupHistory = true
-  result$: Observable<IBasicResponse<ISimpleHistoryResult>> =
-    this.service.getHistoryGroupedByLoop({ grouped: this.shouldGroupHistory })
+  result$: Observable<
+    IBasicResponse<ISimpleHistoryResult & IHistoryGroupItem>
+  > = this.service.getHistoryGroupedByLoop({ grouped: this.shouldGroupHistory })
 
   get uuid() {
     if (!globalThis.localStorage) {
@@ -78,16 +82,23 @@ export class HistoryScreenComponent extends SeoComponent {
 
   ngOnInit(): void {
     this.allLoaded = false
-    this.loadMore()
+    this.load()
   }
 
   changeSort = (sort: ISort) => {
     this.allLoaded = false
-    this.service.sortMeasurementHistory(sort, this.loadMore.bind(this))
+    this.service.sortMeasurementHistory(sort, this.load.bind(this))
   }
 
   async loadMore() {
-    if (this.loading || this.allLoaded || !this.uuid) {
+    if (this.loading) {
+      return
+    }
+    await this.load()
+  }
+
+  async load() {
+    if (this.allLoaded || !this.uuid) {
       return
     }
     this.loading = true

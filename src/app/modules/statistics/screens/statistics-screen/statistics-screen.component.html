@@ -40,12 +40,9 @@
   </ng-container>
 </app-html-wrapper>
 @if (loading) {
-<div class="app-loading-overlay">
-  @if (progressInterval && progress < 1) {
-  <mat-progress-spinner [value]="progress * 100"></mat-progress-spinner>
-  } @else {
-  <mat-spinner></mat-spinner>
-  }
-</div>
+<app-loading-overlay
+  [progressInterval]="progressInterval"
+  [progress]="progress"
+></app-loading-overlay>
 }
 <app-footer></app-footer>

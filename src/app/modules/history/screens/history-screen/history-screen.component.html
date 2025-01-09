@@ -13,8 +13,12 @@
     [grouped]="shouldGroupHistory"
     (sortChange)="changeSort($event)"
   ></app-recent-history>
-  } @else {
+  } @else if (!loading) {
   <h3>{{ "No results available" | translate }}</h3>
   }
 </div>
 <app-footer></app-footer>
+
+@if (loading) {
+<app-loading-overlay></app-loading-overlay>
+}

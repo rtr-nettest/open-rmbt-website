@@ -12,7 +12,7 @@ export interface IHistoryRow extends IHistoryGroupItem {
 }
 
 export interface IHistoryGroupItem {
-  id: string
+  id?: string
   measurementDate: string
   count?: number
   groupHeader?: boolean

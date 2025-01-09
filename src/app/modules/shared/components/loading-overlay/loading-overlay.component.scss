@@ -1,0 +1,12 @@
+.app-loading-overlay {
+  align-items: center;
+  background: rgba($color: #fff, $alpha: 0.5);
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  z-index: 10000;
+}

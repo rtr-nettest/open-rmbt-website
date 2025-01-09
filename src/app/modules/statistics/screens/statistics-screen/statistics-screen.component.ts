@@ -31,6 +31,7 @@ import {
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatButtonModule } from "@angular/material/button"
 import { roundToSignificantDigits } from "../../../shared/util/math"
+import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
 
 @Component({
   selector: "app-statistics-screen",
@@ -43,7 +44,7 @@ import { roundToSignificantDigits } from "../../../shared/util/math"
     TopNavComponent,
     FooterComponent,
     MatButtonModule,
-    MatProgressSpinnerModule,
+    LoadingOverlayComponent,
     AsyncPipe,
     TableComponent,
     TranslatePipe,

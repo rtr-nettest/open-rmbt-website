@@ -124,7 +124,7 @@ export class RecentHistoryComponent implements OnChanges {
   }
 
   handleRowClick = (row: IHistoryRow) => {
-    if (!row.id.startsWith("L")) {
+    if (!row.id?.startsWith("L")) {
       const navFunc = () => {
         this.testService.abortMeasurement()
         this.testService.disableLoopMode()
