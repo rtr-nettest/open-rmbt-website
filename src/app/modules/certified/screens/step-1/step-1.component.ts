@@ -12,6 +12,9 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
 import { CertifiedStoreService } from "../../store/certified-store.service"
 import { Observable } from "rxjs"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
+import { ESteps } from "../../constants/steps.enum"
+import { SeoComponent } from "../../../shared/components/seo/seo.component"
+import { Title } from "@angular/platform-browser"
 
 @Component({
   selector: "app-step-1",
@@ -29,19 +32,21 @@ import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/bre
   templateUrl: "./step-1.component.html",
   styleUrl: "./step-1.component.scss",
 })
-export class Step1Component implements OnInit {
+export class Step1Component extends SeoComponent implements OnInit {
   text$!: Observable<string>
 
   constructor(
-    private readonly i18nStore: I18nStore,
+    ts: Title,
+    i18nStore: I18nStore,
     private readonly router: Router,
     private readonly store: CertifiedStoreService
   ) {
+    super(ts, i18nStore)
     this.text$ = this.i18nStore.getLocalizedHtml("certified-step-1")
   }
 
   ngOnInit(): void {
-    this.store.activeBreadcrumbIndex.set(0)
+    this.store.activeBreadcrumbIndex.set(ESteps.INFO)
   }
 
   onNext() {

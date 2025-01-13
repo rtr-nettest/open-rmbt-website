@@ -28,7 +28,7 @@ export class CertifiedStoreService {
       {
         index: ESteps.MEASUREMENT,
         label: "Measurement",
-        route: `/${this.i18nStore.activeLang}/${ERoutes.CERTIFIED_4}`,
+        route: `/${this.i18nStore.activeLang}/${ERoutes.TEST}`,
       },
       {
         index: ESteps.RESULT,
@@ -62,8 +62,8 @@ export class CertifiedStoreService {
   })
   testStartDisabled = computed(() => {
     return this.activeBreadcrumbIndex() == ESteps.ENVIRONMENT
-      ? !this.isEnvFormValid
-      : !this.isDataFormValid
+      ? !this.isEnvFormValid()
+      : !this.isDataFormValid()
   })
 
   constructor(private readonly i18nStore: I18nStore) {}

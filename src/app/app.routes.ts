@@ -11,6 +11,7 @@ import { StatisticsScreenComponent } from "./modules/statistics/screens/statisti
 import { ResultScreenComponent } from "./modules/history/screens/result-screen/result-screen.component"
 import { HistoryScreenComponent } from "./modules/history/screens/history-screen/history-screen.component"
 import { Step1Component } from "./modules/certified/screens/step-1/step-1.component"
+import { Step2Component } from "./modules/certified/screens/step-2/step-2.component"
 
 export const routes: Routes = [
   {
@@ -89,6 +90,15 @@ export const routes: Routes = [
         path: ERoutes.CERTIFIED,
         pathMatch: "full",
         component: Step1Component,
+        resolve: [localeResolver],
+        data: {
+          title: "Certified measurement",
+        },
+      },
+      {
+        path: ERoutes.CERTIFIED_2,
+        pathMatch: "full",
+        component: Step2Component,
         resolve: [localeResolver],
         data: {
           title: "Certified measurement",

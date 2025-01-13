@@ -4,8 +4,8 @@ import { IBasicNetworkInfo } from "../interfaces/basic-network-info.interface"
 import { ITestVisualizationState } from "../interfaces/test-visualization-state.interface"
 import { TestVisualizationState } from "../dto/test-visualization-state.dto"
 import { BasicNetworkInfo } from "../dto/basic-network-info.dto"
-import { ICertifiedDataForm } from "../interfaces/certified-data-form.interface"
-import { ICertifiedEnvForm } from "../interfaces/certified-env-form.interface"
+import { ICertifiedDataForm } from "../../certified/interfaces/certified-data-form.interface"
+import { ICertifiedEnvForm } from "../../certified/interfaces/certified-env-form.interface"
 
 @Injectable({
   providedIn: "root",

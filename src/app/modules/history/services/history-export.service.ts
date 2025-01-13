@@ -8,7 +8,7 @@ import { environment } from "../../../../environments/environment"
 import { MessageService } from "../../shared/services/message.service"
 import { MainStore } from "../../shared/store/main.store"
 import { TestStore } from "../../test/store/test.store"
-import { ECertifiedLocationType } from "../../test/interfaces/certified-env-form.interface"
+import { ECertifiedLocationType } from "../../certified/interfaces/certified-env-form.interface"
 import { ERROR_OCCURED } from "../../test/constants/strings"
 
 @Injectable({
