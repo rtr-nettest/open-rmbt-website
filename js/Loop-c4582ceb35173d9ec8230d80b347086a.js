@@ -587,7 +587,10 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
     var ctrl = new RMBTControlServerCommunication(config, {
         register: function(registration) {
             //from the registration - get the uuid
-            loopUUID = registration.response["loop_uuid"];
+            if (registration.response.hasOwnProperty("loop_uuid") &&
+                registration.response["loop_uuid"] !== null) {
+                loopUUID = registration.response["loop_uuid"];
+            }
         }
     });
     config.uuid = clientUUID;
