@@ -11,6 +11,7 @@ export enum ERoutes {
   CERTIFIED_2 = "certified-step-2",
   CERTIFIED_3 = "certified-step-3",
   CERTIFIED_4 = "certified-step-4",
+  CERTIFIED_RESULT = "certified-result",
   OPEN_DATA = "opentests",
   OPTIONS = "options",
   RESULT = "result",

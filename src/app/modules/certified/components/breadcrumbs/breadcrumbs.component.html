@@ -1,0 +1,16 @@
+<div class="app-wrapper">
+  <div class="app-breadcrumbs-wrapper">
+    <ul class="app-breadcrumbs">
+      <li
+        *ngFor="let bc of breadcrumbs()"
+        class="app-breadcrumbs__item"
+        [class.active]="bc.active"
+        [class.visited]="bc.visited"
+      >
+        <a [routerLink]="bc.route"
+          >{{ bc.index + 1 }}. {{ bc.label | translate }}</a
+        >
+      </li>
+    </ul>
+  </div>
+</div>

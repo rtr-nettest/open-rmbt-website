@@ -13,7 +13,9 @@
     [grouped]="shouldGroupHistory"
     (sortChange)="changeSort($event)"
   ></app-recent-history>
-  } @else if (!loading) {
+  } @else if (loading) {
+  <h3>{{ "Loading results" | translate }}</h3>
+  } @else {
   <h3>{{ "No results available" | translate }}</h3>
   }
 </div>

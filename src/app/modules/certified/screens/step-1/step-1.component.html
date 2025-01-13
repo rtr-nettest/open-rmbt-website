@@ -1,0 +1,19 @@
+<app-header></app-header>
+<app-top-nav></app-top-nav>
+<app-breadcrumbs></app-breadcrumbs>
+<app-certified-breadcrumbs></app-certified-breadcrumbs>
+<div class="app-wrapper" style="margin-top: 48px; margin-bottom: 64px">
+  <h1 class="app-title">{{ "Certified measurement" | translate }}</h1>
+  @if (text$ | async; as text) {
+  <div [innerHTML]="text"></div>
+  }
+  <button
+    style="margin-top: 16px"
+    mat-flat-button
+    class="app-button"
+    (click)="onNext()"
+  >
+    {{ "Next" | translate }}
+  </button>
+</div>
+<app-footer></app-footer>

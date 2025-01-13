@@ -19,7 +19,7 @@ h2,
   font-family: $base-font-family;
   font-weight: bold;
   line-height: $base-line-height;
-  margin: rem($font-size-h2) auto rem(24);
+  margin: rem(24) auto;
 
   &:first-child {
     margin-top: 0;
@@ -32,7 +32,7 @@ h3,
   font-family: $base-font-family;
   font-weight: bold;
   line-height: $base-line-height;
-  margin: rem($font-size-h3) auto rem(24);
+  margin: rem(24) auto;
 
   &:first-child {
     margin-top: 0;
@@ -45,7 +45,7 @@ h4,
   font-family: $base-font-family;
   font-weight: bold;
   line-height: $base-line-height;
-  margin: rem($font-size-h4) auto rem(24);
+  margin: rem(24) auto;
 
   &:first-child {
     margin-top: 0;
@@ -58,7 +58,7 @@ h5,
   font-family: $base-font-family;
   font-weight: bold;
   line-height: $base-line-height;
-  margin: rem($font-size-h5) auto rem(24);
+  margin: rem(24) auto;
 
   &:first-child {
     margin-top: 0;

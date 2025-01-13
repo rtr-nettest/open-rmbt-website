@@ -10,6 +10,7 @@ import { MapScreenComponent } from "./modules/map/screens/map-screen/map-screen.
 import { StatisticsScreenComponent } from "./modules/statistics/screens/statistics-screen/statistics-screen.component"
 import { ResultScreenComponent } from "./modules/history/screens/result-screen/result-screen.component"
 import { HistoryScreenComponent } from "./modules/history/screens/history-screen/history-screen.component"
+import { Step1Component } from "./modules/certified/screens/step-1/step-1.component"
 
 export const routes: Routes = [
   {
@@ -82,6 +83,15 @@ export const routes: Routes = [
         resolve: [localeResolver],
         data: {
           title: "History",
+        },
+      },
+      {
+        path: ERoutes.CERTIFIED,
+        pathMatch: "full",
+        component: Step1Component,
+        resolve: [localeResolver],
+        data: {
+          title: "Certified measurement",
         },
       },
       {
