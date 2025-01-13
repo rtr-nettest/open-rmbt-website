@@ -29,6 +29,7 @@
     "@angular/ssr": "^18.2.12",
     "@turf/bbox": "^7.1.0",
     "@turf/helpers": "^7.1.0",
+    "browser-image-compression": "^2.0.2",
     "chart.js": "^4.4.6",
     "chartjs-adapter-dayjs-4": "^1.0.4",
     "dayjs": "^1.11.13",

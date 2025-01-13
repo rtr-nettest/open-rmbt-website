@@ -1,4 +1,3 @@
-import { AsyncPipe } from "@angular/common"
 import { Component, OnInit } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { MatButtonModule } from "@angular/material/button"
@@ -35,7 +34,6 @@ import { MatRadioModule } from "@angular/material/radio"
   selector: "app-step-2",
   standalone: true,
   imports: [
-    AsyncPipe,
     BreadcrumbsComponent,
     CertifiedBreadcrumbs,
     HeaderComponent,
@@ -110,7 +108,16 @@ export class Step2Component extends SeoComponent implements OnInit {
       .subscribe()
   }
 
-  onFormChange(value: ICertifiedDataForm | null) {
+  onNext() {
+    this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_3])
+  }
+
+  onTestStart() {
+    this.store.activeBreadcrumbIndex.set(ESteps.MEASUREMENT)
+    this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_TEST])
+  }
+
+  private onFormChange(value: ICertifiedDataForm | null) {
     if (value) {
       this.store.isDataFormValid.set(true)
       if (!value.isFirstCycle) {
@@ -123,14 +130,5 @@ export class Step2Component extends SeoComponent implements OnInit {
       this.store.isReady.set(false)
     }
     this.testStore.certifiedDataForm$.next(value)
-  }
-
-  onNext() {
-    this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_3])
-  }
-
-  onTestStart() {
-    this.store.activeBreadcrumbIndex.set(ESteps.MEASUREMENT)
-    this.router.navigate([this.i18nStore.activeLang, ERoutes.TEST])
   }
 }
