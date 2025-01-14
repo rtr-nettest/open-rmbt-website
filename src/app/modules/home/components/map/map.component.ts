@@ -101,15 +101,9 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
       if (!this.mapContainerId) {
         return
       }
-      let containerWidth = document
-        .getElementById(this.mapContainerId)!
-        .getBoundingClientRect().width
-      if (window.innerWidth > 1239.98) {
-        containerWidth = containerWidth / 2
-      }
       document
         .getElementById(this.mapId)!
-        .setAttribute("style", `height:440px;width:${containerWidth - 24}px`)
+        .setAttribute("style", `height:440px;width:100%`)
     })
   }
 

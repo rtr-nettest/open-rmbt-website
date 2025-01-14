@@ -153,7 +153,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
           this.setMeasurements()
         })
       const testCard = document.querySelector(
-        `a.app-button--large`
+        `a[href*="${ERoutes.TEST}"]`
       ) as HTMLAnchorElement
       testCard.focus()
     }

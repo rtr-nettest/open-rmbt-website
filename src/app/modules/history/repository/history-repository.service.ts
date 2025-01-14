@@ -29,7 +29,7 @@ export class HistoryRepositoryService {
   async getOpenResult(params: IOpenTestResultRequest) {
     const { openTestUuid } = params
     if (!openTestUuid) {
-      throw new Error("Open Test UUID is required")
+      return null
     }
     return await firstValueFrom(
       this.http.get(
