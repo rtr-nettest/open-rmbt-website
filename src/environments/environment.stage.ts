@@ -1,13 +1,13 @@
 export const environment = {
   baseUrl: ".",
-  deployedUrl: "https://www.netztest.at",
+  deployedUrl: "https://dev2.netztest.at",
   api: {
-    baseUrl: "https://c01.netztest.at",
-    ipv4: "https://c01v4.netztest.at",
-    ipv6: "https://c01v6.netztest.at",
-    cloud: "https://m-cloud.netztest.at",
+    baseUrl: "https://dev2.netztest.at",
+    ipv4: "https://dev2v4.netztest.at",
+    ipv6: "https://dev2v6.netztest.at",
+    cloud: "https://dev2.netztest.at",
   },
-  projectTitle: "RTR-Nettest",
+  projectTitle: "RTR-NetTest",
   certifiedTests: {
     count: 5,
     interval: 1,
