@@ -9,6 +9,7 @@
 /certified-step-1
 /certified-step-2
 /certified-step-3
+/certified-test
 /certified-result
 /opentests
 /options
@@ -26,6 +27,7 @@
 /de/certified-step-1
 /de/certified-step-2
 /de/certified-step-3
+/de/certified-test
 /de/certified-result
 /de/opentests
 /de/options
@@ -43,6 +45,7 @@
 /en/certified-step-1
 /en/certified-step-2
 /en/certified-step-3
+/en/certified-test
 /en/certified-result
 /en/opentests
 /en/options
