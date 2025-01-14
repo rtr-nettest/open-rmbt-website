@@ -6,18 +6,14 @@
   margin: 0 rem(-12);
 
   &--main {
-    min-height: rem(450);
     justify-content: center;
+    margin-bottom: rem(50);
     margin-top: rem(50);
 
     .app-col {
       align-items: center;
       justify-content: center;
       flex: 0 0 50%;
-
-      @include screen-sm {
-        flex: 0 0 70%;
-      }
 
       @include screen-xs {
         flex: 0 0 calc(100% - 24px);

@@ -2,20 +2,22 @@
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
 <div class="app-wrapper">
+  <h1>{{ "RTR-NetTest" | translate }}</h1>
   <div class="app-row app-row--main">
     <div class="app-col app-col--padded">
-      <div [innerHTML]="text$ | async"></div>
-      <a
+      <app-card-button
+        iconImage="/assets/images/start-button-icon.svg"
+        smallText="Start test"
+        title="Start RTR-NetTest"
+        [primary]="true"
         [routerLink]="eRoutes.TEST"
-        mat-flat-button
-        class="app-button app-button--large"
-      >
-        {{ "Start test" | translate }}
-      </a>
+      ></app-card-button>
+    </div>
+    <div class="app-col app-col--padded">
+      <div [innerHTML]="text$ | async"></div>
     </div>
   </div>
 </div>
-<div class="app-separator"></div>
 <div class="app-wrapper" style="padding-bottom: 80px">
   <div class="app-row" [id]="mapContainerId">
     <div class="app-col app-col--main">
