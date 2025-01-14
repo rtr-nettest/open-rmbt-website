@@ -8,10 +8,10 @@ import { MatButtonModule } from "@angular/material/button"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatFormField, MatInputModule } from "@angular/material/input"
 import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.interface"
-import { environment } from "../../../../../environments/environment"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { HistoryExportService } from "../../services/history-export.service"
+import { MainStore } from "../../../shared/store/main.store"
 
 @Component({
   selector: "app-share-result",
@@ -61,7 +61,8 @@ export class ShareResultComponent {
 
   constructor(
     private readonly i18nStore: I18nStore,
-    private readonly history: HistoryExportService
+    private readonly history: HistoryExportService,
+    private readonly mainStore: MainStore
   ) {}
 
   getForumBanner() {
@@ -69,7 +70,9 @@ export class ShareResultComponent {
     if (!openTestUUID) {
       return
     }
-    const base = `${environment.api.cloud}/RMBTStatisticServer/${this.i18nStore.activeLang}`
+    const base = `${this.mainStore.cloud()}/RMBTStatisticServer/${
+      this.i18nStore.activeLang
+    }`
     const img = `${base}/${openTestUUID}/forumsmall.png`
     this.forumBanner.set(img)
     this.bannerHtml.set(`<a href="${document.URL}"><img src="${img}"/></a>`)

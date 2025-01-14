@@ -1,9 +1,10 @@
 import { Component } from "@angular/core"
 import { RouterOutlet } from "@angular/router"
 import { MainStore } from "./modules/shared/store/main.store"
-import { Observable } from "rxjs"
+import { Observable, take } from "rxjs"
 import { MatProgressBarModule } from "@angular/material/progress-bar"
 import { AsyncPipe } from "@angular/common"
+import { SettingsService } from "./modules/shared/services/settings.service"
 
 @Component({
   selector: "app-root",
@@ -16,7 +17,16 @@ export class AppComponent {
   title = "open-rmbt-angular"
   inProgress$!: Observable<boolean>
 
-  constructor(private readonly mainStore: MainStore) {
+  constructor(
+    private readonly mainStore: MainStore,
+    private readonly settingsService: SettingsService
+  ) {
     this.inProgress$ = this.mainStore.inProgress$
+    this.settingsService
+      .getSettings()
+      .pipe(take(1))
+      .subscribe((settings) => {
+        this.mainStore.settings.set(settings)
+      })
   }
 }

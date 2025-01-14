@@ -16,6 +16,7 @@ import {
   tap,
 } from "rxjs"
 import { UUID } from "../../test/constants/strings"
+import { MainStore } from "../../shared/store/main.store"
 
 export const DEFAULT_CENTER: [number, number] = [
   13.786457000803567, 47.57838319858735,
@@ -66,12 +67,13 @@ export type MapSourceOptions = Partial<{
 })
 export class MapService {
   get tileServer() {
-    return `${environment.api.cloud}/RMBTMapServer/tiles`
+    return `${this.mainStore.cloud()}/RMBTMapServer/tiles`
   }
 
   constructor(
     private readonly http: HttpClient,
     private readonly i18nStore: I18nStore,
+    private readonly mainStore: MainStore,
     private readonly zone: NgZone
   ) {}
 

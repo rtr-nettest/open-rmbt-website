@@ -13,7 +13,7 @@ import { ICoverageResponse } from "../interfaces/coverage.interface"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
-import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
+import { MainStore } from "../../shared/store/main.store"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -23,7 +23,8 @@ dayjs.extend(tz)
 export class HistoryRepositoryService {
   constructor(
     private readonly http: HttpClient,
-    private readonly i18nStore: I18nStore
+    private readonly i18nStore: I18nStore,
+    private readonly mainStore: MainStore
   ) {}
 
   async getOpenResult(params: IOpenTestResultRequest) {
@@ -33,7 +34,7 @@ export class HistoryRepositoryService {
     }
     return await firstValueFrom(
       this.http.get(
-        `${environment.api.cloud}/RMBTStatisticServer/opentests/${openTestUuid}`
+        `${this.mainStore.cloud()}/RMBTStatisticServer/opentests/${openTestUuid}`
       )
     )
   }
@@ -102,7 +103,7 @@ export class HistoryRepositoryService {
 
   getCoverages(lon: number, lat: number) {
     return this.http.get<ICoverageResponse>(
-      `${environment.api.cloud}/RMBTStatisticServer/coverage?long=${lon}&lat=${lat}`
+      `${this.mainStore.cloud()}/RMBTStatisticServer/coverage?long=${lon}&lat=${lat}`
     )
   }
 }

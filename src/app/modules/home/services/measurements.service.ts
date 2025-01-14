@@ -4,23 +4,26 @@ import {
   IRecentMeasurementsResponse,
   IRecentStats,
 } from "../interfaces/recent-measurements-response.interface"
-import { environment } from "../../../../environments/environment"
+import { MainStore } from "../../shared/store/main.store"
 
 @Injectable({
   providedIn: "root",
 })
 export class MeasurementsService {
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly mainStore: MainStore
+  ) {}
 
   getRecentMeasurements() {
     return this.http.get<IRecentMeasurementsResponse>(
-      `${environment.api.cloud}/cache/recent?_=${Date.now()}`
+      `${this.mainStore.cloud()}/cache/recent?_=${Date.now()}`
     )
   }
 
   getRecentStats() {
     return this.http.get<IRecentStats>(
-      `${environment.api.cloud}/RMBTStatisticServer/opentests/statistics`
+      `${this.mainStore.cloud()}/RMBTStatisticServer/opentests/statistics`
     )
   }
 }

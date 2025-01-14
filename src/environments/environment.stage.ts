@@ -7,7 +7,6 @@ export const environment = {
     ipv6: "https://dev2v6.netztest.at",
     cloud: "https://dev2.netztest.at",
   },
-  projectTitle: "RTR-NetTest",
   certifiedTests: {
     count: 5,
     interval: 1,

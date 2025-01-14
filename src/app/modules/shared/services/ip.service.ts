@@ -1,20 +1,23 @@
 import { Injectable } from "@angular/core"
-import { environment } from "../../../../environments/environment"
 import { IpResponse } from "../interfaces/ip-response.interface"
 import { I18nStore } from "../../i18n/store/i18n.store"
+import { MainStore } from "../store/main.store"
 
 @Injectable({
   providedIn: "root",
 })
 export class IpService {
-  constructor(private readonly i18nStore: I18nStore) {}
+  constructor(
+    private readonly i18nStore: I18nStore,
+    private readonly mainStore: MainStore
+  ) {}
 
   async getIpV4() {
-    return this.getIp(`${environment.api.ipv4}/RMBTControlServer/ip`)
+    return this.getIp(`${this.mainStore.ipv4()}/RMBTControlServer/ip`)
   }
 
   async getIpV6() {
-    return this.getIp(`${environment.api.ipv6}/RMBTControlServer/ip`)
+    return this.getIp(`${this.mainStore.ipv6()}/RMBTControlServer/ip`)
   }
 
   private async getIp(url: string): Promise<IpResponse | null> {
