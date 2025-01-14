@@ -121,8 +121,8 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
         value:
           openTestResponse?.lte_rsrp &&
           openTestResponse?.cat_technology !== null
-            ? openTestResponse.lte_rsrp
-            : openTestResponse.signal_strength,
+            ? openTestResponse?.lte_rsrp
+            : openTestResponse?.signal_strength,
         chart: openTestResponse?.speed_curve?.signal?.length
           ? openTestResponse?.speed_curve?.signal
           : undefined,
