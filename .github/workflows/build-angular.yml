@@ -24,8 +24,14 @@ jobs:
           node-version: 22
       - run: npm i
       - run: npm run ng analytics off
-      - run: npm run ng build
+      - run: npm run build
       - uses: actions/upload-artifact@v4
         with:
           name: build-zip
+          path: dist/open-rmbt-angular/browser/
+      - run: rm -r dist
+      - run: npm run build:stage
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-staging-zip
           path: dist/open-rmbt-angular/browser/
