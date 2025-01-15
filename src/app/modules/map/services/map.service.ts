@@ -1,6 +1,5 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable, NgZone } from "@angular/core"
-import { environment } from "../../../../environments/environment"
 import { NetworkMeasurementType } from "../interfaces/map-type.interface"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { IMapInfo } from "../interfaces/map-info.interface"
@@ -26,7 +25,7 @@ export const DEFAULT_STYLE: StyleSpecification = {
   sources: {
     osm: {
       type: "raster" as const,
-      tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
+      tiles: ["https://cache.netztest.at/tile/osm/{z}/{x}/{y}.png"],
       tileSize: 256,
       attribution: "&copy; OpenStreetMap Contributors",
       maxzoom: 19,
