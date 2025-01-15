@@ -14,7 +14,9 @@ export class TranslationHttpLoader {
       availableLocales = await (
         await fetch(`${environment.baseUrl}/assets/available-locales.json`)
       ).json()
-    } catch (_) {}
+    } catch (e) {
+      console.warn(e)
+    }
     return availableLocales
   }
 
@@ -24,7 +26,8 @@ export class TranslationHttpLoader {
         await fetch(`${environment.baseUrl}/assets/i18n/${lang}.json`)
       ).json()
       return localTranslations
-    } catch (_) {
+    } catch (e) {
+      console.warn(e)
       return defTranslations
     }
   }
@@ -37,7 +40,8 @@ export class TranslationHttpLoader {
         )
       ).text()
       return text
-    } catch (_) {
+    } catch (e) {
+      console.warn(e)
       return ""
     }
   }
