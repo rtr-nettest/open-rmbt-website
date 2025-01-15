@@ -32,7 +32,7 @@ export class StatisticsService {
       return of({} as IStatisticsResponse)
     }
     return this.http.post<IStatisticsResponse>(
-      `${this.mainStore.api().statistics}/statistics`,
+      `${this.mainStore.api().url_web_statistic_server}/statistics`,
       {
         ...body,
         ...(body.end_date

@@ -23,7 +23,7 @@ export class MeasurementsService {
 
   getRecentStats() {
     return this.http.get<IRecentStats>(
-      `${this.mainStore.api().statistics}/opentests/statistics`
+      `${this.mainStore.api().url_web_statistic_server}/opentests/statistics`
     )
   }
 }

@@ -13,17 +13,28 @@ export class MainStore {
   settings = signal<IUserSetingsResponse | null>(null)
   api = computed(() => {
     const urls = this.settings()?.settings?.[0]?.urls
-    const ipv4 = urls?.control_ipv4_only || environment.api.ipv4
-    const ipv6 = urls?.control_ipv6_only || environment.api.ipv6
-    const statistics = urls?.url_statistic_server || environment.api.statistics
-    const map = urls?.url_map_server || environment.api.map
-    const cloud = map ? new URL(map).origin : environment.api.cloud
+    const url_ipv4_check =
+      urls?.url_ipv4_check || environment.api.fallback_url_ipv4_check
+    const url_ipv6_check =
+      urls?.url_ipv6_check || environment.api.fallback_url_ipv6_check
+    const url_statistic_server =
+      urls?.url_statistic_server ||
+      environment.api.fallback_url_statistic_server
+    const url_web_statistic_server =
+      urls?.url_web_statistic_server ||
+      environment.api.fallback_url_web_statistic_server
+    const url_map_server =
+      urls?.url_map_server || environment.api.fallback_url_map_server
+    const cloud = url_map_server
+      ? new URL(url_map_server).origin
+      : environment.api.cloud
     return {
       cloud,
-      ipv4,
-      ipv6,
-      map,
-      statistics,
+      url_ipv4_check,
+      url_ipv6_check,
+      url_statistic_server,
+      url_map_server,
+      url_web_statistic_server,
     }
   })
 }

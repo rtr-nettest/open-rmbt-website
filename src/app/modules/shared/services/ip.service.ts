@@ -13,11 +13,11 @@ export class IpService {
   ) {}
 
   async getIpV4() {
-    return this.getIp(`${this.mainStore.api().ipv4}/RMBTControlServer/ip`)
+    return this.getIp(this.mainStore.api().url_ipv4_check)
   }
 
   async getIpV6() {
-    return this.getIp(`${this.mainStore.api().ipv6}/RMBTControlServer/ip`)
+    return this.getIp(this.mainStore.api().url_ipv6_check)
   }
 
   private async getIp(url: string): Promise<IpResponse | null> {

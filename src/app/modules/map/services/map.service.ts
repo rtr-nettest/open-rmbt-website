@@ -67,7 +67,7 @@ export type MapSourceOptions = Partial<{
 })
 export class MapService {
   get tileServer() {
-    return `${this.mainStore.api().map}/tiles`
+    return `${this.mainStore.api().url_map_server}/tiles`
   }
 
   constructor(

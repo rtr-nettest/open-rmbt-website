@@ -3,11 +3,14 @@ export const environment = {
   deployedUrl: "http://localhost:4200",
   api: {
     baseUrl: "https://c01.netztest.at",
-    ipv4: "https://c01v4.netztest.at",
-    ipv6: "https://c01v6.netztest.at",
+    fallback_url_ipv4_check: "https://c01v4.netztest.at/RMBTControlServer/ip",
+    fallback_url_ipv6_check: "https://c01v6.netztest.at/RMBTControlServer/ip",
     cloud: "https://m-cloud.netztest.at",
-    statistics: "https://m-cloud.netztest.at/RMBTStatisticServer",
-    map: "https://m-cloud.netztest.at/RMBTMapServer",
+    fallback_url_statistic_server:
+      "https://m-cloud.netztest.at/RMBTStatisticServer",
+    fallback_url_web_statistic_server:
+      "https://m-cloud.netztest.at/RMBTStatisticServer",
+    fallback_url_map_server: "https://m-cloud.netztest.at/RMBTMapServer",
   },
   certifiedTests: {
     count: 5,

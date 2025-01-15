@@ -18,7 +18,7 @@ export class HistoryExportService {
   lastCertifiedPdfUrl$ = new BehaviorSubject("")
 
   private get exportUrl() {
-    return `${this.mainStore.api().statistics}/export`
+    return `${this.mainStore.api().url_web_statistic_server}/export`
   }
 
   private get pdfUrl() {
