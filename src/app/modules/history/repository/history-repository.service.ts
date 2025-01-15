@@ -34,7 +34,7 @@ export class HistoryRepositoryService {
     }
     return await firstValueFrom(
       this.http.get(
-        `${this.mainStore.cloud()}/RMBTStatisticServer/opentests/${openTestUuid}`
+        `${this.mainStore.api().statistics}/opentests/${openTestUuid}`
       )
     )
   }
@@ -103,7 +103,7 @@ export class HistoryRepositoryService {
 
   getCoverages(lon: number, lat: number) {
     return this.http.get<ICoverageResponse>(
-      `${this.mainStore.cloud()}/RMBTStatisticServer/coverage?long=${lon}&lat=${lat}`
+      `${this.mainStore.api().statistics}/coverage?long=${lon}&lat=${lat}`
     )
   }
 }

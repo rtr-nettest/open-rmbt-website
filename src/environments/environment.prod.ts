@@ -6,6 +6,8 @@ export const environment = {
     ipv4: "https://c01v4.netztest.at",
     ipv6: "https://c01v6.netztest.at",
     cloud: "https://m-cloud.netztest.at",
+    statistics: "https://m-cloud.netztest.at/RMBTStatisticServer",
+    map: "https://m-cloud.netztest.at/RMBTMapServer",
   },
   certifiedTests: {
     count: 5,

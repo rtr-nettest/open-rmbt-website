@@ -70,7 +70,7 @@ export class ShareResultComponent {
     if (!openTestUUID) {
       return
     }
-    const base = `${this.mainStore.cloud()}/RMBTStatisticServer/${
+    const base = `${this.mainStore.api().statistics}/${
       this.i18nStore.activeLang
     }`
     const img = `${base}/${openTestUUID}/forumsmall.png`

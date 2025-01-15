@@ -18,7 +18,7 @@ export class HistoryExportService {
   lastCertifiedPdfUrl$ = new BehaviorSubject("")
 
   private get exportUrl() {
-    return `${this.mainStore.cloud()}/RMBTStatisticServer/export`
+    return `${this.mainStore.api().statistics}/export`
   }
 
   private get pdfUrl() {

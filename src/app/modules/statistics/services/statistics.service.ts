@@ -2,16 +2,13 @@ import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { environment } from "../../../../environments/environment"
 import { IStatisticsRequest } from "../interfaces/statistics-request.interface"
-import { map, Observable, of } from "rxjs"
+import { of } from "rxjs"
 import { IBrowserData } from "../interfaces/browser-data.interface"
 import utc from "dayjs/plugin/utc"
 import timezone from "dayjs/plugin/timezone"
 import dayjs from "dayjs"
-import {
-  IStatisticsProvider,
-  IStatisticsResponse,
-} from "../interfaces/statistics-response.interface.interface"
-import { IBasicResponse } from "../../tables/interfaces/basic-response.interface"
+import { IStatisticsResponse } from "../interfaces/statistics-response.interface.interface"
+import { MainStore } from "../../shared/store/main.store"
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
@@ -19,7 +16,10 @@ dayjs.extend(timezone)
   providedIn: "root",
 })
 export class StatisticsService {
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly mainStore: MainStore
+  ) {}
 
   getBrowserData() {
     return this.http.get<IBrowserData>(
@@ -32,7 +32,7 @@ export class StatisticsService {
       return of({} as IStatisticsResponse)
     }
     return this.http.post<IStatisticsResponse>(
-      `${environment.api.cloud}/RMBTStatisticServer/statistics`,
+      `${this.mainStore.api().statistics}/statistics`,
       {
         ...body,
         ...(body.end_date
