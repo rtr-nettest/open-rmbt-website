@@ -85,7 +85,10 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             },
             "preprod": {
               "index": "src/index.html",
@@ -125,6 +128,9 @@
             },
             "development": {
               "buildTarget": "open-rmbt-angular:build:development"
+            },
+            "stage": {
+              "buildTarget": "open-rmbt-angular:build:stage"
             }
           },
           "defaultConfiguration": "development"

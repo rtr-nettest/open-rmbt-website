@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "start:prod": "ng build && npx lite-server --baseDir=dist/open-rmbt-angular/browser",
+    "start:stage": "ng serve --configuration=stage",
     "build": "ng build",
     "build:preprod": "ng build --configuration=preprod",
     "build:stage": "ng build --configuration=stage",
