@@ -5,7 +5,7 @@ import {
   Input,
   NgZone,
 } from "@angular/core"
-import { firstValueFrom, Subject, Subscription } from "rxjs"
+import { Subject, Subscription } from "rxjs"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
 import { Map, NavigationControl } from "maplibre-gl"
 import { MatButtonModule } from "@angular/material/button"
@@ -15,6 +15,7 @@ import { I18nStore } from "../../../i18n/store/i18n.store"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { ScrollStrategyOptions } from "@angular/cdk/overlay"
 import { CoverageDialogComponent } from "../coverage-dialog/coverage-dialog.component"
+import { DEFAULT_STYLE } from "../../../map/constants/map-styles"
 
 @Component({
   selector: "app-map",
@@ -93,11 +94,10 @@ export class MapComponent implements AfterViewInit {
   }
 
   private async setMap() {
-    const style = await firstValueFrom(this.mapService.getBasemapAtStyle())
     this.zone.runOutsideAngular(() => {
       this.map = this.mapService.createMap({
         container: this.mapId,
-        style: style,
+        style: DEFAULT_STYLE,
         center: DEFAULT_CENTER,
       })
       this.map.addControl(new NavigationControl())

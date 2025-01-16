@@ -9,7 +9,7 @@ import {
   SimpleChanges,
 } from "@angular/core"
 import { IRecentMeasurementsResponse } from "../../interfaces/recent-measurements-response.interface"
-import { firstValueFrom, Subject, Subscription } from "rxjs"
+import { Subject, Subscription } from "rxjs"
 import { Marker, Map, NavigationControl, FullscreenControl } from "maplibre-gl"
 import { bbox } from "@turf/bbox"
 import { lineString } from "@turf/helpers"
@@ -17,6 +17,7 @@ import { PopupService } from "../../services/popup.service"
 import { FullScreenService } from "../../services/full-screen.service"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
+import { DEFAULT_STYLE } from "../../../map/constants/map-styles"
 
 @Component({
   selector: "app-map",
@@ -71,11 +72,10 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   private async setMap() {
-    const style = await firstValueFrom(this.mapService.getBasemapAtStyle())
     this.zone.runOutsideAngular(() => {
       this.map = this.mapService.createMap({
         container: this.mapId,
-        style,
+        style: DEFAULT_STYLE,
         center: DEFAULT_CENTER,
         zoom: 3,
       })

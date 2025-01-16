@@ -102,7 +102,7 @@ export class MapScreenComponent extends SeoComponent {
   }
 
   private async setMap() {
-    const style = await firstValueFrom(this.mapService.getBasemapAtStyle())
+    const style = await firstValueFrom(this.mapService.getAllBasemapAtStyles())
     this.zone.runOutsideAngular(async () => {
       this.map = this.mapService.createMap({
         container: this.mapId,

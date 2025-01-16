@@ -39,6 +39,7 @@ import { MatIconModule } from "@angular/material/icon"
 import { lineString } from "@turf/helpers"
 import bbox from "@turf/bbox"
 import { HistoryRepositoryService } from "../../repository/history-repository.service"
+import { DEFAULT_STYLE } from "../../../map/constants/map-styles"
 
 @Component({
   selector: "app-coverage-dialog",
@@ -201,11 +202,10 @@ export class CoverageDialogComponent implements OnDestroy {
   }
 
   private async setMap() {
-    const style = await firstValueFrom(this.mapService.getBasemapAtStyle())
     this.zone.runOutsideAngular(() => {
       this.map = this.mapService.createMap({
         container: this.mapId,
-        style: style,
+        style: DEFAULT_STYLE,
         center: DEFAULT_CENTER,
       })
       this.map.addControl(new NavigationControl())

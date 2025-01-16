@@ -50,15 +50,13 @@ export const BASEMAP_STYLE: StyleSpecification = {
     [EBasemapType.BMAPORTHO]: {
       ...BASE_SOURCE,
       tiles: [
-        // TODO: nothing loads from here
-        `http://mapsneu.wien.gv.at/basemap/${EBasemapType.BMAPORTHO}/normal/google3857/{z}/{y}/{x}.png`,
+        `http://mapsneu.wien.gv.at/basemap/${EBasemapType.BMAPORTHO}/normal/google3857/{z}/{y}/{x}.jpeg`,
       ],
     },
     [EBasemapType.BMAPHDPI]: {
       ...BASE_SOURCE,
       tiles: [
-        // TODO: nothing loads from here
-        `http://mapsneu.wien.gv.at/basemap/${EBasemapType.BMAPHDPI}/normal/google3857/{z}/{y}/{x}.png`,
+        `http://mapsneu.wien.gv.at/basemap/${EBasemapType.BMAPHDPI}/normal/google3857/{z}/{y}/{x}.jpeg`,
       ],
     },
   },

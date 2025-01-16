@@ -90,7 +90,7 @@ export class MapService {
     }
   }
 
-  getBasemapAtStyle() {
+  getAllBasemapAtStyles() {
     return of({
       ...DEFAULT_STYLE,
       sources: {
