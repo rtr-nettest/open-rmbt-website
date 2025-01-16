@@ -80,6 +80,3 @@ export const BASEMAP_STYLE: StyleSpecification = {
     },
   ],
 }
-
-export const BASEMAP_AT_VECTOR_STYLE =
-  "https://mapsneu.wien.gv.at/basemapvectorneu/root.json"

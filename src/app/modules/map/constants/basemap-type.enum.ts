@@ -3,6 +3,5 @@ export enum EBasemapType {
   BMAPHDPI = "bmaphidpi",
   BMAPORTHO = "bmaporthofoto30cm",
   BMAPOVERLAY = "bmapoverlay",
-  ESRI = "esri",
   OSM = "osm",
 }
