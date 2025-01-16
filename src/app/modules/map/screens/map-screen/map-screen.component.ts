@@ -1,9 +1,7 @@
-import { AfterViewInit, Component, inject, NgZone, OnInit } from "@angular/core"
+import { Component, effect, inject, NgZone, OnInit } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import {
   DEFAULT_CENTER,
-  DEFAULT_STYLE,
-  ETileTypes,
   MapService,
   MapSourceOptions,
 } from "../../services/map.service"
@@ -11,23 +9,8 @@ import { HeaderComponent } from "../../../shared/components/header/header.compon
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
-import {
-  catchError,
-  debounceTime,
-  firstValueFrom,
-  fromEvent,
-  Observable,
-  of,
-  Subscription,
-  takeUntil,
-  tap,
-} from "rxjs"
-import {
-  Map,
-  NavigationControl,
-  FullscreenControl,
-  IControl,
-} from "maplibre-gl"
+import { firstValueFrom, Observable, Subscription, takeUntil, tap } from "rxjs"
+import { Map, NavigationControl, FullscreenControl } from "maplibre-gl"
 import { AsyncPipe } from "@angular/common"
 import {
   FiltersComponent,
@@ -39,6 +22,13 @@ import { HeatmapLegendComponent } from "../../components/heatmap-legend/heatmap-
 import { SearchComponent } from "../../components/search/search.component"
 import { MatDialog, MatDialogModule } from "@angular/material/dialog"
 import { ScrollStrategyOptions } from "@angular/cdk/overlay"
+import { FiltersControl } from "../../models/filters-control"
+import { BasemapControl } from "../../models/basemap-control"
+import { EBasemapType } from "../../constants/basemap-type.enum"
+import { ETileTypes } from "../../constants/tile-type.enum"
+import { BasemapPickerComponent } from "../../components/basemap-picker/basemap-picker.component"
+import { MapStoreService } from "../../store/map-store.service"
+import { toObservable } from "@angular/core/rxjs-interop"
 
 export const POINTS_HEATMAP_SWITCH_LEVEL = 12
 
@@ -65,6 +55,17 @@ export class MapScreenComponent extends SeoComponent {
   mapService = inject(MapService)
   mapInfo!: IMapInfo
   mapSourceOptions?: MapSourceOptions
+  mapStore = inject(MapStoreService)
+  mapStoreBasemapSub = toObservable(this.mapStore.basemap)
+    .pipe(
+      takeUntil(this.destroyed$),
+      tap((basemap) => {
+        if (basemap) {
+          this.switchBasemap(basemap)
+        }
+      })
+    )
+    .subscribe()
   resizeSub!: Subscription
   text$: Observable<string> = this.i18nStore.getLocalizedHtml("map").pipe(
     tap(() => {
@@ -125,7 +126,17 @@ export class MapScreenComponent extends SeoComponent {
           })
         })
       )
+      this.map.addControl(
+        new BasemapControl(this.i18nStore, () => {
+          this.zone.run(() => {
+            this.dialog.open(BasemapPickerComponent, {
+              scrollStrategy: this.scrollStrategyOptions.noop(),
+            })
+          })
+        })
+      )
       this.map.on("load", () => {
+        this.switchBasemap(EBasemapType.BMAPGRAU)
         this.setTiles()
         this.map.on("zoom", () => {
           this.setTilesVisibility()
@@ -153,6 +164,12 @@ export class MapScreenComponent extends SeoComponent {
       document
         .getElementById(this.mapId)!
         .setAttribute("style", `height:440px;width:${containerWidth}px`)
+    })
+  }
+
+  switchBasemap(layerId: string) {
+    this.zone.runOutsideAngular(() => {
+      this.mapService.switchBasemap(this.map, layerId)
     })
   }
 
@@ -228,32 +245,5 @@ export class MapScreenComponent extends SeoComponent {
         }
       }
     })
-  }
-}
-
-export class FiltersControl implements IControl {
-  private map: Map | undefined
-  private container!: HTMLElement
-
-  constructor(private i18nStore: I18nStore, private onClick: () => void) {}
-
-  onAdd(map: Map) {
-    this.map = map
-    this.container = document.createElement("div")
-    this.container.className = "maplibregl-ctrl maplibregl-ctrl-group"
-    this.container.innerHTML = `<button class="maplibregl-ctrl-filters" type="button" aria-label="${this.i18nStore.translate(
-      "Show filters"
-    )}" title="${this.i18nStore.translate(
-      "Show filters"
-    )}"><mat-icon role="img" fontset="material-symbols-outlined" class="mat-icon notranslate material-symbols-outlined mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font" data-mat-icon-namespace="material-symbols-outlined">tune</mat-icon></button>`
-    this.container.onclick = () => {
-      this.onClick()
-    }
-    return this.container
-  }
-
-  onRemove() {
-    this.container.parentNode?.removeChild(this.container)
-    this.map = undefined
   }
 }

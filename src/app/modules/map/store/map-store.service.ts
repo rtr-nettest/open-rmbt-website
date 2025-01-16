@@ -6,4 +6,5 @@ import { MapSourceOptions } from "../services/map.service"
 })
 export class MapStoreService {
   filters = signal<MapSourceOptions | null>(null)
+  basemap = signal<string | null>(null)
 }

@@ -16,38 +16,18 @@ import {
 } from "rxjs"
 import { UUID } from "../../test/constants/strings"
 import { MainStore } from "../../shared/store/main.store"
+import { EBasemapType } from "../constants/basemap-type.enum"
+import { ETileTypes } from "../constants/tile-type.enum"
+import {
+  BASE_SOURCE,
+  BASEMAP_AT_VECTOR_STYLE,
+  BASEMAP_STYLE,
+  DEFAULT_STYLE,
+} from "../constants/map-styles"
 
 export const DEFAULT_CENTER: [number, number] = [
   13.786457000803567, 47.57838319858735,
 ]
-export const DEFAULT_STYLE: StyleSpecification = {
-  version: 8 as const,
-  sources: {
-    osm: {
-      type: "raster" as const,
-      tiles: ["https://cache.netztest.at/tile/osm/{z}/{x}/{y}.png"],
-      tileSize: 256,
-      attribution: "&copy; OpenStreetMap Contributors",
-      maxzoom: 19,
-    },
-  },
-  layers: [
-    {
-      id: "osm",
-      type: "raster" as const,
-      source: "osm", // This must match the source key above
-    },
-  ],
-}
-export const BASEMAP_AT_STYLE =
-  "https://mapsneu.wien.gv.at/basemapvectorneu/root.json"
-
-export enum ETileTypes {
-  automatic = "automatic",
-  heatmap = "heatmap",
-  points = "points",
-  cadastral = "cadastral",
-}
 
 export type MapSourceOptions = Partial<{
   networkMeasurementType: NetworkMeasurementType | null
@@ -65,6 +45,8 @@ export type MapSourceOptions = Partial<{
   providedIn: "root",
 })
 export class MapService {
+  vectorLayers: any[] = []
+
   get tileServer() {
     return `${this.mainStore.api().url_map_server}/tiles`
   }
@@ -99,15 +81,53 @@ export class MapService {
     })
   }
 
+  switchBasemap(map: Map, layerId: string) {
+    if (!map) {
+      return
+    }
+    map.setLayoutProperty(EBasemapType.BMAPGRAU, "visibility", "none")
+    if (layerId === EBasemapType.ESRI) {
+      for (const layer of Object.values(BASEMAP_STYLE.layers)) {
+        map.setLayoutProperty(layer.id, "visibility", "none")
+      }
+      this.vectorLayers.forEach((layer) => {
+        map.setLayoutProperty(layer.id, "visibility", "visible")
+      })
+      return
+    }
+    const currentLayer = map.getLayer(layerId)
+    if (currentLayer) {
+      for (const layer of Object.values(BASEMAP_STYLE.layers)) {
+        if (layer.id !== layerId) {
+          map.setLayoutProperty(layer.id, "visibility", "none")
+        }
+      }
+      this.vectorLayers.forEach((layer) => {
+        map.setLayoutProperty(layer.id, "visibility", "none")
+      })
+      map.setLayoutProperty(layerId, "visibility", "visible")
+    }
+  }
+
   getBasemapAtStyle() {
-    return this.http.get<StyleSpecification>(BASEMAP_AT_STYLE).pipe(
+    return this.http.get<StyleSpecification>(BASEMAP_AT_VECTOR_STYLE).pipe(
       map((style) => {
-        style.sources["osm"] = DEFAULT_STYLE.sources["osm"]
+        style.sources = {
+          ...style.sources,
+          ...DEFAULT_STYLE.sources,
+          ...BASEMAP_STYLE.sources,
+        }
         if (style.sources["esri"]) {
           ;(style.sources["esri"] as any)["attribution"] =
-            "&copy; <a href='https://basemap.at' target='_blank'>basemap.at</a>"
+            BASE_SOURCE.attribution
         }
-        style.layers.unshift(DEFAULT_STYLE.layers[0])
+        this.vectorLayers = [...style.layers]
+        style.layers = [
+          DEFAULT_STYLE.layers[0],
+          ...style.layers,
+          ...DEFAULT_STYLE.layers.slice(1),
+          ...BASEMAP_STYLE.layers,
+        ]
         return style
       })
     )

@@ -1,0 +1,25 @@
+<mat-dialog-content>
+  <div class="app-close">
+    <button mat-icon-button (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="app-container">
+    <div>
+      <form [formGroup]="form" class="app-form">
+        <mat-radio-group formControlName="basemap">
+          @for (option of options; track $index) {
+          <mat-radio-button [value]="option.value">{{
+            option.label
+          }}</mat-radio-button>
+          }
+        </mat-radio-group>
+      </form>
+    </div>
+    <footer class="app-footer">
+      <button (click)="applyFilters()" mat-flat-button class="app-button">
+        {{ "Accept" | translate }}
+      </button>
+    </footer>
+  </div>
+</mat-dialog-content>

@@ -6,7 +6,7 @@ import {
   OnDestroy,
   ViewChild,
 } from "@angular/core"
-import { ETileTypes, MapSourceOptions } from "../../services/map.service"
+import { MapSourceOptions } from "../../services/map.service"
 import {
   FormBuilder,
   FormControl,
@@ -29,6 +29,7 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from "@angular/material/dialog"
+import { ETileTypes } from "../../constants/tile-type.enum"
 
 export type FilterSheetData = {
   mapInfo: IMapInfo

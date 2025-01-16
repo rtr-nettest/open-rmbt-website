@@ -16,11 +16,7 @@ import { lineString } from "@turf/helpers"
 import { PopupService } from "../../services/popup.service"
 import { FullScreenService } from "../../services/full-screen.service"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
-import {
-  DEFAULT_CENTER,
-  DEFAULT_STYLE,
-  MapService,
-} from "../../../map/services/map.service"
+import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
 
 @Component({
   selector: "app-map",
