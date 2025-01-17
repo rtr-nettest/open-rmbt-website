@@ -68,12 +68,15 @@ export class TestService {
     @Inject(PLATFORM_ID) private readonly platformId: object
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      const promise = isDevMode()
-        ? import("rmbtws/dist/rmbtws.js" as any)
-        : import("rmbtws" as any)
-      promise.then((rmbtws) => {
-        this.rmbtws = rmbtws
-      })
+      if (isDevMode()) {
+        import("rmbtws/dist/rmbtws.js" as any).then((rmbtws) => {
+          this.rmbtws = rmbtws
+        })
+      } else {
+        import("rmbtws" as any).then((rmbtws) => {
+          this.rmbtws = rmbtws.default
+        })
+      }
     }
   }
 
