@@ -63,7 +63,11 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "prerender": {
+                "discoverRoutes": false,
+                "routesFile": "src/prerender-routes.txt"
+              }
             },
             "stage": {
               "index": "src/index.html",

@@ -5,6 +5,7 @@ import { Observable, take } from "rxjs"
 import { MatProgressBarModule } from "@angular/material/progress-bar"
 import { AsyncPipe } from "@angular/common"
 import { SettingsService } from "./modules/shared/services/settings.service"
+import * as pack from "../../package.json"
 
 @Component({
   selector: "app-root",
@@ -28,5 +29,9 @@ export class AppComponent {
       .subscribe((settings) => {
         this.mainStore.settings.set(settings)
       })
+    const gitInfo = pack.gitInfo as any
+    console.log(
+      `Branch-hash: ${gitInfo["branch"]}-${gitInfo["hash"].slice(0, 8)}`
+    )
   }
 }

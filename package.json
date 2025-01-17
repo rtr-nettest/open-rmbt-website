@@ -13,7 +13,9 @@
     "test": "ng test",
     "set-prerender-routes": "npx ts-node scripts/set-prerender-routes.ts",
     "prepare": "husky",
-    "postinstall": "npm update rmbtws"
+    "postinstall": "npm update rmbtws",
+    "prestart": "node scripts/set-package-info.js",
+    "prebuild": "node scripts/set-package-info.js"
   },
   "private": true,
   "dependencies": {
@@ -65,5 +67,6 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.5.2"
-  }
+  },
+  "gitInfo": {}
 }
