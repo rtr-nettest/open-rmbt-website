@@ -35,9 +35,7 @@
             "scripts": [],
             "server": "src/main.server.ts",
             "prerender": false,
-            "ssr": {
-              "entry": "server.ts"
-            },
+            "ssr": false,
             "stylePreprocessorOptions": {
               "includePaths": ["src/assets/styles"]
             }
