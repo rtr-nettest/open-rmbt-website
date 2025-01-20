@@ -163,12 +163,9 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
             const endDate = end_date
               ? dayjs(end_date).endOf("day").utc()
               : dayjs().utc()
-            const period = [duration]
+            const period: [number, string] = [duration, ""]
             adjustTimePeriod(period, endDate)
-            const startDate = dayjs(endDate).subtract(
-              parseInt(period[0], 10),
-              "days"
-            )
+            const startDate = dayjs(endDate).subtract(period[0], "days")
             params += `&time[]=>${startDate.format("YYYY-MM-DD HH:mm:ss")}`
             params += `&time[]=<${endDate.format("YYYY-MM-DD HH:mm:ss")}`
           }
@@ -244,12 +241,9 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
             const endDate = end_date
               ? dayjs(end_date).endOf("day").utc()
               : dayjs().utc()
-            const period = [duration]
+            const period: [number, string] = [duration, ""]
             adjustTimePeriod(period, endDate)
-            const startDate = dayjs(endDate).subtract(
-              parseInt(period[0], 10),
-              "days"
-            )
+            const startDate = dayjs(endDate).subtract(period[0], "days")
             params += `&time[]=>${startDate.format("YYYY-MM-DD HH:mm:ss")}`
             params += `&time[]=<${endDate.format("YYYY-MM-DD HH:mm:ss")}`
           }

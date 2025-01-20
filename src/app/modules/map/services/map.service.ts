@@ -1,6 +1,5 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable, NgZone } from "@angular/core"
-import { NetworkMeasurementType } from "../interfaces/map-type.interface"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { IMapInfo } from "../interfaces/map-info.interface"
 import { Map, Marker, StyleSpecification } from "maplibre-gl"
@@ -19,6 +18,7 @@ import { MainStore } from "../../shared/store/main.store"
 import { EBasemapType } from "../constants/basemap-type.enum"
 import { ETileTypes } from "../constants/tile-type.enum"
 import { BASEMAP_STYLE, DEFAULT_STYLE } from "../constants/map-styles"
+import { NetworkMeasurementType } from "../constants/network-measurement-type"
 
 export const DEFAULT_CENTER: [number, number] = [
   13.786457000803567, 47.57838319858735,

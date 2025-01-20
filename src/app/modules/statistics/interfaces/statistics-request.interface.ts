@@ -4,7 +4,7 @@ export interface IStatisticsRequest {
   language: string | null
   timezone: string | null
   type: StatisticsNetworkType | null
-  duration: string | null
+  duration: number | null
   quantile: string | null
   network_type_group: string | null
   max_devices: number | null
