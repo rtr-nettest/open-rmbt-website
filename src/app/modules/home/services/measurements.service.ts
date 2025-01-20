@@ -17,7 +17,7 @@ export class MeasurementsService {
 
   getRecentMeasurements() {
     return this.http.get<IRecentMeasurementsResponse>(
-      `${this.mainStore.api().cloud}/cache/recent?_=${Date.now()}`
+      `${this.mainStore.api().url_web_recent_server}?_=${Date.now()}`
     )
   }
 

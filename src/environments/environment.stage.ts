@@ -11,6 +11,7 @@ export const environment = {
     fallback_url_web_statistic_server:
       "https://dev2.netztest.at/RMBTStatisticServer",
     fallback_url_map_server: "https://dev2.netztest.at/RMBTMapServer",
+    fallback_url_web_recent_server: "https://dev2.netztest.at/cache/recent",
   },
   certifiedTests: {
     count: 5,

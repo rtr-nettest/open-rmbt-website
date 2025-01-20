@@ -28,6 +28,9 @@ export class MainStore {
     const cloud = url_map_server
       ? new URL(url_map_server).origin
       : environment.api.cloud
+    const url_web_recent_server =
+      urls?.url_web_recent_server ||
+      environment.api.fallback_url_web_recent_server
     return {
       cloud,
       url_ipv4_check,
@@ -35,6 +38,7 @@ export class MainStore {
       url_statistic_server,
       url_map_server,
       url_web_statistic_server,
+      url_web_recent_server,
     }
   })
 }

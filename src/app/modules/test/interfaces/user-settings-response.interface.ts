@@ -14,6 +14,7 @@ export interface IUserSettings {
     url_statistic_server: string
     url_map_server: string
     url_web_statistic_server: string
+    url_web_recent_server: string
   }
   uuid?: string
   qostesttype_desc?: [
