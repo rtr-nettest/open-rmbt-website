@@ -31,6 +31,11 @@ import {
 import { ETileTypes } from "../../constants/tile-type.enum"
 import { NetworkMeasurementType } from "../../constants/network-measurement-type"
 import { MapInfoHash } from "../../dto/map-info-hash"
+import { FiltersForm } from "../../interfaces/filter-form"
+import { GeneralFiltersFormBuilderService } from "../../services/general-filters-form-builder.service"
+import { WlanFiltersFormBuilderService } from "../../services/wlan-filters-form-builder.service"
+import { BrowserFiltersFormBuilderService } from "../../services/browser-filters-form-builder.service"
+import { MobileFiltersFormBuilderService } from "../../services/mobile-filters-form-builder.service"
 
 export type FilterSheetData = {
   mapInfo: IMapInfo
@@ -45,20 +50,6 @@ type ActiveControlGroup =
   | "technologyOptions"
   | "operatorOptions"
   | "providerOptions"
-
-type FiltersForm = {
-  networkMeasurementType: FormControl<NetworkMeasurementType | null>
-  tiles: FormControl<ETileTypes | null>
-  filters: FiltersFormFilters
-}
-
-type FiltersFormFilters = FormGroup<{
-  statistical_method: FormControl<number | null>
-  period: FormControl<number | null>
-  provider: FormControl<string | number | null>
-  operator: FormControl<string | number | null>
-  technology: FormControl<string | null>
-}>
 
 @Component({
   selector: "app-filters",
@@ -102,7 +93,11 @@ export class FiltersComponent implements OnDestroy {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: FilterSheetData,
     private readonly dialogRef: MatDialogRef<FiltersComponent>,
-    private readonly store: MapStoreService
+    private readonly store: MapStoreService,
+    private readonly generalFB: GeneralFiltersFormBuilderService,
+    private readonly wlanFB: WlanFiltersFormBuilderService,
+    private readonly browserFB: BrowserFiltersFormBuilderService,
+    private readonly mobileFB: MobileFiltersFormBuilderService
   ) {
     this.mapInfo = new MapInfoHash(data.mapInfo)
     for (const networkType of this.mapInfo.get("MAP_TYPE").options ?? []) {
@@ -170,148 +165,32 @@ export class FiltersComponent implements OnDestroy {
   }
 
   private getFiltersByType(type?: NetworkMeasurementType) {
+    this.statisticalOptions = undefined
+    this.periodOptions = undefined
+    this.technologyOptions = undefined
+    this.providerOptions = undefined
+    this.operatorOptions = undefined
     if (type?.startsWith("mobile")) {
-      return this.getMobileForm(this.mapInfo)
+      this.statisticalOptions = this.mapInfo.get("STATISTICS")
+      this.periodOptions = this.mapInfo.get("MAP_FILTER_PERIOD")
+      this.technologyOptions = this.mapInfo.get("MAP_FILTER_TECHNOLOGY")
+      this.operatorOptions = this.mapInfo.get("MAP_FILTER_CARRIER")
+      return this.mobileFB.build(this.mapInfo, this.form)
     } else if (type?.startsWith("wifi")) {
-      return this.getWlanForm(this.mapInfo)
+      this.statisticalOptions = this.mapInfo.get("STATISTICS")
+      this.periodOptions = this.mapInfo.get("MAP_FILTER_PERIOD")
+      this.technologyOptions = this.mapInfo.get("MAP_FILTER_TECHNOLOGY")
+      this.providerOptions = this.mapInfo.get("PROVIDER")
+      return this.wlanFB.build(this.mapInfo, this.form)
     } else if (type?.startsWith("browser")) {
-      return this.getBrowserForm(this.mapInfo)
+      this.statisticalOptions = this.mapInfo.get("STATISTICS")
+      this.periodOptions = this.mapInfo.get("MAP_FILTER_PERIOD")
+      this.providerOptions = this.mapInfo.get("PROVIDER")
+      return this.browserFB.build(this.mapInfo, this.form)
     } else {
-      return this.getAllForm(this.mapInfo)
+      this.statisticalOptions = this.mapInfo.get("STATISTICS")
+      this.periodOptions = this.mapInfo.get("MAP_FILTER_PERIOD")
+      return this.generalFB.build(this.mapInfo, this.form)
     }
-  }
-
-  private getAllForm(mapInfo: MapInfoHash): FiltersFormFilters {
-    this.statisticalOptions = mapInfo.get("STATISTICS")
-    this.periodOptions = mapInfo.get("MAP_FILTER_PERIOD")
-    this.technologyOptions = undefined
-    this.providerOptions = undefined
-    this.operatorOptions = undefined
-    return this.fb.group({
-      statistical_method: new FormControl({
-        value:
-          this.store.filters()?.filters?.statistical_method ??
-          mapInfo.getDefaultValueOf("STATISTICS")?.statistical_method ??
-          null,
-        disabled: this.form?.controls.tiles.value == ETileTypes.points,
-      }),
-      period: new FormControl(
-        this.store.filters()?.filters?.period ??
-          mapInfo.getDefaultValueOf("MAP_FILTER_PERIOD")?.period ??
-          null
-      ),
-      technology: new FormControl<string | null>({
-        value: "",
-        disabled: true,
-      }),
-      operator: new FormControl<string | number | null>({
-        value: "",
-        disabled: true,
-      }),
-      provider: new FormControl<string | number | null>({
-        value: "",
-        disabled: true,
-      }),
-    })
-  }
-
-  private getWlanForm(mapInfo: MapInfoHash): FiltersFormFilters {
-    this.statisticalOptions = mapInfo.get("STATISTICS")
-    this.periodOptions = mapInfo.get("MAP_FILTER_PERIOD")
-    this.technologyOptions = mapInfo.get("MAP_FILTER_TECHNOLOGY")
-    this.providerOptions = mapInfo.get("PROVIDER")
-    this.operatorOptions = undefined
-    return this.fb.group({
-      statistical_method: new FormControl({
-        value:
-          this.store.filters()?.filters?.statistical_method ??
-          mapInfo.getDefaultValueOf("STATISTICS")?.statistical_method ??
-          null,
-        disabled: this.form?.controls.tiles.value == ETileTypes.points,
-      }),
-      period: new FormControl(
-        this.store.filters()?.filters?.period ??
-          mapInfo.getDefaultValueOf("MAP_FILTER_PERIOD")?.period ??
-          null
-      ),
-      provider: new FormControl<string | number | null>(
-        this.store.filters()?.filters?.provider ??
-          mapInfo.getDefaultValueOf("PROVIDER")?.provider ??
-          null
-      ),
-      technology: new FormControl({ value: "", disabled: true }),
-      operator: new FormControl<string | number | null>({
-        value: "",
-        disabled: true,
-      }),
-    })
-  }
-
-  private getBrowserForm(mapInfo: MapInfoHash): FiltersFormFilters {
-    this.statisticalOptions = mapInfo.get("STATISTICS")
-    this.periodOptions = mapInfo.get("MAP_FILTER_PERIOD")
-    this.technologyOptions = undefined
-    this.providerOptions = mapInfo.get("PROVIDER")
-    this.operatorOptions = undefined
-    return this.fb.group({
-      statistical_method: new FormControl({
-        value:
-          this.store.filters()?.filters?.statistical_method ??
-          mapInfo.getDefaultValueOf("STATISTICS")?.statistical_method ??
-          null,
-        disabled: this.form?.controls.tiles.value == ETileTypes.points,
-      }),
-      period: new FormControl(
-        this.store.filters()?.filters?.period ??
-          mapInfo.getDefaultValueOf("MAP_FILTER_PERIOD")?.period ??
-          null
-      ),
-      provider: new FormControl<string | number | null>(
-        this.store.filters()?.filters?.provider ??
-          mapInfo.getDefaultValueOf("PROVIDER")?.provider ??
-          null
-      ),
-      technology: new FormControl({ value: "", disabled: true }),
-      operator: new FormControl<string | number | null>({
-        value: "",
-        disabled: true,
-      }),
-    })
-  }
-
-  private getMobileForm(mapInfo: MapInfoHash): FiltersFormFilters {
-    this.statisticalOptions = mapInfo.get("STATISTICS")
-    this.periodOptions = mapInfo.get("MAP_FILTER_PERIOD")
-    this.technologyOptions = mapInfo.get("MAP_FILTER_TECHNOLOGY")
-    this.providerOptions = undefined
-    this.operatorOptions = mapInfo.get("MAP_FILTER_CARRIER")
-    return this.fb.group({
-      statistical_method: new FormControl({
-        value:
-          this.store.filters()?.filters?.statistical_method ??
-          mapInfo.getDefaultValueOf("STATISTICS")?.statistical_method ??
-          null,
-        disabled: this.form?.controls.tiles.value == ETileTypes.points,
-      }),
-      operator: new FormControl<string | number | null>(
-        this.store.filters()?.filters?.operator ??
-          mapInfo.getDefaultValueOf("MAP_FILTER_CARRIER")?.operator ??
-          null
-      ),
-      period: new FormControl(
-        this.store.filters()?.filters?.period ??
-          mapInfo.getDefaultValueOf("MAP_FILTER_PERIOD")?.period ??
-          null
-      ),
-      technology: new FormControl(
-        this.store.filters()?.filters?.technology ??
-          mapInfo.getDefaultValueOf("MAP_FILTER_TECHNOLOGY")?.technology ??
-          null
-      ),
-      provider: new FormControl<string | number | null>({
-        value: "",
-        disabled: true,
-      }),
-    })
   }
 }
