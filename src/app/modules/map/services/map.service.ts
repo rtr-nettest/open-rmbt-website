@@ -28,10 +28,10 @@ export type MapSourceOptions = Partial<{
   networkMeasurementType: NetworkMeasurementType | null
   tiles: ETileTypes | null
   filters: Partial<{
-    statistical_method: string | null
+    statistical_method: number | null
     period: number | null
-    provider: string | null
-    operator: string | null
+    provider: string | number | null
+    operator: string | number | null
     technology: string | null
   }>
 }>
@@ -40,8 +40,11 @@ export type MapSourceOptions = Partial<{
   providedIn: "root",
 })
 export class MapService {
-  get tileServer() {
+  private get tileServer() {
     return `${this.mainStore.api().url_map_server}/tiles`
+  }
+  private get tileServerV2() {
+    return `${this.mainStore.api().url_map_server}/v2/tiles`
   }
 
   constructor(
@@ -117,7 +120,7 @@ export class MapService {
         body["terms_and_conditions_accepted"] = true
       }
     }
-    return this.http.post<IMapInfo>(`${this.tileServer}/info`, body)
+    return this.http.post<IMapInfo>(`${this.tileServerV2}/info`, body)
   }
 
   getPointSource(options: MapSourceOptions) {
