@@ -9,8 +9,7 @@ import { ScrollBottomComponent } from "../../../shared/components/scroll-bottom/
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { MatButtonModule } from "@angular/material/button"
 import { TestService } from "../../services/test.service"
-
-export const TC_VERSION = "RTR_NETZTEST_TC_VERSION"
+import { TC_VERSION_ACCEPTED } from "../../constants/strings"
 
 @Component({
   selector: "app-terms-conditions-screen",
@@ -62,7 +61,7 @@ export class TermsConditionsScreenComponent
 
   agree(version: number) {
     if (globalThis.localStorage) {
-      localStorage.setItem(TC_VERSION, version.toString())
+      localStorage.setItem(TC_VERSION_ACCEPTED, version.toString())
     }
     this.router.navigate([this.i18nStore.activeLang, ERoutes.TEST])
   }

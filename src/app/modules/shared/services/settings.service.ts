@@ -1,8 +1,7 @@
 import { HttpClient } from "@angular/common/http"
-import { computed, Injectable, signal } from "@angular/core"
+import { Injectable } from "@angular/core"
 import { IUserSetingsResponse } from "../../test/interfaces/user-settings-response.interface"
 import { environment } from "../../../../environments/environment"
-import { tap } from "rxjs"
 
 @Injectable({
   providedIn: "root",
