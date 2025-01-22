@@ -1,15 +1,33 @@
-export interface IMapFilterOption {
-  statistical_method?: string
-  summary?: string
-  period: number
-  title?: string
-  default?: boolean
-  provider?: string
-  operator?: string
-  technology?: string
-}
+import { NetworkMeasurementType } from "../constants/network-measurement-type"
+import { ETileTypes } from "../constants/tile-type.enum"
 
 export interface IMapFilter {
-  options: IMapFilterOption[]
+  icon?: string
   title: string
+  summary?: string
+  options?: IMapFilter[]
+  params?: {
+    map_options?: NetworkMeasurementType
+    overlay_type?: ETileTypes
+    technology?: string
+    operator?: number
+    period?: number
+    provider?: number
+    statistical_method?: number
+  }
+  functions?: [
+    {
+      func_name: string
+      func_params: {
+        path?: string
+        type?: ETileTypes
+        z_index?: number
+        tile_size?: number
+      }
+    }
+  ]
+  depends_on?: {
+    map_type_is_mobile: boolean
+  }
+  default: boolean
 }

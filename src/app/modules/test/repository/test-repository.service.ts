@@ -3,8 +3,7 @@ import { Injectable } from "@angular/core"
 import { IUserSetingsResponse } from "../interfaces/user-settings-response.interface"
 import { environment } from "../../../../environments/environment"
 import { tap } from "rxjs"
-import { UUID } from "../constants/strings"
-import { v4 } from "uuid"
+import { TC_VERSION_ACCEPTED, UUID } from "../constants/strings"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
@@ -26,7 +25,9 @@ export class TestRepositoryService {
           language: "en",
           name: "RTR-Netztest",
           terms_and_conditions_accepted: "true",
-          terms_and_conditions_accepted_version: 6,
+          terms_and_conditions_accepted_version: parseInt(
+            localStorage.getItem(TC_VERSION_ACCEPTED) ?? "0"
+          ),
           type: "DESKTOP",
           uuid,
           version_code: "1",

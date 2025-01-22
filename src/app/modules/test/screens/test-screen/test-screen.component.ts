@@ -12,7 +12,6 @@ import {
   takeUntil,
   withLatestFrom,
 } from "rxjs"
-import { TC_VERSION } from "../terms-conditions-screen/terms-conditions-screen.component"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
@@ -26,6 +25,7 @@ import { ITestVisualizationState } from "../../interfaces/test-visualization-sta
 import {
   ERROR_OCCURED,
   ERROR_OCCURED_SENDING_RESULTS,
+  TC_VERSION_ACCEPTED,
 } from "../../constants/strings"
 import { MessageService } from "../../../shared/services/message.service"
 import { SpacerComponent } from "../../../shared/components/spacer/spacer.component"
@@ -91,7 +91,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
         switchMap((settings) => {
           if (
             settings.settings[0].terms_and_conditions.version.toString() !=
-            localStorage.getItem(TC_VERSION)
+            localStorage.getItem(TC_VERSION_ACCEPTED)
           ) {
             this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS])
             return of(null)

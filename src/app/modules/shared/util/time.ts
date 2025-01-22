@@ -1,7 +1,10 @@
 import dayjs from "dayjs"
 
-export const adjustTimePeriod = (period: string[], endDate: dayjs.Dayjs) => {
-  const val = parseInt(period[0], 10)
+export const adjustTimePeriod = (
+  period: [number, string],
+  endDate: dayjs.Dayjs
+) => {
+  const val = period[0]
   const spans = [
     {
       count: 30,
@@ -27,7 +30,7 @@ export const adjustTimePeriod = (period: string[], endDate: dayjs.Dayjs) => {
         then = then.endOf("month").startOf("day")
       }
 
-      period[0] = dayjs(endDate).diff(then, "days").toString()
+      period[0] = dayjs(endDate).diff(then, "days")
     }
   }
 }

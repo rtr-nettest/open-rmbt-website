@@ -17,7 +17,6 @@ import { MatRadioModule } from "@angular/material/radio"
 import { MatButtonModule } from "@angular/material/button"
 import { Observable, Subject } from "rxjs"
 import { MatTabGroup, MatTabsModule } from "@angular/material/tabs"
-import { NetworkMeasurementType } from "../../interfaces/map-type.interface"
 import { IMapInfo } from "../../interfaces/map-info.interface"
 import { MatIconModule } from "@angular/material/icon"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
@@ -30,6 +29,13 @@ import {
   MatDialogRef,
 } from "@angular/material/dialog"
 import { ETileTypes } from "../../constants/tile-type.enum"
+import { NetworkMeasurementType } from "../../constants/network-measurement-type"
+import { MapInfoHash } from "../../dto/map-info-hash"
+import { FiltersForm } from "../../interfaces/filter-form"
+import { GeneralFiltersFormBuilderService } from "../../services/general-filters-form-builder.service"
+import { WlanFiltersFormBuilderService } from "../../services/wlan-filters-form-builder.service"
+import { BrowserFiltersFormBuilderService } from "../../services/browser-filters-form-builder.service"
+import { MobileFiltersFormBuilderService } from "../../services/mobile-filters-form-builder.service"
 
 export type FilterSheetData = {
   mapInfo: IMapInfo
@@ -44,18 +50,6 @@ type ActiveControlGroup =
   | "technologyOptions"
   | "operatorOptions"
   | "providerOptions"
-
-type FiltersForm = {
-  networkMeasurementType: FormControl<NetworkMeasurementType | null>
-  tiles: FormControl<ETileTypes | null>
-  filters: FormGroup<{
-    statistical_method: FormControl<string | null>
-    period: FormControl<number | null>
-    provider: FormControl<string | null>
-    operator: FormControl<string | null>
-    technology: FormControl<string | null>
-  }>
-}
 
 @Component({
   selector: "app-filters",
@@ -82,7 +76,7 @@ export class FiltersComponent implements OnDestroy {
   activeControlGroup?: ActiveControlGroup
   destroyed$ = new Subject<void>()
   form!: FormGroup<FiltersForm>
-  mapInfo!: IMapInfo
+  mapInfo!: MapInfoHash
   mapTypesTitles = new Map<NetworkMeasurementType, string>()
   tilesTypes = Object.values(ETileTypes)
   filters$!: Observable<IMapInfo>
@@ -99,13 +93,20 @@ export class FiltersComponent implements OnDestroy {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: FilterSheetData,
     private readonly dialogRef: MatDialogRef<FiltersComponent>,
-    private readonly store: MapStoreService
+    private readonly store: MapStoreService,
+    private readonly generalFB: GeneralFiltersFormBuilderService,
+    private readonly wlanFB: WlanFiltersFormBuilderService,
+    private readonly browserFB: BrowserFiltersFormBuilderService,
+    private readonly mobileFB: MobileFiltersFormBuilderService
   ) {
-    this.mapInfo = data.mapInfo
-    for (const t of data.mapInfo.mapfilter.mapTypes) {
-      let title = t.title
-      for (const o of t.options) {
-        this.mapTypesTitles.set(o.map_options, `${title}/${o.title}`)
+    this.mapInfo = new MapInfoHash(data.mapInfo)
+    for (const networkType of this.mapInfo.get("MAP_TYPE").options ?? []) {
+      for (const metric of networkType.options ?? []) {
+        if (metric.params?.map_options)
+          this.mapTypesTitles.set(
+            metric.params?.map_options,
+            `${networkType.title}/${metric.title}`
+          )
       }
     }
     const networkMeasurementType =
@@ -130,8 +131,8 @@ export class FiltersComponent implements OnDestroy {
     this.dialogRef.close()
   }
 
-  changeNetworkMeasurementType(v: NetworkMeasurementType) {
-    this.form.controls.networkMeasurementType.setValue(v)
+  changeNetworkMeasurementType(v?: NetworkMeasurementType) {
+    this.form.controls.networkMeasurementType.setValue(v ?? null)
     this.form.setControl("filters", this.getFiltersByType(v))
   }
 
@@ -158,130 +159,38 @@ export class FiltersComponent implements OnDestroy {
     field: string,
     value: string | number
   ) {
-    return filter.options.find((o: any) => o[field] === value)?.title
+    return filter.options?.find(
+      (o) => (o.params as Record<string, any>)?.[field] === value
+    )?.title
   }
 
-  private getFiltersByType(type: NetworkMeasurementType) {
+  private getFiltersByType(type?: NetworkMeasurementType) {
+    this.statisticalOptions = undefined
+    this.periodOptions = undefined
+    this.technologyOptions = undefined
+    this.providerOptions = undefined
+    this.operatorOptions = undefined
     if (type?.startsWith("mobile")) {
-      return this.getMobileForm(this.mapInfo)
+      this.statisticalOptions = this.mapInfo.get("STATISTICS")
+      this.periodOptions = this.mapInfo.get("MAP_FILTER_PERIOD")
+      this.technologyOptions = this.mapInfo.get("MAP_FILTER_TECHNOLOGY")
+      this.operatorOptions = this.mapInfo.get("MAP_FILTER_CARRIER")
+      return this.mobileFB.build(this.mapInfo, this.form)
     } else if (type?.startsWith("wifi")) {
-      return this.getWlanForm(this.mapInfo)
+      this.statisticalOptions = this.mapInfo.get("STATISTICS")
+      this.periodOptions = this.mapInfo.get("MAP_FILTER_PERIOD")
+      this.technologyOptions = this.mapInfo.get("MAP_FILTER_TECHNOLOGY")
+      this.providerOptions = this.mapInfo.get("PROVIDER")
+      return this.wlanFB.build(this.mapInfo, this.form)
     } else if (type?.startsWith("browser")) {
-      return this.getBrowserForm(this.mapInfo)
+      this.statisticalOptions = this.mapInfo.get("STATISTICS")
+      this.periodOptions = this.mapInfo.get("MAP_FILTER_PERIOD")
+      this.providerOptions = this.mapInfo.get("PROVIDER")
+      return this.browserFB.build(this.mapInfo, this.form)
     } else {
-      return this.getAllForm(this.mapInfo)
+      this.statisticalOptions = this.mapInfo.get("STATISTICS")
+      this.periodOptions = this.mapInfo.get("MAP_FILTER_PERIOD")
+      return this.generalFB.build(this.mapInfo, this.form)
     }
-  }
-
-  private getAllForm(mapInfo: IMapInfo) {
-    const options = mapInfo.mapfilter.mapFilters.wifi
-    this.statisticalOptions = options[0]
-    this.periodOptions = options[1]
-    this.technologyOptions = undefined
-    this.providerOptions = undefined
-    this.operatorOptions = undefined
-    return this.fb.group({
-      statistical_method: new FormControl({
-        value:
-          this.store.filters()?.filters?.statistical_method ??
-          this.statisticalOptions.options.find((o) => !!o.default)!
-            .statistical_method!,
-        disabled: this.form?.controls.tiles.value == ETileTypes.points,
-      }),
-      period: new FormControl(
-        this.store.filters()?.filters?.period ??
-          this.periodOptions.options.find((o) => !!o.default)!.period!
-      ),
-      technology: new FormControl({ value: "", disabled: true }),
-      operator: new FormControl({ value: "", disabled: true }),
-      provider: new FormControl({ value: "", disabled: true }),
-    })
-  }
-
-  private getWlanForm(mapInfo: IMapInfo) {
-    const options = mapInfo.mapfilter.mapFilters.wifi
-    this.statisticalOptions = options[0]
-    this.periodOptions = options[2]
-    this.technologyOptions = undefined
-    this.providerOptions = options[1]
-    this.operatorOptions = undefined
-    return this.fb.group({
-      statistical_method: new FormControl({
-        value:
-          this.store.filters()?.filters?.statistical_method ??
-          this.statisticalOptions.options.find((o) => !!o.default)!
-            .statistical_method!,
-        disabled: this.form?.controls.tiles.value == ETileTypes.points,
-      }),
-      period: new FormControl(
-        this.store.filters()?.filters?.period ??
-          this.periodOptions.options.find((o) => !!o.default)!.period!
-      ),
-      provider: new FormControl(
-        this.store.filters()?.filters?.provider ??
-          this.providerOptions.options.find((o) => !!o.default)!.provider!
-      ),
-      technology: new FormControl({ value: "", disabled: true }),
-      operator: new FormControl({ value: "", disabled: true }),
-    })
-  }
-
-  private getBrowserForm(mapInfo: IMapInfo) {
-    const options = mapInfo.mapfilter.mapFilters.browser
-    this.statisticalOptions = options[0]
-    this.periodOptions = options[2]
-    this.technologyOptions = undefined
-    this.providerOptions = options[1]
-    this.operatorOptions = undefined
-    return this.fb.group({
-      statistical_method: new FormControl({
-        value:
-          this.store.filters()?.filters?.statistical_method ??
-          this.statisticalOptions.options.find((o) => !!o.default)!
-            .statistical_method!,
-        disabled: this.form?.controls.tiles.value == ETileTypes.points,
-      }),
-      period: new FormControl(
-        this.store.filters()?.filters?.period ??
-          this.periodOptions.options.find((o) => !!o.default)!.period!
-      ),
-      provider: new FormControl(
-        this.store.filters()?.filters?.provider ??
-          this.providerOptions.options.find((o) => !!o.default)!.provider!
-      ),
-      technology: new FormControl({ value: "", disabled: true }),
-      operator: new FormControl({ value: "", disabled: true }),
-    })
-  }
-
-  private getMobileForm(mapInfo: IMapInfo) {
-    const options = mapInfo.mapfilter.mapFilters.mobile
-    this.statisticalOptions = options[0]
-    this.periodOptions = options[2]
-    this.technologyOptions = options[3]
-    this.providerOptions = undefined
-    this.operatorOptions = options[1]
-    return this.fb.group({
-      statistical_method: new FormControl({
-        value:
-          this.store.filters()?.filters?.statistical_method ??
-          this.statisticalOptions.options.find((o) => !!o.default)!
-            .statistical_method!,
-        disabled: this.form?.controls.tiles.value == ETileTypes.points,
-      }),
-      operator: new FormControl(
-        this.store.filters()?.filters?.operator ??
-          this.operatorOptions.options.find((o) => !!o.default)!.operator!
-      ),
-      period: new FormControl(
-        this.store.filters()?.filters?.period ??
-          this.periodOptions.options.find((o) => !!o.default)!.period!
-      ),
-      technology: new FormControl(
-        this.store.filters()?.filters?.technology ??
-          this.technologyOptions.options.find((o) => !!o.default)!.technology!
-      ),
-      provider: new FormControl({ value: "", disabled: true }),
-    })
   }
 }

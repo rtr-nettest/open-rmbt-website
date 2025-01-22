@@ -198,7 +198,7 @@ export class MapScreenComponent extends SeoComponent {
       case ETileTypes.points:
         tiles = [this.mapService.getPointSource(this.mapSourceOptions)]
         break
-      case ETileTypes.cadastral:
+      case ETileTypes.shapes:
         tiles = [this.mapService.getShapeSource(this.mapSourceOptions)]
         break
       case ETileTypes.heatmap:

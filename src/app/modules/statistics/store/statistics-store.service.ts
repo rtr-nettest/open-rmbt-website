@@ -11,17 +11,17 @@ import dayjs from "dayjs"
 export class StatisticsStoreService {
   browserData$ = new BehaviorSubject<IBrowserData | null>(null)
   filters$ = new BehaviorSubject<IStatisticsRequest | null>(null)
-  durations = signal([
-    ["1", "24 hours"],
-    ["7", "1 week"],
-    ["30", "1 month"],
-    ["90", "3 months"],
-    ["180", "6 months"],
-    ["365", "1 year"],
-    ["730", "2 years"],
-    ["1095", "3 years"],
-    ["1460", "4 years"],
-    ["2920", "8 years"],
+  durations = signal<[number, string][]>([
+    [1, "24 hours"],
+    [7, "1 week"],
+    [30, "1 month"],
+    [90, "3 months"],
+    [180, "6 months"],
+    [365, "1 year"],
+    [730, "2 years"],
+    [1095, "3 years"],
+    [1460, "4 years"],
+    [2920, "8 years"],
   ])
 
   get filters() {

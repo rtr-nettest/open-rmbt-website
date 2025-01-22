@@ -25,7 +25,7 @@ dayjs.extend(tz)
 
 type FiltersForm = {
   country: FormControl<string | null>
-  duration: FormControl<string | null>
+  duration: FormControl<number | null>
   type: FormControl<StatisticsNetworkType | null>
   quantile: FormControl<string | null>
   location_accuracy: FormControl<string | null>
