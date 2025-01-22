@@ -20,7 +20,7 @@ export const DEFAULT_STYLE: StyleSpecification = {
     [EBasemapType.BMAPGRAU]: {
       ...BASE_SOURCE,
       tiles: [
-        `http://mapsneu.wien.gv.at/basemap/${EBasemapType.BMAPGRAU}/normal/google3857/{z}/{y}/{x}.png`,
+        `https://mapsneu.wien.gv.at/basemap/${EBasemapType.BMAPGRAU}/normal/google3857/{z}/{y}/{x}.png`,
       ],
     },
   },
@@ -44,19 +44,19 @@ export const BASEMAP_STYLE: StyleSpecification = {
     [EBasemapType.BMAPOVERLAY]: {
       ...BASE_SOURCE,
       tiles: [
-        `http://mapsneu.wien.gv.at/basemap/${EBasemapType.BMAPOVERLAY}/normal/google3857/{z}/{y}/{x}.png`,
+        `https://mapsneu.wien.gv.at/basemap/${EBasemapType.BMAPOVERLAY}/normal/google3857/{z}/{y}/{x}.png`,
       ],
     },
     [EBasemapType.BMAPORTHO]: {
       ...BASE_SOURCE,
       tiles: [
-        `http://mapsneu.wien.gv.at/basemap/${EBasemapType.BMAPORTHO}/normal/google3857/{z}/{y}/{x}.jpeg`,
+        `https://mapsneu.wien.gv.at/basemap/${EBasemapType.BMAPORTHO}/normal/google3857/{z}/{y}/{x}.jpeg`,
       ],
     },
     [EBasemapType.BMAPHDPI]: {
       ...BASE_SOURCE,
       tiles: [
-        `http://mapsneu.wien.gv.at/basemap/${EBasemapType.BMAPHDPI}/normal/google3857/{z}/{y}/{x}.jpeg`,
+        `https://mapsneu.wien.gv.at/basemap/${EBasemapType.BMAPHDPI}/normal/google3857/{z}/{y}/{x}.jpeg`,
       ],
     },
   },
