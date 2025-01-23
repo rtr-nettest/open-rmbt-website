@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from "@angular/core"
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog"
 import { MatIconModule } from "@angular/material/icon"
-import { Subject } from "rxjs"
+import { Subject, takeUntil } from "rxjs"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import {
   FormBuilder,
@@ -55,6 +55,9 @@ export class BasemapPickerComponent implements OnDestroy {
         this.store.basemap() || EBasemapType.BMAPGRAU
       ),
     })
+    this.form.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+      this.applyFilters()
+    })
   }
 
   ngOnDestroy(): void {
@@ -64,7 +67,6 @@ export class BasemapPickerComponent implements OnDestroy {
 
   applyFilters() {
     this.store.basemap.set(this.form.controls.basemap.value)
-    this.close()
   }
 
   close() {
