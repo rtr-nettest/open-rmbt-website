@@ -68,15 +68,13 @@ export class TestService {
     @Inject(PLATFORM_ID) private readonly platformId: object
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      if (isDevMode()) {
-        import("rmbtws/dist/rmbtws.js" as any).then((rmbtws) => {
-          this.rmbtws = rmbtws
-        })
-      } else {
-        import("rmbtws" as any).then((rmbtws) => {
+      import("rmbtws" as any).then((rmbtws) => {
+        this.rmbtws = rmbtws
+        if (!this.rmbtws.TestEnvironment) {
           this.rmbtws = rmbtws.default
-        })
-      }
+          return
+        }
+      })
     }
   }
 
