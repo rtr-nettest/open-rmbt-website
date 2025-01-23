@@ -1,4 +1,5 @@
 @if(inProgress$ | async) {
 <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-}
+} @if(settings$ | async) {
 <router-outlet></router-outlet>
+}

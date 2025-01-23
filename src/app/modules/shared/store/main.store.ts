@@ -20,6 +20,18 @@ export class MainStore {
       url_web_recent_server,
     } = this.settings()?.settings?.[0]?.urls || ({} as any)
     const cloud = url_map_server ? new URL(url_map_server).origin : undefined
+    const missingEndpoints = [
+      ["url_ipv4_check", url_ipv4_check],
+      ["url_ipv6_check", url_ipv6_check],
+      ["url_statistic_server", url_statistic_server],
+      ["url_map_server", url_map_server],
+      ["url_web_statistic_server", url_web_statistic_server],
+      ["url_web_recent_server", url_web_recent_server],
+    ]
+      .filter(([_, url]) => !url)
+      .map(([name]) => name)
+      .join(", ")
+    console.log("Missing endpoints:", missingEndpoints)
     return {
       cloud,
       url_ipv4_check,
