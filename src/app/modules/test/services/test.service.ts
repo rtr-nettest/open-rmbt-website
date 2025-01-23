@@ -32,11 +32,11 @@ import { ILoopModeInfo } from "../interfaces/measurement-registration-request.in
 import { Router } from "@angular/router"
 import { ERoutes } from "../../shared/constants/routes.enum"
 import { BasicNetworkInfo } from "../dto/basic-network-info.dto"
-import { TestRepositoryService } from "../repository/test-repository.service"
 import { UUID } from "../constants/strings"
 import { STATE_UPDATE_TIMEOUT } from "../constants/numbers"
 import { MainStore } from "../../shared/store/main.store"
 import { HistoryStore } from "../../history/store/history.store"
+import { SettingsService } from "../../shared/services/settings.service"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -62,21 +62,19 @@ export class TestService {
     private readonly historyStore: HistoryStore,
     private readonly mainStore: MainStore,
     private readonly ngZone: NgZone,
-    private readonly repo: TestRepositoryService,
+    private readonly settingsService: SettingsService,
     private readonly router: Router,
     private readonly testStore: TestStore,
     @Inject(PLATFORM_ID) private readonly platformId: object
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      if (isDevMode()) {
-        import("rmbtws/dist/rmbtws.js" as any).then((rmbtws) => {
-          this.rmbtws = rmbtws
-        })
-      } else {
-        import("rmbtws" as any).then((rmbtws) => {
+      import("rmbtws" as any).then((rmbtws) => {
+        this.rmbtws = rmbtws
+        if (!this.rmbtws.TestEnvironment) {
           this.rmbtws = rmbtws.default
-        })
-      }
+          return
+        }
+      })
     }
   }
 
@@ -208,7 +206,7 @@ export class TestService {
     if (!isPlatformBrowser(this.platformId)) {
       return of({ settings: [] } as unknown as IUserSetingsResponse)
     }
-    return this.repo.getSettings()
+    return this.settingsService.getSettings()
   }
 
   async getMeasurementState(): Promise<
