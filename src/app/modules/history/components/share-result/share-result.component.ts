@@ -70,7 +70,7 @@ export class ShareResultComponent {
     if (!openTestUUID) {
       return
     }
-    const base = `${this.mainStore.api().url_web_statistic_server}/${
+    const base = `${this.mainStore.api().url_statistic_server}/${
       this.i18nStore.activeLang
     }`
     const img = `${base}/${openTestUUID}/forumsmall.png`
