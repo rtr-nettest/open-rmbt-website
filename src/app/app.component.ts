@@ -1,7 +1,7 @@
-import { Component } from "@angular/core"
+import { Component, inject } from "@angular/core"
 import { RouterOutlet } from "@angular/router"
 import { MainStore } from "./modules/shared/store/main.store"
-import { Observable, take } from "rxjs"
+import { Observable, tap } from "rxjs"
 import { MatProgressBarModule } from "@angular/material/progress-bar"
 import { AsyncPipe } from "@angular/common"
 import { SettingsService } from "./modules/shared/services/settings.service"
@@ -17,18 +17,12 @@ import * as pack from "../../package.json"
 export class AppComponent {
   title = "open-rmbt-angular"
   inProgress$!: Observable<boolean>
+  settings$ = inject(SettingsService)
+    .getSettings()
+    .pipe(tap((settings) => this.mainStore.settings.set(settings)))
 
-  constructor(
-    private readonly mainStore: MainStore,
-    private readonly settingsService: SettingsService
-  ) {
+  constructor(private readonly mainStore: MainStore) {
     this.inProgress$ = this.mainStore.inProgress$
-    this.settingsService
-      .getSettings()
-      .pipe(take(1))
-      .subscribe((settings) => {
-        this.mainStore.settings.set(settings)
-      })
     const gitInfo = pack.gitInfo as any
     console.log(
       `Branch-hash: ${gitInfo["branch"]}-${gitInfo["hash"].slice(0, 8)}`
