@@ -18,7 +18,7 @@ export class MainStore {
       url_map_server,
       url_web_statistic_server,
       url_web_recent_server,
-    } = this.settings()?.settings?.[0] || ({} as any)
+    } = this.settings()?.settings?.[0]?.urls || ({} as any)
     const cloud = url_map_server ? new URL(url_map_server).origin : undefined
     return {
       cloud,
