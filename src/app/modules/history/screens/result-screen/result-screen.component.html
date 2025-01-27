@@ -8,7 +8,7 @@
   <div class="app-header">
     <h2 *ngIf="result.measurementDate" aria-live="polite">
       {{ "Measurement result from" | translate }}
-      {{ result.measurementDate | date : "medium" : undefined : activeLang }}
+      {{ result.measurementDate | date : "dd.MM.YYYY, HH:mm:ss" }}
     </h2>
     <h2 *ngIf="!result.measurementDate" aria-live="polite">
       {{ "Measurement result" | translate }}
