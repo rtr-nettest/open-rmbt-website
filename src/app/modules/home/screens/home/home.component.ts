@@ -28,7 +28,7 @@ import { Title } from "@angular/platform-browser"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatButtonModule } from "@angular/material/button"
-import { RouterModule } from "@angular/router"
+import { Router, RouterModule } from "@angular/router"
 
 const UPDATE_INTERVAL = 5000
 
@@ -93,7 +93,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
       isHtml: true,
       transformValue(value) {
         const retVal = dayjs(value.time)
-          .utc()
+          .utc(true)
           .tz(dayjs.tz.guess())
           .format("HH:mm:ss")
         return `<i class="app-icon app-icon--browser"></i><span>${retVal}</span>`
@@ -104,7 +104,22 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
       header: "Provider/device",
       isHtml: true,
       transformValue(value) {
-        const retVal = `${value.provider_name}, ${value.model} (${value.platform})`
+        const arr = []
+        let retVal = ""
+        if (value.provider_name) {
+          arr.push(value.provider_name.trim())
+        }
+        if (value.model) {
+          arr.push(value.model.trim())
+        }
+        if (arr.length) {
+          retVal = arr.join(", ")
+        }
+        if (value.platform) {
+          retVal = retVal.length
+            ? `${retVal} (${value.platform.trim()})`
+            : value.platform.trim()
+        }
         return `<i class="app-icon app-icon--marker"></i><span>${retVal}</span>`
       },
     },
@@ -139,7 +154,8 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
     i18nStore: I18nStore,
     title: Title,
     private readonly measurements: MeasurementsService,
-    private readonly platform: PlatformService
+    private readonly platform: PlatformService,
+    private readonly router: Router
   ) {
     super(title, i18nStore)
   }
@@ -159,9 +175,17 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
     }
   }
 
+  goToResult(result: IRecentMeasurement) {
+    this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
+      queryParams: {
+        open_test_uuid: result.open_test_uuid,
+      },
+    })
+  }
+
   private setMeasurements() {
     firstValueFrom(this.measurements.getRecentMeasurements()).then((resp) => {
-      const content = resp?.results.reverse().slice(0, 5) ?? []
+      const content = resp?.results.slice(0, 5) ?? []
       this.tableData.set({
         content,
         totalElements: content.length,

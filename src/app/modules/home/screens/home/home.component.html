@@ -81,7 +81,9 @@
           [data]="tableData()!"
           [columns]="tableColumns"
           [sort]="{ active: 'time', direction: 'desc' }"
+          [rowsAreCLickable]="true"
           [tableClassNames]="['app-table--vertical']"
+          (onRowClick)="goToResult($event)"
           style="width: 100%"
         ></app-table>
         }
