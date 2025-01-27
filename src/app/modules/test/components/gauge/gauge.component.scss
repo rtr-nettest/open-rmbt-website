@@ -4,6 +4,7 @@ $blue: #0071d7;
 
 .gauge {
   width: 100%;
+  margin: 0 auto;
   max-width: 500px;
   height: auto;
   background: url("/assets/images/gauge.svg");
@@ -12,7 +13,6 @@ $blue: #0071d7;
   background-position-y: 0%;
   background-repeat: no-repeat;
   background-position: 0 0;
-  margin: 0 0;
   padding: 0;
   position: relative;
 }

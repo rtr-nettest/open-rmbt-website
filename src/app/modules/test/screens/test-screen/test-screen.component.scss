@@ -6,15 +6,17 @@
   justify-content: center;
   width: 100%;
 
-  & > * {
-    flex: 0 0 44%;
-  }
-
   app-spacer {
     flex: 0 0 rem(10);
   }
 
+  app-interim-results {
+    max-width: $screen-xs;
+    flex: 0 0 min($screen-xs, 45%);
+  }
+
   .app-progress-bar-wrapper {
+    flex: 0 0 calc(55% - 10rem);
     margin: rem(80) 0;
     width: rem(235);
   }
@@ -26,12 +28,18 @@
       display: none;
     }
 
+    app-interim-results,
     .app-progress-bar-wrapper {
-      height: rem(248);
+      width: calc(100% - 56px);
     }
 
     app-interim-results {
       flex: 0 0 rem(400);
+    }
+
+    .app-progress-bar-wrapper {
+      flex: 1;
+      margin: rem(24) 0 rem(40);
     }
   }
 }

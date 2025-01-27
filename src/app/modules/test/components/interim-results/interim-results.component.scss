@@ -29,18 +29,11 @@
 
   app-test-chart {
     height: rem(130);
-    width: 40vw;
   }
 
   &--ping {
     app-test-chart {
       height: rem(90);
-    }
-  }
-
-  @include screen-sm {
-    app-test-chart {
-      width: 80vw;
     }
   }
 }

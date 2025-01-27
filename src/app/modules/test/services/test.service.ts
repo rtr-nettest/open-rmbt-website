@@ -94,7 +94,6 @@ export class TestService {
         )
         config.uuid = localStorage.getItem(UUID)
         config.timezone = dayjs.tz.guess()
-        config.additionalSubmissionParameters = { network_type: 0 }
         const ctrl = new this.rmbtws.RMBTControlServerCommunication(config)
 
         this.startTimeMs = Date.now()

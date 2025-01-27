@@ -3,12 +3,11 @@ import {
   Input,
   NgZone,
   ChangeDetectionStrategy,
-  OnInit,
   OnDestroy,
 } from "@angular/core"
-import { Observable } from "rxjs"
+import { fromEvent, Observable, Subject } from "rxjs"
 import { ITestVisualizationState } from "../../../test/interfaces/test-visualization-state.interface"
-import { map } from "rxjs/operators"
+import { debounceTime, map, takeUntil } from "rxjs/operators"
 import { EMeasurementStatus } from "../../../test/constants/measurement-status.enum"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { TestStore } from "../../../test/store/test.store"
@@ -26,11 +25,20 @@ import { LogChart } from "./settings/log-chart"
   standalone: true,
   imports: [NgIf, AsyncPipe],
 })
-export class TestChartComponent {
+export class TestChartComponent implements OnDestroy {
   @Input() phase: ChartPhase = "download"
 
   chart: TestChart | undefined
+  destroyed$ = new Subject<void>()
   visualization$!: Observable<ITestVisualizationState>
+  resizeSub = fromEvent(window, "resize")
+    .pipe(takeUntil(this.destroyed$), debounceTime(100))
+    .subscribe(() => {
+      const el = document.getElementById(this.id)
+      if (el) {
+        el.style.width = `100%`
+      }
+    })
 
   get canvas() {
     return document.getElementById(this.id) as HTMLCanvasElement
@@ -61,6 +69,10 @@ export class TestChartComponent {
         return s
       })
     )
+  }
+  ngOnDestroy(): void {
+    this.destroyed$.next()
+    this.destroyed$.complete()
   }
 
   private handleChanges(visualization: ITestVisualizationState) {

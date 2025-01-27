@@ -18,6 +18,24 @@ h2 {
   display: flex;
   justify-content: space-between;
   margin-bottom: rem(24);
+
+  .app-button {
+    flex: 0 0 rem(160);
+    margin-left: rem(16);
+  }
+
+  @include screen-xs {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: rem(16);
+
+    .app-button {
+      flex: 0 0 rem(48);
+      margin-bottom: rem(16);
+      margin-left: 0;
+      margin-top: rem(16);
+    }
+  }
 }
 
 .app-wrapper {
