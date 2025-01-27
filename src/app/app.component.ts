@@ -24,8 +24,10 @@ export class AppComponent {
   constructor(private readonly mainStore: MainStore) {
     this.inProgress$ = this.mainStore.inProgress$
     const gitInfo = pack.gitInfo as any
-    console.log(
-      `Branch-hash: ${gitInfo["branch"]}-${gitInfo["hash"].slice(0, 8)}`
-    )
+    if (gitInfo["branch"] && gitInfo["hash"]) {
+      console.log(
+        `Branch-hash: ${gitInfo["branch"]}-${gitInfo["hash"].slice(0, 8)}`
+      )
+    }
   }
 }

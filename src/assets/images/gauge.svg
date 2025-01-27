@@ -25,11 +25,11 @@
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:zoom="2.9457073"
-     inkscape:cx="202.49805"
-     inkscape:cy="294.83581"
+     inkscape:cx="212.00341"
+     inkscape:cy="370.87867"
      inkscape:window-width="1440"
      inkscape:window-height="789"
-     inkscape:window-x="-1"
+     inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg1030" />
@@ -68,19 +68,19 @@
      word-spacing="0"
      style="line-height:125%"
      line-height="125%"
-     id="text1483">1000</text>
+     id="text1483">1G</text>
   <text
      x="58.394978"
      y="353.35443"
      style="font-size:9.333px;line-height:125%;font-family:sans-serif;letter-spacing:0;word-spacing:0;fill:#333333"
      line-height="125%"
-     id="text1401">100</text>
+     id="text1401">100M</text>
   <text
      x="105.17484"
      y="442.47369"
      style="font-size:9.333px;line-height:125%;font-family:sans-serif;letter-spacing:0;word-spacing:0;fill:#333333"
      line-height="125%"
-     id="text1317">10</text>
+     id="text1317">10M</text>
   <use
      transform="translate(18 206)"
      width="500"
@@ -416,7 +416,7 @@
      y="443.2099"
      style="font-size:9.333px;line-height:125%;font-family:sans-serif;letter-spacing:0;word-spacing:0;fill:#333333"
      line-height="125%"
-     id="text1235">1</text>
+     id="text1235">1M</text>
   <text
      x="207.24152"
      y="270.99658"
@@ -428,17 +428,5 @@
      y="270.99658"
      style="font-size:9.333px;line-height:125%;font-family:sans-serif;letter-spacing:0;word-spacing:0;fill:#333333"
      line-height="125%"
-     id="text1175">0</text>
-  <text
-     x="225.39142"
-     y="270.99658"
-     style="font-size:9.333px;line-height:125%;font-family:sans-serif;letter-spacing:0;word-spacing:0;fill:#333333"
-     line-height="125%"
-     id="text1177">0</text>
-  <text
-     x="231.43866"
-     y="270.99658"
-     style="font-size:9.333px;line-height:125%;font-family:sans-serif;letter-spacing:0;word-spacing:0;fill:#333333"
-     line-height="125%"
-     id="text1179">0</text>
+     id="text1175">G</text>
 </svg>
