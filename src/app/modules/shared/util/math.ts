@@ -22,7 +22,7 @@ export function roundToSignificantDigits(number: number) {
 }
 
 export function speedLog(speedMbps?: number) {
-  if (!speedMbps) {
+  if (speedMbps === undefined) {
     return -1
   }
   let yPercent = (1 + Math.log10(speedMbps)) / 5
