@@ -96,10 +96,6 @@ export class HistoryService {
       }),
       catchError((e) => {
         console.log(e)
-        this.router.navigate([
-          this.i18nStore.activeLang,
-          ERoutes.PAGE_NOT_FOUND,
-        ])
         return of(null)
       })
     )

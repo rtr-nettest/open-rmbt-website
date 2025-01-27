@@ -115,15 +115,6 @@ export const routes: Routes = [
         },
       },
       {
-        path: ERoutes.PAGE_NOT_FOUND,
-        pathMatch: "full",
-        component: PageNotFoundComponent,
-        resolve: [localeResolver],
-        data: {
-          title: "Page Not Found",
-        },
-      },
-      {
         path: "**",
         component: PageNotFoundComponent,
         resolve: [localeResolver],

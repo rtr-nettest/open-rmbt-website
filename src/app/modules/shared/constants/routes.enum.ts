@@ -16,5 +16,4 @@ export enum ERoutes {
   OPTIONS = "options",
   RESULT = "result",
   TERMS = "terms-and-conditions",
-  PAGE_NOT_FOUND = "page-not-found",
 }

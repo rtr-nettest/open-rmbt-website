@@ -15,7 +15,6 @@
 /options
 /result
 /terms-and-conditions
-/page-not-found
 /de/
 /de/history
 /de/map
@@ -33,7 +32,6 @@
 /de/options
 /de/result
 /de/terms-and-conditions
-/de/page-not-found
 /en/
 /en/history
 /en/map
@@ -51,4 +49,3 @@
 /en/options
 /en/result
 /en/terms-and-conditions
-/en/page-not-found

@@ -34,8 +34,8 @@ export class MainStore {
     ]
       .filter(([_, url]) => !url)
       .map(([name]) => name)
-      .join(", ")
-    console.log("Missing endpoints:", missingEndpoints)
+    if (missingEndpoints.length)
+      console.log("Missing endpoints:", missingEndpoints.join(", "))
     return {
       cloud,
       url_ipv4_check,

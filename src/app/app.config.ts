@@ -4,7 +4,11 @@ import { provideRouter, withComponentInputBinding } from "@angular/router"
 import { routes } from "./app.routes"
 import { provideClientHydration } from "@angular/platform-browser"
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async"
-import { provideHttpClient, withFetch } from "@angular/common/http"
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from "@angular/common/http"
 import { provideI18n } from "./modules/i18n/i18n.module"
 import localeCs from "@angular/common/locales/cs"
 import localeDe from "@angular/common/locales/de"
@@ -25,6 +29,7 @@ import {
   TimeScale,
 } from "chart.js"
 import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm"
+import { errorInterceptor } from "./modules/shared/interceptors/error.interceptor"
 
 Chart.register(
   BarElement,
@@ -48,7 +53,7 @@ export async function provideConfig(): Promise<ApplicationConfig> {
       provideRouter(routes, withComponentInputBinding()),
       provideClientHydration(),
       provideAnimationsAsync(),
-      provideHttpClient(withFetch()),
+      provideHttpClient(withFetch(), withInterceptors([errorInterceptor])),
       await provideI18n(),
       { provide: DatePipe },
     ],
