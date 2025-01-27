@@ -1,1 +1,1 @@
-export const STATE_UPDATE_TIMEOUT = 175
+export const STATE_UPDATE_TIMEOUT = 100
