@@ -126,6 +126,7 @@ export class ResultScreenComponent extends SeoComponent {
   locationTable = signal<ISimpleHistoryTestLocation[]>([])
   signalTable = signal<ISimpleHistorySignal[]>([])
   phaseDurations = signal<PhaseDurations>({})
+  loading = signal<boolean>(true)
 
   get activeLang() {
     return this.i18nStore.activeLang
@@ -166,6 +167,7 @@ export class ResultScreenComponent extends SeoComponent {
           this.basicResults.set(this.getBasicResults(result))
           this.detailedResults.set(this.getDetailedResults(result))
         }
+        this.loading.set(false)
       })
     )
     this.error$ = this.mainStore.error$

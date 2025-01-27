@@ -36,7 +36,7 @@ const showFriendlyMessage = (
     .split("/")
     .slice(3)
     .join("/")
-    .replace(/[\?\.]*$/, "")
+    .replace(/\?[.]*$/g, "")
   snackBar.open(`${req.method} ${path}: ${message}`, "Dismiss", {
     duration: 5000,
   })
