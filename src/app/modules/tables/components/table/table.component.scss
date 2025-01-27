@@ -206,6 +206,7 @@ mat-paginator {
       &:first-of-type {
         :not(:only-child):last-child {
           justify-content: flex-start !important;
+          text-align: left !important;
           padding-left: 0;
         }
       }

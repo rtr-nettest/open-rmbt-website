@@ -12,4 +12,8 @@ export const SKIPPED_FIELDS = new Set([
   "kg_nr",
   "gkz_sa",
   "signal_classification",
+  "share_subject",
+  "share_text",
+  "time_string",
+  "status",
 ])

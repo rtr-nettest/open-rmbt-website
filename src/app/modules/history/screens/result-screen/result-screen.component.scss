@@ -20,8 +20,8 @@ h2 {
   margin-bottom: rem(24);
 
   .app-button {
-    flex: 0 0 rem(160);
     margin-left: rem(16);
+    white-space: nowrap;
   }
 
   @include screen-xs {

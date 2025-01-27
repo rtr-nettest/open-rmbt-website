@@ -47,24 +47,28 @@ export class HistoryService {
       from(this.repo.getOpenResult(params)),
       from(this.repo.getResult(params)),
     ]).pipe(
-      map(([openTestsResponse, [response, testResultDetail]]) => {
+      map(([openTestsResponse, response]) => {
         const historyResult = SimpleHistoryResult.fromOpenTestResponse(
           params.testUuid!,
           response,
           openTestsResponse
         )
-        if (
-          historyResult.openTestResponse &&
-          testResultDetail?.testresultdetail.length
-        ) {
+        if (historyResult.openTestResponse && response) {
           const trdSet = new Set(
             Object.entries(historyResult.openTestResponse).map(([key, value]) =>
               this.i18nStore.translate(key)
             )
           )
-          for (const item of testResultDetail.testresultdetail) {
-            if (!trdSet.has(item.title)) {
-              historyResult.openTestResponse[item.title] = item.value
+          const details = Object.entries(response).map(([key, value]) => [
+            this.i18nStore.translate(key),
+            value,
+          ]) as [string, any][]
+          for (const [key, value] of details) {
+            if (
+              !trdSet.has(key) &&
+              (typeof value === "string" || typeof value === "number")
+            ) {
+              historyResult.openTestResponse[key] = value
             }
           }
         }

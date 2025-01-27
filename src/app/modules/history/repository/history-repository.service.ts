@@ -42,7 +42,7 @@ export class HistoryRepositoryService {
   async getResult(params: ITestResultRequest) {
     const { testUuid } = params
     if (!testUuid) {
-      return [null, null]
+      return null
     }
     const body = {
       test_uuid: testUuid,
@@ -59,19 +59,7 @@ export class HistoryRepositoryService {
       response = response.testresult[0]
     }
 
-    // Test metadata
-
-    let testResultDetail = (await firstValueFrom(
-      this.http.post(
-        `${environment.api.baseUrl}/RMBTControlServer/testresultdetail`,
-        {
-          ...body,
-          language: this.i18nStore.activeLang,
-        }
-      )
-    )) as any
-
-    return [response, testResultDetail]
+    return response
   }
 
   async getHistory(paginator?: IPaginator) {
