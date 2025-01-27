@@ -33,7 +33,10 @@ export class MapInfoHash {
   }
 
   getDefaultValueOf(key: MapInfoHashKey) {
-    return this.hash[key].options?.find((option) => option.default)?.params
+    const defaultOption =
+      this.hash[key]?.options?.find((option) => option.default) ||
+      this.hash[key]?.options?.[0]
+    return defaultOption?.params
   }
 }
 

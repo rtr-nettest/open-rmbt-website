@@ -15,7 +15,6 @@ import { I18nStore } from "../../../i18n/store/i18n.store"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { ScrollStrategyOptions } from "@angular/cdk/overlay"
 import { CoverageDialogComponent } from "../coverage-dialog/coverage-dialog.component"
-import { DEFAULT_STYLE } from "../../../map/constants/map-styles"
 
 @Component({
   selector: "app-map",
@@ -97,7 +96,7 @@ export class MapComponent implements AfterViewInit {
     this.zone.runOutsideAngular(() => {
       this.map = this.mapService.createMap({
         container: this.mapId,
-        style: DEFAULT_STYLE,
+        style: this.mapService.defaultStyle(),
         center: DEFAULT_CENTER,
       })
       this.map.addControl(new NavigationControl())

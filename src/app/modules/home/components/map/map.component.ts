@@ -17,7 +17,6 @@ import { PopupService } from "../../services/popup.service"
 import { FullScreenService } from "../../services/full-screen.service"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
-import { DEFAULT_STYLE } from "../../../map/constants/map-styles"
 
 @Component({
   selector: "app-map",
@@ -75,7 +74,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.zone.runOutsideAngular(() => {
       this.map = this.mapService.createMap({
         container: this.mapId,
-        style: DEFAULT_STYLE,
+        style: this.mapService.defaultStyle(),
         center: DEFAULT_CENTER,
         zoom: 3,
       })

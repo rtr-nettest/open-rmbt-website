@@ -18,7 +18,9 @@ export class MainStore {
       url_map_server,
       url_web_statistic_server,
       url_web_recent_server,
-    } = this.settings()?.settings?.[0]?.urls || ({} as any)
+      url_web_osm_tiles,
+      url_web_basemap_tiles,
+    } = this.settings()?.settings?.[0]?.urls || {}
     const cloud = url_map_server ? new URL(url_map_server).origin : undefined
     const missingEndpoints = [
       ["url_ipv4_check", url_ipv4_check],
@@ -27,6 +29,8 @@ export class MainStore {
       ["url_map_server", url_map_server],
       ["url_web_statistic_server", url_web_statistic_server],
       ["url_web_recent_server", url_web_recent_server],
+      ["url_web_osm_tiles", url_web_osm_tiles],
+      ["url_web_basemap_tiles", url_web_basemap_tiles],
     ]
       .filter(([_, url]) => !url)
       .map(([name]) => name)
@@ -40,6 +44,8 @@ export class MainStore {
       url_map_server,
       url_web_statistic_server,
       url_web_recent_server,
+      url_web_osm_tiles,
+      url_web_basemap_tiles,
     }
   })
 }

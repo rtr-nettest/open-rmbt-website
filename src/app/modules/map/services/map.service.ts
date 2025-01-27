@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http"
-import { Injectable, NgZone } from "@angular/core"
+import { computed, Injectable, NgZone } from "@angular/core"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { IMapInfo } from "../interfaces/map-info.interface"
 import { Map, Marker, StyleSpecification } from "maplibre-gl"
@@ -7,7 +7,6 @@ import {
   catchError,
   debounceTime,
   fromEvent,
-  map,
   of,
   Subject,
   takeUntil,
@@ -17,7 +16,7 @@ import { UUID } from "../../test/constants/strings"
 import { MainStore } from "../../shared/store/main.store"
 import { EBasemapType } from "../constants/basemap-type.enum"
 import { ETileTypes } from "../constants/tile-type.enum"
-import { BASEMAP_STYLE, DEFAULT_STYLE } from "../constants/map-styles"
+import { BASE_SOURCE } from "../constants/map-styles"
 import { NetworkMeasurementType } from "../constants/network-measurement-type"
 
 export const DEFAULT_CENTER: [number, number] = [
@@ -40,6 +39,82 @@ export type MapSourceOptions = Partial<{
   providedIn: "root",
 })
 export class MapService {
+  defaultStyle = computed<StyleSpecification>(() => {
+    if (
+      !this.mainStore.api().url_web_osm_tiles ||
+      !this.mainStore.api().url_web_basemap_tiles
+    ) {
+      return {
+        version: 8 as const,
+        sources: {},
+        layers: [],
+      }
+    }
+    const sources = {
+      [EBasemapType.OSM]: {
+        ...BASE_SOURCE,
+        tiles: [this.mainStore.api().url_web_osm_tiles!],
+        attribution: "&copy; OpenStreetMap Contributors",
+      },
+      [EBasemapType.BMAPGRAU]: {
+        ...BASE_SOURCE,
+        tiles: [this.getTilesByType(EBasemapType.BMAPGRAU)!],
+      },
+    }
+    return {
+      version: 8 as const,
+      sources,
+      layers: this.getLayersFromSources(sources),
+    }
+  })
+  basemapAtStyle = computed<StyleSpecification>(() => {
+    if (!this.mainStore.api().url_web_basemap_tiles) {
+      return {
+        version: 8 as const,
+        sources: {},
+        layers: [],
+      }
+    }
+    const sources = {
+      [EBasemapType.BMAPOVERLAY]: {
+        ...BASE_SOURCE,
+        tiles: [this.getTilesByType(EBasemapType.BMAPOVERLAY)!],
+      },
+      [EBasemapType.BMAPORTHO]: {
+        ...BASE_SOURCE,
+        tiles: [this.getTilesByType(EBasemapType.BMAPORTHO)!],
+      },
+      [EBasemapType.BMAPHDPI]: {
+        ...BASE_SOURCE,
+        tiles: [this.getTilesByType(EBasemapType.BMAPHDPI)!],
+      },
+    }
+    return {
+      version: 8 as const,
+      sources,
+      layers: this.getLayersFromSources(sources),
+    }
+  })
+  fullStyle = computed<StyleSpecification>(() => {
+    const defaultStyle = this.defaultStyle()
+    const basemapAtStyle = this.basemapAtStyle()
+    if (!defaultStyle.layers.length || !basemapAtStyle.layers.length) {
+      return {
+        version: 8 as const,
+        sources: {},
+        layers: [],
+      }
+    }
+    return {
+      ...defaultStyle,
+      sources: {
+        ...defaultStyle.sources,
+        ...basemapAtStyle.sources,
+      },
+      layers: [...defaultStyle.layers, ...basemapAtStyle.layers],
+    }
+  })
+
   private get tileServer() {
     return `${this.mainStore.api().url_map_server}/tiles`
   }
@@ -60,21 +135,7 @@ export class MapService {
     center?: [number, number]
     zoom?: number
   }) {
-    return new Map({
-      ...options,
-      transformRequest: (url) => {
-        // The Basemap vector style uses relative URLs, which are not supported by Mabox standard
-        if (url.startsWith("tile")) {
-          return {
-            // from https://github.com/trafficon/basemap-at-maplibre/blob/40e36cda1f55e03d8698d5d658037cc2a15c3484/basemapv-bmapv-3857.json#L8
-            url: `https://mapsneu.wien.gv.at/basemapv/bmapv/3857/${url}`,
-          }
-        }
-        return {
-          url,
-        }
-      },
-    })
+    return new Map(options)
   }
 
   switchBasemap(map: Map, layerId: string) {
@@ -83,25 +144,15 @@ export class MapService {
     }
     map.setLayoutProperty(EBasemapType.BMAPGRAU, "visibility", "none")
     const currentLayer = map.getLayer(layerId)
-    if (currentLayer) {
-      for (const layer of Object.values(BASEMAP_STYLE.layers)) {
+    const basemapAtStyle = this.basemapAtStyle()
+    if (currentLayer && basemapAtStyle) {
+      for (const layer of Object.values(basemapAtStyle.layers)) {
         if (layer.id !== layerId) {
           map.setLayoutProperty(layer.id, "visibility", "none")
         }
       }
       map.setLayoutProperty(layerId, "visibility", "visible")
     }
-  }
-
-  getAllBasemapAtStyles() {
-    return of({
-      ...DEFAULT_STYLE,
-      sources: {
-        ...DEFAULT_STYLE.sources,
-        ...BASEMAP_STYLE.sources,
-      },
-      layers: [...DEFAULT_STYLE.layers, ...BASEMAP_STYLE.layers],
-    })
   }
 
   getFilters() {
@@ -133,6 +184,18 @@ export class MapService {
 
   getShapeSource(options: MapSourceOptions) {
     return this.getSource("/shapes/{z}/{x}/{y}.png", options)
+  }
+
+  private getTilesByType(type: EBasemapType) {
+    return this.mainStore.api().url_web_basemap_tiles?.replace("{type}", type)
+  }
+
+  private getLayersFromSources(sources: { [key: string]: any }) {
+    return Object.keys(sources).map((key) => ({
+      id: key,
+      type: "raster" as const,
+      source: key,
+    }))
   }
 
   private getSource(path: string, options: MapSourceOptions) {

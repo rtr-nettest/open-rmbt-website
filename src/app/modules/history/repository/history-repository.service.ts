@@ -104,7 +104,7 @@ export class HistoryRepositoryService {
   getCoverages(lon: number, lat: number) {
     return this.http.get<ICoverageResponse>(
       `${
-        this.mainStore.api().url_statistic_server
+        this.mainStore.api().url_web_statistic_server
       }/coverage?long=${lon}&lat=${lat}`
     )
   }

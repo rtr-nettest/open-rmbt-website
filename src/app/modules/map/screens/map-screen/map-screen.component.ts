@@ -16,7 +16,6 @@ import {
   FiltersComponent,
   FilterSheetData,
 } from "../../components/filters/filters.component"
-import { I18nStore } from "../../../i18n/store/i18n.store"
 import { IMapInfo } from "../../interfaces/map-info.interface"
 import { HeatmapLegendComponent } from "../../components/heatmap-legend/heatmap-legend.component"
 import { SearchComponent } from "../../components/search/search.component"
@@ -29,6 +28,7 @@ import { ETileTypes } from "../../constants/tile-type.enum"
 import { BasemapPickerComponent } from "../../components/basemap-picker/basemap-picker.component"
 import { MapStoreService } from "../../store/map-store.service"
 import { toObservable } from "@angular/core/rxjs-interop"
+import { MessageService } from "../../../shared/services/message.service"
 
 export const POINTS_HEATMAP_SWITCH_LEVEL = 12
 
@@ -66,6 +66,7 @@ export class MapScreenComponent extends SeoComponent {
       })
     )
     .subscribe()
+  messageService = inject(MessageService)
   resizeSub!: Subscription
   text$: Observable<string> = this.i18nStore.getLocalizedHtml("map").pipe(
     tap(() => {
@@ -102,7 +103,11 @@ export class MapScreenComponent extends SeoComponent {
   }
 
   private async setMap() {
-    const style = await firstValueFrom(this.mapService.getAllBasemapAtStyles())
+    const style = this.mapService.fullStyle()
+    if (!style.layers.length) {
+      this.messageService.openSnackbar("Could not load the map style")
+      return
+    }
     this.zone.runOutsideAngular(async () => {
       this.map = this.mapService.createMap({
         container: this.mapId,
@@ -141,6 +146,9 @@ export class MapScreenComponent extends SeoComponent {
         this.map.on("zoom", () => {
           this.setTilesVisibility()
         })
+        this.map.on("styledata", () => {
+          this.setTilesVisibility()
+        })
         this.setTilesVisibility()
       })
     })
@@ -175,8 +183,9 @@ export class MapScreenComponent extends SeoComponent {
 
   private setTilesVisibility() {
     if (
-      !this.mapSourceOptions?.tiles ||
-      this.mapSourceOptions?.tiles === ETileTypes.automatic
+      (!this.mapSourceOptions?.tiles ||
+        this.mapSourceOptions?.tiles === ETileTypes.automatic) &&
+      this.activeLayers.length === 2
     ) {
       if (this.map.getZoom() < POINTS_HEATMAP_SWITCH_LEVEL) {
         // Points

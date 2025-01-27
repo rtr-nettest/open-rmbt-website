@@ -20,7 +20,10 @@ export class IpService {
     return this.getIp(this.mainStore.api().url_ipv6_check)
   }
 
-  private async getIp(url: string): Promise<IpResponse | null> {
+  private async getIp(url?: string): Promise<IpResponse | null> {
+    if (!url) {
+      return null
+    }
     try {
       return (
         await fetch(url, {
