@@ -1,7 +1,6 @@
 @import "core";
 
 .app-main {
-  align-items: center;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -17,7 +16,6 @@
 
   .app-progress-bar-wrapper {
     flex: 0 0 calc(55% - 10rem);
-    margin: rem(80) 0;
     width: rem(235);
   }
 
