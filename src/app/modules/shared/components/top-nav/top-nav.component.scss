@@ -112,6 +112,7 @@
 }
 
 .app-dropdown {
+  transform: scaleY(0);
   @include screen-xs {
     display: none;
   }
