@@ -132,6 +132,10 @@ export class ResultScreenComponent extends SeoComponent {
     return this.i18nStore.activeLang
   }
 
+  get canStartTest() {
+    return this.title === "History"
+  }
+
   private get defaultInitialDetails() {
     return {
       content: [],

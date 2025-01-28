@@ -12,6 +12,7 @@
 /certified-test
 /certified-result
 /opentests
+/opentest
 /options
 /result
 /terms-and-conditions
@@ -29,6 +30,7 @@
 /de/certified-test
 /de/certified-result
 /de/opentests
+/de/opentest
 /de/options
 /de/result
 /de/terms-and-conditions
@@ -46,6 +48,7 @@
 /en/certified-test
 /en/certified-result
 /en/opentests
+/en/opentest
 /en/options
 /en/result
 /en/terms-and-conditions

@@ -2,9 +2,9 @@
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
 <app-scroll-top></app-scroll-top>
-@if (result$ | async; as result) {
 <div class="app-wrapper">
-  <h1>{{ "History" | translate }}</h1>
+  <h1>{{ title | translate }}</h1>
+  @if (result$ | async; as result) {
   <div class="app-header">
     <h2 *ngIf="result.measurementDate" aria-live="polite">
       {{ "Measurement result from" | translate }}
@@ -13,6 +13,7 @@
     <h2 *ngIf="!result.measurementDate" aria-live="polite">
       {{ "Measurement result" | translate }}
     </h2>
+    @if (canStartTest) {
     <a
       [routerLink]="'/' + activeLang + '/' + routes.TEST"
       class="app-button"
@@ -20,6 +21,7 @@
     >
       {{ "Run test again" | translate }}
     </a>
+    }
   </div>
   <div *ngIf="basicResults() as basicResults" class="app-container">
     <app-table
@@ -107,17 +109,12 @@
       <app-share-result [result]="result"></app-share-result>
     </div>
   </ng-container>
-</div>
-} @else {
-<div class="app-wrapper">
-  <h1>{{ "History" | translate }}</h1>
-  @if (loading()) {
+  } @else if (loading()) {
   <h3>{{ "Loading results" | translate }}</h3>
   } @else {
   <h3>{{ "No results available" | translate }}</h3>
   }
 </div>
-}
 <app-footer></app-footer>
 
 <ng-template #noResult>

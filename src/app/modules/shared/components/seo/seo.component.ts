@@ -15,6 +15,7 @@ export class SeoComponent implements OnDestroy {
   destroyed$: Subject<void> = new Subject()
   titleSub!: Subscription
   @Input() set title(t: string) {
+    this._title = t
     this.titleSub = this.i18nStore
       .getTranslations()
       .pipe(
@@ -28,6 +29,11 @@ export class SeoComponent implements OnDestroy {
         })
       )
       .subscribe()
+  }
+  private _title!: string
+
+  get title() {
+    return this._title
   }
 
   constructor(

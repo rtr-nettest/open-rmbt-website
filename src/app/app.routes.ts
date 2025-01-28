@@ -35,7 +35,6 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.TERMS,
-        pathMatch: "full",
         component: TermsConditionsScreenComponent,
         resolve: [localeResolver],
         data: {
@@ -44,7 +43,6 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.TEST,
-        pathMatch: "full",
         component: TestScreenComponent,
         resolve: [localeResolver],
         data: {
@@ -53,7 +51,6 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.MAP,
-        pathMatch: "full",
         component: MapScreenComponent,
         resolve: [localeResolver],
         data: {
@@ -62,7 +59,6 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.STATISTICS,
-        pathMatch: "full",
         component: StatisticsScreenComponent,
         resolve: [localeResolver],
         data: {
@@ -71,7 +67,6 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.RESULT,
-        pathMatch: "full",
         component: ResultScreenComponent,
         resolve: [localeResolver],
         data: {
@@ -80,7 +75,6 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.HISTORY,
-        pathMatch: "full",
         component: HistoryScreenComponent,
         resolve: [localeResolver],
         data: {
@@ -89,7 +83,6 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.CERTIFIED,
-        pathMatch: "full",
         component: Step1Component,
         resolve: [localeResolver],
         data: {
@@ -98,7 +91,6 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.CERTIFIED_2,
-        pathMatch: "full",
         component: Step2Component,
         resolve: [localeResolver],
         data: {
@@ -106,8 +98,15 @@ export const routes: Routes = [
         },
       },
       {
+        path: ERoutes.OPEN_RESULT,
+        component: ResultScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "opentest",
+        },
+      },
+      {
         path: ERoutes.CERTIFIED_3,
-        pathMatch: "full",
         component: Step3Component,
         resolve: [localeResolver],
         data: {

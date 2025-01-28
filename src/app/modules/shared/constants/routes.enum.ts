@@ -13,6 +13,7 @@ export enum ERoutes {
   CERTIFIED_TEST = "certified-test",
   CERTIFIED_RESULT = "certified-result",
   OPEN_DATA = "opentests",
+  OPEN_RESULT = "opentest",
   OPTIONS = "options",
   RESULT = "result",
   TERMS = "terms-and-conditions",

@@ -176,7 +176,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   }
 
   goToResult(result: IRecentMeasurement) {
-    this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
+    this.router.navigate([this.i18nStore.activeLang, ERoutes.OPEN_RESULT], {
       queryParams: {
         open_test_uuid: result.open_test_uuid,
       },
