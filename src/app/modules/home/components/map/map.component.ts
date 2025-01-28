@@ -107,19 +107,22 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
       if (this.measurements?.results?.length) {
         this.cachedMarkers.forEach((m) => m.remove())
         const features: [number, number][] = []
-        this.cachedMarkers = this.measurements.results.reverse().map((m, i) => {
-          const coordinates: [number, number] = [m.long, m.lat]
-          features.push(coordinates)
-          return this.mapService.addMarker(this.map, {
-            lon: m.long,
-            lat: m.lat,
-            diameter: i == this.measurements!.results.length - 1 ? 24 : 18,
-            classification: m.download_classification,
-            onClick: () => {
-              this.popup.addPopup(this.map, m)
-            },
+        this.cachedMarkers = this.measurements.results
+          .reverse()
+          .filter((m) => m.lat && m.long)
+          .map((m, i) => {
+            const coordinates: [number, number] = [m.long, m.lat]
+            features.push(coordinates)
+            return this.mapService.addMarker(this.map, {
+              lon: m.long,
+              lat: m.lat,
+              diameter: i == this.measurements!.results.length - 1 ? 24 : 18,
+              classification: m.download_classification,
+              onClick: () => {
+                this.popup.addPopup(this.map, m)
+              },
+            })
           })
-        })
         const line = lineString(features)
         const box = bbox(line) as [number, number, number, number]
         this.map.fitBounds(box, {

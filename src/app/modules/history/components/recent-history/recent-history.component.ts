@@ -161,9 +161,7 @@ export class RecentHistoryComponent implements OnChanges {
       const locale = this.i18nStore.activeLang
       const measurementDate = this.datePipe.transform(
         hi.measurementDate,
-        "medium",
-        undefined,
-        locale
+        "dd.MM.YYYY, HH:mm:ss"
       )!
       if (hi.groupHeader) {
         return {
