@@ -132,10 +132,18 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
 
   protected goToResult = (state: ITestVisualizationState) => {
     this.stopped$.next()
+    // To not re-trigger the test on back navigation
+    if (globalThis.location) {
+      globalThis.history.replaceState(
+        null,
+        "",
+        `/${this.i18nStore.activeLang}/${ERoutes.HOME}`
+      )
+    }
+    // Go to the result page
     this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
       queryParams: {
         test_uuid: "T" + state.phases[state.currentPhaseName].testUuid,
-        open_test_uuid: state.phases[state.currentPhaseName].openTestUuid,
       },
     })
   }

@@ -129,7 +129,7 @@ export class RecentHistoryComponent implements OnChanges {
         this.testService.abortMeasurement()
         this.testService.disableLoopMode()
         this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
-          queryParams: { test_uuid: row.id, open_test_uuid: row.openUuid },
+          queryParams: { test_uuid: row.id },
         })
       }
       if (this.interruptsTests) {

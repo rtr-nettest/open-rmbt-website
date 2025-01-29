@@ -12,6 +12,7 @@ import { I18nStore } from "../../../i18n/store/i18n.store"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { HistoryExportService } from "../../services/history-export.service"
 import { MainStore } from "../../../shared/store/main.store"
+import { ERoutes } from "../../../shared/constants/routes.enum"
 
 @Component({
   selector: "app-share-result",
@@ -33,31 +34,6 @@ export class ShareResultComponent {
   bannerHtml = signal<string>("")
   bannerBBCode = signal<string>("")
   pdfButtonDisabled = signal<boolean>(false)
-  get socialMedia() {
-    if (!globalThis.document) {
-      return []
-    }
-    return [
-      {
-        icon: "twitter",
-        url: `https://twitter.com/intent/tweet?text=RTR-NetTest&url=${document.URL}`,
-        label: "Twitter",
-        title: "Share on Twitter",
-      },
-      {
-        icon: "facebook",
-        url: `https://www.facebook.com/sharer/sharer.php?u=${document.URL}`,
-        label: "Facebook",
-        title: "Share on Facebook",
-      },
-      {
-        icon: "whatsapp",
-        url: `whatsapp://send?text=RTR-NetTest%20${document.URL}`,
-        label: "WhatsApp",
-        title: "Share via WhatsApp",
-      },
-    ]
-  }
 
   constructor(
     private readonly i18nStore: I18nStore,
@@ -74,9 +50,13 @@ export class ShareResultComponent {
       this.i18nStore.activeLang
     }`
     const img = `${base}/${openTestUUID}/forumsmall.png`
+    const url = `${document.URL.split("?")[0].replace(
+      ERoutes.RESULT,
+      ERoutes.OPEN_RESULT
+    )}?open_test_uuid=${openTestUUID}`
     this.forumBanner.set(img)
-    this.bannerHtml.set(`<a href="${document.URL}"><img src="${img}"/></a>`)
-    this.bannerBBCode.set(`[url=${document.URL}][img]${img}[/img][/url]`)
+    this.bannerHtml.set(`<a href="${url}"><img src="${img}"/></a>`)
+    this.bannerBBCode.set(`[url=${url}][img]${img}[/img][/url]`)
   }
 
   getPdf() {

@@ -1,29 +1,8 @@
-<div class="app-container" style="margin-bottom: 20px">
-  @for (item of socialMedia; track $index) {
-  <a
-    mat-stroked-button
-    class="app-button app-button--outlined app-button--{{ item.icon }}"
-    [href]="item.url"
-    target="_blank"
-    rel="nofollow"
-    role="button"
-    [title]="item.title | translate"
-    [attr.aria-label]="item.title | translate"
-  >
-    <i class="fa-brands fa-{{ item.icon }}"> </i>
-    {{ item.label | translate }}
-  </a>
-  }
-  <button
-    mat-stroked-button
-    class="app-button app-button--outlined"
-    (click)="print()"
-  >
+<div class="app-container">
+  <button mat-flat-button class="app-button" (click)="print()">
     <i class="fa-solid fa-print"> </i>
     {{ "print" | translate }}
   </button>
-</div>
-<div class="app-container">
   <button mat-flat-button class="app-button" (click)="getForumBanner()">
     {{ "Get forum banner" | translate }}
   </button>

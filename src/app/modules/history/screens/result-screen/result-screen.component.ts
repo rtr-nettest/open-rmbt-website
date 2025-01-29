@@ -7,7 +7,7 @@ import { TableComponent } from "../../../tables/components/table/table.component
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { AsyncPipe, DatePipe, NgIf } from "@angular/common"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
-import { Observable, switchMap, tap } from "rxjs"
+import { Observable, of, switchMap, tap } from "rxjs"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { IDetailedHistoryResultItem } from "../../interfaces/detailed-history-result-item.interface"
@@ -48,7 +48,10 @@ import {
 import { HistoryStore } from "../../store/history.store"
 import { HistoryExportService } from "../../services/history-export.service"
 import { SimpleHistoryResult } from "../../dto/simple-history-result.dto"
-import { IPing } from "../../interfaces/measurement-result.interface"
+import {
+  IPing,
+  ITestResultRequest,
+} from "../../interfaces/measurement-result.interface"
 import { HistoryService } from "../../services/history.service"
 
 const MIN_ACCURACY_FOR_SHOWING_MAP = 2000
@@ -157,15 +160,30 @@ export class ResultScreenComponent extends SeoComponent {
   ) {
     super(title, i18nStore)
     this.result$ = this.i18nStore.getTranslations().pipe(
-      switchMap(() =>
-        this.service.getMeasurementResult({
+      switchMap(() => {
+        const params = {
           openTestUuid: this.route.snapshot.queryParamMap.get("open_test_uuid"),
           testUuid:
             this.route.snapshot.queryParamMap
               .get("test_uuid")
               ?.replace("T", "") ?? null,
-        })
-      ),
+        } as ITestResultRequest
+        if (!this.canStartTest) {
+          // We're on the open details result page
+          if (params.testUuid) {
+            // Don't allow to get open test result if testUuid is present
+            return of(null)
+          }
+          return this.service.getOpenResult(params)
+        } else {
+          // We're on the history result page
+          if (params.openTestUuid) {
+            // Don't allow to get history test result if openTestUuid is present
+            return of(null)
+          }
+          return this.service.getPrivateResult(params)
+        }
+      }),
       tap((result) => {
         if (result) {
           this.basicResults.set(this.getBasicResults(result))

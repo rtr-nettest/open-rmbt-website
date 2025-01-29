@@ -5,7 +5,9 @@ import {
   forkJoin,
   from,
   map,
+  Observable,
   of,
+  switchMap,
   take,
   tap,
 } from "rxjs"
@@ -35,19 +37,37 @@ export class HistoryService {
     private repo: HistoryRepositoryService,
     private testStore: TestStore,
     private i18nStore: I18nStore,
-    private router: Router,
     private mainStore: MainStore
   ) {}
 
-  getMeasurementResult(params: ITestResultRequest) {
+  getOpenResult(params: ITestResultRequest) {
+    return this.getMeasurementResult(
+      params,
+      forkJoin([of(null), this.repo.getOpenResult(params)])
+    )
+  }
+
+  getPrivateResult(params: ITestResultRequest) {
+    return this.getMeasurementResult(
+      params,
+      from(this.repo.getResult(params)).pipe(
+        switchMap((response) => {
+          params.openTestUuid = response.open_test_uuid
+          return forkJoin([of(response), this.repo.getOpenResult(params)])
+        })
+      )
+    )
+  }
+
+  private getMeasurementResult(
+    params: ITestResultRequest,
+    observable: Observable<[any, any]>
+  ) {
     if (!params || this.mainStore.error$.value) {
       return of(null)
     }
-    return forkJoin([
-      from(this.repo.getOpenResult(params)),
-      from(this.repo.getResult(params)),
-    ]).pipe(
-      map(([openTestsResponse, response]) => {
+    return observable.pipe(
+      map(([response, openTestsResponse]) => {
         const historyResult = SimpleHistoryResult.fromOpenTestResponse(
           params.testUuid!,
           response,
@@ -99,7 +119,7 @@ export class HistoryService {
         return historyResult
       }),
       catchError((e) => {
-        console.log(e)
+        console.warn(e)
         return of(null)
       })
     )
