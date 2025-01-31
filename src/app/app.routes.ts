@@ -82,7 +82,7 @@ export const routes: Routes = [
         },
       },
       {
-        path: ERoutes.CERTIFIED,
+        path: ERoutes.CERTIFIED_1,
         component: Step1Component,
         resolve: [localeResolver],
         data: {

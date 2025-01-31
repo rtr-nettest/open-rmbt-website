@@ -24,19 +24,17 @@ import { IMeasurementPhaseState } from "../interfaces/measurement-phase-state.in
 import { IBasicNetworkInfo } from "../interfaces/basic-network-info.interface"
 import { EMeasurementStatus } from "../constants/measurement-status.enum"
 import { IOverallResult } from "../../history/interfaces/overall-result.interface"
-import { v4 } from "uuid"
 import { TestStore } from "../store/test.store"
 import { ITestVisualizationState } from "../interfaces/test-visualization-state.interface"
 import { TestVisualizationState } from "../dto/test-visualization-state.dto"
-import { ILoopModeInfo } from "../interfaces/measurement-registration-request.interface"
 import { Router } from "@angular/router"
-import { ERoutes } from "../../shared/constants/routes.enum"
 import { BasicNetworkInfo } from "../dto/basic-network-info.dto"
 import { UUID } from "../constants/strings"
 import { STATE_UPDATE_TIMEOUT } from "../constants/numbers"
 import { MainStore } from "../../shared/store/main.store"
 import { HistoryStore } from "../../history/store/history.store"
 import { SettingsService } from "../../shared/services/settings.service"
+import { LoopStoreService } from "../../loop/store/loop-store.service"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -60,6 +58,7 @@ export class TestService {
 
   constructor(
     private readonly historyStore: HistoryStore,
+    private readonly loopStore: LoopStoreService,
     private readonly mainStore: MainStore,
     private readonly ngZone: NgZone,
     private readonly settingsService: SettingsService,
@@ -78,45 +77,53 @@ export class TestService {
     }
   }
 
-  launchTest() {
+  launchTests() {
     this.resetState()
     if (!isPlatformBrowser(this.platformId) || !this.rmbtws) {
       console.error("RMBTws not loaded")
       return of(null)
     }
-    if (!this.testStore.enableLoopMode$.value) {
-      this.ngZone.runOutsideAngular(() => {
-        this.rmbtws.TestEnvironment.init(this, null)
-        const config = new this.rmbtws.RMBTTestConfig(
-          "en",
-          environment.api.baseUrl,
-          `RMBTControlServer`
-        )
-        config.uuid = localStorage.getItem(UUID)
-        config.timezone = dayjs.tz.guess()
-        const ctrl = new this.rmbtws.RMBTControlServerCommunication(config)
-
-        this.startTimeMs = Date.now()
-        this.rmbtTest = new this.rmbtws.RMBTTest(config, ctrl)
-        this.rmbtTest.startTest()
-        this.rmbtTest.onStateChange(() => {
-          this.stateChangeMs = Date.now()
-        })
-        this.rmbtTest.onError((error: any) => {
-          this.ngZone.run(() => {
-            this.mainStore.error$.next(error)
-          })
-        })
-        // To not trigger console errors
-        this.rmbtTest._registrationCallback = () => {}
-        this.rmbtTest._submissionCallback = () => {}
-      })
-    }
+    this.ngZone.runOutsideAngular(() => {
+      this.rmbtws.TestEnvironment.init(this, null)
+      const config = new this.rmbtws.RMBTTestConfig(
+        "en",
+        environment.api.baseUrl,
+        `RMBTControlServer`
+      )
+      config.uuid = localStorage.getItem(UUID)
+      config.timezone = dayjs.tz.guess()
+      this.testStore.config.set(config)
+      this.testStore.communication.set(
+        new this.rmbtws.RMBTControlServerCommunication(config)
+      )
+      this.triggerNextTest()
+    })
     return interval(STATE_UPDATE_TIMEOUT).pipe(
       concatMap(() => from(this.getMeasurementState())),
       withLatestFrom(this.testStore.visualization$),
       map(([state, vis]) => this.setTestState(state, vis))
     )
+  }
+
+  triggerNextTest() {
+    this.rmbtTest = new this.rmbtws.RMBTTest(
+      this.testStore.config,
+      this.testStore.communication
+    )
+    // To not trigger console errors
+    this.rmbtTest._registrationCallback = () => {}
+    this.rmbtTest._submissionCallback = () => {}
+    //
+    this.startTimeMs = Date.now()
+    this.rmbtTest.startTest()
+    this.rmbtTest.onStateChange(() => {
+      this.stateChangeMs = Date.now()
+    })
+    this.rmbtTest.onError((error: any) => {
+      this.ngZone.run(() => {
+        this.mainStore.error$.next(error)
+      })
+    })
   }
 
   private setTestState = (
@@ -138,52 +145,6 @@ export class TestService {
     this.testStore.visualization$.next(newState)
     this.testStore.basicNetworkInfo$.next(phaseState)
     return newState
-  }
-
-  launchCertifiedTest() {
-    const loopUuid = v4()
-    const loopCounter = 1
-    this.testStore.loopUuid$.next(loopUuid)
-    this.testStore.loopCounter$.next(loopCounter)
-    this.testStore.enableLoopMode$.next(true)
-    this.testStore.isCertifiedMeasurement$.next(true)
-    this.testStore.testIntervalMinutes$.next(
-      environment.certifiedTests.interval
-    )
-    const loopModeInfo: ILoopModeInfo | undefined = {
-      max_delay: this.testStore.testIntervalMinutes$.value ?? 0,
-      max_tests: environment.certifiedTests.count,
-      test_counter: loopCounter,
-      loop_uuid: loopUuid,
-    }
-    // TODO: Certified measurements
-    // window.electronAPI.onMaxTestsReached(() => this.maxTestsReached$.next(true))
-    // window.electronAPI.scheduleLoop(this.fullTestIntervalMs, loopModeInfo)
-    return loopModeInfo
-  }
-
-  launchLoopTest(interval: number) {
-    const loopUuid = v4()
-    const loopCounter = 1
-    this.testStore.loopUuid$.next(loopUuid)
-    this.testStore.loopCounter$.next(loopCounter)
-    this.testStore.enableLoopMode$.next(true)
-    this.testStore.testIntervalMinutes$.next(interval)
-    const loopModeInfo: ILoopModeInfo | undefined = {
-      max_delay: this.testStore.testIntervalMinutes$.value ?? 0,
-      test_counter: loopCounter,
-      loop_uuid: loopUuid,
-    }
-    // TODO: Loop mode
-    // window.electronAPI.scheduleLoop(this.fullTestIntervalMs, loopModeInfo)
-    this.router.navigate(["/", ERoutes.LOOP])
-  }
-
-  disableLoopMode() {
-    this.testStore.enableLoopMode$.next(false)
-    this.testStore.isCertifiedMeasurement$.next(false)
-    this.testStore.maxTestsReached$.next(false)
-    this.testStore.loopCounter$.next(1)
   }
 
   private resetState() {

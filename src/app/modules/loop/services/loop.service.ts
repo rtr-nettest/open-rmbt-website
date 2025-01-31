@@ -1,0 +1,78 @@
+import { Injectable } from "@angular/core"
+import { v4 } from "uuid"
+import { LoopStoreService } from "../store/loop-store.service"
+import { Router } from "@angular/router"
+import { ERoutes } from "../../shared/constants/routes.enum"
+import { I18nStore } from "../../i18n/store/i18n.store"
+import { MessageService } from "../../shared/services/message.service"
+import { ELoopEventType } from "../constants/loop-event.enum"
+
+@Injectable({
+  providedIn: "root",
+})
+export class LoopService {
+  worker!: Worker
+
+  constructor(
+    private readonly i18nStore: I18nStore,
+    private readonly loopStore: LoopStoreService,
+    private readonly messageService: MessageService,
+    private readonly router: Router
+  ) {}
+
+  launchLoopTest(intervalMinutes: number, isCertifiedMeasurement: boolean) {
+    this.loopStore.loopUuid.set(v4())
+    this.loopStore.loopCounter.set(1)
+    this.loopStore.enableLoopMode.set(true)
+    this.loopStore.testIntervalMinutes.set(intervalMinutes)
+    this.loopStore.isCertifiedMeasurement.set(isCertifiedMeasurement)
+    this.router.navigate([this.i18nStore.activeLang, ERoutes.LOOP])
+  }
+
+  disableLoopMode() {
+    this.loopStore.enableLoopMode.set(false)
+    this.loopStore.isCertifiedMeasurement.set(false)
+    this.loopStore.maxTestsReached.set(false)
+    this.loopStore.loopCounter.set(1)
+  }
+
+  scheduleLoop() {
+    console.log("Scheduling loop test")
+    if (typeof Worker !== "undefined") {
+      this.worker = new Worker(
+        new URL("../web-workers/loop.worker.ts", import.meta.url)
+      )
+      this.worker.postMessage({
+        type: ELoopEventType.SCHEDULE_LOOP,
+        payload: {
+          intervalMs: this.loopStore.testIntervalMinutes(),
+        },
+      })
+      this.worker.onmessage = (message) => {
+        const type = message.data as ELoopEventType
+        switch (type) {
+          case ELoopEventType.LOOP_SCHEDULED:
+            this.messageService.openSnackbar("Loop test scheduled.")
+            break
+          case ELoopEventType.LOOP_CANCELLED:
+            this.messageService.openSnackbar("Loop test cancelled.")
+            this.disableLoopMode()
+            break
+          case ELoopEventType.TRIGGER_NEXT_TEST:
+            this.loopStore.loopCounter.set(this.loopStore.loopCounter() + 1)
+            break
+        }
+      }
+    } else {
+      this.messageService.openSnackbar(
+        "Web Workers are not supported in this browser"
+      )
+    }
+  }
+
+  cancelLoop() {
+    this.worker.postMessage({
+      type: ELoopEventType.CANCEL_LOOP,
+    })
+  }
+}

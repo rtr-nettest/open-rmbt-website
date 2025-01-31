@@ -24,11 +24,12 @@ import {
   ICertifiedDataForm,
   ICertifiedDataFormControls,
 } from "../../interfaces/certified-data-form.interface"
-import { TestStore } from "../../../test/store/test.store"
 import { map, takeUntil } from "rxjs"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input"
 import { MatRadioModule } from "@angular/material/radio"
+import { LoopService } from "../../../loop/services/loop.service"
+import { environment } from "../../../../../environments/environment"
 
 @Component({
   selector: "app-step-2",
@@ -64,16 +65,16 @@ export class Step2Component extends SeoComponent implements OnInit {
     ts: Title,
     i18nStore: I18nStore,
     private readonly fb: FormBuilder,
+    private readonly loopService: LoopService,
     private readonly router: Router,
-    private readonly store: CertifiedStoreService,
-    private readonly testStore: TestStore
+    private readonly store: CertifiedStoreService
   ) {
     super(ts, i18nStore)
   }
 
   ngOnInit(): void {
     this.store.activeBreadcrumbIndex.set(ESteps.DATA)
-    const savedForm = this.testStore.certifiedDataForm$.value
+    const savedForm = this.store.dataForm()
     this.form = this.fb.group({
       titlePrepend: new FormControl(savedForm?.titlePrepend || ""),
       firstName: new FormControl(savedForm?.firstName || "", {
@@ -114,7 +115,7 @@ export class Step2Component extends SeoComponent implements OnInit {
 
   onTestStart() {
     this.store.activeBreadcrumbIndex.set(ESteps.MEASUREMENT)
-    this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_TEST])
+    this.loopService.launchLoopTest(environment.certifiedTests.interval, true)
   }
 
   private onFormChange(value: ICertifiedDataForm | null) {
@@ -129,6 +130,6 @@ export class Step2Component extends SeoComponent implements OnInit {
       this.store.isDataFormValid.set(false)
       this.store.isReady.set(false)
     }
-    this.testStore.certifiedDataForm$.next(value)
+    this.store.dataForm.set(value)
   }
 }

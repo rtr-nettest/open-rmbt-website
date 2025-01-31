@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from "@angular/core"
+import { Component, inject, NgZone, OnInit } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Router } from "@angular/router"
 import {
@@ -36,26 +36,30 @@ import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/bre
 import { MainStore } from "../../../shared/store/main.store"
 import { HistoryService } from "../../../history/services/history.service"
 import { RecentHistoryComponent } from "../../../history/components/recent-history/recent-history.component"
+import { LoopStoreService } from "../../../loop/store/loop-store.service"
+import { toObservable } from "@angular/core/rxjs-interop"
+
+export const imports = [
+  AsyncPipe,
+  BreadcrumbsComponent,
+  DatePipe,
+  HeaderComponent,
+  FooterComponent,
+  GaugeComponent,
+  InterimResultsComponent,
+  MatProgressBarModule,
+  NgIf,
+  RecentHistoryComponent,
+  TopNavComponent,
+  TranslatePipe,
+  SpacerComponent,
+  BreadcrumbsComponent,
+]
 
 @Component({
   selector: "app-test-screen",
   standalone: true,
-  imports: [
-    AsyncPipe,
-    BreadcrumbsComponent,
-    DatePipe,
-    HeaderComponent,
-    FooterComponent,
-    GaugeComponent,
-    InterimResultsComponent,
-    MatProgressBarModule,
-    NgIf,
-    RecentHistoryComponent,
-    TopNavComponent,
-    TranslatePipe,
-    SpacerComponent,
-    BreadcrumbsComponent,
-  ],
+  imports,
   templateUrl: "./test-screen.component.html",
   styleUrl: "./test-screen.component.scss",
 })
@@ -64,16 +68,18 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   router = inject(Router)
   mainStore = inject(MainStore)
   message = inject(MessageService)
+  ngZone = inject(NgZone)
   service = inject(TestService)
   store = inject(TestStore)
-  enableLoopMode$ = this.store.enableLoopMode$
-  loopCount$ = this.store.loopCounter$
+  loopStore = inject(LoopStoreService)
+  enableLoopMode$ = toObservable(this.loopStore.enableLoopMode)
+  loopCount$ = toObservable(this.loopStore.loopCounter)
   stopped$: Subject<void> = new Subject()
   visualization$!: Observable<ITestVisualizationState>
   loopWaiting$ = new BehaviorSubject(false)
   result$ = this.historyService.getHistoryGroupedByLoop({
     grouped: false,
-    loopUuid: this.store.loopUuid$.value ?? undefined,
+    loopUuid: this.loopStore.loopUuid() ?? undefined,
   })
   ms$ = new BehaviorSubject(0)
   progress$ = new BehaviorSubject(0)
@@ -96,23 +102,32 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
             this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS])
             return of(null)
           }
-          this.visualization$ = this.store.visualization$.pipe(
-            withLatestFrom(this.mainStore.error$, this.loopCount$),
-            distinctUntilChanged(),
-            map(([state, error]) => {
-              if (error) {
-                this.openErrorDialog(state)
-              } else if (state.currentPhaseName === EMeasurementStatus.END) {
-                this.goToResult(state)
-              }
-              return state
-            })
-          )
-          return this.service.launchTest()
+          this.initVisualization()
+          return this.service.launchTests()
         }),
         takeUntil(this.stopped$)
       )
       .subscribe()
+  }
+
+  protected abortTest() {
+    this.stopped$.next()
+    this.router.navigate([this.i18nStore.activeLang, ERoutes.HOME])
+  }
+
+  protected initVisualization() {
+    this.visualization$ = this.store.visualization$.pipe(
+      withLatestFrom(this.mainStore.error$, this.loopCount$),
+      distinctUntilChanged(),
+      map(([state, error]) => {
+        if (error) {
+          this.openErrorDialog(state)
+        } else if (state.currentPhaseName === EMeasurementStatus.END) {
+          this.goToResult(state)
+        }
+        return state
+      })
+    )
   }
 
   protected openErrorDialog(state: ITestVisualizationState) {
