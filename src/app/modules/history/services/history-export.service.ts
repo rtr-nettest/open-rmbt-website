@@ -10,6 +10,7 @@ import { MainStore } from "../../shared/store/main.store"
 import { TestStore } from "../../test/store/test.store"
 import { ECertifiedLocationType } from "../../certified/interfaces/certified-env-form.interface"
 import { ERROR_OCCURED } from "../../test/constants/strings"
+import { CertifiedStoreService } from "../../certified/store/certified-store.service"
 
 @Injectable({
   providedIn: "root",
@@ -29,10 +30,10 @@ export class HistoryExportService {
   }
 
   constructor(
+    private certifiedStore: CertifiedStoreService,
     private i18nStore: I18nStore,
     private mainStore: MainStore,
     private message: MessageService,
-    private testStore: TestStore,
     private http: HttpClient
   ) {}
 
@@ -123,8 +124,8 @@ export class HistoryExportService {
   }
 
   private getFormData(loopUuid: string) {
-    const dataForm = this.testStore.certifiedDataForm$.value
-    const envForm = this.testStore.certifiedEnvForm$.value
+    const dataForm = this.certifiedStore.dataForm()
+    const envForm = this.certifiedStore.envForm()
     const formData = new FormData()
     const textFields = {
       location_type_other: "locationTypeOther",

@@ -3,7 +3,7 @@
 <app-breadcrumbs></app-breadcrumbs>
 @defer { @if(visualization$ | async; as visualization) {
 
-<ng-container *ngIf="(enableLoopMode$ | async) === true">
+<ng-container *ngIf="(isLoopModeEnabled$ | async) === true">
   <ng-container *ngIf="loopCount$ | async as loopCount">
     <h1
       *ngIf="(loopWaiting$ | async) !== true"
@@ -30,13 +30,14 @@
   <app-spacer></app-spacer>
   <app-interim-results></app-interim-results>
 </div>
-<ng-container *ngIf="(enableLoopMode$ | async) === true">
+<ng-container *ngIf="(isLoopModeEnabled$ | async) === true">
   <app-recent-history
     *ngIf="result$ | async as result"
     class="app-padding"
     [result]="result"
     [excludeColumns]="['details']"
     [interruptsTests]="true"
+    [goBackLocation]="goBackLocation"
     title="Recent measurements"
   ></app-recent-history>
 </ng-container>

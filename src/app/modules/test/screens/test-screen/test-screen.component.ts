@@ -38,6 +38,7 @@ import { HistoryService } from "../../../history/services/history.service"
 import { RecentHistoryComponent } from "../../../history/components/recent-history/recent-history.component"
 import { LoopStoreService } from "../../../loop/store/loop-store.service"
 import { toObservable } from "@angular/core/rxjs-interop"
+import { setGoBackLocation } from "../../../shared/util/nav"
 
 export const imports = [
   AsyncPipe,
@@ -64,6 +65,7 @@ export const imports = [
   styleUrl: "./test-screen.component.scss",
 })
 export class TestScreenComponent extends SeoComponent implements OnInit {
+  goBackLocation = `/${this.i18nStore.activeLang}/${ERoutes.HOME}`
   historyService = inject(HistoryService)
   router = inject(Router)
   mainStore = inject(MainStore)
@@ -72,7 +74,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   service = inject(TestService)
   store = inject(TestStore)
   loopStore = inject(LoopStoreService)
-  enableLoopMode$ = toObservable(this.loopStore.enableLoopMode)
+  isLoopModeEnabled$ = toObservable(this.loopStore.isLoopModeEnabled)
   loopCount$ = toObservable(this.loopStore.loopCounter)
   stopped$: Subject<void> = new Subject()
   visualization$!: Observable<ITestVisualizationState>
@@ -112,6 +114,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
 
   protected abortTest() {
     this.stopped$.next()
+    this.service.abortMeasurement()
     this.router.navigate([this.i18nStore.activeLang, ERoutes.HOME])
   }
 
@@ -147,14 +150,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
 
   protected goToResult = (state: ITestVisualizationState) => {
     this.stopped$.next()
-    // To not re-trigger the test on back navigation
-    if (globalThis.location) {
-      globalThis.history.replaceState(
-        null,
-        "",
-        `/${this.i18nStore.activeLang}/${ERoutes.HOME}`
-      )
-    }
+    setGoBackLocation(this.goBackLocation)
     // Go to the result page
     this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
       queryParams: {

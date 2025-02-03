@@ -25,6 +25,8 @@ import { roundToSignificantDigits } from "../../../shared/util/math"
 import { ExpandArrowComponent } from "../../../shared/components/expand-arrow/expand-arrow.component"
 import { Router } from "@angular/router"
 import { ERoutes } from "../../../shared/constants/routes.enum"
+import { setGoBackLocation } from "../../../shared/util/nav"
+import { LoopService } from "../../../loop/services/loop.service"
 
 @Component({
   selector: "app-recent-history",
@@ -48,6 +50,7 @@ export class RecentHistoryComponent implements OnChanges {
       totalElements: result.totalElements,
     }
   }
+  @Input({ required: true }) goBackLocation!: string
   @Input() grouped?: boolean
   @Input() title?: string
   @Input() excludeColumns?: string[]
@@ -104,6 +107,7 @@ export class RecentHistoryComponent implements OnChanges {
     private classification: ClassificationService,
     private datePipe: DatePipe,
     private i18nStore: I18nStore,
+    private loopService: LoopService,
     private message: MessageService,
     private router: Router,
     private store: HistoryStore,
@@ -127,7 +131,8 @@ export class RecentHistoryComponent implements OnChanges {
     if (!row.id?.startsWith("L")) {
       const navFunc = () => {
         this.testService.abortMeasurement()
-        this.testService.disableLoopMode()
+        this.loopService.cancelLoop()
+        setGoBackLocation(this.goBackLocation)
         this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
           queryParams: { test_uuid: row.id },
         })

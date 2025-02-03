@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core"
-import { v4 } from "uuid"
 import { LoopStoreService } from "../store/loop-store.service"
 import { Router } from "@angular/router"
 import { ERoutes } from "../../shared/constants/routes.enum"
@@ -11,7 +10,7 @@ import { ELoopEventType } from "../constants/loop-event.enum"
   providedIn: "root",
 })
 export class LoopService {
-  worker!: Worker
+  worker?: Worker
 
   constructor(
     private readonly i18nStore: I18nStore,
@@ -21,19 +20,10 @@ export class LoopService {
   ) {}
 
   launchLoopTest(intervalMinutes: number, isCertifiedMeasurement: boolean) {
-    this.loopStore.loopUuid.set(v4())
-    this.loopStore.loopCounter.set(1)
-    this.loopStore.enableLoopMode.set(true)
+    this.loopStore.enableLoopMode()
     this.loopStore.testIntervalMinutes.set(intervalMinutes)
     this.loopStore.isCertifiedMeasurement.set(isCertifiedMeasurement)
     this.router.navigate([this.i18nStore.activeLang, ERoutes.LOOP])
-  }
-
-  disableLoopMode() {
-    this.loopStore.enableLoopMode.set(false)
-    this.loopStore.isCertifiedMeasurement.set(false)
-    this.loopStore.maxTestsReached.set(false)
-    this.loopStore.loopCounter.set(1)
   }
 
   scheduleLoop() {
@@ -56,7 +46,7 @@ export class LoopService {
             break
           case ELoopEventType.LOOP_CANCELLED:
             this.messageService.openSnackbar("Loop test cancelled.")
-            this.disableLoopMode()
+            this.loopStore.disableLoopMode()
             break
           case ELoopEventType.TRIGGER_NEXT_TEST:
             this.loopStore.loopCounter.set(this.loopStore.loopCounter() + 1)
@@ -71,7 +61,7 @@ export class LoopService {
   }
 
   cancelLoop() {
-    this.worker.postMessage({
+    this.worker?.postMessage({
       type: ELoopEventType.CANCEL_LOOP,
     })
   }

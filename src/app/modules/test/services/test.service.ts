@@ -242,7 +242,7 @@ export class TestService {
   }
 
   abortMeasurement() {
-    // TODO:
+    // TODO: cancel on WS side
   }
 
   /** RMBTws delegate */

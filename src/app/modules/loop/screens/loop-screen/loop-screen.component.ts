@@ -16,6 +16,7 @@ import { ERROR_OCCURED_DURING_LOOP } from "../../constants/strings"
 import { STATE_UPDATE_TIMEOUT } from "../../../test/constants/numbers"
 import { LoopService } from "../../services/loop.service"
 import { ERoutes } from "../../../shared/constants/routes.enum"
+import { setGoBackLocation } from "../../../shared/util/nav"
 
 @Component({
   selector: "app-loop-screen",
@@ -25,6 +26,7 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
   styleUrl: "../../../test/screens/test-screen/test-screen.component.css",
 })
 export class LoopScreenComponent extends TestScreenComponent {
+  override goBackLocation: string = `/${this.i18nStore.activeLang}/${ERoutes.LOOP_1}`
   private readonly loopService = inject(LoopService)
   private waitingProgressMs = 0
   private shouldGetHistory$ = new BehaviorSubject<boolean>(false)
@@ -68,15 +70,9 @@ export class LoopScreenComponent extends TestScreenComponent {
 
   override abortTest(): void {
     this.stopped$.next()
+    this.service.abortMeasurement()
     this.loopService.cancelLoop()
-    // To not re-trigger the test on back navigation
-    if (globalThis.location) {
-      globalThis.history.replaceState(
-        null,
-        "",
-        `/${this.i18nStore.activeLang}/${ERoutes.LOOP_1}`
-      )
-    }
+    setGoBackLocation(this.goBackLocation)
     this.router.navigate([this.i18nStore.activeLang, ERoutes.LOOP_RESULT], {
       queryParams: { loop_uuid: this.loopStore.loopUuid() },
     })
