@@ -12,6 +12,7 @@ import { IBasicNetworkInfo } from "../../interfaces/basic-network-info.interface
 import { ITestVisualizationState } from "../../interfaces/test-visualization-state.interface"
 import { roundToSignificantDigits } from "../../../shared/util/math"
 import { LoopStoreService } from "../../../loop/store/loop-store.service"
+import { toObservable } from "@angular/core/rxjs-interop"
 
 @Component({
   selector: "app-interim-results",
@@ -45,7 +46,7 @@ export class InterimResultsComponent {
     private store: TestStore,
     private loopStore: LoopStoreService
   ) {
-    this.basicNetworkInfo$ = this.store.basicNetworkInfo$
+    this.basicNetworkInfo$ = toObservable(this.store.basicNetworkInfo)
     this.visualization$ = this.store.visualization$.pipe(
       tap((state) => {
         const estimatedEndTime = this.loopStore.estimatedEndTime()

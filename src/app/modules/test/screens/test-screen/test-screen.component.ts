@@ -4,6 +4,7 @@ import { Router } from "@angular/router"
 import {
   BehaviorSubject,
   distinctUntilChanged,
+  firstValueFrom,
   map,
   Observable,
   of,
@@ -95,23 +96,18 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
     if (!globalThis.localStorage) {
       return
     }
-    this.service
-      .getSettings()
-      .pipe(
-        switchMap((settings) => {
-          if (
-            settings.settings[0].terms_and_conditions.version.toString() !=
-            localStorage.getItem(TC_VERSION_ACCEPTED)
-          ) {
-            this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS])
-            return of(null)
-          }
-          this.initVisualization()
-          return this.service.launchTests()
-        }),
-        takeUntil(this.stopped$)
-      )
-      .subscribe()
+    firstValueFrom(this.service.getSettings()).then((settings) => {
+      if (
+        settings.settings[0].terms_and_conditions.version.toString() !=
+        localStorage.getItem(TC_VERSION_ACCEPTED)
+      ) {
+        this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS])
+        return
+      }
+      this.initVisualization()
+      this.service.launchTests()
+      return
+    })
   }
 
   protected abortTest() {

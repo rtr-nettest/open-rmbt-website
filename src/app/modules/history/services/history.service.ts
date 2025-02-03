@@ -105,7 +105,7 @@ export class HistoryService {
           newPhase
         )
         this.testStore.visualization$.next(newState)
-        this.testStore.basicNetworkInfo$.next({
+        this.testStore.basicNetworkInfo.set({
           serverName: historyResult.measurementServerName,
           ipAddress: historyResult.ipAddress,
           providerName: historyResult.providerName,

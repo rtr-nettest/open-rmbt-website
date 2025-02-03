@@ -9,9 +9,7 @@ import { BasicNetworkInfo } from "../dto/basic-network-info.dto"
   providedIn: "root",
 })
 export class TestStore {
-  basicNetworkInfo$ = new BehaviorSubject<IBasicNetworkInfo>(
-    new BasicNetworkInfo()
-  )
+  basicNetworkInfo = signal<IBasicNetworkInfo>(new BasicNetworkInfo())
   visualization$ = new BehaviorSubject<ITestVisualizationState>(
     new TestVisualizationState()
   )

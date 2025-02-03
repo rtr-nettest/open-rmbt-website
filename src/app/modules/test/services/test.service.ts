@@ -14,6 +14,7 @@ import {
   map,
   Observable,
   of,
+  Subscription,
   withLatestFrom,
 } from "rxjs"
 import { isPlatformBrowser } from "@angular/common"
@@ -35,6 +36,7 @@ import { MainStore } from "../../shared/store/main.store"
 import { HistoryStore } from "../../history/store/history.store"
 import { SettingsService } from "../../shared/services/settings.service"
 import { LoopStoreService } from "../../loop/store/loop-store.service"
+import { RmbtwsDelegateService } from "./rmbtws-delegate.service"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -42,19 +44,13 @@ dayjs.extend(tz)
   providedIn: "root",
 })
 export class TestService {
-  private coordinates?: [number, number]
   private downs: IOverallResult[] = []
   private ups: IOverallResult[] = []
   private rmbtws: any
-  private rmbtTest: any
   private startTimeMs = 0
   private endTimeMs = 0
-  private serverName?: string
-  private remoteIp?: string
-  private providerName?: string
-  private testUuid?: string
   private stateChangeMs = 0
-  private openTestUuid?: string
+  private visUpdateSub?: Subscription
 
   constructor(
     private readonly historyStore: HistoryStore,
@@ -62,8 +58,8 @@ export class TestService {
     private readonly mainStore: MainStore,
     private readonly ngZone: NgZone,
     private readonly settingsService: SettingsService,
-    private readonly router: Router,
     private readonly testStore: TestStore,
+    private readonly rmbtwsDelegate: RmbtwsDelegateService,
     @Inject(PLATFORM_ID) private readonly platformId: object
   ) {
     if (isPlatformBrowser(this.platformId)) {
@@ -81,20 +77,15 @@ export class TestService {
     this.resetState()
     if (!isPlatformBrowser(this.platformId) || !this.rmbtws) {
       console.error("RMBTws not loaded")
-      return of(null)
+      return
     }
     this.ngZone.runOutsideAngular(() => {
       this.triggerNextTest()
     })
-    return interval(STATE_UPDATE_TIMEOUT).pipe(
-      concatMap(() => from(this.getMeasurementState())),
-      withLatestFrom(this.testStore.visualization$),
-      map(([state, vis]) => this.setTestState(state, vis))
-    )
   }
 
   triggerNextTest() {
-    this.rmbtws.TestEnvironment.init(this, null)
+    this.rmbtws.TestEnvironment.init(this.rmbtwsDelegate, null)
     const config = new this.rmbtws.RMBTTestConfig(
       "en",
       environment.api.baseUrl,
@@ -111,20 +102,32 @@ export class TestService {
           loop_uuid: this.loopStore.loopUuid(),
         },
       }
-    this.rmbtTest = new this.rmbtws.RMBTTest(
+    const rmbtTest = new this.rmbtws.RMBTTest(
       config,
       new this.rmbtws.RMBTControlServerCommunication(config)
     )
-    this.rmbtTest.onStateChange(() => {
+    rmbtTest.onStateChange(() => {
       this.stateChangeMs = Date.now()
     })
-    this.rmbtTest.onError((error: any) => {
+    rmbtTest.onError((error: any) => {
       this.ngZone.run(() => {
         this.mainStore.error$.next(error)
       })
     })
     this.startTimeMs = Date.now()
-    this.rmbtTest.startTest()
+    rmbtTest.startTest()
+    this.visUpdateSub?.unsubscribe()
+    this.visUpdateSub = interval(STATE_UPDATE_TIMEOUT)
+      .pipe(
+        concatMap(() => from(this.getMeasurementState(rmbtTest))),
+        withLatestFrom(this.testStore.visualization$),
+        map(([state, vis]) => {
+          this.ngZone.run(() => {
+            this.setTestState(state, vis)
+          })
+        })
+      )
+      .subscribe()
   }
 
   updateEndTime() {
@@ -148,12 +151,12 @@ export class TestService {
     }
     newState = TestVisualizationState.from(newState, phaseState)
     this.testStore.visualization$.next(newState)
-    this.testStore.basicNetworkInfo$.next(phaseState)
+    this.testStore.basicNetworkInfo.set(phaseState)
     return newState
   }
 
   private resetState() {
-    this.testStore.basicNetworkInfo$.next(new BasicNetworkInfo())
+    this.testStore.basicNetworkInfo.set(new BasicNetworkInfo())
     this.testStore.visualization$.next(new TestVisualizationState())
     this.historyStore.simpleHistoryResult$.next(null)
     this.mainStore.error$.next(null)
@@ -161,10 +164,7 @@ export class TestService {
     this.ups = []
     this.startTimeMs = 0
     this.endTimeMs = 0
-    this.serverName = undefined
-    this.remoteIp = undefined
-    this.providerName = undefined
-    this.testUuid = undefined
+    this.visUpdateSub?.unsubscribe()
   }
 
   getSettings(): Observable<IUserSetingsResponse> {
@@ -174,10 +174,11 @@ export class TestService {
     return this.settingsService.getSettings()
   }
 
-  async getMeasurementState(): Promise<
-    IMeasurementPhaseState & IBasicNetworkInfo
-  > {
-    const result = this.rmbtTest?.getIntermediateResult()
+  async getMeasurementState(
+    rmbtTest: any
+  ): Promise<IMeasurementPhaseState & IBasicNetworkInfo> {
+    const result = rmbtTest?.getIntermediateResult()
+    const basicInfo = this.testStore.basicNetworkInfo()
     const diffTimeMs = Date.now() - this.stateChangeMs
     const phase: EMeasurementStatus =
       result?.status?.toString() ?? EMeasurementStatus.NOT_STARTED
@@ -230,12 +231,12 @@ export class TestService {
       up,
       ups: this.ups ?? [],
       phase,
-      testUuid: this.testUuid ?? "",
-      openTestUuid: this.openTestUuid ?? "",
-      ipAddress: this.remoteIp ?? "-",
-      serverName: this.serverName ?? "-",
-      providerName: this.providerName ?? "-",
-      coordinates: this.coordinates,
+      testUuid: basicInfo.testUuid ?? "",
+      openTestUuid: basicInfo.openTestUuid ?? "",
+      ipAddress: basicInfo.ipAddress ?? "-",
+      serverName: basicInfo.serverName ?? "-",
+      providerName: basicInfo.providerName ?? "-",
+      coordinates: basicInfo.coordinates,
       startTimeMs: this.startTimeMs,
       endTimeMs: this.endTimeMs,
     }
@@ -244,26 +245,4 @@ export class TestService {
   abortMeasurement() {
     // TODO: cancel on WS side
   }
-
-  /** RMBTws delegate */
-  draw() {}
-
-  updateInfo(
-    serverName: string,
-    remoteIp: string,
-    providerName: string,
-    testUuid: string,
-    openTestUuid: string
-  ) {
-    this.serverName = serverName
-    this.remoteIp = remoteIp
-    this.providerName = providerName
-    this.testUuid = testUuid
-    this.openTestUuid = openTestUuid
-  }
-
-  setLocation(lat: number, lon: number) {
-    this.coordinates = [lon, lat]
-  }
-  /** End RMBTws delegate */
 }
