@@ -192,6 +192,10 @@ mat-paginator {
       flex: 0 0 rem(40);
     }
   }
+
+  &-groupArrowIndicator {
+    flex: 0 0 rem(64);
+  }
 }
 
 @include screen-xs {

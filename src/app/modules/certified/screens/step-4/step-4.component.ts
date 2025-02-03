@@ -16,11 +16,6 @@ import { environment } from "../../../../../environments/environment"
 export class Step4Component extends LoopScreenComponent {
   override goBackLocation: string = `/${this.i18nStore.activeLang}/${ERoutes.CERTIFIED_1}`
 
-  override ngOnInit() {
-    this.loopService.enableLoopMode(environment.certifiedTests.interval, true)
-    super.ngOnInit()
-  }
-
   override abortTest(): void {
     this.stopped$.next()
     this.service.abortMeasurement()
@@ -34,19 +29,10 @@ export class Step4Component extends LoopScreenComponent {
     )
   }
 
-  override goToResult = (_: ITestVisualizationState) => {
-    if (
-      this.loopStore.isCertifiedMeasurement() &&
-      this.loopStore.maxTestsReached()
-    ) {
-      this.abortTest()
-      return
-    }
-
-    // Waiting for a new test to start
-    this.service.updateEndTime()
-    this.loopWaiting$.next(true)
-    this.shouldGetHistory$.next(true)
-    this.mainStore.error$.next(null)
+  override scheduleLoop() {
+    this.loopService.scheduleLoop({
+      intervalMinutes: environment.certifiedTests.interval,
+      isCertifiedMeasurement: true,
+    })
   }
 }

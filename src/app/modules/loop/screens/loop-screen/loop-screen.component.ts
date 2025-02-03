@@ -56,6 +56,10 @@ export class LoopScreenComponent extends TestScreenComponent {
       .subscribe(() => {
         this.service.triggerNextTest()
       })
+    this.scheduleLoop()
+  }
+
+  protected scheduleLoop() {
     this.loopService.scheduleLoop()
   }
 
@@ -97,6 +101,10 @@ export class LoopScreenComponent extends TestScreenComponent {
   }
 
   protected override goToResult = (_: ITestVisualizationState) => {
+    if (this.loopStore.maxTestsReached()) {
+      this.abortTest()
+      return
+    }
     // Waiting for a new test to start
     this.service.updateEndTime()
     this.loopWaiting$.next(true)
@@ -125,14 +133,6 @@ export class LoopScreenComponent extends TestScreenComponent {
     this.waitingProgressMs += STATE_UPDATE_TIMEOUT
     const endTimeMs = state.endTimeMs
     const timeTillEndMs = state.startTimeMs + fullIntervalMs - endTimeMs
-    console.log(
-      "endTimeMs",
-      endTimeMs,
-      "startTimeMs",
-      state.startTimeMs,
-      "timeTillEndMs",
-      timeTillEndMs
-    )
     const currentMs = Math.max(0, timeTillEndMs - this.waitingProgressMs + 1000)
     if (currentMs <= 0 || currentMs > fullIntervalMs) {
       this.progressMode$.next("indeterminate")

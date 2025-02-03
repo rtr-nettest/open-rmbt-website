@@ -1,10 +1,13 @@
 import { Injectable } from "@angular/core"
 import { LoopStoreService } from "../store/loop-store.service"
-import { Router } from "@angular/router"
-import { ERoutes } from "../../shared/constants/routes.enum"
-import { I18nStore } from "../../i18n/store/i18n.store"
+import { v4 } from "uuid"
 import { MessageService } from "../../shared/services/message.service"
 import { ELoopEventType } from "../constants/loop-event.enum"
+
+export type CertifiedLoopOpts = {
+  intervalMinutes: number
+  isCertifiedMeasurement: boolean
+}
 
 @Injectable({
   providedIn: "root",
@@ -17,20 +20,8 @@ export class LoopService {
     private readonly messageService: MessageService
   ) {}
 
-  enableLoopMode(intervalMinutes: number, isCertifiedMeasurement: boolean) {
-    this.loopStore.enableLoopMode()
-    this.loopStore.testIntervalMinutes.set(intervalMinutes)
-    this.loopStore.isCertifiedMeasurement.set(isCertifiedMeasurement)
-  }
-
-  scheduleLoop() {
-    console.log("Scheduling loop test")
-    const singleTestDuration = this.loopStore.fullTestIntervalMs()
-    if (singleTestDuration != null) {
-      this.loopStore.estimatedEndTime.set(
-        Date.now() + singleTestDuration * this.loopStore.maxTestsAllowed()
-      )
-    }
+  scheduleLoop(options?: CertifiedLoopOpts) {
+    this.enableLoopMode(options)
     if (typeof Worker !== "undefined") {
       this.worker = new Worker(
         new URL("../web-workers/loop.worker.ts", import.meta.url)
@@ -46,11 +37,15 @@ export class LoopService {
         switch (type) {
           case ELoopEventType.LOOP_CANCELLED:
             this.messageService.openSnackbar("Loop test cancelled.")
-            this.loopStore.disableLoopMode()
+            this.disableLoopMode()
             this.worker?.terminate()
             break
           case ELoopEventType.TRIGGER_NEXT_TEST:
-            this.loopStore.loopCounter.set(this.loopStore.loopCounter() + 1)
+            const newCounter = this.loopStore.loopCounter() + 1
+            this.loopStore.loopCounter.set(newCounter)
+            if (newCounter >= this.loopStore.maxTestsAllowed()) {
+              this.loopStore.maxTestsReached.set(true)
+            }
             break
         }
       }
@@ -65,5 +60,22 @@ export class LoopService {
     this.worker?.postMessage({
       type: ELoopEventType.CANCEL_LOOP,
     })
+  }
+
+  private enableLoopMode(options?: CertifiedLoopOpts | undefined) {
+    const { isCertifiedMeasurement, intervalMinutes } = options || {}
+    this.loopStore.isCertifiedMeasurement.set(isCertifiedMeasurement || false)
+    this.loopStore.isLoopModeEnabled.set(true)
+    this.loopStore.loopCounter.set(1)
+    this.loopStore.loopUuid.set(v4())
+    this.loopStore.testIntervalMinutes.set(intervalMinutes || null)
+  }
+
+  private disableLoopMode() {
+    this.loopStore.isCertifiedMeasurement.set(false)
+    this.loopStore.isLoopModeEnabled.set(false)
+    this.loopStore.loopCounter.set(1)
+    this.loopStore.maxTestsReached.set(false)
+    this.loopStore.testIntervalMinutes.set(null)
   }
 }

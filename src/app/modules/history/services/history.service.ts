@@ -125,16 +125,14 @@ export class HistoryService {
     )
   }
 
-  async getMeasurementHistory(paginator?: IPaginator) {
+  private async getMeasurementHistory(paginator?: IPaginator) {
     const history = (await this.repo.getHistory(paginator))?.map((hi: any) =>
       SimpleHistoryResult.fromHistoryResponse(hi)
     )
     if (!history?.length) {
       return []
     }
-    const mergedHistory = [...this.historyStore.history$.value, ...history]
-    this.historyStore.history$.next(mergedHistory)
-    return mergedHistory
+    return history
   }
 
   getHistoryGroupedByLoop(options?: {
@@ -209,6 +207,20 @@ export class HistoryService {
       take(1),
       tap((history) => {
         this.historyStore.history$.next(history)
+      })
+    )
+  }
+
+  getFullMeasurementHistory(paginator: IPaginator) {
+    if (!paginator.limit) {
+      return of([])
+    }
+    return from(this.getMeasurementHistory(paginator)).pipe(
+      take(1),
+      map((history) => {
+        const mergedHistory = [...this.historyStore.history$.value, ...history]
+        this.historyStore.history$.next(mergedHistory)
+        return mergedHistory
       })
     )
   }

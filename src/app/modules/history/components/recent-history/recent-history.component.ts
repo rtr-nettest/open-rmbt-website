@@ -22,7 +22,6 @@ import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.int
 import { I18nStore, Translation } from "../../../i18n/store/i18n.store"
 import { ClassificationService } from "../../../shared/services/classification.service"
 import { roundToSignificantDigits } from "../../../shared/util/math"
-import { ExpandArrowComponent } from "../../../shared/components/expand-arrow/expand-arrow.component"
 import { Router } from "@angular/router"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { setGoBackLocation } from "../../../shared/util/nav"
@@ -89,6 +88,10 @@ export class RecentHistoryComponent implements OnChanges {
         header: "Ping",
         isHtml: true,
       },
+      {
+        columnDef: "groupArrowIndicator",
+        header: "",
+      },
     ]
     return cols.filter((c) => !this.excludeColumns?.includes(c.columnDef))
   })()
@@ -98,6 +101,10 @@ export class RecentHistoryComponent implements OnChanges {
   }
   tableClassNames?: string[]
   freshlyLoaded = true
+
+  get expandedElements() {
+    return this.store.openLoops$.value
+  }
 
   get sort() {
     return this.store.sort()
@@ -172,12 +179,12 @@ export class RecentHistoryComponent implements OnChanges {
         return {
           id: hi.loopUuid!,
           measurementDate,
+          device: hi.openTestResponse?.["device"],
+          networkType: hi.openTestResponse?.["networkType"],
           groupHeader: hi.groupHeader,
-          details: ExpandArrowComponent,
-          componentField: "details",
-          parameters: {
-            expanded: openLoops.includes(hi.loopUuid!),
-          },
+          download: " ",
+          upload: " ",
+          ping: " ",
         }
       }
       const down = roundToSignificantDigits(hi.download?.value || 0)

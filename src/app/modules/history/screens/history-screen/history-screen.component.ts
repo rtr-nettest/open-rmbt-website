@@ -18,7 +18,7 @@ import { HistoryExportService } from "../../services/history-export.service"
 import { ActionButtonsComponent } from "../../components/action-buttons/action-buttons.component"
 import { RecentHistoryComponent } from "../../components/recent-history/recent-history.component"
 import { AsyncPipe } from "@angular/common"
-import { Observable } from "rxjs"
+import { firstValueFrom, Observable } from "rxjs"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { HistoryService } from "../../services/history.service"
 import { ISort } from "../../../tables/interfaces/sort.interface"
@@ -79,7 +79,9 @@ export class HistoryScreenComponent extends SeoComponent {
       if (!this.uuid) {
         return
       }
-      return this.service.getMeasurementHistory(this.store.paginator())
+      return firstValueFrom(
+        this.service.getFullMeasurementHistory(this.store.paginator())
+      )
     },
     this.store.paginator,
     HISTORY_LIMIT
