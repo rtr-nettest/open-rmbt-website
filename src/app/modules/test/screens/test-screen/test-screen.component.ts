@@ -1,4 +1,4 @@
-import { Component, inject, NgZone, OnInit } from "@angular/core"
+import { Component, HostListener, inject, NgZone, OnInit } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Router } from "@angular/router"
 import {
@@ -159,5 +159,10 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
         test_uuid: "T" + state.phases[state.currentPhaseName].testUuid,
       },
     })
+  }
+
+  @HostListener("window:beforeunload")
+  preventReload() {
+    return false
   }
 }

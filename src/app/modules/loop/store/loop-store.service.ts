@@ -1,5 +1,6 @@
 import { computed, Injectable, signal } from "@angular/core"
 import { v4 } from "uuid"
+import { environment } from "../../../../environments/environment"
 
 @Injectable({
   providedIn: "root",
@@ -12,7 +13,9 @@ export class LoopStoreService {
   fullTestIntervalMs = computed(() =>
     this.testIntervalMinutes() ? this.testIntervalMinutes()! * 60 * 1000 : null
   )
+  estimatedEndTime = signal<number | null>(null)
   isCertifiedMeasurement = signal<boolean>(false)
+  maxTestsAllowed = signal<number>(environment.certifiedTests.count)
   maxTestsReached = signal<boolean>(false)
 
   enableLoopMode() {

@@ -84,26 +84,6 @@ export class TestService {
       return of(null)
     }
     this.ngZone.runOutsideAngular(() => {
-      this.rmbtws.TestEnvironment.init(this, null)
-      const config = new this.rmbtws.RMBTTestConfig(
-        "en",
-        environment.api.baseUrl,
-        `RMBTControlServer`
-      )
-      config.uuid = localStorage.getItem(UUID)
-      config.timezone = dayjs.tz.guess()
-      this.rmbtTest = new this.rmbtws.RMBTTest(
-        config,
-        new this.rmbtws.RMBTControlServerCommunication(config)
-      )
-      this.rmbtTest.onStateChange(() => {
-        this.stateChangeMs = Date.now()
-      })
-      this.rmbtTest.onError((error: any) => {
-        this.ngZone.run(() => {
-          this.mainStore.error$.next(error)
-        })
-      })
       this.triggerNextTest()
     })
     return interval(STATE_UPDATE_TIMEOUT).pipe(
@@ -114,17 +94,41 @@ export class TestService {
   }
 
   triggerNextTest() {
-    if (!this.rmbtTest) {
-      return
-    }
-
+    this.rmbtws.TestEnvironment.init(this, null)
+    const config = new this.rmbtws.RMBTTestConfig(
+      "en",
+      environment.api.baseUrl,
+      `RMBTControlServer`
+    )
+    config.uuid = localStorage.getItem(UUID)
+    config.timezone = dayjs.tz.guess()
+    if (this.loopStore.isLoopModeEnabled())
+      config.additionalRegistrationParameters = {
+        loopmode_info: {
+          max_delay: (this.loopStore.testIntervalMinutes() ?? 0) / 60,
+          test_counter: this.loopStore.loopCounter(),
+          max_tests: this.loopStore.maxTestsAllowed(),
+          loop_uuid: this.loopStore.loopUuid(),
+        },
+      }
+    this.rmbtTest = new this.rmbtws.RMBTTest(
+      config,
+      new this.rmbtws.RMBTControlServerCommunication(config)
+    )
+    this.rmbtTest.onStateChange(() => {
+      this.stateChangeMs = Date.now()
+    })
+    this.rmbtTest.onError((error: any) => {
+      this.ngZone.run(() => {
+        this.mainStore.error$.next(error)
+      })
+    })
     this.startTimeMs = Date.now()
     this.rmbtTest.startTest()
   }
 
   updateEndTime() {
     this.endTimeMs = this.stateChangeMs
-    console.log("updateEndTime", this.endTimeMs)
   }
 
   private setTestState = (

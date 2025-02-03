@@ -25,6 +25,12 @@ export class LoopService {
 
   scheduleLoop() {
     console.log("Scheduling loop test")
+    const singleTestDuration = this.loopStore.fullTestIntervalMs()
+    if (singleTestDuration != null) {
+      this.loopStore.estimatedEndTime.set(
+        Date.now() + singleTestDuration * this.loopStore.maxTestsAllowed()
+      )
+    }
     if (typeof Worker !== "undefined") {
       this.worker = new Worker(
         new URL("../web-workers/loop.worker.ts", import.meta.url)
@@ -41,6 +47,7 @@ export class LoopService {
           case ELoopEventType.LOOP_CANCELLED:
             this.messageService.openSnackbar("Loop test cancelled.")
             this.loopStore.disableLoopMode()
+            this.worker?.terminate()
             break
           case ELoopEventType.TRIGGER_NEXT_TEST:
             this.loopStore.loopCounter.set(this.loopStore.loopCounter() + 1)

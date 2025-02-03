@@ -66,6 +66,12 @@
     @if (basicNetworkInfo$ | async; as info) {
     <div class="app-container">
       <table class="app-table">
+        @if (estimatedEndTime(); as endTime) {
+        <tr class="app-row">
+          <th>{{ "Estimated end time" | translate }}</th>
+          <td>{{ endTime | date : "HH:mm" }}</td>
+        </tr>
+        }
         <tr class="app-row">
           <th>{{ "Coordinates" | translate }}</th>
           <td>
