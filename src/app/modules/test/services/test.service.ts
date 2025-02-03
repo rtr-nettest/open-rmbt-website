@@ -92,10 +92,18 @@ export class TestService {
       )
       config.uuid = localStorage.getItem(UUID)
       config.timezone = dayjs.tz.guess()
-      this.testStore.config.set(config)
-      this.testStore.communication.set(
+      this.rmbtTest = new this.rmbtws.RMBTTest(
+        config,
         new this.rmbtws.RMBTControlServerCommunication(config)
       )
+      this.rmbtTest.onStateChange(() => {
+        this.stateChangeMs = Date.now()
+      })
+      this.rmbtTest.onError((error: any) => {
+        this.ngZone.run(() => {
+          this.mainStore.error$.next(error)
+        })
+      })
       this.triggerNextTest()
     })
     return interval(STATE_UPDATE_TIMEOUT).pipe(
@@ -106,24 +114,17 @@ export class TestService {
   }
 
   triggerNextTest() {
-    this.rmbtTest = new this.rmbtws.RMBTTest(
-      this.testStore.config(),
-      this.testStore.communication()
-    )
-    // To not trigger console errors
-    this.rmbtTest._registrationCallback = () => {}
-    this.rmbtTest._submissionCallback = () => {}
-    //
+    if (!this.rmbtTest) {
+      return
+    }
+
     this.startTimeMs = Date.now()
     this.rmbtTest.startTest()
-    this.rmbtTest.onStateChange(() => {
-      this.stateChangeMs = Date.now()
-    })
-    this.rmbtTest.onError((error: any) => {
-      this.ngZone.run(() => {
-        this.mainStore.error$.next(error)
-      })
-    })
+  }
+
+  updateEndTime() {
+    this.endTimeMs = this.stateChangeMs
+    console.log("updateEndTime", this.endTimeMs)
   }
 
   private setTestState = (
@@ -234,11 +235,6 @@ export class TestService {
       startTimeMs: this.startTimeMs,
       endTimeMs: this.endTimeMs,
     }
-  }
-
-  updateStartTime() {
-    this.startTimeMs = this.endTimeMs || this.startTimeMs
-    this.endTimeMs = Date.now()
   }
 
   abortMeasurement() {

@@ -2,23 +2,24 @@
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
 @defer { @if(visualization$ | async; as visualization) {
-
 <ng-container *ngIf="(isLoopModeEnabled$ | async) === true">
   <div class="app-wrapper" *ngIf="loopCount$ | async as loopCount">
-    <h1
+    <h2
       *ngIf="(loopWaiting$ | async) !== true"
       class="app-title"
       aria-live="polite"
     >
       {{ ("Measurement" | translate) + " " + loopCount }}
-    </h1>
-    <h1
+    </h2>
+    <h2
       *ngIf="(loopWaiting$ | async) === true"
       class="app-title"
       aria-live="polite"
     >
-      {{ "Result of measurement %number - waiting" | translate }}
-    </h1>
+      {{
+        "Result of measurement %0 - waiting" | translate | sprintf : loopCount
+      }}
+    </h2>
   </div>
 </ng-container>
 <div class="app-main">
@@ -47,21 +48,29 @@
 <ng-template #loopWaitProgressBar>
   <div
     *ngIf="progressMode$ | async as progressMode"
-    style="width: 100%; padding: 0.5em"
+    style="
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-bottom: 40px;
+      padding-right: 4rem;
+    "
   >
-    <ng-container *ngIf="progressMode === 'determinate'">
-      <h2 class="app-title">
-        {{
-          ("Next measurement in" | translate) +
-            " " +
-            (ms$ | async | date : "mm:ss")
-        }}
-      </h2>
-    </ng-container>
-    <mat-progress-bar
-      class="app-progress-bar--loop"
-      [mode]="progressMode"
-      [value]="progress$ | async"
-    ></mat-progress-bar>
+    <div style="width: 100%">
+      <ng-container *ngIf="progressMode === 'determinate'">
+        <h4 class="app-title">
+          {{
+            ("Next measurement in" | translate) +
+              " " +
+              (ms$ | async | date : "mm:ss")
+          }}
+        </h4>
+      </ng-container>
+      <mat-progress-bar
+        class="app-progress-bar--loop"
+        [mode]="progressMode"
+        [value]="progress$ | async"
+      ></mat-progress-bar>
+    </div>
   </div>
 </ng-template>

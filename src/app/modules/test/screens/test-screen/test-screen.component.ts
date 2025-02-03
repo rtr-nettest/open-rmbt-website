@@ -39,6 +39,7 @@ import { RecentHistoryComponent } from "../../../history/components/recent-histo
 import { LoopStoreService } from "../../../loop/store/loop-store.service"
 import { toObservable } from "@angular/core/rxjs-interop"
 import { setGoBackLocation } from "../../../shared/util/nav"
+import { SprintfPipe } from "../../../shared/pipes/sprintf.pipe"
 
 export const imports = [
   AsyncPipe,
@@ -54,6 +55,7 @@ export const imports = [
   TopNavComponent,
   TranslatePipe,
   SpacerComponent,
+  SprintfPipe,
   BreadcrumbsComponent,
 ]
 

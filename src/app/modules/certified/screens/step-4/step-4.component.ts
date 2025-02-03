@@ -44,6 +44,7 @@ export class Step4Component extends LoopScreenComponent {
     }
 
     // Waiting for a new test to start
+    this.service.updateEndTime()
     this.loopWaiting$.next(true)
     this.shouldGetHistory$.next(true)
     this.mainStore.error$.next(null)

@@ -98,6 +98,7 @@ export class LoopScreenComponent extends TestScreenComponent {
 
   protected override goToResult = (_: ITestVisualizationState) => {
     // Waiting for a new test to start
+    this.service.updateEndTime()
     this.loopWaiting$.next(true)
     this.shouldGetHistory$.next(true)
     this.mainStore.error$.next(null)
@@ -122,9 +123,17 @@ export class LoopScreenComponent extends TestScreenComponent {
       return
     }
     this.waitingProgressMs += STATE_UPDATE_TIMEOUT
-    const endTimeMs = Math.max(state.startTimeMs, state.endTimeMs)
+    const endTimeMs = state.endTimeMs
     const timeTillEndMs = state.startTimeMs + fullIntervalMs - endTimeMs
-    const currentMs = Math.max(0, timeTillEndMs - this.waitingProgressMs)
+    console.log(
+      "endTimeMs",
+      endTimeMs,
+      "startTimeMs",
+      state.startTimeMs,
+      "timeTillEndMs",
+      timeTillEndMs
+    )
+    const currentMs = Math.max(0, timeTillEndMs - this.waitingProgressMs + 1000)
     if (currentMs <= 0 || currentMs > fullIntervalMs) {
       this.progressMode$.next("indeterminate")
     } else {

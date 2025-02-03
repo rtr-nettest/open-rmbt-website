@@ -38,9 +38,6 @@ export class LoopService {
       this.worker.onmessage = (message) => {
         const type = message.data as ELoopEventType
         switch (type) {
-          case ELoopEventType.LOOP_SCHEDULED:
-            this.messageService.openSnackbar("Loop test scheduled.")
-            break
           case ELoopEventType.LOOP_CANCELLED:
             this.messageService.openSnackbar("Loop test cancelled.")
             this.loopStore.disableLoopMode()

@@ -15,6 +15,4 @@ export class TestStore {
   visualization$ = new BehaviorSubject<ITestVisualizationState>(
     new TestVisualizationState()
   )
-  config = signal<unknown>(null)
-  communication = signal<unknown>(null)
 }
