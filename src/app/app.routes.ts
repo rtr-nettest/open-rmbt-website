@@ -15,6 +15,7 @@ import { Step2Component } from "./modules/certified/screens/step-2/step-2.compon
 import { Step3Component } from "./modules/certified/screens/step-3/step-3.component"
 import { LoopScreenComponent } from "./modules/loop/screens/loop-screen/loop-screen.component"
 import { Step1Component as LoopStep1Component } from "./modules/loop/screens/step-1/step-1.component"
+import { Step4Component } from "./modules/certified/screens/step-4/step-4.component"
 
 export const routes: Routes = [
   {
@@ -133,7 +134,7 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.CERTIFIED_4,
-        component: Step3Component,
+        component: Step4Component,
         resolve: [localeResolver],
         data: {
           title: "Certified measurement",

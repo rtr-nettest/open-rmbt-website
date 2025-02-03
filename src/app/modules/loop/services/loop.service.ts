@@ -13,17 +13,14 @@ export class LoopService {
   worker?: Worker
 
   constructor(
-    private readonly i18nStore: I18nStore,
     private readonly loopStore: LoopStoreService,
-    private readonly messageService: MessageService,
-    private readonly router: Router
+    private readonly messageService: MessageService
   ) {}
 
-  launchLoopTest(intervalMinutes: number, isCertifiedMeasurement: boolean) {
+  enableLoopMode(intervalMinutes: number, isCertifiedMeasurement: boolean) {
     this.loopStore.enableLoopMode()
     this.loopStore.testIntervalMinutes.set(intervalMinutes)
     this.loopStore.isCertifiedMeasurement.set(isCertifiedMeasurement)
-    this.router.navigate([this.i18nStore.activeLang, ERoutes.LOOP])
   }
 
   scheduleLoop() {

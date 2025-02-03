@@ -115,7 +115,8 @@ export class Step2Component extends SeoComponent implements OnInit {
 
   onTestStart() {
     this.store.activeBreadcrumbIndex.set(ESteps.MEASUREMENT)
-    this.loopService.launchLoopTest(environment.certifiedTests.interval, true)
+    this.loopService.enableLoopMode(environment.certifiedTests.interval, true)
+    this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_4])
   }
 
   private onFormChange(value: ICertifiedDataForm | null) {

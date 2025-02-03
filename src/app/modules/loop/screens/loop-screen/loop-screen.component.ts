@@ -27,10 +27,10 @@ import { setGoBackLocation } from "../../../shared/util/nav"
 })
 export class LoopScreenComponent extends TestScreenComponent {
   override goBackLocation: string = `/${this.i18nStore.activeLang}/${ERoutes.LOOP_1}`
-  private readonly loopService = inject(LoopService)
-  private waitingProgressMs = 0
-  private shouldGetHistory$ = new BehaviorSubject<boolean>(false)
-  private currentTestUuid$ = new BehaviorSubject<string | null>(null)
+  protected readonly loopService = inject(LoopService)
+  protected waitingProgressMs = 0
+  protected shouldGetHistory$ = new BehaviorSubject<boolean>(false)
+  protected currentTestUuid$ = new BehaviorSubject<string | null>(null)
 
   override initVisualization(): void {
     console.log("initVisualization")
@@ -99,31 +99,6 @@ export class LoopScreenComponent extends TestScreenComponent {
   }
 
   protected override goToResult = (_: ITestVisualizationState) => {
-    // TODO: Move to certified measutement screen
-    // if (
-    //   this.loopStore.isCertifiedMeasurement() &&
-    //   this.loopStore.maxTestsReached()
-    // ) {
-    //   this.stopped$.next()
-    //   this.loopService.cancelLoop()
-    //   // To not re-trigger the test on back navigation
-    //   if (globalThis.location) {
-    //     globalThis.history.replaceState(
-    //       null,
-    //       "",
-    //       `/${this.i18nStore.activeLang}/${ERoutes.CERTIFIED_1}`
-    //     )
-    //   }
-    //   this.router.navigate(
-    //     [this.i18nStore.activeLang, ERoutes.CERTIFIED_RESULT],
-    //     {
-    //       queryParams: { loop_uuid: this.loopStore.loopUuid() },
-    //     }
-    //   )
-    //   return
-    // }
-    // END TODO
-
     // Waiting for a new test to start
     this.loopWaiting$.next(true)
     this.shouldGetHistory$.next(true)
