@@ -1,0 +1,34 @@
+@import "core.scss";
+
+.app-wrapper {
+  height: calc(100vh - 40px);
+  overflow: scroll;
+  padding: rem(24) rem(32);
+}
+
+.app-article {
+  padding-bottom: rem(100);
+}
+
+.app-footer {
+  align-items: center;
+  background-color: white;
+  border-top: 1px solid #adadad;
+  display: flex;
+  height: rem(100);
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  left: rem(20);
+  right: rem(20);
+
+  .mdc-button {
+    margin: 0 rem(12);
+  }
+}
+
+.app-h1 {
+  font-weight: lighter;
+  margin-bottom: 1em;
+  margin-top: 0.5em;
+}

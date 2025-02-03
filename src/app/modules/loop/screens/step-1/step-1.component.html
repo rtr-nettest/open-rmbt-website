@@ -1,0 +1,9 @@
+@if (text$ | async; as text) {
+<app-agreement
+  [storageItem]="storageItem"
+  [text]="text"
+  [title]="'Loop Mode' | translate"
+  (cancel)="onCancel()"
+  (agree)="onAgree()"
+></app-agreement>
+}

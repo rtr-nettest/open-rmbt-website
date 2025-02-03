@@ -13,6 +13,8 @@ import { HistoryScreenComponent } from "./modules/history/screens/history-screen
 import { Step1Component } from "./modules/certified/screens/step-1/step-1.component"
 import { Step2Component } from "./modules/certified/screens/step-2/step-2.component"
 import { Step3Component } from "./modules/certified/screens/step-3/step-3.component"
+import { LoopScreenComponent } from "./modules/loop/screens/loop-screen/loop-screen.component"
+import { Step1Component as LoopStep1Component } from "./modules/loop/screens/step-1/step-1.component"
 
 export const routes: Routes = [
   {
@@ -82,6 +84,30 @@ export const routes: Routes = [
         },
       },
       {
+        path: ERoutes.LOOP,
+        component: LoopScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Loop Mode",
+        },
+      },
+      {
+        path: ERoutes.LOOP_1,
+        component: LoopStep1Component,
+        resolve: [localeResolver],
+        data: {
+          title: "Loop Mode",
+        },
+      },
+      {
+        path: ERoutes.LOOP_2,
+        component: LoopScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Loop Mode",
+        },
+      },
+      {
         path: ERoutes.CERTIFIED_1,
         component: Step1Component,
         resolve: [localeResolver],
@@ -98,19 +124,27 @@ export const routes: Routes = [
         },
       },
       {
-        path: ERoutes.OPEN_RESULT,
-        component: ResultScreenComponent,
-        resolve: [localeResolver],
-        data: {
-          title: "opentest",
-        },
-      },
-      {
         path: ERoutes.CERTIFIED_3,
         component: Step3Component,
         resolve: [localeResolver],
         data: {
           title: "Certified measurement",
+        },
+      },
+      {
+        path: ERoutes.CERTIFIED_4,
+        component: Step3Component,
+        resolve: [localeResolver],
+        data: {
+          title: "Certified measurement",
+        },
+      },
+      {
+        path: ERoutes.OPEN_RESULT,
+        component: ResultScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "opentest",
         },
       },
       {
