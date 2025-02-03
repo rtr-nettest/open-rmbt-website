@@ -23,7 +23,7 @@ import { setGoBackLocation } from "../../../shared/util/nav"
   standalone: true,
   imports,
   templateUrl: "../../../test/screens/test-screen/test-screen.component.html",
-  styleUrl: "../../../test/screens/test-screen/test-screen.component.css",
+  styleUrl: "../../../test/screens/test-screen/test-screen.component.scss",
 })
 export class LoopScreenComponent extends TestScreenComponent {
   override goBackLocation: string = `/${this.i18nStore.activeLang}/${ERoutes.LOOP_1}`
@@ -33,7 +33,6 @@ export class LoopScreenComponent extends TestScreenComponent {
   protected currentTestUuid$ = new BehaviorSubject<string | null>(null)
 
   override initVisualization(): void {
-    console.log("initVisualization")
     this.visualization$ = this.store.visualization$.pipe(
       withLatestFrom(this.mainStore.error$, this.loopCount$),
       distinctUntilChanged(),
@@ -55,7 +54,6 @@ export class LoopScreenComponent extends TestScreenComponent {
     this.loopCount$
       .pipe(distinctUntilChanged(), takeUntil(this.stopped$))
       .subscribe(() => {
-        console.log("triggerNextTest")
         this.service.triggerNextTest()
       })
     this.loopService.scheduleLoop()

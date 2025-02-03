@@ -170,7 +170,6 @@ export class Step3Component extends SeoComponent implements OnInit {
 
   onTestStart() {
     this.store.activeBreadcrumbIndex.set(ESteps.MEASUREMENT)
-    this.loopService.enableLoopMode(environment.certifiedTests.interval, true)
     this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_4])
   }
 

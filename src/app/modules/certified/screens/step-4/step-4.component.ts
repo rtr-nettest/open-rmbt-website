@@ -4,16 +4,22 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
 import { setGoBackLocation } from "../../../shared/util/nav"
 import { imports } from "../../../test/screens/test-screen/test-screen.component"
 import { ITestVisualizationState } from "../../../test/interfaces/test-visualization-state.interface"
+import { environment } from "../../../../../environments/environment"
 
 @Component({
   selector: "app-step-4",
   standalone: true,
   imports,
   templateUrl: "../../../test/screens/test-screen/test-screen.component.html",
-  styleUrl: "../../../test/screens/test-screen/test-screen.component.css",
+  styleUrl: "../../../test/screens/test-screen/test-screen.component.scss",
 })
 export class Step4Component extends LoopScreenComponent {
   override goBackLocation: string = `/${this.i18nStore.activeLang}/${ERoutes.CERTIFIED_1}`
+
+  override ngOnInit() {
+    this.loopService.enableLoopMode(environment.certifiedTests.interval, true)
+    super.ngOnInit()
+  }
 
   override abortTest(): void {
     this.stopped$.next()

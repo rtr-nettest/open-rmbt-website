@@ -4,7 +4,7 @@
 @defer { @if(visualization$ | async; as visualization) {
 
 <ng-container *ngIf="(isLoopModeEnabled$ | async) === true">
-  <ng-container *ngIf="loopCount$ | async as loopCount">
+  <div class="app-wrapper" *ngIf="loopCount$ | async as loopCount">
     <h1
       *ngIf="(loopWaiting$ | async) !== true"
       class="app-title"
@@ -19,7 +19,7 @@
     >
       {{ "Result of measurement %number - waiting" | translate }}
     </h1>
-  </ng-container>
+  </div>
 </ng-container>
 <div class="app-main">
   <div class="app-progress-bar-wrapper">

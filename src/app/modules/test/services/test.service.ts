@@ -107,8 +107,8 @@ export class TestService {
 
   triggerNextTest() {
     this.rmbtTest = new this.rmbtws.RMBTTest(
-      this.testStore.config,
-      this.testStore.communication
+      this.testStore.config(),
+      this.testStore.communication()
     )
     // To not trigger console errors
     this.rmbtTest._registrationCallback = () => {}

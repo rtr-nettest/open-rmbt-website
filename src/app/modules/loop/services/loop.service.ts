@@ -32,7 +32,7 @@ export class LoopService {
       this.worker.postMessage({
         type: ELoopEventType.SCHEDULE_LOOP,
         payload: {
-          intervalMs: this.loopStore.testIntervalMinutes(),
+          intervalMs: this.loopStore.fullTestIntervalMs(),
         },
       })
       this.worker.onmessage = (message) => {
