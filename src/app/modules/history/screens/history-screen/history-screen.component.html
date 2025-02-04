@@ -10,9 +10,9 @@
   @if (result$ | async; as result) {
   <app-recent-history
     [result]="result"
+    [goBackLocation]="goBackLocation"
     [grouped]="shouldGroupHistory"
     (sortChange)="changeSort($event)"
-    goBackLocation=""
   ></app-recent-history>
   } @else if (loading) {
   <h3>{{ "Loading results" | translate }}</h3>

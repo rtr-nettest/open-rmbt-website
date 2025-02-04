@@ -98,6 +98,10 @@ export class HistoryScreenComponent extends SeoComponent {
     return localStorage.getItem(UUID)
   }
 
+  get goBackLocation() {
+    return globalThis.location.pathname
+  }
+
   ngAfterViewChecked(): void {
     this.cdr.detectChanges()
   }
