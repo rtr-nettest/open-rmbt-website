@@ -14,6 +14,7 @@ import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
 import { MainStore } from "../../shared/store/main.store"
+import { LoopStoreService } from "../../loop/store/loop-store.service"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -24,6 +25,7 @@ export class HistoryRepositoryService {
   constructor(
     private readonly http: HttpClient,
     private readonly i18nStore: I18nStore,
+    private readonly loopStore: LoopStoreService,
     private readonly mainStore: MainStore
   ) {}
 
@@ -76,6 +78,10 @@ export class HistoryRepositoryService {
     }
     if (paginator?.limit) {
       body["result_limit"] = paginator.limit
+    }
+    const loopUuid = this.loopStore.loopUuid()
+    if (loopUuid) {
+      body["loop_uuid"] = loopUuid
     }
     const resp: any = await firstValueFrom(
       this.http.post(
