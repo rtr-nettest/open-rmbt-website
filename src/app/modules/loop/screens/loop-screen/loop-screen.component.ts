@@ -6,6 +6,7 @@ import {
 import {
   BehaviorSubject,
   distinctUntilChanged,
+  filter,
   map,
   takeUntil,
   withLatestFrom,
@@ -67,7 +68,11 @@ export class LoopScreenComponent extends TestScreenComponent {
       })
     )
     this.loopCount$
-      .pipe(distinctUntilChanged(), takeUntil(this.stopped$))
+      .pipe(
+        filter((v) => v > 0),
+        distinctUntilChanged(),
+        takeUntil(this.stopped$)
+      )
       .subscribe(() => {
         this.service.triggerNextTest()
       })

@@ -124,9 +124,9 @@ export class TestScreenComponent
         this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS])
         return
       }
+      this.service.resetState()
       setGoBackLocation(this.goBackLocation)
       this.initVisualization()
-      this.service.launchTests()
       return
     })
   }
@@ -160,6 +160,7 @@ export class TestScreenComponent
         return state
       })
     )
+    this.service.triggerNextTest()
   }
 
   protected openErrorDialog(state: ITestVisualizationState) {

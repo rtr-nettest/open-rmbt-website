@@ -63,13 +63,6 @@ export class TestService {
     @Inject(PLATFORM_ID) private readonly platformId: object
   ) {}
 
-  launchTests() {
-    this.resetState()
-    this.ngZone.runOutsideAngular(() => {
-      this.triggerNextTest()
-    })
-  }
-
   async triggerNextTest() {
     let rmbtws = await import("rmbtws/dist/esm/rmbtws.min.js" as any)
     if (!rmbtws.TestEnvironment) {
@@ -79,55 +72,58 @@ export class TestService {
       this.message.openSnackbar("Error loading test environment")
       return
     }
-    rmbtws.TestEnvironment.init(
-      new RmbtwsDelegateService(
-        () => this.testStore.basicNetworkInfo(),
-        (v) => this.testStore.basicNetworkInfo.set(v)
-      ),
-      null
-    )
-    const config = new rmbtws.RMBTTestConfig(
-      "en",
-      environment.api.baseUrl,
-      `RMBTControlServer`
-    )
-    config.uuid = localStorage.getItem(UUID)
-    config.timezone = dayjs.tz.guess()
-    if (this.loopStore.isLoopModeEnabled())
-      config.additionalRegistrationParameters = {
-        loopmode_info: {
-          max_delay: (this.loopStore.testIntervalMinutes() ?? 0) / 60,
-          test_counter: this.loopStore.loopCounter(),
-          max_tests: this.loopStore.maxTestsAllowed(),
-          loop_uuid: this.loopStore.loopUuid(),
-        },
-      }
-    const rmbtTest = new rmbtws.RMBTTest(
-      config,
-      new rmbtws.RMBTControlServerCommunication(config)
-    )
-    rmbtTest.onStateChange(() => {
-      this.stateChangeMs = Date.now()
-    })
-    rmbtTest.onError((error: any) => {
-      this.ngZone.run(() => {
-        this.mainStore.error$.next(error)
-      })
-    })
-    this.startTimeMs = Date.now()
-    rmbtTest.startTest()
-    this.visUpdateSub?.unsubscribe()
-    this.visUpdateSub = interval(STATE_UPDATE_TIMEOUT)
-      .pipe(
-        concatMap(() => from(this.getMeasurementState(rmbtTest))),
-        withLatestFrom(this.testStore.visualization$),
-        map(([state, vis]) => {
-          this.ngZone.run(() => {
-            this.setTestState(state, vis)
-          })
-        })
+
+    this.ngZone.runOutsideAngular(() => {
+      rmbtws.TestEnvironment.init(
+        new RmbtwsDelegateService(
+          () => this.testStore.basicNetworkInfo(),
+          (v) => this.testStore.basicNetworkInfo.set(v)
+        ),
+        null
       )
-      .subscribe()
+      const config = new rmbtws.RMBTTestConfig(
+        "en",
+        environment.api.baseUrl,
+        `RMBTControlServer`
+      )
+      config.uuid = localStorage.getItem(UUID)
+      config.timezone = dayjs.tz.guess()
+      if (this.loopStore.isLoopModeEnabled())
+        config.additionalRegistrationParameters = {
+          loopmode_info: {
+            max_delay: (this.loopStore.testIntervalMinutes() ?? 0) / 60,
+            test_counter: this.loopStore.loopCounter(),
+            max_tests: this.loopStore.maxTestsAllowed(),
+            loop_uuid: this.loopStore.loopUuid(),
+          },
+        }
+      const rmbtTest = new rmbtws.RMBTTest(
+        config,
+        new rmbtws.RMBTControlServerCommunication(config)
+      )
+      rmbtTest.onStateChange(() => {
+        this.stateChangeMs = Date.now()
+      })
+      rmbtTest.onError((error: any) => {
+        this.ngZone.run(() => {
+          this.mainStore.error$.next(error)
+        })
+      })
+      this.startTimeMs = Date.now()
+      rmbtTest.startTest()
+      this.visUpdateSub?.unsubscribe()
+      this.visUpdateSub = interval(STATE_UPDATE_TIMEOUT)
+        .pipe(
+          concatMap(() => from(this.getMeasurementState(rmbtTest))),
+          withLatestFrom(this.testStore.visualization$),
+          map(([state, vis]) => {
+            this.ngZone.run(() => {
+              this.setTestState(state, vis)
+            })
+          })
+        )
+        .subscribe()
+    })
   }
 
   updateEndTime() {
@@ -155,7 +151,7 @@ export class TestService {
     return newState
   }
 
-  private resetState() {
+  resetState() {
     this.testStore.basicNetworkInfo.set(new BasicNetworkInfo())
     this.testStore.visualization$.next(new TestVisualizationState())
     this.historyStore.simpleHistoryResult$.next(null)
