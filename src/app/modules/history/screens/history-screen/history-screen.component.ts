@@ -107,7 +107,8 @@ export class HistoryScreenComponent extends SeoComponent {
   }
 
   ngOnInit(): void {
-    if (!this.store.history$.value.length && this.uuid) {
+    if (this.uuid) {
+      this.store.history$.next([])
       this.scrollNLoad.load({ reset: true })
     } else {
       this.scrollNLoad.loading = false
