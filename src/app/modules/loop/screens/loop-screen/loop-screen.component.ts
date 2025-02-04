@@ -31,8 +31,24 @@ export class LoopScreenComponent extends TestScreenComponent {
   protected waitingProgressMs = 0
   protected shouldGetHistory$ = new BehaviorSubject<boolean>(false)
   protected currentTestUuid$ = new BehaviorSubject<string | null>(null)
+  isTabActive = true
+
+  tabActivityListener = () => {
+    if (document.hidden) {
+      this.isTabActive = false
+    } else {
+      this.isTabActive = true
+      this.ts.setTitle(this.metaTitle)
+    }
+  }
+
+  override ngOnDestroy(): void {
+    document.removeEventListener("visibilitychange", this.tabActivityListener)
+    super.ngOnDestroy()
+  }
 
   override initVisualization(): void {
+    document.addEventListener("visibilitychange", this.tabActivityListener)
     this.visualization$ = this.store.visualization$.pipe(
       withLatestFrom(this.mainStore.error$, this.loopCount$),
       distinctUntilChanged(),
@@ -61,13 +77,6 @@ export class LoopScreenComponent extends TestScreenComponent {
 
   protected scheduleLoop() {
     this.loopService.scheduleLoop()
-  }
-
-  override ngOnInit(): void {
-    super.ngOnInit()
-    this.ngZone.run(() => {
-      this.getRecentHistory(this.loopStore.loopCounter())
-    })
   }
 
   override abortTest(): void {
@@ -101,6 +110,8 @@ export class LoopScreenComponent extends TestScreenComponent {
   }
 
   protected override goToResult = (_: ITestVisualizationState) => {
+    if (!this.isTabActive)
+      this.ts.setTitle(`(${this.loopStore.loopCounter()}) ${this.metaTitle}`)
     if (this.loopStore.maxTestsReached()) {
       this.abortTest()
       return

@@ -1,12 +1,10 @@
-import { Injectable } from "@angular/core"
-import { TestStore } from "../store/test.store"
 import { BasicNetworkInfo } from "../dto/basic-network-info.dto"
-
-@Injectable({
-  providedIn: "root",
-})
+import { IBasicNetworkInfo } from "../interfaces/basic-network-info.interface"
 export class RmbtwsDelegateService {
-  constructor(private readonly testStore: TestStore) {}
+  constructor(
+    private readonly getFunc: () => IBasicNetworkInfo,
+    private readonly setFunc: (newValue: IBasicNetworkInfo) => void
+  ) {}
 
   draw() {}
 
@@ -17,7 +15,7 @@ export class RmbtwsDelegateService {
     testUuid: string,
     openTestUuid: string
   ) {
-    this.testStore.basicNetworkInfo.set(
+    this.setFunc(
       new BasicNetworkInfo(
         serverName,
         remoteIp,
@@ -29,8 +27,8 @@ export class RmbtwsDelegateService {
   }
 
   setLocation(lat: number, lon: number) {
-    const info = this.testStore.basicNetworkInfo()
+    const info = this.getFunc()
     info.coordinates = [lon, lat]
-    this.testStore.basicNetworkInfo.set(info)
+    this.setFunc(info)
   }
 }

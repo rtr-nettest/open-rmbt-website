@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core"
 import { LoopStoreService } from "../store/loop-store.service"
 import { v4 } from "uuid"
-import { MessageService } from "../../shared/services/message.service"
-import { ELoopEventType } from "../constants/loop-event.enum"
+import { interval, Subscription, tap } from "rxjs"
 
 export type CertifiedLoopOpts = {
   intervalMinutes: number
@@ -13,53 +12,29 @@ export type CertifiedLoopOpts = {
   providedIn: "root",
 })
 export class LoopService {
-  worker?: Worker
+  loopSub?: Subscription
 
-  constructor(
-    private readonly loopStore: LoopStoreService,
-    private readonly messageService: MessageService
-  ) {}
+  constructor(private readonly loopStore: LoopStoreService) {}
 
   scheduleLoop(options?: CertifiedLoopOpts) {
     this.enableLoopMode(options)
-    if (typeof Worker !== "undefined") {
-      this.worker = new Worker(
-        new URL("../web-workers/loop.worker.ts", import.meta.url)
+    this.loopSub?.unsubscribe()
+    this.loopSub = interval(this.loopStore.fullTestIntervalMs()!)
+      .pipe(
+        tap(() => {
+          const newCounter = this.loopStore.loopCounter() + 1
+          this.loopStore.loopCounter.set(newCounter)
+          if (newCounter >= this.loopStore.maxTestsAllowed()) {
+            this.loopStore.maxTestsReached.set(true)
+          }
+        })
       )
-      this.worker.postMessage({
-        type: ELoopEventType.SCHEDULE_LOOP,
-        payload: {
-          intervalMs: this.loopStore.fullTestIntervalMs(),
-        },
-      })
-      this.worker.onmessage = (message) => {
-        const type = message.data as ELoopEventType
-        switch (type) {
-          case ELoopEventType.LOOP_CANCELLED:
-            this.messageService.openSnackbar("Loop test cancelled.")
-            this.disableLoopMode()
-            this.worker?.terminate()
-            break
-          case ELoopEventType.TRIGGER_NEXT_TEST:
-            const newCounter = this.loopStore.loopCounter() + 1
-            this.loopStore.loopCounter.set(newCounter)
-            if (newCounter >= this.loopStore.maxTestsAllowed()) {
-              this.loopStore.maxTestsReached.set(true)
-            }
-            break
-        }
-      }
-    } else {
-      this.messageService.openSnackbar(
-        "Web Workers are not supported in this browser"
-      )
-    }
+      .subscribe()
   }
 
   cancelLoop() {
-    this.worker?.postMessage({
-      type: ELoopEventType.CANCEL_LOOP,
-    })
+    this.loopSub?.unsubscribe()
+    this.disableLoopMode()
   }
 
   private enableLoopMode(options?: CertifiedLoopOpts | undefined) {

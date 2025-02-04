@@ -37,6 +37,7 @@ import { HistoryStore } from "../../history/store/history.store"
 import { SettingsService } from "../../shared/services/settings.service"
 import { LoopStoreService } from "../../loop/store/loop-store.service"
 import { RmbtwsDelegateService } from "./rmbtws-delegate.service"
+import { MessageService } from "../../shared/services/message.service"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -46,7 +47,6 @@ dayjs.extend(tz)
 export class TestService {
   private downs: IOverallResult[] = []
   private ups: IOverallResult[] = []
-  private rmbtws: any
   private startTimeMs = 0
   private endTimeMs = 0
   private stateChangeMs = 0
@@ -56,37 +56,37 @@ export class TestService {
     private readonly historyStore: HistoryStore,
     private readonly loopStore: LoopStoreService,
     private readonly mainStore: MainStore,
+    private readonly message: MessageService,
     private readonly ngZone: NgZone,
     private readonly settingsService: SettingsService,
     private readonly testStore: TestStore,
-    private readonly rmbtwsDelegate: RmbtwsDelegateService,
     @Inject(PLATFORM_ID) private readonly platformId: object
-  ) {
-    if (isPlatformBrowser(this.platformId)) {
-      import("rmbtws/dist/esm/rmbtws.min.js" as any).then((rmbtws) => {
-        this.rmbtws = rmbtws
-        if (!this.rmbtws.TestEnvironment) {
-          this.rmbtws = rmbtws.default
-          return
-        }
-      })
-    }
-  }
+  ) {}
 
   launchTests() {
     this.resetState()
-    if (!isPlatformBrowser(this.platformId) || !this.rmbtws) {
-      console.error("RMBTws not loaded")
-      return
-    }
     this.ngZone.runOutsideAngular(() => {
       this.triggerNextTest()
     })
   }
 
-  triggerNextTest() {
-    this.rmbtws.TestEnvironment.init(this.rmbtwsDelegate, null)
-    const config = new this.rmbtws.RMBTTestConfig(
+  async triggerNextTest() {
+    let rmbtws = await import("rmbtws/dist/esm/rmbtws.min.js" as any)
+    if (!rmbtws.TestEnvironment) {
+      rmbtws = rmbtws.default
+    }
+    if (!isPlatformBrowser(this.platformId) || !rmbtws) {
+      this.message.openSnackbar("Error loading test environment")
+      return
+    }
+    rmbtws.TestEnvironment.init(
+      new RmbtwsDelegateService(
+        () => this.testStore.basicNetworkInfo(),
+        (v) => this.testStore.basicNetworkInfo.set(v)
+      ),
+      null
+    )
+    const config = new rmbtws.RMBTTestConfig(
       "en",
       environment.api.baseUrl,
       `RMBTControlServer`
@@ -102,9 +102,9 @@ export class TestService {
           loop_uuid: this.loopStore.loopUuid(),
         },
       }
-    const rmbtTest = new this.rmbtws.RMBTTest(
+    const rmbtTest = new rmbtws.RMBTTest(
       config,
-      new this.rmbtws.RMBTControlServerCommunication(config)
+      new rmbtws.RMBTControlServerCommunication(config)
     )
     rmbtTest.onStateChange(() => {
       this.stateChangeMs = Date.now()
