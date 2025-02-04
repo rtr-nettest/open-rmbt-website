@@ -16,6 +16,8 @@ import { Step3Component } from "./modules/certified/screens/step-3/step-3.compon
 import { LoopScreenComponent } from "./modules/loop/screens/loop-screen/loop-screen.component"
 import { Step1Component as LoopStep1Component } from "./modules/loop/screens/step-1/step-1.component"
 import { Step4Component } from "./modules/certified/screens/step-4/step-4.component"
+import { LoopResultScreenComponent } from "./modules/loop/screens/loop-result-screen/loop-result-screen.component"
+import { CertifiedResultScreenComponent } from "./modules/certified/screens/certified-result-screen/certified-result-screen.component"
 
 export const routes: Routes = [
   {
@@ -48,6 +50,7 @@ export const routes: Routes = [
         path: ERoutes.TEST,
         component: TestScreenComponent,
         resolve: [localeResolver],
+        runGuardsAndResolvers: "always",
         data: {
           title: "Test",
         },
@@ -109,6 +112,14 @@ export const routes: Routes = [
         },
       },
       {
+        path: ERoutes.LOOP_RESULT,
+        component: LoopResultScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Loop Mode Results",
+        },
+      },
+      {
         path: ERoutes.CERTIFIED_1,
         component: Step1Component,
         resolve: [localeResolver],
@@ -138,6 +149,14 @@ export const routes: Routes = [
         resolve: [localeResolver],
         data: {
           title: "Certified measurement",
+        },
+      },
+      {
+        path: ERoutes.CERTIFIED_RESULT,
+        component: CertifiedResultScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Certified Measurement Results",
         },
       },
       {

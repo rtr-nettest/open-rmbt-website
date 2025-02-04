@@ -18,7 +18,7 @@ import { HistoryExportService } from "../../services/history-export.service"
 import { ActionButtonsComponent } from "../../components/action-buttons/action-buttons.component"
 import { RecentHistoryComponent } from "../../components/recent-history/recent-history.component"
 import { AsyncPipe } from "@angular/common"
-import { firstValueFrom, Observable } from "rxjs"
+import { firstValueFrom, Observable, of } from "rxjs"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { HistoryService } from "../../services/history.service"
 import { ISort } from "../../../tables/interfaces/sort.interface"
@@ -27,21 +27,23 @@ import { IHistoryGroupItem } from "../../interfaces/history-row.interface"
 import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
 import { ScrollNLoadService } from "../../../shared/services/scroll-n-load.service"
 
+export const historyImports = [
+  ActionButtonsComponent,
+  AsyncPipe,
+  BreadcrumbsComponent,
+  FooterComponent,
+  HeaderComponent,
+  LoadingOverlayComponent,
+  RecentHistoryComponent,
+  ScrollTopComponent,
+  TopNavComponent,
+  TranslatePipe,
+]
+
 @Component({
   selector: "app-history-screen",
   standalone: true,
-  imports: [
-    ActionButtonsComponent,
-    AsyncPipe,
-    BreadcrumbsComponent,
-    FooterComponent,
-    HeaderComponent,
-    LoadingOverlayComponent,
-    RecentHistoryComponent,
-    ScrollTopComponent,
-    TopNavComponent,
-    TranslatePipe,
-  ],
+  imports: historyImports,
   templateUrl: "./history-screen.component.html",
   styleUrl: "./history-screen.component.scss",
 })
@@ -86,6 +88,7 @@ export class HistoryScreenComponent extends SeoComponent {
     this.store.paginator,
     HISTORY_LIMIT
   )
+  text$ = of("")
 
   get loading() {
     return this.scrollNLoad.loading

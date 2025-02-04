@@ -11,20 +11,17 @@ import {
 } from "../../../history/interfaces/history-row.interface"
 import { ISort } from "../../../tables/interfaces/sort.interface"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
-import { MessageService } from "../../../shared/services/message.service"
 import { HistoryStore } from "../../../history/store/history.store"
 import { DatePipe, NgIf } from "@angular/common"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { TestService } from "../../../test/services/test.service"
-import { THIS_INTERRUPTS_ACTION } from "../../../test/constants/strings"
 import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.interface"
 import { I18nStore, Translation } from "../../../i18n/store/i18n.store"
 import { ClassificationService } from "../../../shared/services/classification.service"
 import { roundToSignificantDigits } from "../../../shared/util/math"
 import { Router } from "@angular/router"
 import { ERoutes } from "../../../shared/constants/routes.enum"
-import { setGoBackLocation } from "../../../shared/util/nav"
 import { LoopService } from "../../../loop/services/loop.service"
 
 @Component({
@@ -41,15 +38,11 @@ export class RecentHistoryComponent implements OnChanges {
   }) {
     this.data = {
       content: result.content.map(
-        this.historyItemToRow(
-          this.i18nStore.translations,
-          this.store.openLoops$.value
-        )
+        this.historyItemToRow(this.i18nStore.translations)
       ),
       totalElements: result.totalElements,
     }
   }
-  @Input({ required: true }) goBackLocation!: string
   @Input() grouped?: boolean
   @Input() title?: string
   @Input() excludeColumns?: string[]
@@ -114,11 +107,8 @@ export class RecentHistoryComponent implements OnChanges {
     private classification: ClassificationService,
     private datePipe: DatePipe,
     private i18nStore: I18nStore,
-    private loopService: LoopService,
-    private message: MessageService,
     private router: Router,
-    private store: HistoryStore,
-    private testService: TestService
+    private store: HistoryStore
   ) {}
 
   ngOnChanges(): void {
@@ -136,21 +126,10 @@ export class RecentHistoryComponent implements OnChanges {
 
   handleRowClick = (row: IHistoryRow) => {
     if (!row.id?.startsWith("L")) {
-      const navFunc = () => {
-        this.testService.abortMeasurement()
-        this.loopService.cancelLoop()
-        setGoBackLocation(this.goBackLocation)
-        this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
-          queryParams: { test_uuid: row.id },
-        })
-      }
-      if (this.interruptsTests) {
-        this.message.openConfirmDialog(THIS_INTERRUPTS_ACTION, navFunc, {
-          canCancel: true,
-        })
-      } else {
-        navFunc()
-      }
+      // navigation to one of the loop results
+      this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
+        queryParams: { test_uuid: row.id },
+      })
       return
     }
     this.toggleLoopResults(row.id)
@@ -168,7 +147,7 @@ export class RecentHistoryComponent implements OnChanges {
   }
 
   private historyItemToRow =
-    (t: Translation, openLoops: string[]) =>
+    (t: Translation) =>
     (hi: ISimpleHistoryResult & IHistoryGroupItem): IHistoryRow => {
       const locale = this.i18nStore.activeLang
       const measurementDate = this.datePipe.transform(
@@ -192,6 +171,7 @@ export class RecentHistoryComponent implements OnChanges {
       const ping = hi.ping?.value
       return {
         ...hi,
+        id: hi.testUuid,
         openUuid: hi.openTestResponse?.["openTestUuid"],
         device: hi.openTestResponse?.["device"],
         networkType: hi.openTestResponse?.["networkType"],

@@ -29,6 +29,10 @@ export class ScrollNLoadService {
     }
   }
 
+  disableOnScroll() {
+    this.allLoaded = true
+  }
+
   onScroll(event: any) {
     if (this.loading || this.allLoaded) {
       return

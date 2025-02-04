@@ -1,4 +1,11 @@
-import { Component, HostListener, inject, NgZone, OnInit } from "@angular/core"
+import {
+  AfterViewInit,
+  Component,
+  HostListener,
+  inject,
+  NgZone,
+  OnInit,
+} from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Router } from "@angular/router"
 import {
@@ -27,6 +34,7 @@ import {
   ERROR_OCCURED,
   ERROR_OCCURED_SENDING_RESULTS,
   TC_VERSION_ACCEPTED,
+  THIS_INTERRUPTS_ACTION,
 } from "../../constants/strings"
 import { MessageService } from "../../../shared/services/message.service"
 import { SpacerComponent } from "../../../shared/components/spacer/spacer.component"
@@ -67,7 +75,10 @@ export const imports = [
   templateUrl: "./test-screen.component.html",
   styleUrl: "./test-screen.component.scss",
 })
-export class TestScreenComponent extends SeoComponent implements OnInit {
+export class TestScreenComponent
+  extends SeoComponent
+  implements OnInit, AfterViewInit
+{
   goBackLocation = `/${this.i18nStore.activeLang}/${ERoutes.HOME}`
   historyService = inject(HistoryService)
   router = inject(Router)
@@ -92,6 +103,15 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
     "determinate"
   )
 
+  ngAfterViewInit() {
+    document.querySelectorAll("a").forEach((a) => {
+      a.style.pointerEvents = "none"
+    })
+    document.querySelectorAll("button").forEach((a) => {
+      a.style.pointerEvents = "none"
+    })
+  }
+
   ngOnInit(): void {
     if (!globalThis.localStorage) {
       return
@@ -104,10 +124,21 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
         this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS])
         return
       }
+      setGoBackLocation(this.goBackLocation)
       this.initVisualization()
       this.service.launchTests()
       return
     })
+  }
+
+  override ngOnDestroy(): void {
+    document.querySelectorAll("a").forEach((a) => {
+      a.style.pointerEvents = "auto"
+    })
+    document.querySelectorAll("button").forEach((a) => {
+      a.style.pointerEvents = "auto"
+    })
+    super.ngOnDestroy()
   }
 
   protected abortTest() {
@@ -148,7 +179,6 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
 
   protected goToResult = (state: ITestVisualizationState) => {
     this.stopped$.next()
-    setGoBackLocation(this.goBackLocation)
     // Go to the result page
     this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
       queryParams: {

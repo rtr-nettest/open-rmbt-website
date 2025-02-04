@@ -15,6 +15,7 @@ import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
 import { MainStore } from "../../shared/store/main.store"
 import { LoopStoreService } from "../../loop/store/loop-store.service"
+import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -79,7 +80,9 @@ export class HistoryRepositoryService {
     if (paginator?.limit) {
       body["result_limit"] = paginator.limit
     }
-    const loopUuid = this.loopStore.loopUuid()
+    const loopUuid =
+      this.loopStore.loopUuid() ||
+      globalThis.location?.search?.split("loop_uuid=")[1]
     if (loopUuid) {
       body["loop_uuid"] = loopUuid
     }
@@ -92,7 +95,11 @@ export class HistoryRepositoryService {
     if (resp?.error.length) {
       throw new Error(resp.error)
     }
-    return resp?.history
+    return (
+      resp?.history?.map((hi: any) =>
+        SimpleHistoryResult.fromHistoryResponse(hi)
+      ) ?? []
+    )
   }
 
   getCoverages(lon: number, lat: number) {

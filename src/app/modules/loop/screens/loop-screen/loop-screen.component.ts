@@ -16,7 +16,6 @@ import { ERROR_OCCURED_DURING_LOOP } from "../../constants/strings"
 import { STATE_UPDATE_TIMEOUT } from "../../../test/constants/numbers"
 import { LoopService } from "../../services/loop.service"
 import { ERoutes } from "../../../shared/constants/routes.enum"
-import { setGoBackLocation } from "../../../shared/util/nav"
 
 @Component({
   selector: "app-loop-screen",
@@ -83,7 +82,6 @@ export class LoopScreenComponent extends TestScreenComponent {
     this.stopped$.next()
     this.service.abortMeasurement()
     this.loopService.cancelLoop()
-    setGoBackLocation(this.goBackLocation)
     this.router.navigate([this.i18nStore.activeLang, ERoutes.LOOP_RESULT], {
       queryParams: { loop_uuid: this.loopStore.loopUuid() },
     })

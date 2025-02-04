@@ -4,13 +4,14 @@
 <app-scroll-top></app-scroll-top>
 <div class="app-wrapper">
   <header class="app-header">
-    <h1>{{ "History" | translate }}</h1>
+    <h1>{{ title | translate }}</h1>
     <app-action-buttons [items]="actionButtons"></app-action-buttons>
   </header>
-  @if (result$ | async; as result) {
+  @if (text$ | async; as text) {
+  <p class="app-subheader" [innerHTML]="text"></p>
+  } @if (result$ | async; as result) {
   <app-recent-history
     [result]="result"
-    [goBackLocation]="goBackLocation"
     [grouped]="shouldGroupHistory"
     (sortChange)="changeSort($event)"
   ></app-recent-history>
