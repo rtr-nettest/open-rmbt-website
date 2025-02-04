@@ -3,5 +3,7 @@
   title="Privacy Policy and Terms of Use"
   [text]="(terms$ | async)!"
   [storageItem]="storageItem"
+  (cancelChange)="onCancel()"
+  (agreeChange)="onAgree()"
 ></app-agreement>
 }

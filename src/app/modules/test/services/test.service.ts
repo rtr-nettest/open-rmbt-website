@@ -63,7 +63,7 @@ export class TestService {
     @Inject(PLATFORM_ID) private readonly platformId: object
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      import("rmbtws" as any).then((rmbtws) => {
+      import("rmbtws/dist/esm/rmbtws.min.js" as any).then((rmbtws) => {
         this.rmbtws = rmbtws
         if (!this.rmbtws.TestEnvironment) {
           this.rmbtws = rmbtws.default
