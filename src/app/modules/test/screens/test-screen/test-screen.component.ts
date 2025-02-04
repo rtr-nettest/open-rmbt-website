@@ -75,10 +75,7 @@ export const imports = [
   templateUrl: "./test-screen.component.html",
   styleUrl: "./test-screen.component.scss",
 })
-export class TestScreenComponent
-  extends SeoComponent
-  implements OnInit, AfterViewInit
-{
+export class TestScreenComponent extends SeoComponent implements OnInit {
   goBackLocation = `/${this.i18nStore.activeLang}/${ERoutes.HOME}`
   historyService = inject(HistoryService)
   router = inject(Router)
@@ -103,15 +100,6 @@ export class TestScreenComponent
     "determinate"
   )
 
-  ngAfterViewInit() {
-    document.querySelectorAll("a").forEach((a) => {
-      a.style.pointerEvents = "none"
-    })
-    document.querySelectorAll("button").forEach((a) => {
-      a.style.pointerEvents = "none"
-    })
-  }
-
   ngOnInit(): void {
     if (!globalThis.localStorage) {
       return
@@ -129,16 +117,6 @@ export class TestScreenComponent
       this.initVisualization()
       return
     })
-  }
-
-  override ngOnDestroy(): void {
-    document.querySelectorAll("a").forEach((a) => {
-      a.style.pointerEvents = "auto"
-    })
-    document.querySelectorAll("button").forEach((a) => {
-      a.style.pointerEvents = "auto"
-    })
-    super.ngOnDestroy()
   }
 
   protected abortTest() {
