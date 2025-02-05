@@ -76,11 +76,13 @@
         </mat-cell>
       </ng-container>
 
-      <ng-container *ngIf="column.columnDef == 'arrowIndicator'">
+      <ng-container *ngIf="column.columnDef == 'groupArrowIndicator'">
         <mat-cell *matCellDef="let element; let i = dataIndex">
+          @if (element["groupHeader"]) {
           <mat-icon [@arrowRotate]="isElementExpanded(element.id)">
             arrow_drop_down
           </mat-icon>
+          }
         </mat-cell>
       </ng-container>
 
@@ -204,6 +206,8 @@
       [class.mat-row--clickable]="rowsAreCLickable === true"
       [class.mat-row--collapsed]="!isElementExpanded(row.id)"
       [class.mat-row--expanded]="isElementExpanded(row.id)"
+      [class.mat-row--hidden]="row.hidden === true"
+      [class.mat-row--visible]="row.hidden === false"
       [class.mat-row--group-header]="row.groupHeader"
       (click)="onRowClick.emit(row)"
       (keydown.enter)="onRowClick.emit(row)"

@@ -1,12 +1,13 @@
 @import "core";
 
 .app-main {
+  align-items: center;
   display: flex;
   justify-content: center;
   width: 100%;
 
   app-spacer {
-    flex: 0 0 rem(10);
+    flex: 0 0 2rem;
   }
 
   app-interim-results {
@@ -15,7 +16,7 @@
   }
 
   .app-progress-bar-wrapper {
-    flex: 0 0 calc(55% - 10rem);
+    flex: 0 0 calc(55% - 2rem);
     width: rem(235);
   }
 
@@ -40,4 +41,8 @@
       margin: rem(24) 0 rem(40);
     }
   }
+}
+
+.app-title {
+  margin-bottom: 1em;
 }

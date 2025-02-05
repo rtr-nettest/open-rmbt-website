@@ -7,8 +7,6 @@ export interface IHistoryRow extends IHistoryGroupItem {
   loopUuid?: string
   networkType?: string
   openUuid?: string
-  componentField?: string
-  parameters?: { [key: string]: any }
 }
 
 export interface IHistoryGroupItem {

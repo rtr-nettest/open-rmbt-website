@@ -13,6 +13,12 @@ import { HistoryScreenComponent } from "./modules/history/screens/history-screen
 import { Step1Component } from "./modules/certified/screens/step-1/step-1.component"
 import { Step2Component } from "./modules/certified/screens/step-2/step-2.component"
 import { Step3Component } from "./modules/certified/screens/step-3/step-3.component"
+import { LoopScreenComponent } from "./modules/loop/screens/loop-screen/loop-screen.component"
+import { Step1Component as LoopStep1Component } from "./modules/loop/screens/step-1/step-1.component"
+import { Step4Component } from "./modules/certified/screens/step-4/step-4.component"
+import { LoopResultScreenComponent } from "./modules/loop/screens/loop-result-screen/loop-result-screen.component"
+import { CertifiedResultScreenComponent } from "./modules/certified/screens/certified-result-screen/certified-result-screen.component"
+import { preventUnloadGuard } from "./modules/shared/guards/prevent-unload.guard"
 
 export const routes: Routes = [
   {
@@ -44,7 +50,9 @@ export const routes: Routes = [
       {
         path: ERoutes.TEST,
         component: TestScreenComponent,
+        canDeactivate: [preventUnloadGuard],
         resolve: [localeResolver],
+        runGuardsAndResolvers: "always",
         data: {
           title: "Test",
         },
@@ -82,7 +90,40 @@ export const routes: Routes = [
         },
       },
       {
-        path: ERoutes.CERTIFIED,
+        path: ERoutes.LOOP,
+        canDeactivate: [preventUnloadGuard],
+        component: LoopScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Loop Mode",
+        },
+      },
+      {
+        path: ERoutes.LOOP_1,
+        component: LoopStep1Component,
+        resolve: [localeResolver],
+        data: {
+          title: "Loop Mode",
+        },
+      },
+      {
+        path: ERoutes.LOOP_2,
+        component: LoopScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Loop Mode",
+        },
+      },
+      {
+        path: ERoutes.LOOP_RESULT,
+        component: LoopResultScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Loop Mode Results",
+        },
+      },
+      {
+        path: ERoutes.CERTIFIED_1,
         component: Step1Component,
         resolve: [localeResolver],
         data: {
@@ -98,19 +139,36 @@ export const routes: Routes = [
         },
       },
       {
-        path: ERoutes.OPEN_RESULT,
-        component: ResultScreenComponent,
-        resolve: [localeResolver],
-        data: {
-          title: "opentest",
-        },
-      },
-      {
         path: ERoutes.CERTIFIED_3,
         component: Step3Component,
         resolve: [localeResolver],
         data: {
           title: "Certified measurement",
+        },
+      },
+      {
+        path: ERoutes.CERTIFIED_4,
+        canDeactivate: [preventUnloadGuard],
+        component: Step4Component,
+        resolve: [localeResolver],
+        data: {
+          title: "Certified measurement",
+        },
+      },
+      {
+        path: ERoutes.CERTIFIED_RESULT,
+        component: CertifiedResultScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Certified Measurement Results",
+        },
+      },
+      {
+        path: ERoutes.OPEN_RESULT,
+        component: ResultScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "opentest",
         },
       },
       {

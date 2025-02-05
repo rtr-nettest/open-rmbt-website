@@ -14,6 +14,7 @@ import {
   map,
   Observable,
   of,
+  Subscription,
   withLatestFrom,
 } from "rxjs"
 import { isPlatformBrowser } from "@angular/common"
@@ -24,19 +25,19 @@ import { IMeasurementPhaseState } from "../interfaces/measurement-phase-state.in
 import { IBasicNetworkInfo } from "../interfaces/basic-network-info.interface"
 import { EMeasurementStatus } from "../constants/measurement-status.enum"
 import { IOverallResult } from "../../history/interfaces/overall-result.interface"
-import { v4 } from "uuid"
 import { TestStore } from "../store/test.store"
 import { ITestVisualizationState } from "../interfaces/test-visualization-state.interface"
 import { TestVisualizationState } from "../dto/test-visualization-state.dto"
-import { ILoopModeInfo } from "../interfaces/measurement-registration-request.interface"
 import { Router } from "@angular/router"
-import { ERoutes } from "../../shared/constants/routes.enum"
 import { BasicNetworkInfo } from "../dto/basic-network-info.dto"
 import { UUID } from "../constants/strings"
 import { STATE_UPDATE_TIMEOUT } from "../constants/numbers"
 import { MainStore } from "../../shared/store/main.store"
 import { HistoryStore } from "../../history/store/history.store"
 import { SettingsService } from "../../shared/services/settings.service"
+import { LoopStoreService } from "../../loop/store/loop-store.service"
+import { RmbtwsDelegateService } from "./rmbtws-delegate.service"
+import { MessageService } from "../../shared/services/message.service"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -44,79 +45,89 @@ dayjs.extend(tz)
   providedIn: "root",
 })
 export class TestService {
-  private coordinates?: [number, number]
   private downs: IOverallResult[] = []
   private ups: IOverallResult[] = []
-  private rmbtws: any
-  private rmbtTest: any
   private startTimeMs = 0
   private endTimeMs = 0
-  private serverName?: string
-  private remoteIp?: string
-  private providerName?: string
-  private testUuid?: string
   private stateChangeMs = 0
-  private openTestUuid?: string
+  private visUpdateSub?: Subscription
 
   constructor(
     private readonly historyStore: HistoryStore,
+    private readonly loopStore: LoopStoreService,
     private readonly mainStore: MainStore,
+    private readonly message: MessageService,
     private readonly ngZone: NgZone,
     private readonly settingsService: SettingsService,
-    private readonly router: Router,
     private readonly testStore: TestStore,
     @Inject(PLATFORM_ID) private readonly platformId: object
-  ) {
-    if (isPlatformBrowser(this.platformId)) {
-      import("rmbtws" as any).then((rmbtws) => {
-        this.rmbtws = rmbtws
-        if (!this.rmbtws.TestEnvironment) {
-          this.rmbtws = rmbtws.default
-          return
-        }
-      })
+  ) {}
+
+  async triggerNextTest() {
+    let rmbtws = await import("rmbtws/dist/esm/rmbtws.min.js" as any)
+    if (!rmbtws.TestEnvironment) {
+      rmbtws = rmbtws.default
     }
+    if (!isPlatformBrowser(this.platformId) || !rmbtws) {
+      this.message.openSnackbar("Error loading test environment")
+      return
+    }
+
+    this.ngZone.runOutsideAngular(() => {
+      rmbtws.TestEnvironment.init(
+        new RmbtwsDelegateService(
+          () => this.testStore.basicNetworkInfo(),
+          (v) => this.testStore.basicNetworkInfo.set(v)
+        ),
+        null
+      )
+      const config = new rmbtws.RMBTTestConfig(
+        "en",
+        environment.api.baseUrl,
+        `RMBTControlServer`
+      )
+      config.uuid = localStorage.getItem(UUID)
+      config.timezone = dayjs.tz.guess()
+      if (this.loopStore.isLoopModeEnabled())
+        config.additionalRegistrationParameters = {
+          loopmode_info: {
+            max_delay: (this.loopStore.testIntervalMinutes() ?? 0) / 60,
+            test_counter: this.loopStore.loopCounter(),
+            max_tests: this.loopStore.maxTestsAllowed(),
+            loop_uuid: this.loopStore.loopUuid(),
+          },
+        }
+      const rmbtTest = new rmbtws.RMBTTest(
+        config,
+        new rmbtws.RMBTControlServerCommunication(config)
+      )
+      rmbtTest.onStateChange(() => {
+        this.stateChangeMs = Date.now()
+      })
+      rmbtTest.onError((error: any) => {
+        this.ngZone.run(() => {
+          this.mainStore.error$.next(error)
+        })
+      })
+      this.startTimeMs = Date.now()
+      rmbtTest.startTest()
+      this.visUpdateSub?.unsubscribe()
+      this.visUpdateSub = interval(STATE_UPDATE_TIMEOUT)
+        .pipe(
+          concatMap(() => from(this.getMeasurementState(rmbtTest))),
+          withLatestFrom(this.testStore.visualization$),
+          map(([state, vis]) => {
+            this.ngZone.run(() => {
+              this.setTestState(state, vis)
+            })
+          })
+        )
+        .subscribe()
+    })
   }
 
-  launchTest() {
-    this.resetState()
-    if (!isPlatformBrowser(this.platformId) || !this.rmbtws) {
-      console.error("RMBTws not loaded")
-      return of(null)
-    }
-    if (!this.testStore.enableLoopMode$.value) {
-      this.ngZone.runOutsideAngular(() => {
-        this.rmbtws.TestEnvironment.init(this, null)
-        const config = new this.rmbtws.RMBTTestConfig(
-          "en",
-          environment.api.baseUrl,
-          `RMBTControlServer`
-        )
-        config.uuid = localStorage.getItem(UUID)
-        config.timezone = dayjs.tz.guess()
-        const ctrl = new this.rmbtws.RMBTControlServerCommunication(config)
-
-        this.startTimeMs = Date.now()
-        this.rmbtTest = new this.rmbtws.RMBTTest(config, ctrl)
-        this.rmbtTest.startTest()
-        this.rmbtTest.onStateChange(() => {
-          this.stateChangeMs = Date.now()
-        })
-        this.rmbtTest.onError((error: any) => {
-          this.ngZone.run(() => {
-            this.mainStore.error$.next(error)
-          })
-        })
-        // To not trigger console errors
-        this.rmbtTest._registrationCallback = () => {}
-        this.rmbtTest._submissionCallback = () => {}
-      })
-    }
-    return interval(STATE_UPDATE_TIMEOUT).pipe(
-      concatMap(() => from(this.getMeasurementState())),
-      withLatestFrom(this.testStore.visualization$),
-      map(([state, vis]) => this.setTestState(state, vis))
-    )
+  updateEndTime() {
+    this.endTimeMs = this.stateChangeMs
   }
 
   private setTestState = (
@@ -136,58 +147,12 @@ export class TestService {
     }
     newState = TestVisualizationState.from(newState, phaseState)
     this.testStore.visualization$.next(newState)
-    this.testStore.basicNetworkInfo$.next(phaseState)
+    this.testStore.basicNetworkInfo.set(phaseState)
     return newState
   }
 
-  launchCertifiedTest() {
-    const loopUuid = v4()
-    const loopCounter = 1
-    this.testStore.loopUuid$.next(loopUuid)
-    this.testStore.loopCounter$.next(loopCounter)
-    this.testStore.enableLoopMode$.next(true)
-    this.testStore.isCertifiedMeasurement$.next(true)
-    this.testStore.testIntervalMinutes$.next(
-      environment.certifiedTests.interval
-    )
-    const loopModeInfo: ILoopModeInfo | undefined = {
-      max_delay: this.testStore.testIntervalMinutes$.value ?? 0,
-      max_tests: environment.certifiedTests.count,
-      test_counter: loopCounter,
-      loop_uuid: loopUuid,
-    }
-    // TODO: Certified measurements
-    // window.electronAPI.onMaxTestsReached(() => this.maxTestsReached$.next(true))
-    // window.electronAPI.scheduleLoop(this.fullTestIntervalMs, loopModeInfo)
-    return loopModeInfo
-  }
-
-  launchLoopTest(interval: number) {
-    const loopUuid = v4()
-    const loopCounter = 1
-    this.testStore.loopUuid$.next(loopUuid)
-    this.testStore.loopCounter$.next(loopCounter)
-    this.testStore.enableLoopMode$.next(true)
-    this.testStore.testIntervalMinutes$.next(interval)
-    const loopModeInfo: ILoopModeInfo | undefined = {
-      max_delay: this.testStore.testIntervalMinutes$.value ?? 0,
-      test_counter: loopCounter,
-      loop_uuid: loopUuid,
-    }
-    // TODO: Loop mode
-    // window.electronAPI.scheduleLoop(this.fullTestIntervalMs, loopModeInfo)
-    this.router.navigate(["/", ERoutes.LOOP])
-  }
-
-  disableLoopMode() {
-    this.testStore.enableLoopMode$.next(false)
-    this.testStore.isCertifiedMeasurement$.next(false)
-    this.testStore.maxTestsReached$.next(false)
-    this.testStore.loopCounter$.next(1)
-  }
-
-  private resetState() {
-    this.testStore.basicNetworkInfo$.next(new BasicNetworkInfo())
+  resetState() {
+    this.testStore.basicNetworkInfo.set(new BasicNetworkInfo())
     this.testStore.visualization$.next(new TestVisualizationState())
     this.historyStore.simpleHistoryResult$.next(null)
     this.mainStore.error$.next(null)
@@ -195,10 +160,7 @@ export class TestService {
     this.ups = []
     this.startTimeMs = 0
     this.endTimeMs = 0
-    this.serverName = undefined
-    this.remoteIp = undefined
-    this.providerName = undefined
-    this.testUuid = undefined
+    this.visUpdateSub?.unsubscribe()
   }
 
   getSettings(): Observable<IUserSetingsResponse> {
@@ -208,10 +170,11 @@ export class TestService {
     return this.settingsService.getSettings()
   }
 
-  async getMeasurementState(): Promise<
-    IMeasurementPhaseState & IBasicNetworkInfo
-  > {
-    const result = this.rmbtTest?.getIntermediateResult()
+  async getMeasurementState(
+    rmbtTest: any
+  ): Promise<IMeasurementPhaseState & IBasicNetworkInfo> {
+    const result = rmbtTest?.getIntermediateResult()
+    const basicInfo = this.testStore.basicNetworkInfo()
     const diffTimeMs = Date.now() - this.stateChangeMs
     const phase: EMeasurementStatus =
       result?.status?.toString() ?? EMeasurementStatus.NOT_STARTED
@@ -264,45 +227,18 @@ export class TestService {
       up,
       ups: this.ups ?? [],
       phase,
-      testUuid: this.testUuid ?? "",
-      openTestUuid: this.openTestUuid ?? "",
-      ipAddress: this.remoteIp ?? "-",
-      serverName: this.serverName ?? "-",
-      providerName: this.providerName ?? "-",
-      coordinates: this.coordinates,
+      testUuid: basicInfo.testUuid ?? "",
+      openTestUuid: basicInfo.openTestUuid ?? "",
+      ipAddress: basicInfo.ipAddress ?? "-",
+      serverName: basicInfo.serverName ?? "-",
+      providerName: basicInfo.providerName ?? "-",
+      coordinates: basicInfo.coordinates,
       startTimeMs: this.startTimeMs,
       endTimeMs: this.endTimeMs,
     }
   }
 
-  updateStartTime() {
-    this.startTimeMs = this.endTimeMs || this.startTimeMs
-    this.endTimeMs = Date.now()
-  }
-
   abortMeasurement() {
-    // TODO:
+    // TODO: cancel on WS side
   }
-
-  /** RMBTws delegate */
-  draw() {}
-
-  updateInfo(
-    serverName: string,
-    remoteIp: string,
-    providerName: string,
-    testUuid: string,
-    openTestUuid: string
-  ) {
-    this.serverName = serverName
-    this.remoteIp = remoteIp
-    this.providerName = providerName
-    this.testUuid = testUuid
-    this.openTestUuid = openTestUuid
-  }
-
-  setLocation(lat: number, lon: number) {
-    this.coordinates = [lon, lat]
-  }
-  /** End RMBTws delegate */
 }

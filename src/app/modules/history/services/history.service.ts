@@ -105,7 +105,7 @@ export class HistoryService {
           newPhase
         )
         this.testStore.visualization$.next(newState)
-        this.testStore.basicNetworkInfo$.next({
+        this.testStore.basicNetworkInfo.set({
           serverName: historyResult.measurementServerName,
           ipAddress: historyResult.ipAddress,
           providerName: historyResult.providerName,
@@ -123,18 +123,6 @@ export class HistoryService {
         return of(null)
       })
     )
-  }
-
-  async getMeasurementHistory(paginator?: IPaginator) {
-    const history = (await this.repo.getHistory(paginator))?.map((hi: any) =>
-      SimpleHistoryResult.fromHistoryResponse(hi)
-    )
-    if (!history?.length) {
-      return []
-    }
-    const mergedHistory = [...this.historyStore.history$.value, ...history]
-    this.historyStore.history$.next(mergedHistory)
-    return mergedHistory
   }
 
   getHistoryGroupedByLoop(options?: {
@@ -161,6 +149,43 @@ export class HistoryService {
         }
       })
     )
+  }
+
+  getRecentMeasurementHistory(paginator: IPaginator) {
+    if (!paginator.limit) {
+      return of([])
+    }
+    return from(this.repo.getHistory(paginator)).pipe(
+      take(1),
+      tap((history) => {
+        this.historyStore.history$.next(history)
+      })
+    )
+  }
+
+  getFullMeasurementHistory(paginator: IPaginator) {
+    if (!paginator.limit) {
+      return of([])
+    }
+    return from(this.repo.getHistory(paginator)).pipe(
+      take(1),
+      map((history) => {
+        const mergedHistory = [...this.historyStore.history$.value, ...history]
+        this.historyStore.history$.next(mergedHistory)
+        return mergedHistory
+      })
+    )
+  }
+
+  resetMeasurementHistory() {
+    this.historyStore.history$.next([])
+    this.historyStore.paginator.set({ offset: 0, limit: HISTORY_LIMIT })
+  }
+
+  sortMeasurementHistory(sort: ISort, callback: () => any) {
+    this.resetMeasurementHistory()
+    this.historyStore.sort.set(sort)
+    callback()
   }
 
   private getLoopResults(
@@ -199,28 +224,5 @@ export class HistoryService {
       }
     }
     return retVal
-  }
-
-  getRecentMeasurementHistory(paginator: IPaginator) {
-    if (!paginator.limit) {
-      return of([])
-    }
-    return from(this.getMeasurementHistory(paginator)).pipe(
-      take(1),
-      tap((history) => {
-        this.historyStore.history$.next(history)
-      })
-    )
-  }
-
-  resetMeasurementHistory() {
-    this.historyStore.history$.next([])
-    this.historyStore.paginator.set({ offset: 0, limit: HISTORY_LIMIT })
-  }
-
-  sortMeasurementHistory(sort: ISort, callback: () => any) {
-    this.resetMeasurementHistory()
-    this.historyStore.sort.set(sort)
-    callback()
   }
 }

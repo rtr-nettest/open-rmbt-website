@@ -6,16 +6,18 @@ import {
   ConfirmDialogComponent,
   ConfirmDialogOpts,
 } from "../components/confirm-dialog/confirm-dialog.component"
+import { ScrollStrategyOptions } from "@angular/cdk/overlay"
 
 @Injectable({
   providedIn: "root",
 })
 export class MessageService {
   constructor(
-    private snackbar: MatSnackBar,
-    private dialog: MatDialog,
-    private ngZone: NgZone,
-    private i18nStore: I18nStore
+    private readonly snackbar: MatSnackBar,
+    private readonly dialog: MatDialog,
+    private readonly ngZone: NgZone,
+    private readonly i18nStore: I18nStore,
+    private readonly scrollStrategyOptions: ScrollStrategyOptions
   ) {}
 
   closeAllDialogs() {
@@ -43,6 +45,7 @@ export class MessageService {
             text,
             ...options,
           },
+          scrollStrategy: this.scrollStrategyOptions.noop(),
         })
         .afterClosed()
         .subscribe((result) => {

@@ -66,11 +66,11 @@ export class TopNavComponent {
       map((v) => [
         {
           label: v["Loop mode"],
-          route: this.localiseRoute(ERoutes.LOOP),
+          route: this.localiseRoute(ERoutes.LOOP_1),
         },
         {
           label: v["Certified measurement"],
-          route: this.localiseRoute(ERoutes.CERTIFIED),
+          route: this.localiseRoute(ERoutes.CERTIFIED_1),
         },
         {
           label: v["App and Browser Test"],

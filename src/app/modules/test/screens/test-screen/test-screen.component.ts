@@ -1,9 +1,17 @@
-import { Component, inject, OnInit } from "@angular/core"
+import {
+  AfterViewInit,
+  Component,
+  HostListener,
+  inject,
+  NgZone,
+  OnInit,
+} from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Router } from "@angular/router"
 import {
   BehaviorSubject,
   distinctUntilChanged,
+  firstValueFrom,
   map,
   Observable,
   of,
@@ -26,6 +34,7 @@ import {
   ERROR_OCCURED,
   ERROR_OCCURED_SENDING_RESULTS,
   TC_VERSION_ACCEPTED,
+  THIS_INTERRUPTS_ACTION,
 } from "../../constants/strings"
 import { MessageService } from "../../../shared/services/message.service"
 import { SpacerComponent } from "../../../shared/components/spacer/spacer.component"
@@ -36,44 +45,54 @@ import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/bre
 import { MainStore } from "../../../shared/store/main.store"
 import { HistoryService } from "../../../history/services/history.service"
 import { RecentHistoryComponent } from "../../../history/components/recent-history/recent-history.component"
+import { LoopStoreService } from "../../../loop/store/loop-store.service"
+import { toObservable } from "@angular/core/rxjs-interop"
+import { setGoBackLocation } from "../../../shared/util/nav"
+import { SprintfPipe } from "../../../shared/pipes/sprintf.pipe"
+
+export const imports = [
+  AsyncPipe,
+  BreadcrumbsComponent,
+  DatePipe,
+  HeaderComponent,
+  FooterComponent,
+  GaugeComponent,
+  InterimResultsComponent,
+  MatProgressBarModule,
+  NgIf,
+  RecentHistoryComponent,
+  TopNavComponent,
+  TranslatePipe,
+  SpacerComponent,
+  SprintfPipe,
+  BreadcrumbsComponent,
+]
 
 @Component({
   selector: "app-test-screen",
   standalone: true,
-  imports: [
-    AsyncPipe,
-    BreadcrumbsComponent,
-    DatePipe,
-    HeaderComponent,
-    FooterComponent,
-    GaugeComponent,
-    InterimResultsComponent,
-    MatProgressBarModule,
-    NgIf,
-    RecentHistoryComponent,
-    TopNavComponent,
-    TranslatePipe,
-    SpacerComponent,
-    BreadcrumbsComponent,
-  ],
+  imports,
   templateUrl: "./test-screen.component.html",
   styleUrl: "./test-screen.component.scss",
 })
 export class TestScreenComponent extends SeoComponent implements OnInit {
+  goBackLocation = `/${this.i18nStore.activeLang}/${ERoutes.HOME}`
   historyService = inject(HistoryService)
   router = inject(Router)
   mainStore = inject(MainStore)
   message = inject(MessageService)
+  ngZone = inject(NgZone)
   service = inject(TestService)
   store = inject(TestStore)
-  enableLoopMode$ = this.store.enableLoopMode$
-  loopCount$ = this.store.loopCounter$
+  loopStore = inject(LoopStoreService)
+  isLoopModeEnabled$ = toObservable(this.loopStore.isLoopModeEnabled)
+  loopCount$ = toObservable(this.loopStore.loopCounter)
   stopped$: Subject<void> = new Subject()
   visualization$!: Observable<ITestVisualizationState>
   loopWaiting$ = new BehaviorSubject(false)
   result$ = this.historyService.getHistoryGroupedByLoop({
     grouped: false,
-    loopUuid: this.store.loopUuid$.value ?? undefined,
+    loopUuid: this.loopStore.loopUuid() ?? undefined,
   })
   ms$ = new BehaviorSubject(0)
   progress$ = new BehaviorSubject(0)
@@ -85,34 +104,41 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
     if (!globalThis.localStorage) {
       return
     }
-    this.service
-      .getSettings()
-      .pipe(
-        switchMap((settings) => {
-          if (
-            settings.settings[0].terms_and_conditions.version.toString() !=
-            localStorage.getItem(TC_VERSION_ACCEPTED)
-          ) {
-            this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS])
-            return of(null)
-          }
-          this.visualization$ = this.store.visualization$.pipe(
-            withLatestFrom(this.mainStore.error$, this.loopCount$),
-            distinctUntilChanged(),
-            map(([state, error]) => {
-              if (error) {
-                this.openErrorDialog(state)
-              } else if (state.currentPhaseName === EMeasurementStatus.END) {
-                this.goToResult(state)
-              }
-              return state
-            })
-          )
-          return this.service.launchTest()
-        }),
-        takeUntil(this.stopped$)
-      )
-      .subscribe()
+    firstValueFrom(this.service.getSettings()).then((settings) => {
+      if (
+        settings.settings[0].terms_and_conditions.version.toString() !=
+        localStorage.getItem(TC_VERSION_ACCEPTED)
+      ) {
+        this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS])
+        return
+      }
+      this.service.resetState()
+      setGoBackLocation(this.goBackLocation)
+      this.initVisualization()
+      return
+    })
+  }
+
+  protected abortTest() {
+    this.stopped$.next()
+    this.service.abortMeasurement()
+    this.router.navigate([this.i18nStore.activeLang, ERoutes.HOME])
+  }
+
+  protected initVisualization() {
+    this.visualization$ = this.store.visualization$.pipe(
+      withLatestFrom(this.mainStore.error$, this.loopCount$),
+      distinctUntilChanged(),
+      map(([state, error]) => {
+        if (error) {
+          this.openErrorDialog(state)
+        } else if (state.currentPhaseName === EMeasurementStatus.END) {
+          this.goToResult(state)
+        }
+        return state
+      })
+    )
+    this.service.triggerNextTest()
   }
 
   protected openErrorDialog(state: ITestVisualizationState) {
@@ -132,19 +158,16 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
 
   protected goToResult = (state: ITestVisualizationState) => {
     this.stopped$.next()
-    // To not re-trigger the test on back navigation
-    if (globalThis.location) {
-      globalThis.history.replaceState(
-        null,
-        "",
-        `/${this.i18nStore.activeLang}/${ERoutes.HOME}`
-      )
-    }
     // Go to the result page
     this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
       queryParams: {
         test_uuid: "T" + state.phases[state.currentPhaseName].testUuid,
       },
     })
+  }
+
+  @HostListener("window:beforeunload")
+  preventReload() {
+    return false
   }
 }

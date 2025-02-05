@@ -2,6 +2,8 @@ import { computed, Injectable, signal } from "@angular/core"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { ERoutes } from "../../shared/constants/routes.enum"
 import { ESteps } from "../constants/steps.enum"
+import { ICertifiedDataForm } from "../interfaces/certified-data-form.interface"
+import { ICertifiedEnvForm } from "../interfaces/certified-env-form.interface"
 
 @Injectable({
   providedIn: "root",
@@ -13,7 +15,7 @@ export class CertifiedStoreService {
       {
         index: ESteps.INFO,
         label: "Info",
-        route: `/${this.i18nStore.activeLang}/${ERoutes.CERTIFIED}`,
+        route: `/${this.i18nStore.activeLang}/${ERoutes.CERTIFIED_1}`,
       },
       {
         index: ESteps.DATA,
@@ -43,6 +45,8 @@ export class CertifiedStoreService {
       }))
       .sort((a, b) => a.index - b.index)
   })
+  dataForm = signal<ICertifiedDataForm | null>(null)
+  envForm = signal<ICertifiedEnvForm | null>(null)
   isReady = signal(false)
   isDataFormValid = signal(false)
   isEnvFormValid = signal(false)

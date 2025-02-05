@@ -14,6 +14,7 @@ const SEP = " | "
 export class SeoComponent implements OnDestroy {
   destroyed$: Subject<void> = new Subject()
   titleSub!: Subscription
+  metaTitle = ""
   @Input() set title(t: string) {
     this._title = t
     this.titleSub = this.i18nStore
@@ -25,6 +26,7 @@ export class SeoComponent implements OnDestroy {
           const siteName = titleArr.length === 1 ? titleArr[0] : titleArr[1]
           let title = dict[t] || t
           const newTitle = title ? [title, siteName].join(SEP) : siteName
+          this.metaTitle = newTitle
           this.ts.setTitle(newTitle)
         })
       )

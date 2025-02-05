@@ -22,7 +22,7 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
     return new SimpleHistoryResult(
       response?.time
         ? dayjs(response.time)
-            .utc(true)
+            .utc()
             .tz(dayjs.tz.guess())
             .format(RESULT_DATE_FORMAT)
         : "",

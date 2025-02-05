@@ -1,6 +1,8 @@
 export interface IBasicNetworkInfo {
-  serverName: string
-  ipAddress: string
-  providerName: string
   coordinates?: [number, number]
+  ipAddress: string
+  openTestUuid?: string
+  providerName: string
+  serverName: string
+  testUuid?: string
 }

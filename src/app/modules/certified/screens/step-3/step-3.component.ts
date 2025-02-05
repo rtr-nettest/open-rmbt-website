@@ -34,6 +34,8 @@ import { MatInputModule } from "@angular/material/input"
 import { NgFor, NgIf } from "@angular/common"
 import { MatIconModule } from "@angular/material/icon"
 import { MatCheckboxModule } from "@angular/material/checkbox"
+import { environment } from "../../../../../environments/environment"
+import { LoopService } from "../../../loop/services/loop.service"
 
 @Component({
   selector: "app-step-3",
@@ -78,6 +80,7 @@ export class Step3Component extends SeoComponent implements OnInit {
     i18nStore: I18nStore,
     private readonly fb: FormBuilder,
     private readonly fs: FileService,
+    private readonly loopService: LoopService,
     private readonly router: Router,
     private readonly store: CertifiedStoreService,
     private readonly testStore: TestStore
@@ -86,18 +89,16 @@ export class Step3Component extends SeoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.testStore.certifiedDataForm$.pipe(take(1)).subscribe((f) => {
-      if (!f) {
-        this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_2])
-      } else {
-        this.store.activeBreadcrumbIndex.set(ESteps.ENVIRONMENT)
-        this.initForm()
-      }
-    })
+    if (!this.store.dataForm()) {
+      this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_2])
+    } else {
+      this.store.activeBreadcrumbIndex.set(ESteps.ENVIRONMENT)
+      this.initForm()
+    }
   }
 
   private initForm() {
-    const savedForm = this.testStore.certifiedEnvForm$.value
+    const savedForm = this.store.envForm()
     this.form = this.fb.group({
       locationType: new FormArray<FormControl<boolean>>(
         Object.values(ECertifiedLocationType).map(
@@ -169,7 +170,7 @@ export class Step3Component extends SeoComponent implements OnInit {
 
   onTestStart() {
     this.store.activeBreadcrumbIndex.set(ESteps.MEASUREMENT)
-    this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_TEST])
+    this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_4])
   }
 
   toggleLocationTypeOther(isEnabled: boolean) {
@@ -188,6 +189,6 @@ export class Step3Component extends SeoComponent implements OnInit {
       this.store.isEnvFormValid.set(false)
       this.store.isReady.set(false)
     }
-    this.testStore.certifiedEnvForm$.next(value)
+    this.store.envForm.set(value)
   }
 }
