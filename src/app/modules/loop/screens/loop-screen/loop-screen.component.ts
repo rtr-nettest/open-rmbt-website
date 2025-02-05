@@ -87,9 +87,7 @@ export class LoopScreenComponent extends TestScreenComponent {
   override abortTest(): void {
     this.stopped$.next()
     this.loopService.cancelLoop()
-    this.router.navigate([this.i18nStore.activeLang, ERoutes.LOOP_RESULT], {
-      queryParams: { loop_uuid: this.loopStore.loopUuid() },
-    })
+    this.router.navigate([this.i18nStore.activeLang, ERoutes.LOOP_RESULT])
   }
 
   private checkIfNewTestStarted(testUuid: string) {

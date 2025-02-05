@@ -33,7 +33,11 @@
     <app-interim-results></app-interim-results>
   </div>
 </div>
-<div class="app-wrapper" *ngIf="(isLoopModeEnabled$ | async) === true">
+<div
+  class="app-wrapper"
+  *ngIf="(isLoopModeEnabled$ | async) === true"
+  style="margin-bottom: 40px"
+>
   <app-recent-history
     *ngIf="result$ | async as result"
     [addMedian]="addMedian"

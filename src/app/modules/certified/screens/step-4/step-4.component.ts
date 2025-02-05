@@ -17,17 +17,11 @@ export class Step4Component extends LoopScreenComponent {
   override abortTest(): void {
     this.stopped$.next()
     this.loopService.cancelLoop()
-    this.router.navigate(
-      [this.i18nStore.activeLang, ERoutes.CERTIFIED_RESULT],
-      {
-        queryParams: { loop_uuid: this.loopStore.loopUuid() },
-      }
-    )
+    this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_RESULT])
   }
 
   override scheduleLoop() {
     this.loopService.scheduleLoop({
-      intervalMinutes: environment.certifiedTests.interval,
       isCertifiedMeasurement: true,
     })
   }

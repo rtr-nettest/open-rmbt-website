@@ -80,9 +80,7 @@ export class HistoryRepositoryService {
     if (paginator?.limit) {
       body["result_limit"] = paginator.limit
     }
-    const loopUuid =
-      this.loopStore.loopUuid() ||
-      globalThis.location?.search?.split("loop_uuid=")[1]
+    const loopUuid = this.loopStore.loopUuid()
     if (loopUuid) {
       body["loop_uuid"] = loopUuid
     }

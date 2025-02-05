@@ -49,15 +49,7 @@ import { LoopStoreService } from "../../../loop/store/loop-store.service"
 import { toObservable } from "@angular/core/rxjs-interop"
 import { setGoBackLocation } from "../../../shared/util/nav"
 import { SprintfPipe } from "../../../shared/pipes/sprintf.pipe"
-import { ILoopModeInfo } from "../../interfaces/measurement-registration-request.interface"
 import { SettingsService } from "../../../shared/services/settings.service"
-
-declare global {
-  interface Window {
-    _submissionCallback: any
-    _registrationCallback: any
-  }
-}
 
 export const imports = [
   AsyncPipe,
@@ -103,21 +95,18 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   loopWaiting$ = new BehaviorSubject(false)
   result$ = this.historyService.getHistoryGroupedByLoop({
     grouped: false,
-    loopUuid: this.loopStore.loopUuid() ?? undefined,
+    loopUuid: this.loopStore.loopUuid(),
   })
   ms$ = new BehaviorSubject(0)
   progress$ = new BehaviorSubject(0)
   progressMode$ = new BehaviorSubject<"determinate" | "indeterminate">(
     "determinate"
   )
-  loopModeInfo?: ILoopModeInfo
 
   ngOnInit(): void {
     if (!globalThis.localStorage) {
       return
     }
-    window._submissionCallback = null
-    window._registrationCallback = null
     firstValueFrom(this.settingsService.getSettings()).then((settings) => {
       if (
         settings.settings[0].terms_and_conditions.version.toString() !=

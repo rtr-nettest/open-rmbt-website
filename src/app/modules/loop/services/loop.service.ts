@@ -1,10 +1,8 @@
 import { Injectable } from "@angular/core"
 import { LoopStoreService } from "../store/loop-store.service"
-import { v4 } from "uuid"
 import { interval, Subscription, tap } from "rxjs"
 
 export type CertifiedLoopOpts = {
-  intervalMinutes: number
   isCertifiedMeasurement: boolean
 }
 
@@ -38,19 +36,16 @@ export class LoopService {
   }
 
   private enableLoopMode(options?: CertifiedLoopOpts) {
-    const { isCertifiedMeasurement, intervalMinutes } = options || {}
+    const { isCertifiedMeasurement } = options || {}
     this.loopStore.isCertifiedMeasurement.set(isCertifiedMeasurement || false)
     this.loopStore.isLoopModeEnabled.set(true)
     this.loopStore.loopCounter.set(1)
-    this.loopStore.loopUuid.set(v4())
-    this.loopStore.testIntervalMinutes.set(intervalMinutes || null)
+    this.loopStore.loopUuid.set(null)
+    this.loopStore.maxTestsReached.set(false)
   }
 
   private disableLoopMode() {
-    this.loopStore.isCertifiedMeasurement.set(false)
+    this.loopStore.loopCounter.set(-1)
     this.loopStore.isLoopModeEnabled.set(false)
-    this.loopStore.loopCounter.set(1)
-    this.loopStore.maxTestsReached.set(false)
-    this.loopStore.testIntervalMinutes.set(null)
   }
 }

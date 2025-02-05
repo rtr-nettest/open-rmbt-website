@@ -4,8 +4,9 @@ export const environment = {
   api: {
     baseUrl: "https://c01.netztest.at",
   },
-  certifiedTests: {
-    count: 5,
-    interval: 1,
+  loopModeDefaults: {
+    max_delay: 15,
+    max_tests: 8,
+    test_counter: 1,
   },
 }

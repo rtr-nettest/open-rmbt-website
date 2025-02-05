@@ -26,12 +26,18 @@ import { UUID } from "../constants/strings"
 import { STATE_UPDATE_TIMEOUT } from "../constants/numbers"
 import { MainStore } from "../../shared/store/main.store"
 import { HistoryStore } from "../../history/store/history.store"
-import { SettingsService } from "../../shared/services/settings.service"
 import { LoopStoreService } from "../../loop/store/loop-store.service"
 import { RmbtwsDelegateService } from "./rmbtws-delegate.service"
 import { MessageService } from "../../shared/services/message.service"
 dayjs.extend(utc)
 dayjs.extend(tz)
+
+declare global {
+  interface Window {
+    _submissionCallback: any
+    _registrationCallback: any
+  }
+}
 
 @Injectable({
   providedIn: "root",
@@ -50,7 +56,6 @@ export class TestService {
     private readonly mainStore: MainStore,
     private readonly message: MessageService,
     private readonly ngZone: NgZone,
-    private readonly settingsService: SettingsService,
     private readonly testStore: TestStore,
     @Inject(PLATFORM_ID) private readonly platformId: object
   ) {}
@@ -80,19 +85,30 @@ export class TestService {
       )
       config.uuid = localStorage.getItem(UUID)
       config.timezone = dayjs.tz.guess()
-      if (this.loopStore.isLoopModeEnabled())
+      if (this.loopStore.isLoopModeEnabled()) {
         config.additionalRegistrationParameters = {
           loopmode_info: {
             max_delay: (this.loopStore.testIntervalMinutes() ?? 0) / 60,
             test_counter: this.loopStore.loopCounter(),
             max_tests: this.loopStore.maxTestsAllowed(),
-            loop_uuid: this.loopStore.loopUuid(),
           },
         }
+        const loopUuid = this.loopStore.loopUuid()
+        if (loopUuid) {
+          config.additionalRegistrationParameters.loopmode_info.loop_uuid =
+            loopUuid
+        }
+      }
 
       //1006
 
       const communication = new rmbtws.RMBTControlServerCommunication(config)
+      window._registrationCallback = (data: any) => {
+        if (data.response["loop_uuid"]) {
+          this.loopStore.loopUuid.set(data.response["loop_uuid"])
+        }
+      }
+      window._submissionCallback = null
       const rmbtTest = new rmbtws.RMBTTest(config, communication)
       rmbtTest.onStateChange(() => {
         this.stateChangeMs = Date.now()
