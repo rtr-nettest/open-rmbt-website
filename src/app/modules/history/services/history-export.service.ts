@@ -137,7 +137,7 @@ export class HistoryExportService {
       title_append: "titleAppend",
       address: "address",
     }
-    formData.append("loop_uuid", "L" + loopUuid)
+    formData.append("loop_uuid", loopUuid)
     if (envForm?.locationType.length) {
       for (const [i, l] of Object.values(ECertifiedLocationType).entries()) {
         if (envForm.locationType.includes(l)) {

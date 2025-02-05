@@ -182,11 +182,18 @@
         @if (column.footer) {
         <span class="app-table__mobile-label">{{ column.header }}</span>
         @if (column.getLink) {
-        <a [href]="column.getLink(null, column)" class="app-link">{{
-          toString(column.footer, column)
-        }}</a>
+        <a
+          [href]="column.getLink(null, column)"
+          class="app-link app-flex-wrapper"
+          [style]="justify(column)"
+          [innerHTML]="toString(column.footer, column)"
+        ></a>
         } @else {
-        <span>{{ toString(column.footer, column) }}</span>
+        <span
+          class="app-flex-wrapper"
+          [style]="justify(column)"
+          [innerHTML]="toString(column.footer, column)"
+        ></span>
         } }
       </mat-footer-cell>
     </ng-container>

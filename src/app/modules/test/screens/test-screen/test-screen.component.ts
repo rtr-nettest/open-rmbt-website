@@ -49,6 +49,15 @@ import { LoopStoreService } from "../../../loop/store/loop-store.service"
 import { toObservable } from "@angular/core/rxjs-interop"
 import { setGoBackLocation } from "../../../shared/util/nav"
 import { SprintfPipe } from "../../../shared/pipes/sprintf.pipe"
+import { ILoopModeInfo } from "../../interfaces/measurement-registration-request.interface"
+import { SettingsService } from "../../../shared/services/settings.service"
+
+declare global {
+  interface Window {
+    _submissionCallback: any
+    _registrationCallback: any
+  }
+}
 
 export const imports = [
   AsyncPipe,
@@ -76,6 +85,7 @@ export const imports = [
   styleUrl: "./test-screen.component.scss",
 })
 export class TestScreenComponent extends SeoComponent implements OnInit {
+  addMedian = false
   goBackLocation = `/${this.i18nStore.activeLang}/${ERoutes.HOME}`
   historyService = inject(HistoryService)
   router = inject(Router)
@@ -83,6 +93,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   message = inject(MessageService)
   ngZone = inject(NgZone)
   service = inject(TestService)
+  settingsService = inject(SettingsService)
   store = inject(TestStore)
   loopStore = inject(LoopStoreService)
   isLoopModeEnabled$ = toObservable(this.loopStore.isLoopModeEnabled)
@@ -99,12 +110,15 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   progressMode$ = new BehaviorSubject<"determinate" | "indeterminate">(
     "determinate"
   )
+  loopModeInfo?: ILoopModeInfo
 
   ngOnInit(): void {
     if (!globalThis.localStorage) {
       return
     }
-    firstValueFrom(this.service.getSettings()).then((settings) => {
+    window._submissionCallback = null
+    window._registrationCallback = null
+    firstValueFrom(this.settingsService.getSettings()).then((settings) => {
       if (
         settings.settings[0].terms_and_conditions.version.toString() !=
         localStorage.getItem(TC_VERSION_ACCEPTED)
@@ -121,7 +135,6 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
 
   protected abortTest() {
     this.stopped$.next()
-    this.service.abortMeasurement()
     this.router.navigate([this.i18nStore.activeLang, ERoutes.HOME])
   }
 

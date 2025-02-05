@@ -195,7 +195,7 @@ export class HistoryService {
     if (!loopUuid) {
       return history
     }
-    return history.filter((hi) => hi.loopUuid === "L" + loopUuid)
+    return history.filter((hi) => hi.loopUuid === loopUuid)
   }
 
   private groupResults(history: ISimpleHistoryResult[], openLoops: string[]) {

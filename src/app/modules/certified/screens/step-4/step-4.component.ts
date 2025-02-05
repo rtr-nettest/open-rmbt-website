@@ -16,7 +16,6 @@ export class Step4Component extends LoopScreenComponent {
 
   override abortTest(): void {
     this.stopped$.next()
-    this.service.abortMeasurement()
     this.loopService.cancelLoop()
     this.router.navigate(
       [this.i18nStore.activeLang, ERoutes.CERTIFIED_RESULT],

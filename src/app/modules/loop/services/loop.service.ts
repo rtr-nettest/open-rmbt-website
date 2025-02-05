@@ -37,7 +37,7 @@ export class LoopService {
     this.disableLoopMode()
   }
 
-  private enableLoopMode(options?: CertifiedLoopOpts | undefined) {
+  private enableLoopMode(options?: CertifiedLoopOpts) {
     const { isCertifiedMeasurement, intervalMinutes } = options || {}
     this.loopStore.isCertifiedMeasurement.set(isCertifiedMeasurement || false)
     this.loopStore.isLoopModeEnabled.set(true)

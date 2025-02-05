@@ -48,6 +48,7 @@ export const historyImports = [
   styleUrl: "./history-screen.component.scss",
 })
 export class HistoryScreenComponent extends SeoComponent {
+  addMedian = false
   cdr = inject(ChangeDetectorRef)
   exporter = inject(HistoryExportService)
   service = inject(HistoryService)

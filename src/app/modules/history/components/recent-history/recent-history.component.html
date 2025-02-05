@@ -1,12 +1,16 @@
-<ng-container *ngIf="data && data.totalElements > 0">
-  <h3 *ngIf="title" class="app-title" style="margin-bottom: 1em">
+@if (data(); as data) {
+<ng-container *ngIf="data.totalElements > 0">
+  @if(title(); as title) {
+  <h3 class="app-title" style="margin-bottom: 1em">
     {{ title | translate }}
   </h3>
+  }
   <app-table
     [action]="changeSort"
-    [columns]="columns"
+    [columns]="columns()"
     [data]="data"
     [expandedElements]="expandedElements"
+    [footerColumns]="footerColumns()"
     [rowsAreCLickable]="true"
     [sort]="sort"
     [shouldHideHeader]="false"
@@ -14,3 +18,4 @@
     (onRowClick)="handleRowClick($event)"
   ></app-table>
 </ng-container>
+}

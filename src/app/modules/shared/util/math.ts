@@ -44,3 +44,10 @@ export function formatBytes(bytes: any, t: any) {
   }
   return roundToSignificantDigits(bytes) + "&nbsp;" + unit
 }
+
+export function median(arr: number[]) {
+  if (!arr.length) return 0
+  const s = [...arr].sort((a, b) => a - b)
+  const mid = Math.floor(s.length / 2)
+  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2
+}

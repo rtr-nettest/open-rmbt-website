@@ -1,11 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  isDevMode,
-  NgZone,
-  PLATFORM_ID,
-} from "@angular/core"
-import { IUserSetingsResponse } from "../interfaces/user-settings-response.interface"
+import { Inject, Injectable, NgZone, PLATFORM_ID } from "@angular/core"
 import { environment } from "../../../../environments/environment"
 import {
   concatMap,
@@ -28,7 +21,6 @@ import { IOverallResult } from "../../history/interfaces/overall-result.interfac
 import { TestStore } from "../store/test.store"
 import { ITestVisualizationState } from "../interfaces/test-visualization-state.interface"
 import { TestVisualizationState } from "../dto/test-visualization-state.dto"
-import { Router } from "@angular/router"
 import { BasicNetworkInfo } from "../dto/basic-network-info.dto"
 import { UUID } from "../constants/strings"
 import { STATE_UPDATE_TIMEOUT } from "../constants/numbers"
@@ -97,16 +89,17 @@ export class TestService {
             loop_uuid: this.loopStore.loopUuid(),
           },
         }
-      const rmbtTest = new rmbtws.RMBTTest(
-        config,
-        new rmbtws.RMBTControlServerCommunication(config)
-      )
+
+      //1006
+
+      const communication = new rmbtws.RMBTControlServerCommunication(config)
+      const rmbtTest = new rmbtws.RMBTTest(config, communication)
       rmbtTest.onStateChange(() => {
         this.stateChangeMs = Date.now()
       })
       rmbtTest.onError((error: any) => {
         this.ngZone.run(() => {
-          this.mainStore.error$.next(error)
+          if (error) this.mainStore.error$.next(error)
         })
       })
       this.startTimeMs = Date.now()
@@ -161,13 +154,6 @@ export class TestService {
     this.startTimeMs = 0
     this.endTimeMs = 0
     this.visUpdateSub?.unsubscribe()
-  }
-
-  getSettings(): Observable<IUserSetingsResponse> {
-    if (!isPlatformBrowser(this.platformId)) {
-      return of({ settings: [] } as unknown as IUserSetingsResponse)
-    }
-    return this.settingsService.getSettings()
   }
 
   async getMeasurementState(
@@ -236,9 +222,5 @@ export class TestService {
       startTimeMs: this.startTimeMs,
       endTimeMs: this.endTimeMs,
     }
-  }
-
-  abortMeasurement() {
-    // TODO: cancel on WS side
   }
 }

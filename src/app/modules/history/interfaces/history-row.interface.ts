@@ -7,6 +7,7 @@ export interface IHistoryRow extends IHistoryGroupItem {
   loopUuid?: string
   networkType?: string
   openUuid?: string
+  intValues?: Record<string, number>
 }
 
 export interface IHistoryGroupItem {

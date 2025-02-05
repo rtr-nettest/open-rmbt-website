@@ -18,7 +18,7 @@ import { Step1Component as LoopStep1Component } from "./modules/loop/screens/ste
 import { Step4Component } from "./modules/certified/screens/step-4/step-4.component"
 import { LoopResultScreenComponent } from "./modules/loop/screens/loop-result-screen/loop-result-screen.component"
 import { CertifiedResultScreenComponent } from "./modules/certified/screens/certified-result-screen/certified-result-screen.component"
-import { preventUnloadGuard } from "./modules/shared/guards/prevent-unload.guard"
+import { unloadOnlyFor } from "./modules/shared/guards/unload-only-for.guard"
 
 export const routes: Routes = [
   {
@@ -50,7 +50,7 @@ export const routes: Routes = [
       {
         path: ERoutes.TEST,
         component: TestScreenComponent,
-        canDeactivate: [preventUnloadGuard],
+        canDeactivate: [unloadOnlyFor([ERoutes.RESULT])],
         resolve: [localeResolver],
         runGuardsAndResolvers: "always",
         data: {
@@ -91,7 +91,7 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.LOOP,
-        canDeactivate: [preventUnloadGuard],
+        canDeactivate: [unloadOnlyFor([ERoutes.LOOP_RESULT])],
         component: LoopScreenComponent,
         resolve: [localeResolver],
         data: {
@@ -148,7 +148,7 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.CERTIFIED_4,
-        canDeactivate: [preventUnloadGuard],
+        canDeactivate: [unloadOnlyFor([ERoutes.CERTIFIED_RESULT])],
         component: Step4Component,
         resolve: [localeResolver],
         data: {

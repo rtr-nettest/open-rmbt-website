@@ -11,6 +11,7 @@
   <p class="app-subheader" [innerHTML]="text"></p>
   } @if (result$ | async; as result) {
   <app-recent-history
+    [addMedian]="addMedian"
     [result]="result"
     [grouped]="shouldGroupHistory"
     (sortChange)="changeSort($event)"

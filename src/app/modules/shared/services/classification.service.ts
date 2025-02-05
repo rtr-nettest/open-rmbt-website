@@ -17,6 +17,7 @@ export const GSM_CONNECTION_TYPES = [
 ]
 export const LTE_CONNECTION_TYPES = ["4G", "5G", "MOBILE"]
 export const WLAN_CONNECTION_TYPES = ["CLI", "LAN", "WLAN"]
+export type Phase = "down" | "up" | "ping"
 
 @Injectable({
   providedIn: "root",
@@ -42,7 +43,7 @@ export class ClassificationService {
     return Math.min(retVal, CLASSIFICATION_ITEMS)
   }
 
-  getPhaseIconByClass(phase: "down" | "up" | "ping", classification?: number) {
+  getPhaseIconByClass(phase: Phase, classification?: number) {
     switch (classification) {
       case 1:
         return `<i class="app-icon--phase app-icon--phase-${phase}-red"></i>`

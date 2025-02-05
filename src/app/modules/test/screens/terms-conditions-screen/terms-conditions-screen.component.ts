@@ -9,6 +9,7 @@ import { TestService } from "../../services/test.service"
 import { AgreementComponent } from "../../../shared/components/agreement/agreement.component"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { TC_VERSION_ACCEPTED } from "../../constants/strings"
+import { SettingsService } from "../../../shared/services/settings.service"
 
 @Component({
   selector: "app-terms-conditions-screen",
@@ -25,11 +26,12 @@ export class TermsConditionsScreenComponent
   settings$!: Observable<IUserSetingsResponse>
   router = inject(Router)
   service = inject(TestService)
+  settingsService = inject(SettingsService)
   storageItem!: [string, string]
   termsText = ""
 
   ngOnInit(): void {
-    this.settings$ = this.service.getSettings().pipe(
+    this.settings$ = this.settingsService.getSettings().pipe(
       tap((settings) => {
         this.storageItem = [
           TC_VERSION_ACCEPTED,

@@ -1,8 +1,11 @@
 import {
   Component,
+  computed,
   EventEmitter,
+  input,
   Input,
   OnChanges,
+  output,
   Output,
 } from "@angular/core"
 import {
@@ -15,14 +18,19 @@ import { HistoryStore } from "../../../history/store/history.store"
 import { DatePipe, NgIf } from "@angular/common"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
-import { TestService } from "../../../test/services/test.service"
 import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.interface"
 import { I18nStore, Translation } from "../../../i18n/store/i18n.store"
-import { ClassificationService } from "../../../shared/services/classification.service"
-import { roundToSignificantDigits } from "../../../shared/util/math"
+import {
+  ClassificationService,
+  Phase,
+  THRESHOLD_DOWNLOAD,
+  THRESHOLD_PING,
+  THRESHOLD_UPLOAD,
+} from "../../../shared/services/classification.service"
+import { median, roundToSignificantDigits } from "../../../shared/util/math"
 import { Router } from "@angular/router"
 import { ERoutes } from "../../../shared/constants/routes.enum"
-import { LoopService } from "../../../loop/services/loop.service"
+import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 
 @Component({
   selector: "app-recent-history",
@@ -32,23 +40,15 @@ import { LoopService } from "../../../loop/services/loop.service"
   imports: [NgIf, TableComponent, TranslatePipe],
 })
 export class RecentHistoryComponent implements OnChanges {
-  @Input({ required: true }) set result(result: {
-    content: Array<ISimpleHistoryResult & IHistoryGroupItem>
-    totalElements: number
-  }) {
-    this.data = {
-      content: result.content.map(
-        this.historyItemToRow(this.i18nStore.translations)
-      ),
-      totalElements: result.totalElements,
-    }
-  }
-  @Input() grouped?: boolean
-  @Input() title?: string
-  @Input() excludeColumns?: string[]
-  @Input() interruptsTests = false
-  @Output() sortChange: EventEmitter<ISort> = new EventEmitter()
-  columns: ITableColumn<IHistoryRow>[] = (() => {
+  addMedian = input(false)
+  result =
+    input.required<IBasicResponse<ISimpleHistoryResult & IHistoryGroupItem>>()
+  grouped = input(false)
+  title = input<string>()
+  excludeColumns = input<string[]>()
+  interruptsTests = input(false)
+  sortChange = output<ISort>()
+  columns = computed(() => {
     let cols: ITableColumn<IHistoryRow>[] = []
     cols = [
       {
@@ -86,12 +86,23 @@ export class RecentHistoryComponent implements OnChanges {
         header: "",
       },
     ]
-    return cols.filter((c) => !this.excludeColumns?.includes(c.columnDef))
-  })()
-  data!: {
-    content: IHistoryRow[]
-    totalElements: number
-  }
+    return cols
+      .filter((c) => !this.excludeColumns()?.includes(c.columnDef))
+      .map((c) => ({
+        ...c,
+        footer: this.getFooterValueByColumnName(c, this.data()),
+      }))
+  })
+  footerColumns = computed(() => this.columns().map((c) => c.columnDef))
+  data = computed(() => {
+    const result = this.result()
+    return {
+      content: result.content.map(
+        this.historyItemToRow(this.i18nStore.translations)
+      ),
+      totalElements: result.totalElements,
+    }
+  })
   tableClassNames?: string[]
   freshlyLoaded = true
 
@@ -112,8 +123,8 @@ export class RecentHistoryComponent implements OnChanges {
   ) {}
 
   ngOnChanges(): void {
-    const firstItem = this.data.content[0]
-    if (this.grouped && firstItem?.groupHeader && this.freshlyLoaded) {
+    const firstItem = this.data().content[0]
+    if (this.grouped() && firstItem?.groupHeader && this.freshlyLoaded) {
       this.freshlyLoaded = false
       this.store.openLoops$.next([])
       this.toggleLoopResults(firstItem.id!)
@@ -149,7 +160,6 @@ export class RecentHistoryComponent implements OnChanges {
   private historyItemToRow =
     (t: Translation) =>
     (hi: ISimpleHistoryResult & IHistoryGroupItem): IHistoryRow => {
-      const locale = this.i18nStore.activeLang
       const measurementDate = this.datePipe.transform(
         hi.measurementDate,
         "dd.MM.YYYY, HH:mm:ss"
@@ -176,30 +186,95 @@ export class RecentHistoryComponent implements OnChanges {
         device: hi.openTestResponse?.["device"],
         networkType: hi.openTestResponse?.["networkType"],
         measurementDate,
-        download:
-          this.classification.getPhaseIconByClass(
-            "down",
-            hi.download?.classification
-          ) +
-          down.toLocaleString(locale) +
-          " " +
-          t["Mbps"],
-        upload:
-          this.classification.getPhaseIconByClass(
-            "up",
-            hi.upload?.classification
-          ) +
-          up.toLocaleString(locale) +
-          " " +
-          t["Mbps"],
-        ping:
-          this.classification.getPhaseIconByClass(
-            "ping",
-            hi.ping?.classification
-          ) +
-          ping?.toLocaleString(locale) +
-          " " +
-          t["millis"],
+        intValues: {
+          download: (hi.download?.value || 0) * 1000,
+          upload: (hi.upload?.value || 0) * 1000,
+          ping: hi.ping?.value || 0,
+        },
+        download: this.getHtmlValueByColumnName(down, {
+          klass: hi.download?.classification || 0,
+          phase: "down",
+          units: "Mbps",
+        }),
+        upload: this.getHtmlValueByColumnName(up, {
+          klass: hi.upload?.classification || 0,
+          phase: "up",
+          units: "Mbps",
+        }),
+        ping: this.getHtmlValueByColumnName(ping || 0, {
+          klass: hi.ping?.classification || 0,
+          phase: "ping",
+          units: "millis",
+        }),
       }
     }
+
+  private getHtmlValueByColumnName(
+    value: number,
+    options: {
+      klass: number
+      phase: Phase
+      units: "Mbps" | "millis"
+    }
+  ) {
+    const { klass, phase, units } = options
+    return (
+      this.classification.getPhaseIconByClass(phase, klass) +
+      value.toLocaleString(this.i18nStore.activeLang) +
+      " " +
+      this.i18nStore.translate(units)
+    )
+  }
+
+  private getFooterValueByColumnName(
+    col: ITableColumn<IHistoryRow>,
+    data: IBasicResponse<IHistoryRow>
+  ) {
+    const medianForField = (field: "download" | "upload" | "ping") =>
+      median(
+        data.content.map((c) =>
+          c.intValues?.[field] ? c.intValues?.[field] : 0
+        )
+      )
+    let med = 0
+    switch (col.columnDef) {
+      case "down":
+        med = medianForField("download")
+        return this.getHtmlValueByColumnName(med / 1000, {
+          klass: this.classification.classify(
+            med,
+            THRESHOLD_DOWNLOAD,
+            "biggerBetter"
+          ),
+          phase: "down",
+          units: "Mbps",
+        })
+      case "up":
+        med = medianForField("upload")
+        return this.getHtmlValueByColumnName(med / 1000, {
+          klass: this.classification.classify(
+            med,
+            THRESHOLD_UPLOAD,
+            "biggerBetter"
+          ),
+          phase: "up",
+          units: "Mbps",
+        })
+      case "latency":
+        med = medianForField("ping")
+        return this.getHtmlValueByColumnName(med, {
+          klass: this.classification.classify(
+            med,
+            THRESHOLD_PING,
+            "smallerBetter"
+          ),
+          phase: "ping",
+          units: "millis",
+        })
+      case "device":
+        return this.i18nStore.translate("Median")
+      default:
+        return undefined
+    }
+  }
 }

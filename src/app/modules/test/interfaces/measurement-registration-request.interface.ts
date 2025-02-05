@@ -4,7 +4,7 @@ export interface ILoopModeInfo {
   loop_uuid: string
   max_delay: number
   max_movement?: number
-  max_tests?: number
+  max_tests: number
   test_counter: number
 }
 

@@ -26,6 +26,7 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
   styleUrl: "../../../test/screens/test-screen/test-screen.component.scss",
 })
 export class LoopScreenComponent extends TestScreenComponent {
+  override addMedian = true
   override goBackLocation: string = `/${this.i18nStore.activeLang}/${ERoutes.LOOP_1}`
   protected readonly loopService = inject(LoopService)
   protected waitingProgressMs = 0
@@ -85,7 +86,6 @@ export class LoopScreenComponent extends TestScreenComponent {
 
   override abortTest(): void {
     this.stopped$.next()
-    this.service.abortMeasurement()
     this.loopService.cancelLoop()
     this.router.navigate([this.i18nStore.activeLang, ERoutes.LOOP_RESULT], {
       queryParams: { loop_uuid: this.loopStore.loopUuid() },

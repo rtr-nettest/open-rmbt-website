@@ -36,6 +36,7 @@
 <div class="app-wrapper" *ngIf="(isLoopModeEnabled$ | async) === true">
   <app-recent-history
     *ngIf="result$ | async as result"
+    [addMedian]="addMedian"
     [result]="result"
     [excludeColumns]="['details']"
     [interruptsTests]="true"
