@@ -1,3 +1,4 @@
+import { STATE_UPDATE_TIMEOUT } from "../../test/constants/numbers"
 import { IPing } from "../interfaces/measurement-result.interface"
 import { IOverallResult } from "../interfaces/overall-result.interface"
 
@@ -43,7 +44,7 @@ export class CalcService {
 
   getOverallResultsFromSpeedCurve(
     curve: CurveItem[],
-    stepMs = 175 // value from RTR web
+    stepMs = STATE_UPDATE_TIMEOUT
   ): IOverallResult[] {
     if (!curve?.length) {
       return []
