@@ -7,6 +7,5 @@ export const environment = {
   loopModeDefaults: {
     max_delay: 1,
     max_tests: 5,
-    test_counter: 1,
   },
 }
