@@ -1,4 +1,4 @@
-export enum ESteps {
+export enum ECertifiedSteps {
   INFO,
   DATA,
   ENVIRONMENT,

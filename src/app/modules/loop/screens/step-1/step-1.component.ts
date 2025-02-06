@@ -9,25 +9,43 @@ import { Observable } from "rxjs"
 import { Router } from "@angular/router"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { LOOP_ACCEPTED } from "../../constants/strings"
-import { AgreementComponent } from "../../../shared/components/agreement/agreement.component"
+import { FooterComponent } from "../../../shared/components/footer/footer.component"
+import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
+import { LoopStoreService } from "../../store/loop-store.service"
+import { ECertifiedSteps } from "../../../certified/constants/certified-steps.enum"
+import { MatButtonModule } from "@angular/material/button"
 
 @Component({
   selector: "app-step-1",
   standalone: true,
-  imports: [AgreementComponent, AsyncPipe, TranslatePipe],
+  imports: [
+    AsyncPipe,
+    BreadcrumbsComponent,
+    CertifiedBreadcrumbsComponent,
+    FooterComponent,
+    HeaderComponent,
+    MatButtonModule,
+    TopNavComponent,
+    TranslatePipe,
+  ],
   templateUrl: "./step-1.component.html",
   styleUrl: "./step-1.component.scss",
 })
 export class Step1Component extends SeoComponent {
+  loopStore = inject(LoopStoreService)
   router = inject(Router)
   storageItem: [string, string] = [LOOP_ACCEPTED, "true"]
   text$: Observable<string> = this.i18nStore.getLocalizedHtml("loop-step-1")
 
-  onCancel() {
-    this.router.navigate([this.i18nStore.activeLang, ERoutes.HOME])
+  get breadcrumbs() {
+    return this.loopStore.breadcrumbs
   }
 
-  onAgree() {
+  ngOnInit(): void {
+    this.loopStore.activeBreadcrumbIndex.set(ECertifiedSteps.INFO)
+  }
+
+  onNext() {
     this.router.navigate([this.i18nStore.activeLang, ERoutes.LOOP_2])
   }
 }

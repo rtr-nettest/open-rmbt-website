@@ -1,7 +1,7 @@
 import { Component } from "@angular/core"
-import { LoopScreenComponent } from "../../../loop/screens/loop-screen/loop-screen.component"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { imports } from "../../../test/screens/test-screen/test-screen.component"
+import { Step3Component as LoopScreenComponent } from "../../../loop/screens/step-3/step-3.component"
 import { environment } from "../../../../../environments/environment"
 
 @Component({
@@ -23,6 +23,8 @@ export class Step4Component extends LoopScreenComponent {
   override scheduleLoop() {
     this.loopService.scheduleLoop({
       isCertifiedMeasurement: true,
+      maxTestsAllowed: environment.loopModeDefaults.max_tests,
+      testIntervalMinutes: environment.loopModeDefaults.max_delay,
     })
   }
 }

@@ -3,9 +3,9 @@
 /map
 /statistics
 /test
-/series
 /series-step-1
 /series-step-2
+/series-step-3
 /series-result
 /certified-step-1
 /certified-step-2
@@ -22,9 +22,9 @@
 /de/map
 /de/statistics
 /de/test
-/de/series
 /de/series-step-1
 /de/series-step-2
+/de/series-step-3
 /de/series-result
 /de/certified-step-1
 /de/certified-step-2
@@ -41,9 +41,9 @@
 /en/map
 /en/statistics
 /en/test
-/en/series
 /en/series-step-1
 /en/series-step-2
+/en/series-step-3
 /en/series-result
 /en/certified-step-1
 /en/certified-step-2

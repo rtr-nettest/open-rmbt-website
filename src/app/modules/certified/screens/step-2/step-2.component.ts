@@ -4,13 +4,12 @@ import { MatButtonModule } from "@angular/material/button"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
-import { BreadcrumbsComponent as CertifiedBreadcrumbs } from "../../components/breadcrumbs/breadcrumbs.component"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { Router } from "@angular/router"
 import { CertifiedStoreService } from "../../store/certified-store.service"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
-import { ESteps } from "../../constants/steps.enum"
+import { ECertifiedSteps } from "../../constants/certified-steps.enum"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Title } from "@angular/platform-browser"
 import {
@@ -29,14 +28,14 @@ import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input"
 import { MatRadioModule } from "@angular/material/radio"
 import { LoopService } from "../../../loop/services/loop.service"
-import { environment } from "../../../../../environments/environment"
+import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
 
 @Component({
   selector: "app-step-2",
   standalone: true,
   imports: [
+    CertifiedBreadcrumbsComponent,
     BreadcrumbsComponent,
-    CertifiedBreadcrumbs,
     HeaderComponent,
     MatButtonModule,
     MatFormFieldModule,
@@ -53,6 +52,10 @@ import { environment } from "../../../../../environments/environment"
 export class Step2Component extends SeoComponent implements OnInit {
   form?: FormGroup<ICertifiedDataFormControls>
 
+  get breadcrumbs() {
+    return this.store.breadcrumbs
+  }
+
   get nextStepAvailable() {
     return this.store.nextStepAvailable
   }
@@ -65,7 +68,6 @@ export class Step2Component extends SeoComponent implements OnInit {
     ts: Title,
     i18nStore: I18nStore,
     private readonly fb: FormBuilder,
-    private readonly loopService: LoopService,
     private readonly router: Router,
     private readonly store: CertifiedStoreService
   ) {
@@ -73,7 +75,7 @@ export class Step2Component extends SeoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.activeBreadcrumbIndex.set(ESteps.DATA)
+    this.store.activeBreadcrumbIndex.set(ECertifiedSteps.DATA)
     const savedForm = this.store.dataForm()
     this.form = this.fb.group({
       titlePrepend: new FormControl(savedForm?.titlePrepend || ""),
@@ -114,7 +116,7 @@ export class Step2Component extends SeoComponent implements OnInit {
   }
 
   onTestStart() {
-    this.store.activeBreadcrumbIndex.set(ESteps.MEASUREMENT)
+    this.store.activeBreadcrumbIndex.set(ECertifiedSteps.MEASUREMENT)
     this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_4])
   }
 

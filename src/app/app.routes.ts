@@ -13,8 +13,9 @@ import { HistoryScreenComponent } from "./modules/history/screens/history-screen
 import { Step1Component } from "./modules/certified/screens/step-1/step-1.component"
 import { Step2Component } from "./modules/certified/screens/step-2/step-2.component"
 import { Step3Component } from "./modules/certified/screens/step-3/step-3.component"
-import { LoopScreenComponent } from "./modules/loop/screens/loop-screen/loop-screen.component"
 import { Step1Component as LoopStep1Component } from "./modules/loop/screens/step-1/step-1.component"
+import { Step2Component as LoopStep2Component } from "./modules/loop/screens/step-2/step-2.component"
+import { Step3Component as LoopStep3Component } from "./modules/loop/screens/step-3/step-3.component"
 import { Step4Component } from "./modules/certified/screens/step-4/step-4.component"
 import { LoopResultScreenComponent } from "./modules/loop/screens/loop-result-screen/loop-result-screen.component"
 import { CertifiedResultScreenComponent } from "./modules/certified/screens/certified-result-screen/certified-result-screen.component"
@@ -90,28 +91,28 @@ export const routes: Routes = [
         },
       },
       {
-        path: ERoutes.LOOP,
-        canDeactivate: [unloadOnlyFor([ERoutes.LOOP_RESULT])],
-        component: LoopScreenComponent,
-        resolve: [localeResolver],
-        data: {
-          title: "Loop Mode",
-        },
-      },
-      {
         path: ERoutes.LOOP_1,
         component: LoopStep1Component,
         resolve: [localeResolver],
         data: {
-          title: "Loop Mode",
+          title: "Loop mode",
         },
       },
       {
         path: ERoutes.LOOP_2,
-        component: LoopScreenComponent,
+        component: LoopStep2Component,
         resolve: [localeResolver],
         data: {
-          title: "Loop Mode",
+          title: "Loop mode",
+        },
+      },
+      {
+        path: ERoutes.LOOP_3,
+        canDeactivate: [unloadOnlyFor([ERoutes.LOOP_RESULT])],
+        component: LoopStep3Component,
+        resolve: [localeResolver],
+        data: {
+          title: "Loop mode",
         },
       },
       {
@@ -119,7 +120,7 @@ export const routes: Routes = [
         component: LoopResultScreenComponent,
         resolve: [localeResolver],
         data: {
-          title: "Loop Mode Results",
+          title: "Loop mode results",
         },
       },
       {

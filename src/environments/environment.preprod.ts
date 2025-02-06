@@ -1,11 +1,13 @@
 export const environment = {
-  baseUrl: ".",
+  baseUrl: "http://localhost:4200",
   deployedUrl: "http://localhost:4200",
   api: {
     baseUrl: "https://c01.netztest.at",
   },
   loopModeDefaults: {
-    max_delay: 15,
-    max_tests: 8,
+    max_delay: 1,
+    max_tests: 3,
+    min_delay: 1,
+    min_tests: 2,
   },
 }

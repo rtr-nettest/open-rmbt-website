@@ -1,39 +1,41 @@
 import { computed, Injectable, signal } from "@angular/core"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { ERoutes } from "../../shared/constants/routes.enum"
-import { ESteps } from "../constants/steps.enum"
+import { ECertifiedSteps } from "../constants/certified-steps.enum"
 import { ICertifiedDataForm } from "../interfaces/certified-data-form.interface"
 import { ICertifiedEnvForm } from "../interfaces/certified-env-form.interface"
+import { IMainMenuItem } from "../../shared/interfaces/main-menu-item.interface"
+import { IBreadcrumb } from "../../shared/interfaces/breadcrumb.interface"
 
 @Injectable({
   providedIn: "root",
 })
 export class CertifiedStoreService {
   activeBreadcrumbIndex = signal(0)
-  breadcrumbs = computed(() => {
+  breadcrumbs = computed<IBreadcrumb[]>(() => {
     return [
       {
-        index: ESteps.INFO,
+        index: ECertifiedSteps.INFO,
         label: "Info",
         route: `/${this.i18nStore.activeLang}/${ERoutes.CERTIFIED_1}`,
       },
       {
-        index: ESteps.DATA,
+        index: ECertifiedSteps.DATA,
         label: "Data",
         route: `/${this.i18nStore.activeLang}/${ERoutes.CERTIFIED_2}`,
       },
       {
-        index: ESteps.ENVIRONMENT,
+        index: ECertifiedSteps.ENVIRONMENT,
         label: "Environment",
         route: `/${this.i18nStore.activeLang}/${ERoutes.CERTIFIED_3}`,
       },
       {
-        index: ESteps.MEASUREMENT,
+        index: ECertifiedSteps.MEASUREMENT,
         label: "Measurement",
         route: `/${this.i18nStore.activeLang}/${ERoutes.TEST}`,
       },
       {
-        index: ESteps.RESULT,
+        index: ECertifiedSteps.RESULT,
         label: "Result",
         route: `/${this.i18nStore.activeLang}/${ERoutes.CERTIFIED_RESULT}`,
       },
@@ -52,20 +54,21 @@ export class CertifiedStoreService {
   isEnvFormValid = signal(false)
   nextStepAvailable = computed(() => {
     return (
-      this.activeBreadcrumbIndex() === ESteps.INFO ||
-      (!this.isReady() && this.activeBreadcrumbIndex() < ESteps.ENVIRONMENT)
+      this.activeBreadcrumbIndex() === ECertifiedSteps.INFO ||
+      (!this.isReady() &&
+        this.activeBreadcrumbIndex() < ECertifiedSteps.ENVIRONMENT)
     )
   })
   testStartAvailable = computed(() => {
     return (
       (this.isReady() &&
-        this.activeBreadcrumbIndex() != ESteps.INFO &&
-        this.activeBreadcrumbIndex() < ESteps.MEASUREMENT) ||
-      this.activeBreadcrumbIndex() == ESteps.ENVIRONMENT
+        this.activeBreadcrumbIndex() != ECertifiedSteps.INFO &&
+        this.activeBreadcrumbIndex() < ECertifiedSteps.MEASUREMENT) ||
+      this.activeBreadcrumbIndex() == ECertifiedSteps.ENVIRONMENT
     )
   })
   testStartDisabled = computed(() => {
-    return this.activeBreadcrumbIndex() == ESteps.ENVIRONMENT
+    return this.activeBreadcrumbIndex() == ECertifiedSteps.ENVIRONMENT
       ? !this.isEnvFormValid()
       : !this.isDataFormValid()
   })

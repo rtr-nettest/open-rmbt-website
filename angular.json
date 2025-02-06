@@ -118,6 +118,9 @@
             },
             "stage": {
               "buildTarget": "open-rmbt-angular:build:stage"
+            },
+            "preprod": {
+              "buildTarget": "open-rmbt-angular:build:preprod"
             }
           },
           "defaultConfiguration": "development"

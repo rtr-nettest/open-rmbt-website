@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
-import { BreadcrumbsComponent as CertifiedBreadcrumbs } from "../../components/breadcrumbs/breadcrumbs.component"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { AsyncPipe } from "@angular/common"
 import { MatButtonModule } from "@angular/material/button"
@@ -12,9 +11,10 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
 import { CertifiedStoreService } from "../../store/certified-store.service"
 import { Observable } from "rxjs"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
-import { ESteps } from "../../constants/steps.enum"
+import { ECertifiedSteps } from "../../constants/certified-steps.enum"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Title } from "@angular/platform-browser"
+import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
 
 @Component({
   selector: "app-step-1",
@@ -22,7 +22,7 @@ import { Title } from "@angular/platform-browser"
   imports: [
     AsyncPipe,
     BreadcrumbsComponent,
-    CertifiedBreadcrumbs,
+    CertifiedBreadcrumbsComponent,
     HeaderComponent,
     MatButtonModule,
     TopNavComponent,
@@ -35,6 +35,10 @@ import { Title } from "@angular/platform-browser"
 export class Step1Component extends SeoComponent implements OnInit {
   text$!: Observable<string>
 
+  get breadcrumbs() {
+    return this.store.breadcrumbs
+  }
+
   constructor(
     ts: Title,
     i18nStore: I18nStore,
@@ -46,7 +50,7 @@ export class Step1Component extends SeoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.activeBreadcrumbIndex.set(ESteps.INFO)
+    this.store.activeBreadcrumbIndex.set(ECertifiedSteps.INFO)
   }
 
   onNext() {

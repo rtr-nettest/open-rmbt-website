@@ -19,13 +19,13 @@ import { LoopService } from "../../services/loop.service"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 
 @Component({
-  selector: "app-loop-screen",
+  selector: "app-step-3",
   standalone: true,
   imports,
   templateUrl: "../../../test/screens/test-screen/test-screen.component.html",
   styleUrl: "../../../test/screens/test-screen/test-screen.component.scss",
 })
-export class LoopScreenComponent extends TestScreenComponent {
+export class Step3Component extends TestScreenComponent {
   override addMedian = true
   override goBackLocation: string = `/${this.i18nStore.activeLang}/${ERoutes.LOOP_1}`
   protected readonly loopService = inject(LoopService)
@@ -87,7 +87,11 @@ export class LoopScreenComponent extends TestScreenComponent {
   }
 
   protected scheduleLoop() {
-    this.loopService.scheduleLoop()
+    this.loopService.scheduleLoop({
+      isCertifiedMeasurement: false,
+      maxTestsAllowed: this.loopStore.maxTestsAllowed(),
+      testIntervalMinutes: this.loopStore.testIntervalMinutes(),
+    })
   }
 
   override abortTest(): void {

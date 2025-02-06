@@ -12,7 +12,7 @@ import { CertifiedStoreService } from "../../store/certified-store.service"
 import { Router } from "@angular/router"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { map, take, takeUntil } from "rxjs"
-import { ESteps } from "../../constants/steps.enum"
+import { ECertifiedSteps } from "../../constants/certified-steps.enum"
 import {
   FormArray,
   FormBuilder,
@@ -25,7 +25,6 @@ import { v4 } from "uuid"
 import { FileService } from "../../../shared/services/file.service"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
-import { BreadcrumbsComponent as CertifiedBreadcrumbs } from "../../components/breadcrumbs/breadcrumbs.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatFormFieldModule } from "@angular/material/form-field"
@@ -34,17 +33,16 @@ import { MatInputModule } from "@angular/material/input"
 import { NgFor, NgIf } from "@angular/common"
 import { MatIconModule } from "@angular/material/icon"
 import { MatCheckboxModule } from "@angular/material/checkbox"
-import { environment } from "../../../../../environments/environment"
 import { LoopService } from "../../../loop/services/loop.service"
+import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
 
 @Component({
   selector: "app-step-3",
   standalone: true,
   imports: [
-    HeaderComponent,
-    TopNavComponent,
-    CertifiedBreadcrumbs,
     BreadcrumbsComponent,
+    CertifiedBreadcrumbsComponent,
+    HeaderComponent,
     MatButtonModule,
     MatCheckboxModule,
     MatFormFieldModule,
@@ -53,6 +51,7 @@ import { LoopService } from "../../../loop/services/loop.service"
     NgFor,
     NgIf,
     ReactiveFormsModule,
+    TopNavComponent,
     TranslatePipe,
   ],
   templateUrl: "./step-3.component.html",
@@ -70,6 +69,10 @@ export class Step3Component extends SeoComponent implements OnInit {
   ]
   fileIds = [v4()]
   files: { [key: string]: File } = {}
+
+  get breadcrumbs() {
+    return this.store.breadcrumbs
+  }
 
   get testStartAvailable() {
     return this.store.testStartAvailable
@@ -92,7 +95,7 @@ export class Step3Component extends SeoComponent implements OnInit {
     if (!this.store.dataForm()) {
       this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_2])
     } else {
-      this.store.activeBreadcrumbIndex.set(ESteps.ENVIRONMENT)
+      this.store.activeBreadcrumbIndex.set(ECertifiedSteps.ENVIRONMENT)
       this.initForm()
     }
   }
@@ -169,7 +172,7 @@ export class Step3Component extends SeoComponent implements OnInit {
   }
 
   onTestStart() {
-    this.store.activeBreadcrumbIndex.set(ESteps.MEASUREMENT)
+    this.store.activeBreadcrumbIndex.set(ECertifiedSteps.MEASUREMENT)
     this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_4])
   }
 
