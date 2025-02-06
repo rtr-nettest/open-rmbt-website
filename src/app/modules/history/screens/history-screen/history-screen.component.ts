@@ -117,6 +117,7 @@ export class HistoryScreenComponent extends SeoComponent {
     } else {
       this.scrollNLoad.loading = false
     }
+    console.log(this.addMedian)
   }
 
   changeSort = (sort: ISort) => {

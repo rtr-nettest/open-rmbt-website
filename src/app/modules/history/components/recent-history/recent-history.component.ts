@@ -93,7 +93,9 @@ export class RecentHistoryComponent implements OnChanges {
         footer: this.getFooterValueByColumnName(c, this.data()),
       }))
   })
-  footerColumns = computed(() => this.columns().map((c) => c.columnDef))
+  footerColumns = computed(() =>
+    this.addMedian() ? this.columns().map((c) => c.columnDef) : []
+  )
   data = computed(() => {
     const result = this.result()
     return {
