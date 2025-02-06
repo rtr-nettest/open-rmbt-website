@@ -8,7 +8,6 @@ import { IUserSetingsResponse } from "../../test/interfaces/user-settings-respon
 export class MainStore {
   inProgress$ = new BehaviorSubject<boolean>(false)
   error$ = new BehaviorSubject<Error | null>(null)
-  referrer$ = new BehaviorSubject<string | null>(null)
   settings = signal<IUserSetingsResponse | null>(null)
   api = computed(() => {
     const {

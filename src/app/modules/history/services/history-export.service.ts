@@ -1,13 +1,11 @@
 import { Injectable } from "@angular/core"
-import { BehaviorSubject, catchError, concatMap, map, of, tap } from "rxjs"
+import { catchError, concatMap, map, of, tap, finalize } from "rxjs"
 import { HttpClient, HttpParams } from "@angular/common/http"
 import saveAs from "file-saver"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { ISimpleHistoryResult } from "../../history/interfaces/simple-history-result.interface"
-import { environment } from "../../../../environments/environment"
 import { MessageService } from "../../shared/services/message.service"
 import { MainStore } from "../../shared/store/main.store"
-import { TestStore } from "../../test/store/test.store"
 import { ECertifiedLocationType } from "../../certified/interfaces/certified-env-form.interface"
 import { ERROR_OCCURED } from "../../test/constants/strings"
 import { CertifiedStoreService } from "../../certified/store/certified-store.service"
@@ -16,17 +14,10 @@ import { CertifiedStoreService } from "../../certified/store/certified-store.ser
   providedIn: "root",
 })
 export class HistoryExportService {
-  lastCertifiedPdfUrl$ = new BehaviorSubject("")
-
-  private get exportUrl() {
-    return `${this.mainStore.api().url_web_statistic_server}/export`
-  }
-
-  private get pdfUrl() {
-    if (!this.exportUrl) {
-      return null
-    }
-    return this.exportUrl + "/pdf/" + this.i18nStore.activeLang
+  private get basePdfUrl() {
+    return `${this.mainStore.api().url_web_statistic_server}/export/pdf/${
+      this.i18nStore.activeLang
+    }`
   }
 
   constructor(
@@ -38,7 +29,9 @@ export class HistoryExportService {
   ) {}
 
   exportAs(format: "csv" | "xlsx", results: ISimpleHistoryResult[]) {
-    const exportUrl = `${environment.api.baseUrl}/RMBTStatisticServer/opentests/search`
+    const exportUrl = `${
+      this.mainStore.api().url_web_statistic_server
+    }/opentests/search`
     if (!exportUrl) {
       return of(null)
     }
@@ -53,62 +46,46 @@ export class HistoryExportService {
   }
 
   exportAsPdf(results: ISimpleHistoryResult[]) {
-    if (!this.pdfUrl) {
+    if (!this.basePdfUrl) {
       return of(null)
     }
     this.mainStore.inProgress$.next(true)
     return this.http
-      .post(this.pdfUrl, this.getExportParams("pdf", results))
+      .post(this.basePdfUrl, this.getExportParams("pdf", results))
       .pipe(
-        concatMap(this.downloadPdf),
+        concatMap((resp: any) => {
+          if (resp?.["file"]) {
+            return this.http.get(`${this.basePdfUrl}/${resp["file"]}`, {
+              responseType: "blob",
+              observe: "response",
+            })
+          }
+          return of(null)
+        }),
         tap(this.saveFile("pdf")),
         catchError(this.handleError)
       )
   }
 
-  exportAsCertified(loopUuid?: string | null) {
-    if (this.lastCertifiedPdfUrl$.value) {
-      //   window.electronAPI.openPdf(this.lastCertifiedPdfUrl$.value)
-      return this.lastCertifiedPdfUrl$.asObservable()
-    }
-    if (!this.pdfUrl || !loopUuid) {
+  openCertifiedPdf(loopUuid?: string | null) {
+    if (!this.basePdfUrl || !loopUuid) {
       return of(null)
     }
     this.mainStore.inProgress$.next(true)
     return this.http
-      .post<any>(this.pdfUrl, this.getFormData(loopUuid))
+      .post<any>(this.basePdfUrl, this.getFormData(loopUuid))
       .pipe(
-        concatMap(this.downloadPdf),
-        tap(this.saveFile("pdf")),
-        catchError(this.handleError)
+        map((resp: any) => {
+          if (resp?.["file"]) {
+            const url = `${this.basePdfUrl}/${resp["file"]}`
+            window.open(url, "_blank")
+            return url
+          }
+          return null
+        }),
+        catchError(this.handleError),
+        finalize(() => this.mainStore.inProgress$.next(false))
       )
-  }
-
-  getCertifiedPdfUrl(loopUuid?: string | null) {
-    if (!this.pdfUrl || !loopUuid) {
-      return of(null)
-    }
-    return this.http.post<any>(this.pdfUrl, this.getFormData(loopUuid)).pipe(
-      map((resp: any) => {
-        if (resp?.["file"]) {
-          const fileUrl = this.exportUrl + "/pdf/" + resp["file"]
-          this.lastCertifiedPdfUrl$.next(fileUrl)
-          return fileUrl
-        }
-        return null
-      }),
-      catchError(this.handleError)
-    )
-  }
-
-  private downloadPdf = (resp: any) => {
-    if (resp?.["file"]) {
-      return this.http.get(this.exportUrl + "/pdf/" + resp["file"], {
-        responseType: "blob",
-        observe: "response",
-      })
-    }
-    return of(null)
   }
 
   private saveFile = (format: string) => (data: any) => {
