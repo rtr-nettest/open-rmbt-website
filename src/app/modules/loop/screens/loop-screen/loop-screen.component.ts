@@ -33,10 +33,16 @@ export class LoopScreenComponent extends TestScreenComponent {
   protected shouldGetHistory$ = new BehaviorSubject<boolean>(false)
   protected currentTestUuid$ = new BehaviorSubject<string | null>(null)
   isTabActive = true
+  testsFinishedWhileActive = 0
+
+  get testsFinishedWhileInactive() {
+    return this.loopStore.loopCounter() - this.testsFinishedWhileActive
+  }
 
   tabActivityListener = () => {
     if (document.hidden) {
       this.isTabActive = false
+      this.testsFinishedWhileActive = this.loopStore.loopCounter()
     } else {
       this.isTabActive = true
       this.ts.setTitle(this.metaTitle)
@@ -111,8 +117,9 @@ export class LoopScreenComponent extends TestScreenComponent {
   }
 
   protected override goToResult = (_: ITestVisualizationState) => {
-    if (!this.isTabActive)
-      this.ts.setTitle(`(${this.loopStore.loopCounter()}) ${this.metaTitle}`)
+    if (!this.isTabActive && this.testsFinishedWhileInactive > 0) {
+      this.ts.setTitle(`(${this.testsFinishedWhileInactive}) ${this.metaTitle}`)
+    }
     if (this.loopStore.maxTestsReached()) {
       this.abortTest()
       return

@@ -107,6 +107,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
     if (!globalThis.localStorage) {
       return
     }
+    this.historyService.resetMeasurementHistory()
     firstValueFrom(this.settingsService.getSettings()).then((settings) => {
       if (
         settings.settings[0].terms_and_conditions.version.toString() !=
