@@ -80,6 +80,12 @@ export class TableComponent implements OnInit, OnChanges {
   displayedSubHeaderColumns: string[] = []
   filters: ITableColumn[] = []
 
+  get ngClass() {
+    return this.tableClassNames?.length
+      ? this.tableClassNames
+      : "app-table--default"
+  }
+
   constructor(
     private tableSortService: TableSortService,
     private i18nStore: I18nStore,

@@ -7,7 +7,12 @@
 
 .app-header {
   display: flex;
+  flex-wrap: wrap;
   margin-bottom: 1em;
+
+  h1 {
+    margin-left: 0;
+  }
 }
 
 .app-subheader {

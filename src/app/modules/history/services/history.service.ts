@@ -208,7 +208,7 @@ export class HistoryService {
           retVal.push({
             ...history[i],
             id: history[i].loopUuid!,
-            groupHeader: true,
+            groupHeader: history[i].measurementDate,
           })
         }
         retVal.push({

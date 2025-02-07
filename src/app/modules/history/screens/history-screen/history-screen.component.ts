@@ -112,7 +112,7 @@ export class HistoryScreenComponent extends SeoComponent {
 
   ngOnInit(): void {
     if (this.uuid) {
-      this.store.history$.next([])
+      this.service.resetMeasurementHistory()
       this.scrollNLoad.load({ reset: true })
     } else {
       this.scrollNLoad.loading = false

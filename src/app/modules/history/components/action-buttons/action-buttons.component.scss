@@ -3,14 +3,11 @@
 
 :host {
   display: flex;
-  flex: 1;
-  justify-content: flex-end;
   position: relative;
 }
 
 .app-button {
   height: rem($font-size-h4 * 2.5);
-  margin-left: 1ex;
   position: relative;
   width: rem($font-size-h4 * 2.5);
 
@@ -18,6 +15,9 @@
     & > * {
       opacity: 0.5;
     }
+  }
+  &:not(:first-of-type) {
+    margin-left: 1ex;
   }
 }
 

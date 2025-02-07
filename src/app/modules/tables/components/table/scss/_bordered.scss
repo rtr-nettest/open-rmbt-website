@@ -1,0 +1,30 @@
+.app-table--bordered {
+  mat-cell,
+  mat-header-cell,
+  mat-footer-cell {
+    &:not(:last-of-type) {
+      border-right: 1px solid $color-primary;
+    }
+  }
+
+  @include screen-xs {
+    mat-cell {
+      border-right: none;
+
+      :not(:only-child):last-child {
+        border-left: none;
+      }
+
+      &:first-of-type {
+        :not(:only-child):last-child {
+          justify-content: flex-start !important;
+          text-align: left !important;
+          padding-left: 0;
+        }
+      }
+      &:last-of-type {
+        justify-content: flex-end;
+      }
+    }
+  }
+}

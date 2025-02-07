@@ -14,6 +14,6 @@ export interface IHistoryGroupItem {
   id?: string
   measurementDate: string
   count?: number
-  groupHeader?: boolean
+  groupHeader?: string
   hidden?: boolean
 }

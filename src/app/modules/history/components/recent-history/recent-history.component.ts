@@ -162,14 +162,10 @@ export class RecentHistoryComponent implements OnChanges {
   private historyItemToRow =
     (t: Translation) =>
     (hi: ISimpleHistoryResult & IHistoryGroupItem): IHistoryRow => {
-      const measurementDate = this.datePipe.transform(
-        hi.measurementDate,
-        "dd.MM.YYYY, HH:mm:ss"
-      )!
       if (hi.groupHeader) {
         return {
           id: hi.loopUuid!,
-          measurementDate,
+          measurementDate: hi.measurementDate,
           device: hi.openTestResponse?.["device"],
           networkType: hi.openTestResponse?.["networkType"],
           groupHeader: hi.groupHeader,
@@ -187,7 +183,6 @@ export class RecentHistoryComponent implements OnChanges {
         openUuid: hi.openTestResponse?.["openTestUuid"],
         device: hi.openTestResponse?.["device"],
         networkType: hi.openTestResponse?.["networkType"],
-        measurementDate,
         intValues: {
           download: (hi.download?.value || 0) * 1000,
           upload: (hi.upload?.value || 0) * 1000,
