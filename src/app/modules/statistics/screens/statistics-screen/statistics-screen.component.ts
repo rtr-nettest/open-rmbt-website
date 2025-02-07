@@ -340,6 +340,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
       case "count":
         return data.providers_sums.count
       case "name":
+        return this.i18nStore.translate("Total")
       default:
         return undefined
     }

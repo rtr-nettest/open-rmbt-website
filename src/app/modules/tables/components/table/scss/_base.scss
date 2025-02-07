@@ -50,6 +50,12 @@ $color-border: rgba(0, 0, 0, 0.1);
 
   mat-cell,
   mat-footer-cell {
+    &:empty {
+      display: none;
+    }
+    &:last-of-type {
+      padding-right: 16px;
+    }
     :nth-child(2) {
       flex: 1;
       max-width: 100%;
@@ -66,7 +72,6 @@ $color-border: rgba(0, 0, 0, 0.1);
           display: inline-flex;
           height: 100%;
           justify-content: flex-end !important;
-          padding-left: rem(12);
           text-align: right !important;
         }
       }
@@ -165,6 +170,7 @@ mat-paginator {
 
     @include screen-xs {
       flex: 0 0 rem(40);
+      width: auto;
     }
   }
 

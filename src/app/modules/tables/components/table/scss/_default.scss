@@ -29,7 +29,7 @@
           display: flex;
           flex: 1;
           justify-content: space-between;
-          padding: 0 rem(16);
+          padding: 0 16px;
 
           mat-icon {
             flex: none;
@@ -57,7 +57,7 @@
 
       &:first-of-type {
         border-top: 1px solid $color-border;
-        padding-left: rem(16);
+        padding-left: 16px;
       }
 
       * {
