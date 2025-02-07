@@ -73,6 +73,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
     {
       header: "Name",
       columnDef: "name",
+      getNgClass: () => "app-table__footer-title",
     },
     {
       header: "Down (Mbps)",

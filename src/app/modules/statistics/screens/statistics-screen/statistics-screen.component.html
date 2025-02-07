@@ -17,7 +17,7 @@
   </ng-container>
   <ng-container body>
     @if (devicesSlice()) {
-    <div style="margin-top: 24px">
+    <div style="margin-top: 24px; margin-bottom: 24px">
       <app-table
         [data]="devicesSlice()"
         [columns]="deviceColumns"
@@ -43,4 +43,6 @@
   [progress]="progress"
 ></app-loading-overlay>
 }
-<app-footer></app-footer>
+<div style="margin-top: 40px">
+  <app-footer></app-footer>
+</div>

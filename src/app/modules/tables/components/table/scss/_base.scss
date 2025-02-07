@@ -50,9 +50,6 @@ $color-border: rgba(0, 0, 0, 0.1);
 
   mat-cell,
   mat-footer-cell {
-    &:empty {
-      display: none;
-    }
     &:last-of-type {
       padding-right: 16px;
     }
@@ -61,6 +58,9 @@ $color-border: rgba(0, 0, 0, 0.1);
       max-width: 100%;
     }
     :not(:only-child) {
+      overflow: hidden;
+      max-height: rem(32);
+
       @include screen-sm {
         max-width: 50vw;
       }
@@ -176,5 +176,15 @@ mat-paginator {
 
   &-groupArrowIndicator {
     flex: 0 0 rem(64);
+  }
+}
+
+.app-table {
+  & mat-footer-row &__footer-title {
+    @include screen-xs {
+      .app-table__mobile-label {
+        display: none;
+      }
+    }
   }
 }

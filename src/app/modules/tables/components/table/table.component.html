@@ -179,7 +179,11 @@
 
       <!-- FOOTER CELL -->
 
-      <mat-footer-cell *matFooterCellDef [style]="justify(column)">
+      <mat-footer-cell
+        *matFooterCellDef
+        [style]="justify(column)"
+        [ngClass]="column.getNgClass?.('', column)"
+      >
         @if (column.footer) {
         <span class="app-table__mobile-label">{{ column.header }}</span>
         @if (column.getLink) {

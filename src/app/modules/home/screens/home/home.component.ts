@@ -120,7 +120,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
             ? `${retVal} (${value.platform.trim()})`
             : value.platform.trim()
         }
-        return `<i class="app-icon app-icon--marker"></i><span>${retVal}</span>`
+        return `<i class="app-icon app-icon--marker"></i>${retVal}`
       },
     },
     {
