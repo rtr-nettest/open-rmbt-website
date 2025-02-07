@@ -89,7 +89,7 @@ export class PopupService {
         .utc(true)
         .tz(dayjs.tz.guess())
         .format(`HH:mm:ss`),
-      detailsUrl: `${environment.deployedUrl}/${this.i18nStore.activeLang}/${ERoutes.RESULT}?open_test_uuid=${measurement.open_test_uuid}`,
+      detailsUrl: `/${this.i18nStore.activeLang}/${ERoutes.OPEN_RESULT}?open_test_uuid=${measurement.open_test_uuid}`,
       downloadClass: this.classification.classify(
         measurement.download_kbit,
         THRESHOLD_DOWNLOAD,
