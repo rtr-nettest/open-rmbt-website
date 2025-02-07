@@ -22,8 +22,9 @@ export class SignalDetailsComponent extends ShowDetailsComponent<ISimpleHistoryS
   override columns: ITableColumn<ISimpleHistorySignal>[] = [
     {
       columnDef: "time_elapsed",
-      header: "Time, s",
-      transformValue: (row) => roundMs(row.time_elapsed / 1e3),
+      header: "Time",
+      transformValue: (row) =>
+        `${roundMs(row.time_elapsed / 1e3)} ${this.i18nStore.translate("s")}`,
       getNgClass: () => "app-cell--20",
     },
     {

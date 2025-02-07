@@ -21,25 +21,26 @@ export class SpeedDetailsComponent extends ShowDetailsComponent<IOverallResult> 
   override columns: ITableColumn<IOverallResult>[] = [
     {
       columnDef: "nsec",
-      header: `${this.i18nStore.translate("Time")}, ${this.i18nStore.translate(
-        "s"
-      )}`,
-      transformValue: (row) => roundMs(row.nsec / 1e9),
+      header: "Time",
+      transformValue: (row) =>
+        `${roundMs(row.nsec / 1e9)} ${this.i18nStore.translate("s")}`,
       getNgClass: () => "app-cell--25",
     },
     {
       columnDef: "speed",
-      header: `${this.i18nStore.translate("Speed")}, ${this.i18nStore.translate(
-        "Mbps"
-      )}`,
-      transformValue: (row) => roundToSignificantDigits(row.speed / 1e6),
+      header: "Speed",
+      transformValue: (row) =>
+        `${roundToSignificantDigits(
+          row.speed / 1e6
+        )} ${this.i18nStore.translate("Mbps")}`,
     },
     {
       columnDef: "bytes",
-      header: `${this.i18nStore.translate(
-        "Data volume"
-      )}, ${this.i18nStore.translate("MB")}`,
-      transformValue: (row) => roundToSignificantDigits(row.bytes / 1e6),
+      header: "Data volume",
+      transformValue: (row) =>
+        `${roundToSignificantDigits(
+          row.bytes / 1e6
+        )} ${this.i18nStore.translate("MB")}`,
     },
   ]
 }
