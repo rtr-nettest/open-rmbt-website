@@ -1,5 +1,6 @@
 import { NetworkMeasurementType } from "../constants/network-measurement-type"
 import { ETileTypes } from "../constants/tile-type.enum"
+import { IColorStop } from "./color-stop.interface"
 
 export interface IMapFilter {
   icon?: string
@@ -15,6 +16,7 @@ export interface IMapFilter {
     provider?: number
     statistical_method?: number
   }
+  heatmap: IColorStop[]
   functions?: [
     {
       func_name: string
