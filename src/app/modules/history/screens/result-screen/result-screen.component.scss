@@ -19,6 +19,10 @@ h2 {
   justify-content: space-between;
   margin-bottom: rem(24);
 
+  h1 {
+    margin-left: 0;
+  }
+
   .app-button {
     margin-left: rem(16);
     white-space: nowrap;

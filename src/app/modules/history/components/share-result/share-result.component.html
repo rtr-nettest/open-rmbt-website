@@ -1,18 +1,6 @@
 <div class="app-container">
-  <button mat-flat-button class="app-button" (click)="print()">
-    <i class="fa-solid fa-print"> </i>
-    {{ "print" | translate }}
-  </button>
   <button mat-flat-button class="app-button" (click)="getForumBanner()">
     {{ "Get forum banner" | translate }}
-  </button>
-  <button
-    mat-flat-button
-    class="app-button"
-    (click)="getPdf()"
-    [disabled]="pdfButtonDisabled()"
-  >
-    {{ "Download PDF" | translate }}
   </button>
 </div>
 @if (forumBanner()) {

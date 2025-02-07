@@ -3,7 +3,10 @@
 <app-breadcrumbs></app-breadcrumbs>
 <app-scroll-top></app-scroll-top>
 <div class="app-wrapper">
-  <h1>{{ title | translate }}</h1>
+  <header class="app-header">
+    <h1>{{ title | translate }}</h1>
+    <app-action-buttons [items]="actionButtons"></app-action-buttons>
+  </header>
   @if (result$ | async; as result) {
   <div class="app-header">
     <h2 *ngIf="result.measurementDate" aria-live="polite">

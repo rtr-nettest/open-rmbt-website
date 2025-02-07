@@ -10,7 +10,6 @@ import { MatFormField, MatInputModule } from "@angular/material/input"
 import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.interface"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { MatFormFieldModule } from "@angular/material/form-field"
-import { HistoryExportService } from "../../services/history-export.service"
 import { MainStore } from "../../../shared/store/main.store"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 
@@ -33,11 +32,9 @@ export class ShareResultComponent {
   forumBanner = signal<string>("")
   bannerHtml = signal<string>("")
   bannerBBCode = signal<string>("")
-  pdfButtonDisabled = signal<boolean>(false)
 
   constructor(
     private readonly i18nStore: I18nStore,
-    private readonly history: HistoryExportService,
     private readonly mainStore: MainStore
   ) {}
 
@@ -57,17 +54,6 @@ export class ShareResultComponent {
     this.forumBanner.set(img)
     this.bannerHtml.set(`<a href="${url}"><img src="${img}"/></a>`)
     this.bannerBBCode.set(`[url=${url}][img]${img}[/img][/url]`)
-  }
-
-  getPdf() {
-    this.pdfButtonDisabled.set(true)
-    this.history.exportAsPdf([this.result()!]).subscribe(() => {
-      this.pdfButtonDisabled.set(false)
-    })
-  }
-
-  print() {
-    window.print()
   }
 
   selectText(event: MouseEvent) {

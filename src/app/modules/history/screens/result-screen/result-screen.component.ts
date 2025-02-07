@@ -53,6 +53,7 @@ import {
   ITestResultRequest,
 } from "../../interfaces/measurement-result.interface"
 import { HistoryService } from "../../services/history.service"
+import { ActionButtonsComponent } from "../../components/action-buttons/action-buttons.component"
 
 const MIN_ACCURACY_FOR_SHOWING_MAP = 2000
 
@@ -60,6 +61,7 @@ const MIN_ACCURACY_FOR_SHOWING_MAP = 2000
   selector: "app-result-screen",
   standalone: true,
   imports: [
+    ActionButtonsComponent,
     AsyncPipe,
     BreadcrumbsComponent,
     DatePipe,
@@ -104,6 +106,11 @@ export class ResultScreenComponent extends SeoComponent {
     direction: "",
   }
   actionButtons: IMainMenuItem[] = [
+    {
+      label: "Print",
+      icon: "print",
+      action: () => window.print(),
+    },
     {
       label: "Export as PDF",
       icon: "filetype-pdf",

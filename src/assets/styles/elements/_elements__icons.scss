@@ -26,6 +26,10 @@
     background-image: url("/assets/images/filetype-xlsx-icon.svg");
   }
 
+  &--print {
+    background-image: url("/assets/images/print.svg");
+  }
+
   &--marker {
     background-image: url("/assets/images/marker.svg");
     margin-right: rem(8);
