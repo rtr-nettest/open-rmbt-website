@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core"
 import {
   IRecentMeasurementsResponse,
   IRecentStats,
-} from "../interfaces/recent-measurements-response.interface"
+} from "../../opendata/interfaces/recent-measurements-response.interface"
 import { MainStore } from "../../shared/store/main.store"
 
 @Injectable({

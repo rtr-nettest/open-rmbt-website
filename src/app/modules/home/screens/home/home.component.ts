@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, signal } from "@angular/core"
+import { AfterViewInit, Component, inject, signal } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
@@ -18,17 +18,16 @@ import { MapComponent } from "../../components/map/map.component"
 import {
   IRecentMeasurement,
   IRecentMeasurementsResponse,
-} from "../../interfaces/recent-measurements-response.interface"
+} from "../../../opendata/interfaces/recent-measurements-response.interface"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
-import dayjs from "dayjs"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
-import { roundToSignificantDigits } from "../../../shared/util/math"
 import { Title } from "@angular/platform-browser"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatButtonModule } from "@angular/material/button"
 import { Router, RouterModule } from "@angular/router"
+import { OpendataService } from "../../../opendata/services/opendata.service"
 
 const UPDATE_INTERVAL = 5000
 
@@ -86,68 +85,9 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   )
   eRoutes = ERoutes
   recentMeasurements = signal<IRecentMeasurementsResponse | null>(null)
-  tableColumns: ITableColumn<IRecentMeasurement>[] = [
-    {
-      columnDef: "time",
-      header: "Time",
-      isHtml: true,
-      transformValue(value) {
-        const retVal = dayjs(value.time)
-          .utc(true)
-          .tz(dayjs.tz.guess())
-          .format("HH:mm:ss")
-        return `<i class="app-icon app-icon--browser"></i><span>${retVal}</span>`
-      },
-    },
-    {
-      columnDef: "platform",
-      header: "Provider/device",
-      isHtml: true,
-      transformValue(value) {
-        const arr = []
-        let retVal = ""
-        if (value.provider_name) {
-          arr.push(value.provider_name.trim())
-        }
-        if (value.model) {
-          arr.push(value.model.trim())
-        }
-        if (arr.length) {
-          retVal = arr.join(", ")
-        }
-        if (value.platform) {
-          retVal = retVal.length
-            ? `${retVal} (${value.platform.trim()})`
-            : value.platform.trim()
-        }
-        return `<i class="app-icon app-icon--marker"></i><span class="app-marker-cell">${retVal}</span>`
-      },
-    },
-    {
-      columnDef: "download",
-      header: "Down (Mbps)",
-      transformValue: (value) => {
-        return roundToSignificantDigits(value.download_kbit / 1000)
-      },
-      justify: "flex-end",
-    },
-    {
-      columnDef: "upload",
-      header: "Up (Mbps)",
-      transformValue: (value) => {
-        return roundToSignificantDigits(value.upload_kbit / 1000)
-      },
-      justify: "flex-end",
-    },
-    {
-      columnDef: "ping",
-      header: "Ping (ms)",
-      transformValue: (value) => {
-        return Math.round(value.ping_ms)
-      },
-      justify: "flex-end",
-    },
-  ]
+  opendataService = inject(OpendataService)
+  tableColumns: ITableColumn<IRecentMeasurement>[] =
+    this.opendataService.getColumns()
   tableData = signal<IBasicResponse<IRecentMeasurement> | null>(null)
 
   constructor(

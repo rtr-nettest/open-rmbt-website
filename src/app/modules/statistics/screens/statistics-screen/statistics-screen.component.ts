@@ -2,7 +2,10 @@ import { Component, computed, inject, OnInit, signal } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { StatisticsService } from "../../services/statistics.service"
 import { AsyncPipe } from "@angular/common"
-import { StatisticsStoreService } from "../../store/statistics-store.service"
+import {
+  DEFAULT_FILTERS,
+  StatisticsStoreService,
+} from "../../store/statistics-store.service"
 import { catchError, map, Observable, switchMap, tap } from "rxjs"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
@@ -271,18 +274,11 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
         tap((data) => {
           this.store.adjustTimePeriods()
           this.store.filters$.next({
+            ...DEFAULT_FILTERS,
             language: this.i18nStore.activeLang,
-            type: "mobile",
-            country: data.country_geoip,
             duration: this.store.durations()[2][0],
-            province: -1,
-            end_date: null,
-            quantile: "0.5",
+            country: data.country_geoip,
             location_accuracy: data.country_geoip == "AT" ? "2000" : "-1",
-            network_type_group: "all",
-            max_devices: 100,
-            capabilities: { classification: { count: 4 } },
-            timezone: dayjs.tz.guess(),
           })
           this.statistics$ = this.store.filters$.pipe(
             switchMap((filters) => {

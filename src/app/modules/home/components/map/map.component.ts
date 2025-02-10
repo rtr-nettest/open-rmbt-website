@@ -8,7 +8,7 @@ import {
   OnDestroy,
   SimpleChanges,
 } from "@angular/core"
-import { IRecentMeasurementsResponse } from "../../interfaces/recent-measurements-response.interface"
+import { IRecentMeasurementsResponse } from "../../../opendata/interfaces/recent-measurements-response.interface"
 import { Subject, Subscription } from "rxjs"
 import { Marker, Map, NavigationControl, FullscreenControl } from "maplibre-gl"
 import { bbox } from "@turf/bbox"

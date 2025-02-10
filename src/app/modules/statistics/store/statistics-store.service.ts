@@ -5,6 +5,21 @@ import { IBrowserData } from "../interfaces/browser-data.interface"
 import { adjustTimePeriod } from "../../shared/util/time"
 import dayjs from "dayjs"
 
+export const DEFAULT_FILTERS: IStatisticsRequest = {
+  timezone: dayjs.tz.guess(),
+  type: "mobile",
+  province: -1,
+  end_date: null,
+  quantile: "0.5",
+  network_type_group: "all",
+  max_devices: 100,
+  capabilities: { classification: { count: 4 } },
+  language: null,
+  duration: null,
+  location_accuracy: null,
+  country: null,
+}
+
 @Injectable({
   providedIn: "root",
 })

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core"
 import { Popup, Map } from "maplibre-gl"
-import { IRecentMeasurement } from "../interfaces/recent-measurements-response.interface"
+import { IRecentMeasurement } from "../../opendata/interfaces/recent-measurements-response.interface"
 import { environment } from "../../../../environments/environment"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { firstValueFrom } from "rxjs"
