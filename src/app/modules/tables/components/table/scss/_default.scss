@@ -11,6 +11,9 @@
         justify-content: flex-start !important;
         text-align: left !important;
       }
+      &:last-of-type {
+        padding-right: 16px;
+      }
     }
 
     .app-table__mobile-label {

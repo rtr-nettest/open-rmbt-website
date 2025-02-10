@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  computed,
   HostListener,
   inject,
   NgZone,
@@ -14,10 +15,7 @@ import {
   firstValueFrom,
   map,
   Observable,
-  of,
   Subject,
-  switchMap,
-  takeUntil,
   withLatestFrom,
 } from "rxjs"
 import { ERoutes } from "../../../shared/constants/routes.enum"
@@ -34,7 +32,6 @@ import {
   ERROR_OCCURED,
   ERROR_OCCURED_SENDING_RESULTS,
   TC_VERSION_ACCEPTED,
-  THIS_INTERRUPTS_ACTION,
 } from "../../constants/strings"
 import { MessageService } from "../../../shared/services/message.service"
 import { SpacerComponent } from "../../../shared/components/spacer/spacer.component"
@@ -50,6 +47,10 @@ import { toObservable } from "@angular/core/rxjs-interop"
 import { setGoBackLocation } from "../../../shared/util/nav"
 import { SprintfPipe } from "../../../shared/pipes/sprintf.pipe"
 import { SettingsService } from "../../../shared/services/settings.service"
+import {
+  EPlatform,
+  PlatformService,
+} from "../../../shared/services/platform.service"
 
 export const imports = [
   AsyncPipe,
@@ -76,7 +77,10 @@ export const imports = [
   templateUrl: "./test-screen.component.html",
   styleUrl: "./test-screen.component.scss",
 })
-export class TestScreenComponent extends SeoComponent implements OnInit {
+export class TestScreenComponent
+  extends SeoComponent
+  implements OnInit, AfterViewInit
+{
   addMedian = false
   goBackLocation = `/${this.i18nStore.activeLang}/${ERoutes.HOME}`
   historyService = inject(HistoryService)
@@ -102,9 +106,37 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   progressMode$ = new BehaviorSubject<"determinate" | "indeterminate">(
     "determinate"
   )
+  platform = inject(PlatformService)
+  mobileWarning = computed(() => {
+    const platform = this.platform.detectPlatform()
+    if (platform === EPlatform.ANDROID) {
+      return this.i18nStore.translate("Please use Android app")
+    } else if (platform === EPlatform.IOS) {
+      return this.i18nStore.translate("Please use iOS app")
+    }
+    return null
+  })
+
+  ngAfterViewInit(): void {
+    const mw = this.mobileWarning()
+    if (mw) {
+      setTimeout(() => {
+        const link = document
+          .getElementById("mobileWarning")
+          ?.querySelector("a")
+        if (link) {
+          link.target = "_blank"
+          link.click()
+        }
+      }, 100)
+    }
+  }
 
   ngOnInit(): void {
     if (!globalThis.localStorage) {
+      return
+    }
+    if (this.mobileWarning()) {
       return
     }
     this.historyService.resetMeasurementHistory()
