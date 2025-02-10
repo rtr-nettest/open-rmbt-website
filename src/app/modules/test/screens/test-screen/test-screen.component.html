@@ -42,7 +42,7 @@
     *ngIf="result$ | async as result"
     [addMedian]="addMedian"
     [result]="result"
-    [excludeColumns]="['details']"
+    [excludeColumns]="excludeColumns"
     [interruptsTests]="true"
     title="Recent measurements"
   ></app-recent-history>

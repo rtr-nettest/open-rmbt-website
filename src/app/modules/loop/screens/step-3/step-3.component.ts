@@ -17,6 +17,7 @@ import { ERROR_OCCURED_DURING_LOOP } from "../../constants/strings"
 import { STATE_UPDATE_TIMEOUT } from "../../../test/constants/numbers"
 import { LoopService } from "../../services/loop.service"
 import { ERoutes } from "../../../shared/constants/routes.enum"
+import { environment } from "../../../../../environments/environment"
 
 @Component({
   selector: "app-step-3",
@@ -28,6 +29,8 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
 export class Step3Component extends TestScreenComponent {
   override addMedian = true
   override goBackLocation: string = `/${this.i18nStore.activeLang}/${ERoutes.LOOP_1}`
+  override excludeColumns =
+    environment.loopModeDefaults.exclude_from_result ?? []
   protected readonly loopService = inject(LoopService)
   protected waitingProgressMs = 0
   protected shouldGetHistory$ = new BehaviorSubject<boolean>(false)

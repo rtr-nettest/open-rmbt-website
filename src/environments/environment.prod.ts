@@ -9,5 +9,6 @@ export const environment = {
     max_tests: 8,
     min_delay: 1,
     min_tests: 2,
+    exclude_from_result: ["networkType"],
   },
 }

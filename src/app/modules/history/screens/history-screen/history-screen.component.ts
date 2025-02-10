@@ -53,6 +53,7 @@ export class HistoryScreenComponent extends SeoComponent {
   exporter = inject(HistoryExportService)
   service = inject(HistoryService)
   store = inject(HistoryStore)
+  excludeColumns: string[] = []
 
   actionButtons: IMainMenuItem[] = [
     {

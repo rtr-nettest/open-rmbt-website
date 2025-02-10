@@ -6,6 +6,7 @@ import {
 import { ActivatedRoute, Router } from "@angular/router"
 import { LoopStoreService } from "../../store/loop-store.service"
 import { ERoutes } from "../../../shared/constants/routes.enum"
+import { environment } from "../../../../../environments/environment"
 
 @Component({
   selector: "app-loop-result-screen",
@@ -27,6 +28,8 @@ export class LoopResultScreenComponent extends HistoryScreenComponent {
     grouped: this.shouldGroupHistory,
     loopUuid: this.loopStore.loopUuid(),
   })
+  override excludeColumns =
+    environment.loopModeDefaults.exclude_from_result ?? []
 
   override ngOnDestroy(): void {
     super.ngOnDestroy()

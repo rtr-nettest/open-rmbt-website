@@ -116,6 +116,7 @@ export class TestScreenComponent
     }
     return null
   })
+  protected excludeColumns: string[] = []
 
   ngAfterViewInit(): void {
     const mw = this.mobileWarning()
