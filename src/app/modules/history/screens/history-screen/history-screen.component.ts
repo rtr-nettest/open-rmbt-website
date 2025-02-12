@@ -86,7 +86,7 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
       this.service.getFullMeasurementHistory(this.store.paginator())
     )
     this.store.paginator.set({
-      offset: this.store.paginator().offset + HISTORY_LIMIT,
+      offset: this.store.paginator().offset + this.dataLimit,
       limit: this.dataLimit,
     })
     return retVal
