@@ -3,12 +3,9 @@ export const searchFromFilters = (filters: Record<string, any>) => {
     .map((key) => {
       const value = (filters as any)[key]
       if (Array.isArray(value)) {
-        const param = []
-        const [from, to] = value
-        if (from) param.push(`${key}[]=>${from}`)
-        if (to) param.push(`${key}[]=<${to}`)
-        if (param.length === 2) return param.join("&")
-        return param[0]
+        const params = value.map((v) => `${key}[]=${v}`)
+        if (params.length > 1) return params.join("&")
+        return params[0]
       }
       return `${key}=${value}`
     })
@@ -22,13 +19,9 @@ export const filtersFromSearch = (search: string) => {
     const [key, value] = param.split("=")
     if (key.endsWith("[]")) {
       if (!filters[key]) {
-        filters[key] = [null, null]
+        filters[key] = []
       }
-      if (value.startsWith(">")) {
-        filters[key][0] = value.slice(2)
-      } else if (value.startsWith("<")) {
-        filters[key][1] = value.slice(2)
-      }
+      filters[key].push(value)
     } else {
       filters[key] = value
     }

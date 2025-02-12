@@ -1,10 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  inject,
-} from "@angular/core"
-import { SeoComponent } from "../../../shared/components/seo/seo.component"
+import { ChangeDetectorRef, Component, inject } from "@angular/core"
 import { UUID } from "../../../test/constants/strings"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
@@ -25,7 +19,7 @@ import { ISort } from "../../../tables/interfaces/sort.interface"
 import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.interface"
 import { IHistoryGroupItem } from "../../interfaces/history-row.interface"
 import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
-import { ScrollNLoadService } from "../../../shared/services/scroll-n-load.service"
+import { LoadOnScrollComponent } from "../../../shared/components/load-on-scroll/load-on-scroll.component"
 
 export const historyImports = [
   ActionButtonsComponent,
@@ -47,7 +41,7 @@ export const historyImports = [
   templateUrl: "./history-screen.component.html",
   styleUrl: "./history-screen.component.scss",
 })
-export class HistoryScreenComponent extends SeoComponent {
+export class HistoryScreenComponent extends LoadOnScrollComponent {
   addMedian = false
   cdr = inject(ChangeDetectorRef)
   exporter = inject(HistoryExportService)
@@ -78,22 +72,24 @@ export class HistoryScreenComponent extends SeoComponent {
   > | null> = this.service.getHistoryGroupedByLoop({
     grouped: this.shouldGroupHistory,
   })
-  scrollNLoad = new ScrollNLoadService(
-    async () => {
-      if (!this.uuid) {
-        return
-      }
-      return firstValueFrom(
-        this.service.getFullMeasurementHistory(this.store.paginator())
-      )
-    },
-    this.store.paginator,
-    HISTORY_LIMIT
-  )
   text$ = of("")
 
-  get loading() {
-    return this.scrollNLoad.loading
+  protected override get dataLimit() {
+    return HISTORY_LIMIT
+  }
+
+  protected override async fetchData(): Promise<Array<any>> {
+    if (!this.uuid) {
+      return []
+    }
+    const retVal = firstValueFrom(
+      this.service.getFullMeasurementHistory(this.store.paginator())
+    )
+    this.store.paginator.set({
+      offset: this.store.paginator().offset + HISTORY_LIMIT,
+      limit: this.dataLimit,
+    })
+    return retVal
   }
 
   get uuid() {
@@ -114,21 +110,15 @@ export class HistoryScreenComponent extends SeoComponent {
   ngOnInit(): void {
     if (this.uuid) {
       this.service.resetMeasurementHistory()
-      this.scrollNLoad.load({ reset: true })
+      this.updateData({ reset: true })
     } else {
-      this.scrollNLoad.loading = false
+      this.loading = false
     }
-    console.log(this.addMedian)
   }
 
   changeSort = (sort: ISort) => {
     this.service.sortMeasurementHistory(sort, () => {
-      this.scrollNLoad.load({ reset: true })
+      this.updateData({ reset: true })
     })
-  }
-
-  @HostListener("body:scroll", ["$event"])
-  onScroll(event: any) {
-    this.scrollNLoad.onScroll(event)
   }
 }

@@ -38,7 +38,7 @@ export class LoopResultScreenComponent extends HistoryScreenComponent {
 
   override ngOnInit(): void {
     super.ngOnInit()
-    this.scrollNLoad.disableOnScroll()
+    this.disableOnScroll()
     if (!this.loopStore.loopUuid()) {
       this.router.navigateByUrl(this.redirectUrl)
     }

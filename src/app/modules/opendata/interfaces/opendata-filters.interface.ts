@@ -42,7 +42,7 @@ export interface IOpendataFilters {
   sort_by?: string
   sort_order?: string
   max_results?: number
-  cursor?: string
+  cursor?: number
   sender?: string
   timestamp?: string
   asn?: number

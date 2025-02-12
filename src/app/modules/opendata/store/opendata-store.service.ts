@@ -1,9 +1,11 @@
-import { computed, Injectable, signal } from "@angular/core"
+import { Injectable, signal } from "@angular/core"
 import { IOpendataFilters } from "../interfaces/opendata-filters.interface"
-import { searchFromFilters } from "../../shared/util/search"
+import { IRecentMeasurement } from "../interfaces/recent-measurements-response.interface"
+
+export const OPEN_DATA_LIMIT = 10
 
 const DEFAULT_FILTERS: IOpendataFilters = {
-  max_results: 400,
+  max_results: OPEN_DATA_LIMIT,
   additional_info: ["download_classification", "signal_classification"],
 }
 
@@ -12,4 +14,12 @@ const DEFAULT_FILTERS: IOpendataFilters = {
 })
 export class OpendataStoreService {
   filters = signal<IOpendataFilters>({ ...DEFAULT_FILTERS })
+  cursor = signal<number>(0)
+  data = signal<IRecentMeasurement[]>([])
+
+  reset() {
+    this.cursor.set(0)
+    this.data.set([])
+    this.filters.set({ ...DEFAULT_FILTERS })
+  }
 }

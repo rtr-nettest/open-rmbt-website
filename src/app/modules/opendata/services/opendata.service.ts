@@ -10,6 +10,8 @@ import {
 import { ITableColumn } from "../../tables/interfaces/table-column.interface"
 import { roundToSignificantDigits } from "../../shared/util/math"
 import dayjs from "dayjs"
+import { map } from "rxjs"
+import { OpendataStoreService } from "../store/opendata-store.service"
 
 @Injectable({
   providedIn: "root",
@@ -17,6 +19,7 @@ import dayjs from "dayjs"
 export class OpendataService {
   constructor(
     private readonly mainStore: MainStore,
+    private readonly store: OpendataStoreService,
     private readonly http: HttpClient
   ) {}
 
@@ -86,10 +89,18 @@ export class OpendataService {
   }
 
   search(filters: IOpendataFilters) {
-    return this.http.get<IRecentMeasurementsResponse>(
-      `${
-        this.mainStore.api().url_web_statistic_server
-      }/opendata/search?${searchFromFilters(filters)}`
-    )
+    return this.http
+      .get<IRecentMeasurementsResponse>(
+        `${
+          this.mainStore.api().url_web_statistic_server
+        }/opentests/search?${searchFromFilters(filters)}`
+      )
+      .pipe(
+        map((response) => {
+          this.store.cursor.set(response.next_cursor)
+          this.store.data.set([...this.store.data(), ...response.results])
+          return response.results
+        })
+      )
   }
 }

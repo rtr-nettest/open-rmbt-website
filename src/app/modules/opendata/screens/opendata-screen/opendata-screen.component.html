@@ -1,10 +1,14 @@
 <app-header></app-header>
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
-<div class="app-wrapper">
+<div class="app-wrapper" style="margin-bottom: 40px">
   <h1 class="app-title">{{ "Open data" | translate }}</h1>
-  @if (data$ | async; as data) {
-  <app-table [data]="data" [columns]="columns" [sort]="sort"></app-table>
+  @if (filters$ | async; as filters) {
+  <app-table
+    [data]="(data$ | async)!"
+    [columns]="columns"
+    [sort]="sort"
+  ></app-table>
   }
 </div>
 <app-footer></app-footer>
