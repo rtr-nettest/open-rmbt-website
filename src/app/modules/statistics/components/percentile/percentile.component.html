@@ -17,7 +17,7 @@
 <mat-menu #legend [hasBackdrop]="false">
   <div class="app-menu">
     <p>{{ provider }}</p>
-    <p>{{ label }} {{ units }}</p>
+    <p>{{ label }} {{ units | translate }}</p>
     <ul class="app-list">
       @for (percent of percents; track $index) {
       <li class="app-li">

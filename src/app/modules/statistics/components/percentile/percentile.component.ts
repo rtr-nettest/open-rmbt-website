@@ -2,6 +2,7 @@ import { Component, Input, ViewChild } from "@angular/core"
 import { IDynamicComponent } from "../../../shared/interfaces/dynamic-component.interface"
 import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu"
 import { I18nStore } from "../../../i18n/store/i18n.store"
+import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 export type PercentileParametes = {
   red: number | undefined
@@ -14,10 +15,10 @@ export type PercentileParametes = {
 }
 
 @Component({
-    selector: "app-percentile",
-    imports: [MatMenuModule],
-    templateUrl: "./percentile.component.html",
-    styleUrl: "./percentile.component.scss"
+  selector: "app-percentile",
+  imports: [MatMenuModule, TranslatePipe],
+  templateUrl: "./percentile.component.html",
+  styleUrl: "./percentile.component.scss",
 })
 export class PercentileComponent
   implements IDynamicComponent<PercentileParametes>

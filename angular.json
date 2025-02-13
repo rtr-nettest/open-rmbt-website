@@ -37,7 +37,15 @@
             "prerender": false,
             "ssr": false,
             "stylePreprocessorOptions": {
-              "includePaths": ["src/assets/styles"]
+              "includePaths": ["src/assets/styles"],
+              "sass": {
+                "silenceDeprecations": [
+                  "mixed-decls",
+                  "color-functions",
+                  "global-builtin",
+                  "import"
+                ]
+              }
             },
             "webWorkerTsConfig": "tsconfig.worker.json"
           },
