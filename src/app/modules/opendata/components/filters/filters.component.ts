@@ -22,6 +22,7 @@ import { COUNTRIES } from "../../../shared/constants/countries"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatDatepickerModule } from "@angular/material/datepicker"
 import { OpendataService } from "../../services/opendata.service"
+import { NgFor } from "@angular/common"
 
 type FiltersForm = {
   download_kbit_from: FormControl<string | null>
@@ -81,6 +82,7 @@ class Range {
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
+    NgFor,
     ReactiveFormsModule,
     TranslatePipe,
   ],
@@ -149,9 +151,8 @@ export class FiltersComponent {
   ])
   timeUnits = Object.entries(ETimeUnit)
   pinnedOptions = new Map([
-    ["All", null],
-    ["Pinned", true],
-    ["Not pinned", false],
+    ["pinned_true", true],
+    ["pinned_false", false],
   ])
 
   get formControlKeys() {

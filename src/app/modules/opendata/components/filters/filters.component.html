@@ -44,6 +44,23 @@
         }}</span>
       </div>
     </div>
+    } @else if (selects.has(key)) {
+    <div class="app-row">
+      <div class="app-col">
+        <label class="app-label">{{ key | translate }}</label>
+      </div>
+      <div class="app-col">
+        <mat-select class="app-select" [formControlName]="key" panelWidth="">
+          <mat-option [value]="null"> --{{ "all" | translate }}-- </mat-option>
+          <mat-option
+            *ngFor="let option of selects.get(key)"
+            [value]="option[1]"
+          >
+            {{ option[0].toString() | translate }}
+          </mat-option>
+        </mat-select>
+      </div>
+    </div>
     } } }
     <div class="app-footer">
       <button
