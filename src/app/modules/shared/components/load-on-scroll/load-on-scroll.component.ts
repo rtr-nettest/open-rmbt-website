@@ -1,4 +1,4 @@
-import { Component, Host, HostListener } from "@angular/core"
+import { Component, HostListener, signal } from "@angular/core"
 import { SeoComponent } from "../seo/seo.component"
 
 @Component({
@@ -8,8 +8,8 @@ import { SeoComponent } from "../seo/seo.component"
   template: "",
 })
 export class LoadOnScrollComponent extends SeoComponent {
-  loading = true
-  private allLoaded = false
+  loading = signal(true)
+  private allLoaded = signal(false)
 
   protected get dataLimit() {
     return -1
@@ -22,30 +22,30 @@ export class LoadOnScrollComponent extends SeoComponent {
   protected async updateData(options?: { reset: boolean }) {
     let retVal: Array<any> = []
     if (options?.reset) {
-      this.allLoaded = false
+      this.allLoaded.set(false)
     }
-    if (this.allLoaded) {
+    if (this.allLoaded()) {
       return retVal
     }
-    this.loading = true
+    this.loading.set(true)
     try {
       retVal = await this.fetchData()
       if (!retVal || !retVal.length || retVal.length % this.dataLimit > 0) {
-        this.allLoaded = true
+        this.allLoaded.set(true)
       }
     } finally {
-      this.loading = false
+      this.loading.set(false)
     }
     return retVal
   }
 
   protected disableOnScroll() {
-    this.allLoaded = true
+    this.allLoaded.set(true)
   }
 
   @HostListener("body:scroll", ["$event"])
   private onScroll(event: any) {
-    if (this.loading || this.allLoaded) {
+    if (this.loading() || this.allLoaded()) {
       return
     }
     const scrollHeight = event.target.scrollHeight

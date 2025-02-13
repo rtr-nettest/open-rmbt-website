@@ -37,7 +37,7 @@
     } }
   </ng-container>
 </app-html-wrapper>
-@if (loading) {
+@if (loading()) {
 <app-loading-overlay
   [progressInterval]="progressInterval"
   [progress]="progress"

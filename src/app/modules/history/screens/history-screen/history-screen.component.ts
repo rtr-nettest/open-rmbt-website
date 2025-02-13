@@ -112,7 +112,7 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
       this.service.resetMeasurementHistory()
       this.updateData({ reset: true })
     } else {
-      this.loading = false
+      this.loading.set(false)
     }
   }
 

@@ -57,7 +57,7 @@ import { LoadingOverlayComponent } from "../../../shared/components/loading-over
 })
 export class StatisticsScreenComponent extends SeoComponent implements OnInit {
   footerColumns = ["name", "down", "up", "latency", "count"]
-  loading = false
+  loading = signal(false)
   progress = 0
   progressInterval?: NodeJS.Timeout
   platform = inject(PlatformService)
@@ -282,7 +282,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
           })
           this.statistics$ = this.store.filters$.pipe(
             switchMap((filters) => {
-              this.loading = true
+              this.loading.set(true)
               if (globalThis.document) {
                 this.progressInterval = setInterval(() => {
                   this.progress += 0.02
@@ -291,7 +291,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
               return this.service.getStatistics(filters)
             }),
             map((response) => {
-              this.loading = false
+              this.loading.set(false)
               this.progress = 0
               clearInterval(this.progressInterval)
               this.progressInterval = undefined
@@ -312,7 +312,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
               }
             }),
             catchError(() => {
-              this.loading = false
+              this.loading.set(false)
               return []
             })
           )

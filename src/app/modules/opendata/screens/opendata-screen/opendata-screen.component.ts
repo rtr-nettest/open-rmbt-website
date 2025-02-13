@@ -16,6 +16,7 @@ import { TableComponent } from "../../../tables/components/table/table.component
 import { ISort } from "../../../tables/interfaces/sort.interface"
 import { LoadOnScrollComponent } from "../../../shared/components/load-on-scroll/load-on-scroll.component"
 import { FiltersComponent } from "../../components/filters/filters.component"
+import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
 
 @Component({
   selector: "app-opendata-screen",
@@ -26,6 +27,7 @@ import { FiltersComponent } from "../../components/filters/filters.component"
     HeaderComponent,
     FiltersComponent,
     FooterComponent,
+    LoadingOverlayComponent,
     TableComponent,
     TopNavComponent,
     TranslatePipe,
