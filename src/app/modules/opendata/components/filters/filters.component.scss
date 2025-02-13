@@ -15,7 +15,7 @@
 .app-col {
   align-items: center;
   display: flex;
-  flex: 0 0 42%;
+  flex: 0 0 40%;
 
   &:first-of-type {
     flex: 1;
@@ -47,7 +47,7 @@
 
 .app-field {
   &--number {
-    width: calc(100% - 180px);
+    width: calc(100% - 100px);
 
     @include screen-xs {
       width: 100%;

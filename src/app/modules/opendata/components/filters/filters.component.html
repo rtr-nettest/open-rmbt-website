@@ -16,7 +16,7 @@
         >
           <input
             matInput
-            min="0"
+            [min]="ranges.get(key)!.min"
             type="number"
             formControlName="{{ ranges.get(key)!.from }}"
           />
@@ -34,7 +34,7 @@
         >
           <input
             matInput
-            min="0"
+            [min]="ranges.get(key)!.min"
             type="number"
             formControlName="{{ ranges.get(key)!.to }}"
             size="4"
@@ -50,6 +50,7 @@
         mat-flat-button
         class="app-button app-button--primary"
         type="submit"
+        [disabled]="form.invalid"
       >
         {{ "Apply filters" | translate }}
       </button>
@@ -58,7 +59,7 @@
         class="app-button app-button--primary"
         type="reset"
       >
-        {{ "Reset form" | translate }}
+        {{ "Reset" | translate }}
       </button>
     </div>
   </form>

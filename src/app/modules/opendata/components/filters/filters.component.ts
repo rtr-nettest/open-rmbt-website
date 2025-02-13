@@ -66,7 +66,8 @@ class Range {
   constructor(
     public readonly from: string,
     public readonly to: string,
-    public readonly unit: string
+    public readonly unit: string,
+    public readonly min: number = 0
   ) {}
 }
 
@@ -125,7 +126,7 @@ export class FiltersComponent {
     ["ping_ms_from", new Range("ping_ms_from", "ping_ms_to", "millis")],
     [
       "signal_strength_from",
-      new Range("signal_strength_from", "signal_strength_to", "dBm"),
+      new Range("signal_strength_from", "signal_strength_to", "dBm", -120),
     ],
     [
       "loc_accuracy_from",
@@ -159,9 +160,7 @@ export class FiltersComponent {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly i18nStore: I18nStore,
-    private readonly store: OpendataStoreService,
-    private readonly router: Router
+    private readonly store: OpendataStoreService
   ) {
     effect(() => {
       const filters = this.store.filters()
@@ -255,9 +254,7 @@ export class FiltersComponent {
   }
 
   applyFilters() {
-    if (this.form?.value) {
-      this.service.applyFilters(this.form.value)
-    }
+    this.service.applyFilters(this.form?.value)
   }
 
   resetForm() {

@@ -118,7 +118,8 @@ export class OpendataService {
     }
   }
 
-  applyFilters(filters: IOpendataFilters) {
+  applyFilters(filters?: IOpendataFilters) {
+    if (!filters) return
     this.store.reset()
     this.store.filters.set(filters)
     this.router.navigateByUrl(
