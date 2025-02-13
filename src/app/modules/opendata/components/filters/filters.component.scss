@@ -1,0 +1,71 @@
+@import "core";
+
+.app-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin-top: 2rem;
+
+  @include screen-xs {
+    flex-direction: column;
+  }
+}
+
+.app-col {
+  align-items: center;
+  display: flex;
+  flex: 0 0 42%;
+
+  &:first-of-type {
+    flex: 1;
+  }
+
+  @include screen-xs {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 1rem;
+
+    &:first-of-type {
+      margin-bottom: 0.5rem;
+      * {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.app-footer {
+  margin: 2rem 0;
+
+  .app-button {
+    &:first-of-type {
+      margin-right: 1rem;
+    }
+  }
+}
+
+.app-field {
+  &--number {
+    width: calc(100% - 180px);
+
+    @include screen-xs {
+      width: 100%;
+    }
+  }
+
+  &-prefix {
+    margin-right: 0.5em;
+  }
+  &-suffix {
+    margin-left: 0.5em;
+  }
+
+  @include screen-xs {
+    &-prefix,
+    &-suffix {
+      position: relative;
+      flex: 0 0 15%;
+    }
+  }
+}

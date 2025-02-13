@@ -6,7 +6,6 @@ import {
 import { OpendataService } from "../../services/opendata.service"
 import { concatMap, firstValueFrom, map } from "rxjs"
 import { toObservable } from "@angular/core/rxjs-interop"
-import { filtersFromSearch } from "../../../shared/util/search"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
@@ -16,6 +15,7 @@ import { AsyncPipe } from "@angular/common"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { ISort } from "../../../tables/interfaces/sort.interface"
 import { LoadOnScrollComponent } from "../../../shared/components/load-on-scroll/load-on-scroll.component"
+import { FiltersComponent } from "../../components/filters/filters.component"
 
 @Component({
   selector: "app-opendata-screen",
@@ -24,6 +24,7 @@ import { LoadOnScrollComponent } from "../../../shared/components/load-on-scroll
     AsyncPipe,
     BreadcrumbsComponent,
     HeaderComponent,
+    FiltersComponent,
     FooterComponent,
     TableComponent,
     TopNavComponent,
@@ -61,9 +62,7 @@ export class OpendataScreenComponent
   }
 
   ngOnInit(): void {
-    if (!globalThis?.location) return
-    const search = location.search.slice(1)
-    if (search) this.opendataStoreService.filters.set(filtersFromSearch(search))
+    this.opendataService.initFilters()
   }
 
   override ngOnDestroy(): void {

@@ -87,7 +87,9 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   recentMeasurements = signal<IRecentMeasurementsResponse | null>(null)
   opendataService = inject(OpendataService)
   tableColumns: ITableColumn<IRecentMeasurement>[] =
-    this.opendataService.getColumns()
+    this.opendataService.getColumns({
+      showTimeOnly: true,
+    })
   tableData = signal<IBasicResponse<IRecentMeasurement> | null>(null)
 
   constructor(

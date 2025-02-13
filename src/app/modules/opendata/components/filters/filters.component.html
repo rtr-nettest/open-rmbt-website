@@ -1,1 +1,66 @@
-<p>filters works!</p>
+@if (form) {
+<div class="app-container">
+  <form [formGroup]="form" (ngSubmit)="applyFilters()">
+    @for (key of formControlKeys; track $index) { @if (visibleFields().has(key))
+    { @if (ranges.has(key)) {
+    <div class="app-row">
+      <div class="app-col">
+        <label class="app-label">{{ key | translate }}</label>
+      </div>
+      <div class="app-col">
+        <span class="app-field-prefix">{{ "from_value" | translate }}</span>
+        <mat-form-field
+          class="app-field app-field--number"
+          appearance="outline"
+          subscriptSizing="dynamic"
+        >
+          <input
+            matInput
+            min="0"
+            type="number"
+            formControlName="{{ ranges.get(key)!.from }}"
+          />
+        </mat-form-field>
+        <span class="app-field-suffix">{{
+          ranges.get(key)!.unit | translate
+        }}</span>
+      </div>
+      <div class="app-col">
+        <span class="app-field-prefix">{{ "to_value" | translate }}</span>
+        <mat-form-field
+          class="app-field app-field--number"
+          appearance="outline"
+          subscriptSizing="dynamic"
+        >
+          <input
+            matInput
+            min="0"
+            type="number"
+            formControlName="{{ ranges.get(key)!.to }}"
+            size="4"
+        /></mat-form-field>
+        <span class="app-field-suffix">{{
+          ranges.get(key)!.unit | translate
+        }}</span>
+      </div>
+    </div>
+    } } }
+    <div class="app-footer">
+      <button
+        mat-flat-button
+        class="app-button app-button--primary"
+        type="submit"
+      >
+        {{ "Apply filters" | translate }}
+      </button>
+      <button
+        mat-stroked-button
+        class="app-button app-button--primary"
+        type="reset"
+      >
+        {{ "Reset form" | translate }}
+      </button>
+    </div>
+  </form>
+</div>
+}

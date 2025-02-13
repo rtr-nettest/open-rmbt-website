@@ -4,6 +4,7 @@
 <div class="app-wrapper" style="margin-bottom: 40px">
   <h1 class="app-title">{{ "Open data" | translate }}</h1>
   @if (filters$ | async; as filters) {
+  <app-filters></app-filters>
   <app-table
     [data]="(data$ | async)!"
     [columns]="columns"

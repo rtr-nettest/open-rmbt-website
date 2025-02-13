@@ -2,7 +2,6 @@ import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { MainStore } from "../../shared/store/main.store"
 import { IOpendataFilters } from "../interfaces/opendata-filters.interface"
-import { searchFromFilters } from "../../shared/util/search"
 import {
   IRecentMeasurement,
   IRecentMeasurementsResponse,
@@ -11,29 +10,47 @@ import { ITableColumn } from "../../tables/interfaces/table-column.interface"
 import { roundToSignificantDigits } from "../../shared/util/math"
 import dayjs from "dayjs"
 import { map } from "rxjs"
-import { OpendataStoreService } from "../store/opendata-store.service"
+import {
+  DEFAULT_FILTERS,
+  OpendataStoreService,
+} from "../store/opendata-store.service"
+import { I18nStore } from "../../i18n/store/i18n.store"
+import { Router } from "@angular/router"
+import { ERoutes } from "../../shared/constants/routes.enum"
+import {
+  filtersFromSearch,
+  searchFromFilters,
+} from "../../shared/util/query-params"
 
 @Injectable({
   providedIn: "root",
 })
 export class OpendataService {
   constructor(
+    private readonly i18nStore: I18nStore,
     private readonly mainStore: MainStore,
     private readonly store: OpendataStoreService,
-    private readonly http: HttpClient
+    private readonly http: HttpClient,
+    private readonly router: Router
   ) {}
 
-  getColumns(): ITableColumn<IRecentMeasurement>[] {
+  getColumns(options?: {
+    showTimeOnly?: boolean
+  }): ITableColumn<IRecentMeasurement>[] {
     return [
       {
-        columnDef: "time",
+        columnDef: "date_time",
         header: "Time",
         isHtml: true,
+        getNgClass: () => "app-cell app-cell--20",
         transformValue(value) {
+          const dateFormat = options?.showTimeOnly
+            ? "HH:mm:ss"
+            : "YYYY-MM-DD HH:mm:ss"
           const retVal = dayjs(value.time)
             .utc(true)
             .tz(dayjs.tz.guess())
-            .format("HH:mm:ss")
+            .format(dateFormat)
           return `<i class="app-icon app-icon--browser"></i><span>${retVal}</span>`
         },
       },
@@ -85,7 +102,30 @@ export class OpendataService {
         },
         justify: "flex-end",
       },
+      {
+        columnDef: "signal_strength",
+        header: "Signal (dBm)",
+        justify: "flex-end",
+      },
     ]
+  }
+
+  initFilters() {
+    if (!globalThis?.location) return
+    const search = location.search.slice(1)
+    if (search) {
+      this.store.filters.set(this.getFiltersFromSearch(search))
+    }
+  }
+
+  applyFilters(filters: IOpendataFilters) {
+    this.store.reset()
+    this.store.filters.set(filters)
+    this.router.navigateByUrl(
+      `/${this.i18nStore.activeLang}/${
+        ERoutes.OPEN_DATA
+      }?${this.getSearchFromFilters(filters)}`
+    )
   }
 
   search(filters: IOpendataFilters) {
@@ -93,7 +133,10 @@ export class OpendataService {
       .get<IRecentMeasurementsResponse>(
         `${
           this.mainStore.api().url_web_statistic_server
-        }/opentests/search?${searchFromFilters(filters)}`
+        }/opentests/search?${this.getSearchFromFilters({
+          ...DEFAULT_FILTERS,
+          ...filters,
+        })}`
       )
       .pipe(
         map((response) => {
@@ -102,5 +145,23 @@ export class OpendataService {
           return response.results
         })
       )
+  }
+
+  private getSearchFromFilters(filters: IOpendataFilters) {
+    return searchFromFilters(filters, {
+      download_kbit_from: (value) => `>${value * 1000}`,
+      download_kbit_to: (value) => `<${value * 1000}`,
+      upload_kbit_from: (value) => `>${value * 1000}`,
+      upload_kbit_to: (value) => `<${value * 1000}`,
+    })
+  }
+
+  private getFiltersFromSearch(search: string) {
+    return filtersFromSearch(search, {
+      download_kbit_from: (value) => value / 1000,
+      download_kbit_to: (value) => value / 1000,
+      upload_kbit_from: (value) => value / 1000,
+      upload_kbit_to: (value) => value / 1000,
+    })
   }
 }

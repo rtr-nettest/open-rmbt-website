@@ -76,5 +76,10 @@
     .mat-row--visible:has(+ :not(.mat-row--visible)) mat-cell {
       border-bottom: none !important;
     }
+
+    .app-cell {
+      flex: auto;
+      width: auto;
+    }
   }
 }

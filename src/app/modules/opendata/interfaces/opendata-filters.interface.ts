@@ -1,52 +1,61 @@
 // ref: https://github.com/rtr-nettest/open-rmbt-statistics/blob/master/src/main/java/at/rtr/rmbt/controller/OpenTestController.java
 
 export interface IOpendataFilters {
-  download_kbit?: string[] // ">6903"
-  upload_kbit?: string[] // "<4670"
-  ping_ms?: string[] // "<16"
-  signal_strength?: string[] // ">-70"
-  loc_accuracy?: string[] // "<100"
-  gkz?: string[]
-  gkz_sa?: string
-  cat_technology?: string
-  client_version?: string
-  model?: string
-  network_name?: string
-  network_type?: string
-  platform?: string
-  lte_rsrp?: string
-  open_uuid?: string
-  open_test_uuid?: string
-  client_uuid?: string
-  loop_uuid?: string
-  test_uuid?: string
-  long?: number
-  lat?: number
-  radius?: string
-  mobile_provider_name?: string
-  provider_name?: string
-  sim_mcc_mnc?: string
-  sim_country?: string
-  network_country?: string
-  country_geoip?: string
-  country_location?: string
-  user_server_selection?: boolean
-  link_name?: string
-  public_ip_as_name?: string
-  time?: string
-  radio_band?: number
-  cell_area_code?: number
-  cell_location_id?: number
-  additional_info?: string[]
-  format?: string
-  sort_by?: string
-  sort_order?: string
-  max_results?: number
-  cursor?: number
-  sender?: string
-  timestamp?: string
-  asn?: number
-  land_cover?: number
-  implausible?: boolean
-  pinned?: boolean
+  download_kbit_from?: string | null // ">6903"
+  download_kbit_to?: string | null // "<6903"
+  upload_kbit_from?: string | null
+  upload_kbit_to?: string | null
+  ping_ms_from?: string | null
+  ping_ms_to?: string | null
+  signal_strength_from?: string | null
+  signal_strength_to?: string | null
+  loc_accuracy_from?: string | null
+  loc_accuracy_to?: string | null
+  gkz_from?: string | null
+  gkz_to?: string | null
+  gkz_sa?: string | null
+  cat_technology?: string | null
+  client_version?: string | null
+  model?: string | null
+  network_name?: string | null
+  network_type?: string | null
+  platform?: string | null
+  lte_rsrp?: string | null
+  open_uuid?: string | null
+  open_test_uuid?: string | null
+  client_uuid?: string | null
+  loop_uuid?: string | null
+  test_uuid?: string | null
+  long?: number | null
+  lat?: number | null
+  radius?: string | null
+  mobile_provider_name?: string | null
+  provider_name?: string | null
+  sim_mcc_mnc?: string | null
+  sim_country?: string | null
+  network_country?: string | null
+  country_geoip?: string | null
+  country_location?: string | null
+  user_server_selection?: boolean | null
+  link_name?: string | null
+  public_ip_as_name?: string | null
+  timespan?: number | null
+  timespan_unit?: string | null
+  time_from?: Date | null
+  time_to?: Date | null
+  radio_band?: number | null
+  cell_area_code?: number | null
+  cell_location_id?: number | null
+  additional_info?: string[] | null
+  format?: string | null
+  sort_by?: string | null
+  sort_order?: string | null
+  max_results?: number | null
+  cursor?: number | null
+  sender?: string | null
+  timestamp?: string | null
+  asn?: number | null
+  land_cover?: number | null
+  implausible?: boolean | null
+  pinned?: boolean | null
 }

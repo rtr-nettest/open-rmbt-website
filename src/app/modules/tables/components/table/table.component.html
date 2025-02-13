@@ -47,6 +47,7 @@
         <mat-cell
           *matCellDef="let element; let i = dataIndex"
           [style]="justify(column)"
+          [ngClass]="column.getNgClass?.('', column)"
         >
           <span class="app-table__mobile-label">{{ column.header }}</span>
           @if(column.isExpandable) {
@@ -66,7 +67,10 @@
       </ng-container>
 
       <ng-container *ngIf="column.isHtml; else defaultCell">
-        <mat-cell *matCellDef="let element; let i = dataIndex">
+        <mat-cell
+          *matCellDef="let element; let i = dataIndex"
+          [ngClass]="column.getNgClass?.('', column)"
+        >
           <span class="app-table__mobile-label">{{ column.header }}</span>
           <div
             class="app-flex-wrapper"
@@ -91,7 +95,7 @@
         <mat-cell
           *matCellDef="let element; let i = dataIndex"
           [style]="justify(column)"
-          [ngClass]="column.getNgClass && column.getNgClass(element, column)"
+          [ngClass]="column.getNgClass?.('', column)"
         >
           <span class="app-table__mobile-label">{{ column.header }}</span>
           <a
