@@ -6,11 +6,10 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatButtonModule } from "@angular/material/button"
 
 @Component({
-  selector: "app-action-buttons",
-  templateUrl: "./action-buttons.component.html",
-  styleUrls: ["./action-buttons.component.scss"],
-  imports: [AsyncPipe, TranslatePipe, MatButtonModule, NgIf, NgFor],
-  standalone: true,
+    selector: "app-action-buttons",
+    templateUrl: "./action-buttons.component.html",
+    styleUrls: ["./action-buttons.component.scss"],
+    imports: [AsyncPipe, TranslatePipe, MatButtonModule, NgIf, NgFor]
 })
 export class ActionButtonsComponent {
   @Input() items?: IMainMenuItem[]

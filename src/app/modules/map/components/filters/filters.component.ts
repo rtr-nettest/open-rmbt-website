@@ -52,23 +52,22 @@ type ActiveControlGroup =
   | "providerOptions"
 
 @Component({
-  selector: "app-filters",
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatIconModule,
-    MatRadioModule,
-    MatTabsModule,
-    NgTemplateOutlet,
-    NgIf,
-    TranslatePipe,
-    TitleCasePipe,
-  ],
-  templateUrl: "./filters.component.html",
-  styleUrl: "./filters.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-filters",
+    imports: [
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatIconModule,
+        MatRadioModule,
+        MatTabsModule,
+        NgTemplateOutlet,
+        NgIf,
+        TranslatePipe,
+        TitleCasePipe,
+    ],
+    templateUrl: "./filters.component.html",
+    styleUrl: "./filters.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FiltersComponent implements OnDestroy {
   @ViewChild("tabs") tabs: MatTabGroup | undefined

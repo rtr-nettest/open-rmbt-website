@@ -41,19 +41,18 @@ import bbox from "@turf/bbox"
 import { HistoryRepositoryService } from "../../repository/history-repository.service"
 
 @Component({
-  selector: "app-coverage-dialog",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    HtmlWrapperComponent,
-    MatButtonModule,
-    MatDialogModule,
-    MatIconModule,
-    TableComponent,
-    TranslatePipe,
-  ],
-  templateUrl: "./coverage-dialog.component.html",
-  styleUrl: "./coverage-dialog.component.scss",
+    selector: "app-coverage-dialog",
+    imports: [
+        AsyncPipe,
+        HtmlWrapperComponent,
+        MatButtonModule,
+        MatDialogModule,
+        MatIconModule,
+        TableComponent,
+        TranslatePipe,
+    ],
+    templateUrl: "./coverage-dialog.component.html",
+    styleUrl: "./coverage-dialog.component.scss"
 })
 export class CoverageDialogComponent implements OnDestroy {
   coverageText$!: Observable<string>

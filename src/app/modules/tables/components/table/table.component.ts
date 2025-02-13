@@ -33,26 +33,25 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 export const APP_DATE_TIME_FORMAT = "DD.MM.YYYY HH:mm"
 
 @Component({
-  selector: "app-table",
-  templateUrl: "./table.component.html",
-  styleUrls: ["./table.component.scss"],
-  animations: [arrowRotate, expandVertically],
-  standalone: true,
-  imports: [
-    DynamicComponentDirective,
-    NgFor,
-    NgIf,
-    NgClass,
-    MatButtonModule,
-    MatTableModule,
-    MatTooltipModule,
-    MatSortModule,
-    MatIconModule,
-    MatProgressSpinner,
-    PaginatorComponent,
-    RouterLink,
-    TranslatePipe,
-  ],
+    selector: "app-table",
+    templateUrl: "./table.component.html",
+    styleUrls: ["./table.component.scss"],
+    animations: [arrowRotate, expandVertically],
+    imports: [
+        DynamicComponentDirective,
+        NgFor,
+        NgIf,
+        NgClass,
+        MatButtonModule,
+        MatTableModule,
+        MatTooltipModule,
+        MatSortModule,
+        MatIconModule,
+        MatProgressSpinner,
+        PaginatorComponent,
+        RouterLink,
+        TranslatePipe,
+    ]
 })
 export class TableComponent implements OnInit, OnChanges {
   @Input() action?: (...ars: any[]) => any

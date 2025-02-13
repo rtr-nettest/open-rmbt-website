@@ -73,21 +73,20 @@ class Range {
 }
 
 @Component({
-  selector: "app-filters",
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatOptionModule,
-    MatSelectModule,
-    NgFor,
-    ReactiveFormsModule,
-    TranslatePipe,
-  ],
-  templateUrl: "./filters.component.html",
-  styleUrl: "./filters.component.scss",
+    selector: "app-filters",
+    imports: [
+        MatButtonModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatOptionModule,
+        MatSelectModule,
+        NgFor,
+        ReactiveFormsModule,
+        TranslatePipe,
+    ],
+    templateUrl: "./filters.component.html",
+    styleUrl: "./filters.component.scss"
 })
 export class FiltersComponent {
   form?: FormGroup<FiltersForm>

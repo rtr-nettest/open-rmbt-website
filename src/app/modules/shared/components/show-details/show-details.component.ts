@@ -8,11 +8,10 @@ import { ISort } from "../../../tables/interfaces/sort.interface"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 
 @Component({
-  selector: "app-show-details",
-  standalone: true,
-  imports: [TableComponent, MatExpansionModule, TranslatePipe],
-  templateUrl: "./show-details.component.html",
-  styleUrl: "./show-details.component.scss",
+    selector: "app-show-details",
+    imports: [TableComponent, MatExpansionModule, TranslatePipe],
+    templateUrl: "./show-details.component.html",
+    styleUrl: "./show-details.component.scss"
 })
 export class ShowDetailsComponent<T> {
   details = input<T[]>([])

@@ -8,11 +8,10 @@ import { TelPipe } from "../../pipes/tel.pipe"
 import { MatButtonModule } from "@angular/material/button"
 
 @Component({
-  selector: "app-footer",
-  standalone: true,
-  imports: [AsyncPipe, MatButtonModule, UpperCasePipe, TelPipe, TranslatePipe],
-  templateUrl: "./footer.component.html",
-  styleUrl: "./footer.component.scss",
+    selector: "app-footer",
+    imports: [AsyncPipe, MatButtonModule, UpperCasePipe, TelPipe, TranslatePipe],
+    templateUrl: "./footer.component.html",
+    styleUrl: "./footer.component.scss"
 })
 export class FooterComponent {
   menu$!: Observable<ILink[]>

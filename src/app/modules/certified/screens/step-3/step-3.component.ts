@@ -37,25 +37,24 @@ import { LoopService } from "../../../loop/services/loop.service"
 import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
 
 @Component({
-  selector: "app-step-3",
-  standalone: true,
-  imports: [
-    BreadcrumbsComponent,
-    CertifiedBreadcrumbsComponent,
-    HeaderComponent,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    NgFor,
-    NgIf,
-    ReactiveFormsModule,
-    TopNavComponent,
-    TranslatePipe,
-  ],
-  templateUrl: "./step-3.component.html",
-  styleUrl: "./step-3.component.scss",
+    selector: "app-step-3",
+    imports: [
+        BreadcrumbsComponent,
+        CertifiedBreadcrumbsComponent,
+        HeaderComponent,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        NgFor,
+        NgIf,
+        ReactiveFormsModule,
+        TopNavComponent,
+        TranslatePipe,
+    ],
+    templateUrl: "./step-3.component.html",
+    styleUrl: "./step-3.component.scss"
 })
 export class Step3Component extends SeoComponent implements OnInit {
   form?: FormGroup<ICertifiedEnvFormControls>

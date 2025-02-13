@@ -32,25 +32,24 @@ import { OpendataService } from "../../../opendata/services/opendata.service"
 const UPDATE_INTERVAL = 5000
 
 @Component({
-  selector: "app-landing",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    BreadcrumbsComponent,
-    CardButtonComponent,
-    HeaderComponent,
-    IpInfoComponent,
-    FooterComponent,
-    MapComponent,
-    MatButtonModule,
-    RouterModule,
-    TopNavComponent,
-    BreadcrumbsComponent,
-    TableComponent,
-    TranslatePipe,
-  ],
-  templateUrl: "./home.component.html",
-  styleUrl: "./home.component.scss",
+    selector: "app-landing",
+    imports: [
+        AsyncPipe,
+        BreadcrumbsComponent,
+        CardButtonComponent,
+        HeaderComponent,
+        IpInfoComponent,
+        FooterComponent,
+        MapComponent,
+        MatButtonModule,
+        RouterModule,
+        TopNavComponent,
+        BreadcrumbsComponent,
+        TableComponent,
+        TranslatePipe,
+    ],
+    templateUrl: "./home.component.html",
+    styleUrl: "./home.component.scss"
 })
 export class HomeComponent extends SeoComponent implements AfterViewInit {
   mapContainerId = "mapContainer"

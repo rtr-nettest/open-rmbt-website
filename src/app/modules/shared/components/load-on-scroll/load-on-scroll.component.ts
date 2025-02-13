@@ -2,10 +2,9 @@ import { Component, HostListener, signal } from "@angular/core"
 import { SeoComponent } from "../seo/seo.component"
 
 @Component({
-  selector: "app-load-on-scroll",
-  standalone: true,
-  imports: [],
-  template: "",
+    selector: "app-load-on-scroll",
+    imports: [],
+    template: ""
 })
 export class LoadOnScrollComponent extends SeoComponent {
   loading = signal(true)

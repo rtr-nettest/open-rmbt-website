@@ -7,11 +7,10 @@ import { IColorStop } from "../../interfaces/color-stop.interface"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 
 @Component({
-  selector: "app-heatmap-legend",
-  standalone: true,
-  imports: [TranslatePipe],
-  templateUrl: "./heatmap-legend.component.html",
-  styleUrl: "./heatmap-legend.component.scss",
+    selector: "app-heatmap-legend",
+    imports: [TranslatePipe],
+    templateUrl: "./heatmap-legend.component.html",
+    styleUrl: "./heatmap-legend.component.scss"
 })
 export class HeatmapLegendComponent {
   i18nStore = inject(I18nStore)

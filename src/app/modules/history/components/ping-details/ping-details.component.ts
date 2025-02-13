@@ -8,14 +8,11 @@ import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { roundMs } from "../../../shared/util/math"
 
 @Component({
-  selector: "app-ping-details",
-  standalone: true,
-  imports: [TableComponent, MatExpansionModule, TranslatePipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl:
-    "../../../shared/components/show-details/show-details.component.html",
-  styleUrl:
-    "../../../shared/components/show-details/show-details.component.scss",
+    selector: "app-ping-details",
+    imports: [TableComponent, MatExpansionModule, TranslatePipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: "../../../shared/components/show-details/show-details.component.html",
+    styleUrl: "../../../shared/components/show-details/show-details.component.scss"
 })
 export class PingDetailsComponent extends ShowDetailsComponent<IPing> {
   override columns: ITableColumn<IPing>[] = [

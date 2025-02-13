@@ -9,14 +9,12 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
 import { environment } from "../../../../../environments/environment"
 
 @Component({
-  selector: "app-loop-result-screen",
-  imports: historyImports,
-  templateUrl:
-    "../../../history/screens/history-screen/history-screen.component.html",
-  styleUrls: [
-    "../../../history/screens/history-screen/history-screen.component.scss",
-  ],
-  standalone: true,
+    selector: "app-loop-result-screen",
+    imports: historyImports,
+    templateUrl: "../../../history/screens/history-screen/history-screen.component.html",
+    styleUrls: [
+        "../../../history/screens/history-screen/history-screen.component.scss",
+    ]
 })
 export class LoopResultScreenComponent extends HistoryScreenComponent {
   activatedRoute: ActivatedRoute = inject(ActivatedRoute)

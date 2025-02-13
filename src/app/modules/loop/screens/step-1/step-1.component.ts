@@ -16,20 +16,19 @@ import { ECertifiedSteps } from "../../../certified/constants/certified-steps.en
 import { MatButtonModule } from "@angular/material/button"
 
 @Component({
-  selector: "app-step-1",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    BreadcrumbsComponent,
-    CertifiedBreadcrumbsComponent,
-    FooterComponent,
-    HeaderComponent,
-    MatButtonModule,
-    TopNavComponent,
-    TranslatePipe,
-  ],
-  templateUrl: "./step-1.component.html",
-  styleUrl: "./step-1.component.scss",
+    selector: "app-step-1",
+    imports: [
+        AsyncPipe,
+        BreadcrumbsComponent,
+        CertifiedBreadcrumbsComponent,
+        FooterComponent,
+        HeaderComponent,
+        MatButtonModule,
+        TopNavComponent,
+        TranslatePipe,
+    ],
+    templateUrl: "./step-1.component.html",
+    styleUrl: "./step-1.component.scss"
 })
 export class Step1Component extends SeoComponent {
   loopStore = inject(LoopStoreService)

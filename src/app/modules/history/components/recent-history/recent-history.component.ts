@@ -33,11 +33,10 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 
 @Component({
-  selector: "app-recent-history",
-  templateUrl: "./recent-history.component.html",
-  styleUrls: ["./recent-history.component.scss"],
-  standalone: true,
-  imports: [NgIf, TableComponent, TranslatePipe],
+    selector: "app-recent-history",
+    templateUrl: "./recent-history.component.html",
+    styleUrls: ["./recent-history.component.scss"],
+    imports: [NgIf, TableComponent, TranslatePipe]
 })
 export class RecentHistoryComponent implements OnChanges {
   addMedian = input(false)

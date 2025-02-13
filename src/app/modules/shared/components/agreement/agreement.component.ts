@@ -4,11 +4,10 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { ScrollBottomComponent } from "../scroll-bottom/scroll-bottom.component"
 
 @Component({
-  selector: "app-agreement",
-  standalone: true,
-  imports: [MatButtonModule, TranslatePipe, ScrollBottomComponent],
-  templateUrl: "./agreement.component.html",
-  styleUrl: "./agreement.component.scss",
+    selector: "app-agreement",
+    imports: [MatButtonModule, TranslatePipe, ScrollBottomComponent],
+    templateUrl: "./agreement.component.html",
+    styleUrl: "./agreement.component.scss"
 })
 export class AgreementComponent implements OnInit {
   agreeChange = output<void>()

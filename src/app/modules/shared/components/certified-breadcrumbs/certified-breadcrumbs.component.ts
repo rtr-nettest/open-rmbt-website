@@ -6,11 +6,10 @@ import { IMainMenuItem } from "../../interfaces/main-menu-item.interface"
 import { IBreadcrumb } from "../../interfaces/breadcrumb.interface"
 
 @Component({
-  selector: "app-certified-breadcrumbs",
-  standalone: true,
-  imports: [RouterModule, TranslatePipe, NgFor],
-  templateUrl: "./certified-breadcrumbs.component.html",
-  styleUrl: "./certified-breadcrumbs.component.scss",
+    selector: "app-certified-breadcrumbs",
+    imports: [RouterModule, TranslatePipe, NgFor],
+    templateUrl: "./certified-breadcrumbs.component.html",
+    styleUrl: "./certified-breadcrumbs.component.scss"
 })
 export class CertifiedBreadcrumbsComponent {
   breadcrumbs = input.required<IBreadcrumb[]>()

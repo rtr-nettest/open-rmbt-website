@@ -35,11 +35,10 @@ export const historyImports = [
 ]
 
 @Component({
-  selector: "app-history-screen",
-  standalone: true,
-  imports: historyImports,
-  templateUrl: "./history-screen.component.html",
-  styleUrl: "./history-screen.component.scss",
+    selector: "app-history-screen",
+    imports: historyImports,
+    templateUrl: "./history-screen.component.html",
+    styleUrl: "./history-screen.component.scss"
 })
 export class HistoryScreenComponent extends LoadOnScrollComponent {
   addMedian = false

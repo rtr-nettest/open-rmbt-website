@@ -16,19 +16,18 @@ import { arrowRotate } from "../../animations/arrow-rotate.animation"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 @Component({
-  selector: "app-top-nav",
-  standalone: true,
-  animations: [expandToFixedHeight, expandVertically, arrowRotate],
-  imports: [
-    AsyncPipe,
-    MatButtonModule,
-    MatIconModule,
-    MatMenuModule,
-    RouterModule,
-    TranslatePipe,
-  ],
-  templateUrl: "./top-nav.component.html",
-  styleUrl: "./top-nav.component.scss",
+    selector: "app-top-nav",
+    animations: [expandToFixedHeight, expandVertically, arrowRotate],
+    imports: [
+        AsyncPipe,
+        MatButtonModule,
+        MatIconModule,
+        MatMenuModule,
+        RouterModule,
+        TranslatePipe,
+    ],
+    templateUrl: "./top-nav.component.html",
+    styleUrl: "./top-nav.component.scss"
 })
 export class TopNavComponent {
   mainItems$!: Observable<ILink[]>

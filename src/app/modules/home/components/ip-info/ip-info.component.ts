@@ -4,11 +4,10 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 
 @Component({
-  selector: "app-ip-info",
-  standalone: true,
-  imports: [MatProgressSpinnerModule, TranslatePipe],
-  templateUrl: "./ip-info.component.html",
-  styleUrl: "./ip-info.component.scss",
+    selector: "app-ip-info",
+    imports: [MatProgressSpinnerModule, TranslatePipe],
+    templateUrl: "./ip-info.component.html",
+    styleUrl: "./ip-info.component.scss"
 })
 export class IpInfoComponent implements OnInit {
   ipV4 = signal<string | null>(null)

@@ -12,11 +12,10 @@ export type ConfirmDialogOpts = {
 }
 
 @Component({
-  selector: "app-confirm-dialog",
-  templateUrl: "./confirm-dialog.component.html",
-  styleUrls: ["./confirm-dialog.component.scss"],
-  standalone: true,
-  imports: [NgIf, MatButtonModule, TranslatePipe],
+    selector: "app-confirm-dialog",
+    templateUrl: "./confirm-dialog.component.html",
+    styleUrls: ["./confirm-dialog.component.scss"],
+    imports: [NgIf, MatButtonModule, TranslatePipe]
 })
 export class ConfirmDialogComponent {
   get text() {

@@ -7,11 +7,10 @@ import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Title } from "@angular/platform-browser"
 
 @Component({
-  selector: "app-page-not-found",
-  standalone: true,
-  imports: [MatButtonModule, RouterModule],
-  templateUrl: "./page-not-found.component.html",
-  styleUrl: "./page-not-found.component.scss",
+    selector: "app-page-not-found",
+    imports: [MatButtonModule, RouterModule],
+    templateUrl: "./page-not-found.component.html",
+    styleUrl: "./page-not-found.component.scss"
 })
 export class PageNotFoundComponent extends SeoComponent {
   link = "/"

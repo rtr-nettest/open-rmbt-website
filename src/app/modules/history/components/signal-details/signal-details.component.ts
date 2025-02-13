@@ -9,14 +9,11 @@ import { roundMs } from "../../../shared/util/math"
 import { CellInfoComponent } from "../cell-info/cell-info.component"
 
 @Component({
-  selector: "app-signal-details",
-  standalone: true,
-  imports: [TableComponent, MatExpansionModule, TranslatePipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl:
-    "../../../shared/components/show-details/show-details.component.html",
-  styleUrl:
-    "../../../shared/components/show-details/show-details.component.scss",
+    selector: "app-signal-details",
+    imports: [TableComponent, MatExpansionModule, TranslatePipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: "../../../shared/components/show-details/show-details.component.html",
+    styleUrl: "../../../shared/components/show-details/show-details.component.scss"
 })
 export class SignalDetailsComponent extends ShowDetailsComponent<ISimpleHistorySignal> {
   override columns: ITableColumn<ISimpleHistorySignal>[] = [

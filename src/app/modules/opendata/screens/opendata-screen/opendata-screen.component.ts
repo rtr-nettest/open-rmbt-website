@@ -19,21 +19,20 @@ import { FiltersComponent } from "../../components/filters/filters.component"
 import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
 
 @Component({
-  selector: "app-opendata-screen",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    BreadcrumbsComponent,
-    HeaderComponent,
-    FiltersComponent,
-    FooterComponent,
-    LoadingOverlayComponent,
-    TableComponent,
-    TopNavComponent,
-    TranslatePipe,
-  ],
-  templateUrl: "./opendata-screen.component.html",
-  styleUrl: "./opendata-screen.component.scss",
+    selector: "app-opendata-screen",
+    imports: [
+        AsyncPipe,
+        BreadcrumbsComponent,
+        HeaderComponent,
+        FiltersComponent,
+        FooterComponent,
+        LoadingOverlayComponent,
+        TableComponent,
+        TopNavComponent,
+        TranslatePipe,
+    ],
+    templateUrl: "./opendata-screen.component.html",
+    styleUrl: "./opendata-screen.component.scss"
 })
 export class OpendataScreenComponent
   extends LoadOnScrollComponent

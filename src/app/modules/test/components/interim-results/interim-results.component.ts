@@ -15,20 +15,19 @@ import { LoopStoreService } from "../../../loop/store/loop-store.service"
 import { toObservable } from "@angular/core/rxjs-interop"
 
 @Component({
-  selector: "app-interim-results",
-  templateUrl: "./interim-results.component.html",
-  styleUrls: ["./interim-results.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    DatePipe,
-    LonlatPipe,
-    MatProgressSpinnerModule,
-    NgIf,
-    TestChartComponent,
-    TranslatePipe,
-  ],
+    selector: "app-interim-results",
+    templateUrl: "./interim-results.component.html",
+    styleUrls: ["./interim-results.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        AsyncPipe,
+        DatePipe,
+        LonlatPipe,
+        MatProgressSpinnerModule,
+        NgIf,
+        TestChartComponent,
+        TranslatePipe,
+    ]
 })
 export class InterimResultsComponent {
   basicNetworkInfo$!: Observable<IBasicNetworkInfo>

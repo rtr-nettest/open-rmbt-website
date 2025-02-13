@@ -4,11 +4,10 @@ import { MatButtonModule } from "@angular/material/button"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 @Component({
-  selector: "app-scroll-bottom",
-  templateUrl: "./scroll-bottom.component.html",
-  styleUrls: ["./scroll-bottom.component.scss"],
-  standalone: true,
-  imports: [NgIf, MatButtonModule, TranslatePipe],
+    selector: "app-scroll-bottom",
+    templateUrl: "./scroll-bottom.component.html",
+    styleUrls: ["./scroll-bottom.component.scss"],
+    imports: [NgIf, MatButtonModule, TranslatePipe]
 })
 export class ScrollBottomComponent {
   @Input() isVisible = true

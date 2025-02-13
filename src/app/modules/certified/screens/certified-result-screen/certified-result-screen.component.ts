@@ -5,14 +5,12 @@ import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interfa
 import { ERoutes } from "../../../shared/constants/routes.enum"
 
 @Component({
-  selector: "app-loop-result-screen",
-  imports: historyImports,
-  templateUrl:
-    "../../../history/screens/history-screen/history-screen.component.html",
-  styleUrls: [
-    "../../../history/screens/history-screen/history-screen.component.scss",
-  ],
-  standalone: true,
+    selector: "app-loop-result-screen",
+    imports: historyImports,
+    templateUrl: "../../../history/screens/history-screen/history-screen.component.html",
+    styleUrls: [
+        "../../../history/screens/history-screen/history-screen.component.scss",
+    ]
 })
 export class CertifiedResultScreenComponent
   extends LoopResultScreenComponent

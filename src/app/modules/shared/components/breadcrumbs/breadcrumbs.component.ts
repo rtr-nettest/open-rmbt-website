@@ -14,11 +14,10 @@ import { ERoutes } from "../../constants/routes.enum"
 import { routes } from "../../../../app.routes"
 
 @Component({
-  selector: "app-breadcrumbs",
-  standalone: true,
-  imports: [AsyncPipe, RouterModule],
-  templateUrl: "./breadcrumbs.component.html",
-  styleUrl: "./breadcrumbs.component.scss",
+    selector: "app-breadcrumbs",
+    imports: [AsyncPipe, RouterModule],
+    templateUrl: "./breadcrumbs.component.html",
+    styleUrl: "./breadcrumbs.component.scss"
 })
 export class BreadcrumbsComponent {
   breadcrumbs$!: Observable<ILink[]>

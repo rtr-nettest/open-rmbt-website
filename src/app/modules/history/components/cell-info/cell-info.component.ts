@@ -5,11 +5,10 @@ import { I18nStore } from "../../../i18n/store/i18n.store"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 
 @Component({
-  selector: "app-cell-info",
-  standalone: true,
-  imports: [],
-  templateUrl: "./cell-info.component.html",
-  styleUrl: "./cell-info.component.scss",
+    selector: "app-cell-info",
+    imports: [],
+    templateUrl: "./cell-info.component.html",
+    styleUrl: "./cell-info.component.scss"
 })
 export class CellInfoComponent
   implements IDynamicComponent<ISimpleHistorySignal>

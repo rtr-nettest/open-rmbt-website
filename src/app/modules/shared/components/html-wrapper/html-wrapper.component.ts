@@ -1,11 +1,10 @@
 import { Component, Input } from "@angular/core"
 
 @Component({
-  selector: "app-html-wrapper",
-  standalone: true,
-  imports: [],
-  templateUrl: "./html-wrapper.component.html",
-  styleUrl: "./html-wrapper.component.scss",
+    selector: "app-html-wrapper",
+    imports: [],
+    templateUrl: "./html-wrapper.component.html",
+    styleUrl: "./html-wrapper.component.scss"
 })
 export class HtmlWrapperComponent {
   @Input() id = ""

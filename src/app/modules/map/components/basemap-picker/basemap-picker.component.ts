@@ -20,18 +20,17 @@ type BasemapPickerForm = {
 }
 
 @Component({
-  selector: "app-basemap-picker",
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    MatDialogModule,
-    MatIconModule,
-    MatRadioModule,
-    ReactiveFormsModule,
-    TranslatePipe,
-  ],
-  templateUrl: "./basemap-picker.component.html",
-  styleUrl: "./basemap-picker.component.scss",
+    selector: "app-basemap-picker",
+    imports: [
+        MatButtonModule,
+        MatDialogModule,
+        MatIconModule,
+        MatRadioModule,
+        ReactiveFormsModule,
+        TranslatePipe,
+    ],
+    templateUrl: "./basemap-picker.component.html",
+    styleUrl: "./basemap-picker.component.scss"
 })
 export class BasemapPickerComponent implements OnDestroy {
   destroyed$ = new Subject<void>()

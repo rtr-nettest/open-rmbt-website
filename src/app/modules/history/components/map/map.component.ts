@@ -17,12 +17,11 @@ import { ScrollStrategyOptions } from "@angular/cdk/overlay"
 import { CoverageDialogComponent } from "../coverage-dialog/coverage-dialog.component"
 
 @Component({
-  selector: "app-map",
-  standalone: true,
-  imports: [MatButtonModule, TranslatePipe],
-  templateUrl: "./map.component.html",
-  styleUrl: "./map.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-map",
+    imports: [MatButtonModule, TranslatePipe],
+    templateUrl: "./map.component.html",
+    styleUrl: "./map.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MapComponent implements AfterViewInit {
   @Input({ required: true }) params!: URLSearchParams

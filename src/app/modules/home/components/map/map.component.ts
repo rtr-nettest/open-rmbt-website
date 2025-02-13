@@ -19,11 +19,10 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
 
 @Component({
-  selector: "app-map",
-  standalone: true,
-  imports: [TranslatePipe],
-  templateUrl: "./map.component.html",
-  styleUrl: "./map.component.scss",
+    selector: "app-map",
+    imports: [TranslatePipe],
+    templateUrl: "./map.component.html",
+    styleUrl: "./map.component.scss"
 })
 export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input({ required: true }) measurements: IRecentMeasurementsResponse | null =

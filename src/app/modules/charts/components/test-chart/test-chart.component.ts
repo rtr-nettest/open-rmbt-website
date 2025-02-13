@@ -18,12 +18,11 @@ import { BarChart } from "./settings/bar-chart"
 import { LogChart } from "./settings/log-chart"
 
 @Component({
-  selector: "app-test-chart",
-  templateUrl: "./test-chart.component.html",
-  styleUrls: ["./test-chart.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NgIf, AsyncPipe],
+    selector: "app-test-chart",
+    templateUrl: "./test-chart.component.html",
+    styleUrls: ["./test-chart.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [NgIf, AsyncPipe]
 })
 export class TestChartComponent implements OnDestroy {
   @Input() phase: ChartPhase = "download"

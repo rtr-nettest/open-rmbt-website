@@ -8,14 +8,11 @@ import { MatExpansionModule } from "@angular/material/expansion"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 @Component({
-  selector: "app-speed-details",
-  standalone: true,
-  imports: [TableComponent, MatExpansionModule, TranslatePipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl:
-    "../../../shared/components/show-details/show-details.component.html",
-  styleUrl:
-    "../../../shared/components/show-details/show-details.component.scss",
+    selector: "app-speed-details",
+    imports: [TableComponent, MatExpansionModule, TranslatePipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: "../../../shared/components/show-details/show-details.component.html",
+    styleUrl: "../../../shared/components/show-details/show-details.component.scss"
 })
 export class SpeedDetailsComponent extends ShowDetailsComponent<IOverallResult> {
   override columns: ITableColumn<IOverallResult>[] = [

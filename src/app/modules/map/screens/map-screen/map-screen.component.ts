@@ -33,20 +33,19 @@ import { MessageService } from "../../../shared/services/message.service"
 export const POINTS_HEATMAP_SWITCH_LEVEL = 12
 
 @Component({
-  selector: "app-map-screen",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    HeaderComponent,
-    HeatmapLegendComponent,
-    TopNavComponent,
-    BreadcrumbsComponent,
-    FooterComponent,
-    MatDialogModule,
-    SearchComponent,
-  ],
-  templateUrl: "./map-screen.component.html",
-  styleUrl: "./map-screen.component.scss",
+    selector: "app-map-screen",
+    imports: [
+        AsyncPipe,
+        HeaderComponent,
+        HeatmapLegendComponent,
+        TopNavComponent,
+        BreadcrumbsComponent,
+        FooterComponent,
+        MatDialogModule,
+        SearchComponent,
+    ],
+    templateUrl: "./map-screen.component.html",
+    styleUrl: "./map-screen.component.scss"
 })
 export class MapScreenComponent extends SeoComponent {
   map!: Map

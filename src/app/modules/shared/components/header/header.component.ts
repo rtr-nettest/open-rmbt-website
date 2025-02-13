@@ -11,11 +11,10 @@ import { AsyncPipe } from "@angular/common"
 import { TranslationService } from "../../../i18n/services/translation.service"
 
 @Component({
-  selector: "app-header",
-  standalone: true,
-  imports: [AsyncPipe, MatIconModule, MatButtonModule, MatMenuModule],
-  templateUrl: "./header.component.html",
-  styleUrl: "./header.component.scss",
+    selector: "app-header",
+    imports: [AsyncPipe, MatIconModule, MatButtonModule, MatMenuModule],
+    templateUrl: "./header.component.html",
+    styleUrl: "./header.component.scss"
 })
 export class HeaderComponent {
   rtrOpen = false

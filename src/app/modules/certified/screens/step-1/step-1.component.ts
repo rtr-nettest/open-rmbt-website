@@ -17,20 +17,19 @@ import { Title } from "@angular/platform-browser"
 import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
 
 @Component({
-  selector: "app-step-1",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    BreadcrumbsComponent,
-    CertifiedBreadcrumbsComponent,
-    HeaderComponent,
-    MatButtonModule,
-    TopNavComponent,
-    TranslatePipe,
-    FooterComponent,
-  ],
-  templateUrl: "./step-1.component.html",
-  styleUrl: "./step-1.component.scss",
+    selector: "app-step-1",
+    imports: [
+        AsyncPipe,
+        BreadcrumbsComponent,
+        CertifiedBreadcrumbsComponent,
+        HeaderComponent,
+        MatButtonModule,
+        TopNavComponent,
+        TranslatePipe,
+        FooterComponent,
+    ],
+    templateUrl: "./step-1.component.html",
+    styleUrl: "./step-1.component.scss"
 })
 export class Step1Component extends SeoComponent implements OnInit {
   text$!: Observable<string>

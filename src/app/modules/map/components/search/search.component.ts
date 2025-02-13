@@ -27,19 +27,18 @@ import { Map, Marker } from "maplibre-gl"
 import { MatButtonModule } from "@angular/material/button"
 
 @Component({
-  selector: "app-search",
-  standalone: true,
-  imports: [
-    FormsModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    NgIf,
-    NgFor,
-    TranslatePipe,
-  ],
-  templateUrl: "./search.component.html",
-  styleUrl: "./search.component.scss",
+    selector: "app-search",
+    imports: [
+        FormsModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NgIf,
+        NgFor,
+        TranslatePipe,
+    ],
+    templateUrl: "./search.component.html",
+    styleUrl: "./search.component.scss"
 })
 export class SearchComponent implements OnDestroy {
   @Input({ required: true }) map!: Map

@@ -14,11 +14,10 @@ export type PercentileParametes = {
 }
 
 @Component({
-  selector: "app-percentile",
-  standalone: true,
-  imports: [MatMenuModule],
-  templateUrl: "./percentile.component.html",
-  styleUrl: "./percentile.component.scss",
+    selector: "app-percentile",
+    imports: [MatMenuModule],
+    templateUrl: "./percentile.component.html",
+    styleUrl: "./percentile.component.scss"
 })
 export class PercentileComponent
   implements IDynamicComponent<PercentileParametes>

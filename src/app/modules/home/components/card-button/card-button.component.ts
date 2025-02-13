@@ -4,11 +4,10 @@ import { RouterModule } from "@angular/router"
 import { NgTemplateOutlet } from "@angular/common"
 
 @Component({
-  selector: "app-card-button",
-  templateUrl: "./card-button.component.html",
-  styleUrls: ["./card-button.component.scss"],
-  standalone: true,
-  imports: [TranslatePipe, NgTemplateOutlet, RouterModule],
+    selector: "app-card-button",
+    templateUrl: "./card-button.component.html",
+    styleUrls: ["./card-button.component.scss"],
+    imports: [TranslatePipe, NgTemplateOutlet, RouterModule]
 })
 export class CardButtonComponent {
   @Input() iconImage?: string

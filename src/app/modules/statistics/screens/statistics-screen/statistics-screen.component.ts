@@ -37,23 +37,22 @@ import { roundToSignificantDigits } from "../../../shared/util/math"
 import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
 
 @Component({
-  selector: "app-statistics-screen",
-  standalone: true,
-  imports: [
-    BreadcrumbsComponent,
-    FiltersComponent,
-    HeaderComponent,
-    HtmlWrapperComponent,
-    TopNavComponent,
-    FooterComponent,
-    MatButtonModule,
-    LoadingOverlayComponent,
-    AsyncPipe,
-    TableComponent,
-    TranslatePipe,
-  ],
-  templateUrl: "./statistics-screen.component.html",
-  styleUrl: "./statistics-screen.component.scss",
+    selector: "app-statistics-screen",
+    imports: [
+        BreadcrumbsComponent,
+        FiltersComponent,
+        HeaderComponent,
+        HtmlWrapperComponent,
+        TopNavComponent,
+        FooterComponent,
+        MatButtonModule,
+        LoadingOverlayComponent,
+        AsyncPipe,
+        TableComponent,
+        TranslatePipe,
+    ],
+    templateUrl: "./statistics-screen.component.html",
+    styleUrl: "./statistics-screen.component.scss"
 })
 export class StatisticsScreenComponent extends SeoComponent implements OnInit {
   footerColumns = ["name", "down", "up", "latency", "count"]

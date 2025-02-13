@@ -24,12 +24,11 @@ export type PhaseDurations = {
 }
 
 @Component({
-  selector: "app-signal-chart",
-  standalone: true,
-  imports: [],
-  templateUrl: "./signal-chart.component.html",
-  styleUrl: "./signal-chart.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-signal-chart",
+    imports: [],
+    templateUrl: "./signal-chart.component.html",
+    styleUrl: "./signal-chart.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignalChartComponent implements AfterViewInit {
   id = "signal_chart"

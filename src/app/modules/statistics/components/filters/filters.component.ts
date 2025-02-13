@@ -35,23 +35,22 @@ type FiltersForm = {
 }
 
 @Component({
-  selector: "app-filters",
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatInputModule,
-    MatNativeDateModule,
-    MatSelectModule,
-    MatIconModule,
-    MatOptionModule,
-    TranslatePipe,
-  ],
-  templateUrl: "./filters.component.html",
-  styleUrl: "./filters.component.scss",
+    selector: "app-filters",
+    imports: [
+        AsyncPipe,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatDatepickerModule,
+        MatInputModule,
+        MatNativeDateModule,
+        MatSelectModule,
+        MatIconModule,
+        MatOptionModule,
+        TranslatePipe,
+    ],
+    templateUrl: "./filters.component.html",
+    styleUrl: "./filters.component.scss"
 })
 export class FiltersComponent implements OnDestroy {
   cdr = inject(ChangeDetectorRef)

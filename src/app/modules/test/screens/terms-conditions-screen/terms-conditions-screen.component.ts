@@ -12,11 +12,10 @@ import { TC_VERSION_ACCEPTED } from "../../constants/strings"
 import { SettingsService } from "../../../shared/services/settings.service"
 
 @Component({
-  selector: "app-terms-conditions-screen",
-  templateUrl: "./terms-conditions-screen.component.html",
-  styleUrls: ["./terms-conditions-screen.component.scss"],
-  standalone: true,
-  imports: [AgreementComponent, AsyncPipe, MatButtonModule],
+    selector: "app-terms-conditions-screen",
+    templateUrl: "./terms-conditions-screen.component.html",
+    styleUrls: ["./terms-conditions-screen.component.scss"],
+    imports: [AgreementComponent, AsyncPipe, MatButtonModule]
 })
 export class TermsConditionsScreenComponent
   extends SeoComponent

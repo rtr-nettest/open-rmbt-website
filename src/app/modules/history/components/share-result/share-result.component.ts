@@ -14,18 +14,17 @@ import { MainStore } from "../../../shared/store/main.store"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 
 @Component({
-  selector: "app-share-result",
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    MatFormFieldModule,
-    MatFormField,
-    MatInputModule,
-    TranslatePipe,
-  ],
-  templateUrl: "./share-result.component.html",
-  styleUrl: "./share-result.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-share-result",
+    imports: [
+        MatButtonModule,
+        MatFormFieldModule,
+        MatFormField,
+        MatInputModule,
+        TranslatePipe,
+    ],
+    templateUrl: "./share-result.component.html",
+    styleUrl: "./share-result.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ShareResultComponent {
   result = input<ISimpleHistoryResult | null>(null)

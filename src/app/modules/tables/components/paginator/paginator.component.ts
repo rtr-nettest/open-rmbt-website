@@ -12,11 +12,10 @@ import {
 } from '@angular/material/paginator';
 
 @Component({
-  selector: 'app-paginator',
-  templateUrl: './paginator.component.html',
-  styleUrls: ['./paginator.component.scss'],
-  standalone: true,
-  imports: [MatPaginatorModule],
+    selector: 'app-paginator',
+    templateUrl: './paginator.component.html',
+    styleUrls: ['./paginator.component.scss'],
+    imports: [MatPaginatorModule]
 })
 export class PaginatorComponent {
   @Input() length: number = 0;

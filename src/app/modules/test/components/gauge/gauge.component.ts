@@ -10,12 +10,11 @@ import { ITestVisualizationState } from "../../interfaces/test-visualization-sta
 import { roundToSignificantDigits, speedLog } from "../../../shared/util/math"
 
 @Component({
-  selector: "app-gauge",
-  templateUrl: "./gauge.component.html",
-  styleUrls: ["./gauge.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [AsyncPipe, NgIf, TranslatePipe],
+    selector: "app-gauge",
+    templateUrl: "./gauge.component.html",
+    styleUrls: ["./gauge.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [AsyncPipe, NgIf, TranslatePipe]
 })
 export class GaugeComponent {
   visualization$!: Observable<ITestVisualizationState>

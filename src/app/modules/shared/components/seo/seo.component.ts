@@ -6,10 +6,9 @@ import { Subject, Subscription, takeUntil, tap } from "rxjs"
 const SEP = " | "
 
 @Component({
-  selector: "app-seo",
-  standalone: true,
-  imports: [],
-  template: "",
+    selector: "app-seo",
+    imports: [],
+    template: ""
 })
 export class SeoComponent implements OnDestroy {
   destroyed$: Subject<void> = new Subject()

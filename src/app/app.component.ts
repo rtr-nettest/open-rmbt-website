@@ -8,11 +8,10 @@ import { SettingsService } from "./modules/shared/services/settings.service"
 import * as pack from "../../package.json"
 
 @Component({
-  selector: "app-root",
-  standalone: true,
-  imports: [AsyncPipe, RouterOutlet, MatProgressBarModule],
-  templateUrl: "./app.component.html",
-  styleUrl: "./app.component.scss",
+    selector: "app-root",
+    imports: [AsyncPipe, RouterOutlet, MatProgressBarModule],
+    templateUrl: "./app.component.html",
+    styleUrl: "./app.component.scss"
 })
 export class AppComponent {
   title = "open-rmbt-angular"
