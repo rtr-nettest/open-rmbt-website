@@ -56,7 +56,6 @@ $color-border: rgba(0, 0, 0, 0.1);
     }
     :not(:only-child) {
       overflow: hidden;
-      max-height: rem(32);
 
       @include screen-sm {
         max-width: 50vw;

@@ -132,7 +132,7 @@ export class FiltersComponent {
       "loc_accuracy_from",
       new Range("loc_accuracy_from", "loc_accuracy_to", "m"),
     ],
-    ["gkz_from", new Range("gkz_from", "gkz_to", "m")],
+    ["gkz_from", new Range("gkz_from", "gkz_to", "")],
   ])
   selects = new Map([
     ["cat_technology", Object.entries(EConnectionType)],
