@@ -8,7 +8,7 @@ export const queryParamsFromFilters = (
 ) => {
   const params = [] as [string, string][]
   for (const [key, value] of Object.entries(filters)) {
-    if (value === null || value === undefined) {
+    if (value === null || value === undefined || value === "") {
       continue
     }
     if (Array.isArray(value)) {
@@ -36,7 +36,12 @@ export const searchFromFilters = (
   }
 ) => {
   const params = queryParamsFromFilters(filters, conversions)
-  return params.map(([key, value]) => `${key}=${value}`).join("&")
+  return params
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+    )
+    .join("&")
 }
 
 export const filtersFromSearch = (

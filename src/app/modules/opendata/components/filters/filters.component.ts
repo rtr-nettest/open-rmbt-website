@@ -1,4 +1,11 @@
-import { Component, computed, effect, inject, signal } from "@angular/core"
+import {
+  Component,
+  computed,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from "@angular/core"
 import {
   FormBuilder,
   FormControl,
@@ -22,6 +29,7 @@ import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatDatepickerModule } from "@angular/material/datepicker"
 import { OpendataService } from "../../services/opendata.service"
 import { NgFor, NgIf } from "@angular/common"
+import { Subject, takeUntil } from "rxjs"
 
 type FiltersForm = {
   download_kbit_from: FormControl<string | null>
@@ -150,7 +158,8 @@ const ALL_FIELDS = [
   templateUrl: "./filters.component.html",
   styleUrl: "./filters.component.scss",
 })
-export class FiltersComponent {
+export class FiltersComponent implements OnInit, OnDestroy {
+  destroyed$ = new Subject<void>()
   form?: FormGroup<FiltersForm>
   i18nStore = inject(I18nStore)
   service = inject(OpendataService)
@@ -202,7 +211,10 @@ export class FiltersComponent {
       ],
     ],
   ])
-  timeUnits = Object.entries(ETimeUnit)
+  timeUnits = Object.values(ETimeUnit).map((unit) => [
+    unit.slice(0, 1).toUpperCase() + unit.slice(1),
+    unit,
+  ])
 
   get formControlKeys() {
     return Object.keys(this.form?.controls || {})
@@ -211,96 +223,113 @@ export class FiltersComponent {
   constructor(
     private readonly fb: FormBuilder,
     private readonly store: OpendataStoreService
-  ) {
-    effect(() => {
-      const filters = this.store.filters()
-      this.form = this.fb.group({
-        download_kbit_from: new FormControl<string | null>(
-          filters.download_kbit_from || null
-        ),
-        download_kbit_to: new FormControl<string | null>(
-          filters.download_kbit_to || null
-        ),
-        upload_kbit_from: new FormControl<string | null>(
-          filters.upload_kbit_from || null
-        ),
-        upload_kbit_to: new FormControl<string | null>(
-          filters.upload_kbit_to || null
-        ),
-        ping_ms_from: new FormControl<string | null>(
-          filters.ping_ms_from || null
-        ),
-        ping_ms_to: new FormControl<string | null>(filters.ping_ms_to || null),
-        signal_strength_from: new FormControl<string | null>(
-          filters.signal_strength_from || null
-        ),
-        signal_strength_to: new FormControl<string | null>(
-          filters.signal_strength_to || null
-        ),
-        loc_accuracy_from: new FormControl<string | null>(
-          filters.loc_accuracy_from || null
-        ),
-        loc_accuracy_to: new FormControl<string | null>(
-          filters.loc_accuracy_to || null
-        ),
-        gkz_from: new FormControl<string | null>(filters.gkz_from || null),
-        gkz_to: new FormControl<string | null>(filters.gkz_to || null),
-        cat_technology: new FormControl<EConnectionType | null>(
-          (filters.cat_technology as EConnectionType) || null
-        ),
-        model: new FormControl<string | null>(filters.model || null),
-        provider_name: new FormControl<string | null>(
-          filters.provider_name || null
-        ),
-        public_ip_as_name: new FormControl<string | null>(
-          filters.public_ip_as_name || null
-        ),
-        timespan: new FormControl<number | null>(filters.timespan || null),
-        timespan_unit: new FormControl<ETimeUnit | null>(
-          (filters.timespan_unit as ETimeUnit) || null
-        ),
-        time_from: new FormControl<Date | null>(filters.time_from || null),
-        time_to: new FormControl<Date | null>(filters.time_to || null),
-        platform: new FormControl<EPlatform | null>(
-          (filters.platform as EPlatform) || null
-        ),
-        client_version: new FormControl<EClientVersion | null>(
-          (filters.client_version as EClientVersion) || null
-        ),
-        land_cover: new FormControl<number | null>(filters.land_cover || null),
-        network_name: new FormControl<string | null>(
-          filters.network_name || null
-        ),
-        network_country: new FormControl<string | null>(
-          filters.network_country || null
-        ),
-        country_geoip: new FormControl<string | null>(
-          filters.country_geoip || null
-        ),
-        country_location: new FormControl<string | null>(
-          filters.country_location || null
-        ),
-        sim_country: new FormControl<string | null>(
-          filters.sim_country || null
-        ),
-        sim_mcc_mnc: new FormControl<string | null>(
-          filters.sim_mcc_mnc || null
-        ),
-        asn: new FormControl<number | null>(filters.asn || null),
-        cell_area_code: new FormControl<number | null>(
-          filters.cell_area_code || null
-        ),
-        cell_location_id: new FormControl<number | null>(
-          filters.cell_location_id || null
-        ),
-        radio_band: new FormControl<number | null>(filters.radio_band || null),
-        open_uuid: new FormControl<string | null>(filters.open_uuid || null),
-        client_uuid: new FormControl<string | null>(
-          filters.client_uuid || null
-        ),
-        pinned: new FormControl<boolean | null>(filters.pinned || null),
-      })
+  ) {}
+
+  ngOnInit() {
+    this.initForm()
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next()
+    this.destroyed$.complete()
+  }
+
+  initForm() {
+    const filters = this.store.filters()
+    this.form = this.fb.group({
+      download_kbit_from: new FormControl<string | null>(
+        filters.download_kbit_from || null
+      ),
+      download_kbit_to: new FormControl<string | null>(
+        filters.download_kbit_to || null
+      ),
+      upload_kbit_from: new FormControl<string | null>(
+        filters.upload_kbit_from || null
+      ),
+      upload_kbit_to: new FormControl<string | null>(
+        filters.upload_kbit_to || null
+      ),
+      ping_ms_from: new FormControl<string | null>(
+        filters.ping_ms_from || null
+      ),
+      ping_ms_to: new FormControl<string | null>(filters.ping_ms_to || null),
+      signal_strength_from: new FormControl<string | null>(
+        filters.signal_strength_from || null
+      ),
+      signal_strength_to: new FormControl<string | null>(
+        filters.signal_strength_to || null
+      ),
+      loc_accuracy_from: new FormControl<string | null>(
+        filters.loc_accuracy_from || null
+      ),
+      loc_accuracy_to: new FormControl<string | null>(
+        filters.loc_accuracy_to || null
+      ),
+      gkz_from: new FormControl<string | null>(filters.gkz_from || null),
+      gkz_to: new FormControl<string | null>(filters.gkz_to || null),
+      cat_technology: new FormControl<EConnectionType | null>(
+        (filters.cat_technology as EConnectionType) || null
+      ),
+      model: new FormControl<string | null>(filters.model || null),
+      provider_name: new FormControl<string | null>(
+        filters.provider_name || null
+      ),
+      public_ip_as_name: new FormControl<string | null>(
+        filters.public_ip_as_name || null
+      ),
+      timespan: new FormControl<number | null>(filters.timespan || null),
+      timespan_unit: new FormControl<ETimeUnit | null>(
+        (filters.timespan_unit as ETimeUnit) || null
+      ),
+      time_from: new FormControl<Date | null>(filters.time_from || null),
+      time_to: new FormControl<Date | null>(filters.time_to || null),
+      platform: new FormControl<EPlatform | null>(
+        (filters.platform as EPlatform) || null
+      ),
+      client_version: new FormControl<EClientVersion | null>(
+        (filters.client_version as EClientVersion) || null
+      ),
+      land_cover: new FormControl<number | null>(filters.land_cover || null),
+      network_name: new FormControl<string | null>(
+        filters.network_name || null
+      ),
+      network_country: new FormControl<string | null>(
+        filters.network_country || null
+      ),
+      country_geoip: new FormControl<string | null>(
+        filters.country_geoip || null
+      ),
+      country_location: new FormControl<string | null>(
+        filters.country_location || null
+      ),
+      sim_country: new FormControl<string | null>(filters.sim_country || null),
+      sim_mcc_mnc: new FormControl<string | null>(filters.sim_mcc_mnc || null),
+      asn: new FormControl<number | null>(filters.asn || null),
+      cell_area_code: new FormControl<number | null>(
+        filters.cell_area_code || null
+      ),
+      cell_location_id: new FormControl<number | null>(
+        filters.cell_location_id || null
+      ),
+      radio_band: new FormControl<number | null>(filters.radio_band || null),
+      open_uuid: new FormControl<string | null>(filters.open_uuid || null),
+      client_uuid: new FormControl<string | null>(filters.client_uuid || null),
+      pinned: new FormControl<boolean | null>(filters.pinned || null),
     })
+    this.form.controls.time_from.valueChanges
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.form?.controls.timespan.setValue(null)
+        this.form?.controls.timespan_unit.setValue(null)
+      })
+    this.form.controls.time_to.valueChanges
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        if (this.form?.controls.time_from.value) {
+          this.form?.controls.timespan.setValue(null)
+          this.form?.controls.timespan_unit.setValue(null)
+        }
+      })
   }
 
   applyFilters() {

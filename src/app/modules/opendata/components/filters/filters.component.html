@@ -50,6 +50,7 @@
         <label class="app-label">{{ key | translate }}</label>
       </div>
       <div class="app-col app-col--two-thirds">
+        <span class="app-field-prefix"></span>
         <mat-select
           class="app-field app-field--half app-select"
           [formControlName]="key"
@@ -65,12 +66,13 @@
         </mat-select>
       </div>
     </div>
-    } @else if (!key.endsWith("_to")) {
+    } @else if (!key.endsWith("_to") && !key.includes("time")) {
     <div class="app-row">
       <div class="app-col">
         <label class="app-label">{{ key | translate }}</label>
       </div>
       <div class="app-col app-col--two-thirds">
+        <span class="app-field-prefix"></span>
         <mat-form-field
           class="app-field app-field--half"
           appearance="outline"
@@ -79,6 +81,36 @@
           <input matInput type="text" formControlName="{{ key }}" size="4" />
         </mat-form-field>
       </div>
+    </div>
+    } @else if(key === "timespan_unit") {
+    <div class="app-row">
+      <div class="app-col">
+        <label class="app-label">{{ "Timespan" | translate }}</label>
+      </div>
+      <div class="app-col app-col--third">
+        <span class="app-field-prefix"></span>
+        <mat-form-field
+          class="app-field app-field--timespan"
+          appearance="outline"
+          subscriptSizing="dynamic"
+        >
+          <input
+            matInput
+            type="number"
+            formControlName="timespan"
+            min="0"
+            max="366"
+          />
+        </mat-form-field>
+        <mat-select class="app-field app-select" [formControlName]="key">
+          @for (options of timeUnits; track $index) {
+          <mat-option [value]="options[1]">
+            {{ options[0] | translate }}</mat-option
+          >
+          }
+        </mat-select>
+      </div>
+      <div class="app-col app-col--third"></div>
     </div>
     } } }
     <div class="app-footer">
@@ -92,7 +124,7 @@
           {{ "Further filters" | translate }}
         </a>
       </div>
-      <div class="app-row">
+      <div class="app-row" style="flex-direction: row">
         <button
           mat-flat-button
           class="app-button app-button--primary"

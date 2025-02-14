@@ -8,7 +8,6 @@ import {
 } from "../interfaces/recent-measurements-response.interface"
 import { ITableColumn } from "../../tables/interfaces/table-column.interface"
 import { roundToSignificantDigits } from "../../shared/util/math"
-import dayjs from "dayjs"
 import { map } from "rxjs"
 import {
   DEFAULT_FILTERS,
@@ -22,6 +21,13 @@ import {
   searchFromFilters,
 } from "../../shared/util/query-params"
 import { truncate } from "../../shared/util/string"
+import dayjs, { ManipulateType } from "dayjs"
+import utc from "dayjs/plugin/utc"
+import tz from "dayjs/plugin/timezone"
+dayjs.extend(utc)
+dayjs.extend(tz)
+
+const TIME_FORMAT = "YYYY-MM-DD HH:mm:ss"
 
 @Injectable({
   providedIn: "root",
@@ -123,11 +129,11 @@ export class OpendataService {
     if (!filters) return
     this.store.reset()
     this.store.filters.set(filters)
-    this.router.navigateByUrl(
-      `/${this.i18nStore.activeLang}/${
-        ERoutes.OPEN_DATA
-      }?${this.getSearchFromFilters(filters)}`
-    )
+    // this.router.navigateByUrl(
+    //   `/${this.i18nStore.activeLang}/${
+    //     ERoutes.OPEN_DATA
+    //   }?${this.getSearchFromFilters(filters)}`
+    // )
   }
 
   search(filters: IOpendataFilters) {
@@ -150,11 +156,25 @@ export class OpendataService {
   }
 
   private getSearchFromFilters(filters: IOpendataFilters) {
-    return searchFromFilters(filters, {
+    const newFilters = JSON.parse(JSON.stringify(filters))
+    if (newFilters.timespan && newFilters.timespan_unit) {
+      const now = newFilters.time_to
+        ? dayjs(newFilters.time_to)
+        : dayjs().endOf("day")
+      newFilters.time_from = now
+        .subtract(
+          newFilters.timespan,
+          newFilters.timespan_unit as ManipulateType
+        )
+        .toDate()
+    }
+    return searchFromFilters(newFilters, {
       download_kbit_from: (value) => `>${value * 1000}`,
       download_kbit_to: (value) => `<${value * 1000}`,
       upload_kbit_from: (value) => `>${value * 1000}`,
       upload_kbit_to: (value) => `<${value * 1000}`,
+      time_from: (value) => `>${dayjs(value).utc().format(TIME_FORMAT)}`,
+      time_to: (value) => `<${dayjs(value).utc().format(TIME_FORMAT)}`,
     })
   }
 
@@ -164,6 +184,8 @@ export class OpendataService {
       download_kbit_to: (value) => value / 1000,
       upload_kbit_from: (value) => value / 1000,
       upload_kbit_to: (value) => value / 1000,
+      time_from: (value) => dayjs(value).utc(true).toDate(),
+      time_to: (value) => dayjs(value).utc(true).toDate(),
     })
   }
 }

@@ -53,22 +53,37 @@
   width: calc(100% - 100px);
 
   &--half {
-    margin-left: 38px;
     width: calc(50% - 100px);
 
     &.app-select {
       width: calc(50% - 128px);
+
+      @include screen-xs {
+        width: 100%;
+      }
     }
   }
 
   @include screen-xs {
-    margin-left: 0;
     width: 100%;
+  }
+
+  &--timespan {
+    flex: 0 0 100px;
+
+    & + .app-select {
+      flex: 0 0 calc(100% - 242px);
+      margin-left: 16px;
+    }
+
+    @include screen-xs {
+      flex: 1;
+    }
   }
 
   &-prefix,
   &-suffix {
-    width: 30px;
+    flex: 0 0 30px;
   }
 
   &-prefix {
@@ -82,8 +97,9 @@
   @include screen-xs {
     &-prefix,
     &-suffix {
-      position: relative;
-      flex: 0 0 30px;
+      &:empty {
+        display: none;
+      }
     }
   }
 }
