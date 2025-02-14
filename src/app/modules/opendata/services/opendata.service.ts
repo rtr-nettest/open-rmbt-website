@@ -21,6 +21,7 @@ import {
   filtersFromSearch,
   searchFromFilters,
 } from "../../shared/util/query-params"
+import { truncate } from "../../shared/util/string"
 
 @Injectable({
   providedIn: "root",
@@ -72,7 +73,7 @@ export class OpendataService {
           }
           if (value.platform) {
             retVal = retVal.length
-              ? `${retVal} (${value.platform.trim()})`
+              ? `${truncate(retVal, 50)} (${value.platform.trim()})`
               : value.platform.trim()
           }
           return `<i class="app-icon app-icon--marker"></i><span class="app-marker-cell">${retVal}</span>`

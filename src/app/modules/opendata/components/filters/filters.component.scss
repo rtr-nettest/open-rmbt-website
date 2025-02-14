@@ -54,7 +54,11 @@
 
   &--half {
     margin-left: 38px;
-    width: calc(50% - 128px);
+    width: calc(50% - 100px);
+
+    &.app-select {
+      width: calc(50% - 128px);
+    }
   }
 
   @include screen-xs {
@@ -81,5 +85,11 @@
       position: relative;
       flex: 0 0 30px;
     }
+  }
+}
+
+.app-footer {
+  .app-row {
+    justify-content: flex-start;
   }
 }

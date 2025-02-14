@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from "@angular/core"
+import { Component, computed, effect, inject, signal } from "@angular/core"
 import {
   FormBuilder,
   FormControl,
@@ -10,19 +10,18 @@ import { EPlatform } from "../../constants/platform.enum"
 import { EConnectionType } from "../../constants/connection-type.enum"
 import { EClientVersion } from "../../constants/client-version.enum"
 import { LAND_COVERS } from "../../constants/land-covers"
-import { I18nStore } from "../../../i18n/store/i18n.store"
 import { OpendataStoreService } from "../../store/opendata-store.service"
-import { Router } from "@angular/router"
 import { MatInputModule } from "@angular/material/input"
 import { MatSelectModule } from "@angular/material/select"
 import { MatButtonModule } from "@angular/material/button"
 import { MatOptionModule } from "@angular/material/core"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { COUNTRIES } from "../../../shared/constants/countries"
+import { I18nStore } from "../../../i18n/store/i18n.store"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatDatepickerModule } from "@angular/material/datepicker"
 import { OpendataService } from "../../services/opendata.service"
-import { NgFor } from "@angular/common"
+import { NgFor, NgIf } from "@angular/common"
 
 type FiltersForm = {
   download_kbit_from: FormControl<string | null>
@@ -72,48 +71,92 @@ class Range {
   ) {}
 }
 
+const DEFAULT_FIELDS = [
+  "download_kbit_from",
+  "download_kbit_to",
+  "upload_kbit_from",
+  "upload_kbit_to",
+  "ping_ms_from",
+  "ping_ms_to",
+  "signal_strength_from",
+  "signal_strength_to",
+  "loc_accuracy_from",
+  "loc_accuracy_to",
+  "gkz_from",
+  "gkz_to",
+  "cat_technology",
+  "model",
+  "provider_name",
+  "public_ip_as_name",
+  "timespan",
+  "timespan_unit",
+  "time_from",
+  "time_to",
+]
+
+const ALL_FIELDS = [
+  "download_kbit_from",
+  "download_kbit_to",
+  "upload_kbit_from",
+  "upload_kbit_to",
+  "ping_ms_from",
+  "ping_ms_to",
+  "signal_strength_from",
+  "signal_strength_to",
+  "loc_accuracy_from",
+  "loc_accuracy_to",
+  "gkz_from",
+  "gkz_to",
+  "cat_technology",
+  "model",
+  "provider_name",
+  "public_ip_as_name",
+  "timespan",
+  "timespan_unit",
+  "time_to",
+  "time_from",
+  "platform",
+  "client_version",
+  "land_cover",
+  "network_name",
+  "network_country",
+  "country_geoip",
+  "country_location",
+  "sim_country",
+  "sim_mcc_mnc",
+  "asn",
+  "cell_area_code",
+  "cell_location_id",
+  "radio_band",
+  "open_uuid",
+  "client_uuid",
+  "pinned",
+]
+
 @Component({
-    selector: "app-filters",
-    imports: [
-        MatButtonModule,
-        MatDatepickerModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatOptionModule,
-        MatSelectModule,
-        NgFor,
-        ReactiveFormsModule,
-        TranslatePipe,
-    ],
-    templateUrl: "./filters.component.html",
-    styleUrl: "./filters.component.scss"
+  selector: "app-filters",
+  imports: [
+    MatButtonModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
+    NgFor,
+    NgIf,
+    ReactiveFormsModule,
+    TranslatePipe,
+  ],
+  templateUrl: "./filters.component.html",
+  styleUrl: "./filters.component.scss",
 })
 export class FiltersComponent {
   form?: FormGroup<FiltersForm>
+  i18nStore = inject(I18nStore)
   service = inject(OpendataService)
-  visibleFields = signal(
-    new Set([
-      "download_kbit_from",
-      "download_kbit_to",
-      "upload_kbit_from",
-      "upload_kbit_to",
-      "ping_ms_from",
-      "ping_ms_to",
-      "signal_strength_from",
-      "signal_strength_to",
-      "loc_accuracy_from",
-      "loc_accuracy_to",
-      "gkz_from",
-      "gkz_to",
-      "cat_technology",
-      "model",
-      "provider_name",
-      "public_ip_as_name",
-      "timespan",
-      "timespan_unit",
-      "time_from",
-      "time_to",
-    ])
+  allFieldsAreVisible = signal(false)
+  visibleFields = computed(
+    () => new Set(this.allFieldsAreVisible() ? ALL_FIELDS : DEFAULT_FIELDS)
   )
   ranges = new Map([
     [
@@ -135,24 +178,31 @@ export class FiltersComponent {
     ],
     ["gkz_from", new Range("gkz_from", "gkz_to", "")],
   ])
+  countries = Object.keys(COUNTRIES).map((country) => [country, country])
   selects = new Map([
     ["cat_technology", Object.entries(EConnectionType)],
     ["platform", Object.entries(EPlatform)],
     ["client_version", Object.entries(EClientVersion)],
     [
       "land_cover",
-      LAND_COVERS.map((landCover) => [`corine_${landCover}`, landCover]),
+      LAND_COVERS.map((landCover) => [
+        `${landCover} - ${this.i18nStore.translate(`corine_${landCover}`)}`,
+        landCover,
+      ]),
     ],
-    ["network_country", Object.entries(COUNTRIES)],
-    ["country_geoip", Object.entries(COUNTRIES)],
-    ["country_location", Object.entries(COUNTRIES)],
-    ["sim_country", Object.entries(COUNTRIES)],
+    ["network_country", this.countries],
+    ["country_geoip", this.countries],
+    ["country_location", this.countries],
+    ["sim_country", this.countries],
+    [
+      "pinned",
+      [
+        ["pinned_true", "true"],
+        ["pinned_false", "false"],
+      ],
+    ],
   ])
   timeUnits = Object.entries(ETimeUnit)
-  pinnedOptions = new Map([
-    ["pinned_true", true],
-    ["pinned_false", false],
-  ])
 
   get formControlKeys() {
     return Object.keys(this.form?.controls || {})
@@ -296,5 +346,9 @@ export class FiltersComponent {
       client_uuid: new FormControl<string | null>(null),
       pinned: new FormControl<boolean | null>(null),
     })
+  }
+
+  showAllFields() {
+    this.allFieldsAreVisible.set(true)
   }
 }

@@ -65,23 +65,50 @@
         </mat-select>
       </div>
     </div>
+    } @else if (!key.endsWith("_to")) {
+    <div class="app-row">
+      <div class="app-col">
+        <label class="app-label">{{ key | translate }}</label>
+      </div>
+      <div class="app-col app-col--two-thirds">
+        <mat-form-field
+          class="app-field app-field--half"
+          appearance="outline"
+          subscriptSizing="dynamic"
+        >
+          <input matInput type="text" formControlName="{{ key }}" size="4" />
+        </mat-form-field>
+      </div>
+    </div>
     } } }
     <div class="app-footer">
-      <button
-        mat-flat-button
-        class="app-button app-button--primary"
-        type="submit"
-        [disabled]="form.invalid"
-      >
-        {{ "Apply filters" | translate }}
-      </button>
-      <button
-        mat-stroked-button
-        class="app-button app-button--primary"
-        type="reset"
-      >
-        {{ "Reset" | translate }}
-      </button>
+      <div class="app-row" style="justify-content: center">
+        <a
+          *ngIf="!allFieldsAreVisible()"
+          mat-button
+          class="app-button"
+          (click)="showAllFields()"
+        >
+          {{ "Further filters" | translate }}
+        </a>
+      </div>
+      <div class="app-row">
+        <button
+          mat-flat-button
+          class="app-button app-button--primary"
+          type="submit"
+          [disabled]="form.invalid"
+        >
+          {{ "Apply filters" | translate }}
+        </button>
+        <button
+          mat-stroked-button
+          class="app-button app-button--primary"
+          type="reset"
+        >
+          {{ "Reset" | translate }}
+        </button>
+      </div>
     </div>
   </form>
 </div>
