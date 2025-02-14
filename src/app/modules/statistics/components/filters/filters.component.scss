@@ -4,7 +4,7 @@
   background-color: #f8f8f8;
   border: 1px solid #c2c2c2;
   border-radius: rem(9);
-  padding: rem(24);
+  padding: rem(24) rem(24) 0;
 }
 
 .app-button {
@@ -24,15 +24,12 @@
   align-items: center;
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: rem(24);
 
-  &:last-of-type {
-    margin-bottom: 0;
+  .app-col {
+    margin-bottom: rem(24);
   }
 
   @include screen-xs {
-    margin-bottom: 0;
-
     .app-col {
       align-items: center;
       display: flex;

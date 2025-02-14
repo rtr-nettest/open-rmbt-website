@@ -5,7 +5,8 @@
 @use "sass:math";
 @use "sass:color";
 @use "@angular/material" as mat;
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 @import "settings__theme";
 
 // Note: Color palettes are generated from primary: #47A4F5, secondary: #EAF547
@@ -156,18 +157,20 @@ $light-theme: mat.define-theme(
 :root {
   @include mat.all-component-themes($light-theme);
 
-  --mat-menu-container-color: white;
-  --mdc-filled-button-container-shape: 9px;
-  --mat-mdc-focus-indicator-border-radius: 9px;
-  --mdc-outlined-button-container-shape: 9px;
-  --mdc-text-button-container-shape: 9px;
-  --mdc-outlined-text-field-container-shape: 9px;
-  --mat-text-button-with-icon-horizontal-padding: 12px;
-  --mat-form-field-container-vertical-padding: 12px;
+  --mat-menu-container-color: white !important;
+  --mdc-filled-button-container-shape: 9px !important;
+  --mat-mdc-focus-indicator-border-radius: 9px !important;
+  --mdc-outlined-button-container-shape: 9px !important;
+  --mdc-text-button-container-shape: 9px !important;
+  --mdc-outlined-text-field-container-shape: 9px !important;
+  --mat-text-button-with-icon-horizontal-padding: 12px !important;
+  --mat-form-field-container-vertical-padding: 12px !important;
 
-  --mat-table-row-item-outline-color: rgba(0, 0, 0, 0.1);
-  --mdc-outlined-text-field-outline-color: #2f5f00;
-  --mdc-outlined-text-field-outline-width: 2px;
-  --mdc-dialog-supporting-text-color: rgba(0, 0, 0, 1);
-  --mat-form-field-container-height: 48px;
+  --mat-table-row-item-outline-color: rgba(0, 0, 0, 0.1) !important;
+  --mdc-outlined-text-field-outline-color: #2f5f00 !important;
+  --mdc-outlined-text-field-outline-width: 2px !important;
+  --mdc-dialog-supporting-text-color: rgba(0, 0, 0, 1) !important;
+  --mat-form-field-container-height: 48px !important;
+
+  --mdc-outlined-button-outline-color: #2f5f00 !important;
 }

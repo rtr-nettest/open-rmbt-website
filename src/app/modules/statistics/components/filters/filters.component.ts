@@ -35,22 +35,22 @@ type FiltersForm = {
 }
 
 @Component({
-    selector: "app-filters",
-    imports: [
-        AsyncPipe,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatButtonModule,
-        MatDatepickerModule,
-        MatInputModule,
-        MatNativeDateModule,
-        MatSelectModule,
-        MatIconModule,
-        MatOptionModule,
-        TranslatePipe,
-    ],
-    templateUrl: "./filters.component.html",
-    styleUrl: "./filters.component.scss"
+  selector: "app-filters",
+  imports: [
+    AsyncPipe,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
+    MatSelectModule,
+    MatIconModule,
+    MatOptionModule,
+    TranslatePipe,
+  ],
+  templateUrl: "./filters.component.html",
+  styleUrl: "./filters.component.scss",
 })
 export class FiltersComponent implements OnDestroy {
   cdr = inject(ChangeDetectorRef)
@@ -87,7 +87,7 @@ export class FiltersComponent implements OnDestroy {
       if (!filters) return null
       this.store.adjustTimePeriods(filters.end_date)
       const form = this.fb.group<FiltersForm>({
-        country: new FormControl(filters.country),
+        country: new FormControl(filters.country || "AT"),
         duration: new FormControl(filters.duration),
         type: new FormControl(filters.type),
         quantile: new FormControl(filters.quantile),

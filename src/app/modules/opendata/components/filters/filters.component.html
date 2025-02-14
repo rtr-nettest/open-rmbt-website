@@ -7,7 +7,7 @@
       <div class="app-col">
         <label class="app-label">{{ key | translate }}</label>
       </div>
-      <div class="app-col">
+      <div class="app-col app-col--third">
         <span class="app-field-prefix">{{ "from_value" | translate }}</span>
         <mat-form-field
           class="app-field app-field--number"
@@ -25,7 +25,7 @@
           ranges.get(key)!.unit | translate
         }}</span>
       </div>
-      <div class="app-col">
+      <div class="app-col app-col--third">
         <span class="app-field-prefix">{{ "to_value" | translate }}</span>
         <mat-form-field
           class="app-field app-field--number"
@@ -49,8 +49,12 @@
       <div class="app-col">
         <label class="app-label">{{ key | translate }}</label>
       </div>
-      <div class="app-col">
-        <mat-select class="app-select" [formControlName]="key" panelWidth="">
+      <div class="app-col app-col--two-thirds">
+        <mat-select
+          class="app-field app-field--half app-select"
+          [formControlName]="key"
+          canSelectNullableOptions="true"
+        >
           <mat-option [value]="null"> --{{ "all" | translate }}-- </mat-option>
           <mat-option
             *ngFor="let option of selects.get(key)"
