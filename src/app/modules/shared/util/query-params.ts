@@ -1,5 +1,3 @@
-// TODO: dates
-
 export const queryParamsFromFilters = (
   filters: Record<string, any>,
   conversions?: {
@@ -11,19 +9,24 @@ export const queryParamsFromFilters = (
     if (value === null || value === undefined || value === "") {
       continue
     }
-    if (Array.isArray(value)) {
-      for (const v of value) {
-        params.push([`${key}[]`, conversions?.[key] ? conversions[key](v) : v])
-      }
-    } else {
+    const formatValue = (value: any, newKey?: string) => {
       const v = conversions?.[key] ? conversions[key](value) : value
       if (key.endsWith("_from")) {
-        params.push([key.replace("_from", "[]"), v])
+        params.push([key.replace("_from", "[]"), `>${v}`])
       } else if (key.endsWith("_to")) {
-        params.push([key.replace("_to", "[]"), v])
+        params.push([key.replace("_to", "[]"), `<${v}`])
+      } else if (newKey) {
+        params.push([newKey, v])
       } else {
         params.push([key, v])
       }
+    }
+    if (Array.isArray(value)) {
+      for (const v of value) {
+        formatValue(v, `${key}[]`)
+      }
+    } else {
+      formatValue(value)
     }
   }
   return params
@@ -69,7 +72,7 @@ export const filtersFromSearch = (
         continue
       }
     } else {
-      filters[key] = value
+      filters[key] = conversions?.[key] ? conversions[key](value) : value
     }
   }
   return filters

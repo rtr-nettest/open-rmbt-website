@@ -160,12 +160,12 @@ export class OpendataService {
     delete newFilters.timespan
     delete newFilters.timespan_unit
     return searchFromFilters(newFilters, {
-      download_kbit_from: (value) => `>${value * 1000}`,
-      download_kbit_to: (value) => `<${value * 1000}`,
-      upload_kbit_from: (value) => `>${value * 1000}`,
-      upload_kbit_to: (value) => `<${value * 1000}`,
-      time_from: (value) => `>${dayjs(value).utc().format(TIME_FORMAT)}`,
-      time_to: (value) => `<${dayjs(value).utc().format(TIME_FORMAT)}`,
+      download_kbit_from: (value) => value * 1000,
+      download_kbit_to: (value) => value * 1000,
+      upload_kbit_from: (value) => value * 1000,
+      upload_kbit_to: (value) => value * 1000,
+      time_from: (value) => dayjs(value).utc().format(TIME_FORMAT),
+      time_to: (value) => dayjs(value).utc().format(TIME_FORMAT),
     })
   }
 
