@@ -246,8 +246,8 @@ export class FiltersComponent implements OnInit, OnDestroy {
       timespan_unit: new FormControl<ETimeUnit | null>(
         (filters.timespan_unit as ETimeUnit) || null
       ),
-      time_to: new FormControl<Date | null>(filters.time_to || null),
       time_from: new FormControl<Date | null>(filters.time_from || null),
+      time_to: new FormControl<Date | null>(filters.time_to || null),
       platform: new FormControl<EPlatform | null>(
         (filters.platform as EPlatform) || null
       ),

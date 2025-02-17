@@ -5,7 +5,9 @@
   <h1 class="app-title">{{ "Open data" | translate }}</h1>
   @if (filters$ | async; as filters) {
   <div class="app-expansion-panel">
-    <app-expansion-panel title="Advanced search">
+    <app-expansion-panel
+      [title]="('Advanced search' | translate) + filterCount()"
+    >
       <app-filters></app-filters>
     </app-expansion-panel>
   </div>

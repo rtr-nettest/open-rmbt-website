@@ -1,5 +1,6 @@
-import { Component, inject, OnInit } from "@angular/core"
+import { Component, inject, OnInit, signal } from "@angular/core"
 import {
+  DEFAULT_FILTERS,
   OPEN_DATA_LIMIT,
   OpendataStoreService,
 } from "../../store/opendata-store.service"
@@ -18,6 +19,7 @@ import { LoadOnScrollComponent } from "../../../shared/components/load-on-scroll
 import { FiltersComponent } from "../../components/filters/filters.component"
 import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
 import { ExpansionPanelComponent } from "../../../shared/components/expansion-panel/expansion-panel.component"
+import { IOpendataFilters } from "../../interfaces/opendata-filters.interface"
 
 @Component({
   selector: "app-opendata-screen",
@@ -49,8 +51,12 @@ export class OpendataScreenComponent
       totalElements: data?.length,
     }))
   )
+  filterCount = signal("")
   filters$ = toObservable(this.opendataStoreService.filters).pipe(
-    concatMap(() => this.updateData({ reset: true }))
+    concatMap((filters) => {
+      this.updateFilterCount(filters)
+      return this.updateData({ reset: true })
+    })
   )
   sort: ISort = { active: "times", direction: "desc" }
 
@@ -71,5 +77,15 @@ export class OpendataScreenComponent
   override ngOnDestroy(): void {
     super.ngOnDestroy()
     this.opendataStoreService.reset()
+  }
+
+  private updateFilterCount(filters: IOpendataFilters) {
+    const filtersCount = Object.keys(filters).filter(
+      (k) =>
+        !(k in DEFAULT_FILTERS) &&
+        !k.startsWith("timespan") &&
+        (filters as any)[k]
+    ).length
+    this.filterCount.set(filtersCount > 0 ? ` (${filtersCount})` : "")
   }
 }
