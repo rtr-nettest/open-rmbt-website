@@ -12,6 +12,7 @@
     >
       <input
         matInput
+        [max]="maxDate()"
         [matDatepicker]="datepicker"
         [formControl]="getFormControl(key)"
       />
@@ -27,7 +28,12 @@
       appearance="outline"
       subscriptSizing="dynamic"
     >
-      <input matInput [matTimepicker]="timepicker" [(ngModel)]="time" />
+      <input
+        matInput
+        [max]="maxDate()"
+        [matTimepicker]="timepicker"
+        [(ngModel)]="time"
+      />
       <mat-timepicker #timepicker />
       <mat-timepicker-toggle [for]="timepicker" matSuffix />
     </mat-form-field>

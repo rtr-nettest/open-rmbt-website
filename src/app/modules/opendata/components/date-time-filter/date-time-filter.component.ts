@@ -1,4 +1,11 @@
-import { Component, effect, model, OnInit } from "@angular/core"
+import {
+  Component,
+  computed,
+  effect,
+  input,
+  model,
+  OnInit,
+} from "@angular/core"
 import { BaseFilterComponent } from "../base-filter/base-filter.component"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input"
@@ -29,6 +36,13 @@ export class DateTimeFilterComponent
   extends BaseFilterComponent
   implements OnInit
 {
+  maxFromDate = input.required<Date>()
+  maxDate = computed(() => {
+    if (this.key === "time_to") {
+      return new Date()
+    }
+    return this.maxFromDate()
+  })
   time = model<Date | null>(null)
 
   constructor() {

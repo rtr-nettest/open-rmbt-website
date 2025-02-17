@@ -125,6 +125,7 @@ const ALL_FIELDS = [
 export class FiltersComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject<void>()
   form?: FormGroup<FiltersForm>
+  maxFromDate = signal(new Date())
   i18nStore = inject(I18nStore)
   service = inject(OpendataService)
   allFieldsAreVisible = signal(false)
@@ -245,8 +246,8 @@ export class FiltersComponent implements OnInit, OnDestroy {
       timespan_unit: new FormControl<ETimeUnit | null>(
         (filters.timespan_unit as ETimeUnit) || null
       ),
-      time_from: new FormControl<Date | null>(filters.time_from || null),
       time_to: new FormControl<Date | null>(filters.time_to || null),
+      time_from: new FormControl<Date | null>(filters.time_from || null),
       platform: new FormControl<EPlatform | null>(
         (filters.platform as EPlatform) || null
       ),
@@ -353,6 +354,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
         this.form?.controls.timespan_unit.setValue(null)
       }
     }
+    this.maxFromDate.set(time_to || new Date())
   }
 
   // TODO: Min-max time
