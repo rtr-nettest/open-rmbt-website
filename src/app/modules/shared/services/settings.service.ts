@@ -4,6 +4,7 @@ import { IUserSetingsResponse } from "../../test/interfaces/user-settings-respon
 import { environment } from "../../../../environments/environment"
 import { TC_VERSION_ACCEPTED, UUID } from "../../test/constants/strings"
 import { tap } from "rxjs"
+import { NO_ERROR_HANDLING } from "../constants/strings"
 
 @Injectable({
   providedIn: "root",
@@ -28,6 +29,11 @@ export class SettingsService {
           ...(tcVersion
             ? { terms_and_conditions_version: parseInt(tcVersion) }
             : {}),
+        },
+        {
+          headers: {
+            [NO_ERROR_HANDLING]: "true",
+          },
         }
       )
       .pipe(

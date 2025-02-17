@@ -6,3 +6,12 @@ mat-progress-bar {
   left: 0;
   z-index: 1001;
 }
+
+.app-maintanence {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
