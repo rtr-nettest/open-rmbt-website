@@ -36,6 +36,8 @@ import { FiltersForm } from "../../interfaces/filters-form"
 import { SelectsFilterComponent } from "../selects-filter/selects-filter.component"
 import { InputsFilterComponent } from "../inputs-filter/inputs-filter.component"
 import { TimespanFilterComponent } from "../timespan-filter/timespan-filter.component"
+import { DateTimeFilterComponent } from "../date-time-filter/date-time-filter.component"
+import dayjs from "dayjs"
 
 const DEFAULT_FIELDS = [
   "download_kbit_from",
@@ -102,6 +104,7 @@ const ALL_FIELDS = [
 @Component({
   selector: "app-filters",
   imports: [
+    DateTimeFilterComponent,
     InputsFilterComponent,
     MatButtonModule,
     MatDatepickerModule,
@@ -277,20 +280,13 @@ export class FiltersComponent implements OnInit, OnDestroy {
       client_uuid: new FormControl<string | null>(filters.client_uuid || null),
       pinned: new FormControl<boolean | null>(filters.pinned || null),
     })
+
     this.form.controls.time_from.valueChanges
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(() => {
-        this.form?.controls.timespan.setValue(null)
-        this.form?.controls.timespan_unit.setValue(null)
-      })
+      .subscribe(this.calculateTime)
     this.form.controls.time_to.valueChanges
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(() => {
-        if (this.form?.controls.time_from.value) {
-          this.form?.controls.timespan.setValue(null)
-          this.form?.controls.timespan_unit.setValue(null)
-        }
-      })
+      .subscribe(this.calculateTime)
   }
 
   applyFilters() {
@@ -341,4 +337,23 @@ export class FiltersComponent implements OnInit, OnDestroy {
   showAllFields() {
     this.allFieldsAreVisible.set(true)
   }
+
+  private calculateTime = () => {
+    const timespan = this.form?.get("timespan")?.value
+    const timespan_unit = this.form?.get("timespan_unit")?.value
+    const time_to = this.form?.get("time_to")?.value
+    const time_from = this.form?.get("time_from")?.value
+    if (timespan && timespan_unit) {
+      const diff = dayjs(time_to || new Date()).diff(
+        dayjs(time_from),
+        timespan_unit as dayjs.ManipulateType
+      )
+      if (diff !== timespan) {
+        this.form?.controls.timespan.setValue(null)
+        this.form?.controls.timespan_unit.setValue(null)
+      }
+    }
+  }
+
+  // TODO: Min-max time
 }

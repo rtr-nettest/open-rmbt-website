@@ -129,11 +129,11 @@ export class OpendataService {
     if (!filters) return
     this.store.reset()
     this.store.filters.set(filters)
-    // this.router.navigateByUrl(
-    //   `/${this.i18nStore.activeLang}/${
-    //     ERoutes.OPEN_DATA
-    //   }?${this.getSearchFromFilters(filters)}`
-    // )
+    this.router.navigateByUrl(
+      `/${this.i18nStore.activeLang}/${
+        ERoutes.OPEN_DATA
+      }?${this.getSearchFromFilters(filters)}`
+    )
   }
 
   search(filters: IOpendataFilters) {
@@ -157,17 +157,8 @@ export class OpendataService {
 
   private getSearchFromFilters(filters: IOpendataFilters) {
     const newFilters = JSON.parse(JSON.stringify(filters))
-    if (newFilters.timespan && newFilters.timespan_unit) {
-      const now = newFilters.time_to
-        ? dayjs(newFilters.time_to)
-        : dayjs().endOf("day")
-      newFilters.time_from = now
-        .subtract(
-          newFilters.timespan,
-          newFilters.timespan_unit as ManipulateType
-        )
-        .toDate()
-    }
+    delete newFilters.timespan
+    delete newFilters.timespan_unit
     return searchFromFilters(newFilters, {
       download_kbit_from: (value) => `>${value * 1000}`,
       download_kbit_to: (value) => `<${value * 1000}`,

@@ -1,0 +1,37 @@
+@if (form) {
+<div class="app-row">
+  <div class="app-col">
+    <label class="app-label">{{ key | translate }}</label>
+  </div>
+  <div class="app-col app-col--third">
+    <span class="app-field-prefix"></span>
+    <mat-form-field
+      class="app-field"
+      appearance="outline"
+      subscriptSizing="dynamic"
+    >
+      <input
+        matInput
+        [matDatepicker]="datepicker"
+        [formControl]="getFormControl(key)"
+      />
+      <mat-datepicker #datepicker />
+      <mat-datepicker-toggle [for]="datepicker" matSuffix />
+    </mat-form-field>
+    <span class="app-field-suffix"></span>
+  </div>
+  <div class="app-col app-col--third">
+    <span class="app-field-prefix"></span>
+    <mat-form-field
+      class="app-field"
+      appearance="outline"
+      subscriptSizing="dynamic"
+    >
+      <input matInput [matTimepicker]="timepicker" [(ngModel)]="time" />
+      <mat-timepicker #timepicker />
+      <mat-timepicker-toggle [for]="timepicker" matSuffix />
+    </mat-form-field>
+    <span class="app-field-suffix"></span>
+  </div>
+</div>
+}

@@ -29,29 +29,28 @@ import { PaginatorComponent } from "../paginator/paginator.component"
 import { DynamicComponentDirective } from "../../../shared/directives/dynamic-component.directive"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
-
-export const APP_DATE_TIME_FORMAT = "DD.MM.YYYY HH:mm"
+import { APP_DATE_TIME_FORMAT } from "../../../shared/adapters/app-date.adapter"
 
 @Component({
-    selector: "app-table",
-    templateUrl: "./table.component.html",
-    styleUrls: ["./table.component.scss"],
-    animations: [arrowRotate, expandVertically],
-    imports: [
-        DynamicComponentDirective,
-        NgFor,
-        NgIf,
-        NgClass,
-        MatButtonModule,
-        MatTableModule,
-        MatTooltipModule,
-        MatSortModule,
-        MatIconModule,
-        MatProgressSpinner,
-        PaginatorComponent,
-        RouterLink,
-        TranslatePipe,
-    ]
+  selector: "app-table",
+  templateUrl: "./table.component.html",
+  styleUrls: ["./table.component.scss"],
+  animations: [arrowRotate, expandVertically],
+  imports: [
+    DynamicComponentDirective,
+    NgFor,
+    NgIf,
+    NgClass,
+    MatButtonModule,
+    MatTableModule,
+    MatTooltipModule,
+    MatSortModule,
+    MatIconModule,
+    MatProgressSpinner,
+    PaginatorComponent,
+    RouterLink,
+    TranslatePipe,
+  ],
 })
 export class TableComponent implements OnInit, OnChanges {
   @Input() action?: (...ars: any[]) => any

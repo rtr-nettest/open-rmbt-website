@@ -22,6 +22,8 @@
       [key]="key"
       [timeUnits]="timeUnits"
     ></app-timespan-filter>
+    } @else if (key === "time_to" || key === "time_from") {
+    <app-date-time-filter [form]="form" [key]="key"></app-date-time-filter>
     } } }
     <div class="app-footer">
       <div class="app-row" style="justify-content: center">
