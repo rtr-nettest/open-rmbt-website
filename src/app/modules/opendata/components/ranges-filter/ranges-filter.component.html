@@ -1,0 +1,43 @@
+@if (form) {
+<div class="app-row">
+  <div class="app-col">
+    <label class="app-label">{{ key | translate }}</label>
+  </div>
+  <div class="app-col app-col--third">
+    <span class="app-field-prefix">{{ "from_value" | translate }}</span>
+    <mat-form-field
+      class="app-field app-field--number"
+      appearance="outline"
+      subscriptSizing="dynamic"
+    >
+      <input
+        matInput
+        [min]="ranges.get(key)!.min"
+        type="number"
+        [formControl]="getFormControl(ranges.get(key)!.from)"
+      />
+    </mat-form-field>
+    <span class="app-field-suffix">{{
+      ranges.get(key)!.unit | translate
+    }}</span>
+  </div>
+  <div class="app-col app-col--third">
+    <span class="app-field-prefix">{{ "to_value" | translate }}</span>
+    <mat-form-field
+      class="app-field app-field--number"
+      appearance="outline"
+      subscriptSizing="dynamic"
+    >
+      <input
+        matInput
+        [min]="ranges.get(key)!.min"
+        type="number"
+        [formControl]="getFormControl(ranges.get(key)!.to)"
+        size="4"
+    /></mat-form-field>
+    <span class="app-field-suffix">{{
+      ranges.get(key)!.unit | translate
+    }}</span>
+  </div>
+</div>
+}

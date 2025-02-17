@@ -28,56 +28,14 @@ import { I18nStore } from "../../../i18n/store/i18n.store"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatDatepickerModule } from "@angular/material/datepicker"
 import { OpendataService } from "../../services/opendata.service"
-import { NgFor, NgIf } from "@angular/common"
+import { NgIf } from "@angular/common"
 import { Subject, takeUntil } from "rxjs"
-
-type FiltersForm = {
-  download_kbit_from: FormControl<string | null>
-  download_kbit_to: FormControl<string | null>
-  upload_kbit_from: FormControl<string | null>
-  upload_kbit_to: FormControl<string | null>
-  ping_ms_from: FormControl<string | null>
-  ping_ms_to: FormControl<string | null>
-  signal_strength_from: FormControl<string | null>
-  signal_strength_to: FormControl<string | null>
-  loc_accuracy_from: FormControl<string | null>
-  loc_accuracy_to: FormControl<string | null>
-  gkz_from: FormControl<string | null>
-  gkz_to: FormControl<string | null>
-  cat_technology: FormControl<EConnectionType | null> // Technology
-  model: FormControl<string | null> // Device
-  provider_name: FormControl<string | null>
-  public_ip_as_name: FormControl<string | null> // Network name (AS)
-  timespan: FormControl<number | null>
-  timespan_unit: FormControl<ETimeUnit | null>
-  time_to: FormControl<Date | null>
-  time_from: FormControl<Date | null>
-  platform: FormControl<EPlatform | null>
-  client_version: FormControl<EClientVersion | null> // Software version
-  land_cover: FormControl<number | null>
-  network_name: FormControl<string | null> // Mobile network (Display)
-  network_country: FormControl<string | null> // Country
-  country_geoip: FormControl<string | null> // Country (IP)
-  country_location: FormControl<string | null>
-  sim_country: FormControl<string | null>
-  sim_mcc_mnc: FormControl<string | null>
-  asn: FormControl<number | null>
-  cell_area_code: FormControl<number | null>
-  cell_location_id: FormControl<number | null>
-  radio_band: FormControl<number | null>
-  open_uuid: FormControl<string | null>
-  client_uuid: FormControl<string | null>
-  pinned: FormControl<boolean | null>
-}
-
-class Range {
-  constructor(
-    public readonly from: string,
-    public readonly to: string,
-    public readonly unit: string,
-    public readonly min: number = 0
-  ) {}
-}
+import { Range } from "../../dto/range.dto"
+import { RangesFilterComponent } from "../ranges-filter/ranges-filter.component"
+import { FiltersForm } from "../../interfaces/filters-form"
+import { SelectsFilterComponent } from "../selects-filter/selects-filter.component"
+import { InputsFilterComponent } from "../inputs-filter/inputs-filter.component"
+import { TimespanFilterComponent } from "../timespan-filter/timespan-filter.component"
 
 const DEFAULT_FIELDS = [
   "download_kbit_from",
@@ -144,16 +102,19 @@ const ALL_FIELDS = [
 @Component({
   selector: "app-filters",
   imports: [
+    InputsFilterComponent,
     MatButtonModule,
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
-    NgFor,
     NgIf,
+    RangesFilterComponent,
     ReactiveFormsModule,
+    SelectsFilterComponent,
     TranslatePipe,
+    TimespanFilterComponent,
   ],
   templateUrl: "./filters.component.html",
   styleUrl: "./filters.component.scss",

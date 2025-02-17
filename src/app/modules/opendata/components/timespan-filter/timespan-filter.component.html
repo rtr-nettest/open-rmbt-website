@@ -1,0 +1,34 @@
+@if (form) {
+<div class="app-row">
+  <div class="app-col">
+    <label class="app-label">{{ "Timespan" | translate }}</label>
+  </div>
+  <div class="app-col app-col--third">
+    <span class="app-field-prefix"></span>
+    <mat-form-field
+      class="app-field app-field--timespan"
+      appearance="outline"
+      subscriptSizing="dynamic"
+    >
+      <input
+        matInput
+        type="number"
+        [formControl]="getFormControl('timespan')"
+        min="0"
+        max="366"
+      />
+    </mat-form-field>
+    <mat-select
+      class="app-field app-select"
+      [formControl]="getFormControl(key)"
+    >
+      @for (options of timeUnits; track $index) {
+      <mat-option [value]="options[1]">
+        {{ options[0] | translate }}</mat-option
+      >
+      }
+    </mat-select>
+  </div>
+  <div class="app-col app-col--third"></div>
+</div>
+}
