@@ -58,32 +58,32 @@ import { ActionButtonsComponent } from "../../components/action-buttons/action-b
 const MIN_ACCURACY_FOR_SHOWING_MAP = 2000
 
 @Component({
-    selector: "app-result-screen",
-    imports: [
-        ActionButtonsComponent,
-        AsyncPipe,
-        BreadcrumbsComponent,
-        DatePipe,
-        HeaderComponent,
-        MatButtonModule,
-        NgIf,
-        RouterModule,
-        TableComponent,
-        TestChartComponent,
-        TopNavComponent,
-        TranslatePipe,
-        FooterComponent,
-        ScrollTopComponent,
-        SignalChartComponent,
-        SignalDetailsComponent,
-        ShareResultComponent,
-        SpeedDetailsComponent,
-        LocationDetailsComponent,
-        MapComponent,
-        PingDetailsComponent,
-    ],
-    templateUrl: "./result-screen.component.html",
-    styleUrl: "./result-screen.component.scss"
+  selector: "app-result-screen",
+  imports: [
+    ActionButtonsComponent,
+    AsyncPipe,
+    BreadcrumbsComponent,
+    DatePipe,
+    HeaderComponent,
+    MatButtonModule,
+    NgIf,
+    RouterModule,
+    TableComponent,
+    TestChartComponent,
+    TopNavComponent,
+    TranslatePipe,
+    FooterComponent,
+    ScrollTopComponent,
+    SignalChartComponent,
+    SignalDetailsComponent,
+    ShareResultComponent,
+    SpeedDetailsComponent,
+    LocationDetailsComponent,
+    MapComponent,
+    PingDetailsComponent,
+  ],
+  templateUrl: "./result-screen.component.html",
+  styleUrl: "./result-screen.component.scss",
 })
 export class ResultScreenComponent extends SeoComponent {
   columns: ITableColumn[] = [
@@ -108,7 +108,10 @@ export class ResultScreenComponent extends SeoComponent {
     {
       label: "Print",
       icon: "print",
-      action: () => window.print(),
+      action: () => {
+        window.print()
+        return of(null)
+      },
     },
     {
       label: "Export as PDF",
