@@ -2,17 +2,19 @@ import { ChangeDetectionStrategy, Component } from "@angular/core"
 import { IOverallResult } from "../../interfaces/overall-result.interface"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { roundMs, roundToSignificantDigits } from "../../../shared/util/math"
-import { ShowDetailsComponent } from "../../../shared/components/show-details/show-details.component"
-import { TableComponent } from "../../../tables/components/table/table.component"
-import { MatExpansionModule } from "@angular/material/expansion"
-import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
+import {
+  imports,
+  ShowDetailsComponent,
+} from "../../../shared/components/show-details/show-details.component"
 
 @Component({
-    selector: "app-speed-details",
-    imports: [TableComponent, MatExpansionModule, TranslatePipe],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    templateUrl: "../../../shared/components/show-details/show-details.component.html",
-    styleUrl: "../../../shared/components/show-details/show-details.component.scss"
+  selector: "app-speed-details",
+  imports,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl:
+    "../../../shared/components/show-details/show-details.component.html",
+  styleUrl:
+    "../../../shared/components/show-details/show-details.component.scss",
 })
 export class SpeedDetailsComponent extends ShowDetailsComponent<IOverallResult> {
   override columns: ITableColumn<IOverallResult>[] = [

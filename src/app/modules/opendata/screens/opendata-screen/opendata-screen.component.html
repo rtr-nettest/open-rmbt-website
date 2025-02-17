@@ -4,7 +4,11 @@
 <div class="app-wrapper" style="margin-bottom: 40px">
   <h1 class="app-title">{{ "Open data" | translate }}</h1>
   @if (filters$ | async; as filters) {
-  <app-filters></app-filters>
+  <div class="app-expansion-panel">
+    <app-expansion-panel title="Advanced search">
+      <app-filters></app-filters>
+    </app-expansion-panel>
+  </div>
   <app-table
     [data]="(data$ | async)!"
     [columns]="columns"

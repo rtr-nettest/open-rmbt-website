@@ -1,17 +1,18 @@
-import { Component, computed, input, signal } from "@angular/core"
+import { Component, computed, input } from "@angular/core"
 import { TableComponent } from "../../../tables/components/table/table.component"
-import { MatExpansionModule } from "@angular/material/expansion"
-import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { ISort } from "../../../tables/interfaces/sort.interface"
 import { I18nStore } from "../../../i18n/store/i18n.store"
+import { ExpansionPanelComponent } from "../expansion-panel/expansion-panel.component"
+
+export const imports = [ExpansionPanelComponent, TableComponent]
 
 @Component({
-    selector: "app-show-details",
-    imports: [TableComponent, MatExpansionModule, TranslatePipe],
-    templateUrl: "./show-details.component.html",
-    styleUrl: "./show-details.component.scss"
+  selector: "app-show-details",
+  imports,
+  templateUrl: "./show-details.component.html",
+  styleUrl: "./show-details.component.scss",
 })
 export class ShowDetailsComponent<T> {
   details = input<T[]>([])

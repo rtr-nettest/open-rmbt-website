@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core"
-import { TableComponent } from "../../../tables/components/table/table.component"
-import { MatExpansionModule } from "@angular/material/expansion"
-import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
-import { ShowDetailsComponent } from "../../../shared/components/show-details/show-details.component"
+import {
+  imports,
+  ShowDetailsComponent,
+} from "../../../shared/components/show-details/show-details.component"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { roundMs } from "../../../shared/util/math"
 import formatcoords from "formatcoords"
@@ -10,11 +10,13 @@ import { LOC_FORMAT } from "../../../shared/pipes/lonlat.pipe"
 import { ISimpleHistoryTestLocation } from "../../../history/interfaces/simple-history-result.interface"
 
 @Component({
-    selector: "app-location-details",
-    imports: [TableComponent, MatExpansionModule, TranslatePipe],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    templateUrl: "../../../shared/components/show-details/show-details.component.html",
-    styleUrl: "../../../shared/components/show-details/show-details.component.scss"
+  selector: "app-location-details",
+  imports,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl:
+    "../../../shared/components/show-details/show-details.component.html",
+  styleUrl:
+    "../../../shared/components/show-details/show-details.component.scss",
 })
 export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistoryTestLocation> {
   override columns: ITableColumn<ISimpleHistoryTestLocation>[] = [

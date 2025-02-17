@@ -17,22 +17,24 @@ import { ISort } from "../../../tables/interfaces/sort.interface"
 import { LoadOnScrollComponent } from "../../../shared/components/load-on-scroll/load-on-scroll.component"
 import { FiltersComponent } from "../../components/filters/filters.component"
 import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
+import { ExpansionPanelComponent } from "../../../shared/components/expansion-panel/expansion-panel.component"
 
 @Component({
-    selector: "app-opendata-screen",
-    imports: [
-        AsyncPipe,
-        BreadcrumbsComponent,
-        HeaderComponent,
-        FiltersComponent,
-        FooterComponent,
-        LoadingOverlayComponent,
-        TableComponent,
-        TopNavComponent,
-        TranslatePipe,
-    ],
-    templateUrl: "./opendata-screen.component.html",
-    styleUrl: "./opendata-screen.component.scss"
+  selector: "app-opendata-screen",
+  imports: [
+    AsyncPipe,
+    BreadcrumbsComponent,
+    ExpansionPanelComponent,
+    HeaderComponent,
+    FiltersComponent,
+    FooterComponent,
+    LoadingOverlayComponent,
+    TableComponent,
+    TopNavComponent,
+    TranslatePipe,
+  ],
+  templateUrl: "./opendata-screen.component.html",
+  styleUrl: "./opendata-screen.component.scss",
 })
 export class OpendataScreenComponent
   extends LoadOnScrollComponent
