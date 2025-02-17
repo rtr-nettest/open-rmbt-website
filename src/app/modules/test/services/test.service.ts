@@ -102,13 +102,13 @@ export class TestService {
 
       //1006
 
-      const communication = new rmbtws.RMBTControlServerCommunication(config)
-      window._registrationCallback = (data: any) => {
-        if (data.response["loop_uuid"]) {
-          this.loopStore.loopUuid.set(data.response["loop_uuid"])
-        }
-      }
-      window._submissionCallback = null
+      const communication = new rmbtws.RMBTControlServerCommunication(config, {
+        register: (data: any) => {
+          if (data.response["loop_uuid"]) {
+            this.loopStore.loopUuid.set(data.response["loop_uuid"])
+          }
+        },
+      })
       const rmbtTest = new rmbtws.RMBTTest(config, communication)
       rmbtTest.onStateChange(() => {
         this.stateChangeMs = Date.now()
