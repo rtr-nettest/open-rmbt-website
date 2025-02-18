@@ -53,27 +53,35 @@
     <h3 class="app-title">{{ "Speed curve" | translate }}</h3>
     <div class="app-charts">
       <div class="app-charts-row">
-        <h4>{{ "Ping" | translate }}</h4>
-        <app-test-chart phase="ping"></app-test-chart>
+        <header class="app-charts-row__base">
+          <h4>{{ "Ping" | translate }}</h4>
+          <app-test-chart phase="ping"></app-test-chart>
+        </header>
         <app-ping-details [details]="pingTable()"></app-ping-details>
       </div>
       <div class="app-charts-row">
-        <h4>{{ "Download" | translate }}</h4>
-        <app-test-chart phase="download"></app-test-chart>
+        <header class="app-charts-row__base">
+          <h4>{{ "Download" | translate }}</h4>
+          <app-test-chart phase="download"></app-test-chart>
+        </header>
         <app-speed-details [details]="downloadTable()"></app-speed-details>
       </div>
       <div class="app-charts-row">
-        <h4>{{ "Upload" | translate }}</h4>
-        <app-test-chart phase="upload"></app-test-chart>
+        <header class="app-charts-row__base">
+          <h4>{{ "Upload" | translate }}</h4>
+          <app-test-chart phase="upload"></app-test-chart>
+        </header>
         <app-speed-details [details]="uploadTable()"></app-speed-details>
       </div>
       @if (signalTable().length) {
       <div class="app-charts-row">
-        <h4>{{ "Signal" | translate }}</h4>
-        <app-signal-chart
-          [signal]="signalTable()"
-          [phaseDurations]="phaseDurations()"
-        ></app-signal-chart>
+        <header class="app-charts-row__base">
+          <h4>{{ "Signal" | translate }}</h4>
+          <app-signal-chart
+            [signal]="signalTable()"
+            [phaseDurations]="phaseDurations()"
+          ></app-signal-chart>
+        </header>
         <app-signal-details [details]="signalTable()"></app-signal-details>
       </div>
       }
@@ -118,6 +126,7 @@
   <h3>{{ "No results available" | translate }}</h3>
   }
 </div>
+<div class="app-separator"></div>
 <app-footer></app-footer>
 
 <ng-template #noResult>
