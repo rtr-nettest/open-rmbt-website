@@ -72,7 +72,9 @@
     </div>
     <div class="app-col app-col--main app-col--padded" style="display: block">
       @defer () {
+      <h4>{{ "Recent tests" | translate }}</h4>
       <app-map
+        [controls]="mapControls"
         [measurements]="recentMeasurements()"
         [mapContainerId]="mapContainerId"
       ></app-map

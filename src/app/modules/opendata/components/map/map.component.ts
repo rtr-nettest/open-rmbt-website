@@ -8,26 +8,24 @@ import {
   OnDestroy,
   SimpleChanges,
 } from "@angular/core"
-import { IRecentMeasurementsResponse } from "../../../opendata/interfaces/recent-measurements-response.interface"
+import { IRecentMeasurement } from "../../interfaces/recent-measurements-response.interface"
 import { Subject, Subscription } from "rxjs"
-import { Marker, Map, NavigationControl, FullscreenControl } from "maplibre-gl"
+import { Marker, Map, NavigationControl, IControl } from "maplibre-gl"
 import { bbox } from "@turf/bbox"
 import { lineString } from "@turf/helpers"
 import { PopupService } from "../../services/popup.service"
 import { FullScreenService } from "../../services/full-screen.service"
-import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
 
 @Component({
-    selector: "app-map",
-    imports: [TranslatePipe],
-    templateUrl: "./map.component.html",
-    styleUrl: "./map.component.scss"
+  selector: "app-map",
+  templateUrl: "./map.component.html",
+  styleUrl: "./map.component.scss",
 })
 export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
-  @Input({ required: true }) measurements: IRecentMeasurementsResponse | null =
-    null
-  @Input() mapContainerId?: string
+  @Input({ required: true }) measurements: IRecentMeasurement[] = []
+  @Input({ required: true }) mapContainerId!: string
+  @Input() controls: IControl[] = [new NavigationControl()]
   cachedMarkers: Marker[] = []
   destroyed$ = new Subject<void>()
   fullScreen = inject(FullScreenService)
@@ -54,6 +52,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
     if (globalThis.document) {
       this.setSize()
       this.setMap().then(() => {
+        this.setMeasurements()
         this.setResizeSub()
       })
     }
@@ -77,8 +76,9 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
         center: DEFAULT_CENTER,
         zoom: 3,
       })
-      this.map.addControl(new NavigationControl())
-      this.map.addControl(new FullscreenControl())
+      for (const control of this.controls) {
+        this.map.addControl(control)
+      }
       this.map.on("resize", this.showStats)
     })
   }
@@ -103,11 +103,10 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   private setMeasurements() {
     this.zone.runOutsideAngular(() => {
-      if (this.measurements?.results?.length) {
+      if (this.measurements.length) {
         this.cachedMarkers.forEach((m) => m.remove())
         const features: [number, number][] = []
-        this.cachedMarkers = this.measurements.results
-          .reverse()
+        this.cachedMarkers = [...this.measurements]
           .filter((m) => m.lat && m.long)
           .map((m, i) => {
             const coordinates: [number, number] = [m.long, m.lat]
@@ -115,7 +114,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
             return this.mapService.addMarker(this.map, {
               lon: m.long,
               lat: m.lat,
-              diameter: i == this.measurements!.results.length - 1 ? 24 : 18,
+              diameter: i == this.measurements.length - 1 ? 24 : 18,
               classification: m.download_classification,
               onClick: () => {
                 this.popup.addPopup(this.map, m)
@@ -126,6 +125,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
         const box = bbox(line) as [number, number, number, number]
         this.map.fitBounds(box, {
           padding: { top: 12, bottom: 12, left: 12, right: 12 },
+          maxZoom: 12,
         })
       }
     })

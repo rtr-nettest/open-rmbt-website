@@ -14,11 +14,8 @@ import {
   PlatformService,
 } from "../../../shared/services/platform.service"
 import { MeasurementsService } from "../../services/measurements.service"
-import { MapComponent } from "../../components/map/map.component"
-import {
-  IRecentMeasurement,
-  IRecentMeasurementsResponse,
-} from "../../../opendata/interfaces/recent-measurements-response.interface"
+import { MapComponent } from "../../../opendata/components/map/map.component"
+import { IRecentMeasurement } from "../../../opendata/interfaces/recent-measurements-response.interface"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
@@ -32,9 +29,9 @@ import { RECENT_MEASUREMENTS_COLUMNS } from "../../../opendata/constants/recent-
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
+import { FullscreenControl, NavigationControl } from "maplibre-gl"
 dayjs.extend(utc)
 dayjs.extend(tz)
-import { APP_TIME_FORMAT } from "../../../shared/adapters/app-date.adapter"
 
 const UPDATE_INTERVAL = 5000
 
@@ -60,6 +57,7 @@ const UPDATE_INTERVAL = 5000
 })
 export class HomeComponent extends SeoComponent implements AfterViewInit {
   mapContainerId = "mapContainer"
+  mapControls = [new NavigationControl(), new FullscreenControl()]
   text$: Observable<string> = this.i18nStore.getLocalizedHtml("home")
   appLinksText$: Observable<string> = this.i18nStore.getTranslations().pipe(
     map((t) => {
@@ -90,7 +88,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
     })
   )
   eRoutes = ERoutes
-  recentMeasurements = signal<IRecentMeasurementsResponse | null>(null)
+  recentMeasurements = signal<IRecentMeasurement[]>([])
   opendataService = inject(OpendataService)
   tableColumns: ITableColumn<IRecentMeasurement>[] = RECENT_MEASUREMENTS_COLUMNS
   tableData = signal<IBasicResponse<IRecentMeasurement> | null>(null)
@@ -137,7 +135,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
         content,
         totalElements: content.length,
       })
-      this.recentMeasurements.set(resp)
+      this.recentMeasurements.set(resp.results)
     })
   }
 

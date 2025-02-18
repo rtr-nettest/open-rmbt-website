@@ -11,12 +11,17 @@
       <app-filters></app-filters>
     </app-expansion-panel>
   </div>
-  <app-table
-    [data]="(data$ | async)!"
-    [columns]="columns"
-    [sort]="sort"
-  ></app-table>
-  }
+  @if (data$ | async; as data) {
+  <div [id]="mapContainerId" class="app-expansion-panel">
+    <app-expansion-panel [title]="'Map' | translate">
+      <app-map
+        [measurements]="data.content"
+        [mapContainerId]="mapContainerId"
+      ></app-map>
+    </app-expansion-panel>
+  </div>
+  <app-table [data]="data" [columns]="columns" [sort]="sort"></app-table>
+  } }
 </div>
 <app-footer></app-footer>
 

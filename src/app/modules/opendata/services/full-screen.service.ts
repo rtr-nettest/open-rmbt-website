@@ -9,7 +9,7 @@ import {
   tap,
 } from "rxjs"
 import dayjs from "dayjs"
-import { MeasurementsService } from "./measurements.service"
+import { MeasurementsService } from "../../home/services/measurements.service"
 
 const DATA_UPDATE_INTERVAL = 5000
 const ID = "fullScreenStats"
@@ -64,9 +64,6 @@ export class FullScreenService {
   }
 
   removePopup() {
-    if (!this.popup) {
-      return
-    }
     this.dataSub?.unsubscribe()
     this.timeSub?.unsubscribe()
     document.getElementById(ID)?.remove()
@@ -98,6 +95,8 @@ export class FullScreenService {
     for (const [key, val] of Object.entries(this.data!)) {
       if (val) {
         retVal = retVal.replace(`{{${key}}}`, val.toString())
+      } else {
+        retVal = retVal.replace(`{{${key}}}`, "?")
       }
     }
     return retVal

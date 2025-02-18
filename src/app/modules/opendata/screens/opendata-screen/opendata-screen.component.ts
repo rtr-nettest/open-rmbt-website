@@ -26,6 +26,7 @@ import { APP_DATE_TIME_FORMAT } from "../../../shared/adapters/app-date.adapter"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
+import { MapComponent } from "../../components/map/map.component"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -39,6 +40,7 @@ dayjs.extend(tz)
     FiltersComponent,
     FooterComponent,
     LoadingOverlayComponent,
+    MapComponent,
     TableComponent,
     TopNavComponent,
     TranslatePipe,
@@ -54,10 +56,13 @@ export class OpendataScreenComponent
   opendataService = inject(OpendataService)
   columns = RECENT_MEASUREMENTS_COLUMNS
   data$ = toObservable(this.opendataStoreService.data).pipe(
-    map((data) => ({
-      content: data?.map(this.formatTime),
-      totalElements: data?.length,
-    }))
+    map((data) => {
+      const content = data?.map(this.formatTime)
+      return {
+        content,
+        totalElements: content?.length,
+      }
+    })
   )
   filterCount = signal("")
   filters$ = toObservable(this.opendataStoreService.filters).pipe(
@@ -66,6 +71,7 @@ export class OpendataScreenComponent
       return this.updateData({ reset: true })
     })
   )
+  mapContainerId = "mapContainer"
   sort: ISort = { active: "times", direction: "desc" }
 
   protected override get dataLimit(): number {
