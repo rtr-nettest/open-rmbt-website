@@ -28,28 +28,35 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatButtonModule } from "@angular/material/button"
 import { Router, RouterModule } from "@angular/router"
 import { OpendataService } from "../../../opendata/services/opendata.service"
+import { RECENT_MEASUREMENTS_COLUMNS } from "../../../opendata/constants/recent-measurements-columns"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+import tz from "dayjs/plugin/timezone"
+dayjs.extend(utc)
+dayjs.extend(tz)
+import { APP_TIME_FORMAT } from "../../../shared/adapters/app-date.adapter"
 
 const UPDATE_INTERVAL = 5000
 
 @Component({
-    selector: "app-landing",
-    imports: [
-        AsyncPipe,
-        BreadcrumbsComponent,
-        CardButtonComponent,
-        HeaderComponent,
-        IpInfoComponent,
-        FooterComponent,
-        MapComponent,
-        MatButtonModule,
-        RouterModule,
-        TopNavComponent,
-        BreadcrumbsComponent,
-        TableComponent,
-        TranslatePipe,
-    ],
-    templateUrl: "./home.component.html",
-    styleUrl: "./home.component.scss"
+  selector: "app-landing",
+  imports: [
+    AsyncPipe,
+    BreadcrumbsComponent,
+    CardButtonComponent,
+    HeaderComponent,
+    IpInfoComponent,
+    FooterComponent,
+    MapComponent,
+    MatButtonModule,
+    RouterModule,
+    TopNavComponent,
+    BreadcrumbsComponent,
+    TableComponent,
+    TranslatePipe,
+  ],
+  templateUrl: "./home.component.html",
+  styleUrl: "./home.component.scss",
 })
 export class HomeComponent extends SeoComponent implements AfterViewInit {
   mapContainerId = "mapContainer"
@@ -85,10 +92,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   eRoutes = ERoutes
   recentMeasurements = signal<IRecentMeasurementsResponse | null>(null)
   opendataService = inject(OpendataService)
-  tableColumns: ITableColumn<IRecentMeasurement>[] =
-    this.opendataService.getColumns({
-      showTimeOnly: true,
-    })
+  tableColumns: ITableColumn<IRecentMeasurement>[] = RECENT_MEASUREMENTS_COLUMNS
   tableData = signal<IBasicResponse<IRecentMeasurement> | null>(null)
 
   constructor(
@@ -126,12 +130,22 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
 
   private setMeasurements() {
     firstValueFrom(this.measurements.getRecentMeasurements()).then((resp) => {
-      const content = resp?.results.slice(0, 5) ?? []
+      const content = (resp?.results.slice(0, 5) ?? []).map((r) =>
+        this.formatTime(r)
+      )
       this.tableData.set({
         content,
         totalElements: content.length,
       })
       this.recentMeasurements.set(resp)
     })
+  }
+
+  private formatTime(value: IRecentMeasurement) {
+    const time = dayjs(value.time)
+      .utc(true)
+      .tz(dayjs.tz.guess())
+      .format(APP_TIME_FORMAT)
+    return { ...value, time }
   }
 }

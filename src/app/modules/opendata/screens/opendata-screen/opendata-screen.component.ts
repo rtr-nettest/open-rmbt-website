@@ -20,6 +20,14 @@ import { FiltersComponent } from "../../components/filters/filters.component"
 import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
 import { ExpansionPanelComponent } from "../../../shared/components/expansion-panel/expansion-panel.component"
 import { IOpendataFilters } from "../../interfaces/opendata-filters.interface"
+import { RECENT_MEASUREMENTS_COLUMNS } from "../../constants/recent-measurements-columns"
+import { IRecentMeasurement } from "../../interfaces/recent-measurements-response.interface"
+import { APP_DATE_TIME_FORMAT } from "../../../shared/adapters/app-date.adapter"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+import tz from "dayjs/plugin/timezone"
+dayjs.extend(utc)
+dayjs.extend(tz)
 
 @Component({
   selector: "app-opendata-screen",
@@ -44,10 +52,10 @@ export class OpendataScreenComponent
 {
   opendataStoreService = inject(OpendataStoreService)
   opendataService = inject(OpendataService)
-  columns = this.opendataService.getColumns()
+  columns = RECENT_MEASUREMENTS_COLUMNS
   data$ = toObservable(this.opendataStoreService.data).pipe(
     map((data) => ({
-      content: data,
+      content: data?.map(this.formatTime),
       totalElements: data?.length,
     }))
   )
@@ -77,6 +85,14 @@ export class OpendataScreenComponent
   override ngOnDestroy(): void {
     super.ngOnDestroy()
     this.opendataStoreService.reset()
+  }
+
+  private formatTime = (value: IRecentMeasurement) => {
+    const time = dayjs(value.time)
+      .utc(true)
+      .tz(dayjs.tz.guess())
+      .format(APP_DATE_TIME_FORMAT)
+    return { ...value, time }
   }
 
   private updateFilterCount(filters: IOpendataFilters) {

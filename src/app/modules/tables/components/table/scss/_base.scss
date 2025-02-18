@@ -108,13 +108,25 @@ $color-border: rgba(0, 0, 0, 0.1);
   .mat-mdc-cell.app-cell,
   .mat-mdc-header-cell.app-cell,
   .mat-mdc-footer-cell.app-cell {
+    &--10 {
+      flex: 0 0 10%;
+      width: 10%;
+    }
+    &--12 {
+      flex: 0 0 12%;
+      width: 12%;
+    }
+    &--15 {
+      flex: 0 0 15%;
+      width: 15%;
+    }
     &--20 {
       flex: 0 0 20%;
       width: 20%;
     }
-    &--25 {
-      flex: 0 0 25%;
-      width: 25%;
+    &--20 {
+      flex: 0 0 20%;
+      width: 20%;
     }
     &--30 {
       flex: 0 0 30%;
