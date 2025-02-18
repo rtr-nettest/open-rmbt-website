@@ -145,7 +145,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
     const time = dayjs(value.time)
       .utc(true)
       .tz(dayjs.tz.guess())
-      .format(APP_TIME_FORMAT)
+      .format("HH:mm:ss")
     return { ...value, time }
   }
 }

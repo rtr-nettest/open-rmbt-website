@@ -46,7 +46,7 @@ export const RECENT_MEASUREMENTS_COLUMNS: Array<
   },
   {
     columnDef: "download",
-    getNgClass: () => "app-cell app-cell--12",
+    getNgClass: () => "app-cell app-cell--flex-10",
     header: "Down (Mbps)",
     transformValue: (value) => {
       return roundToSignificantDigits(value.download_kbit / 1000)
@@ -55,7 +55,7 @@ export const RECENT_MEASUREMENTS_COLUMNS: Array<
   },
   {
     columnDef: "upload",
-    getNgClass: () => "app-cell app-cell--12",
+    getNgClass: () => "app-cell app-cell--flex-10",
     header: "Up (Mbps)",
     transformValue: (value) => {
       return roundToSignificantDigits(value.upload_kbit / 1000)
@@ -64,7 +64,7 @@ export const RECENT_MEASUREMENTS_COLUMNS: Array<
   },
   {
     columnDef: "ping",
-    getNgClass: () => "app-cell app-cell--12",
+    getNgClass: () => "app-cell app-cell--flex-10",
     header: "Ping (ms)",
     transformValue: (value) => {
       return Math.round(value.ping_ms)
@@ -73,7 +73,7 @@ export const RECENT_MEASUREMENTS_COLUMNS: Array<
   },
   {
     columnDef: "signal_strength",
-    getNgClass: () => "app-cell app-cell--12",
+    getNgClass: () => "app-cell app-cell--flex-10",
     header: "Signal (dBm)",
     justify: "flex-end",
   },
