@@ -1,4 +1,4 @@
-import { Component, input } from "@angular/core"
+import { Component, input, model, output } from "@angular/core"
 import { MatExpansionModule } from "@angular/material/expansion"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
@@ -10,4 +10,5 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 })
 export class ExpansionPanelComponent {
   title = input.required<string>()
+  expand = output<boolean>()
 }

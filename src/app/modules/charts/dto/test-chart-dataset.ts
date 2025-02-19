@@ -4,6 +4,7 @@ export type ChartPhase = "download" | "upload" | "ping" | "signal"
 export type BarOptions = {
   barPercentage?: number
   barThickness: number | string
+  categoryPercentage?: number
 }
 export enum EChartColor {
   DOWNLOAD = "rgba(108, 209, 95, 0.33)",
@@ -14,6 +15,7 @@ export enum EChartColor {
   UPLOAD_BORDER = "rgba(0, 128, 193, 1)",
   SIGNAL_BORDER = "rgba(209, 144, 16, 1)",
   PING_BORDER = "transparent",
+  PING_SEMI = "rgba(39, 177, 220, 0.33)",
 }
 
 export class TestChartDataset {

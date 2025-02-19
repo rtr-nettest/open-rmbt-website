@@ -13,11 +13,21 @@
   </div>
   @if (data$ | async; as data) {
   <div [id]="mapContainerId" class="app-expansion-panel">
-    <app-expansion-panel [title]="'Map' | translate">
+    <app-expansion-panel [title]="'Map view' | translate">
       <app-map
         [measurements]="data.content"
         [mapContainerId]="mapContainerId"
       ></app-map>
+    </app-expansion-panel>
+  </div>
+  <div class="app-expansion-panel">
+    <app-expansion-panel
+      [title]="'Histogram' | translate"
+      (expand)="loadHistograms.set($event)"
+    >
+      @if (loadHistograms()) {
+      <app-histogram phase="ping" [filters]="filters"></app-histogram>
+      }
     </app-expansion-panel>
   </div>
   <app-table [data]="data" [columns]="columns" [sort]="sort"></app-table>

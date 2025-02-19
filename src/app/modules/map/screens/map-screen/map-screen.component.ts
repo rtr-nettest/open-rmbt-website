@@ -21,8 +21,8 @@ import { HeatmapLegendComponent } from "../../components/heatmap-legend/heatmap-
 import { SearchComponent } from "../../components/search/search.component"
 import { MatDialog, MatDialogModule } from "@angular/material/dialog"
 import { ScrollStrategyOptions } from "@angular/cdk/overlay"
-import { FiltersControl } from "../../models/filters-control"
-import { BasemapControl } from "../../models/basemap-control"
+import { FiltersControl } from "../../dto/filters-control"
+import { BasemapControl } from "../../dto/basemap-control"
 import { EBasemapType } from "../../constants/basemap-type.enum"
 import { ETileTypes } from "../../constants/tile-type.enum"
 import { BasemapPickerComponent } from "../../components/basemap-picker/basemap-picker.component"
@@ -33,19 +33,19 @@ import { MessageService } from "../../../shared/services/message.service"
 export const POINTS_HEATMAP_SWITCH_LEVEL = 12
 
 @Component({
-    selector: "app-map-screen",
-    imports: [
-        AsyncPipe,
-        HeaderComponent,
-        HeatmapLegendComponent,
-        TopNavComponent,
-        BreadcrumbsComponent,
-        FooterComponent,
-        MatDialogModule,
-        SearchComponent,
-    ],
-    templateUrl: "./map-screen.component.html",
-    styleUrl: "./map-screen.component.scss"
+  selector: "app-map-screen",
+  imports: [
+    AsyncPipe,
+    HeaderComponent,
+    HeatmapLegendComponent,
+    TopNavComponent,
+    BreadcrumbsComponent,
+    FooterComponent,
+    MatDialogModule,
+    SearchComponent,
+  ],
+  templateUrl: "./map-screen.component.html",
+  styleUrl: "./map-screen.component.scss",
 })
 export class MapScreenComponent extends SeoComponent {
   map!: Map

@@ -1,6 +1,6 @@
 import { I18nStore } from "../../../../i18n/store/i18n.store"
-import { TestChartDataset } from "../../../models/test-chart-dataset"
-import { TestChart } from "../../../models/test-chart"
+import { TestChartDataset } from "../../../dto/test-chart-dataset"
+import { TestChart } from "../../../dto/test-chart"
 import { TestSignalChartOptions } from "./signal-chart-options"
 
 export class TestSignalChart extends TestChart {

@@ -11,18 +11,18 @@ import { debounceTime, map, takeUntil } from "rxjs/operators"
 import { EMeasurementStatus } from "../../../test/constants/measurement-status.enum"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { TestStore } from "../../../test/store/test.store"
-import { ChartPhase } from "../../models/test-chart-dataset"
-import { TestChart } from "../../models/test-chart"
+import { ChartPhase } from "../../dto/test-chart-dataset"
+import { TestChart } from "../../dto/test-chart"
 import { AsyncPipe, NgIf } from "@angular/common"
 import { BarChart } from "./settings/bar-chart"
 import { LogChart } from "./settings/log-chart"
 
 @Component({
-    selector: "app-test-chart",
-    templateUrl: "./test-chart.component.html",
-    styleUrls: ["./test-chart.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [NgIf, AsyncPipe]
+  selector: "app-test-chart",
+  templateUrl: "./test-chart.component.html",
+  styleUrls: ["./test-chart.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgIf, AsyncPipe],
 })
 export class TestChartComponent implements OnDestroy {
   @Input() phase: ChartPhase = "download"

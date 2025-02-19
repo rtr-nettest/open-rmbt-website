@@ -5,7 +5,7 @@ import {
   OpendataStoreService,
 } from "../../store/opendata-store.service"
 import { OpendataService } from "../../services/opendata.service"
-import { concatMap, firstValueFrom, map } from "rxjs"
+import { concatMap, firstValueFrom, forkJoin, map, of } from "rxjs"
 import { toObservable } from "@angular/core/rxjs-interop"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
@@ -27,6 +27,8 @@ import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
 import { MapComponent } from "../../components/map/map.component"
+import { HistogramComponent } from "../../components/histogram/histogram.component"
+import { fork } from "child_process"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -37,6 +39,7 @@ dayjs.extend(tz)
     BreadcrumbsComponent,
     ExpansionPanelComponent,
     HeaderComponent,
+    HistogramComponent,
     FiltersComponent,
     FooterComponent,
     LoadingOverlayComponent,
@@ -44,6 +47,7 @@ dayjs.extend(tz)
     TableComponent,
     TopNavComponent,
     TranslatePipe,
+    HistogramComponent,
   ],
   templateUrl: "./opendata-screen.component.html",
   styleUrl: "./opendata-screen.component.scss",
@@ -68,9 +72,11 @@ export class OpendataScreenComponent
   filters$ = toObservable(this.opendataStoreService.filters).pipe(
     concatMap((filters) => {
       this.updateFilterCount(filters)
-      return this.updateData({ reset: true })
-    })
+      return forkJoin([of(filters), this.updateData({ reset: true })])
+    }),
+    map(([filters]) => filters)
   )
+  loadHistograms = signal(false)
   mapContainerId = "mapContainer"
   sort: ISort = { active: "times", direction: "desc" }
 

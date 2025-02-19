@@ -1,0 +1,6 @@
+<div class="app-container">
+  <canvas [id]="id()" [style.height.%]="100" [style.width.%]="100"></canvas>
+  @if (loading()) {
+  <mat-spinner></mat-spinner>
+  }
+</div>

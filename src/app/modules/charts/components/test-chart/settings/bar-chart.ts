@@ -1,11 +1,11 @@
-import { TestChart } from "../../../models/test-chart"
+import { TestChart } from "../../../dto/test-chart"
 import { BarChartOptions } from "./bar-chart-options"
 import { I18nStore } from "../../../../i18n/store/i18n.store"
 import {
   BarOptions,
   ChartPhase,
   TestChartDataset,
-} from "../../../models/test-chart-dataset"
+} from "../../../dto/test-chart-dataset"
 import { ITestPhaseState } from "../../../../test/interfaces/test-phase-state.interface"
 import { BarChartPlugin, getBarWidth } from "../../../plugins/bar-chart-plugin"
 

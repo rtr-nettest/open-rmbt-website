@@ -1,11 +1,8 @@
 import { Point } from "chart.js"
 import { I18nStore } from "../../../../i18n/store/i18n.store"
 import { generateIndexesOfLength } from "../../../../shared/util/array"
-import {
-  ChartPhase,
-  TestChartDataset,
-} from "../../../models/test-chart-dataset"
-import { TestChart } from "../../../models/test-chart"
+import { ChartPhase, TestChartDataset } from "../../../dto/test-chart-dataset"
+import { TestChart } from "../../../dto/test-chart"
 import { ITestPhaseState } from "../../../../test/interfaces/test-phase-state.interface"
 import { LogChartOptions } from "./log-chart-options"
 

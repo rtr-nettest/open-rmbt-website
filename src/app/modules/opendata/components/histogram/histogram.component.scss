@@ -1,0 +1,14 @@
+@import "core";
+
+.app-container {
+  height: 100%;
+  position: relative;
+  width: 100%;
+
+  mat-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

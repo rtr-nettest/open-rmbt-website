@@ -31,12 +31,13 @@ import { median, roundToSignificantDigits } from "../../../shared/util/math"
 import { Router } from "@angular/router"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
+import { ChartPhase } from "../../../charts/dto/test-chart-dataset"
 
 @Component({
-    selector: "app-recent-history",
-    templateUrl: "./recent-history.component.html",
-    styleUrls: ["./recent-history.component.scss"],
-    imports: [NgIf, TableComponent, TranslatePipe]
+  selector: "app-recent-history",
+  templateUrl: "./recent-history.component.html",
+  styleUrls: ["./recent-history.component.scss"],
+  imports: [NgIf, TableComponent, TranslatePipe],
 })
 export class RecentHistoryComponent implements OnChanges {
   addMedian = input(false)
@@ -226,7 +227,7 @@ export class RecentHistoryComponent implements OnChanges {
     col: ITableColumn<IHistoryRow>,
     data: IBasicResponse<IHistoryRow>
   ) {
-    const medianForField = (field: "download" | "upload" | "ping") =>
+    const medianForField = (field: ChartPhase) =>
       median(
         data.content.map((c) =>
           c.intValues?.[field] ? c.intValues?.[field] : 0

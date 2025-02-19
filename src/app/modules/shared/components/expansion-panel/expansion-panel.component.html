@@ -1,4 +1,8 @@
-<mat-expansion-panel class="app-expansion-panel">
+<mat-expansion-panel
+  class="app-expansion-panel"
+  (afterExpand)="expand.emit(true)"
+  (afterCollapse)="expand.emit(false)"
+>
   <mat-expansion-panel-header>
     <mat-panel-title class="app-title">{{
       title() | translate

@@ -6,7 +6,7 @@ import {
 } from "@angular/core"
 import { ISimpleHistorySignal } from "../../../history/interfaces/simple-history-result.interface"
 import { I18nStore } from "../../../i18n/store/i18n.store"
-import { EChartColor, TestChartDataset } from "../../models/test-chart-dataset"
+import { EChartColor, TestChartDataset } from "../../dto/test-chart-dataset"
 import dayjs from "dayjs"
 import { ITestChartPluginOptions } from "../../interfaces/test-chart-plugin.interface"
 import { TestSignalChart } from "./settings/signal-chart"
@@ -24,11 +24,11 @@ export type PhaseDurations = {
 }
 
 @Component({
-    selector: "app-signal-chart",
-    imports: [],
-    templateUrl: "./signal-chart.component.html",
-    styleUrl: "./signal-chart.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-signal-chart",
+  imports: [],
+  templateUrl: "./signal-chart.component.html",
+  styleUrl: "./signal-chart.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignalChartComponent implements AfterViewInit {
   id = "signal_chart"

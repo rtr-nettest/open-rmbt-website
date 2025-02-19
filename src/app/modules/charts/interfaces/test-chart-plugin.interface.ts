@@ -1,4 +1,4 @@
-import { EChartColor } from "../models/test-chart-dataset"
+import { EChartColor } from "../dto/test-chart-dataset"
 
 export interface ITestChartPluginOptions {
   id: string

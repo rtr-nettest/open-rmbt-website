@@ -18,6 +18,12 @@ import {
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
+import {
+  HistogramMetric,
+  IHistogramResponse,
+  IHistogramResponseItem,
+} from "../interfaces/histogram-response.interface"
+import { ChartPhase } from "../../charts/dto/test-chart-dataset"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -51,6 +57,18 @@ export class OpendataService {
       `/${this.i18nStore.activeLang}/${
         ERoutes.OPEN_DATA
       }?${this.getSearchFromFilters(filters)}`
+    )
+  }
+
+  getHistogram(options: { phase: ChartPhase; filters?: IOpendataFilters }) {
+    let { phase, filters } = options
+    const addFilters = Object.keys(filters ?? {}).length > 0
+    return this.http.get<IHistogramResponse>(
+      `${
+        this.mainStore.api().url_web_statistic_server
+      }/opentests/histogram?measurement=${phase}${addFilters ? "&" : ""}${
+        addFilters ? searchFromFilters(filters!) : ""
+      }`
     )
   }
 
