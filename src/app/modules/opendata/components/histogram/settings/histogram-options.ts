@@ -18,14 +18,6 @@ export class HistogramOptions {
   parsing = false as const
   scales = {
     x: {
-      type: "linear" as const,
-      title: {
-        display: true,
-        color: EColors.SECONDARY_50,
-        font: {
-          size: 12,
-        },
-      },
       ticks: {
         autoSkip: false,
         color: EColors.SECONDARY_50,
@@ -33,8 +25,8 @@ export class HistogramOptions {
         font: {
           size: 12,
         },
-        callback: (value: any) => {
-          return this.formatter.format(value)
+        callback: (value: any, index: number) => {
+          return this.formatter.format(value, index)
         },
       },
     },

@@ -1,11 +1,12 @@
 import { FormatterService } from "./formatter.service"
 
 export class PingFormatterService extends FormatterService {
-  override format(val: number) {
-    if (val === null) {
+  override format(_: number, index: number) {
+    const val = this.labels[index]
+    if (val === null || val === undefined) {
       return ""
     } else {
-      return this.labels[val] + " " + this.i18nStore.translate("millis")
+      return val + " " + this.i18nStore.translate("millis")
     }
   }
 }

@@ -1,7 +1,7 @@
 import { Chart } from "chart.js"
-import { ITestChartPluginOptions } from "../../charts/interfaces/test-chart-plugin.interface"
+import { ITestChartPluginOptions } from "../interfaces/test-chart-plugin.interface"
 
-export class ChartAreaPlugin {
+export class TimeIntervalFillPlugin {
   id!: string
   constructor(private readonly options: ITestChartPluginOptions) {
     this.id = options.id

@@ -1,8 +1,8 @@
 import { Chart } from "chart.js"
 import { EColors } from "../../shared/constants/colors.enum"
-import { ITestChartPluginOptions } from "../../charts/interfaces/test-chart-plugin.interface"
+import { ITestChartPluginOptions } from "../interfaces/test-chart-plugin.interface"
 
-export class ChartTextPlugin {
+export class TimeIntervalNamePlugin {
   id!: string
   constructor(private readonly options: ITestChartPluginOptions) {
     this.id = options.id

@@ -8,7 +8,7 @@ export abstract class FormatterService {
     protected i18nStore: I18nStore
   ) {}
 
-  format(val: number): string {
+  format(val: number, index: number): string {
     throw new Error("Method not implemented.")
   }
 }

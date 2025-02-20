@@ -147,7 +147,6 @@ export class HistogramComponent implements AfterViewInit {
       }
     }
     datasets.push(lineDataset)
-    console.log(datasets)
     return datasets
   }
 }

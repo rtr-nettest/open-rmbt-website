@@ -11,8 +11,8 @@ import dayjs from "dayjs"
 import { ITestChartPluginOptions } from "../../interfaces/test-chart-plugin.interface"
 import { TestSignalChart } from "./settings/signal-chart"
 import { TestSignalChartOptions } from "./settings/signal-chart-options"
-import { ChartAreaPlugin } from "../../plugins/chart-area-plugin"
-import { ChartTextPlugin } from "../../plugins/chart-text-plugin"
+import { TimeIntervalFillPlugin } from "../../plugins/time-interval-fill"
+import { TimeIntervalNamePlugin } from "../../plugins/time-interval-name"
 
 export type PhaseDurations = {
   downStart?: number
@@ -144,7 +144,7 @@ export class SignalChartComponent implements AfterViewInit {
     if (networkChanges.length) {
       for (const p of networkChanges) {
         plugins.push(
-          new ChartAreaPlugin({
+          new TimeIntervalFillPlugin({
             id: p.id,
             color: p.color,
             x: p.x,
@@ -152,7 +152,7 @@ export class SignalChartComponent implements AfterViewInit {
           })
         )
         plugins.push(
-          new ChartTextPlugin({
+          new TimeIntervalNamePlugin({
             id: `text-${p.id}`,
             text: p.text,
             x: p.x,
@@ -164,7 +164,7 @@ export class SignalChartComponent implements AfterViewInit {
     if (ltePeriods.length) {
       for (const p of ltePeriods) {
         plugins.push(
-          new ChartAreaPlugin({
+          new TimeIntervalFillPlugin({
             id: p.id,
             color: p.color,
             x: p.x,
@@ -175,7 +175,7 @@ export class SignalChartComponent implements AfterViewInit {
     }
     if (this.phaseDurations()?.downStart) {
       plugins.push(
-        new ChartAreaPlugin({
+        new TimeIntervalFillPlugin({
           id: "download",
           color: EChartColor.DOWNLOAD,
           x: this.phaseDurations()!.downStart!,
@@ -183,7 +183,7 @@ export class SignalChartComponent implements AfterViewInit {
         })
       )
       plugins.push(
-        new ChartTextPlugin({
+        new TimeIntervalNamePlugin({
           id: "text-download",
           text: this.i18nStore.translate("Download"),
           x: this.phaseDurations()!.downStart!,
@@ -193,7 +193,7 @@ export class SignalChartComponent implements AfterViewInit {
     }
     if (this.phaseDurations()?.upStart) {
       plugins.push(
-        new ChartAreaPlugin({
+        new TimeIntervalFillPlugin({
           id: "upload",
           color: EChartColor.UPLOAD,
           x: this.phaseDurations()!.upStart!,
@@ -201,7 +201,7 @@ export class SignalChartComponent implements AfterViewInit {
         })
       )
       plugins.push(
-        new ChartTextPlugin({
+        new TimeIntervalNamePlugin({
           id: "text-upload",
           text: this.i18nStore.translate("Upload"),
           x: this.phaseDurations()!.upStart!,
@@ -211,7 +211,7 @@ export class SignalChartComponent implements AfterViewInit {
     }
     if (this.phaseDurations()?.pingStart) {
       plugins.push(
-        new ChartAreaPlugin({
+        new TimeIntervalFillPlugin({
           id: "ping",
           color: EChartColor.PING,
           x: this.phaseDurations()!.pingStart!,
@@ -219,7 +219,7 @@ export class SignalChartComponent implements AfterViewInit {
         })
       )
       plugins.push(
-        new ChartTextPlugin({
+        new TimeIntervalNamePlugin({
           id: "text-ping",
           text: this.i18nStore.translate("Ping"),
           x: this.phaseDurations()!.pingStart!,

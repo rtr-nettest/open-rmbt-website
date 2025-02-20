@@ -7,7 +7,10 @@ import {
   TestChartDataset,
 } from "../../../dto/test-chart-dataset"
 import { ITestPhaseState } from "../../../../test/interfaces/test-phase-state.interface"
-import { BarChartPlugin, getBarWidth } from "../../../plugins/bar-chart-plugin"
+import {
+  PingBarChartPlugin,
+  getBarWidth,
+} from "../../../plugins/ping-bar-chart-plugin"
 
 export class BarChart extends TestChart {
   private barOptions?: BarOptions
@@ -26,7 +29,7 @@ export class BarChart extends TestChart {
         labels: [],
       },
       new BarChartOptions(i18nStore),
-      [new BarChartPlugin()]
+      [new PingBarChartPlugin()]
     )
   }
 
