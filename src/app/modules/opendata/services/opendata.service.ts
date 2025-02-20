@@ -67,7 +67,7 @@ export class OpendataService {
       `${
         this.mainStore.api().url_web_statistic_server
       }/opentests/histogram?measurement=${phase}${addFilters ? "&" : ""}${
-        addFilters ? searchFromFilters(filters!) : ""
+        addFilters ? this.getSearchFromFilters(filters!) : ""
       }`
     )
   }

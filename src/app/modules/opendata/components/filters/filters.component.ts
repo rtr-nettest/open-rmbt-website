@@ -1,9 +1,9 @@
 import {
   Component,
   computed,
+  effect,
   inject,
   OnDestroy,
-  OnInit,
   signal,
 } from "@angular/core"
 import {
@@ -122,7 +122,7 @@ const ALL_FIELDS = [
   templateUrl: "./filters.component.html",
   styleUrl: "./filters.component.scss",
 })
-export class FiltersComponent implements OnInit, OnDestroy {
+export class FiltersComponent implements OnDestroy {
   destroyed$ = new Subject<void>()
   form?: FormGroup<FiltersForm>
   maxFromDate = signal(new Date())
@@ -188,10 +188,10 @@ export class FiltersComponent implements OnInit, OnDestroy {
   constructor(
     private readonly fb: FormBuilder,
     private readonly store: OpendataStoreService
-  ) {}
-
-  ngOnInit() {
-    this.initForm()
+  ) {
+    effect(() => {
+      this.initForm()
+    })
   }
 
   ngOnDestroy(): void {

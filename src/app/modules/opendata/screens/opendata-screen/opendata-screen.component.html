@@ -27,13 +27,13 @@
     >
       @if (loadHistograms()) {
       <div class="app-expansion-panel__row">
-        <app-histogram phase="download" [filters]="filters"></app-histogram>
+        <app-histogram phase="download"></app-histogram>
       </div>
       <div class="app-expansion-panel__row">
-        <app-histogram phase="upload" [filters]="filters"></app-histogram>
+        <app-histogram phase="upload"></app-histogram>
       </div>
       <div class="app-expansion-panel__row">
-        <app-histogram phase="ping" [filters]="filters"></app-histogram>
+        <app-histogram phase="ping"></app-histogram>
       </div>
       }
     </app-expansion-panel>

@@ -18,8 +18,10 @@ import { SpeedFormatterService } from "../../services/speed-formatter.service"
 import { HistogramDataset } from "./settings/histogram-dataset"
 import { ChartPhase } from "../../../charts/dto/test-chart-dataset"
 import { OpendataService } from "../../services/opendata.service"
-import { IOpendataFilters } from "../../interfaces/opendata-filters.interface"
-import { DEFAULT_FILTERS } from "../../store/opendata-store.service"
+import {
+  DEFAULT_FILTERS,
+  OpendataStoreService,
+} from "../../store/opendata-store.service"
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 
 @Component({
@@ -32,7 +34,6 @@ export class HistogramComponent implements AfterViewInit {
   chart!: Histogram
   id = computed(() => `${this.phase()}_histogram`)
   phase = input.required<ChartPhase>()
-  filters = input<IOpendataFilters>()
   loading = signal<boolean>(true)
 
   get canvas() {
@@ -41,7 +42,8 @@ export class HistogramComponent implements AfterViewInit {
 
   constructor(
     private readonly i18nStore: I18nStore,
-    private readonly service: OpendataService
+    private readonly service: OpendataService,
+    private readonly store: OpendataStoreService
   ) {
     effect(() => {
       this.initChart()
@@ -56,7 +58,7 @@ export class HistogramComponent implements AfterViewInit {
     this.chart?.destroy()
     const ctx = this.canvas?.getContext("2d")
     const phase = this.phase()
-    const filters = { ...this.filters() }
+    const filters = { ...this.store.filters() }
     for (const key in DEFAULT_FILTERS) {
       delete (filters as any)[key]
     }
@@ -98,7 +100,8 @@ export class HistogramComponent implements AfterViewInit {
       this.i18nStore,
       this.phase() === "ping"
         ? new PingFormatterService(min, max, labels, this.i18nStore)
-        : new SpeedFormatterService(min, max, labels, this.i18nStore)
+        : new SpeedFormatterService(min, max, labels, this.i18nStore),
+      this.setFilters
     )
   }
 
@@ -148,5 +151,27 @@ export class HistogramComponent implements AfterViewInit {
     }
     datasets.push(lineDataset)
     return datasets
+  }
+
+  private setFilters = (lowerBound: string, upperBound: string) => {
+    const filters = { ...this.store.filters() }
+    const from = Math.round(parseFloat(lowerBound) / 1000)
+    const to = Math.round(parseFloat(upperBound) / 1000)
+    switch (this.phase()) {
+      case "ping":
+        filters.ping_ms_from = lowerBound
+        filters.ping_ms_to = upperBound
+        break
+      case "download":
+        filters.download_kbit_from = from.toString()
+        filters.download_kbit_to = to.toString()
+        break
+      case "upload":
+        filters.download_kbit_from = from.toString()
+        filters.download_kbit_to = to.toString()
+        break
+    }
+    console.log(filters)
+    this.service.applyFilters(filters)
   }
 }

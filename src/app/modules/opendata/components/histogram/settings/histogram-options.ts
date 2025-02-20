@@ -105,5 +105,18 @@ export class HistogramOptions {
     },
   }
 
-  constructor(private t: I18nStore, private formatter: FormatterService) {}
+  constructor(
+    private t: I18nStore,
+    private formatter: FormatterService,
+    private clickHandler: (lowerBound: string, upperBound: string) => void
+  ) {}
+
+  onClick = (event: any, clickedElements: any[]) => {
+    if (clickedElements.length === 0) return
+
+    const { dataIndex } = clickedElements[0].element.$context
+    const lowerBound = event.chart.data.labels[dataIndex]
+    const upperBound = event.chart.data.labels[dataIndex + 1]
+    this.clickHandler(lowerBound, upperBound)
+  }
 }
