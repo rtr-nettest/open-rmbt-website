@@ -75,8 +75,8 @@ export class HistogramComponent implements AfterViewInit {
           const data = response[metric]!
           const fineData = response[`${metric}_fine`]!
           const datasets = this.getDatasets(data, fineData)
-          const labels = data.map((item) => item.lower_bound)
-          const options = this.getOptions(data)
+          const labels = data.map((item) => item.lower_bound.toString())
+          const options = this.getOptions(data, labels)
           this.chart = new Histogram(
             ctx,
             this.i18nStore,
@@ -88,14 +88,17 @@ export class HistogramComponent implements AfterViewInit {
     }
   }
 
-  private getOptions(data: IHistogramResponseItem[]): HistogramOptions {
+  private getOptions(
+    data: IHistogramResponseItem[],
+    labels: string[]
+  ): HistogramOptions {
     const max = data[data.length - 2].upper_bound
     const min = data[0].lower_bound
     return new HistogramOptions(
       this.i18nStore,
       this.phase() === "ping"
-        ? new PingFormatterService(min, max)
-        : new SpeedFormatterService(min, max)
+        ? new PingFormatterService(min, max, labels, this.i18nStore)
+        : new SpeedFormatterService(min, max, labels, this.i18nStore)
     )
   }
 

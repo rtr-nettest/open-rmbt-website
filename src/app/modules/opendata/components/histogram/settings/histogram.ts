@@ -1,5 +1,4 @@
 import { Chart } from "chart.js"
-import { TestChart } from "../../../../charts/dto/test-chart"
 import { TestChartDataset } from "../../../../charts/dto/test-chart-dataset"
 import { I18nStore } from "../../../../i18n/store/i18n.store"
 import { HistogramOptions } from "./histogram-options"

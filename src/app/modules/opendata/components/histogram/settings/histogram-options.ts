@@ -19,7 +19,6 @@ export class HistogramOptions {
   scales = {
     x: {
       type: "linear" as const,
-      offset: false,
       grid: {
         drawOnChartArea: false,
       },
@@ -31,12 +30,14 @@ export class HistogramOptions {
         },
       },
       ticks: {
+        autoSkip: false,
         color: EColors.SECONDARY_50,
+        stepSize: 1,
         font: {
           size: 12,
         },
         callback: (value: any) => {
-          return this.formatter.format(value, this.t)
+          return this.formatter.format(value)
         },
       },
     },

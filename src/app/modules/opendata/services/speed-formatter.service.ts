@@ -1,10 +1,10 @@
-import { I18nStore } from "../../i18n/store/i18n.store"
 import { formatNumber } from "../../shared/util/math"
 import { FormatterService } from "./formatter.service"
 
 export class SpeedFormatterService extends FormatterService {
-  override format(val: number, i18nStore: I18nStore) {
+  override format(index: number) {
     const { min, max } = this
+    const val = parseFloat(this.labels[index])
     if (val === null) {
       return ""
     } else {
@@ -21,7 +21,7 @@ export class SpeedFormatterService extends FormatterService {
       } else {
         nr = formatNumber(val, positions)
       }
-      return nr + " " + i18nStore.translate("Mbps")
+      return nr + " " + this.i18nStore.translate("Mbps")
     }
   }
 }
