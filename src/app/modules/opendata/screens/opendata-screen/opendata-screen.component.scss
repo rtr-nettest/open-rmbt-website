@@ -2,4 +2,8 @@
 
 .app-expansion-panel {
   margin-bottom: rem(20);
+
+  &__row {
+    height: rem(200);
+  }
 }

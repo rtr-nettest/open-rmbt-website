@@ -4,6 +4,7 @@ import {
   computed,
   effect,
   input,
+  signal,
 } from "@angular/core"
 import {
   HistogramMetric,
@@ -32,7 +33,7 @@ export class HistogramComponent implements AfterViewInit {
   id = computed(() => `${this.phase()}_histogram`)
   phase = input.required<ChartPhase>()
   filters = input<IOpendataFilters>()
-  loading = input<boolean>(true)
+  loading = signal<boolean>(true)
 
   get canvas() {
     return document.getElementById(this.id()) as HTMLCanvasElement
@@ -60,12 +61,14 @@ export class HistogramComponent implements AfterViewInit {
       delete (filters as any)[key]
     }
     if (ctx) {
+      this.loading.set(true)
       this.service
         .getHistogram({
           phase,
           filters,
         })
         .subscribe((response) => {
+          this.loading.set(false)
           const metric = (
             phase === "ping" ? `${phase}_ms` : `${phase}_kbit`
           ) as HistogramMetric

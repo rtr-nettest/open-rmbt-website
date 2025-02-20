@@ -26,7 +26,15 @@
       (expand)="loadHistograms.set($event)"
     >
       @if (loadHistograms()) {
-      <app-histogram phase="ping" [filters]="filters"></app-histogram>
+      <div class="app-expansion-panel__row">
+        <app-histogram phase="download" [filters]="filters"></app-histogram>
+      </div>
+      <div class="app-expansion-panel__row">
+        <app-histogram phase="upload" [filters]="filters"></app-histogram>
+      </div>
+      <div class="app-expansion-panel__row">
+        <app-histogram phase="ping" [filters]="filters"></app-histogram>
+      </div>
       }
     </app-expansion-panel>
   </div>

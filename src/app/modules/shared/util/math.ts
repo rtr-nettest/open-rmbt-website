@@ -21,9 +21,11 @@ export function roundToSignificantDigits(number: number) {
   return Math.round(number * rounder) / rounder
 }
 
-export function roundToDigits(number: number, digits: number) {
-  const rounder = 10 ** digits
-  return Math.round(number * rounder) / rounder
+export function formatNumber(number: number, digits: number) {
+  return new Intl.NumberFormat("en-IN", {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(number)
 }
 
 export function speedLog(speedMbps?: number) {

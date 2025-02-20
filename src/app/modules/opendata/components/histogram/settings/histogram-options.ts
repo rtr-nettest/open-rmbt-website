@@ -1,7 +1,7 @@
 import { EColors } from "../../../../shared/constants/colors.enum"
 import { I18nStore } from "../../../../i18n/store/i18n.store"
 import { FormatterService } from "../../../services/formatter.service"
-import { roundToDigits } from "../../../../shared/util/math"
+import { formatNumber } from "../../../../shared/util/math"
 
 export class HistogramOptions {
   animation = {
@@ -54,13 +54,13 @@ export class HistogramOptions {
           if (v >= 1000000) {
             if (v >= 10000000) {
               return (
-                roundToDigits(v / 1000000, 0) +
+                formatNumber(v / 1000000, 0) +
                 " " +
                 this.t.translate("Mio_abbr")
               )
             } else {
               return (
-                roundToDigits(v / 1000000, 1) +
+                formatNumber(v / 1000000, 1) +
                 " " +
                 this.t.translate("Mio_abbr")
               )
@@ -68,11 +68,11 @@ export class HistogramOptions {
           } else if (v > 1000) {
             if (v >= 10000) {
               return (
-                roundToDigits(v / 1000, 0) + " " + this.t.translate("Thou_abbr")
+                formatNumber(v / 1000, 0) + " " + this.t.translate("Thou_abbr")
               )
             } else {
               return (
-                roundToDigits(v / 1000, 1) + " " + this.t.translate("Thou_abbr")
+                formatNumber(v / 1000, 1) + " " + this.t.translate("Thou_abbr")
               )
             }
           }
