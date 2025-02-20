@@ -77,6 +77,7 @@ export class OpendataScreenComponent
     map(([filters]) => filters)
   )
   loadHistograms = signal(false)
+  loadMap = signal(false)
   mapContainerId = "mapContainer"
   sort: ISort = { active: "times", direction: "desc" }
 

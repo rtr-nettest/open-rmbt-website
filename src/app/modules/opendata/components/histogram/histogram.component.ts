@@ -155,8 +155,8 @@ export class HistogramComponent implements AfterViewInit {
 
   private setFilters = (lowerBound: string, upperBound: string) => {
     const filters = { ...this.store.filters() }
-    const from = Math.round(parseFloat(lowerBound) / 1000)
-    const to = Math.round(parseFloat(upperBound) / 1000)
+    const from = parseFloat(lowerBound) / 1000
+    const to = parseFloat(upperBound) / 1000
     switch (this.phase()) {
       case "ping":
         filters.ping_ms_from = lowerBound

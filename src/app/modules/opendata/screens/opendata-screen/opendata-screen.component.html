@@ -13,11 +13,16 @@
   </div>
   @if (data$ | async; as data) {
   <div [id]="mapContainerId" class="app-expansion-panel">
-    <app-expansion-panel [title]="'Map view' | translate">
+    <app-expansion-panel
+      [title]="'Map view' | translate"
+      (expand)="loadMap.set($event)"
+    >
+      @if (loadMap()) {
       <app-map
         [measurements]="data.content"
         [mapContainerId]="mapContainerId"
       ></app-map>
+      }
     </app-expansion-panel>
   </div>
   <div class="app-expansion-panel">
