@@ -109,7 +109,7 @@ export class HistogramComponent implements AfterViewInit {
     const datasets: HistogramDataset[] = []
 
     // Bars
-    const barDataset = new HistogramDataset(this.phase(), "bar", "y")
+    const barDataset = new HistogramDataset(this.phase(), "bar", "x", "y")
     barDataset.data = data.map((item, i) => {
       return {
         x: i,
@@ -119,20 +119,21 @@ export class HistogramComponent implements AfterViewInit {
     datasets.push(barDataset)
 
     // Line
-    const lineDataset = new HistogramDataset(this.phase(), "line", "y1")
+    const lineDataset = new HistogramDataset(this.phase(), "line", "x1", "y1")
     const fineFactor = Math.round(
       fineData.length /
         (data[data.length - 1].upper_bound === null
           ? data.length - 1
           : data.length)
     )
+    const spaceTakenInChart = (1 / data.length) * 0.9
 
     let total = 0
     lineDataset.data = fineData.map((item, i) => {
       const y = total
       total += fineData[i].results
       return {
-        x: i / fineFactor,
+        x: (i / fineFactor) * spaceTakenInChart,
         y,
       }
     })

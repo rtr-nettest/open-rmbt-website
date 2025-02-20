@@ -9,6 +9,7 @@ export class HistogramDataset extends TestChartDataset {
   constructor(
     phase: ChartPhase,
     private type: "bar" | "line",
+    private xAxisID: string,
     private yAxisID: string,
     barOptions: BarOptions = {
       categoryPercentage: 1,

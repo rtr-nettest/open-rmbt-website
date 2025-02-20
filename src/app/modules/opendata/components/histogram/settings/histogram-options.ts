@@ -19,9 +19,6 @@ export class HistogramOptions {
   scales = {
     x: {
       type: "linear" as const,
-      grid: {
-        drawOnChartArea: false,
-      },
       title: {
         display: true,
         color: EColors.SECONDARY_50,
@@ -41,6 +38,10 @@ export class HistogramOptions {
         },
       },
     },
+    x1: {
+      type: "linear" as const,
+      display: false,
+    },
     y: {
       beginAtZero: true,
       grid: {
@@ -51,6 +52,7 @@ export class HistogramOptions {
         font: {
           size: 12,
         },
+        stepSize: 2.5 * 1e6,
         callback: (v: any) => {
           if (v >= 1000000) {
             if (v >= 10000000) {
@@ -91,6 +93,7 @@ export class HistogramOptions {
       max: 1,
       position: "right",
       ticks: {
+        stepSize: 0.25,
         color: EColors.SECONDARY_50,
         font: {
           size: 12,
