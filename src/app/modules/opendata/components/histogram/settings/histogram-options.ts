@@ -38,13 +38,14 @@ export class HistogramOptions {
       beginAtZero: true,
       grid: {
         color: EColors.SECONDARY_10,
+        drawOnChartArea: false,
       },
       ticks: {
         color: EColors.SECONDARY_50,
         font: {
           size: 12,
         },
-        stepSize: 2.5 * 1e6,
+        count: 5,
         callback: (v: any) => {
           if (v >= 1000000) {
             if (v >= 10000000) {
@@ -79,7 +80,6 @@ export class HistogramOptions {
       beginAtZero: true,
       grid: {
         color: EColors.SECONDARY_10,
-        drawOnChartArea: false,
       },
       min: 0,
       max: 1,

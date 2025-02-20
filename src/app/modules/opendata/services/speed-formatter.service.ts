@@ -20,8 +20,8 @@ export class SpeedFormatterService extends FormatterService {
       else if (val < 10000) nr = formatNumber(val / 1000, 1)
       else nr = formatNumber(val / 1000, 0)
     } else {
-      nr = formatNumber(val, positions)
+      nr = formatNumber(val / 1000, positions)
     }
-    return nr + " " + this.i18nStore.translate("Mbps")
+    return nr + " " + this.i18nStore.translate("kbps")
   }
 }
