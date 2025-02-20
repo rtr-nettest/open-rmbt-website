@@ -26,12 +26,15 @@
       (expand)="loadHistograms.set($event)"
     >
       @if (loadHistograms()) {
+      <h5>{{ "Download" | translate }}</h5>
       <div class="app-expansion-panel__row">
         <app-histogram phase="download"></app-histogram>
       </div>
+      <h5>{{ "Upload" | translate }}</h5>
       <div class="app-expansion-panel__row">
         <app-histogram phase="upload"></app-histogram>
       </div>
+      <h5>{{ "Ping" | translate }}</h5>
       <div class="app-expansion-panel__row">
         <app-histogram phase="ping"></app-histogram>
       </div>

@@ -129,7 +129,7 @@ export class HistogramComponent implements AfterViewInit {
           ? data.length - 1
           : data.length)
     )
-    const spaceTakenInChart = (1 / data.length) * 0.9
+    const spaceTakenInChart = 1 / data.length
 
     let total = 0
     lineDataset.data = fineData.map((item, i) => {

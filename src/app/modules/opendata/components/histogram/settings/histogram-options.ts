@@ -117,6 +117,20 @@ export class HistogramOptions {
     const { dataIndex } = clickedElements[0].element.$context
     const lowerBound = event.chart.data.labels[dataIndex]
     const upperBound = event.chart.data.labels[dataIndex + 1]
-    this.clickHandler(lowerBound, upperBound)
+    if (lowerBound !== undefined) {
+      this.clickHandler(lowerBound, upperBound)
+    }
+  }
+
+  onHover = (event: any, elements: any[]) => {
+    if (!elements.length) {
+      event.native.target.style.cursor = "default"
+      return
+    }
+    const { dataIndex } = elements[0].element.$context
+    const lowerBound = event.chart.data.labels[dataIndex]
+    if (lowerBound !== undefined) {
+      event.native.target.style.cursor = "pointer"
+    }
   }
 }
