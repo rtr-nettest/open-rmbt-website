@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, NgZone } from "@angular/core"
-import { Observable, tap } from "rxjs"
+import { distinctUntilChanged, Observable, tap } from "rxjs"
 import { TestStore } from "../../store/test.store"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { EMeasurementStatus } from "../../constants/measurement-status.enum"
@@ -10,11 +10,11 @@ import { ITestVisualizationState } from "../../interfaces/test-visualization-sta
 import { roundToSignificantDigits, speedLog } from "../../../shared/util/math"
 
 @Component({
-    selector: "app-gauge",
-    templateUrl: "./gauge.component.html",
-    styleUrls: ["./gauge.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [AsyncPipe, NgIf, TranslatePipe]
+  selector: "app-gauge",
+  templateUrl: "./gauge.component.html",
+  styleUrls: ["./gauge.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [AsyncPipe, NgIf, TranslatePipe],
 })
 export class GaugeComponent {
   visualization$!: Observable<ITestVisualizationState>
@@ -26,6 +26,7 @@ export class GaugeComponent {
     private ngZone: NgZone
   ) {
     this.visualization$ = this.store.visualization$.pipe(
+      distinctUntilChanged(),
       tap((state) => {
         this.ngZone.runOutsideAngular(() => {
           this.drawLoop(state.phases[state.currentPhaseName])

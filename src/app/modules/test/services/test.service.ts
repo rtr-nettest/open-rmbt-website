@@ -43,12 +43,12 @@ declare global {
   providedIn: "root",
 })
 export class TestService {
+  visUpdateSub?: Subscription
   private downs: IOverallResult[] = []
   private ups: IOverallResult[] = []
   private startTimeMs = 0
   private endTimeMs = 0
   private stateChangeMs = 0
-  private visUpdateSub?: Subscription
 
   constructor(
     private readonly historyStore: HistoryStore,
@@ -126,7 +126,7 @@ export class TestService {
           concatMap(() => from(this.getMeasurementState(rmbtTest))),
           withLatestFrom(this.testStore.visualization$),
           map(([state, vis]) => {
-            this.ngZone.run(() => {
+            requestAnimationFrame(() => {
               this.setTestState(state, vis)
             })
           })

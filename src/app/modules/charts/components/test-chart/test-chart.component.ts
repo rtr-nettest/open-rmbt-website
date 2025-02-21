@@ -7,7 +7,12 @@ import {
 } from "@angular/core"
 import { fromEvent, Observable, Subject } from "rxjs"
 import { ITestVisualizationState } from "../../../test/interfaces/test-visualization-state.interface"
-import { debounceTime, map, takeUntil } from "rxjs/operators"
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  takeUntil,
+} from "rxjs/operators"
 import { EMeasurementStatus } from "../../../test/constants/measurement-status.enum"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { TestStore } from "../../../test/store/test.store"
@@ -61,6 +66,7 @@ export class TestChartComponent implements OnDestroy {
     private store: TestStore
   ) {
     this.visualization$ = this.store.visualization$.pipe(
+      distinctUntilChanged(),
       map((s) => {
         if (this.canvas) {
           this.handleChanges(s)

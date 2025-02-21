@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from "@angular/core"
-import { Observable, tap } from "rxjs"
+import { distinctUntilChanged, Observable, tap } from "rxjs"
 import { EMeasurementStatus } from "../../constants/measurement-status.enum"
 import { TestStore } from "../../store/test.store"
 import { I18nStore } from "../../../i18n/store/i18n.store"
@@ -15,19 +15,19 @@ import { LoopStoreService } from "../../../loop/store/loop-store.service"
 import { toObservable } from "@angular/core/rxjs-interop"
 
 @Component({
-    selector: "app-interim-results",
-    templateUrl: "./interim-results.component.html",
-    styleUrls: ["./interim-results.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        AsyncPipe,
-        DatePipe,
-        LonlatPipe,
-        MatProgressSpinnerModule,
-        NgIf,
-        TestChartComponent,
-        TranslatePipe,
-    ]
+  selector: "app-interim-results",
+  templateUrl: "./interim-results.component.html",
+  styleUrls: ["./interim-results.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    AsyncPipe,
+    DatePipe,
+    LonlatPipe,
+    MatProgressSpinnerModule,
+    NgIf,
+    TestChartComponent,
+    TranslatePipe,
+  ],
 })
 export class InterimResultsComponent {
   basicNetworkInfo$!: Observable<IBasicNetworkInfo>
@@ -47,6 +47,7 @@ export class InterimResultsComponent {
   ) {
     this.basicNetworkInfo$ = toObservable(this.store.basicNetworkInfo)
     this.visualization$ = this.store.visualization$.pipe(
+      distinctUntilChanged(),
       tap((state) => {
         const estimatedEndTime = this.loopStore.estimatedEndTime()
         if (estimatedEndTime) {

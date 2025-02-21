@@ -54,6 +54,7 @@ import {
 } from "../../interfaces/measurement-result.interface"
 import { HistoryService } from "../../services/history.service"
 import { ActionButtonsComponent } from "../../components/action-buttons/action-buttons.component"
+import { TestService } from "../../../test/services/test.service"
 
 const MIN_ACCURACY_FOR_SHOWING_MAP = 2000
 
@@ -165,7 +166,8 @@ export class ResultScreenComponent extends SeoComponent {
     private mainStore: MainStore,
     private service: HistoryService,
     private store: HistoryStore,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private testService: TestService
   ) {
     super(title, i18nStore)
     this.result$ = this.i18nStore.getTranslations().pipe(
@@ -199,6 +201,7 @@ export class ResultScreenComponent extends SeoComponent {
           this.detailedResults.set(this.getDetailedResults(result))
         }
         this.loading.set(false)
+        this.testService.visUpdateSub?.unsubscribe()
       })
     )
     this.error$ = this.mainStore.error$
