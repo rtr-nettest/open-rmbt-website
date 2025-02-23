@@ -99,8 +99,8 @@ export class HistogramComponent implements AfterViewInit {
     return new HistogramOptions(
       this.i18nStore,
       this.phase() === "ping"
-        ? new PingFormatterService(min, max, labels, this.i18nStore)
-        : new SpeedFormatterService(min, max, labels, this.i18nStore),
+        ? new PingFormatterService(this.i18nStore, labels, min, max)
+        : new SpeedFormatterService(this.i18nStore, labels, min, max),
       this.setFilters
     )
   }

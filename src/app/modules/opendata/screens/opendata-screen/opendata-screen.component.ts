@@ -29,6 +29,8 @@ import tz from "dayjs/plugin/timezone"
 import { MapComponent } from "../../components/map/map.component"
 import { HistogramComponent } from "../../components/histogram/histogram.component"
 import { fork } from "child_process"
+import { IntradayComponent } from "../../components/intraday/intraday.component"
+import { IIntradayResponseItem } from "../../interfaces/intraday-response.interface"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -40,6 +42,7 @@ dayjs.extend(tz)
     ExpansionPanelComponent,
     HeaderComponent,
     HistogramComponent,
+    IntradayComponent,
     FiltersComponent,
     FooterComponent,
     LoadingOverlayComponent,
@@ -78,8 +81,10 @@ export class OpendataScreenComponent
   )
   loadHistograms = signal(false)
   loadMap = signal(false)
+  loadingIntraday = signal(false)
   mapContainerId = "mapContainer"
   sort: ISort = { active: "times", direction: "desc" }
+  intradayData = signal<IIntradayResponseItem[]>([])
 
   protected override get dataLimit(): number {
     return OPEN_DATA_LIMIT
@@ -98,6 +103,19 @@ export class OpendataScreenComponent
   override ngOnDestroy(): void {
     super.ngOnDestroy()
     this.opendataStoreService.reset()
+  }
+
+  loadIntradayData(load: boolean) {
+    if (load) {
+      this.loadingIntraday.set(true)
+      firstValueFrom(
+        this.opendataService.getIntraday({
+          ...this.opendataStoreService.filters(),
+        })
+      )
+        .then((data) => this.intradayData.set(data))
+        .finally(() => this.loadingIntraday.set(false))
+    }
   }
 
   private formatTime = (value: IRecentMeasurement) => {

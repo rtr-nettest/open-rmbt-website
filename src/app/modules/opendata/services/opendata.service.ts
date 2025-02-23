@@ -24,6 +24,7 @@ import {
   IHistogramResponseItem,
 } from "../interfaces/histogram-response.interface"
 import { ChartPhase } from "../../charts/dto/test-chart-dataset"
+import { IIntradayResponseItem } from "../interfaces/intraday-response.interface"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -69,6 +70,15 @@ export class OpendataService {
       }/opentests/histogram?measurement=${phase}${addFilters ? "&" : ""}${
         addFilters ? this.getSearchFromFilters(filters!) : ""
       }`
+    )
+  }
+
+  getIntraday(filters?: IOpendataFilters) {
+    const addFilters = Object.keys(filters ?? {}).length > 0
+    return this.http.get<IIntradayResponseItem[]>(
+      `${this.mainStore.api().url_web_statistic_server}/opentests/intraday${
+        addFilters ? "?" : ""
+      }${addFilters ? this.getSearchFromFilters(filters!) : ""}`
     )
   }
 
