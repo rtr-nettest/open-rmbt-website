@@ -21,6 +21,7 @@ import { LoopResultScreenComponent } from "./modules/loop/screens/loop-result-sc
 import { CertifiedResultScreenComponent } from "./modules/certified/screens/certified-result-screen/certified-result-screen.component"
 import { unloadOnlyFor } from "./modules/shared/guards/unload-only-for.guard"
 import { OpendataScreenComponent } from "./modules/opendata/screens/opendata-screen/opendata-screen.component"
+import { InterfaceScreenComponent } from "./modules/opendata/screens/interface-screen/interface-screen.component"
 
 export const routes: Routes = [
   {
@@ -179,6 +180,14 @@ export const routes: Routes = [
         resolve: [localeResolver],
         data: {
           title: "opentest",
+        },
+      },
+      {
+        path: ERoutes.INTERFACE,
+        component: InterfaceScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "open_data_specification",
         },
       },
       {

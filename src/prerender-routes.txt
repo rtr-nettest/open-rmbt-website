@@ -1,5 +1,6 @@
 /
 /history
+/interface
 /map
 /statistics
 /test
@@ -19,6 +20,7 @@
 /terms-and-conditions
 /de/
 /de/history
+/de/interface
 /de/map
 /de/statistics
 /de/test
@@ -38,6 +40,7 @@
 /de/terms-and-conditions
 /en/
 /en/history
+/en/interface
 /en/map
 /en/statistics
 /en/test

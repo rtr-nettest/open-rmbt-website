@@ -1,0 +1,19 @@
+@import "core";
+
+.app-row {
+  align-items: center;
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.app-col {
+  flex: 0 0 180px;
+
+  &:first-of-type {
+    flex: 0 0 90px;
+  }
+
+  .app-select {
+    width: 100%;
+  }
+}

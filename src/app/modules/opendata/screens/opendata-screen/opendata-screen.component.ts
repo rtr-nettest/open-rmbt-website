@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from "@angular/core"
+import { Component, computed, inject, OnInit, signal } from "@angular/core"
 import {
   DEFAULT_FILTERS,
   OPEN_DATA_LIMIT,
@@ -34,6 +34,8 @@ import { MapComponent } from "../../components/map/map.component"
 import { HistogramComponent } from "../../components/histogram/histogram.component"
 import { IntradayComponent } from "../../components/intraday/intraday.component"
 import { IIntradayResponseItem } from "../../interfaces/intraday-response.interface"
+import { ERoutes } from "../../../shared/constants/routes.enum"
+import { RouterModule } from "@angular/router"
 
 @Component({
   selector: "app-opendata-screen",
@@ -48,6 +50,7 @@ import { IIntradayResponseItem } from "../../interfaces/intraday-response.interf
     FooterComponent,
     LoadingOverlayComponent,
     MapComponent,
+    RouterModule,
     TableComponent,
     TopNavComponent,
     TranslatePipe,
@@ -60,6 +63,9 @@ export class OpendataScreenComponent
   extends LoadOnScrollComponent
   implements OnInit
 {
+  apiLink = computed(() => {
+    return `/${this.i18nStore.activeLang}/${ERoutes.INTERFACE}`
+  })
   opendataStoreService = inject(OpendataStoreService)
   opendataService = inject(OpendataService)
   columns = RECENT_MEASUREMENTS_COLUMNS

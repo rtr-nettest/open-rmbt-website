@@ -9,3 +9,12 @@ export function truncate(text: string, max: number) {
   }
   return retVal + "&hellip;"
 }
+
+export function pad(number: number, length: number) {
+  let str = "" + number
+  while (str.length < length) {
+    str = "0" + str
+  }
+
+  return str
+}

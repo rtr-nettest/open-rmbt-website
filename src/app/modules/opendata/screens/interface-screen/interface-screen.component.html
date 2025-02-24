@@ -1,0 +1,52 @@
+<app-header></app-header>
+<app-top-nav></app-top-nav>
+<app-breadcrumbs></app-breadcrumbs>
+<div style="margin-bottom: 40px">
+  @if (text$ | async; as text) {
+  <app-html-wrapper [html]="text">
+    <ng-container header>
+      @if (form) {
+      <form [formGroup]="form">
+        <div class="app-row">
+          <div class="app-col">{{ "CSV" | translate }}</div>
+          <div class="app-col">
+            <mat-select
+              class="app-select"
+              formControlName="csv"
+              (valueChange)="download($event, 'zip')"
+              canSelectNullableOptions="true"
+            >
+              <mat-option [value]="null"
+                >--{{ "Please select" | translate }}--</mat-option
+              >
+              @for (option of options(); track $index) {
+              <mat-option [value]="option[1]">{{ option[0] }}</mat-option>
+              }
+            </mat-select>
+          </div>
+        </div>
+        <div class="app-row">
+          <div class="app-col">{{ "XLSX" | translate }}</div>
+          <div class="app-col">
+            <mat-select
+              class="app-select"
+              formControlName="xlsx"
+              (valueChange)="download($event, 'xlsx')"
+              canSelectNullableOptions="true"
+            >
+              <mat-option [value]="null"
+                >--{{ "Please select" | translate }}--</mat-option
+              >
+              @for (option of options(); track $index) {
+              <mat-option [value]="option[1]">{{ option[0] }}</mat-option>
+              }
+            </mat-select>
+          </div>
+        </div>
+      </form>
+      }
+    </ng-container>
+  </app-html-wrapper>
+  }
+</div>
+<app-footer></app-footer>

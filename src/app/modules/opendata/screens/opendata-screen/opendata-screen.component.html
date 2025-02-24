@@ -2,7 +2,10 @@
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
 <div class="app-wrapper" style="margin-bottom: 40px">
-  <h1 class="app-title">{{ "Open data" | translate }}</h1>
+  <header class="app-header">
+    <h1 class="app-title">{{ "Open data" | translate }}</h1>
+    <a [routerLink]="apiLink()">{{ "API" | translate }} </a>
+  </header>
   @if (filters$ | async; as filters) {
   <div class="app-expansion-panel">
     <app-expansion-panel

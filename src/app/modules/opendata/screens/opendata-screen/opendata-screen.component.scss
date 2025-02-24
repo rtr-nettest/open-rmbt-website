@@ -7,3 +7,13 @@
     height: rem(200);
   }
 }
+
+.app-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+
+  .app-title {
+    margin-left: 0;
+  }
+}
