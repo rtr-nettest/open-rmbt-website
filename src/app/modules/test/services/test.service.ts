@@ -239,4 +239,15 @@ export class TestService {
       endTimeMs: this.endTimeMs,
     }
   }
+
+  sendAbort() {
+    navigator.sendBeacon(
+      `${environment.api.baseUrl}/RMBTControlServer/resultUpdate`,
+      JSON.stringify({
+        uuid: localStorage.getItem(UUID),
+        test_uuid: this.testStore.basicNetworkInfo().testUuid,
+        aborted: true,
+      })
+    )
+  }
 }

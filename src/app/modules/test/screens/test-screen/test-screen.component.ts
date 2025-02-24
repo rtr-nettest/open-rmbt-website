@@ -184,6 +184,7 @@ export class TestScreenComponent
       message = ERROR_OCCURED_SENDING_RESULTS
     }
     this.stopped$.next()
+    this.service.sendAbort()
     this.message.openConfirmDialog(message, () => {
       this.mainStore.error$.next(null)
       state.currentPhaseName === EMeasurementStatus.SUBMITTING_RESULTS
@@ -205,5 +206,10 @@ export class TestScreenComponent
   @HostListener("window:beforeunload")
   preventReload() {
     return false
+  }
+
+  @HostListener("window:unload")
+  unload() {
+    this.service.sendAbort()
   }
 }

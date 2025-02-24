@@ -106,9 +106,7 @@ export class GaugeComponent {
 
   private setBarPercentage(barSelector: string, percents: number) {
     var bar = document.querySelector(barSelector) as SVGGeometryElement
-    if (!bar) {
-      console.error("Element not found: " + barSelector + ".")
-    } else {
+    if (bar) {
       bar.style.strokeDasharray = bar.getTotalLength() * percents + ",9999"
     }
   }

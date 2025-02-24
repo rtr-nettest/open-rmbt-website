@@ -119,6 +119,7 @@ export class Step3Component extends TestScreenComponent {
       this.i18nStore.translate(ERROR_OCCURED_DURING_LOOP) +
       " " +
       this.loopStore.loopCounter()
+    this.service.sendAbort()
     this.message.openConfirmDialog(message, () => void 0)
     this.goToResult(state)
   }
