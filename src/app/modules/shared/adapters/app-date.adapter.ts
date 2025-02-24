@@ -6,9 +6,10 @@ import {
   NativeDateAdapter,
 } from "@angular/material/core"
 import dayjs from "dayjs"
+import { IRecentMeasurement } from "../../opendata/interfaces/recent-measurements-response.interface"
 
-export const APP_DATE_FORMAT = "DD.MM.YYYY"
-export const APP_DATE_TIME_FORMAT = "DD.MM.YYYY HH:mm"
+export const APP_DATE_FORMAT = "YYYY-DD-MM"
+export const APP_DATE_TIME_FORMAT = "YYYY-DD-MM HH:mm"
 export const APP_TIME_FORMAT = "HH:mm"
 
 export const AppDateFormats = {
@@ -48,4 +49,12 @@ export function provideAppDateAdapter() {
       useValue: AppDateFormats,
     },
   ]
+}
+
+export function formatTime(value: IRecentMeasurement) {
+  const time = dayjs(value.time)
+    .utc(true)
+    .tz(dayjs.tz.guess())
+    .format(APP_DATE_TIME_FORMAT)
+  return { ...value, time }
 }

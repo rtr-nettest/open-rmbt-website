@@ -21,18 +21,11 @@ import { LoadingOverlayComponent } from "../../../shared/components/loading-over
 import { ExpansionPanelComponent } from "../../../shared/components/expansion-panel/expansion-panel.component"
 import { IOpendataFilters } from "../../interfaces/opendata-filters.interface"
 import { RECENT_MEASUREMENTS_COLUMNS } from "../../constants/recent-measurements-columns"
-import { IRecentMeasurement } from "../../interfaces/recent-measurements-response.interface"
-import { APP_DATE_TIME_FORMAT } from "../../../shared/adapters/app-date.adapter"
-import dayjs from "dayjs"
-import utc from "dayjs/plugin/utc"
-import tz from "dayjs/plugin/timezone"
+import { formatTime } from "../../../shared/adapters/app-date.adapter"
 import { MapComponent } from "../../components/map/map.component"
 import { HistogramComponent } from "../../components/histogram/histogram.component"
-import { fork } from "child_process"
 import { IntradayComponent } from "../../components/intraday/intraday.component"
 import { IIntradayResponseItem } from "../../interfaces/intraday-response.interface"
-dayjs.extend(utc)
-dayjs.extend(tz)
 
 @Component({
   selector: "app-opendata-screen",
@@ -64,7 +57,7 @@ export class OpendataScreenComponent
   columns = RECENT_MEASUREMENTS_COLUMNS
   data$ = toObservable(this.opendataStoreService.data).pipe(
     map((data) => {
-      const content = data?.map(this.formatTime)
+      const content = data?.map(formatTime)
       return {
         content,
         totalElements: content?.length,
@@ -116,14 +109,6 @@ export class OpendataScreenComponent
         .then((data) => this.intradayData.set(data))
         .finally(() => this.loadingIntraday.set(false))
     }
-  }
-
-  private formatTime = (value: IRecentMeasurement) => {
-    const time = dayjs(value.time)
-      .utc(true)
-      .tz(dayjs.tz.guess())
-      .format(APP_DATE_TIME_FORMAT)
-    return { ...value, time }
   }
 
   private updateFilterCount(filters: IOpendataFilters) {

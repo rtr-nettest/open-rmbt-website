@@ -26,12 +26,8 @@ import { MatButtonModule } from "@angular/material/button"
 import { Router, RouterModule } from "@angular/router"
 import { OpendataService } from "../../../opendata/services/opendata.service"
 import { RECENT_MEASUREMENTS_COLUMNS } from "../../../opendata/constants/recent-measurements-columns"
-import dayjs from "dayjs"
-import utc from "dayjs/plugin/utc"
-import tz from "dayjs/plugin/timezone"
 import { FullscreenControl, NavigationControl } from "maplibre-gl"
-dayjs.extend(utc)
-dayjs.extend(tz)
+import { formatTime } from "../../../shared/adapters/app-date.adapter"
 
 const UPDATE_INTERVAL = 5000
 
@@ -129,7 +125,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   private setMeasurements() {
     firstValueFrom(this.measurements.getRecentMeasurements()).then((resp) => {
       const content = (resp?.results.slice(0, 5) ?? []).map((r) =>
-        this.formatTime(r)
+        formatTime(r)
       )
       this.tableData.set({
         content,
@@ -137,13 +133,5 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
       })
       this.recentMeasurements.set(resp.results)
     })
-  }
-
-  private formatTime(value: IRecentMeasurement) {
-    const time = dayjs(value.time)
-      .utc(true)
-      .tz(dayjs.tz.guess())
-      .format("HH:mm:ss")
-    return { ...value, time }
   }
 }

@@ -85,10 +85,7 @@ export class PopupService {
       }
     }
     const data: PopupData = {
-      time: dayjs(measurement.time)
-        .utc(true)
-        .tz(dayjs.tz.guess())
-        .format(`HH:mm:ss`),
+      time: measurement.time,
       detailsUrl: `/${this.i18nStore.activeLang}/${ERoutes.OPEN_RESULT}?open_test_uuid=${measurement.open_test_uuid}`,
       downloadClass: this.classification.classify(
         measurement.download_kbit,
