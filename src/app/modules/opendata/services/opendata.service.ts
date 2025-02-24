@@ -2,12 +2,11 @@ import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { MainStore } from "../../shared/store/main.store"
 import { IOpendataFilters } from "../interfaces/opendata-filters.interface"
-import { IRecentMeasurementsResponse } from "../interfaces/recent-measurements-response.interface"
-import { map } from "rxjs"
 import {
-  DEFAULT_FILTERS,
-  OpendataStoreService,
-} from "../store/opendata-store.service"
+  IRecentMeasurementsResponse,
+  IRecentStats,
+} from "../interfaces/recent-measurements-response.interface"
+import { OpendataStoreService } from "../store/opendata-store.service"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { Router } from "@angular/router"
 import { ERoutes } from "../../shared/constants/routes.enum"
@@ -82,23 +81,20 @@ export class OpendataService {
     )
   }
 
-  search(filters: IOpendataFilters) {
-    return this.http
-      .get<IRecentMeasurementsResponse>(
-        `${
-          this.mainStore.api().url_web_statistic_server
-        }/opentests/search?${this.getSearchFromFilters({
-          ...DEFAULT_FILTERS,
-          ...filters,
-        })}`
-      )
-      .pipe(
-        map((response) => {
-          this.store.cursor.set(response.next_cursor)
-          this.store.data.set([...this.store.data(), ...response.results])
-          return response.results
-        })
-      )
+  getRecentStats() {
+    return this.http.get<IRecentStats>(
+      `${this.mainStore.api().url_web_statistic_server}/opentests/statistics`
+    )
+  }
+
+  search(filters?: IOpendataFilters) {
+    return this.http.get<IRecentMeasurementsResponse>(
+      `${
+        this.mainStore.api().url_web_statistic_server
+      }/opentests/search?${this.getSearchFromFilters({
+        ...(filters || {}),
+      })}&_=${Date.now()}`
+    )
   }
 
   private getSearchFromFilters(filters: IOpendataFilters) {

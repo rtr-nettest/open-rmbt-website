@@ -8,8 +8,8 @@ import {
 import dayjs from "dayjs"
 import { IRecentMeasurement } from "../../opendata/interfaces/recent-measurements-response.interface"
 
-export const APP_DATE_FORMAT = "YYYY-DD-MM"
-export const APP_DATE_TIME_FORMAT = "YYYY-DD-MM HH:mm"
+export const APP_DATE_FORMAT = "YYYY-MM-DD"
+export const APP_DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm"
 export const APP_TIME_FORMAT = "HH:mm"
 
 export const AppDateFormats = {

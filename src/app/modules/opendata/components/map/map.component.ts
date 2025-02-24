@@ -121,12 +121,14 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
               },
             })
           })
-        const line = lineString(features)
-        const box = bbox(line) as [number, number, number, number]
-        this.map.fitBounds(box, {
-          padding: { top: 12, bottom: 12, left: 12, right: 12 },
-          maxZoom: 12,
-        })
+        if (features.length > 1) {
+          const line = lineString(features)
+          const box = bbox(line) as [number, number, number, number]
+          this.map.fitBounds(box, {
+            padding: { top: 12, bottom: 12, left: 12, right: 12 },
+            maxZoom: 12,
+          })
+        }
       }
     })
   }

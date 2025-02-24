@@ -13,7 +13,6 @@ import {
   EPlatform,
   PlatformService,
 } from "../../../shared/services/platform.service"
-import { MeasurementsService } from "../../services/measurements.service"
 import { MapComponent } from "../../../opendata/components/map/map.component"
 import { IRecentMeasurement } from "../../../opendata/interfaces/recent-measurements-response.interface"
 import { TableComponent } from "../../../tables/components/table/table.component"
@@ -92,7 +91,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   constructor(
     i18nStore: I18nStore,
     title: Title,
-    private readonly measurements: MeasurementsService,
+    private readonly measurements: OpendataService,
     private readonly platform: PlatformService,
     private readonly router: Router
   ) {
@@ -123,7 +122,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   }
 
   private setMeasurements() {
-    firstValueFrom(this.measurements.getRecentMeasurements()).then((resp) => {
+    firstValueFrom(this.measurements.search()).then((resp) => {
       const content = (resp?.results.slice(0, 5) ?? []).map((r) =>
         formatTime(r)
       )
@@ -131,7 +130,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
         content,
         totalElements: content.length,
       })
-      this.recentMeasurements.set(resp.results)
+      this.recentMeasurements.set(content)
     })
   }
 }

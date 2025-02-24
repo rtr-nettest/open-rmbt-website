@@ -9,7 +9,7 @@ import {
   tap,
 } from "rxjs"
 import dayjs from "dayjs"
-import { MeasurementsService } from "../../home/services/measurements.service"
+import { OpendataService } from "./opendata.service"
 
 const DATA_UPDATE_INTERVAL = 5000
 const ID = "fullScreenStats"
@@ -33,7 +33,7 @@ export class FullScreenService {
 
   constructor(
     private readonly i18nStore: I18nStore,
-    private readonly measurements: MeasurementsService
+    private readonly measurements: OpendataService
   ) {}
 
   async addPopup() {

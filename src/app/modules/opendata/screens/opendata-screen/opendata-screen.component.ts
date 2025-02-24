@@ -5,7 +5,15 @@ import {
   OpendataStoreService,
 } from "../../store/opendata-store.service"
 import { OpendataService } from "../../services/opendata.service"
-import { concatMap, firstValueFrom, forkJoin, map, of } from "rxjs"
+import {
+  concatMap,
+  firstValueFrom,
+  forkJoin,
+  interval,
+  map,
+  of,
+  takeUntil,
+} from "rxjs"
 import { toObservable } from "@angular/core/rxjs-interop"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
@@ -64,6 +72,11 @@ export class OpendataScreenComponent
       }
     })
   )
+  recentMeasurementSub = interval(5000)
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe(() => {
+      this.addRecentMeasurements()
+    })
   filterCount = signal("")
   filters$ = toObservable(this.opendataStoreService.filters).pipe(
     concatMap((filters) => {
@@ -86,7 +99,20 @@ export class OpendataScreenComponent
   protected override async fetchData(): Promise<Array<any>> {
     const filters = this.opendataStoreService.filters()
     const cursor = this.opendataStoreService.cursor()
-    return firstValueFrom(this.opendataService.search({ ...filters, cursor }))
+    return firstValueFrom(
+      this.opendataService
+        .search({ ...DEFAULT_FILTERS, ...filters, cursor })
+        .pipe(
+          map((response) => {
+            this.opendataStoreService.cursor.set(response.next_cursor)
+            this.opendataStoreService.data.set([
+              ...this.opendataStoreService.data(),
+              ...response.results,
+            ])
+            return response.results
+          })
+        )
+    )
   }
 
   ngOnInit(): void {
@@ -119,5 +145,17 @@ export class OpendataScreenComponent
         (filters as any)[k]
     ).length
     this.filterCount.set(filtersCount > 0 ? ` (${filtersCount})` : "")
+  }
+
+  private addRecentMeasurements() {
+    const filters = this.opendataStoreService.filters()
+    firstValueFrom(
+      this.opendataService.search({ ...DEFAULT_FILTERS, ...filters })
+    ).then((resp) => {
+      const oldContent = this.opendataStoreService.data()
+      if (resp.results[0].open_test_uuid === oldContent[0].open_test_uuid)
+        return
+      this.opendataStoreService.data.set([...resp.results, ...oldContent])
+    })
   }
 }
