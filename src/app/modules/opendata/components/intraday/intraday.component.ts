@@ -11,7 +11,7 @@ import { IIntradayResponseItem } from "../../interfaces/intraday-response.interf
 import { Intraday } from "./settings/intraday"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { IntradayOptions } from "./settings/intraday-options"
-import { ChartPhase } from "../../../charts/dto/test-chart-dataset"
+import { ChartPhase, EChartColor } from "../../../charts/dto/test-chart-dataset"
 import { IntradayPingFormatterService } from "../../services/intraday-ping-formatter.service"
 import { IntradaySpeedFormatterService } from "../../services/intraday-speed-formatter.service"
 import { IntradayDataset } from "./settings/intraday-dataset"
@@ -29,6 +29,16 @@ export class IntradayComponent implements AfterViewInit {
   phase = input.required<ChartPhase>()
   loading = input<boolean>(true)
   data = input<IIntradayResponseItem[]>([])
+  legend = [
+    {
+      color: EChartColor.DOWNLOAD_BORDER,
+      text: "Down",
+    },
+    {
+      color: EChartColor.UPLOAD_BORDER,
+      text: "Up",
+    },
+  ]
 
   get canvas() {
     return document.getElementById(this.id()) as HTMLCanvasElement

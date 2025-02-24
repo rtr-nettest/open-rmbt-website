@@ -81,7 +81,7 @@ export class OpendataScreenComponent
   )
   loadHistograms = signal(false)
   loadMap = signal(false)
-  loadingIntraday = signal(false)
+  loadingIntraday = signal(true)
   mapContainerId = "mapContainer"
   sort: ISort = { active: "times", direction: "desc" }
   intradayData = signal<IIntradayResponseItem[]>([])

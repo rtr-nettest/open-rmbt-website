@@ -1,4 +1,14 @@
 <div class="app-container">
+  @if (phase() !== "ping") {
+  <ul class="app-legend">
+    @for (item of legend; track $index) {
+    <li class="app-legend__item">
+      <i class="app-legend__marker" [style.background-color]="item.color"></i
+      >{{ item.text }}
+    </li>
+    }
+  </ul>
+  }
   <canvas
     [id]="id()"
     [style.height.%]="100"

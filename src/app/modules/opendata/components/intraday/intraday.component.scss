@@ -12,3 +12,29 @@
     transform: translate(-50%, -50%);
   }
 }
+
+.app-legend {
+  align-items: center;
+  display: flex;
+  position: absolute;
+  top: 12px;
+  right: 64px;
+
+  &__item {
+    align-items: center;
+    display: flex;
+    color: rgb(1, 1, 1, 0.5);
+    font-size: 12px;
+
+    &:not(:last-of-type) {
+      margin-right: 8px;
+    }
+  }
+
+  &__marker {
+    display: block;
+    height: 12px;
+    width: 12px;
+    margin-right: 3px;
+  }
+}
