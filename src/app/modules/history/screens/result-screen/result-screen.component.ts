@@ -55,8 +55,7 @@ import {
 import { HistoryService } from "../../services/history.service"
 import { ActionButtonsComponent } from "../../components/action-buttons/action-buttons.component"
 import { TestService } from "../../../test/services/test.service"
-
-const MIN_ACCURACY_FOR_SHOWING_MAP = 2000
+import { MIN_ACCURACY_FOR_SHOWING_MAP } from "../../../opendata/constants/recent-measurements-columns"
 
 @Component({
   selector: "app-result-screen",
