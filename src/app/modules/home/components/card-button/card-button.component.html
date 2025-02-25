@@ -6,7 +6,16 @@
 >
   <ng-container *ngTemplateOutlet="card"></ng-container>
 </a>
-} @else if(url) {
+} @else if (mobileLink) {
+<a
+  [href]="mobileLink"
+  class="app-card"
+  [class.app-card--primary]="primary"
+  target="_blank"
+>
+  <ng-container *ngTemplateOutlet="card"></ng-container>
+</a>
+} @else if (url) {
 <div class="app-card" target="_blank">
   <ng-container *ngTemplateOutlet="card"></ng-container>
 </div>

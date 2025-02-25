@@ -77,10 +77,7 @@ export const imports = [
   templateUrl: "./test-screen.component.html",
   styleUrl: "./test-screen.component.scss",
 })
-export class TestScreenComponent
-  extends SeoComponent
-  implements OnInit, AfterViewInit
-{
+export class TestScreenComponent extends SeoComponent implements OnInit {
   addMedian = false
   goBackLocation = `/${this.i18nStore.activeLang}/${ERoutes.HOME}`
   historyService = inject(HistoryService)
@@ -107,37 +104,10 @@ export class TestScreenComponent
     "determinate"
   )
   platform = inject(PlatformService)
-  mobileWarning = computed(() => {
-    const platform = this.platform.detectPlatform()
-    if (platform === EPlatform.ANDROID) {
-      return this.i18nStore.translate("Please use Android app")
-    } else if (platform === EPlatform.IOS) {
-      return this.i18nStore.translate("Please use iOS app")
-    }
-    return null
-  })
   protected excludeColumns: string[] = []
-
-  ngAfterViewInit(): void {
-    const mw = this.mobileWarning()
-    if (mw) {
-      setTimeout(() => {
-        const link = document
-          .getElementById("mobileWarning")
-          ?.querySelector("a")
-        if (link) {
-          link.target = "_blank"
-          link.click()
-        }
-      }, 100)
-    }
-  }
 
   ngOnInit(): void {
     if (!globalThis.localStorage) {
-      return
-    }
-    if (this.mobileWarning()) {
       return
     }
     this.historyService.resetMeasurementHistory()

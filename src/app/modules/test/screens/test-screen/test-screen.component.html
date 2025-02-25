@@ -47,12 +47,7 @@
     title="Recent measurements"
   ></app-recent-history>
 </div>
-} @else { @if (mobileWarning(); as mobileWarning) {
-<div class="app-wrapper" style="margin-bottom: 20px">
-  <h1>{{ "Test" | translate }}</h1>
-  <p id="mobileWarning" [innerHTML]="mobileWarning"></p>
-</div>
-} } }
+} }
 <app-footer></app-footer>
 
 <ng-template #loopWaitProgressBar>

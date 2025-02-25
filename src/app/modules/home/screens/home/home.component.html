@@ -5,6 +5,15 @@
   <h1>{{ "RTR-NetTest" | translate }}</h1>
   <div class="app-row app-row--main">
     <div class="app-col app-col--padded">
+      @if (mobileLink(); as mobileLink) {
+      <app-card-button
+        iconImage="/assets/images/start-button-icon.svg"
+        smallText="Start test"
+        title="Start RTR-NetTest"
+        [primary]="true"
+        [mobileLink]="mobileLink"
+      ></app-card-button>
+      } @else {
       <app-card-button
         iconImage="/assets/images/start-button-icon.svg"
         smallText="Start test"
@@ -12,6 +21,7 @@
         [primary]="true"
         [routerLink]="eRoutes.TEST"
       ></app-card-button>
+      }
     </div>
     <div class="app-col app-col--padded">
       <div [innerHTML]="text$ | async"></div>

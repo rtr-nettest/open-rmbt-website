@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, inject, signal } from "@angular/core"
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  inject,
+  signal,
+} from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
@@ -87,6 +93,15 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   opendataService = inject(OpendataService)
   tableColumns: ITableColumn<IRecentMeasurement>[] = RECENT_MEASUREMENTS_COLUMNS
   tableData = signal<IBasicResponse<IRecentMeasurement> | null>(null)
+  mobileLink = computed(() => {
+    const platform = this.platform.detectPlatform()
+    if (platform === EPlatform.ANDROID) {
+      return this.i18nStore.translate("Android app href")
+    } else if (platform === EPlatform.IOS) {
+      return this.i18nStore.translate("iOS app href")
+    }
+    return null
+  })
 
   constructor(
     i18nStore: I18nStore,
