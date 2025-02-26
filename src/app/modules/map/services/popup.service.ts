@@ -132,11 +132,15 @@ export class PopupService {
       ping: measurement.ping_ms
         ? `${Math.round(measurement.ping_ms)} ${t["millis"]}`
         : t[UNKNOWN],
-      signalClass: this.classification.classify(
-        signal,
-        signalThreshold,
-        "biggerBetter"
-      ),
+      ...(signal
+        ? {
+            signalClass: this.classification.classify(
+              signal,
+              signalThreshold,
+              "biggerBetter"
+            ),
+          }
+        : {}),
       signal: signal ? `${signal} ${t["dBm"]}` : "",
       connection: measurement.platform
         ? measurement.platform.trim()

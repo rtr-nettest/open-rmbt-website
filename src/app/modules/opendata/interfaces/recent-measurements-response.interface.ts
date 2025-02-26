@@ -13,13 +13,13 @@ export interface IRecentMeasurement {
   download_kbit: number
   upload_kbit: number
   ping_ms: number
-  signal_strength: number
-  lte_rsrp: number
+  signal_strength?: number
+  lte_rsrp?: number
   platform: string
   provider_name: string
   model?: string
   loc_accuracy?: number
-  download_classification: number
+  download_classification?: number
   signal_classification?: number
 }
 

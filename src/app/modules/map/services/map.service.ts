@@ -348,12 +348,12 @@ export class MapService {
               lat: m.lat,
               long: m.lon,
               download_classification:
-                m.measurement_result.download_classification ?? -1,
-              download_kbit: m.measurement_result.download_kbit ?? -1,
-              ping_ms: m.measurement_result.ping_ms ?? -1,
-              upload_kbit: m.measurement_result.upload_kbit ?? -1,
-              signal_strength: m.measurement_result.signal_strength ?? -1,
-              lte_rsrp: m.measurement_result.lte_rsrp ?? -1,
+                m.measurement_result.download_classification,
+              download_kbit: m.measurement_result.download_kbit!,
+              ping_ms: m.measurement_result.ping_ms!,
+              upload_kbit: m.measurement_result.upload_kbit!,
+              signal_strength: m.measurement_result.signal_strength,
+              lte_rsrp: m.measurement_result.lte_rsrp,
               platform: m.network_info.network_type_label,
               provider_name: m.network_info.provider_name,
             })
