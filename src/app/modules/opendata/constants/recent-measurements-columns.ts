@@ -45,6 +45,7 @@ export const getPositionMarker = (testdata: IRecentMeasurement) => {
   let position_marker = ""
   if (testdata.long !== null) {
     let image =
+      testdata.loc_accuracy &&
       testdata.loc_accuracy <= MIN_ACCURACY_FOR_SHOWING_MAP
         ? "svg-marker"
         : "svg-marker-line"

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core"
 import { Popup, Map } from "maplibre-gl"
-import { IRecentMeasurement } from "../interfaces/recent-measurements-response.interface"
+import { IRecentMeasurement } from "../../opendata/interfaces/recent-measurements-response.interface"
 import { environment } from "../../../../environments/environment"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { firstValueFrom } from "rxjs"
@@ -52,21 +52,38 @@ export class PopupService {
     private readonly classification: ClassificationService
   ) {}
 
-  async addPopup(mapContainer: Map, measurement: IRecentMeasurement) {
-    const content = await this.getPopupContent(measurement)
+  async addPopup(
+    mapContainer: Map,
+    measurements: IRecentMeasurement[],
+    options?: {
+      lon: number
+      lat: number
+    }
+  ) {
+    const content = await this.getPopupContent(measurements)
     if (!this.popup) {
       this.popup = new Popup()
     }
 
-    if (content) {
-      this.popup
-        .setLngLat([measurement.long, measurement.lat])
-        .addTo(mapContainer)
-        .setHTML(content)
-    }
+    const lon = options?.lon ?? measurements[0].long
+    const lat = options?.lat ?? measurements[0].lat
+    this.popup.setLngLat([lon, lat]).addTo(mapContainer).setHTML(content)
   }
 
-  private async getPopupContent(
+  private async getPopupContent(measurements: IRecentMeasurement[]) {
+    const retVal = await Promise.all(
+      measurements.map((measurement) => this.getSingleMeasurement(measurement))
+    )
+    return (
+      "<div class='app-popup-wrapper'>" +
+      (retVal.length === 1
+        ? retVal[0]
+        : retVal.join("<hr class='app-separator'/>")) +
+      "</div>"
+    )
+  }
+
+  private async getSingleMeasurement(
     measurement: IRecentMeasurement
   ): Promise<string> {
     const t = this.i18nStore.translations

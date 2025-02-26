@@ -1,4 +1,4 @@
-import { Component, effect, inject, NgZone, OnInit } from "@angular/core"
+import { Component, inject, NgZone } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import {
   DEFAULT_CENTER,
@@ -10,12 +10,14 @@ import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.comp
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { firstValueFrom, Observable, Subscription, takeUntil, tap } from "rxjs"
-import { Map, NavigationControl, FullscreenControl } from "maplibre-gl"
-import { AsyncPipe } from "@angular/common"
 import {
-  FiltersComponent,
-  FilterSheetData,
-} from "../../components/filters/filters.component"
+  Map,
+  NavigationControl,
+  FullscreenControl,
+  MapMouseEvent,
+} from "maplibre-gl"
+import { AsyncPipe } from "@angular/common"
+import { FiltersComponent } from "../../components/filters/filters.component"
 import { IMapInfo } from "../../interfaces/map-info.interface"
 import { HeatmapLegendComponent } from "../../components/heatmap-legend/heatmap-legend.component"
 import { SearchComponent } from "../../components/search/search.component"
@@ -29,6 +31,8 @@ import { BasemapPickerComponent } from "../../components/basemap-picker/basemap-
 import { MapStoreService } from "../../store/map-store.service"
 import { toObservable } from "@angular/core/rxjs-interop"
 import { MessageService } from "../../../shared/services/message.service"
+import { PopupService } from "../../services/popup.service"
+import { fromLonLat } from "ol/proj.js"
 
 export const POINTS_HEATMAP_SWITCH_LEVEL = 12
 
@@ -66,7 +70,20 @@ export class MapScreenComponent extends SeoComponent {
     )
     .subscribe()
   messageService = inject(MessageService)
+  popupService = inject(PopupService)
   resizeSub!: Subscription
+  filters = toObservable(this.mapStore.filters)
+    .pipe(
+      takeUntil(this.destroyed$),
+      tap((filters) => {
+        if (filters) {
+          this.mapSourceOptions = filters
+          this.setTiles()
+          this.setTilesVisibility()
+        }
+      })
+    )
+    .subscribe()
   text$: Observable<string> = this.i18nStore.getLocalizedHtml("map").pipe(
     tap(() => {
       firstValueFrom(this.mapService.getFilters()).then((mapInfo) => {
@@ -96,9 +113,12 @@ export class MapScreenComponent extends SeoComponent {
   private readonly dialog = inject(MatDialog)
   private readonly scrollStrategyOptions = inject(ScrollStrategyOptions)
 
-  switchLayers(event: MapSourceOptions) {
-    this.mapSourceOptions = event
-    this.setTiles()
+  private get heatmapAndPointsActive() {
+    return (
+      (!this.mapSourceOptions?.tiles ||
+        this.mapSourceOptions?.tiles === ETileTypes.automatic) &&
+      this.activeLayers.length === 2
+    )
   }
 
   private async setMap() {
@@ -120,11 +140,6 @@ export class MapScreenComponent extends SeoComponent {
         new FiltersControl(this.i18nStore, () => {
           this.zone.run(() => {
             this.dialog.open(FiltersComponent, {
-              data: {
-                mapInfo: this.mapInfo,
-                onFiltersChange: (filters: MapSourceOptions) =>
-                  this.switchLayers(filters),
-              } as FilterSheetData,
               scrollStrategy: this.scrollStrategyOptions.noop(),
             })
           })
@@ -141,14 +156,15 @@ export class MapScreenComponent extends SeoComponent {
       )
       this.map.on("load", () => {
         this.switchBasemap(EBasemapType.BMAPGRAU)
-        this.setTiles()
+        this.mapStore.initFilters(this.mapInfo)
         this.map.on("zoom", () => {
           this.setTilesVisibility()
         })
         this.map.on("styledata", () => {
           this.setTilesVisibility()
         })
-        this.setTilesVisibility()
+        this.map.on("click", this.onClick.bind(this))
+        this.map.on("error", (event) => console.log(event))
       })
     })
   }
@@ -181,22 +197,43 @@ export class MapScreenComponent extends SeoComponent {
   }
 
   private setTilesVisibility() {
-    if (
-      (!this.mapSourceOptions?.tiles ||
-        this.mapSourceOptions?.tiles === ETileTypes.automatic) &&
-      this.activeLayers.length === 2
-    ) {
-      if (this.map.getZoom() < POINTS_HEATMAP_SWITCH_LEVEL) {
-        // Points
-        this.map.setLayoutProperty(this.activeLayers[1], "visibility", "none")
-      } else {
-        // Points
-        this.map.setLayoutProperty(
-          this.activeLayers[1],
-          "visibility",
-          "visible"
-        )
+    this.zone.runOutsideAngular(() => {
+      if (this.heatmapAndPointsActive) {
+        if (this.map.getZoom() < POINTS_HEATMAP_SWITCH_LEVEL) {
+          // Hide points
+          this.map.setLayoutProperty(this.activeLayers[1], "visibility", "none")
+        } else {
+          // Show points
+          this.map.setLayoutProperty(
+            this.activeLayers[1],
+            "visibility",
+            "visible"
+          )
+        }
       }
+    })
+  }
+
+  private onClick = (e: MapMouseEvent & Object) => {
+    if (
+      (this.heatmapAndPointsActive &&
+        this.map.getZoom() >= POINTS_HEATMAP_SWITCH_LEVEL) ||
+      this.mapSourceOptions?.tiles === ETileTypes.points
+    ) {
+      const coordinates = fromLonLat([e.lngLat.lng, e.lngLat.lat])
+      this.mapService
+        .getMeasurementsAtPoint(this.map, coordinates, this.mapSourceOptions)
+        .pipe(
+          tap((measurements) => {
+            if (measurements.length) {
+              this.popupService.addPopup(this.map, measurements, {
+                lon: e.lngLat.lng,
+                lat: e.lngLat.lat,
+              })
+            }
+          })
+        )
+        .subscribe()
     }
   }
 

@@ -44,6 +44,7 @@
     "maplibre-gl": "^4.7.1",
     "material-icons": "^1.13.12",
     "material-symbols": "^0.27.0",
+    "ol": "^10.4.0",
     "rmbtws": "https://github.com/rtr-nettest/rmbtws.git#master",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

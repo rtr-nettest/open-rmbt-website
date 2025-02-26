@@ -1,12 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Inject,
   inject,
   OnDestroy,
   ViewChild,
 } from "@angular/core"
-import { MapSourceOptions } from "../../services/map.service"
 import {
   FormBuilder,
   FormControl,
@@ -30,17 +28,11 @@ import {
 } from "@angular/material/dialog"
 import { ETileTypes } from "../../constants/tile-type.enum"
 import { NetworkMeasurementType } from "../../constants/network-measurement-type"
-import { MapInfoHash } from "../../dto/map-info-hash"
 import { FiltersForm } from "../../interfaces/filter-form"
 import { GeneralFiltersFormBuilderService } from "../../services/general-filters-form-builder.service"
 import { WlanFiltersFormBuilderService } from "../../services/wlan-filters-form-builder.service"
 import { BrowserFiltersFormBuilderService } from "../../services/browser-filters-form-builder.service"
 import { MobileFiltersFormBuilderService } from "../../services/mobile-filters-form-builder.service"
-
-export type FilterSheetData = {
-  mapInfo: IMapInfo
-  onFiltersChange: (filters: MapSourceOptions) => void
-}
 
 type ActiveControlGroup =
   | "networkMeasurementType"
@@ -52,22 +44,22 @@ type ActiveControlGroup =
   | "providerOptions"
 
 @Component({
-    selector: "app-filters",
-    imports: [
-        ReactiveFormsModule,
-        MatButtonModule,
-        MatDialogModule,
-        MatIconModule,
-        MatRadioModule,
-        MatTabsModule,
-        NgTemplateOutlet,
-        NgIf,
-        TranslatePipe,
-        TitleCasePipe,
-    ],
-    templateUrl: "./filters.component.html",
-    styleUrl: "./filters.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-filters",
+  imports: [
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatIconModule,
+    MatRadioModule,
+    MatTabsModule,
+    NgTemplateOutlet,
+    NgIf,
+    TranslatePipe,
+    TitleCasePipe,
+  ],
+  templateUrl: "./filters.component.html",
+  styleUrl: "./filters.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FiltersComponent implements OnDestroy {
   @ViewChild("tabs") tabs: MatTabGroup | undefined
@@ -75,7 +67,6 @@ export class FiltersComponent implements OnDestroy {
   activeControlGroup?: ActiveControlGroup
   destroyed$ = new Subject<void>()
   form!: FormGroup<FiltersForm>
-  mapInfo!: MapInfoHash
   mapTypesTitles = new Map<NetworkMeasurementType, string>()
   tilesTypes = Object.values(ETileTypes)
   filters$!: Observable<IMapInfo>
@@ -85,12 +76,15 @@ export class FiltersComponent implements OnDestroy {
   operatorOptions?: IMapFilter
   providerOptions?: IMapFilter
 
+  get mapInfo() {
+    return this.store.mapInfo
+  }
+
   get showStatistics() {
     return this.form.controls.tiles.value !== ETileTypes.points
   }
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: FilterSheetData,
     private readonly dialogRef: MatDialogRef<FiltersComponent>,
     private readonly store: MapStoreService,
     private readonly generalFB: GeneralFiltersFormBuilderService,
@@ -98,7 +92,6 @@ export class FiltersComponent implements OnDestroy {
     private readonly browserFB: BrowserFiltersFormBuilderService,
     private readonly mobileFB: MobileFiltersFormBuilderService
   ) {
-    this.mapInfo = new MapInfoHash(data.mapInfo)
     for (const networkType of this.mapInfo.get("MAP_TYPE").options ?? []) {
       for (const metric of networkType.options ?? []) {
         if (metric.params?.map_options)
@@ -108,16 +101,14 @@ export class FiltersComponent implements OnDestroy {
           )
       }
     }
-    const networkMeasurementType =
-      this.store.filters()?.networkMeasurementType ?? "mobile/download"
     this.form = this.fb.group({
       networkMeasurementType: new FormControl<NetworkMeasurementType>(
-        networkMeasurementType
+        this.store.filters()!.networkMeasurementType!
       ),
-      tiles: new FormControl<ETileTypes>(
-        this.store.filters()?.tiles ?? this.tilesTypes[0]
+      tiles: new FormControl<ETileTypes>(this.store.filters()!.tiles!),
+      filters: this.getFiltersByType(
+        this.store.filters()!.networkMeasurementType!
       ),
-      filters: this.getFiltersByType(networkMeasurementType),
     })
   }
 
@@ -150,7 +141,6 @@ export class FiltersComponent implements OnDestroy {
     }
     this.activeControlGroup = undefined
     this.store.filters.set({ ...this.form.value })
-    this.data.onFiltersChange(this.store.filters()!)
   }
 
   getFilterTitleFromValue(

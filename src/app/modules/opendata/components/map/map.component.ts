@@ -13,7 +13,7 @@ import { Subject, Subscription } from "rxjs"
 import { Marker, Map, NavigationControl, IControl } from "maplibre-gl"
 import { bbox } from "@turf/bbox"
 import { lineString } from "@turf/helpers"
-import { PopupService } from "../../services/popup.service"
+import { PopupService } from "../../../map/services/popup.service"
 import { FullScreenService } from "../../services/full-screen.service"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
 
@@ -117,7 +117,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
               diameter: i == this.measurements.length - 1 ? 24 : 18,
               classification: m.download_classification,
               onClick: () => {
-                this.popup.addPopup(this.map, m)
+                this.popup.addPopup(this.map, [m])
               },
             })
           })

@@ -7,6 +7,8 @@ import {
   catchError,
   debounceTime,
   fromEvent,
+  map,
+  Observable,
   of,
   Subject,
   takeUntil,
@@ -18,6 +20,11 @@ import { EBasemapType } from "../constants/basemap-type.enum"
 import { ETileTypes } from "../constants/tile-type.enum"
 import { BASE_SOURCE } from "../constants/map-styles"
 import { NetworkMeasurementType } from "../constants/network-measurement-type"
+import { IMarkerRequest } from "../interfaces/marker-request.interface"
+import { IMarkerResponse } from "../interfaces/marker-response.interface"
+import { IRecentMeasurement } from "../../opendata/interfaces/recent-measurements-response.interface"
+import { formatTime } from "../../shared/adapters/app-date.adapter"
+import { Coordinate } from "ol/coordinate"
 
 export const DEFAULT_CENTER: [number, number] = [
   13.786457000803567, 47.57838319858735,
@@ -299,5 +306,59 @@ export class MapService {
       default:
         return `/assets/images/map-icon-blue.svg`
     }
+  }
+
+  getMeasurementsAtPoint(
+    mapContainer: Map,
+    point: Coordinate,
+    options: MapSourceOptions = {}
+  ): Observable<IRecentMeasurement[]> {
+    const uuid = localStorage.getItem(UUID)
+    const body: IMarkerRequest = {
+      language: this.i18nStore.activeLang,
+      coords: {
+        x: point[0],
+        y: point[1],
+        z: mapContainer.getZoom(),
+      },
+      filter: {
+        ...Object.entries(options.filters ?? {}).reduce(
+          (acc, [key, val]) => (val !== "" ? { ...acc, [key]: val } : acc),
+          {}
+        ),
+        ...(uuid ? { highlight: uuid } : {}),
+      },
+      options: {
+        map_options: options.networkMeasurementType!,
+      },
+      capabilities: { classification: { count: 4 } },
+    }
+    return this.http
+      .post<IMarkerResponse>(
+        `${this.mainStore.api().url_map_server}/tiles/markers`,
+        body
+      )
+      .pipe(
+        map((res) =>
+          res.measurements.map((m) =>
+            formatTime({
+              open_uuid: "",
+              open_test_uuid: m.open_test_uuid,
+              time: m.time_string,
+              lat: m.lat,
+              long: m.lon,
+              download_classification:
+                m.measurement_result.download_classification ?? -1,
+              download_kbit: m.measurement_result.download_kbit ?? -1,
+              ping_ms: m.measurement_result.ping_ms ?? -1,
+              upload_kbit: m.measurement_result.upload_kbit ?? -1,
+              signal_strength: m.measurement_result.signal_strength ?? -1,
+              lte_rsrp: m.measurement_result.lte_rsrp ?? -1,
+              platform: m.network_info.network_type_label,
+              provider_name: m.network_info.provider_name,
+            })
+          )
+        )
+      )
   }
 }

@@ -17,8 +17,8 @@ export interface IRecentMeasurement {
   lte_rsrp: number
   platform: string
   provider_name: string
-  model: string
-  loc_accuracy: number
+  model?: string
+  loc_accuracy?: number
   download_classification: number
   signal_classification?: number
 }
