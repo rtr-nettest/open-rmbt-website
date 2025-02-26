@@ -1,10 +1,5 @@
 <mat-dialog-content>
-  <div class="app-close">
-    <button mat-icon-button (click)="close()">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
-
+  <app-close-dialog-header [dialogRef]="dialogRef"></app-close-dialog-header>
   @if (coverages$ | async; as data) {
   <app-html-wrapper [id]="mapContainerId" [html]="coverageText$ | async">
     <ng-container header>

@@ -16,6 +16,7 @@ import tz from "dayjs/plugin/timezone"
 import { MainStore } from "../../shared/store/main.store"
 import { LoopStoreService } from "../../loop/store/loop-store.service"
 import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
+import { ISyncResponse } from "../interfaces/sync-response.interface"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -105,6 +106,17 @@ export class HistoryRepositoryService {
       `${
         this.mainStore.api().url_web_statistic_server
       }/coverage?long=${lon}&lat=${lat}`
+    )
+  }
+
+  syncHistory(syncCode: string | null = null) {
+    return this.http.post<ISyncResponse>(
+      `${environment.api.baseUrl}/RMBTControlServer/sync`,
+      {
+        language: this.i18nStore.activeLang,
+        uuid: localStorage.getItem(UUID),
+        ...(syncCode ? { sync_code: syncCode } : {}),
+      }
     )
   }
 }

@@ -1,0 +1,10 @@
+@import "core";
+
+.app-close {
+  background-color: var(--mdc-dialog-container-color);
+  border-radius: 50%;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 1000;
+}

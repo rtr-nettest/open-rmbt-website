@@ -39,20 +39,22 @@ import { MatIconModule } from "@angular/material/icon"
 import { lineString } from "@turf/helpers"
 import bbox from "@turf/bbox"
 import { HistoryRepositoryService } from "../../repository/history-repository.service"
+import { CloseDialogHeaderComponent } from "../../../shared/components/close-dialog-header/close-dialog-header.component"
 
 @Component({
-    selector: "app-coverage-dialog",
-    imports: [
-        AsyncPipe,
-        HtmlWrapperComponent,
-        MatButtonModule,
-        MatDialogModule,
-        MatIconModule,
-        TableComponent,
-        TranslatePipe,
-    ],
-    templateUrl: "./coverage-dialog.component.html",
-    styleUrl: "./coverage-dialog.component.scss"
+  selector: "app-coverage-dialog",
+  imports: [
+    AsyncPipe,
+    CloseDialogHeaderComponent,
+    HtmlWrapperComponent,
+    MatButtonModule,
+    MatDialogModule,
+    MatIconModule,
+    TableComponent,
+    TranslatePipe,
+  ],
+  templateUrl: "./coverage-dialog.component.html",
+  styleUrl: "./coverage-dialog.component.scss",
 })
 export class CoverageDialogComponent implements OnDestroy {
   coverageText$!: Observable<string>
@@ -125,8 +127,8 @@ export class CoverageDialogComponent implements OnDestroy {
   }
 
   constructor(
+    readonly dialogRef: MatDialogRef<CoverageDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private readonly data: URLSearchParams,
-    private readonly dialogRef: MatDialogRef<CoverageDialogComponent>,
     private readonly repo: HistoryRepositoryService,
     private readonly i18nStore: I18nStore,
     private readonly mapService: MapService,

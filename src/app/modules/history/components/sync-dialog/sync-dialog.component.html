@@ -1,0 +1,63 @@
+<mat-dialog-content>
+  <app-close-dialog-header [dialogRef]="dialogRef"></app-close-dialog-header>
+  @if (code(); as code) {
+  <div class="app-container">
+    <div class="app-row">
+      <p>{{ "YourSyncCode" | translate }}</p>
+    </div>
+    <div class="app-row">
+      <h3 class="app-code">{{ code }}</h3>
+    </div>
+  </div>
+  } @else if (text() || error()) {
+  <div class="app-container">
+    <div class="app-row">
+      <p>{{ text() || error() }}</p>
+    </div>
+  </div>
+  } @else if (showForm()) {
+  <div class="app-container">
+    <div class="app-row">
+      <form [formGroup]="form" class="app-form">
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            formControlName="code"
+            placeholder="{{ 'Synchronization code' | translate }}"
+          />
+          <mat-error *ngIf="form.get('code')!.hasError('required')">
+            {{ "Code is required" | translate }}
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+    <footer class="app-footer">
+      <button
+        (click)="submitCode()"
+        mat-flat-button
+        class="app-button"
+        [disabled]="form.invalid"
+      >
+        {{ "Submit" | translate }}
+      </button>
+    </footer>
+  </div>
+  } @else {
+  <div class="app-container">
+    <div class="app-row">
+      <button class="app-button" mat-flat-button (click)="requestCode()">
+        {{ "Request synchronization code" | translate }}
+      </button>
+    </div>
+    <div class="app-row">
+      <button
+        class="app-button"
+        mat-stroked-button
+        (click)="showForm.set(true)"
+      >
+        {{ "Enter synchronization code" | translate }}
+      </button>
+    </div>
+  </div>
+  }
+</mat-dialog-content>

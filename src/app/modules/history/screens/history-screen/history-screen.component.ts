@@ -20,6 +20,11 @@ import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.int
 import { IHistoryGroupItem } from "../../interfaces/history-row.interface"
 import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
 import { LoadOnScrollComponent } from "../../../shared/components/load-on-scroll/load-on-scroll.component"
+import { MatDialog } from "@angular/material/dialog"
+import { SyncDialogComponent } from "../../components/sync-dialog/sync-dialog.component"
+import { on } from "events"
+import { ScrollStrategyOptions } from "@angular/cdk/overlay"
+import { MatButtonModule } from "@angular/material/button"
 
 export const historyImports = [
   ActionButtonsComponent,
@@ -35,18 +40,20 @@ export const historyImports = [
 ]
 
 @Component({
-    selector: "app-history-screen",
-    imports: historyImports,
-    templateUrl: "./history-screen.component.html",
-    styleUrl: "./history-screen.component.scss"
+  selector: "app-history-screen",
+  imports: [...historyImports, MatButtonModule],
+  templateUrl: "./history-screen.component.html",
+  styleUrl: "./history-screen.component.scss",
 })
 export class HistoryScreenComponent extends LoadOnScrollComponent {
   addMedian = false
   cdr = inject(ChangeDetectorRef)
+  dialog = inject(MatDialog)
   exporter = inject(HistoryExportService)
   service = inject(HistoryService)
   store = inject(HistoryStore)
   excludeColumns: string[] = []
+  scrollStrategyOptions = inject(ScrollStrategyOptions)
 
   actionButtons: IMainMenuItem[] = [
     {
@@ -118,6 +125,18 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
   changeSort = (sort: ISort) => {
     this.service.sortMeasurementHistory(sort, () => {
       this.updateData({ reset: true })
+    })
+  }
+
+  showSyncDialog() {
+    this.dialog.open(SyncDialogComponent, {
+      data: {
+        onSync: () => {
+          this.service.resetMeasurementHistory()
+          this.updateData({ reset: true })
+        },
+      },
+      scrollStrategy: this.scrollStrategyOptions.noop(),
     })
   }
 }

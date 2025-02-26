@@ -1,0 +1,26 @@
+@import "core";
+
+.app-container {
+  font-size: rem(14);
+  &:first-of-type {
+    margin-top: rem(40);
+  }
+}
+
+.app-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: rem(16);
+}
+
+.app-form {
+  width: 100%;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.app-button {
+  font-size: rem(14);
+}

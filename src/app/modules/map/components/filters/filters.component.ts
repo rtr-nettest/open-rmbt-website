@@ -33,6 +33,7 @@ import { GeneralFiltersFormBuilderService } from "../../services/general-filters
 import { WlanFiltersFormBuilderService } from "../../services/wlan-filters-form-builder.service"
 import { BrowserFiltersFormBuilderService } from "../../services/browser-filters-form-builder.service"
 import { MobileFiltersFormBuilderService } from "../../services/mobile-filters-form-builder.service"
+import { CloseDialogHeaderComponent } from "../../../shared/components/close-dialog-header/close-dialog-header.component"
 
 type ActiveControlGroup =
   | "networkMeasurementType"
@@ -46,6 +47,7 @@ type ActiveControlGroup =
 @Component({
   selector: "app-filters",
   imports: [
+    CloseDialogHeaderComponent,
     ReactiveFormsModule,
     MatButtonModule,
     MatDialogModule,
@@ -85,7 +87,7 @@ export class FiltersComponent implements OnDestroy {
   }
 
   constructor(
-    private readonly dialogRef: MatDialogRef<FiltersComponent>,
+    readonly dialogRef: MatDialogRef<FiltersComponent>,
     private readonly store: MapStoreService,
     private readonly generalFB: GeneralFiltersFormBuilderService,
     private readonly wlanFB: WlanFiltersFormBuilderService,

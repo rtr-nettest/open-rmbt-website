@@ -15,14 +15,12 @@ import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
 import { TestPhaseState } from "../../test/dto/test-phase-state.dto"
 import { EMeasurementStatus } from "../../test/constants/measurement-status.enum"
 import { TestVisualizationState } from "../../test/dto/test-visualization-state.dto"
-import { ERoutes } from "../../shared/constants/routes.enum"
 import { IPaginator } from "../../tables/interfaces/paginator.interface"
 import { ITestResultRequest } from "../interfaces/measurement-result.interface"
 import { HistoryRepositoryService } from "../repository/history-repository.service"
 import { TestStore } from "../../test/store/test.store"
 import { HISTORY_LIMIT, HistoryStore } from "../store/history.store"
 import { I18nStore } from "../../i18n/store/i18n.store"
-import { Router } from "@angular/router"
 import { MainStore } from "../../shared/store/main.store"
 import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interface"
 import { IHistoryGroupItem } from "../interfaces/history-row.interface"
@@ -224,5 +222,19 @@ export class HistoryService {
       }
     }
     return retVal
+  }
+
+  syncHistory(syncCode: string | null = null) {
+    return this.repo.syncHistory(syncCode).pipe(
+      map((data) => {
+        if (data.error.length > 0) {
+          throw new Error(data.error[0])
+        } else if (data.sync[0].msg_text && data.sync[0].msg_text.length > 0) {
+          return data.sync[0].msg_text
+        } else {
+          return data.sync[0].sync_code
+        }
+      })
+    )
   }
 }

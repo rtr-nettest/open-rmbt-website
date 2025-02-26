@@ -6,15 +6,23 @@
 }
 
 .app-header {
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 1em;
+  margin-bottom: rem(24);
 
   h1 {
     margin-left: 0;
+    margin-bottom: rem(16);
+    margin-top: rem(16);
   }
 }
 
 .app-subheader {
   margin-bottom: rem(30);
+}
+
+app-action-buttons {
+  margin-right: rem(16);
+  margin-top: rem(4);
 }

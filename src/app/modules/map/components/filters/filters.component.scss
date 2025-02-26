@@ -61,14 +61,6 @@ mat-radio-group {
   padding-bottom: 4px;
 }
 
-.app-close {
-  background-color: var(--mdc-dialog-container-color);
-  position: absolute;
-  right: 16px;
-  top: 16px;
-  z-index: 1000;
-}
-
 form {
   & > div:last-of-type {
     margin-bottom: rem(52);
