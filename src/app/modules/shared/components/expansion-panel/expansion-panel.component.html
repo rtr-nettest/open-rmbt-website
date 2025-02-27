@@ -3,10 +3,10 @@
   (afterExpand)="expand.emit(true)"
   (afterCollapse)="expand.emit(false)"
 >
-  <mat-expansion-panel-header>
-    <mat-panel-title class="app-title">{{
-      title() | translate
-    }}</mat-panel-title>
+  <mat-expansion-panel-header [attr.aria-label]="a11yTitle() | translate">
+    <mat-panel-title class="app-title" [attr.aria-hidden]="true">
+      {{ title() | translate }}</mat-panel-title
+    >
   </mat-expansion-panel-header>
   <ng-content></ng-content>
 </mat-expansion-panel>

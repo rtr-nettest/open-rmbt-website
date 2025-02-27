@@ -47,6 +47,7 @@
       <app-location-details
         [details]="locationTable()"
         style="display: block; margin-top: 24px"
+        a11yTitle="Location details"
       ></app-location-details>
     </div>
     }
@@ -57,21 +58,30 @@
           <h4>{{ "Ping" | translate }}</h4>
           <app-test-chart phase="ping"></app-test-chart>
         </header>
-        <app-ping-details [details]="pingTable()"></app-ping-details>
+        <app-ping-details
+          [details]="pingTable()"
+          a11yTitle="Ping details"
+        ></app-ping-details>
       </div>
       <div class="app-charts-row">
         <header class="app-charts-row__base">
           <h4>{{ "Download" | translate }}</h4>
           <app-test-chart phase="download"></app-test-chart>
         </header>
-        <app-speed-details [details]="downloadTable()"></app-speed-details>
+        <app-speed-details
+          [details]="downloadTable()"
+          a11yTitle="Download details"
+        ></app-speed-details>
       </div>
       <div class="app-charts-row">
         <header class="app-charts-row__base">
           <h4>{{ "Upload" | translate }}</h4>
           <app-test-chart phase="upload"></app-test-chart>
         </header>
-        <app-speed-details [details]="uploadTable()"></app-speed-details>
+        <app-speed-details
+          [details]="uploadTable()"
+          a11yTitle="Upload details"
+        ></app-speed-details>
       </div>
       @if (signalTable().length) {
       <div class="app-charts-row">
@@ -82,7 +92,10 @@
             [phaseDurations]="phaseDurations()"
           ></app-signal-chart>
         </header>
-        <app-signal-details [details]="signalTable()"></app-signal-details>
+        <app-signal-details
+          [details]="signalTable()"
+          a11yTitle="Signal details"
+        ></app-signal-details>
       </div>
       }
     </div>

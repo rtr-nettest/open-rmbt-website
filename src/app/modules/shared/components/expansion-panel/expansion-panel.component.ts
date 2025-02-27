@@ -10,5 +10,6 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 })
 export class ExpansionPanelComponent {
   title = input.required<string>()
+  a11yTitle = input.required<string>()
   expand = output<boolean>()
 }

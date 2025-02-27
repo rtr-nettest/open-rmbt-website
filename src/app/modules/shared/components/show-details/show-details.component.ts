@@ -15,6 +15,7 @@ export const imports = [ExpansionPanelComponent, TableComponent]
   styleUrl: "./show-details.component.scss",
 })
 export class ShowDetailsComponent<T> {
+  a11yTitle = input.required<string>()
   details = input<T[]>([])
   data = computed<IBasicResponse<T>>(() => {
     const content = this.details()
