@@ -1,7 +1,7 @@
 @if (form) {
 <div class="app-row">
   <div class="app-col">
-    <label class="app-label">{{ key | translate }}</label>
+    <label class="app-label" [for]="key">{{ key | translate }}</label>
   </div>
   <div class="app-col app-col--third">
     <span class="app-field-prefix">{{ "from_value" | translate }}</span>
@@ -12,6 +12,7 @@
     >
       <input
         matInput
+        [id]="key"
         [min]="ranges.get(key)!.min"
         type="number"
         [formControl]="getFormControl(ranges.get(key)!.from)"

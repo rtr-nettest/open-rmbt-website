@@ -1,7 +1,7 @@
 @if (form) {
 <div class="app-row">
   <div class="app-col">
-    <label class="app-label">{{ key | translate }}</label>
+    <label class="app-label" [for]="key">{{ key | translate }}</label>
   </div>
   <div class="app-col app-col--two-thirds">
     <span class="app-field-prefix"></span>
@@ -10,7 +10,12 @@
       appearance="outline"
       subscriptSizing="dynamic"
     >
-      <input matInput type="text" [formControl]="getFormControl(key)" />
+      <input
+        [id]="key"
+        matInput
+        type="text"
+        [formControl]="getFormControl(key)"
+      />
     </mat-form-field>
   </div>
 </div>

@@ -46,8 +46,15 @@
     </div>
     <div class="app-row">
       <div class="app-col">
-        <label class="app-label">{{ "Providers from" | translate }}</label>
-        <mat-select class="app-select" formControlName="country" panelWidth="">
+        <label class="app-label" for="country">{{
+          "Providers from" | translate
+        }}</label>
+        <mat-select
+          id="country"
+          class="app-select"
+          formControlName="country"
+          panelWidth=""
+        >
           @for (item of countries; track $index) {
           <mat-option class="app-option" [value]="item[0]">{{
             item[1] | translate
@@ -72,8 +79,15 @@
       }
       <div class="app-spacer"></div>
       <div class="app-col">
-        <label class="app-label">{{ "Time span" | translate }}</label>
-        <mat-select class="app-select" formControlName="duration" panelWidth="">
+        <label for="duration" class="app-label">{{
+          "Time span" | translate
+        }}</label>
+        <mat-select
+          id="duration"
+          class="app-select"
+          formControlName="duration"
+          panelWidth=""
+        >
           @for (item of durations; track $index) {
           <mat-option class="app-option" [value]="item[0]">{{
             item[1] | translate
@@ -83,7 +97,12 @@
       </div>
       <div class="app-spacer"></div>
       <div class="app-col">
-        <a (click)="setShowMore()" class="app-link" iconPositionEnd>
+        <a
+          (click)="setShowMore()"
+          class="app-link"
+          iconPositionEnd
+          role="button"
+        >
           @if (!showMore) {
           <span>{{ "More" | translate }}</span
           ><mat-icon>arrow_drop_down</mat-icon>
@@ -97,8 +116,11 @@
     @if (showMore) {
     <div class="app-row">
       <div class="app-col">
-        <label class="app-label">{{ "Technology" | translate }}</label>
+        <label class="app-label" for="network_type_group">{{
+          "Technology" | translate
+        }}</label>
         <mat-select
+          id="network_type_group"
           class="app-select"
           formControlName="network_type_group"
           panelWidth=""
@@ -112,8 +134,15 @@
       </div>
       <div class="app-spacer"></div>
       <div class="app-col">
-        <label class="app-label">{{ "Quantile" | translate }}</label>
-        <mat-select class="app-select" formControlName="quantile" panelWidth="">
+        <label class="app-label" for="quantile">{{
+          "Quantile" | translate
+        }}</label>
+        <mat-select
+          id="quantile"
+          class="app-select"
+          formControlName="quantile"
+          panelWidth=""
+        >
           @for (item of quantiles; track $index) {
           <mat-option class="app-option" [value]="item[0]">{{
             item[1] | translate
@@ -123,8 +152,11 @@
       </div>
       <div class="app-spacer"></div>
       <div class="app-col">
-        <label class="app-label">{{ "Location accuracy" | translate }}</label>
+        <label class="app-label" for="location_accuracy">{{
+          "Location accuracy" | translate
+        }}</label>
         <mat-select
+          id="location_accuracy"
           class="app-select"
           formControlName="location_accuracy"
           panelWidth=""
@@ -138,10 +170,13 @@
       </div>
       <div class="app-spacer"></div>
       <div class="app-col">
-        <label class="app-label">{{ "End date" | translate }}</label>
+        <label class="app-label" for="end_date">{{
+          "End date" | translate
+        }}</label>
         <mat-form-field class="app-form-field" appearance="outline">
           <input
             matInput
+            id="end_date"
             [matDatepicker]="picker"
             formControlName="end_date"
             placeholder="MM/DD/YYYY"

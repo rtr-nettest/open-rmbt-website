@@ -235,7 +235,6 @@
       <mat-row
         class="app-expandable-row"
         *matRowDef="let expandableRow; columns: expandableColumns"
-        tabindex="1"
       >
       </mat-row>
     </ng-container>
@@ -257,7 +256,6 @@
 
     <ng-container *ngIf="footerColumns.length">
       <mat-footer-row
-        tabindex="2"
         class="app-table__footer"
         *matFooterRowDef="footerColumns"
       ></mat-footer-row>
