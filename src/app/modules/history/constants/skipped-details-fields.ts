@@ -5,6 +5,8 @@ export const SKIPPED_FIELDS = new Set([
   "ping_classification",
   "long",
   "lat",
+  "geo_long",
+  "geo_lat",
   "loc_accuracy",
   "loc_src",
   "pinned",

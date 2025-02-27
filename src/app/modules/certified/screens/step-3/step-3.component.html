@@ -49,6 +49,13 @@
         formControlName="locationTypeOther"
         name="locationTypeOther"
       ></textarea>
+      <mat-error
+        *ngIf="
+          form.controls.locationType.controls[locationValues.length - 1].value &&
+          form.controls.locationTypeOther.errors?.['required']
+        "
+        >{{ "Location is required" | translate }}</mat-error
+      >
     </mat-form-field>
     <h4>
       {{ "Please describe your Internet access" | translate }}

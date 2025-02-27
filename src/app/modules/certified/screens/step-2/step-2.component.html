@@ -29,6 +29,9 @@
         name="firstName"
         required
       />
+      <mat-error *ngIf="form.get('firstName')!.hasError('required')">
+        {{ "First name is required" | translate }}
+      </mat-error>
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>{{ "Last name" | translate }}</mat-label>
@@ -39,6 +42,9 @@
         name="lastName"
         required
       />
+      <mat-error *ngIf="form.get('lastName')!.hasError('required')">
+        {{ "Last name is required" | translate }}
+      </mat-error>
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>{{ "Academic degree" | translate }}</mat-label>
@@ -59,6 +65,9 @@
         rows="3"
         required
       ></textarea>
+      <mat-error *ngIf="form.get('address')!.hasError('required')">
+        {{ "Address is required" | translate }}
+      </mat-error>
     </mat-form-field>
     <h4>{{ "Is it the first measurement cycle?" | translate }}<sup>*</sup></h4>
     <mat-radio-group formControlName="isFirstCycle" name="isFirstCycle">

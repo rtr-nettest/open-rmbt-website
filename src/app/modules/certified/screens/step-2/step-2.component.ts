@@ -29,24 +29,26 @@ import { MatInputModule } from "@angular/material/input"
 import { MatRadioModule } from "@angular/material/radio"
 import { LoopService } from "../../../loop/services/loop.service"
 import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
+import { NgIf } from "@angular/common"
 
 @Component({
-    selector: "app-step-2",
-    imports: [
-        CertifiedBreadcrumbsComponent,
-        BreadcrumbsComponent,
-        HeaderComponent,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatRadioModule,
-        ReactiveFormsModule,
-        TopNavComponent,
-        TranslatePipe,
-        FooterComponent,
-    ],
-    templateUrl: "./step-2.component.html",
-    styleUrl: "./step-2.component.scss"
+  selector: "app-step-2",
+  imports: [
+    CertifiedBreadcrumbsComponent,
+    BreadcrumbsComponent,
+    HeaderComponent,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    NgIf,
+    ReactiveFormsModule,
+    TopNavComponent,
+    TranslatePipe,
+    FooterComponent,
+  ],
+  templateUrl: "./step-2.component.html",
+  styleUrl: "./step-2.component.scss",
 })
 export class Step2Component extends SeoComponent implements OnInit {
   form?: FormGroup<ICertifiedDataFormControls>
