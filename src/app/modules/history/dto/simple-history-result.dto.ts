@@ -16,6 +16,7 @@ import {
 } from "../../shared/services/classification.service"
 import { CalcService } from "../services/calc.service"
 import { RESULT_DATE_FORMAT } from "../../test/constants/strings"
+import { IQoeItem } from "../interfaces/qoe-item.interface"
 
 export class SimpleHistoryResult implements ISimpleHistoryResult {
   static fromHistoryResponse(response: any) {
@@ -143,7 +144,8 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
       openTestResponse?.ip_anonym,
       uuid,
       response?.loop_uuid,
-      openTestResponse
+      openTestResponse,
+      response?.qoe_classification
     )
   }
 
@@ -158,6 +160,7 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
     public ipAddress: string,
     public testUuid?: string,
     public loopUuid?: string,
-    public openTestResponse?: { [key: string]: any }
+    public openTestResponse?: { [key: string]: any },
+    public qoeClassification?: IQoeItem[]
   ) {}
 }

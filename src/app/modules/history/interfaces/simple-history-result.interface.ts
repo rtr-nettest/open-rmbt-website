@@ -1,3 +1,5 @@
+import { IQoeItem } from "./qoe-item.interface"
+
 export interface ISimpleHistoryPaginator {
   totalPages: number
   totalElements: number
@@ -49,4 +51,5 @@ export interface ISimpleHistoryResult {
   ping?: ISimpleHistoryTestMetric
   signal?: ISimpleHistoryTestMetric
   openTestResponse?: { [key: string]: any }
+  qoeClassification?: IQoeItem[]
 }

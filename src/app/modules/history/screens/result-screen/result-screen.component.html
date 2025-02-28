@@ -36,6 +36,17 @@
       aria-live="polite"
     ></app-table>
   </div>
+  <div *ngIf="qoeResults() as qoeResults" class="app-container">
+    <h4>{{ "Quality" | translate }}</h4>
+    <app-table
+      [columns]="qoeColumns"
+      [data]="qoeResults"
+      [sort]="sort"
+      [shouldHideHeader]="true"
+      [tableClassNames]="['app-table--bordered']"
+      aria-live="polite"
+    ></app-table>
+  </div>
   <ng-container *ngIf="detailedResults() as detailedResult">
     @defer () { @if (locationTable().length) {
     <div class="app-container" [id]="mapContainerId" style="margin-top: 24px">

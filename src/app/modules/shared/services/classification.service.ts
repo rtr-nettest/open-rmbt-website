@@ -54,7 +54,7 @@ export class ClassificationService {
       case 4:
         return `<i class="app-icon--phase app-icon--phase-${phase}-deep-green"></i>`
       default:
-        return `<i class="app-icon--phase app-icon--phase-${phase}"`
+        return `<i class="app-icon--phase app-icon--phase-${phase}"></i>`
     }
   }
 
@@ -73,5 +73,27 @@ export class ClassificationService {
       sprite = "svg-empty"
     }
     return `<i class="svg-icon svg24 ${sprite}"></i>`
+  }
+
+  getQoeIconByCategory(category?: string) {
+    if (!category) {
+      return `<i class="app-icon--phase"></i>`
+    }
+    return `<i class="app-icon--phase app-icon--phase-${category}"></i>`
+  }
+
+  getQoeBarByClass(fill: number, classification?: number) {
+    switch (classification) {
+      case 1:
+        return `<i class="app-phase-bar app-phase-bar-${fill}-red"></i>`
+      case 2:
+        return `<i class="app-phase-bar app-phase-bar-${fill}-yellow"></i>`
+      case 3:
+        return `<i class="app-phase-bar app-phase-bar-${fill}-green"></i>`
+      case 4:
+        return `<i class="app-phase-bar app-phase-bar-${fill}-deep-green"></i>`
+      default:
+        return `<i class="app-phase-bar app-phase-bar-${fill}"></i>`
+    }
   }
 }

@@ -98,6 +98,19 @@ export class ResultScreenComponent extends SeoComponent {
       isHtml: true,
     },
   ]
+  qoeColumns: ITableColumn[] = [
+    {
+      columnDef: "title",
+      header: "",
+      getNgClass: () => "app-cell--30",
+      isHtml: true,
+    },
+    {
+      columnDef: "value",
+      header: "",
+      isHtml: true,
+    },
+  ]
   error$!: Observable<Error | null>
   result$!: Observable<SimpleHistoryResult | null>
   sort: ISort = {
@@ -131,6 +144,7 @@ export class ResultScreenComponent extends SeoComponent {
   detailedResults = signal<IBasicResponse<IDetailedHistoryResultItem> | null>(
     null
   )
+  qoeResults = signal<IBasicResponse<IDetailedHistoryResultItem> | null>(null)
 
   downloadTable = signal<IOverallResult[]>([])
   uploadTable = signal<IOverallResult[]>([])
@@ -198,6 +212,7 @@ export class ResultScreenComponent extends SeoComponent {
         if (result) {
           this.basicResults.set(this.getBasicResults(result))
           this.detailedResults.set(this.getDetailedResults(result))
+          this.qoeResults.set(this.getQoeResults(result))
         }
         this.loading.set(false)
         this.testService.visUpdateSub?.unsubscribe()
@@ -310,6 +325,28 @@ export class ResultScreenComponent extends SeoComponent {
           return acc
       }
     }, [] as IDetailedHistoryResultItem[])
+    return {
+      content,
+      totalElements: content.length,
+    }
+  }
+
+  private getQoeResults(result: ISimpleHistoryResult) {
+    const rounder = 0.05
+    const content =
+      result.qoeClassification?.map((item) => {
+        const fill =
+          Math.max(rounder, Math.round(item.quality / rounder) * rounder) * 100
+        return {
+          title: `${this.classification.getQoeIconByCategory(
+            item.category
+          )}<span>${this.i18nStore.translate(item.category)}</span>`,
+          value: this.classification.getQoeBarByClass(
+            fill,
+            item.classification
+          ),
+        }
+      }) ?? []
     return {
       content,
       totalElements: content.length,
