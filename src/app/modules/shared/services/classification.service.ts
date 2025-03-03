@@ -81,19 +81,4 @@ export class ClassificationService {
     }
     return `<i class="app-icon--phase app-icon--phase-${category}"></i>`
   }
-
-  getQoeBarByClass(fill: number, classification?: number) {
-    switch (classification) {
-      case 1:
-        return `<i class="app-phase-bar app-phase-bar-${fill}-red"></i>`
-      case 2:
-        return `<i class="app-phase-bar app-phase-bar-${fill}-yellow"></i>`
-      case 3:
-        return `<i class="app-phase-bar app-phase-bar-${fill}-green"></i>`
-      case 4:
-        return `<i class="app-phase-bar app-phase-bar-${fill}-deep-green"></i>`
-      default:
-        return `<i class="app-phase-bar app-phase-bar-${fill}"></i>`
-    }
-  }
 }

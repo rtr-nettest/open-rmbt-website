@@ -56,6 +56,7 @@ import { HistoryService } from "../../services/history.service"
 import { ActionButtonsComponent } from "../../components/action-buttons/action-buttons.component"
 import { TestService } from "../../../test/services/test.service"
 import { MIN_ACCURACY_FOR_SHOWING_MAP } from "../../../opendata/constants/recent-measurements-columns"
+import { QoeBarComponent } from "../../components/qoe-bar/qoe-bar.component"
 
 @Component({
   selector: "app-result-screen",
@@ -108,7 +109,10 @@ export class ResultScreenComponent extends SeoComponent {
     {
       columnDef: "value",
       header: "",
-      isHtml: true,
+      component: QoeBarComponent,
+      getComponentParameters(value) {
+        return value
+      },
     },
   ]
   error$!: Observable<Error | null>
@@ -332,19 +336,13 @@ export class ResultScreenComponent extends SeoComponent {
   }
 
   private getQoeResults(result: ISimpleHistoryResult) {
-    const rounder = 0.05
     const content =
       result.qoeClassification?.map((item) => {
-        const fill =
-          Math.max(rounder, Math.round(item.quality / rounder) * rounder) * 100
         return {
           title: `${this.classification.getQoeIconByCategory(
             item.category
           )}<span>${this.i18nStore.translate(item.category)}</span>`,
-          value: this.classification.getQoeBarByClass(
-            fill,
-            item.classification
-          ),
+          value: item,
         }
       }) ?? []
     return {
