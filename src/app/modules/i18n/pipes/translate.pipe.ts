@@ -9,7 +9,7 @@ import { I18nStore } from "../store/i18n.store"
 export class TranslatePipe implements PipeTransform {
   constructor(private readonly store: I18nStore) {}
 
-  transform(key: string | null, args?: { [key: string]: any }) {
+  transform(key: string | null | undefined, args?: { [key: string]: any }) {
     if (!key) {
       return ""
     }

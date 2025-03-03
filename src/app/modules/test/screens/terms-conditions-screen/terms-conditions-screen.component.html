@@ -1,4 +1,4 @@
-@if (settings$ | async; as settings) {
+@if (storageItem) {
 <app-agreement
   title="Privacy Policy and Terms of Use"
   [text]="(terms$ | async)!"

@@ -1,5 +1,6 @@
 /
 /history
+/iframe
 /interface
 /map
 /statistics
@@ -20,6 +21,7 @@
 /terms-and-conditions
 /de/
 /de/history
+/de/iframe
 /de/interface
 /de/map
 /de/statistics
@@ -40,6 +42,7 @@
 /de/terms-and-conditions
 /en/
 /en/history
+/en/iframe
 /en/interface
 /en/map
 /en/statistics

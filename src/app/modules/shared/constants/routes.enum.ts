@@ -1,6 +1,7 @@
 export enum ERoutes {
   HOME = "",
   HISTORY = "history",
+  IFRAME = "iframe",
   INTERFACE = "interface",
   MAP = "map",
   STATISTICS = "statistics",

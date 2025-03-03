@@ -22,6 +22,7 @@ import { CertifiedResultScreenComponent } from "./modules/certified/screens/cert
 import { unloadOnlyFor } from "./modules/shared/guards/unload-only-for.guard"
 import { OpendataScreenComponent } from "./modules/opendata/screens/opendata-screen/opendata-screen.component"
 import { InterfaceScreenComponent } from "./modules/opendata/screens/interface-screen/interface-screen.component"
+import { IframeComponent } from "./modules/test/screens/iframe/iframe.component"
 
 export const routes: Routes = [
   {
@@ -185,6 +186,14 @@ export const routes: Routes = [
       {
         path: ERoutes.INTERFACE,
         component: InterfaceScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "open_data_specification",
+        },
+      },
+      {
+        path: ERoutes.IFRAME,
+        component: IframeComponent,
         resolve: [localeResolver],
         data: {
           title: "open_data_specification",

@@ -100,8 +100,6 @@ export class TestService {
         }
       }
 
-      //1006
-
       const communication = new rmbtws.RMBTControlServerCommunication(config, {
         register: (data: any) => {
           if (data.response["loop_uuid"]) {
