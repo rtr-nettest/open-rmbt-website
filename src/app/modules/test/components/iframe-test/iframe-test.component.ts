@@ -12,6 +12,8 @@ import { roundToSignificantDigits } from "../../../shared/util/math"
 import { environment } from "../../../../../environments/environment"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { MatButtonModule } from "@angular/material/button"
+import { BasicNetworkInfo } from "../../dto/basic-network-info.dto"
+import { TestVisualizationState } from "../../dto/test-visualization-state.dto"
 
 const DEFAULT_VALUE = "-"
 
@@ -111,6 +113,8 @@ export class IframeTestComponent {
     this.status.set(DEFAULT_VALUE)
     this.testServer.set(DEFAULT_VALUE)
     this.up.set(DEFAULT_VALUE)
+    this.testStore.visualization$.next(new TestVisualizationState())
+    this.testStore.basicNetworkInfo.set(new BasicNetworkInfo())
     this.testService.triggerNextTest()
   }
 }
