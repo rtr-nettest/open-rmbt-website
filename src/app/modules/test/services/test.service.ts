@@ -238,6 +238,74 @@ export class TestService {
     }
   }
 
+  getProgressSegment(status: EMeasurementStatus, progress: number) {
+    var ProgressSegmentsTotal = 96
+    var ProgressSegmentsInit = 1
+    var ProgressSegmentsInitDown = 13
+    var ProgressSegmentsPing = 15
+    var ProgressSegmentsDown = 34
+    var ProgressSegmentsInitUp = 4
+    var ProgressSegmentsUp = 29
+    var progressValue = 0
+    var progressSegments = 0
+    switch (status) {
+      case EMeasurementStatus.INIT:
+        progressSegments = +Math.round(ProgressSegmentsInit * progress)
+        break
+      case EMeasurementStatus.INIT_DOWN:
+        progressSegments =
+          ProgressSegmentsInit + Math.round(ProgressSegmentsInitDown * progress)
+        break
+      case EMeasurementStatus.PING:
+        progressSegments =
+          ProgressSegmentsInit +
+          ProgressSegmentsInitDown +
+          Math.round(ProgressSegmentsPing * progress)
+        break
+      case EMeasurementStatus.DOWN:
+        progressSegments =
+          ProgressSegmentsInit +
+          ProgressSegmentsInitDown +
+          ProgressSegmentsPing +
+          Math.round(ProgressSegmentsDown * progress)
+        break
+      case EMeasurementStatus.INIT_UP:
+        progressSegments =
+          ProgressSegmentsInit +
+          ProgressSegmentsInitDown +
+          ProgressSegmentsPing +
+          ProgressSegmentsDown +
+          Math.round(ProgressSegmentsInitUp * progress)
+        break
+      case EMeasurementStatus.UP:
+        progressSegments =
+          ProgressSegmentsInit +
+          ProgressSegmentsInitDown +
+          ProgressSegmentsPing +
+          ProgressSegmentsDown +
+          ProgressSegmentsInitUp +
+          Math.round(ProgressSegmentsUp * progress)
+        progressSegments = Math.min(95, progressSegments)
+        break
+      case EMeasurementStatus.SUBMITTING_RESULTS:
+      case EMeasurementStatus.END:
+        progressSegments = ProgressSegmentsTotal
+        break
+      case EMeasurementStatus.QOS_TEST_RUNNING:
+        progressSegments = 95
+        break
+      case EMeasurementStatus.SPEEDTEST_END:
+      case EMeasurementStatus.QOS_END:
+        progressSegments = 95
+        break
+      case EMeasurementStatus.ERROR:
+      case EMeasurementStatus.ABORTED:
+        progressSegments = 0
+        break
+    }
+    return Math.round((progressSegments / ProgressSegmentsTotal) * 100)
+  }
+
   sendAbort() {
     navigator.sendBeacon(
       `${environment.api.baseUrl}/RMBTControlServer/resultUpdate`,

@@ -1,0 +1,36 @@
+<p [innerHTML]="text$ | async"></p>
+@if (form) {
+<form [formGroup]="form" (ngSubmit)="submit()">
+  @if (!form.controls['agree'].disabled) {
+  <p>
+    <mat-checkbox formControlName="agree" name="agree"
+      ><span
+        class="app-form-text"
+        [innerHTML]="
+          'I agree to the terms of use and privacy policy' | translate
+        "
+      ></span
+    ></mat-checkbox>
+  </p>
+  }
+  <p style="margin-top: 1.6em; margin-bottom: 1.6em">
+    <button
+      mat-flat-button
+      class="app-button"
+      type="submit"
+      [disabled]="form.invalid"
+    >
+      <span class="app-form-text">{{ "Start measurement" | translate }}</span>
+    </button>
+  </p>
+</form>
+}
+<ul class="app-list" role="menu">
+  @for (item of menu; track $index) {
+  <li class="app-li">
+    <a class="app-link" [href]="item.url | translate" target="_blank">{{
+      item.label | translate
+    }}</a>
+  </li>
+  }
+</ul>

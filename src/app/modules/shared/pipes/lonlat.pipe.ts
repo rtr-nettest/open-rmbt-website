@@ -8,7 +8,7 @@ export const LOC_FORMAT = "X DDmm"
   standalone: true,
 })
 export class LonlatPipe implements PipeTransform {
-  transform(value: [number, number] | null, ...args: unknown[]): unknown {
+  transform(value: [number, number] | null, ...args: unknown[]): string | null {
     if (!value) {
       return null
     }

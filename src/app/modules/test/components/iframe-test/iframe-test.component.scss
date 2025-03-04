@@ -1,0 +1,56 @@
+@import "core";
+
+.app-progressbar {
+  background-color: $color_primary;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  color: white;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  margin-bottom: 10px;
+  text-align: center;
+  transition: width 0.6s ease;
+}
+
+.app-table {
+  width: 100%;
+}
+
+.app-col {
+  &:first-of-type {
+    width: 25%;
+  }
+}
+
+.app-metric {
+  align-items: center;
+  display: flex;
+  height: 22px;
+}
+
+.app-row {
+  &--separator {
+    height: 20px;
+  }
+}
+
+.app-footer {
+  display: flex;
+  margin-top: 20px;
+}
+
+.app-button {
+  border-width: 2px;
+  font-size: 14px;
+  &:not(:last-child) {
+    margin-right: 12px;
+  }
+}
+
+mat-spinner {
+  margin-right: 4px;
+  height: 14px !important;
+  width: 14px !important;
+  --mdc-circular-progress-size: 14px !important;
+  --mdc-circular-progress-active-indicator-width: 14px !important;
+}

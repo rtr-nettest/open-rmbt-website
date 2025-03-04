@@ -1,13 +1,9 @@
 .app-iframe {
   margin: 0 auto;
-  max-width: 600px;
+  max-width: 630px;
   min-width: 370px;
   min-height: 400px;
   padding: 15px;
-}
-
-.app-form-text {
-  font-size: 1rem;
 }
 
 .app-logo {
@@ -20,23 +16,4 @@
     height: 100%;
     width: auto;
   }
-}
-
-.app-list {
-  margin-top: 40px;
-}
-
-.app-li {
-  color: #999;
-  display: inline-block;
-  &:not(:last-of-type)::after {
-    content: "·";
-    display: inline-block;
-    margin-left: 4px;
-    margin-right: 4px;
-  }
-}
-
-.app-link {
-  color: #999;
 }

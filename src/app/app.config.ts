@@ -30,6 +30,7 @@ import {
 } from "chart.js"
 import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm"
 import { errorInterceptor } from "./modules/shared/interceptors/error.interceptor"
+import { LonlatPipe } from "./modules/shared/pipes/lonlat.pipe"
 
 Chart.register(
   BarElement,
@@ -56,6 +57,7 @@ export async function provideConfig(): Promise<ApplicationConfig> {
       provideHttpClient(withFetch(), withInterceptors([errorInterceptor])),
       await provideI18n(),
       { provide: DatePipe },
+      { provide: LonlatPipe },
     ],
   }
 }
