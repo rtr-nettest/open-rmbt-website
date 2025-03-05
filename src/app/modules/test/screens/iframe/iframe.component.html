@@ -5,7 +5,9 @@
       [alt]="'RTR-Nettest' | translate"
     />
   </a>
-  @if (!testIsRunning()) {
+  @if (warning(); as warning) {
+  <p>{{ warning | translate }}</p>
+  } @else { @if (!testIsRunning()) {
   <app-iframe-intro (onSubmit)="launchTest()"></app-iframe-intro>
-  } @else { <app-iframe-test></app-iframe-test> }
+  } @else { <app-iframe-test></app-iframe-test> } }
 </div>

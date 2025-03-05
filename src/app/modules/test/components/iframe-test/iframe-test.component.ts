@@ -1,6 +1,11 @@
-import { Component, inject, signal } from "@angular/core"
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from "@angular/core"
 import { TestStore } from "../../store/test.store"
-import { distinctUntilChanged, tap, withLatestFrom } from "rxjs"
+import { distinctUntilChanged, tap } from "rxjs"
 import { AsyncPipe } from "@angular/common"
 import { TestService } from "../../services/test.service"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
@@ -14,6 +19,7 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
 import { MatButtonModule } from "@angular/material/button"
 import { BasicNetworkInfo } from "../../dto/basic-network-info.dto"
 import { TestVisualizationState } from "../../dto/test-visualization-state.dto"
+import { ITestVisualizationState } from "../../interfaces/test-visualization-state.interface"
 
 const DEFAULT_VALUE = "-"
 
@@ -27,6 +33,7 @@ const DEFAULT_VALUE = "-"
   ],
   templateUrl: "./iframe-test.component.html",
   styleUrl: "./iframe-test.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IframeTestComponent {
   i18nStore = inject(I18nStore)
@@ -98,8 +105,41 @@ export class IframeTestComponent {
       this.resultUrl.set(
         `${environment.deployedUrl}/${this.i18nStore.activeLang}/${ERoutes.RESULT}?test_uuid=${currentPhase.testUuid}`
       )
+
+      this.notifyParent(state)
     })
   )
+
+  private parentWindowMessage = ""
+
+  notifyParent(state: ITestVisualizationState) {
+    if (parent.window && typeof parent.window.postMessage === "function") {
+      if (
+        state.currentPhaseName === EMeasurementStatus.INIT &&
+        !this.parentWindowMessage
+      ) {
+        this.parentWindowMessage = "start"
+        parent.window.postMessage(
+          {
+            type: "start",
+          },
+          "*"
+        )
+      }
+      if (
+        state.currentPhaseName === EMeasurementStatus.END &&
+        this.parentWindowMessage === "start"
+      ) {
+        this.parentWindowMessage = ""
+        parent.window.postMessage(
+          {
+            type: "end",
+          },
+          "*"
+        )
+      }
+    }
+  }
 
   restart() {
     this.coordinates.set(DEFAULT_VALUE)
@@ -115,6 +155,6 @@ export class IframeTestComponent {
     this.up.set(DEFAULT_VALUE)
     this.testStore.visualization$.next(new TestVisualizationState())
     this.testStore.basicNetworkInfo.set(new BasicNetworkInfo())
-    this.testService.triggerNextTest()
+    this.testService.triggerNextIframeTest()
   }
 }

@@ -60,7 +60,13 @@ export class TestService {
     @Inject(PLATFORM_ID) private readonly platformId: object
   ) {}
 
-  async triggerNextTest() {
+  triggerNextIframeTest() {
+    return this.triggerNextTest({
+      referrer: document.referrer || "https://unknown.invalid",
+    })
+  }
+
+  async triggerNextTest(options?: { referrer?: string }) {
     let rmbtws = await import("rmbtws/dist/esm/rmbtws.min.js" as any)
     if (!rmbtws.TestEnvironment) {
       rmbtws = rmbtws.default
@@ -78,28 +84,7 @@ export class TestService {
         ),
         null
       )
-      const config = new rmbtws.RMBTTestConfig(
-        "en",
-        environment.api.baseUrl,
-        `RMBTControlServer`
-      )
-      config.uuid = localStorage.getItem(UUID)
-      config.timezone = dayjs.tz.guess()
-      if (this.loopStore.isLoopModeEnabled()) {
-        config.additionalRegistrationParameters = {
-          loopmode_info: {
-            max_delay: (this.loopStore.testIntervalMinutes() ?? 0) / 60,
-            test_counter: this.loopStore.loopCounter(),
-            max_tests: this.loopStore.maxTestsAllowed(),
-          },
-        }
-        const loopUuid = this.loopStore.loopUuid()
-        if (loopUuid) {
-          config.additionalRegistrationParameters.loopmode_info.loop_uuid =
-            loopUuid
-        }
-      }
-
+      const config = this.getConfig(rmbtws, options)
       const communication = new rmbtws.RMBTControlServerCommunication(config, {
         register: (data: any) => {
           if (data.response["loop_uuid"]) {
@@ -107,34 +92,74 @@ export class TestService {
           }
         },
       })
-      const rmbtTest = new rmbtws.RMBTTest(config, communication)
-      rmbtTest.onStateChange(() => {
-        this.stateChangeMs = Date.now()
-      })
-      rmbtTest.onError((error: any) => {
-        this.ngZone.run(() => {
-          if (error) this.mainStore.error$.next(error)
-        })
-      })
-      this.startTimeMs = Date.now()
-      rmbtTest.startTest()
-      this.visUpdateSub?.unsubscribe()
-      this.visUpdateSub = interval(STATE_UPDATE_TIMEOUT)
-        .pipe(
-          concatMap(() => from(this.getMeasurementState(rmbtTest))),
-          withLatestFrom(this.testStore.visualization$),
-          map(([state, vis]) => {
-            requestAnimationFrame(() => {
-              this.setTestState(state, vis)
-            })
-          })
-        )
-        .subscribe()
+      const rmbtTest = this.startTest(rmbtws, config, communication)
+      this.watchForUpdates(rmbtTest)
     })
   }
 
   updateEndTime() {
     this.endTimeMs = this.stateChangeMs
+  }
+
+  private getConfig(rmbtws: any, options?: { referrer?: string }) {
+    const config = new rmbtws.RMBTTestConfig(
+      "en",
+      environment.api.baseUrl,
+      `RMBTControlServer`
+    )
+    config.uuid = localStorage.getItem(UUID)
+    config.timezone = dayjs.tz.guess()
+
+    if (this.loopStore.isLoopModeEnabled()) {
+      config.additionalRegistrationParameters = {
+        loopmode_info: {
+          max_delay: (this.loopStore.testIntervalMinutes() ?? 0) / 60,
+          test_counter: this.loopStore.loopCounter(),
+          max_tests: this.loopStore.maxTestsAllowed(),
+        },
+      }
+      const loopUuid = this.loopStore.loopUuid()
+      if (loopUuid) {
+        config.additionalRegistrationParameters.loopmode_info.loop_uuid =
+          loopUuid
+      }
+    }
+
+    if (options?.referrer) {
+      config.additionalRegistrationParameters["referrer"] = options.referrer
+    }
+
+    return config
+  }
+
+  private startTest(rmbtws: any, config: any, communication: any) {
+    const rmbtTest = new rmbtws.RMBTTest(config, communication)
+    rmbtTest.onStateChange(() => {
+      this.stateChangeMs = Date.now()
+    })
+    rmbtTest.onError((error: any) => {
+      this.ngZone.run(() => {
+        if (error) this.mainStore.error$.next(error)
+      })
+    })
+    this.startTimeMs = Date.now()
+    rmbtTest.startTest()
+    return rmbtTest
+  }
+
+  private watchForUpdates(rmbtTest: any) {
+    this.visUpdateSub?.unsubscribe()
+    this.visUpdateSub = interval(STATE_UPDATE_TIMEOUT)
+      .pipe(
+        concatMap(() => from(this.getMeasurementState(rmbtTest))),
+        withLatestFrom(this.testStore.visualization$),
+        map(([state, vis]) => {
+          requestAnimationFrame(() => {
+            this.setTestState(state, vis)
+          })
+        })
+      )
+      .subscribe()
   }
 
   private setTestState = (

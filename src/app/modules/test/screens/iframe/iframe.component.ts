@@ -1,4 +1,10 @@
-import { Component, inject, signal } from "@angular/core"
+import {
+  Component,
+  computed,
+  HostListener,
+  inject,
+  signal,
+} from "@angular/core"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { SettingsService } from "../../../shared/services/settings.service"
@@ -17,6 +23,16 @@ export class IframeComponent extends SeoComponent {
   settingsService = inject(SettingsService)
   testIsRunning = signal(false)
   testService = inject(TestService)
+  warning = computed(() => {
+    if (window !== window.parent) {
+      if (document.referrer) {
+        return null
+      } else {
+        return "RTR-NetTest could not be loaded. Please check the iframe tag."
+      }
+    }
+    return null
+  })
 
   get activeLang() {
     return this.i18nStore.activeLang
@@ -25,10 +41,20 @@ export class IframeComponent extends SeoComponent {
   async launchTest() {
     try {
       await firstValueFrom(this.settingsService.getSettings())
-      this.testService.triggerNextTest()
+      this.testService.triggerNextIframeTest()
       this.testIsRunning.set(true)
     } catch (e) {
       console.error(e)
     }
+  }
+
+  @HostListener("window:beforeunload")
+  preventReload() {
+    return false
+  }
+
+  @HostListener("window:unload")
+  unload() {
+    this.testService.sendAbort()
   }
 }

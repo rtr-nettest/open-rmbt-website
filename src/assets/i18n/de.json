@@ -821,6 +821,7 @@
   "Romania": "Rumänien",
   "rs": "Serbien",
   "RTR-NetTest": "RTR-Netztest",
+  "RTR-NetTest could not be loaded. Please check the iframe tag.": "RTR-Netztest konnte nicht geladen werden. Bitte überprüfen Sie das iframe-Tag.",
   "RTR": "RTR",
   "ru": "Russische Föderation",
   "Run test again": "Führen Sie den Test erneut durch",
