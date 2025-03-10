@@ -61,6 +61,10 @@ export class SignalChartComponent implements AfterViewInit {
     }
   }
 
+  private getX(ms: number) {
+    return dayjs().startOf("day").add(ms, "milliseconds").toDate().getTime()
+  }
+
   private getMinSignal() {
     let containsLTE = false
     let minSignal = Math.min(
@@ -86,7 +90,7 @@ export class SignalChartComponent implements AfterViewInit {
   ) {
     const datasets: TestChartDataset[] = []
     let currentNetworkType = ""
-    let currentDataset: TestChartDataset
+    let currentDataset: TestChartDataset | undefined
     for (const signal of this.signal()) {
       if (signal.network_type != currentNetworkType) {
         currentNetworkType = signal.network_type
@@ -116,22 +120,39 @@ export class SignalChartComponent implements AfterViewInit {
             signal.time_elapsed - ltePeriods[ltePeriods.length - 1].x
         }
       }
+      const y =
+        minSignal -
+        Math.abs(
+          signal.lte_rsrp
+            ? signal.lte_rsrp
+            : signal.nr_rsrp
+            ? signal.nr_rsrp
+            : signal.signal_strength
+        )
+      const x = this.getX(signal.time_elapsed)
       currentDataset!.data.push({
-        x: dayjs()
-          .startOf("day")
-          .add(signal.time_elapsed, "milliseconds")
-          .toDate()
-          .getTime(),
-        y:
-          minSignal -
-          Math.abs(
-            signal.lte_rsrp
-              ? signal.lte_rsrp
-              : signal.nr_rsrp
-              ? signal.nr_rsrp
-              : signal.signal_strength
-          ),
+        x,
+        y,
       })
+    }
+    if (this.phaseDurations()?.upStart && this.phaseDurations()?.upDuration) {
+      // draw the chart until the end of the upload phase
+      const lastX = this.getX(
+        this.phaseDurations()!.upStart! + this.phaseDurations()!.upDuration!
+      )
+      const lastSignal = currentDataset?.data[currentDataset.data.length - 1]
+      if (lastSignal && lastSignal.x < lastX) {
+        currentDataset?.data.push({
+          x: lastX,
+          y: lastSignal ? lastSignal.y : 0,
+        })
+      }
+      currentDataset = new TestChartDataset("ping")
+      currentDataset.data.push({
+        x: lastX,
+        y: 0,
+      })
+      datasets.push(currentDataset)
     }
     return datasets
   }
