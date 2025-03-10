@@ -49,6 +49,9 @@ export class LoopStoreService {
     this.testIntervalMinutes() ? this.testIntervalMinutes()! * 60 * 1000 : null
   )
   estimatedEndTime = computed(() => {
+    if (!this.isLoopModeEnabled()) {
+      return null
+    }
     const singleTestDuration = this.fullTestIntervalMs()
     if (!singleTestDuration) {
       return null
