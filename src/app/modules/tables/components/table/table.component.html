@@ -100,7 +100,7 @@
           <span class="app-table__mobile-label">{{ column.header }}</span>
           <a
             *ngIf="!shouldShowText(column, element)"
-            [routerLink]="column.getLink?.(element, column)"
+            [href]="column.getLink?.(element, column)"
             [matTooltip]="column.getTooltip?.(element, column) ?? ''"
             [class.app-table__cell--sortable]="column.isSortable"
             class="app-link"
