@@ -31,11 +31,6 @@ export class LoopResultScreenComponent extends HistoryScreenComponent {
   override excludeColumns =
     environment.loopModeDefaults.exclude_from_result ?? []
 
-  override ngOnDestroy(): void {
-    super.ngOnDestroy()
-    this.loopStore.loopUuid.set(null)
-  }
-
   override ngOnInit(): void {
     super.ngOnInit()
     this.disableOnScroll()

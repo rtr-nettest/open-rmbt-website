@@ -75,6 +75,9 @@ export class TestService {
       this.message.openSnackbar("Error loading test environment")
       return
     }
+    if (!this.loopStore.isLoopModeEnabled()) {
+      this.loopStore.loopUuid.set(null)
+    }
 
     this.ngZone.runOutsideAngular(() => {
       rmbtws.TestEnvironment.init(
