@@ -6,9 +6,11 @@
   <header class="app-header">
     <h1>{{ title | translate }}</h1>
     <app-action-buttons [items]="actionButtons"></app-action-buttons>
+    @if (!loopResults) {
     <button class="app-button" mat-flat-button (click)="showSyncDialog()">
       {{ "Synchronization code" | translate }}
     </button>
+    }
   </header>
   @if (text$ | async; as text) {
   <p class="app-subheader" [innerHTML]="text"></p>

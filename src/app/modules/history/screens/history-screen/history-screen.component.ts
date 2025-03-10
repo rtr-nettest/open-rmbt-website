@@ -54,6 +54,7 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
   store = inject(HistoryStore)
   excludeColumns: string[] = []
   scrollStrategyOptions = inject(ScrollStrategyOptions)
+  loopResults = false
 
   actionButtons: IMainMenuItem[] = [
     {

@@ -9,18 +9,20 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
 import { environment } from "../../../../../environments/environment"
 
 @Component({
-    selector: "app-loop-result-screen",
-    imports: historyImports,
-    templateUrl: "../../../history/screens/history-screen/history-screen.component.html",
-    styleUrls: [
-        "../../../history/screens/history-screen/history-screen.component.scss",
-    ]
+  selector: "app-loop-result-screen",
+  imports: historyImports,
+  templateUrl:
+    "../../../history/screens/history-screen/history-screen.component.html",
+  styleUrls: [
+    "../../../history/screens/history-screen/history-screen.component.scss",
+  ],
 })
 export class LoopResultScreenComponent extends HistoryScreenComponent {
   activatedRoute: ActivatedRoute = inject(ActivatedRoute)
   loopStore = inject(LoopStoreService)
   router = inject(Router)
   redirectUrl = `/${this.i18nStore.activeLang}/${ERoutes.LOOP_1}`
+  override loopResults = true
   override shouldGroupHistory = false
   override result$ = this.service.getHistoryGroupedByLoop({
     grouped: this.shouldGroupHistory,
