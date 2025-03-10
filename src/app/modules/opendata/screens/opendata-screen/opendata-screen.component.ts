@@ -35,7 +35,8 @@ import { HistogramComponent } from "../../components/histogram/histogram.compone
 import { IntradayComponent } from "../../components/intraday/intraday.component"
 import { IIntradayResponseItem } from "../../interfaces/intraday-response.interface"
 import { ERoutes } from "../../../shared/constants/routes.enum"
-import { RouterModule } from "@angular/router"
+import { Router, RouterModule } from "@angular/router"
+import { IRecentMeasurement } from "../../interfaces/recent-measurements-response.interface"
 
 @Component({
   selector: "app-opendata-screen",
@@ -68,6 +69,7 @@ export class OpendataScreenComponent
   })
   opendataStoreService = inject(OpendataStoreService)
   opendataService = inject(OpendataService)
+  router = inject(Router)
   columns = RECENT_MEASUREMENTS_COLUMNS
   data$ = toObservable(this.opendataStoreService.data).pipe(
     map((data) => {
@@ -141,6 +143,12 @@ export class OpendataScreenComponent
         .then((data) => this.intradayData.set(data))
         .finally(() => this.loadingIntraday.set(false))
     }
+  }
+
+  handleRowClick = (row: IRecentMeasurement) => {
+    this.router.navigate([this.i18nStore.activeLang, ERoutes.OPEN_RESULT], {
+      queryParams: { open_test_uuid: row.open_test_uuid },
+    })
   }
 
   private updateFilterCount(filters: IOpendataFilters) {

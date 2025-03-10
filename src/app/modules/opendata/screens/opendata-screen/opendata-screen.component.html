@@ -76,7 +76,13 @@
       </div>
     </app-expansion-panel>
   </div>
-  <app-table [data]="data" [columns]="columns" [sort]="sort"></app-table>
+  <app-table
+    [data]="data"
+    [columns]="columns"
+    [sort]="sort"
+    [rowsAreCLickable]="true"
+    (onRowClick)="handleRowClick($event)"
+  ></app-table>
   } }
 </div>
 <app-footer></app-footer>
