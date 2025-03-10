@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http"
 import { computed, Injectable, NgZone } from "@angular/core"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { IMapInfo } from "../interfaces/map-info.interface"
-import { Map, Marker, StyleSpecification } from "maplibre-gl"
+import { Map, MapOptions, Marker, StyleSpecification } from "maplibre-gl"
 import {
   catchError,
   debounceTime,
@@ -136,12 +136,7 @@ export class MapService {
     private readonly zone: NgZone
   ) {}
 
-  createMap(options: {
-    container: string
-    style: StyleSpecification
-    center?: [number, number]
-    zoom?: number
-  }) {
+  createMap(options: MapOptions) {
     return new Map(options)
   }
 

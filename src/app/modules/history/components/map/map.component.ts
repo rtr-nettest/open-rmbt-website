@@ -17,11 +17,11 @@ import { ScrollStrategyOptions } from "@angular/cdk/overlay"
 import { CoverageDialogComponent } from "../coverage-dialog/coverage-dialog.component"
 
 @Component({
-    selector: "app-map",
-    imports: [MatButtonModule, TranslatePipe],
-    templateUrl: "./map.component.html",
-    styleUrl: "./map.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-map",
+  imports: [MatButtonModule, TranslatePipe],
+  templateUrl: "./map.component.html",
+  styleUrl: "./map.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapComponent implements AfterViewInit {
   @Input({ required: true }) params!: URLSearchParams
@@ -82,12 +82,9 @@ export class MapComponent implements AfterViewInit {
       if (!this.mapContainerId) {
         return
       }
-      let containerWidth = document
-        .getElementById(this.mapContainerId)!
-        .getBoundingClientRect().width
       document
         .getElementById(this.mapId)!
-        .setAttribute("style", `height:350px;width:${containerWidth}px`)
+        .setAttribute("style", `height:350px;width:100%`)
     })
   }
 
@@ -97,6 +94,7 @@ export class MapComponent implements AfterViewInit {
         container: this.mapId,
         style: this.mapService.defaultStyle(),
         center: DEFAULT_CENTER,
+        preserveDrawingBuffer: true,
       })
       this.map.addControl(new NavigationControl())
     })
