@@ -48,7 +48,6 @@ import { APP_DATE_TIME_FORMAT } from "../../../shared/adapters/app-date.adapter"
     MatIconModule,
     MatProgressSpinner,
     PaginatorComponent,
-    RouterLink,
     TranslatePipe,
   ],
 })
