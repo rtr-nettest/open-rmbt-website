@@ -32,7 +32,7 @@ import { MapStoreService } from "../../store/map-store.service"
 import { toObservable } from "@angular/core/rxjs-interop"
 import { MessageService } from "../../../shared/services/message.service"
 import { PopupService } from "../../services/popup.service"
-import { fromLonLat } from "ol/proj.js"
+import { fromLonLat, toLonLat } from "ol/proj.js"
 
 export const POINTS_HEATMAP_SWITCH_LEVEL = 12
 
@@ -225,12 +225,21 @@ export class MapScreenComponent extends SeoComponent {
         .getMeasurementsAtPoint(this.map, coordinates, this.mapSourceOptions)
         .pipe(
           tap((measurements) => {
-            if (measurements.length) {
-              this.popupService.addPopup(this.map, measurements, {
-                lon: e.lngLat.lng,
-                lat: e.lngLat.lat,
-              })
+            if (
+              !measurements.length ||
+              !measurements[0].lat ||
+              !measurements[0].long
+            ) {
+              return
             }
+            const coordinates = toLonLat([
+              measurements[0].lat,
+              measurements[0].long,
+            ]) as [number, number]
+            this.popupService.addPopup(this.map, measurements, {
+              lat: coordinates[1],
+              lon: coordinates[0],
+            })
           })
         )
         .subscribe()
