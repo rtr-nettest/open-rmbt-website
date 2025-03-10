@@ -26,7 +26,8 @@
     </a>
     }
   </div>
-  <div *ngIf="basicResults() as basicResults" class="app-container">
+  @if (basicResults(); as basicResults) {
+  <div *ngIf="basicResults.content.length" class="app-container">
     <app-table
       [columns]="columns"
       [data]="basicResults"
@@ -36,7 +37,8 @@
       aria-live="polite"
     ></app-table>
   </div>
-  <div *ngIf="qoeResults() as qoeResults" class="app-container">
+  } @if (qoeResults(); as qoeResults) {
+  <div *ngIf="qoeResults.content.length" class="app-container">
     <h4>{{ "Quality" | translate }}</h4>
     <app-table
       [columns]="qoeColumns"
@@ -47,7 +49,8 @@
       aria-live="polite"
     ></app-table>
   </div>
-  <ng-container *ngIf="detailedResults() as detailedResult">
+  } @if (detailedResults(); as detailedResult) {
+  <ng-container *ngIf="detailedResult.content.length">
     @defer () { @if (locationTable().length) {
     <div class="app-container" [id]="mapContainerId" style="margin-top: 24px">
       <h4>{{ "Position" | translate }}</h4>
@@ -144,7 +147,7 @@
       <app-share-result [result]="result"></app-share-result>
     </div>
   </ng-container>
-  } @else if (loading()) {
+  } } @else if (loading()) {
   <h3>{{ "Loading results" | translate }}</h3>
   } @else {
   <h3>{{ "No results available" | translate }}</h3>
