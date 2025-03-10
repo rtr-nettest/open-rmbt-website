@@ -144,7 +144,7 @@ export class SignalChartComponent implements AfterViewInit {
       if (lastSignal && lastSignal.x < lastX) {
         currentDataset?.data.push({
           x: lastX,
-          y: lastSignal ? lastSignal.y : 0,
+          y: lastSignal.y,
         })
       }
       currentDataset = new TestChartDataset("ping")
