@@ -14,23 +14,25 @@ import { EBasemapType } from "../../constants/basemap-type.enum"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { MatRadioModule } from "@angular/material/radio"
 import { MatButtonModule } from "@angular/material/button"
+import { CloseDialogHeaderComponent } from "../../../shared/components/close-dialog-header/close-dialog-header.component"
 
 type BasemapPickerForm = {
   basemap: FormControl<string | null>
 }
 
 @Component({
-    selector: "app-basemap-picker",
-    imports: [
-        MatButtonModule,
-        MatDialogModule,
-        MatIconModule,
-        MatRadioModule,
-        ReactiveFormsModule,
-        TranslatePipe,
-    ],
-    templateUrl: "./basemap-picker.component.html",
-    styleUrl: "./basemap-picker.component.scss"
+  selector: "app-basemap-picker",
+  imports: [
+    CloseDialogHeaderComponent,
+    MatButtonModule,
+    MatDialogModule,
+    MatIconModule,
+    MatRadioModule,
+    ReactiveFormsModule,
+    TranslatePipe,
+  ],
+  templateUrl: "./basemap-picker.component.html",
+  styleUrl: "./basemap-picker.component.scss",
 })
 export class BasemapPickerComponent implements OnDestroy {
   destroyed$ = new Subject<void>()
@@ -38,7 +40,7 @@ export class BasemapPickerComponent implements OnDestroy {
   options!: { value: string; label: string }[]
 
   constructor(
-    private readonly dialogRef: MatDialogRef<BasemapPickerComponent>,
+    public readonly dialogRef: MatDialogRef<BasemapPickerComponent>,
     private readonly fb: FormBuilder,
     private readonly i18nStore: I18nStore,
     private readonly store: MapStoreService

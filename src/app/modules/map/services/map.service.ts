@@ -89,7 +89,7 @@ export class MapService {
       },
       [EBasemapType.BMAPORTHO]: {
         ...BASE_SOURCE,
-        tiles: [this.getTilesByType(EBasemapType.BMAPORTHO)!],
+        tiles: [this.getTilesByType(EBasemapType.BMAPORTHO, "jpeg")!],
       },
       [EBasemapType.BMAPHDPI]: {
         ...BASE_SOURCE,
@@ -188,8 +188,11 @@ export class MapService {
     return this.getSource("/shapes/{z}/{x}/{y}.png", options)
   }
 
-  private getTilesByType(type: EBasemapType) {
-    return this.mainStore.api().url_web_basemap_tiles?.replace("{type}", type)
+  private getTilesByType(type: EBasemapType, ext = "png") {
+    return this.mainStore
+      .api()
+      .url_web_basemap_tiles?.replace("{type}", type)
+      .replace(".png", `.${ext}`)
   }
 
   private getLayersFromSources(sources: { [key: string]: any }) {
