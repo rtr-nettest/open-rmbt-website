@@ -1,4 +1,4 @@
-import { Component, inject, NgZone } from "@angular/core"
+import { Component, inject, NgZone, signal } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import {
   DEFAULT_CENTER,
@@ -9,7 +9,15 @@ import { HeaderComponent } from "../../../shared/components/header/header.compon
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
-import { firstValueFrom, Observable, Subscription, takeUntil, tap } from "rxjs"
+import {
+  catchError,
+  Observable,
+  of,
+  Subscription,
+  takeUntil,
+  tap,
+  timeout,
+} from "rxjs"
 import {
   Map,
   NavigationControl,
@@ -33,6 +41,7 @@ import { toObservable } from "@angular/core/rxjs-interop"
 import { MessageService } from "../../../shared/services/message.service"
 import { PopupService } from "../../services/popup.service"
 import { fromLonLat, toLonLat } from "ol/proj.js"
+import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 export const POINTS_HEATMAP_SWITCH_LEVEL = 12
 
@@ -47,6 +56,7 @@ export const POINTS_HEATMAP_SWITCH_LEVEL = 12
     FooterComponent,
     MatDialogModule,
     SearchComponent,
+    TranslatePipe,
   ],
   templateUrl: "./map-screen.component.html",
   styleUrl: "./map-screen.component.scss",
@@ -84,21 +94,32 @@ export class MapScreenComponent extends SeoComponent {
       })
     )
     .subscribe()
+  mapError = signal("")
   text$: Observable<string> = this.i18nStore.getLocalizedHtml("map").pipe(
     tap(() => {
-      firstValueFrom(this.mapService.getFilters()).then((mapInfo) => {
-        if (globalThis.document) {
-          this.mapInfo = mapInfo
-          this.setSize()
-          this.setMap().then(() => {
-            this.setResizeSub()
-            this.mapService.setCoordinatesAndZoom(
-              this.map,
-              new URLSearchParams(globalThis.location.search)
-            )
+      this.mapService
+        .getFilters()
+        .pipe(
+          timeout(5000),
+          catchError((e) => {
+            console.error(e)
+            this.mapError.set(e)
+            return of(null)
           })
-        }
-      })
+        )
+        .subscribe((mapInfo) => {
+          if (globalThis.document && mapInfo) {
+            this.mapInfo = mapInfo
+            this.setSize()
+            this.setMap().then(() => {
+              this.setResizeSub()
+              this.mapService.setCoordinatesAndZoom(
+                this.map,
+                new URLSearchParams(globalThis.location.search)
+              )
+            })
+          }
+        })
     })
   )
   zone = inject(NgZone)
