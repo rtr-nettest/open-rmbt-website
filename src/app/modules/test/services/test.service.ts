@@ -29,6 +29,7 @@ import { HistoryStore } from "../../history/store/history.store"
 import { LoopStoreService } from "../../loop/store/loop-store.service"
 import { RmbtwsDelegateService } from "./rmbtws-delegate.service"
 import { MessageService } from "../../shared/services/message.service"
+import { IPing } from "../../history/interfaces/measurement-result.interface"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -43,9 +44,10 @@ declare global {
   providedIn: "root",
 })
 export class TestService {
-  visUpdateSub?: Subscription
+  visUpdateInterval?: any
   private downs: IOverallResult[] = []
   private ups: IOverallResult[] = []
+  private pings: IPing[] = []
   private startTimeMs = 0
   private endTimeMs = 0
   private stateChangeMs = 0
@@ -151,18 +153,14 @@ export class TestService {
   }
 
   private watchForUpdates(rmbtTest: any) {
-    this.visUpdateSub?.unsubscribe()
-    this.visUpdateSub = interval(STATE_UPDATE_TIMEOUT)
-      .pipe(
-        concatMap(() => from(this.getMeasurementState(rmbtTest))),
-        withLatestFrom(this.testStore.visualization$),
-        map(([state, vis]) => {
-          requestAnimationFrame(() => {
-            this.setTestState(state, vis)
-          })
+    clearInterval(this.visUpdateInterval)
+    this.visUpdateInterval = setInterval(() => {
+      this.getMeasurementState(rmbtTest).then((state) => {
+        requestAnimationFrame(() => {
+          this.setTestState(state, this.testStore.visualization$.value)
         })
-      )
-      .subscribe()
+      })
+    }, STATE_UPDATE_TIMEOUT)
   }
 
   private setTestState = (
@@ -193,9 +191,10 @@ export class TestService {
     this.mainStore.error$.next(null)
     this.downs = []
     this.ups = []
+    this.pings = []
     this.startTimeMs = 0
     this.endTimeMs = 0
-    this.visUpdateSub?.unsubscribe()
+    clearInterval(this.visUpdateInterval)
   }
 
   async getMeasurementState(
@@ -232,11 +231,11 @@ export class TestService {
       result?.pingNano && result?.pingNano !== -1
         ? Math.round((result.pingNano as number) / 1e6)
         : -1
-    const pings = []
     if (phase === EMeasurementStatus.DOWN && result.pings) {
       const startTimeNs = result.pings[0]?.timeNs || 0
+      this.pings = []
       for (const p of result.pings) {
-        pings.push({
+        this.pings.push({
           value_server: p.server,
           value: p.client,
           time_ns: p.timeNs - startTimeNs,
@@ -249,7 +248,7 @@ export class TestService {
       progress: result.progress,
       time: Date.now(),
       ping,
-      pings,
+      pings: this.pings ?? [],
       down,
       downs: this.downs ?? [],
       up,

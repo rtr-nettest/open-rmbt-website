@@ -219,7 +219,7 @@ export class ResultScreenComponent extends SeoComponent {
           this.qoeResults.set(this.getQoeResults(result))
         }
         this.loading.set(false)
-        this.testService.visUpdateSub?.unsubscribe()
+        clearInterval(this.testService.visUpdateInterval)
       })
     )
     this.error$ = this.mainStore.error$

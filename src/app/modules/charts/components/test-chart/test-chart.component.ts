@@ -4,6 +4,7 @@ import {
   NgZone,
   ChangeDetectionStrategy,
   OnDestroy,
+  OnInit,
 } from "@angular/core"
 import { fromEvent, Observable, Subject } from "rxjs"
 import { ITestVisualizationState } from "../../../test/interfaces/test-visualization-state.interface"
@@ -21,6 +22,8 @@ import { TestChart } from "../../dto/test-chart"
 import { AsyncPipe, NgIf } from "@angular/common"
 import { BarChart } from "./settings/bar-chart"
 import { LogChart } from "./settings/log-chart"
+import { TestService } from "../../../test/services/test.service"
+import { TestPhaseState } from "../../../test/dto/test-phase-state.dto"
 
 @Component({
   selector: "app-test-chart",
@@ -29,7 +32,7 @@ import { LogChart } from "./settings/log-chart"
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgIf, AsyncPipe],
 })
-export class TestChartComponent implements OnDestroy {
+export class TestChartComponent implements OnDestroy, OnInit {
   @Input() phase: ChartPhase = "download"
 
   chart: TestChart | undefined
@@ -75,9 +78,27 @@ export class TestChartComponent implements OnDestroy {
       })
     )
   }
+
   ngOnDestroy(): void {
+    window.removeEventListener("focus", this.setChartOnFocus)
     this.destroyed$.next()
     this.destroyed$.complete()
+  }
+
+  ngOnInit(): void {
+    window.addEventListener("focus", this.setChartOnFocus)
+  }
+
+  private setChartOnFocus = () => {
+    if (
+      this.store.visualization$.value.currentPhaseName ===
+      EMeasurementStatus.SHOWING_RESULTS
+    ) {
+      return
+    }
+    this.chart?.destroy()
+    this.initChart({ force: true })
+    this.showResults(this.store.visualization$.value)
   }
 
   private handleChanges(visualization: ITestVisualizationState) {
