@@ -6,7 +6,7 @@ $bar-side: 4px;
   &__item {
     display: inline-block;
     position: relative;
-    margin-right: calc($bar-side / 2);
+    margin: 0 calc($bar-side / 2) 0 0;
     &::before {
       content: "";
       display: block;
