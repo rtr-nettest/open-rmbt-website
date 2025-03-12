@@ -2,9 +2,6 @@
   list-style: none;
 }
 
-p {
-  & + ul,
-  & + ol {
-    margin-top: -1em;
-  }
+li:not(:last-child) {
+  margin: 0.2em 0;
 }
