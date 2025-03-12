@@ -1,7 +1,11 @@
-.app-list {
-  list-style: none;
-}
-
 li:not(:last-child) {
   margin: 0.2em 0;
+}
+
+.app-list {
+  list-style: none;
+
+  li {
+    margin: 0;
+  }
 }
