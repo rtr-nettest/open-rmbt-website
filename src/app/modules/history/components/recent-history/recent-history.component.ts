@@ -52,6 +52,10 @@ export class RecentHistoryComponent implements OnChanges {
     let cols: ITableColumn<IHistoryRow>[] = []
     cols = [
       {
+        columnDef: "groupArrowIndicator",
+        header: "",
+      },
+      {
         columnDef: "device",
         header: "Device",
       },
@@ -80,10 +84,6 @@ export class RecentHistoryComponent implements OnChanges {
         key: "ping",
         header: "Ping",
         isHtml: true,
-      },
-      {
-        columnDef: "groupArrowIndicator",
-        header: "",
       },
     ]
     return cols
@@ -165,8 +165,8 @@ export class RecentHistoryComponent implements OnChanges {
       if (hi.groupHeader) {
         return {
           id: hi.loopUuid!,
+          device: " ",
           measurementDate: hi.measurementDate,
-          device: hi.openTestResponse?.["device"],
           networkType: hi.openTestResponse?.["networkType"],
           groupHeader: hi.groupHeader,
           download: " ",

@@ -184,6 +184,9 @@ mat-paginator {
 
   &-groupArrowIndicator {
     flex: 0 0 rem(64);
+    left: 16px;
+    padding: 0;
+    position: absolute;
   }
 }
 

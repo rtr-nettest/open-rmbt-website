@@ -52,7 +52,7 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
   exporter = inject(HistoryExportService)
   service = inject(HistoryService)
   store = inject(HistoryStore)
-  excludeColumns: string[] = []
+  excludeColumns: string[] = ["networkType"]
   scrollStrategyOptions = inject(ScrollStrategyOptions)
   loopResults = false
 
