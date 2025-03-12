@@ -38,7 +38,9 @@
       <ul class="app-list">
         @for (item of menu$ | async; track $index) {
         <li class="app-li">
-          <a [href]="item.url" target="_blank">{{ item.label! | translate }}</a>
+          <a [href]="item.url | translate" target="_blank">{{
+            item.label! | translate
+          }}</a>
         </li>
         }
       </ul>
