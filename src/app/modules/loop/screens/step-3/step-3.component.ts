@@ -35,19 +35,12 @@ export class Step3Component extends TestScreenComponent {
   protected waitingProgressMs = 0
   protected shouldGetHistory$ = new BehaviorSubject<boolean>(false)
   protected currentTestUuid$ = new BehaviorSubject<string | null>(null)
-  isTabActive = true
+  finishedTests = 0
   testsFinishedWhileActive = 0
 
-  get testsFinishedWhileInactive() {
-    return this.loopStore.loopCounter() - this.testsFinishedWhileActive
-  }
-
   tabActivityListener = () => {
-    if (document.hidden) {
-      this.isTabActive = false
-      this.testsFinishedWhileActive = this.loopStore.loopCounter()
-    } else {
-      this.isTabActive = true
+    if (!document.hidden) {
+      this.testsFinishedWhileActive = this.finishedTests = 0
       this.ts.setTitle(this.metaTitle)
     }
   }
@@ -84,6 +77,14 @@ export class Step3Component extends TestScreenComponent {
         takeUntil(this.stopped$)
       )
       .subscribe(() => {
+        this.finishedTests++
+        if (!document.hidden) {
+          this.testsFinishedWhileActive++
+        }
+        const diff = this.finishedTests - this.testsFinishedWhileActive
+        if (document.hidden && diff > 0) {
+          this.ts.setTitle(`(${diff}) ${this.metaTitle}`)
+        }
         this.service.triggerNextTest()
       })
     this.scheduleLoop()
@@ -125,9 +126,6 @@ export class Step3Component extends TestScreenComponent {
   }
 
   protected override goToResult = (_: ITestVisualizationState) => {
-    if (!this.isTabActive && this.testsFinishedWhileInactive > 0) {
-      this.ts.setTitle(`(${this.testsFinishedWhileInactive}) ${this.metaTitle}`)
-    }
     if (this.loopStore.maxTestsReached()) {
       this.abortTest()
       return

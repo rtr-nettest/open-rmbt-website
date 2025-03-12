@@ -5,8 +5,6 @@ import {
   from,
   interval,
   map,
-  Observable,
-  of,
   Subscription,
   withLatestFrom,
 } from "rxjs"
@@ -31,6 +29,10 @@ import { RmbtwsDelegateService } from "./rmbtws-delegate.service"
 import { MessageService } from "../../shared/services/message.service"
 dayjs.extend(utc)
 dayjs.extend(tz)
+
+export type TestOptions = {
+  referrer?: string
+}
 
 declare global {
   interface Window {
@@ -66,7 +68,7 @@ export class TestService {
     })
   }
 
-  async triggerNextTest(options?: { referrer?: string }) {
+  async triggerNextTest(options?: TestOptions) {
     let rmbtws = await import("rmbtws/dist/esm/rmbtws.min.js" as any)
     if (!rmbtws.TestEnvironment) {
       rmbtws = rmbtws.default
@@ -157,7 +159,7 @@ export class TestService {
         concatMap(() => from(this.getMeasurementState(rmbtTest))),
         withLatestFrom(this.testStore.visualization$),
         map(([state, vis]) => {
-          requestAnimationFrame(() => {
+          this.ngZone.run(() => {
             this.setTestState(state, vis)
           })
         })
