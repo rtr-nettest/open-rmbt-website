@@ -163,7 +163,7 @@ export class ResultScreenComponent extends SeoComponent {
   }
 
   get canStartTest() {
-    return this.title === "History"
+    return this.route.snapshot.routeConfig?.path === ERoutes.RESULT
   }
 
   private get defaultInitialDetails() {

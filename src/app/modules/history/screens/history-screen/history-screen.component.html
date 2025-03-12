@@ -4,7 +4,7 @@
 <app-scroll-top></app-scroll-top>
 <div class="app-wrapper">
   <header class="app-header">
-    <h1>{{ title | translate }}</h1>
+    <h1 class="app-result-h1">{{ title | translate }}</h1>
     @if (actionButtonsPosition === 'header') {
     <app-action-buttons [items]="actionButtons"></app-action-buttons>
     } @if (!loopResults) {

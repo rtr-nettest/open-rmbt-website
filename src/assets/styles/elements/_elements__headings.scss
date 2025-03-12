@@ -74,3 +74,9 @@ h4:has(+ h2),
 .app-h4:has(+ .app-h2) {
   margin-bottom: rem(16);
 }
+
+.app-result-h1 {
+  margin-left: 0;
+  margin-bottom: rem(16);
+  margin-top: rem(16);
+}
