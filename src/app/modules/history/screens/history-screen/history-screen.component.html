@@ -5,16 +5,28 @@
 <div class="app-wrapper">
   <header class="app-header">
     <h1>{{ title | translate }}</h1>
+    @if (actionButtonsPosition === 'header') {
     <app-action-buttons [items]="actionButtons"></app-action-buttons>
-    @if (!loopResults) {
+    } @if (!loopResults) {
     <button class="app-button" mat-flat-button (click)="showSyncDialog()">
       {{ "Synchronization code" | translate }}
     </button>
     }
   </header>
-  @if (text$ | async; as text) {
-  <p class="app-subheader" [innerHTML]="text"></p>
-  } @if (result$ | async; as result) {
+</div>
+@if (text$ | async; as text) {
+<div class="app-subheader">
+  <app-html-wrapper [html]="text">
+    <ng-container header>
+      @if (actionButtonsPosition === 'html-wrapper') {
+      <app-action-buttons [items]="actionButtons"></app-action-buttons>
+      }
+    </ng-container>
+  </app-html-wrapper>
+</div>
+}
+<div class="app-wrapper">
+  @if (result$ | async; as result) {
   <app-recent-history
     [addMedian]="addMedian"
     [result]="result"

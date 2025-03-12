@@ -1,21 +1,26 @@
 import { AfterViewInit, Component } from "@angular/core"
-import { historyImports } from "../../../history/screens/history-screen/history-screen.component"
+import {
+  ActionButtonsPosition,
+  historyImports,
+} from "../../../history/screens/history-screen/history-screen.component"
 import { LoopResultScreenComponent } from "../../../loop/screens/loop-result-screen/loop-result-screen.component"
 import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interface"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 
 @Component({
-    selector: "app-loop-result-screen",
-    imports: historyImports,
-    templateUrl: "../../../history/screens/history-screen/history-screen.component.html",
-    styleUrls: [
-        "../../../history/screens/history-screen/history-screen.component.scss",
-    ]
+  selector: "app-loop-result-screen",
+  imports: historyImports,
+  templateUrl:
+    "../../../history/screens/history-screen/history-screen.component.html",
+  styleUrls: [
+    "../../../history/screens/history-screen/history-screen.component.scss",
+  ],
 })
 export class CertifiedResultScreenComponent
   extends LoopResultScreenComponent
   implements AfterViewInit
 {
+  override actionButtonsPosition = "html-wrapper" as ActionButtonsPosition
   override actionButtons: IMainMenuItem[] = [
     {
       label: "",

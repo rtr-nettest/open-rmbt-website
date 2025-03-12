@@ -22,9 +22,9 @@ import { LoadingOverlayComponent } from "../../../shared/components/loading-over
 import { LoadOnScrollComponent } from "../../../shared/components/load-on-scroll/load-on-scroll.component"
 import { MatDialog } from "@angular/material/dialog"
 import { SyncDialogComponent } from "../../components/sync-dialog/sync-dialog.component"
-import { on } from "events"
 import { ScrollStrategyOptions } from "@angular/cdk/overlay"
 import { MatButtonModule } from "@angular/material/button"
+import { HtmlWrapperComponent } from "../../../shared/components/html-wrapper/html-wrapper.component"
 
 export const historyImports = [
   ActionButtonsComponent,
@@ -32,16 +32,20 @@ export const historyImports = [
   BreadcrumbsComponent,
   FooterComponent,
   HeaderComponent,
+  HtmlWrapperComponent,
   LoadingOverlayComponent,
+  MatButtonModule,
   RecentHistoryComponent,
   ScrollTopComponent,
   TopNavComponent,
   TranslatePipe,
 ]
 
+export type ActionButtonsPosition = "header" | "html-wrapper"
+
 @Component({
   selector: "app-history-screen",
-  imports: [...historyImports, MatButtonModule],
+  imports: [...historyImports],
   templateUrl: "./history-screen.component.html",
   styleUrl: "./history-screen.component.scss",
 })
@@ -55,6 +59,7 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
   excludeColumns: string[] = ["networkType"]
   scrollStrategyOptions = inject(ScrollStrategyOptions)
   loopResults = false
+  actionButtonsPosition: ActionButtonsPosition = "header"
 
   actionButtons: IMainMenuItem[] = [
     {
