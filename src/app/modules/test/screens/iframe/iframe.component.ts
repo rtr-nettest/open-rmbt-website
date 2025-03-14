@@ -25,6 +25,7 @@ export class IframeComponent extends SeoComponent {
   testIsRunning = signal(false)
   testService = inject(TestService)
   testStore = inject(TestStore)
+  error = signal<string | null>(null)
   warning = computed(() => {
     if (window !== window.parent) {
       if (document.referrer) {
@@ -46,6 +47,7 @@ export class IframeComponent extends SeoComponent {
       this.testService.triggerNextIframeTest()
       this.testIsRunning.set(true)
     } catch (e) {
+      this.error.set("error_during_test")
       console.error(e)
     }
   }

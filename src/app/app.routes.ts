@@ -23,6 +23,7 @@ import { unloadOnlyFor } from "./modules/shared/guards/unload-only-for.guard"
 import { OpendataScreenComponent } from "./modules/opendata/screens/opendata-screen/opendata-screen.component"
 import { InterfaceScreenComponent } from "./modules/opendata/screens/interface-screen/interface-screen.component"
 import { IframeComponent } from "./modules/test/screens/iframe/iframe.component"
+import { OptionsScreenComponent } from "./modules/options/screens/options-screen/options-screen.component"
 
 export const routes: Routes = [
   {
@@ -198,6 +199,14 @@ export const routes: Routes = [
         resolve: [localeResolver],
         data: {
           title: "open_data_specification",
+        },
+      },
+      {
+        path: ERoutes.OPTIONS,
+        component: OptionsScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Options",
         },
       },
       {

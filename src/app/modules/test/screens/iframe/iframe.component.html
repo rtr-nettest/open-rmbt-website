@@ -7,6 +7,8 @@
   </a>
   @if (warning(); as warning) {
   <p>{{ warning | translate }}</p>
+  } @else if(error()) {
+  <p>{{ error() | translate }}</p>
   } @else { @if (!testIsRunning()) {
   <app-iframe-intro (onSubmit)="launchTest()"></app-iframe-intro>
   } @else { <app-iframe-test></app-iframe-test> } }

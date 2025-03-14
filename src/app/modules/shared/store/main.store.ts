@@ -11,6 +11,8 @@ export class MainStore {
   settings = signal<IUserSetingsResponse | null>(null)
   api = computed(() => {
     const {
+      control_ipv4_only,
+      control_ipv6_only,
       url_ipv4_check,
       url_ipv6_check,
       url_statistic_server,
@@ -22,6 +24,8 @@ export class MainStore {
     } = this.settings()?.settings?.[0]?.urls || {}
     const cloud = url_map_server ? new URL(url_map_server).origin : undefined
     const missingEndpoints = [
+      ["control_ipv4_only", control_ipv4_only],
+      ["control_ipv6_only", control_ipv6_only],
       ["url_ipv4_check", url_ipv4_check],
       ["url_ipv6_check", url_ipv6_check],
       ["url_statistic_server", url_statistic_server],
@@ -37,6 +41,8 @@ export class MainStore {
       console.log("Missing endpoints:", missingEndpoints.join(", "))
     return {
       cloud,
+      control_ipv4_only,
+      control_ipv6_only,
       url_ipv4_check,
       url_ipv6_check,
       url_statistic_server,

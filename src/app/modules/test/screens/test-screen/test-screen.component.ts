@@ -154,6 +154,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
       message = ERROR_OCCURED_SENDING_RESULTS
     }
     this.stopped$.next()
+    this.service.stopUpdates()
     this.message.openConfirmDialog(message, () => {
       this.mainStore.error$.next(null)
       state.currentPhaseName === EMeasurementStatus.SUBMITTING_RESULTS

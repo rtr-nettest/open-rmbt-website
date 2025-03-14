@@ -1,13 +1,5 @@
 import { Inject, Injectable, NgZone, PLATFORM_ID } from "@angular/core"
 import { environment } from "../../../../environments/environment"
-import {
-  concatMap,
-  from,
-  interval,
-  map,
-  Subscription,
-  withLatestFrom,
-} from "rxjs"
 import { isPlatformBrowser } from "@angular/common"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
@@ -27,6 +19,7 @@ import { HistoryStore } from "../../history/store/history.store"
 import { LoopStoreService } from "../../loop/store/loop-store.service"
 import { RmbtwsDelegateService } from "./rmbtws-delegate.service"
 import { MessageService } from "../../shared/services/message.service"
+import { OptionsStoreService } from "../../options/store/options-store.service"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -59,6 +52,7 @@ export class TestService {
     private readonly message: MessageService,
     private readonly ngZone: NgZone,
     private readonly testStore: TestStore,
+    private readonly optionsStore: OptionsStoreService,
     @Inject(PLATFORM_ID) private readonly platformId: object
   ) {}
 
@@ -69,7 +63,7 @@ export class TestService {
   }
 
   async triggerNextTest(options?: TestOptions) {
-    let rmbtws = await import("rmbtws/dist/esm/rmbtws.min.js" as any)
+    let rmbtws = await import("rmbtws/dist/esm/rmbtws.js" as any)
     if (!rmbtws.TestEnvironment) {
       rmbtws = rmbtws.default
     }
@@ -112,9 +106,10 @@ export class TestService {
   }
 
   private getConfig(rmbtws: any, options?: { referrer?: string }) {
+    const controlProxy = this.getControlProxy()
     const config = new rmbtws.RMBTTestConfig(
       "en",
-      environment.api.baseUrl,
+      controlProxy,
       `RMBTControlServer`
     )
     config.uuid = localStorage.getItem(UUID)
@@ -139,7 +134,24 @@ export class TestService {
       config.additionalRegistrationParameters["referrer"] = options.referrer
     }
 
+    if (controlProxy && controlProxy !== environment.api.baseUrl) {
+      config.additionalRegistrationParameters["protocol_version"] =
+        this.optionsStore.ipVersion()
+    }
     return config
+  }
+
+  private getControlProxy() {
+    let controlProxy = environment.api.baseUrl
+    const ipv6Only = this.mainStore.api().control_ipv6_only
+    const ipv4Only = this.mainStore.api().control_ipv4_only
+    const storedIpVersion = this.optionsStore.ipVersion()
+    if (storedIpVersion === "ipv6" && ipv6Only) {
+      controlProxy = `https://${ipv6Only}`
+    } else if (storedIpVersion === "ipv4" && ipv4Only) {
+      controlProxy = `https://${ipv4Only}`
+    }
+    return controlProxy
   }
 
   private startTest(rmbtws: any, config: any, communication: any) {
@@ -194,6 +206,10 @@ export class TestService {
       this.updateEndTime()
       if (phaseState.phase === EMeasurementStatus.ERROR) {
         this.sendAbort(phaseState.testUuid)
+        if (oldPhaseName === EMeasurementStatus.NOT_STARTED) {
+          // Probably the server is not reachable
+          this.optionsStore.ipVersion.set("default")
+        }
       }
     }
     let newState
