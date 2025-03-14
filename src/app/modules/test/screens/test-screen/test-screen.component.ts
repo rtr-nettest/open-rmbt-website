@@ -154,7 +154,6 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
       message = ERROR_OCCURED_SENDING_RESULTS
     }
     this.stopped$.next()
-    this.service.sendAbort()
     this.message.openConfirmDialog(message, () => {
       this.mainStore.error$.next(null)
       state.currentPhaseName === EMeasurementStatus.SUBMITTING_RESULTS
@@ -180,6 +179,6 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
 
   @HostListener("window:unload")
   unload() {
-    this.service.sendAbort()
+    this.service.sendAbort(this.store.basicNetworkInfo().testUuid)
   }
 }

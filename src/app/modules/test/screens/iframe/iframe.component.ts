@@ -12,6 +12,7 @@ import { firstValueFrom } from "rxjs"
 import { TestService } from "../../services/test.service"
 import { IframeIntroComponent } from "../../components/iframe-intro/iframe-intro.component"
 import { IframeTestComponent } from "../../components/iframe-test/iframe-test.component"
+import { TestStore } from "../../store/test.store"
 
 @Component({
   selector: "app-iframe",
@@ -23,6 +24,7 @@ export class IframeComponent extends SeoComponent {
   settingsService = inject(SettingsService)
   testIsRunning = signal(false)
   testService = inject(TestService)
+  testStore = inject(TestStore)
   warning = computed(() => {
     if (window !== window.parent) {
       if (document.referrer) {
@@ -55,6 +57,6 @@ export class IframeComponent extends SeoComponent {
 
   @HostListener("window:unload")
   unload() {
-    this.testService.sendAbort()
+    this.testService.sendAbort(this.testStore.basicNetworkInfo().testUuid)
   }
 }

@@ -13,4 +13,5 @@ export class TestStore {
   visualization$ = new BehaviorSubject<ITestVisualizationState>(
     new TestVisualizationState()
   )
+  lastTestFinishedAt = signal<number>(0)
 }

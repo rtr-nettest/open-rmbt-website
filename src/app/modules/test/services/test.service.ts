@@ -45,12 +45,12 @@ declare global {
   providedIn: "root",
 })
 export class TestService {
-  visUpdateSub?: Subscription
   private downs: IOverallResult[] = []
   private ups: IOverallResult[] = []
   private startTimeMs = 0
   private endTimeMs = 0
   private stateChangeMs = 0
+  private worker?: Worker
 
   constructor(
     private readonly historyStore: HistoryStore,
@@ -102,8 +102,13 @@ export class TestService {
     })
   }
 
+  stopUpdates() {
+    this.worker?.terminate()
+  }
+
   updateEndTime() {
     this.endTimeMs = this.stateChangeMs
+    this.testStore.lastTestFinishedAt.set(Date.now())
   }
 
   private getConfig(rmbtws: any, options?: { referrer?: string }) {
@@ -153,18 +158,23 @@ export class TestService {
   }
 
   private watchForUpdates(rmbtTest: any) {
-    this.visUpdateSub?.unsubscribe()
-    this.visUpdateSub = interval(STATE_UPDATE_TIMEOUT)
-      .pipe(
-        concatMap(() => from(this.getMeasurementState(rmbtTest))),
-        withLatestFrom(this.testStore.visualization$),
-        map(([state, vis]) => {
-          this.ngZone.run(() => {
-            this.setTestState(state, vis)
+    this.stopUpdates()
+    this.worker = new Worker(new URL("./test-timer.worker", import.meta.url))
+    this.worker.addEventListener("message", (event) => {
+      if (event.data.type === "timer") {
+        this.ngZone.run(() => {
+          this.getMeasurementState(rmbtTest).then((state) => {
+            this.ngZone.run(() => {
+              this.setTestState(state, this.testStore.visualization$.value)
+            })
           })
         })
-      )
-      .subscribe()
+      }
+    })
+    this.worker.postMessage({
+      type: "startTimer",
+      payload: STATE_UPDATE_TIMEOUT,
+    })
   }
 
   private setTestState = (
@@ -176,6 +186,16 @@ export class TestService {
       oldPhaseName === EMeasurementStatus.END ||
       oldPhaseName === EMeasurementStatus.ERROR ||
       oldPhaseName === EMeasurementStatus.ABORTED
+    const newPhaseIsOfFinishType =
+      phaseState.phase === EMeasurementStatus.END ||
+      phaseState.phase === EMeasurementStatus.ERROR ||
+      phaseState.phase === EMeasurementStatus.ABORTED
+    if (newPhaseIsOfFinishType && phaseState.phase !== oldPhaseName) {
+      this.updateEndTime()
+      if (phaseState.phase === EMeasurementStatus.ERROR) {
+        this.sendAbort(phaseState.testUuid)
+      }
+    }
     let newState
     if (phaseState.phase !== oldPhaseName && oldPhaseIsOfFinishType) {
       newState = new TestVisualizationState()
@@ -197,7 +217,7 @@ export class TestService {
     this.ups = []
     this.startTimeMs = 0
     this.endTimeMs = 0
-    this.visUpdateSub?.unsubscribe()
+    this.stopUpdates()
   }
 
   async getMeasurementState(
@@ -276,7 +296,6 @@ export class TestService {
     var ProgressSegmentsDown = 34
     var ProgressSegmentsInitUp = 4
     var ProgressSegmentsUp = 29
-    var progressValue = 0
     var progressSegments = 0
     switch (status) {
       case EMeasurementStatus.INIT:
@@ -336,12 +355,12 @@ export class TestService {
     return Math.round((progressSegments / ProgressSegmentsTotal) * 100)
   }
 
-  sendAbort() {
+  sendAbort(testUuid: string | undefined) {
     navigator.sendBeacon(
       `${environment.api.baseUrl}/RMBTControlServer/resultUpdate`,
       JSON.stringify({
         uuid: localStorage.getItem(UUID),
-        test_uuid: this.testStore.basicNetworkInfo().testUuid,
+        test_uuid: testUuid,
         aborted: true,
       })
     )

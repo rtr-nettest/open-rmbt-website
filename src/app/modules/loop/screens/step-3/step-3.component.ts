@@ -18,6 +18,7 @@ import { STATE_UPDATE_TIMEOUT } from "../../../test/constants/numbers"
 import { LoopService } from "../../services/loop.service"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { environment } from "../../../../../environments/environment"
+import { toObservable } from "@angular/core/rxjs-interop"
 
 @Component({
   selector: "app-step-3",
@@ -35,6 +36,7 @@ export class Step3Component extends TestScreenComponent {
   protected waitingProgressMs = 0
   protected shouldGetHistory$ = new BehaviorSubject<boolean>(false)
   protected currentTestUuid$ = new BehaviorSubject<string | null>(null)
+  lastTestFinishedAt$ = toObservable(this.store.lastTestFinishedAt)
   finishedTests = 0
   testsFinishedWhileActive = 0
 
@@ -77,6 +79,15 @@ export class Step3Component extends TestScreenComponent {
         takeUntil(this.stopped$)
       )
       .subscribe(() => {
+        this.service.triggerNextTest()
+      })
+    this.lastTestFinishedAt$
+      .pipe(
+        filter((v) => v > 0),
+        distinctUntilChanged(),
+        takeUntil(this.stopped$)
+      )
+      .subscribe(() => {
         this.finishedTests++
         if (!document.hidden) {
           this.testsFinishedWhileActive++
@@ -85,7 +96,6 @@ export class Step3Component extends TestScreenComponent {
         if (document.hidden && diff > 0) {
           this.ts.setTitle(`(${diff}) ${this.metaTitle}`)
         }
-        this.service.triggerNextTest()
       })
     this.scheduleLoop()
   }
@@ -120,7 +130,6 @@ export class Step3Component extends TestScreenComponent {
       this.i18nStore.translate(ERROR_OCCURED_DURING_LOOP) +
       " " +
       this.loopStore.loopCounter()
-    this.service.sendAbort()
     this.message.openConfirmDialog(message, () => void 0)
     this.goToResult(state)
   }
@@ -131,7 +140,6 @@ export class Step3Component extends TestScreenComponent {
       return
     }
     // Waiting for a new test to start
-    this.service.updateEndTime()
     this.loopWaiting$.next(true)
     this.shouldGetHistory$.next(true)
     this.mainStore.error$.next(null)
