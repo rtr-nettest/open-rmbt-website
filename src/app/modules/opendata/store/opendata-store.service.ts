@@ -2,7 +2,7 @@ import { Injectable, signal } from "@angular/core"
 import { IOpendataFilters } from "../interfaces/opendata-filters.interface"
 import { IRecentMeasurement } from "../interfaces/recent-measurements-response.interface"
 
-export const OPEN_DATA_LIMIT = 500
+export const OPEN_DATA_LIMIT = 100
 
 export const DEFAULT_FILTERS: IOpendataFilters = {
   max_results: OPEN_DATA_LIMIT,

@@ -17,11 +17,7 @@ import {
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
-import {
-  HistogramMetric,
-  IHistogramResponse,
-  IHistogramResponseItem,
-} from "../interfaces/histogram-response.interface"
+import { IHistogramResponse } from "../interfaces/histogram-response.interface"
 import { ChartPhase } from "../../charts/dto/test-chart-dataset"
 import { IIntradayResponseItem } from "../interfaces/intraday-response.interface"
 dayjs.extend(utc)
