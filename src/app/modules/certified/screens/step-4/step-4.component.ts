@@ -12,7 +12,7 @@ import { environment } from "../../../../../environments/environment"
   styleUrl: "../../../test/screens/test-screen/test-screen.component.scss",
 })
 export class Step4Component extends LoopScreenComponent {
-  override goBackLocation: string = `/${this.i18nStore.activeLang}/${ERoutes.CERTIFIED_1}`
+  override goBackLocation: string = ""
 
   override abortTest(): void {
     this.stopped$.next()

@@ -1,0 +1,2 @@
+export const DATA_FORM = "RTR_NETZTEST_DATA_FORM"
+export const ENV_FORM = "RTR_NETZTEST_ENV_FORM"

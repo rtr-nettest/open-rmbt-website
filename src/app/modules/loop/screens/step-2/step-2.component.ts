@@ -28,22 +28,22 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
 import { environment } from "../../../../../environments/environment"
 
 @Component({
-    selector: "app-step-2",
-    imports: [
-        CertifiedBreadcrumbsComponent,
-        BreadcrumbsComponent,
-        HeaderComponent,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatRadioModule,
-        ReactiveFormsModule,
-        TopNavComponent,
-        TranslatePipe,
-        FooterComponent,
-    ],
-    templateUrl: "./step-2.component.html",
-    styleUrl: "./step-2.component.scss"
+  selector: "app-step-2",
+  imports: [
+    CertifiedBreadcrumbsComponent,
+    BreadcrumbsComponent,
+    HeaderComponent,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    ReactiveFormsModule,
+    TopNavComponent,
+    TranslatePipe,
+    FooterComponent,
+  ],
+  templateUrl: "./step-2.component.html",
+  styleUrl: "./step-2.component.scss",
 })
 export class Step2Component extends SeoComponent implements OnInit {
   form?: FormGroup<ILoopDataFormControls>
@@ -58,7 +58,6 @@ export class Step2Component extends SeoComponent implements OnInit {
     ts: Title,
     i18nStore: I18nStore,
     private readonly fb: FormBuilder,
-    private readonly loopService: LoopService,
     private readonly router: Router,
     private readonly store: LoopStoreService
   ) {
@@ -81,7 +80,6 @@ export class Step2Component extends SeoComponent implements OnInit {
 
   onTestStart() {
     if (!this.form?.valid) return
-    this.store.activeBreadcrumbIndex.set(ECertifiedSteps.MEASUREMENT)
     this.store.maxTestsAllowed.set(this.form.controls.maxTestsAllowed.value)
     this.store.testIntervalMinutes.set(
       this.form.controls.testIntervalMinutes.value

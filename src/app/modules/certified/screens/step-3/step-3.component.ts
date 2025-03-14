@@ -33,28 +33,27 @@ import { MatInputModule } from "@angular/material/input"
 import { NgFor, NgIf } from "@angular/common"
 import { MatIconModule } from "@angular/material/icon"
 import { MatCheckboxModule } from "@angular/material/checkbox"
-import { LoopService } from "../../../loop/services/loop.service"
 import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
 
 @Component({
-    selector: "app-step-3",
-    imports: [
-        BreadcrumbsComponent,
-        CertifiedBreadcrumbsComponent,
-        HeaderComponent,
-        MatButtonModule,
-        MatCheckboxModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        NgFor,
-        NgIf,
-        ReactiveFormsModule,
-        TopNavComponent,
-        TranslatePipe,
-    ],
-    templateUrl: "./step-3.component.html",
-    styleUrl: "./step-3.component.scss"
+  selector: "app-step-3",
+  imports: [
+    BreadcrumbsComponent,
+    CertifiedBreadcrumbsComponent,
+    HeaderComponent,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    NgFor,
+    NgIf,
+    ReactiveFormsModule,
+    TopNavComponent,
+    TranslatePipe,
+  ],
+  templateUrl: "./step-3.component.html",
+  styleUrl: "./step-3.component.scss",
 })
 export class Step3Component extends SeoComponent implements OnInit {
   form?: FormGroup<ICertifiedEnvFormControls>
@@ -82,10 +81,8 @@ export class Step3Component extends SeoComponent implements OnInit {
     i18nStore: I18nStore,
     private readonly fb: FormBuilder,
     private readonly fs: FileService,
-    private readonly loopService: LoopService,
     private readonly router: Router,
-    private readonly store: CertifiedStoreService,
-    private readonly testStore: TestStore
+    private readonly store: CertifiedStoreService
   ) {
     super(ts, i18nStore)
   }
@@ -171,7 +168,6 @@ export class Step3Component extends SeoComponent implements OnInit {
   }
 
   onTestStart() {
-    this.store.activeBreadcrumbIndex.set(ECertifiedSteps.MEASUREMENT)
     this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_4])
   }
 

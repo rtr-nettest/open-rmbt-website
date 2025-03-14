@@ -28,7 +28,7 @@ import { environment } from "../../../../../environments/environment"
 })
 export class Step3Component extends TestScreenComponent {
   override addMedian = true
-  override goBackLocation: string = `/${this.i18nStore.activeLang}/${ERoutes.LOOP_1}`
+  override goBackLocation: string = ""
   override excludeColumns =
     environment.loopModeDefaults.exclude_from_result ?? []
   protected readonly loopService = inject(LoopService)

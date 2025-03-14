@@ -1,11 +1,11 @@
-import { computed, Injectable, signal } from "@angular/core"
+import { computed, effect, Injectable, signal } from "@angular/core"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { ERoutes } from "../../shared/constants/routes.enum"
 import { ECertifiedSteps } from "../constants/certified-steps.enum"
 import { ICertifiedDataForm } from "../interfaces/certified-data-form.interface"
 import { ICertifiedEnvForm } from "../interfaces/certified-env-form.interface"
-import { IMainMenuItem } from "../../shared/interfaces/main-menu-item.interface"
 import { IBreadcrumb } from "../../shared/interfaces/breadcrumb.interface"
+import { DATA_FORM, ENV_FORM } from "../constants/strings"
 
 @Injectable({
   providedIn: "root",
@@ -73,5 +73,20 @@ export class CertifiedStoreService {
       : !this.isDataFormValid()
   })
 
-  constructor(private readonly i18nStore: I18nStore) {}
+  constructor(private readonly i18nStore: I18nStore) {
+    if (globalThis.localStorage) {
+      const dataForm = localStorage.getItem(DATA_FORM)
+      if (dataForm) {
+        this.dataForm.set(JSON.parse(dataForm))
+      }
+      const envForm = localStorage.getItem(ENV_FORM)
+      if (envForm) {
+        this.envForm.set(JSON.parse(envForm))
+      }
+      effect(() => {
+        localStorage.setItem(DATA_FORM, JSON.stringify(this.dataForm()))
+        localStorage.setItem(ENV_FORM, JSON.stringify(this.envForm()))
+      })
+    }
+  }
 }

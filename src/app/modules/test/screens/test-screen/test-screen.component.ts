@@ -120,7 +120,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
         return
       }
       this.service.resetState()
-      setGoBackLocation(this.goBackLocation)
+      if (this.goBackLocation) setGoBackLocation(this.goBackLocation)
       this.initVisualization()
       return
     })

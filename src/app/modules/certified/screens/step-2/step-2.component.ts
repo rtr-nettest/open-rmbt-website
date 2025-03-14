@@ -117,7 +117,6 @@ export class Step2Component extends SeoComponent implements OnInit {
   }
 
   onTestStart() {
-    this.store.activeBreadcrumbIndex.set(ECertifiedSteps.MEASUREMENT)
     this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_4])
   }
 
