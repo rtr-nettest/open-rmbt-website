@@ -58,7 +58,7 @@ h5,
   font-family: $base-font-family;
   font-weight: bold;
   line-height: $base-line-height;
-  margin: rem(24) auto;
+  margin: rem(24) auto rem(10);
 
   &:first-child {
     margin-top: 0;

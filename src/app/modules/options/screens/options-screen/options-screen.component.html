@@ -5,14 +5,11 @@
 <div class="app-wrapper">
   <h2>{{ "Client-UUID" | translate }}</h2>
   <p>{{ "Your UUID is: %0" | translate | sprintf : uuid() }}</p>
-  <p>{{ "E-Mail: netztest@rtr.at" | translate }}</p>
+  <p [innerHTML]="'E-Mail: netztest@rtr.at' | translate"></p>
   <h2>{{ "Options" | translate }}</h2>
   <h3>{{ "IP-Version" | translate }}</h3>
   <p>
-    {{
-      "If your internet access supports both IPv4 and IPv6, you can choose which protocol version is used for conducting the test."
-        | translate
-    }}
+    {{ "IP-Version description" | translate }}
   </p>
   @if (form) {
   <form [formGroup]="form" (ngSubmit)="submit()">
@@ -44,6 +41,8 @@
   <p>{{ error() | translate }}</p>
   } @else {
   <p>{{ "Loading the form..." | translate }}</p>
+  } @if (text$ | async; as text) {
+  <div [innerHTML]="text" style="margin: 40px 0"></div>
   }
 </div>
 <app-footer></app-footer>

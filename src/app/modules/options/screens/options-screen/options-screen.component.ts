@@ -17,15 +17,16 @@ import {
   IpVersion,
   OptionsStoreService,
 } from "../../store/options-store.service"
-import { MatOptionModule } from "@angular/material/core"
 import { MatButtonModule } from "@angular/material/button"
 import { MatRadioModule } from "@angular/material/radio"
 import { UUID } from "../../../test/constants/strings"
 import { IpService } from "../../../shared/services/ip.service"
+import { AsyncPipe } from "@angular/common"
 
 @Component({
   selector: "app-options-screen",
   imports: [
+    AsyncPipe,
     HeaderComponent,
     TopNavComponent,
     BreadcrumbsComponent,
@@ -69,6 +70,7 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
   })
   loading = signal<boolean>(true)
   error = signal<string | null>(null)
+  text$ = this.i18nStore.getLocalizedHtml("options")
 
   ngOnInit(): void {
     Promise.all([this.ipService.getIpV4(), this.ipService.getIpV6()])
