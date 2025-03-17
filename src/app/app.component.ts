@@ -1,7 +1,7 @@
 import { Component, inject, signal } from "@angular/core"
 import { RouterOutlet } from "@angular/router"
 import { MainStore } from "./modules/shared/store/main.store"
-import { catchError, Observable, of, tap } from "rxjs"
+import { Observable, retry, tap, timer } from "rxjs"
 import { MatProgressBarModule } from "@angular/material/progress-bar"
 import { AsyncPipe } from "@angular/common"
 import { SettingsService } from "./modules/shared/services/settings.service"
@@ -24,9 +24,11 @@ export class AppComponent {
       tap((settings) => {
         this.mainStore.settings.set(settings)
       }),
-      catchError(() => {
-        this.error.set(true)
-        return of(null)
+      retry({
+        delay: (_, attempt) => {
+          this.error.set(true)
+          return attempt < 12 ? timer(5000) : timer(10000)
+        },
       })
     )
 
