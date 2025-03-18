@@ -55,7 +55,7 @@ export const routes: Routes = [
       {
         path: ERoutes.TEST,
         component: TestScreenComponent,
-        canDeactivate: [unloadOnlyFor([ERoutes.RESULT])],
+        canDeactivate: [unloadOnlyFor([ERoutes.RESULT, ERoutes.TERMS])],
         resolve: [localeResolver],
         runGuardsAndResolvers: "always",
         data: {
@@ -112,7 +112,7 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.LOOP_3,
-        canDeactivate: [unloadOnlyFor([ERoutes.LOOP_RESULT])],
+        canDeactivate: [unloadOnlyFor([ERoutes.LOOP_RESULT, ERoutes.TERMS])],
         component: LoopStep3Component,
         resolve: [localeResolver],
         data: {
@@ -153,7 +153,9 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.CERTIFIED_4,
-        canDeactivate: [unloadOnlyFor([ERoutes.CERTIFIED_RESULT])],
+        canDeactivate: [
+          unloadOnlyFor([ERoutes.CERTIFIED_RESULT, ERoutes.TERMS]),
+        ],
         component: Step4Component,
         resolve: [localeResolver],
         data: {
