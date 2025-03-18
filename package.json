@@ -70,8 +70,5 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.5.2"
   },
-  "gitInfo": {
-    "hash": "add2053254cc214c42212d0a375686d52dd7d2b2",
-    "branch": "angular"
-  }
+  "gitInfo": {}
 }
