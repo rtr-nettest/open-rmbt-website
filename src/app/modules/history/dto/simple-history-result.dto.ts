@@ -20,6 +20,13 @@ import { IQoeItem } from "../interfaces/qoe-item.interface"
 
 export class SimpleHistoryResult implements ISimpleHistoryResult {
   static fromHistoryResponse(response: any) {
+    const down = response?.speed_download
+      ? parseFloat(response.speed_download.replace(",", ""))
+      : 0
+    const up = response?.speed_upload
+      ? parseFloat(response.speed_upload.replace(",", ""))
+      : 0
+    const ping = response?.ping ? parseFloat(response.ping.replace(",", "")) : 0
     return new SimpleHistoryResult(
       response?.time
         ? dayjs(response.time)
@@ -29,27 +36,25 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
         : "",
       "",
       {
-        value: response?.speed_download
-          ? parseFloat(response.speed_download)
-          : 0,
+        value: down,
         classification: ClassificationService.I.classify(
-          parseFloat(response.speed_download) * 1e3,
+          down * 1e3,
           THRESHOLD_DOWNLOAD,
           "biggerBetter"
         ),
       },
       {
-        value: response?.speed_upload ? parseFloat(response.speed_upload) : 0,
+        value: up,
         classification: ClassificationService.I.classify(
-          parseFloat(response.speed_upload) * 1e3,
+          up * 1e3,
           THRESHOLD_UPLOAD,
           "biggerBetter"
         ),
       },
       {
-        value: response?.ping ? parseFloat(response.ping) : 0,
+        value: ping,
         classification: ClassificationService.I.classify(
-          parseFloat(response.ping),
+          ping,
           THRESHOLD_PING,
           "smallerBetter"
         ),

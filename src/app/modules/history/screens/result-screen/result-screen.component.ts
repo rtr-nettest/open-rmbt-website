@@ -243,7 +243,7 @@ export class ResultScreenComponent extends SeoComponent {
   getPingInMs(ping: number) {
     const locale = this.i18nStore.activeLang
     return (
-      Math.round(ping).toLocaleString(locale) +
+      roundToSignificantDigits(ping).toLocaleString(locale) +
       " " +
       this.i18nStore.translate("millis")
     )
