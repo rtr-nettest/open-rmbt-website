@@ -58,6 +58,7 @@
       (expand)="loadIntradayData($event)"
       [a11yTitle]="'Intraday' | translate"
     >
+      @if (loadIntraday()) {
       <h5>{{ "Download/Upload" | translate }}</h5>
       <div class="app-expansion-panel__row">
         <app-intraday
@@ -74,16 +75,20 @@
           [loading]="loadingIntraday()"
         ></app-intraday>
       </div>
+      }
     </app-expansion-panel>
   </div>
+  @if (data.totalElements) {
   <app-table
     [data]="data"
     [columns]="columns"
     [sort]="sort"
     [rowsAreCLickable]="true"
     (onRowClick)="handleRowClick($event)"
+    (onContentChange)="logTableFinishedRendering()"
+    identifyField="open_uuid"
   ></app-table>
-  } }
+  } } }
 </div>
 <app-footer></app-footer>
 

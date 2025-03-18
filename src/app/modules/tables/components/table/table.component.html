@@ -9,6 +9,7 @@
     (matSortChange)="changeSort($event)"
     [matSortActive]="sort.active"
     [matSortDirection]="sort.direction"
+    (contentChanged)="onContentChange.emit()"
   >
     <ng-container
       *ngFor="let column of columns"
@@ -47,7 +48,7 @@
         <mat-cell
           *matCellDef="let element; let i = dataIndex"
           [style]="justify(column)"
-          [ngClass]="column.getNgClass?.('', column)"
+          [ngClass]="column.getNgClass?.(element, column)"
         >
           <span class="app-table__mobile-label">{{ column.header }}</span>
           @if(column.isExpandable) {
@@ -69,7 +70,7 @@
       <ng-container *ngIf="column.isHtml; else defaultCell">
         <mat-cell
           *matCellDef="let element; let i = dataIndex"
-          [ngClass]="column.getNgClass?.('', column)"
+          [ngClass]="column.getNgClass?.(element, column)"
         >
           <span class="app-table__mobile-label">{{ column.header }}</span>
           <div
@@ -77,6 +78,19 @@
             [style]="justify(column)"
             [innerHtml]="getDefaultValue(column, element, i)"
           ></div>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container *ngIf="column.getIconClass; else defaultCell">
+        <mat-cell
+          *matCellDef="let element; let i = dataIndex"
+          [ngClass]="column.getNgClass?.(element, column)"
+        >
+          <span class="app-table__mobile-label">{{ column.header }}</span>
+          <div class="app-flex-wrapper" [style]="justify(column)">
+            <i [ngClass]="column.getIconClass(element, column)"></i
+            ><span>{{ getDefaultValue(column, element, i) }}</span>
+          </div>
         </mat-cell>
       </ng-container>
 
@@ -97,7 +111,7 @@
         <mat-cell
           *matCellDef="let element; let i = dataIndex"
           [style]="justify(column)"
-          [ngClass]="column.getNgClass?.('', column)"
+          [ngClass]="column.getNgClass?.(element, column)"
         >
           <span class="app-table__mobile-label">{{ column.header }}</span>
           <a

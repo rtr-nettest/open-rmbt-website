@@ -10,8 +10,8 @@ dayjs.extend(tz)
 
 export const MIN_ACCURACY_FOR_SHOWING_MAP = 2000
 
-export const getNetworkIcon = (testdata: IRecentMeasurement) => {
-  let img = "<i class='svg-icon svg14'></i>"
+export const getNetworkIconClass = (testdata: IRecentMeasurement) => {
+  let img = "svg-icon svg14"
   let svgType = ""
   if (testdata.platform.indexOf("WLAN") !== -1) {
     svgType = "wlan4"
@@ -41,17 +41,37 @@ export const getNetworkIcon = (testdata: IRecentMeasurement) => {
   return img
 }
 
-export const getPositionMarker = (testdata: IRecentMeasurement) => {
-  let position_marker = ""
+export const getPositionMarkerClass = (testdata: IRecentMeasurement) => {
+  let position_marker = "svg-icon svg-empty"
   if (testdata.long !== null) {
     let image =
       testdata.loc_accuracy &&
       testdata.loc_accuracy <= MIN_ACCURACY_FOR_SHOWING_MAP
         ? "svg-marker"
         : "svg-marker-line"
-    position_marker = "<i class='svg-icon svg14 " + image + "'></i>"
+    position_marker = "svg-icon svg14 " + image
   }
   return position_marker
+}
+
+export const truncatePlatform = (value: IRecentMeasurement) => {
+  const arr = []
+  let retVal = ""
+  if (value.provider_name) {
+    arr.push(value.provider_name.trim())
+  }
+  if (value.model) {
+    arr.push(value.model.trim())
+  }
+  if (arr.length) {
+    retVal = arr.join(", ")
+  }
+  if (value.platform) {
+    retVal = retVal.length
+      ? `${truncate(retVal, 50)} (${value.platform.trim()})`
+      : value.platform.trim()
+  }
+  return retVal
 }
 
 export const RECENT_MEASUREMENTS_COLUMNS: Array<
@@ -60,36 +80,19 @@ export const RECENT_MEASUREMENTS_COLUMNS: Array<
   {
     columnDef: "date_time",
     header: "Time",
-    isHtml: true,
-    getNgClass: () => "app-cell app-cell--20",
+    getIconClass: (value) => getNetworkIconClass(value),
+    getNgClass: () => `app-cell app-cell--20`,
     transformValue(value) {
-      return `${getNetworkIcon(value)}<span>${value.time}</span>`
+      return value.time
     },
   },
   {
     columnDef: "platform",
     header: "Provider/device",
-    isHtml: true,
+    getIconClass: (value) => getPositionMarkerClass(value),
+    getNgClass: () => `app-marker-cell`,
     transformValue(value) {
-      const arr = []
-      let retVal = ""
-      if (value.provider_name) {
-        arr.push(value.provider_name.trim())
-      }
-      if (value.model) {
-        arr.push(value.model.trim())
-      }
-      if (arr.length) {
-        retVal = arr.join(", ")
-      }
-      if (value.platform) {
-        retVal = retVal.length
-          ? `${truncate(retVal, 50)} (${value.platform.trim()})`
-          : value.platform.trim()
-      }
-      return `${getPositionMarker(
-        value
-      )}<span class="app-marker-cell">${retVal}</span>`
+      return truncatePlatform(value)
     },
   },
   {

@@ -64,6 +64,7 @@ export class OpendataScreenComponent
   extends LoadOnScrollComponent
   implements OnInit
 {
+  startMs = Date.now()
   apiLink = computed(() => {
     return `/${this.i18nStore.activeLang}/${ERoutes.INTERFACE}`
   })
@@ -73,10 +74,15 @@ export class OpendataScreenComponent
   columns = RECENT_MEASUREMENTS_COLUMNS
   data$ = toObservable(this.opendataStoreService.data).pipe(
     map((data) => {
-      const content = data?.map(formatTime)
+      console.log("Data observed", Date.now() - this.startMs)
+      const content: IRecentMeasurement[] = []
+      for (const item of data) {
+        content.push(formatTime(item))
+      }
+      console.log("Formatted dates. Rendering table", Date.now() - this.startMs)
       return {
-        content,
-        totalElements: content?.length,
+        content: data,
+        totalElements: data?.length,
       }
     })
   )
@@ -88,13 +94,19 @@ export class OpendataScreenComponent
   filterCount = signal("")
   filters$ = toObservable(this.opendataStoreService.filters).pipe(
     concatMap((filters) => {
+      console.log("Observed filters", Date.now() - this.startMs)
       this.updateFilterCount(filters)
+      console.log("Updated filter count", Date.now() - this.startMs)
       return forkJoin([of(filters), this.updateData({ reset: true })])
     }),
-    map(([filters]) => filters)
+    map(([filters]) => {
+      console.log(console.log("Updated data", Date.now() - this.startMs))
+      return filters
+    })
   )
   loadHistograms = signal(false)
   loadMap = signal(false)
+  loadIntraday = signal(false)
   loadingIntraday = signal(true)
   mapContainerId = "mapContainer"
   sort: ISort = { active: "times", direction: "desc" }
@@ -107,19 +119,20 @@ export class OpendataScreenComponent
   protected override async fetchData(): Promise<Array<any>> {
     const filters = this.opendataStoreService.filters()
     const cursor = this.opendataStoreService.cursor()
+    const newFilters = { ...DEFAULT_FILTERS, ...filters, cursor }
+    console.log("Fetching data", Date.now() - this.startMs)
     return firstValueFrom(
-      this.opendataService
-        .search({ ...DEFAULT_FILTERS, ...filters, cursor })
-        .pipe(
-          map((response) => {
-            this.opendataStoreService.cursor.set(response.next_cursor)
-            this.opendataStoreService.data.set([
-              ...this.opendataStoreService.data(),
-              ...response.results,
-            ])
-            return response.results
-          })
-        )
+      this.opendataService.search(newFilters).pipe(
+        map((response) => {
+          console.log("Got data", Date.now() - this.startMs)
+          this.opendataStoreService.cursor.set(response.next_cursor)
+          this.opendataStoreService.data.set([
+            ...this.opendataStoreService.data(),
+            ...response.results,
+          ])
+          return response.results
+        })
+      )
     )
   }
 
@@ -133,6 +146,7 @@ export class OpendataScreenComponent
   }
 
   loadIntradayData(load: boolean) {
+    this.loadIntraday.set(true)
     if (load) {
       this.loadingIntraday.set(true)
       firstValueFrom(
@@ -151,6 +165,10 @@ export class OpendataScreenComponent
     })
   }
 
+  logTableFinishedRendering = () => {
+    console.log("Table finished rendering", Date.now() - this.startMs)
+  }
+
   private updateFilterCount(filters: IOpendataFilters) {
     const filtersCount = Object.keys(filters).filter(
       (k) =>
@@ -162,14 +180,17 @@ export class OpendataScreenComponent
   }
 
   private addRecentMeasurements() {
+    console.log("Adding recent mesurements", Date.now() - this.startMs)
     const filters = this.opendataStoreService.filters()
     firstValueFrom(
       this.opendataService.search({ ...DEFAULT_FILTERS, ...filters })
     ).then((resp) => {
+      console.log("Received recent mesurements", Date.now() - this.startMs)
       const oldContent = this.opendataStoreService.data()
       if (resp.results[0].open_test_uuid === oldContent[0].open_test_uuid)
         return
       this.opendataStoreService.data.set([...resp.results, ...oldContent])
+      console.log("Updated recent mesurements", Date.now() - this.startMs)
     })
   }
 }

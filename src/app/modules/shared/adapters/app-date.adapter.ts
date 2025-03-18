@@ -52,9 +52,9 @@ export function provideAppDateAdapter() {
 }
 
 export function formatTime(value: IRecentMeasurement) {
-  const time = dayjs(value.time)
+  value.time = dayjs(value.time)
     .utc(true)
     .tz(dayjs.tz.guess())
     .format(APP_DATE_TIME_FORMAT)
-  return { ...value, time }
+  return value
 }

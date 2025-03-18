@@ -64,7 +64,7 @@
         padding-left: 16px;
       }
 
-      * {
+      *:not(.svg-icon) {
         flex: 0 0 50%;
         justify-content: flex-start !important;
       }

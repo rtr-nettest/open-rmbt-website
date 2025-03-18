@@ -5,6 +5,7 @@ import {
   Input,
   OnChanges,
   OnInit,
+  output,
   Output,
   ViewChild,
 } from "@angular/core"
@@ -69,6 +70,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() footerColumns: string[] = []
 
   @Output() onRowClick = new EventEmitter<any>()
+  onContentChange = output<void>()
 
   @ViewChild(MatTable) table?: MatTable<any>
 
@@ -90,8 +92,10 @@ export class TableComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnChanges(): void {
-    this.cdr.detectChanges()
-    this.table?.removeFooterRowDef(null as any)
+    if (this.footerColumns.length) {
+      this.cdr.detectChanges()
+      this.table?.removeFooterRowDef(null as any)
+    }
   }
 
   ngOnInit() {

@@ -321,6 +321,10 @@
 .svg-empty {
   background: url("/assets/images/sprite.svg") 44.44444444444444% 62.5%
     no-repeat;
+
+  &.svg-icon {
+    margin-right: 0;
+  }
 }
 
 .svg-empty-dims {

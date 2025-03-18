@@ -18,6 +18,7 @@ export interface ITableColumn<T = any> {
     column: ITableColumn<T>,
     ...args: any[]
   ) => string | string[] | Set<string> | { [klass: string]: any }
+  getIconClass?: (value: T, column: ITableColumn<T>, ...args: any[]) => string
   getTooltip?: (value: T, column: ITableColumn<T>, ...args: any[]) => string
   footer?: string | number
   header: string
