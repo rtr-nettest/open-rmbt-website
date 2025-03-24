@@ -52,7 +52,7 @@ export const FORMATTED_FIELDS: {
     `${testData.wifi_link_speed} ${t["Mbps"] || "Mbps"}`,
 
   ping_ms: (testData: any, t: any) =>
-    `${Math.round(testData.ping_ms)} ${t["millis"] || "millis"}`,
+    `${roundToSignificantDigits(testData.ping_ms)} ${t["millis"] || "millis"}`,
   time_dl_ms: (testData: any, t: any) =>
     `${Math.round(testData.time_dl_ms)} ${t["millis"] || "millis"}`,
   time_ul_ms: (testData: any, t: any) =>

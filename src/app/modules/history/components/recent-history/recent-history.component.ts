@@ -176,7 +176,7 @@ export class RecentHistoryComponent implements OnChanges {
       }
       const down = roundToSignificantDigits(hi.download?.value || 0)
       const up = roundToSignificantDigits(hi.upload?.value || 0)
-      const ping = hi.ping?.value
+      const ping = roundToSignificantDigits(hi.ping?.value || 0)
       return {
         ...hi,
         id: hi.testUuid,

@@ -67,7 +67,9 @@ export class IframeTestComponent {
       this.ping.set(
         !currentPhase.ping || currentPhase.ping === -1
           ? DEFAULT_VALUE
-          : `${currentPhase.ping} ${this.i18nStore.translate("millis")}`
+          : `${roundToSignificantDigits(
+              currentPhase.ping
+            )} ${this.i18nStore.translate("millis")}`
       )
       this.down.set(
         !currentPhase.down || currentPhase.down === -1

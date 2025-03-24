@@ -130,7 +130,7 @@ export class PopupService {
         "smallerBetter"
       ),
       ping: measurement.ping_ms
-        ? `${Math.round(measurement.ping_ms)} ${t["millis"]}`
+        ? `${roundToSignificantDigits(measurement.ping_ms)} ${t["millis"]}`
         : t[UNKNOWN],
       ...(signal
         ? {

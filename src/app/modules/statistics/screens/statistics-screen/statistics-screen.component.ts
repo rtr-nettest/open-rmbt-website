@@ -37,22 +37,22 @@ import { roundToSignificantDigits } from "../../../shared/util/math"
 import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
 
 @Component({
-    selector: "app-statistics-screen",
-    imports: [
-        BreadcrumbsComponent,
-        FiltersComponent,
-        HeaderComponent,
-        HtmlWrapperComponent,
-        TopNavComponent,
-        FooterComponent,
-        MatButtonModule,
-        LoadingOverlayComponent,
-        AsyncPipe,
-        TableComponent,
-        TranslatePipe,
-    ],
-    templateUrl: "./statistics-screen.component.html",
-    styleUrl: "./statistics-screen.component.scss"
+  selector: "app-statistics-screen",
+  imports: [
+    BreadcrumbsComponent,
+    FiltersComponent,
+    HeaderComponent,
+    HtmlWrapperComponent,
+    TopNavComponent,
+    FooterComponent,
+    MatButtonModule,
+    LoadingOverlayComponent,
+    AsyncPipe,
+    TableComponent,
+    TranslatePipe,
+  ],
+  templateUrl: "./statistics-screen.component.html",
+  styleUrl: "./statistics-screen.component.scss",
 })
 export class StatisticsScreenComponent extends SeoComponent implements OnInit {
   footerColumns = ["name", "down", "up", "latency", "count"]
@@ -116,7 +116,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
         yellow: provider.ping_yellow,
         green: provider.ping_green,
         deepGreen: provider.ping_ultragreen,
-        label: Math.round(provider.quantile_ping / 1e6),
+        label: roundToSignificantDigits(provider.quantile_ping / 1e6),
         provider: provider.name,
         units: "millis",
       }),
@@ -205,7 +205,8 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
     {
       header: "Ping (ms)",
       columnDef: "latency",
-      transformValue: (value) => Math.round(value.quantile_ping / 1e6),
+      transformValue: (value) =>
+        roundToSignificantDigits(value.quantile_ping / 1e6),
       justify: "flex-end",
     },
     {
@@ -332,7 +333,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
       case "up":
         return roundToSignificantDigits(data.providers_sums.quantile_up / 1000)
       case "latency":
-        return Math.round(data.providers_sums.quantile_ping / 1e6)
+        return roundToSignificantDigits(data.providers_sums.quantile_ping / 1e6)
       case "count":
         return data.providers_sums.count
       case "name":

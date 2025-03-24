@@ -268,7 +268,7 @@ export class TestService {
     }
     const ping =
       result?.pingNano && result?.pingNano !== -1
-        ? Math.round((result.pingNano as number) / 1e6)
+        ? (result.pingNano as number) / 1e6
         : -1
     const pings = []
     if (phase === EMeasurementStatus.DOWN && result.pings) {

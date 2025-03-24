@@ -118,7 +118,7 @@ export const RECENT_MEASUREMENTS_COLUMNS: Array<
     getNgClass: () => "app-cell app-cell--flex-10",
     header: "Ping (ms)",
     transformValue: (value) => {
-      return Math.round(value.ping_ms)
+      return roundToSignificantDigits(value.ping_ms)
     },
     justify: "flex-end",
   },
