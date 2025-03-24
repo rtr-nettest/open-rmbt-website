@@ -47,7 +47,19 @@
     title="Recent measurements"
   ></app-recent-history>
 </div>
-} }
+} } @if (testStartDisabled()) {
+<div class="app-wrapper">
+  <h2 class="app-title" aria-live="polite">
+    {{ "Measurement" | translate }}
+  </h2>
+  <h4 style="margin-bottom: 40px">
+    {{
+      "The measurement is not configured. Please fill the form and try again."
+        | translate
+    }}
+  </h4>
+</div>
+}
 <app-footer></app-footer>
 
 <ng-template #loopWaitProgressBar>

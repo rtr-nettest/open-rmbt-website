@@ -84,9 +84,27 @@ export class CertifiedStoreService {
         this.envForm.set(JSON.parse(envForm))
       }
       effect(() => {
-        localStorage.setItem(DATA_FORM, JSON.stringify(this.dataForm()))
-        localStorage.setItem(ENV_FORM, JSON.stringify(this.envForm()))
+        const dataForm = this.dataForm()
+        const envForm = this.envForm()
+        if (dataForm) {
+          localStorage.setItem(DATA_FORM, JSON.stringify(dataForm))
+        } else {
+          localStorage.removeItem(DATA_FORM)
+        }
+        if (envForm) {
+          localStorage.setItem(ENV_FORM, JSON.stringify(envForm))
+        } else {
+          localStorage.removeItem(ENV_FORM)
+        }
       })
     }
+  }
+
+  reset() {
+    this.dataForm.set(null)
+    this.envForm.set(null)
+    this.isReady.set(false)
+    this.isDataFormValid.set(false)
+    this.isEnvFormValid.set(false)
   }
 }

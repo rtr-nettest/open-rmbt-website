@@ -1,11 +1,10 @@
 import {
-  AfterViewInit,
   Component,
-  computed,
   HostListener,
   inject,
   NgZone,
   OnInit,
+  signal,
 } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Router } from "@angular/router"
@@ -104,6 +103,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
     "determinate"
   )
   platform = inject(PlatformService)
+  testStartDisabled = signal(false)
   protected excludeColumns: string[] = []
 
   ngOnInit(): void {

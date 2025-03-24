@@ -24,6 +24,7 @@ import { OpendataScreenComponent } from "./modules/opendata/screens/opendata-scr
 import { InterfaceScreenComponent } from "./modules/opendata/screens/interface-screen/interface-screen.component"
 import { IframeComponent } from "./modules/test/screens/iframe/iframe.component"
 import { OptionsScreenComponent } from "./modules/options/screens/options-screen/options-screen.component"
+import { clearStoreGuard } from "./modules/certified/guards/clear-store.guard"
 
 export const routes: Routes = [
   {
@@ -129,6 +130,7 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.CERTIFIED_1,
+        canDeactivate: [clearStoreGuard],
         component: Step1Component,
         resolve: [localeResolver],
         data: {
@@ -137,6 +139,7 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.CERTIFIED_2,
+        canDeactivate: [clearStoreGuard],
         component: Step2Component,
         resolve: [localeResolver],
         data: {
@@ -145,6 +148,7 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.CERTIFIED_3,
+        canDeactivate: [clearStoreGuard],
         component: Step3Component,
         resolve: [localeResolver],
         data: {
@@ -155,6 +159,7 @@ export const routes: Routes = [
         path: ERoutes.CERTIFIED_4,
         canDeactivate: [
           unloadOnlyFor([ERoutes.CERTIFIED_RESULT, ERoutes.TERMS]),
+          clearStoreGuard,
         ],
         component: Step4Component,
         resolve: [localeResolver],
@@ -164,6 +169,7 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.CERTIFIED_RESULT,
+        canDeactivate: [clearStoreGuard],
         component: CertifiedResultScreenComponent,
         resolve: [localeResolver],
         data: {
