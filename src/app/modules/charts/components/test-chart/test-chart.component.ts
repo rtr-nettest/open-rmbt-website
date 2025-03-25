@@ -11,6 +11,7 @@ import { ITestVisualizationState } from "../../../test/interfaces/test-visualiza
 import {
   debounceTime,
   distinctUntilChanged,
+  filter,
   map,
   takeUntil,
 } from "rxjs/operators"
@@ -22,6 +23,7 @@ import { TestChart } from "../../dto/test-chart"
 import { AsyncPipe, NgIf } from "@angular/common"
 import { BarChart } from "./settings/bar-chart"
 import { LogChart } from "./settings/log-chart"
+import { STATE_UPDATE_TIMEOUT } from "../../../test/constants/numbers"
 
 @Component({
   selector: "app-test-chart",
@@ -45,6 +47,7 @@ export class TestChartComponent implements OnDestroy {
       }
     })
   id = computed(() => `${this.phase}_chart`)
+  updateTimer?: NodeJS.Timeout
 
   get canvas() {
     return document.getElementById(this.id()) as HTMLCanvasElement
@@ -64,18 +67,37 @@ export class TestChartComponent implements OnDestroy {
     private store: TestStore
   ) {
     this.visualization$ = this.store.visualization$.pipe(
+      filter(
+        (s) =>
+          s.currentPhaseName === EMeasurementStatus.INIT ||
+          s.currentPhaseName === EMeasurementStatus.END ||
+          s.currentPhaseName === EMeasurementStatus.SHOWING_RESULTS
+      ),
       distinctUntilChanged(),
       map((s) => {
         if (this.canvas) {
-          for (let i = 0; i < 70; i++) {
-            this.handleChanges(s)
+          this.handleChanges(s)
+          if (!this.updateTimer) {
+            this.updateTimer = setInterval(() => {
+              this.handleChanges(this.store.visualization$.value)
+            }, STATE_UPDATE_TIMEOUT * 2)
+          }
+          if (
+            s.currentPhaseName === EMeasurementStatus.SHOWING_RESULTS ||
+            s.currentPhaseName === EMeasurementStatus.END
+          ) {
+            clearInterval(this.updateTimer)
+            this.updateTimer = undefined
           }
         }
         return s
       })
     )
   }
+
   ngOnDestroy(): void {
+    clearInterval(this.updateTimer)
+    this.updateTimer = undefined
     this.destroyed$.next()
     this.destroyed$.complete()
   }

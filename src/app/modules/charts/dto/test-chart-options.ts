@@ -21,8 +21,24 @@ export class TestChartOptions {
     tooltip: {
       enabled: false,
     },
+    decimation: {
+      enabled: true,
+      algorithm: "lttb",
+      threshold: 2,
+    },
   }
   scales: any
+  spanGaps = true
+  datasets = {
+    line: {
+      pointRadius: 0, // disable for all `'line'` datasets
+    },
+  }
+  elements = {
+    point: {
+      radius: 0, // default to disabled in all datasets
+    },
+  }
 
   constructor(private t: I18nStore) {
     this.scales = {
@@ -57,6 +73,7 @@ export class TestChartOptions {
           labelString: this.t.translate("Mbps"),
         },
         position: "right",
+        sampleSize: 1,
         ticks: {
           color: EColors.SECONDARY_50,
           font: {
