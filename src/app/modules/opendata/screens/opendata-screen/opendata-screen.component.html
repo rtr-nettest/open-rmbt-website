@@ -15,7 +15,7 @@
       <app-filters></app-filters>
     </app-expansion-panel>
   </div>
-  @if (data$ | async; as data) {
+  @if (data$ | async; as data) { @if (!loading()) {
   <div [id]="mapContainerId" class="app-expansion-panel">
     <app-expansion-panel
       [title]="'Map view' | translate"
@@ -78,17 +78,16 @@
       }
     </app-expansion-panel>
   </div>
-  @if (data.totalElements) {
-  <app-table
+  }
+  <app-opendata-table
     [data]="data"
     [columns]="columns"
     [sort]="sort"
-    [rowsAreCLickable]="true"
     (onRowClick)="handleRowClick($event)"
     (onContentChange)="logTableFinishedRendering()"
-    identifyField="open_uuid"
-  ></app-table>
-  } } }
+    identifyField="open_test_uuid"
+  ></app-opendata-table>
+  } }
 </div>
 <app-footer></app-footer>
 

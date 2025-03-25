@@ -21,7 +21,6 @@ import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/bre
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { AsyncPipe } from "@angular/common"
-import { TableComponent } from "../../../tables/components/table/table.component"
 import { ISort } from "../../../tables/interfaces/sort.interface"
 import { LoadOnScrollComponent } from "../../../shared/components/load-on-scroll/load-on-scroll.component"
 import { FiltersComponent } from "../../components/filters/filters.component"
@@ -37,6 +36,7 @@ import { IIntradayResponseItem } from "../../interfaces/intraday-response.interf
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { Router, RouterModule } from "@angular/router"
 import { IRecentMeasurement } from "../../interfaces/recent-measurements-response.interface"
+import { OpendataTableComponent } from "../../components/opendata-table/opendata-table.component"
 
 @Component({
   selector: "app-opendata-screen",
@@ -52,7 +52,7 @@ import { IRecentMeasurement } from "../../interfaces/recent-measurements-respons
     LoadingOverlayComponent,
     MapComponent,
     RouterModule,
-    TableComponent,
+    OpendataTableComponent,
     TopNavComponent,
     TranslatePipe,
     HistogramComponent,
@@ -91,7 +91,7 @@ export class OpendataScreenComponent
     .subscribe(() => {
       this.addRecentMeasurements()
     })
-  filterCount = signal("")
+  filterCount = signal<string | null>(null)
   filters$ = toObservable(this.opendataStoreService.filters).pipe(
     concatMap((filters) => {
       console.log("Observed filters", Date.now() - this.startMs)

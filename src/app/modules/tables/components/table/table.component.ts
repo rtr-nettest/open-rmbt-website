@@ -1,6 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
+  computed,
   EventEmitter,
   Input,
   OnChanges,
@@ -20,7 +21,6 @@ import { IPaginator } from "../../interfaces/paginator.interface"
 import { ISort } from "../../interfaces/sort.interface"
 import { TableSortService } from "../../services/table-sort.service"
 import dayjs from "dayjs"
-import { RouterLink } from "@angular/router"
 import { NgClass, NgFor, NgIf } from "@angular/common"
 import { MatButtonModule } from "@angular/material/button"
 import { MatTooltipModule } from "@angular/material/tooltip"
@@ -79,11 +79,9 @@ export class TableComponent implements OnInit, OnChanges {
   displayedSubHeaderColumns: string[] = []
   filters: ITableColumn[] = []
 
-  get ngClass() {
-    return this.tableClassNames?.length
-      ? this.tableClassNames
-      : "app-table--default"
-  }
+  ngClass = computed(() =>
+    this.tableClassNames?.length ? this.tableClassNames : "app-table--default"
+  )
 
   constructor(
     private tableSortService: TableSortService,

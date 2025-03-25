@@ -2,9 +2,9 @@ import { Component, HostListener, signal } from "@angular/core"
 import { SeoComponent } from "../seo/seo.component"
 
 @Component({
-    selector: "app-load-on-scroll",
-    imports: [],
-    template: ""
+  selector: "app-load-on-scroll",
+  imports: [],
+  template: "",
 })
 export class LoadOnScrollComponent extends SeoComponent {
   loading = signal(true)
@@ -49,7 +49,9 @@ export class LoadOnScrollComponent extends SeoComponent {
     }
     const scrollHeight = event.target.scrollHeight
     const scrollTop = event.target.scrollTop
-    const clientHeight = event.target.clientHeight
+    const footerHeight =
+      document.querySelector("app-footer")?.getBoundingClientRect().height || 0
+    const clientHeight = event.target.clientHeight + footerHeight
     if (scrollTop + clientHeight >= scrollHeight) {
       this.updateData()
     }

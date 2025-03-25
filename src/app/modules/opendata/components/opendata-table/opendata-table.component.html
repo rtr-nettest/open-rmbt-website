@@ -1,0 +1,56 @@
+<div class="app-table app-table--default mat-table-wrap">
+  <mat-table
+    *ngIf="data"
+    [dataSource]="data.content"
+    multiTemplateDataRows
+    [trackBy]="identify"
+    (contentChanged)="onContentChange.emit()"
+  >
+    <ng-container
+      *ngFor="let column of columns"
+      matColumnDef="{{ column.columnDef }}"
+    >
+      <!-- MAT-HEADER-CELL -->
+      <mat-header-cell *matHeaderCellDef>
+        <div class="sah-table__cell--ellipsis">
+          {{ column.header | translate }}
+        </div>
+      </mat-header-cell>
+      <!-- END MAT-HEADER-CELL-->
+
+      <ng-container *ngIf="column.getIconClass; else defaultCell">
+        <mat-cell *matCellDef="let element; let i = dataIndex">
+          <span class="app-table__mobile-label">{{ column.header }}</span>
+          <div class="app-flex-wrapper">
+            <i [ngClass]="column.getIconClass(element, column)"></i
+            ><span>{{ getDefaultValue(column, element, i) }}</span>
+          </div>
+        </mat-cell>
+      </ng-container>
+
+      <ng-template #defaultCell>
+        <mat-cell *matCellDef="let element; let i = dataIndex">
+          <span class="app-table__mobile-label">{{ column.header }}</span>
+          <span [matTooltip]="column.getTooltip?.(element, column) ?? ''">
+            {{ getDefaultValue(column, element, i) }}
+          </span>
+        </mat-cell>
+      </ng-template>
+      <!-- END MAT-CELL -->
+    </ng-container>
+
+    <mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      tabindex="0"
+      class="mat-row--clickable"
+      (click)="onRowClick.emit(row)"
+      (keydown.enter)="onRowClick.emit(row)"
+    >
+    </mat-row>
+
+    <mat-header-row
+      tabindex="0"
+      *matHeaderRowDef="displayedColumns; sticky: true"
+    ></mat-header-row>
+  </mat-table>
+</div>

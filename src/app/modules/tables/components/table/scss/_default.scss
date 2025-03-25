@@ -68,6 +68,10 @@
         flex: 0 0 50%;
         justify-content: flex-start !important;
       }
+
+      .svg-icon + span {
+        flex: 1;
+      }
     }
 
     .mat-row--hidden {
