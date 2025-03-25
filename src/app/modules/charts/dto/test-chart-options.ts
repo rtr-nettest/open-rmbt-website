@@ -62,7 +62,7 @@ export class TestChartOptions {
         minRotation: 0,
         maxRotation: 0,
         grid: {
-          color: EColors.SECONDARY_10,
+          display: false,
         },
         title: {
           display: true,

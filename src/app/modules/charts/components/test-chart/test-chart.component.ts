@@ -167,7 +167,6 @@ export class TestChartComponent implements OnDestroy {
   private initChart(options?: { force: boolean }) {
     const ctx = this.canvas?.getContext("2d")
     if (ctx && (options?.force || this.isCanvasEmpty)) {
-      console.log("initChart", this.phase)
       try {
         if (this.phase === "ping") {
           this.chart = new BarChart(ctx!, this.i18nStore, this.phase)
