@@ -25,7 +25,7 @@ import { toObservable } from "@angular/core/rxjs-interop"
     LonlatPipe,
     MatProgressSpinnerModule,
     NgIf,
-    // TestChartComponent,
+    TestChartComponent,
     TranslatePipe,
   ],
 })

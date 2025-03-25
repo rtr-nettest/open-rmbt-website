@@ -4,6 +4,7 @@ import {
   NgZone,
   ChangeDetectionStrategy,
   OnDestroy,
+  computed,
 } from "@angular/core"
 import { fromEvent, Observable, Subject } from "rxjs"
 import { ITestVisualizationState } from "../../../test/interfaces/test-visualization-state.interface"
@@ -38,22 +39,19 @@ export class TestChartComponent implements OnDestroy {
   resizeSub = fromEvent(window, "resize")
     .pipe(takeUntil(this.destroyed$), debounceTime(100))
     .subscribe(() => {
-      const el = document.getElementById(this.id)
+      const el = document.getElementById(this.id())
       if (el) {
         el.style.width = `100%`
       }
     })
+  id = computed(() => `${this.phase}_chart`)
 
   get canvas() {
-    return document.getElementById(this.id) as HTMLCanvasElement
-  }
-
-  get id() {
-    return `${this.phase}_chart`
+    return document.getElementById(this.id()) as HTMLCanvasElement
   }
 
   private get blankCanvas() {
-    return document.getElementById(this.id + "_blank") as HTMLCanvasElement
+    return document.getElementById(this.id() + "_blank") as HTMLCanvasElement
   }
 
   private get isCanvasEmpty() {
@@ -69,7 +67,9 @@ export class TestChartComponent implements OnDestroy {
       distinctUntilChanged(),
       map((s) => {
         if (this.canvas) {
-          this.handleChanges(s)
+          for (let i = 0; i < 70; i++) {
+            this.handleChanges(s)
+          }
         }
         return s
       })
@@ -145,6 +145,7 @@ export class TestChartComponent implements OnDestroy {
   private initChart(options?: { force: boolean }) {
     const ctx = this.canvas?.getContext("2d")
     if (ctx && (options?.force || this.isCanvasEmpty)) {
+      console.log("initChart", this.phase)
       try {
         if (this.phase === "ping") {
           this.chart = new BarChart(ctx!, this.i18nStore, this.phase)
