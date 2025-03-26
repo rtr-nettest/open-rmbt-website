@@ -40,5 +40,11 @@ export class AppComponent {
         `Branch-hash: ${gitInfo["branch"]}-${gitInfo["hash"].slice(0, 8)}`
       )
     }
+    window.addEventListener("popstate", () => {
+      this.mainStore.routingEvent.set("popstate")
+    })
+    window.addEventListener("pushstate", () => {
+      this.mainStore.routingEvent.set("pushstate")
+    })
   }
 }

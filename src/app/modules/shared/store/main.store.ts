@@ -6,6 +6,7 @@ import { IUserSetingsResponse } from "../../test/interfaces/user-settings-respon
   providedIn: "root",
 })
 export class MainStore {
+  routingEvent = signal<"popstate" | "pushstate" | null>(null)
   inProgress$ = new BehaviorSubject<boolean>(false)
   error$ = new BehaviorSubject<Error | null>(null)
   settings = signal<IUserSetingsResponse | null>(null)
