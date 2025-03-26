@@ -13,6 +13,7 @@ import { TestService } from "../../services/test.service"
 import { IframeIntroComponent } from "../../components/iframe-intro/iframe-intro.component"
 import { IframeTestComponent } from "../../components/iframe-test/iframe-test.component"
 import { TestStore } from "../../store/test.store"
+import { EMeasurementStatus } from "../../constants/measurement-status.enum"
 
 @Component({
   selector: "app-iframe",
@@ -54,7 +55,12 @@ export class IframeComponent extends SeoComponent {
 
   @HostListener("window:beforeunload")
   preventReload() {
-    return false
+    return [
+      EMeasurementStatus.END,
+      EMeasurementStatus.ERROR,
+      EMeasurementStatus.NOT_STARTED,
+      EMeasurementStatus.SHOWING_RESULTS,
+    ].includes(this.testStore.visualization$.value?.currentPhaseName)
   }
 
   @HostListener("window:unload")

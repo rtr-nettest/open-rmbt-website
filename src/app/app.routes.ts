@@ -202,7 +202,6 @@ export const routes: Routes = [
       },
       {
         path: ERoutes.IFRAME,
-        canDeactivate: [unloadOnlyFor([])],
         component: IframeComponent,
         resolve: [localeResolver],
         data: {
