@@ -78,7 +78,6 @@ export const imports = [
 })
 export class TestScreenComponent extends SeoComponent implements OnInit {
   addMedian = false
-  goBackLocation = `/${this.i18nStore.activeLang}/${ERoutes.HOME}`
   historyService = inject(HistoryService)
   router = inject(Router)
   mainStore = inject(MainStore)
@@ -120,7 +119,6 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
         return
       }
       this.service.resetState()
-      if (this.goBackLocation) setGoBackLocation(this.goBackLocation)
       this.initVisualization()
       return
     })

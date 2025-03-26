@@ -14,7 +14,6 @@ import { CertifiedStoreService } from "../../store/certified-store.service"
 })
 export class Step4Component extends LoopScreenComponent {
   private readonly certifiedStore = inject(CertifiedStoreService)
-  override goBackLocation: string = ""
 
   override initVisualization(): void {
     if (this.certifiedStore.testStartDisabled()) {
