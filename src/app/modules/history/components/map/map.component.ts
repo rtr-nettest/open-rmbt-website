@@ -2,10 +2,13 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  Input,
+  computed,
+  effect,
+  input,
   NgZone,
+  signal,
 } from "@angular/core"
-import { Subject, Subscription } from "rxjs"
+import { firstValueFrom, Subject, Subscription } from "rxjs"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
 import { Map, NavigationControl } from "maplibre-gl"
 import { MatButtonModule } from "@angular/material/button"
@@ -15,6 +18,9 @@ import { I18nStore } from "../../../i18n/store/i18n.store"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { ScrollStrategyOptions } from "@angular/cdk/overlay"
 import { CoverageDialogComponent } from "../coverage-dialog/coverage-dialog.component"
+import { HistoryRepositoryService } from "../../repository/history-repository.service"
+import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
+import { ICoverage } from "../../interfaces/coverage.interface"
 
 @Component({
   selector: "app-map",
@@ -24,17 +30,20 @@ import { CoverageDialogComponent } from "../coverage-dialog/coverage-dialog.comp
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapComponent implements AfterViewInit {
-  @Input({ required: true }) params!: URLSearchParams
-  @Input({ required: true }) mapContainerId!: string
   destroyed$ = new Subject<void>()
+  mapContainerId = input.required<string>()
   mapId = "map"
   map!: Map
+  params = input.required<URLSearchParams>()
   resizeSub!: Subscription
+  coverages = signal<IBasicResponse<ICoverage> | null>(null)
+  lat = computed(() => this.params().get("lat"))
+  lon = computed(() => this.params().get("lon"))
 
   get href() {
     const search = [
-      `lat=${this.params.get("lat")}`,
-      `lon=${this.params.get("lon")}`,
+      `lat=${this.lat()}`,
+      `lon=${this.lon()}`,
       `radius=700`,
       `accuracy=<700`,
     ]
@@ -47,24 +56,40 @@ export class MapComponent implements AfterViewInit {
     private readonly dialog: MatDialog,
     private readonly i18nStore: I18nStore,
     private readonly mapService: MapService,
+    private readonly repo: HistoryRepositoryService,
     private readonly scrollStrategyOptions: ScrollStrategyOptions,
     private readonly zone: NgZone
-  ) {}
+  ) {
+    effect(() => {
+      const lon = +this.lon()!
+      const lat = +this.lat()!
+      firstValueFrom(this.repo.getCoverages(lon, lat)).then((res) => {
+        if (!res?.coverages.length) {
+          this.coverages.set(null)
+          return
+        }
+        this.coverages.set({
+          content: res.coverages,
+          totalElements: res.coverages.length,
+        })
+      })
+    })
+  }
 
   ngAfterViewInit(): void {
     if (globalThis.document) {
       this.setSize()
       this.setMap().then(() => {
         this.setResizeSub()
-        this.mapService.setCoordinatesAndZoom(this.map, this.params)
+        this.mapService.setCoordinatesAndZoom(this.map, this.params())
         this.addMarker()
       })
     }
   }
 
-  showCoverageDialog() {
+  async showCoverageDialog() {
     this.dialog.open(CoverageDialogComponent, {
-      data: this.params,
+      data: { query: this.params(), coverages: this.coverages() },
       panelClass: "app-coverage-dialog",
       scrollStrategy: this.scrollStrategyOptions.noop(),
     })
@@ -102,8 +127,8 @@ export class MapComponent implements AfterViewInit {
 
   private addMarker() {
     this.zone.runOutsideAngular(() => {
-      const lon = this.params.get("lon")
-      const lat = this.params.get("lat")
+      const lon = this.lon()
+      const lat = this.lat()
       if (!lon && !lat) {
         return
       }

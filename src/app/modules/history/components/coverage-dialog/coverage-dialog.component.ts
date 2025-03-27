@@ -2,19 +2,11 @@ import {
   AfterViewInit,
   Component,
   Inject,
-  Input,
   NgZone,
   OnDestroy,
 } from "@angular/core"
 import { I18nStore } from "../../../i18n/store/i18n.store"
-import {
-  firstValueFrom,
-  map,
-  Observable,
-  Subject,
-  Subscription,
-  tap,
-} from "rxjs"
+import { map, Observable, Subject, Subscription } from "rxjs"
 import { HtmlWrapperComponent } from "../../../shared/components/html-wrapper/html-wrapper.component"
 import { AsyncPipe } from "@angular/common"
 import { TableComponent } from "../../../tables/components/table/table.component"
@@ -38,7 +30,6 @@ import { MatButtonModule } from "@angular/material/button"
 import { MatIconModule } from "@angular/material/icon"
 import { lineString } from "@turf/helpers"
 import bbox from "@turf/bbox"
-import { HistoryRepositoryService } from "../../repository/history-repository.service"
 import { CloseDialogHeaderComponent } from "../../../shared/components/close-dialog-header/close-dialog-header.component"
 
 @Component({
@@ -56,9 +47,8 @@ import { CloseDialogHeaderComponent } from "../../../shared/components/close-dia
   templateUrl: "./coverage-dialog.component.html",
   styleUrl: "./coverage-dialog.component.scss",
 })
-export class CoverageDialogComponent implements OnDestroy {
+export class CoverageDialogComponent implements AfterViewInit, OnDestroy {
   coverageText$!: Observable<string>
-  coverages$!: Observable<IBasicResponse<ICoverage> | null>
   destroyed$ = new Subject<void>()
   mapContainerId = "coverage-map-container"
   mapId = "coverage-map"
@@ -128,14 +118,17 @@ export class CoverageDialogComponent implements OnDestroy {
 
   constructor(
     readonly dialogRef: MatDialogRef<CoverageDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private readonly data: URLSearchParams,
-    private readonly repo: HistoryRepositoryService,
+    @Inject(MAT_DIALOG_DATA)
+    public readonly data: {
+      query: URLSearchParams
+      coverages: IBasicResponse<ICoverage> | null
+    },
     private readonly i18nStore: I18nStore,
     private readonly mapService: MapService,
     private readonly zone: NgZone
   ) {
-    const lon = +this.data.get("lon")!
-    const lat = +this.data.get("lat")!
+    const lon = +data.query.get("lon")!
+    const lat = +data.query.get("lat")!
     this.coverageText$ = this.i18nStore
       .getLocalizedHtml("coverage")
       .pipe(
@@ -146,26 +139,18 @@ export class CoverageDialogComponent implements OnDestroy {
           )
         )
       )
-    this.coverages$ = this.repo.getCoverages(lon, lat).pipe(
-      map((res) => {
-        if (res.coverages[0]?.raster_geo_json) {
-          this.setMap().then(() => {
-            this.map?.on("load", () => {
-              this.setResizeSub()
-              this.addPolygon(res.coverages[0].raster_geo_json!)
-              setTimeout(() => this.setSize(), 0)
-            })
-          })
-        }
-        if (res.coverages.length === 0) {
-          return null
-        }
-        return {
-          content: res.coverages,
-          totalElements: res.coverages.length,
-        }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.data.coverages?.content[0]?.raster_geo_json) {
+      this.setMap().then(() => {
+        this.map?.on("load", () => {
+          this.setResizeSub()
+          this.addPolygon(this.data.coverages?.content[0]?.raster_geo_json!)
+          setTimeout(() => this.setSize(), 0)
+        })
       })
-    )
+    }
   }
 
   ngOnDestroy(): void {

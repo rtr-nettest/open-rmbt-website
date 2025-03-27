@@ -1,4 +1,4 @@
-@if (mapContainerId) {
+@if (mapContainerId()) { @if (coverages()) {
 <button
   class="app-button app-button--outlined"
   mat-stroked-button
@@ -6,6 +6,7 @@
 >
   {{ "Coverage" | translate }}
 </button>
+}
 <div [id]="mapId"></div>
 <a class="app-button" mat-text-button [href]="href">{{
   "Show surrounding measurements as open data" | translate

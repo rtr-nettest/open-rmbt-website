@@ -1,6 +1,6 @@
 <mat-dialog-content>
   <app-close-dialog-header [dialogRef]="dialogRef"></app-close-dialog-header>
-  @if (coverages$ | async; as data) {
+  @if (data.coverages; as data) {
   <app-html-wrapper [id]="mapContainerId" [html]="coverageText$ | async">
     <ng-container header>
       <div style="margin-top: 24px">
