@@ -23,6 +23,7 @@ jobs:
         with:
           node-version: 22
       - run: npm i
+      - run: npm audit
       - run: npm run ng analytics off
       - run: npm run build
       - uses: actions/upload-artifact@v4
