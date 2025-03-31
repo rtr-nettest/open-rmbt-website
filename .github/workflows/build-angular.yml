@@ -22,7 +22,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm i
+      - run: npm i 
+      - run: |
+          npm audit || echo "npm audit failed, but proceeding"
       - run: npm run ng analytics off
       - run: npm run build
       - uses: actions/upload-artifact@v4
