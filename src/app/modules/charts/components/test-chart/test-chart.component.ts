@@ -10,8 +10,7 @@ import { fromEvent, Observable, Subject } from "rxjs"
 import { ITestVisualizationState } from "../../../test/interfaces/test-visualization-state.interface"
 import {
   debounceTime,
-  distinctUntilChanged,
-  filter,
+  distinctUntilKeyChanged,
   map,
   takeUntil,
 } from "rxjs/operators"
@@ -67,13 +66,7 @@ export class TestChartComponent implements OnDestroy {
     private store: TestStore
   ) {
     this.visualization$ = this.store.visualization$.pipe(
-      filter(
-        (s) =>
-          s.currentPhaseName === EMeasurementStatus.INIT ||
-          s.currentPhaseName === EMeasurementStatus.END ||
-          s.currentPhaseName === EMeasurementStatus.SHOWING_RESULTS
-      ),
-      distinctUntilChanged(),
+      distinctUntilKeyChanged("currentPhaseName"),
       map((s) => {
         if (this.canvas) {
           this.handleChanges(s)
