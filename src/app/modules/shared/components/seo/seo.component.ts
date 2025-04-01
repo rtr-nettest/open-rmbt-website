@@ -1,14 +1,16 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core"
+import { Component, inject, Input, OnDestroy } from "@angular/core"
 import { Title } from "@angular/platform-browser"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { Subject, Subscription, takeUntil, tap } from "rxjs"
+import { TestStore } from "../../../test/store/test.store"
+import { TestService } from "../../../test/services/test.service"
 
 const SEP = " | "
 
 @Component({
-    selector: "app-seo",
-    imports: [],
-    template: ""
+  selector: "app-seo",
+  imports: [],
+  template: "",
 })
 export class SeoComponent implements OnDestroy {
   destroyed$: Subject<void> = new Subject()
@@ -31,6 +33,8 @@ export class SeoComponent implements OnDestroy {
       )
       .subscribe()
   }
+  protected readonly testStore = inject(TestStore)
+  protected readonly testService = inject(TestService)
   private _title!: string
 
   get title() {
@@ -40,7 +44,12 @@ export class SeoComponent implements OnDestroy {
   constructor(
     protected readonly ts: Title,
     protected readonly i18nStore: I18nStore
-  ) {}
+  ) {
+    if (this.testStore.shouldAbort()) {
+      this.testStore.shouldAbort.set(false)
+      location.reload()
+    }
+  }
 
   ngOnDestroy(): void {
     this.destroyed$.next()

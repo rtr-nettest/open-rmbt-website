@@ -74,12 +74,10 @@ export class OpendataScreenComponent
   columns = RECENT_MEASUREMENTS_COLUMNS
   data$ = toObservable(this.opendataStoreService.data).pipe(
     map((data) => {
-      console.log("Data observed", Date.now() - this.startMs)
       const content: IRecentMeasurement[] = []
       for (const item of data) {
         content.push(formatTime(item))
       }
-      console.log("Formatted dates. Rendering table", Date.now() - this.startMs)
       return {
         content: data,
         totalElements: data?.length,
@@ -94,15 +92,10 @@ export class OpendataScreenComponent
   filterCount = signal<string | null>(null)
   filters$ = toObservable(this.opendataStoreService.filters).pipe(
     concatMap((filters) => {
-      console.log("Observed filters", Date.now() - this.startMs)
       this.updateFilterCount(filters)
-      console.log("Updated filter count", Date.now() - this.startMs)
       return forkJoin([of(filters), this.updateData({ reset: true })])
     }),
-    map(([filters]) => {
-      console.log(console.log("Updated data", Date.now() - this.startMs))
-      return filters
-    })
+    map(([filters]) => filters)
   )
   loadHistograms = signal(false)
   loadMap = signal(false)
@@ -120,11 +113,9 @@ export class OpendataScreenComponent
     const filters = this.opendataStoreService.filters()
     const cursor = this.opendataStoreService.cursor()
     const newFilters = { ...DEFAULT_FILTERS, ...filters, cursor }
-    console.log("Fetching data", Date.now() - this.startMs)
     return firstValueFrom(
       this.opendataService.search(newFilters).pipe(
         map((response) => {
-          console.log("Got data", Date.now() - this.startMs)
           this.opendataStoreService.cursor.set(response.next_cursor)
           this.opendataStoreService.data.set([
             ...this.opendataStoreService.data(),
@@ -165,10 +156,6 @@ export class OpendataScreenComponent
     })
   }
 
-  logTableFinishedRendering = () => {
-    console.log("Table finished rendering", Date.now() - this.startMs)
-  }
-
   private updateFilterCount(filters: IOpendataFilters) {
     const filtersCount = Object.keys(filters).filter(
       (k) =>
@@ -180,17 +167,14 @@ export class OpendataScreenComponent
   }
 
   private addRecentMeasurements() {
-    console.log("Adding recent mesurements", Date.now() - this.startMs)
     const filters = this.opendataStoreService.filters()
     firstValueFrom(
       this.opendataService.search({ ...DEFAULT_FILTERS, ...filters })
     ).then((resp) => {
-      console.log("Received recent mesurements", Date.now() - this.startMs)
       const oldContent = this.opendataStoreService.data()
       if (resp.results[0].open_test_uuid === oldContent[0].open_test_uuid)
         return
       this.opendataStoreService.data.set([...resp.results, ...oldContent])
-      console.log("Updated recent mesurements", Date.now() - this.startMs)
     })
   }
 }

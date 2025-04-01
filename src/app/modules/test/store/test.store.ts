@@ -14,4 +14,5 @@ export class TestStore {
     new TestVisualizationState()
   )
   lastTestFinishedAt = signal<number>(0)
+  shouldAbort = signal<boolean>(false)
 }

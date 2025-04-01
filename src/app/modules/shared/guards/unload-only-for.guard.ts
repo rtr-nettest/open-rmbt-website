@@ -5,6 +5,8 @@ import { MatDialog } from "@angular/material/dialog"
 import { ConfirmDialogComponent } from "../components/confirm-dialog/confirm-dialog.component"
 import { ScrollStrategyOptions } from "@angular/cdk/overlay"
 import { map } from "rxjs"
+import { TestService } from "../../test/services/test.service"
+import { TestStore } from "../../test/store/test.store"
 
 export const unloadOnlyFor: (
   allowedPaths: ERoutes[]
@@ -12,6 +14,8 @@ export const unloadOnlyFor: (
   (allowedPaths) => (component, currentRoute, currentState, nextState) => {
     const dialog = inject(MatDialog)
     const scrollStrategyOptions = inject(ScrollStrategyOptions)
+    const testStore = inject(TestStore)
+    const testService = inject(TestService)
     if (
       nextState.url &&
       !allowedPaths.some((path) => nextState.url.includes(path))
@@ -29,9 +33,8 @@ export const unloadOnlyFor: (
           map((result) => {
             const proceed = result?.confirmAction === true
             if (proceed) {
-              setTimeout(() => {
-                location.reload()
-              }, 30)
+              testStore.shouldAbort.set(true)
+              testService.sendAbort(testStore.basicNetworkInfo().testUuid)
             }
             return proceed
           })

@@ -183,8 +183,7 @@ export class ResultScreenComponent extends SeoComponent {
     private mainStore: MainStore,
     private service: HistoryService,
     private store: HistoryStore,
-    private route: ActivatedRoute,
-    private testService: TestService
+    private route: ActivatedRoute
   ) {
     super(title, i18nStore)
     this.result$ = this.i18nStore.getTranslations().pipe(

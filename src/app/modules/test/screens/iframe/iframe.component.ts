@@ -24,8 +24,6 @@ import { EMeasurementStatus } from "../../constants/measurement-status.enum"
 export class IframeComponent extends SeoComponent {
   settingsService = inject(SettingsService)
   testIsRunning = signal(false)
-  testService = inject(TestService)
-  testStore = inject(TestStore)
   error = signal<string | null>(null)
   warning = computed(() => {
     if (window !== window.parent) {
