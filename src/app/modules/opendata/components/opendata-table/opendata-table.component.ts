@@ -1,16 +1,13 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core"
+import { ChangeDetectionStrategy, Component, input } from "@angular/core"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { arrowRotate } from "../../../shared/animations/arrow-rotate.animation"
 import { expandVertically } from "../../../shared/animations/detail-expand.animation"
-import { DynamicComponentDirective } from "../../../shared/directives/dynamic-component.directive"
 import { NgClass, NgFor, NgIf } from "@angular/common"
 import { MatButtonModule } from "@angular/material/button"
 import { MatTableModule } from "@angular/material/table"
 import { MatTooltipModule } from "@angular/material/tooltip"
 import { MatSortModule } from "@angular/material/sort"
 import { MatIconModule } from "@angular/material/icon"
-import { MatProgressSpinner } from "@angular/material/progress-spinner"
-import { PaginatorComponent } from "../../../tables/components/paginator/paginator.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 @Component({
@@ -32,6 +29,8 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpendataTableComponent extends TableComponent {
+  showUuids = input(false)
+
   override ngOnChanges(): void {
     // do nothing
   }

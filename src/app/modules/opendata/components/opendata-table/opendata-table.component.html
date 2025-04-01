@@ -1,4 +1,8 @@
-<div class="app-table app-table--default mat-table-wrap">
+<div
+  class="app-table app-table--default mat-table-wrap {{
+    showUuids() ? 'app-table--show-uuids' : ''
+  }}"
+>
   <mat-table
     *ngIf="data"
     [dataSource]="data.content"
@@ -23,7 +27,14 @@
           <span class="app-table__mobile-label">{{ column.header }}</span>
           <div class="app-flex-wrapper">
             <i [ngClass]="column.getIconClass(element, column)"></i
-            ><span>{{ getDefaultValue(column, element, i) }}</span>
+            ><span
+              >{{ getDefaultValue(column, element, i)
+              }}<span
+                *ngIf="column.columnDef === 'platform'"
+                class="app-open-test-uuid"
+                >, {{ element.open_test_uuid }}</span
+              >
+            </span>
           </div>
         </mat-cell>
       </ng-container>

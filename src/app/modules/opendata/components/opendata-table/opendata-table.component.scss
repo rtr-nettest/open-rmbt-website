@@ -18,3 +18,13 @@
     text-align: right;
   }
 }
+
+.app-open-test-uuid {
+  display: none;
+}
+
+.app-table--show-uuids {
+  .app-open-test-uuid {
+    display: inline;
+  }
+}

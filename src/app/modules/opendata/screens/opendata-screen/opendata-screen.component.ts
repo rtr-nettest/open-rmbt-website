@@ -104,6 +104,7 @@ export class OpendataScreenComponent
   mapContainerId = "mapContainer"
   sort: ISort = { active: "times", direction: "desc" }
   intradayData = signal<IIntradayResponseItem[]>([])
+  showUuids = signal(false)
 
   protected override get dataLimit(): number {
     return OPEN_DATA_LIMIT

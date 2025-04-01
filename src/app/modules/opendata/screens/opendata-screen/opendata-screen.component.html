@@ -84,8 +84,15 @@
     [columns]="columns"
     [sort]="sort"
     (onRowClick)="handleRowClick($event)"
+    [showUuids]="showUuids()"
     identifyField="open_test_uuid"
   ></app-opendata-table>
+  <div class="app-counter">
+    ({{ data.totalElements }} {{ "Results" | translate }}) |
+    <a href="javascript:;" (click)="showUuids.set(true)">{{
+      "Show Open-Test-UUID" | translate
+    }}</a>
+  </div>
   } }
 </div>
 <app-footer></app-footer>
