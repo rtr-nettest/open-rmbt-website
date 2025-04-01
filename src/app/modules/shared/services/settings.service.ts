@@ -2,9 +2,14 @@ import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { IUserSetingsResponse } from "../../test/interfaces/user-settings-response.interface"
 import { environment } from "../../../../environments/environment"
-import { TC_VERSION_ACCEPTED, UUID } from "../../test/constants/strings"
+import {
+  RMBTTermsV6,
+  TC_VERSION_ACCEPTED,
+  UUID,
+} from "../../test/constants/strings"
 import { tap } from "rxjs"
 import { NO_ERROR_HANDLING } from "../constants/strings"
+import Cookies from "js-cookie"
 
 @Injectable({
   providedIn: "root",
@@ -13,8 +18,12 @@ export class SettingsService {
   constructor(private readonly http: HttpClient) {}
 
   getSettings() {
-    let uuid = localStorage.getItem(UUID) ?? undefined
-    let tcVersion = localStorage.getItem(TC_VERSION_ACCEPTED) ?? undefined
+    let uuid = localStorage.getItem(UUID) || Cookies.get(UUID) || undefined
+    let tcVersion = localStorage.getItem(TC_VERSION_ACCEPTED) || undefined
+    if (!tcVersion && Cookies.get(RMBTTermsV6)) {
+      tcVersion = "6"
+      localStorage.setItem(TC_VERSION_ACCEPTED, tcVersion)
+    }
     return this.http
       .post<IUserSetingsResponse>(
         `${environment.api.baseUrl}/RMBTControlServer/settings`,
