@@ -171,9 +171,11 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
     })
   }
 
-  @HostListener("window:beforeunload")
-  preventReload() {
-    return false
+  @HostListener("window:beforeunload", ["$event"])
+  preventReload(event: BeforeUnloadEvent) {
+    event.preventDefault()
+    event.returnValue = true
+    return true
   }
 
   @HostListener("window:unload")
