@@ -172,9 +172,15 @@ export class OpendataScreenComponent
       this.opendataService.search({ ...DEFAULT_FILTERS, ...filters })
     ).then((resp) => {
       const oldContent = this.opendataStoreService.data()
-      if (resp.results[0].open_test_uuid === oldContent[0].open_test_uuid)
-        return
-      this.opendataStoreService.data.set([...resp.results, ...oldContent])
+      let newContent = resp?.results?.length ? resp.results : []
+      const lastTestUuid = newContent[newContent.length - 1]?.open_test_uuid
+      const lastOldItemIndex = oldContent.findIndex(
+        (item) => item.open_test_uuid === lastTestUuid
+      )
+      if (lastOldItemIndex !== -1) {
+        newContent = newContent.concat(oldContent.slice(lastOldItemIndex + 1))
+      }
+      this.opendataStoreService.data.set(newContent)
     })
   }
 }
