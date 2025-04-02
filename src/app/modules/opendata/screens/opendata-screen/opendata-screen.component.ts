@@ -37,10 +37,14 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
 import { Router, RouterModule } from "@angular/router"
 import { IRecentMeasurement } from "../../interfaces/recent-measurements-response.interface"
 import { OpendataTableComponent } from "../../components/opendata-table/opendata-table.component"
+import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interface"
+import { OpendataExportService } from "../../services/opendata-export.service"
+import { ActionButtonsComponent } from "../../../history/components/action-buttons/action-buttons.component"
 
 @Component({
   selector: "app-opendata-screen",
   imports: [
+    ActionButtonsComponent,
     AsyncPipe,
     BreadcrumbsComponent,
     ExpansionPanelComponent,
@@ -64,7 +68,21 @@ export class OpendataScreenComponent
   extends LoadOnScrollComponent
   implements OnInit
 {
-  startMs = Date.now()
+  exporter = inject(OpendataExportService)
+  actionButtons: IMainMenuItem[] = [
+    {
+      label: "Export as CSV",
+      icon: "filetype-csv",
+      action: () =>
+        this.exporter.exportAs("csv", this.opendataStoreService.data()),
+    },
+    {
+      label: "Export as XLSX",
+      icon: "filetype-xlsx",
+      action: () =>
+        this.exporter.exportAs("xlsx", this.opendataStoreService.data()),
+    },
+  ]
   apiLink = computed(() => {
     return `/${this.i18nStore.activeLang}/${ERoutes.INTERFACE}`
   })
@@ -105,6 +123,7 @@ export class OpendataScreenComponent
   sort: ISort = { active: "times", direction: "desc" }
   intradayData = signal<IIntradayResponseItem[]>([])
   showUuids = signal(false)
+  startMs = Date.now()
 
   protected override get dataLimit(): number {
     return OPEN_DATA_LIMIT
