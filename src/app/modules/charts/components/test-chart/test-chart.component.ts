@@ -52,14 +52,6 @@ export class TestChartComponent implements OnDestroy {
     return document.getElementById(this.id()) as HTMLCanvasElement
   }
 
-  private get blankCanvas() {
-    return document.getElementById(this.id() + "_blank") as HTMLCanvasElement
-  }
-
-  private get isCanvasEmpty() {
-    return this.canvas?.toDataURL() === this.blankCanvas?.toDataURL()
-  }
-
   constructor(
     private i18nStore: I18nStore,
     private ngZone: NgZone,
@@ -159,7 +151,7 @@ export class TestChartComponent implements OnDestroy {
 
   private initChart(options?: { force: boolean }) {
     const ctx = this.canvas?.getContext("2d")
-    if (ctx && (options?.force || this.isCanvasEmpty)) {
+    if (ctx && (options?.force || !this.updateTimer)) {
       try {
         if (this.phase === "ping") {
           this.chart = new BarChart(ctx!, this.i18nStore, this.phase)
