@@ -22,6 +22,7 @@ import { MatRadioModule } from "@angular/material/radio"
 import { UUID } from "../../../test/constants/strings"
 import { IpService } from "../../../shared/services/ip.service"
 import { AsyncPipe } from "@angular/common"
+import { MessageService } from "../../../shared/services/message.service"
 
 @Component({
   selector: "app-options-screen",
@@ -45,6 +46,7 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
   fb = inject(FormBuilder)
   store = inject(OptionsStoreService)
   ipService = inject(IpService)
+  message = inject(MessageService)
   ipVersionOptions: { label: string; value: IpVersion }[] = [
     {
       label: "Auto",
@@ -96,6 +98,7 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
   submit(): void {
     if (this.form) {
       this.store.ipVersion.set(this.form.value.ipVersion)
+      this.message.openSnackbar("The configuration has been saved.")
     }
   }
 }
