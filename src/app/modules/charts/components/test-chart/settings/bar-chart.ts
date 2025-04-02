@@ -16,7 +16,7 @@ export class BarChart extends TestChart {
   private barOptions?: BarOptions
 
   constructor(
-    context: CanvasRenderingContext2D,
+    context: OffscreenCanvasRenderingContext2D,
     i18nStore: I18nStore,
     private phase: ChartPhase
   ) {

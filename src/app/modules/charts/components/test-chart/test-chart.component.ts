@@ -34,7 +34,6 @@ import { STATE_UPDATE_TIMEOUT } from "../../../test/constants/numbers"
 export class TestChartComponent implements OnDestroy {
   @Input() phase: ChartPhase = "download"
 
-  chart: TestChart | undefined
   destroyed$ = new Subject<void>()
   visualization$!: Observable<ITestVisualizationState>
   resizeSub = fromEvent(window, "resize")
@@ -46,7 +45,9 @@ export class TestChartComponent implements OnDestroy {
       }
     })
   id = computed(() => `${this.phase}_chart`)
+  worker?: Worker
   updateTimer?: NodeJS.Timeout
+  offscreenCanvas?: OffscreenCanvas
 
   get canvas() {
     return document.getElementById(this.id()) as HTMLCanvasElement
@@ -65,11 +66,29 @@ export class TestChartComponent implements OnDestroy {
     private ngZone: NgZone,
     private store: TestStore
   ) {
+    this.worker = new Worker(new URL("./test-chart.worker", import.meta.url))
     this.visualization$ = this.store.visualization$.pipe(
       distinctUntilKeyChanged("currentPhaseName"),
       map((s) => {
         if (this.canvas) {
-          this.handleChanges(s)
+          if (!this.offscreenCanvas) {
+            this.offscreenCanvas = this.canvas.transferControlToOffscreen()
+            this.worker?.postMessage(
+              {
+                type: "init",
+                data: {
+                  canvas: this.offscreenCanvas,
+                  i18nStore: this.i18nStore,
+                  phase: this.phase,
+                },
+              },
+              [this.offscreenCanvas]
+            )
+          }
+          this.worker?.postMessage({
+            type: "handleChanges",
+            data: s,
+          })
           if (!this.updateTimer) {
             this.updateTimer = setInterval(() => {
               this.handleChanges(this.store.visualization$.value)
@@ -93,35 +112,6 @@ export class TestChartComponent implements OnDestroy {
     this.updateTimer = undefined
     this.destroyed$.next()
     this.destroyed$.complete()
-  }
-
-  private handleChanges(visualization: ITestVisualizationState) {
-    this.ngZone.runOutsideAngular(async () => {
-      this.initChart()
-      try {
-        switch (visualization.currentPhaseName) {
-          case EMeasurementStatus.INIT:
-          case EMeasurementStatus.INIT_DOWN:
-          case EMeasurementStatus.PING:
-          case EMeasurementStatus.NOT_STARTED:
-            this.chart?.resetData()
-            break
-          case EMeasurementStatus.DOWN:
-            this.updateDownload(visualization)
-            break
-          case EMeasurementStatus.UP:
-            this.updateUpload(visualization)
-            break
-          case EMeasurementStatus.SHOWING_RESULTS:
-            this.initChart({ force: true })
-            this.showResults(visualization)
-            break
-          case EMeasurementStatus.END:
-            this.showResults(visualization)
-            break
-        }
-      } catch (_) {}
-    })
   }
 
   private showResults(visualization: ITestVisualizationState) {
@@ -154,21 +144,6 @@ export class TestChartComponent implements OnDestroy {
       this.chart?.setData(visualization.phases[EMeasurementStatus.DOWN])
     } else if (this.phase === "ping" && !this.chart?.finished) {
       this.chart?.setData(visualization.phases[EMeasurementStatus.PING])
-    }
-  }
-
-  private initChart(options?: { force: boolean }) {
-    const ctx = this.canvas?.getContext("2d")
-    if (ctx && (options?.force || this.isCanvasEmpty)) {
-      try {
-        if (this.phase === "ping") {
-          this.chart = new BarChart(ctx!, this.i18nStore, this.phase)
-        } else {
-          this.chart = new LogChart(ctx!, this.i18nStore, this.phase)
-        }
-      } catch (e) {
-        console.warn(this.phase, e)
-      }
     }
   }
 }
