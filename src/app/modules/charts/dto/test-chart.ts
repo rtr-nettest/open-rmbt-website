@@ -8,7 +8,7 @@ export class TestChart extends Chart {
   finished = false
 
   constructor(
-    context: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
     i18nStore: I18nStore,
     type: "line" | "bar" = "line",
     data: ChartData = {
@@ -18,7 +18,7 @@ export class TestChart extends Chart {
     options: { [key: string]: any } = new TestChartOptions(i18nStore),
     plugins: any[] = []
   ) {
-    super(context, {
+    super(canvas, {
       type,
       data,
       options,

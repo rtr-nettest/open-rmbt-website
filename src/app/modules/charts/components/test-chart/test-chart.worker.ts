@@ -2,42 +2,59 @@
 
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { EMeasurementStatus } from "../../../test/constants/measurement-status.enum"
+import { STATE_UPDATE_TIMEOUT } from "../../../test/constants/numbers"
 import { ITestVisualizationState } from "../../../test/interfaces/test-visualization-state.interface"
 import { TestChart } from "../../dto/test-chart"
 import { ChartPhase } from "../../dto/test-chart-dataset"
 import { BarChart } from "./settings/bar-chart"
 import { LogChart } from "./settings/log-chart"
 
-let canvas: OffscreenCanvas | undefined
+let canvas: HTMLCanvasElement | undefined
 let chart: TestChart | undefined
+let phase: ChartPhase | undefined
+let updateTimer: NodeJS.Timeout | undefined
+let i18nStore = new I18nStore()
 
 addEventListener("message", ({ data }) => {
   switch (data.type) {
     case "initChart":
+      phase = data.phase
       canvas = data.canvas
-      initChart({ phase: data.phase, i18nStore: data.i18nStore })
+      initChart()
+      clearInterval(updateTimer)
+      updateTimer = setInterval(() => {
+        postMessage({ type: "tick" })
+      }, STATE_UPDATE_TIMEOUT * 2)
       break
     case "handleChanges":
+      handleChanges(data.visualization)
+      break
+    case "stopUpdates":
+      clearInterval(updateTimer)
+      updateTimer = undefined
+      break
+  }
 })
 
-function initChart(options?: { phase?: ChartPhase; i18nStore?: I18nStore, force?: boolean }) {
-    const { phase = "download", i18nStore, force } = options || {}
-    const ctx = canvas?.getContext("2d")
-    if (ctx) {
-      try {
-        if (phase === "ping") {
-          chart = new BarChart(ctx!, i18nStore, phase)
-        } else {
-          chart = new LogChart(ctx!, i18nStore, phase)
-        }
-      } catch (e) {
-        console.warn(phase, e)
-      }
-    }
+function initChart() {
+  if (!canvas) {
+    return
   }
+  try {
+    if (phase === "ping") {
+      chart = new BarChart(canvas, i18nStore, phase)
+    } else if (phase) {
+      chart = new LogChart(canvas, i18nStore, phase)
+    }
+    canvas.width = 300
+    canvas.height = 100
+    chart!.resize()
+  } catch (e) {
+    console.warn(phase, e)
+  }
+}
 
 function handleChanges(visualization: ITestVisualizationState) {
-  initChart()
   try {
     switch (visualization.currentPhaseName) {
       case EMeasurementStatus.INIT:
@@ -53,7 +70,7 @@ function handleChanges(visualization: ITestVisualizationState) {
         updateUpload(visualization)
         break
       case EMeasurementStatus.SHOWING_RESULTS:
-        initChart({ force: true })
+        initChart()
         showResults(visualization)
         break
       case EMeasurementStatus.END:
@@ -61,4 +78,37 @@ function handleChanges(visualization: ITestVisualizationState) {
         break
     }
   } catch (_) {}
+}
+
+function showResults(visualization: ITestVisualizationState) {
+  if (!!chart?.finished) {
+    return
+  }
+  if (phase === "download") {
+    chart?.setData(visualization.phases[EMeasurementStatus.DOWN])
+  } else if (phase === "upload") {
+    chart?.setData(visualization.phases[EMeasurementStatus.UP])
+  } else if (phase === "ping") {
+    chart?.setData(visualization.phases[EMeasurementStatus.PING])
+  }
+}
+
+function updateDownload(visualization: ITestVisualizationState) {
+  if (phase === "download") {
+    chart?.updateData(visualization.phases[EMeasurementStatus.DOWN])
+  } else if (phase === "ping" && !chart?.finished) {
+    chart?.setData(visualization.phases[EMeasurementStatus.PING])
+  } else if (phase === "upload") {
+    chart?.resetData()
+  }
+}
+
+function updateUpload(visualization: ITestVisualizationState) {
+  if (phase === "upload") {
+    chart?.updateData(visualization.phases[EMeasurementStatus.UP])
+  } else if (phase === "download" && !chart?.finished) {
+    chart?.setData(visualization.phases[EMeasurementStatus.DOWN])
+  } else if (phase === "ping" && !chart?.finished) {
+    chart?.setData(visualization.phases[EMeasurementStatus.PING])
+  }
 }

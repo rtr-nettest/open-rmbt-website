@@ -46,26 +46,13 @@ export class TestChartComponent implements OnDestroy {
     })
   id = computed(() => `${this.phase}_chart`)
   worker?: Worker
-  updateTimer?: NodeJS.Timeout
   offscreenCanvas?: OffscreenCanvas
 
   get canvas() {
     return document.getElementById(this.id()) as HTMLCanvasElement
   }
 
-  private get blankCanvas() {
-    return document.getElementById(this.id() + "_blank") as HTMLCanvasElement
-  }
-
-  private get isCanvasEmpty() {
-    return this.canvas?.toDataURL() === this.blankCanvas?.toDataURL()
-  }
-
-  constructor(
-    private i18nStore: I18nStore,
-    private ngZone: NgZone,
-    private store: TestStore
-  ) {
+  constructor(private i18nStore: I18nStore, private store: TestStore) {
     this.worker = new Worker(new URL("./test-chart.worker", import.meta.url))
     this.visualization$ = this.store.visualization$.pipe(
       distinctUntilKeyChanged("currentPhaseName"),
@@ -73,33 +60,35 @@ export class TestChartComponent implements OnDestroy {
         if (this.canvas) {
           if (!this.offscreenCanvas) {
             this.offscreenCanvas = this.canvas.transferControlToOffscreen()
-            this.worker?.postMessage(
+            this.worker!.addEventListener("message", ({ data }) => {
+              if (data.type === "tick") {
+                this.worker!.postMessage({
+                  type: "handleChanges",
+                  visualization: this.store.visualization$.value,
+                })
+              }
+            })
+            this.worker!.postMessage(
               {
-                type: "init",
-                data: {
-                  canvas: this.offscreenCanvas,
-                  i18nStore: this.i18nStore,
-                  phase: this.phase,
-                },
+                type: "initChart",
+                canvas: this.offscreenCanvas,
+                phase: this.phase,
               },
               [this.offscreenCanvas]
             )
           }
-          this.worker?.postMessage({
+          this.worker!.postMessage({
             type: "handleChanges",
-            data: s,
+            visualization: s,
           })
-          if (!this.updateTimer) {
-            this.updateTimer = setInterval(() => {
-              this.handleChanges(this.store.visualization$.value)
-            }, STATE_UPDATE_TIMEOUT * 2)
-          }
           if (
             s.currentPhaseName === EMeasurementStatus.SHOWING_RESULTS ||
             s.currentPhaseName === EMeasurementStatus.END
           ) {
-            clearInterval(this.updateTimer)
-            this.updateTimer = undefined
+            this.worker!.postMessage({
+              type: "stopUpdates",
+            })
+            this.worker!.terminate()
           }
         }
         return s
@@ -108,42 +97,7 @@ export class TestChartComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    clearInterval(this.updateTimer)
-    this.updateTimer = undefined
     this.destroyed$.next()
     this.destroyed$.complete()
-  }
-
-  private showResults(visualization: ITestVisualizationState) {
-    if (!!this.chart?.finished) {
-      return
-    }
-    if (this.phase === "download") {
-      this.chart?.setData(visualization.phases[EMeasurementStatus.DOWN])
-    } else if (this.phase === "upload") {
-      this.chart?.setData(visualization.phases[EMeasurementStatus.UP])
-    } else if (this.phase === "ping") {
-      this.chart?.setData(visualization.phases[EMeasurementStatus.PING])
-    }
-  }
-
-  private updateDownload(visualization: ITestVisualizationState) {
-    if (this.phase === "download") {
-      this.chart?.updateData(visualization.phases[EMeasurementStatus.DOWN])
-    } else if (this.phase === "ping" && !this.chart?.finished) {
-      this.chart?.setData(visualization.phases[EMeasurementStatus.PING])
-    } else if (this.phase === "upload") {
-      this.chart?.resetData()
-    }
-  }
-
-  private updateUpload(visualization: ITestVisualizationState) {
-    if (this.phase === "upload") {
-      this.chart?.updateData(visualization.phases[EMeasurementStatus.UP])
-    } else if (this.phase === "download" && !this.chart?.finished) {
-      this.chart?.setData(visualization.phases[EMeasurementStatus.DOWN])
-    } else if (this.phase === "ping" && !this.chart?.finished) {
-      this.chart?.setData(visualization.phases[EMeasurementStatus.PING])
-    }
   }
 }

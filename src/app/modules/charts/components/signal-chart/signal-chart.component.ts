@@ -52,7 +52,7 @@ export class SignalChartComponent implements AfterViewInit {
       const plugins = this.getPlugins(ltePeriods, networkChanges)
       const options = new TestSignalChartOptions(this.i18nStore, minSignal)
       this.chart = new TestSignalChart(
-        ctx,
+        this.canvas,
         this.i18nStore,
         datasets,
         options,

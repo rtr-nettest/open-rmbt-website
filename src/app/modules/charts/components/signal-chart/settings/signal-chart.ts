@@ -5,14 +5,14 @@ import { TestSignalChartOptions } from "./signal-chart-options"
 
 export class TestSignalChart extends TestChart {
   constructor(
-    context: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
     i18nStore: I18nStore,
     datasets: TestChartDataset[],
     options: TestSignalChartOptions,
     plugins: any[] = []
   ) {
     super(
-      context,
+      canvas,
       i18nStore,
       "line",
       {

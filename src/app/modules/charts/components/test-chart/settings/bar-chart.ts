@@ -16,12 +16,12 @@ export class BarChart extends TestChart {
   private barOptions?: BarOptions
 
   constructor(
-    context: OffscreenCanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
     i18nStore: I18nStore,
     private phase: ChartPhase
   ) {
     super(
-      context,
+      canvas,
       i18nStore,
       "bar",
       {

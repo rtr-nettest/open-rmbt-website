@@ -8,12 +8,12 @@ import { LogChartOptions } from "./log-chart-options"
 
 export class LogChart extends TestChart {
   constructor(
-    context: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
     i18nStore: I18nStore,
     private phase: ChartPhase
   ) {
     super(
-      context,
+      canvas,
       i18nStore,
       "line",
       {
