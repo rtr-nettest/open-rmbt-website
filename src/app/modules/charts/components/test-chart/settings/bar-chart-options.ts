@@ -19,6 +19,8 @@ export class BarChartOptions {
   scales = {
     x: {
       min: this.startTime,
+      minRotation: 0,
+      maxRotation: 0,
       type: "time",
       grid: {
         offset: false,

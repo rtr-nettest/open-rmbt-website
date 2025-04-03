@@ -61,12 +61,14 @@ export class TestChartComponent implements OnDestroy {
       distinctUntilKeyChanged("currentPhaseName"),
       map((s) => {
         if (this.canvas) {
-          this.handleChanges(s)
           if (!this.updateTimer) {
+            this.initChart()
             this.updateTimer = setInterval(() => {
+              const startDate = Date.now()
               this.handleChanges(this.store.visualization$.value)
             }, STATE_UPDATE_TIMEOUT * 2)
           }
+          this.handleChanges(s)
           if (
             s.currentPhaseName === EMeasurementStatus.SHOWING_RESULTS ||
             s.currentPhaseName === EMeasurementStatus.END
@@ -89,14 +91,13 @@ export class TestChartComponent implements OnDestroy {
 
   private handleChanges(visualization: ITestVisualizationState) {
     this.ngZone.runOutsideAngular(async () => {
-      this.initChart()
       try {
         switch (visualization.currentPhaseName) {
           case EMeasurementStatus.INIT:
           case EMeasurementStatus.INIT_DOWN:
           case EMeasurementStatus.PING:
           case EMeasurementStatus.NOT_STARTED:
-            this.chart?.resetData()
+            this.resetData()
             break
           case EMeasurementStatus.DOWN:
             this.updateDownload(visualization)
@@ -116,6 +117,12 @@ export class TestChartComponent implements OnDestroy {
     })
   }
 
+  private resetData() {
+    if (this.chart?.data.datasets[0].data.length) {
+      this.chart?.resetData()
+    }
+  }
+
   private showResults(visualization: ITestVisualizationState) {
     if (!!this.chart?.finished) {
       return
@@ -130,22 +137,28 @@ export class TestChartComponent implements OnDestroy {
   }
 
   private updateDownload(visualization: ITestVisualizationState) {
+    if (!this.chart) {
+      return
+    }
     if (this.phase === "download") {
-      this.chart?.updateData(visualization.phases[EMeasurementStatus.DOWN])
-    } else if (this.phase === "ping" && !this.chart?.finished) {
-      this.chart?.setData(visualization.phases[EMeasurementStatus.PING])
+      this.chart.updateData(visualization.phases[EMeasurementStatus.DOWN])
+    } else if (this.phase === "ping" && !this.chart.finished) {
+      this.chart.setData(visualization.phases[EMeasurementStatus.PING])
     } else if (this.phase === "upload") {
-      this.chart?.resetData()
+      this.resetData()
     }
   }
 
   private updateUpload(visualization: ITestVisualizationState) {
+    if (!this.chart) {
+      return
+    }
     if (this.phase === "upload") {
-      this.chart?.updateData(visualization.phases[EMeasurementStatus.UP])
-    } else if (this.phase === "download" && !this.chart?.finished) {
-      this.chart?.setData(visualization.phases[EMeasurementStatus.DOWN])
-    } else if (this.phase === "ping" && !this.chart?.finished) {
-      this.chart?.setData(visualization.phases[EMeasurementStatus.PING])
+      this.chart.updateData(visualization.phases[EMeasurementStatus.UP])
+    } else if (this.phase === "download" && !this.chart.finished) {
+      this.chart.setData(visualization.phases[EMeasurementStatus.DOWN])
+    } else if (this.phase === "ping" && !this.chart.finished) {
+      this.chart.setData(visualization.phases[EMeasurementStatus.PING])
     }
   }
 
