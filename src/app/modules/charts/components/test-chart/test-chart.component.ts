@@ -61,14 +61,12 @@ export class TestChartComponent implements OnDestroy {
       distinctUntilKeyChanged("currentPhaseName"),
       map((s) => {
         if (this.canvas) {
+          this.handleChanges(s)
           if (!this.updateTimer) {
-            this.initChart()
             this.updateTimer = setInterval(() => {
-              const startDate = Date.now()
               this.handleChanges(this.store.visualization$.value)
             }, STATE_UPDATE_TIMEOUT * 2)
           }
-          this.handleChanges(s)
           if (
             s.currentPhaseName === EMeasurementStatus.SHOWING_RESULTS ||
             s.currentPhaseName === EMeasurementStatus.END
@@ -91,6 +89,7 @@ export class TestChartComponent implements OnDestroy {
 
   private handleChanges(visualization: ITestVisualizationState) {
     this.ngZone.runOutsideAngular(async () => {
+      this.initChart()
       try {
         switch (visualization.currentPhaseName) {
           case EMeasurementStatus.INIT:
