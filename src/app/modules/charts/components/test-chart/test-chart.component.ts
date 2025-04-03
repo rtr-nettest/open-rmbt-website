@@ -114,5 +114,6 @@ export class TestChartComponent implements OnDestroy {
       width: this.width(),
       height: this.height(),
     })
+    this.canvas.style.width = `${this.width()}px`
   }
 }

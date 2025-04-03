@@ -56,8 +56,6 @@ addEventListener("message", ({ data }) => {
       canvas!.width = width
       canvas!.height = height
       chart!.resize()
-      canvas!.width = width
-      canvas!.height = height
       break
     case "handleChanges":
       clearInterval(updateTimer)
@@ -142,7 +140,7 @@ function updateDownload(visualization: ITestVisualizationState) {
     chart?.updateData(visualization.phases[EMeasurementStatus.DOWN])
   } else if (phase === "ping" && !chart?.finished) {
     chart?.setData(visualization.phases[EMeasurementStatus.PING])
-  } else if (phase === "upload") {
+  } else if (phase === "upload" && chart?.data.datasets[0].data.length) {
     chart?.resetData()
   }
 }
