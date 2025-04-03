@@ -8,25 +8,62 @@ import { TestChart } from "../../dto/test-chart"
 import { ChartPhase } from "../../dto/test-chart-dataset"
 import { BarChart } from "./settings/bar-chart"
 import { LogChart } from "./settings/log-chart"
+import {
+  BarController,
+  BarElement,
+  CategoryScale,
+  Chart,
+  Filler,
+  LinearScale,
+  LineController,
+  LineElement,
+  PointElement,
+  TimeScale,
+} from "chart.js"
+import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm"
+import { LogChartOptions } from "./settings/log-chart-options"
+import { BarChartOptions } from "./settings/bar-chart-options"
+
+Chart.register(
+  BarElement,
+  BarController,
+  LineElement,
+  PointElement,
+  LineController,
+  CategoryScale,
+  LinearScale,
+  TimeScale,
+  Filler
+)
 
 let canvas: HTMLCanvasElement | undefined
 let chart: TestChart | undefined
 let phase: ChartPhase | undefined
 let updateTimer: NodeJS.Timeout | undefined
 let i18nStore = new I18nStore()
+let devicePixelRatio = 1
 
 addEventListener("message", ({ data }) => {
   switch (data.type) {
     case "initChart":
       phase = data.phase
       canvas = data.canvas
+      devicePixelRatio = data.devicePixelRatio
       initChart()
+      break
+    case "resizeChart":
+      const { width, height } = data
+      canvas!.width = width
+      canvas!.height = height
+      chart!.resize()
+      canvas!.width = width
+      canvas!.height = height
+      break
+    case "handleChanges":
       clearInterval(updateTimer)
       updateTimer = setInterval(() => {
         postMessage({ type: "tick" })
       }, STATE_UPDATE_TIMEOUT * 2)
-      break
-    case "handleChanges":
       handleChanges(data.visualization)
       break
     case "stopUpdates":
@@ -42,13 +79,20 @@ function initChart() {
   }
   try {
     if (phase === "ping") {
-      chart = new BarChart(canvas, i18nStore, phase)
+      chart = new BarChart(
+        canvas,
+        i18nStore,
+        phase,
+        new BarChartOptions(i18nStore, devicePixelRatio)
+      )
     } else if (phase) {
-      chart = new LogChart(canvas, i18nStore, phase)
+      chart = new LogChart(
+        canvas,
+        i18nStore,
+        phase,
+        new LogChartOptions(i18nStore, devicePixelRatio)
+      )
     }
-    canvas.width = 300
-    canvas.height = 100
-    chart!.resize()
   } catch (e) {
     console.warn(phase, e)
   }

@@ -75,5 +75,5 @@ export class LogChartOptions {
     },
   }
 
-  constructor(private t: I18nStore) {}
+  constructor(private t: I18nStore, private devicePixelRatio: number) {}
 }

@@ -39,14 +39,19 @@ export class TestChartComponent implements OnDestroy {
   resizeSub = fromEvent(window, "resize")
     .pipe(takeUntil(this.destroyed$), debounceTime(100))
     .subscribe(() => {
-      const el = document.getElementById(this.id())
-      if (el) {
-        el.style.width = `100%`
-      }
+      this.resizeChart()
     })
   id = computed(() => `${this.phase}_chart`)
   worker?: Worker
   offscreenCanvas?: OffscreenCanvas
+  height = computed(() => {
+    const parent = this.canvas.parentElement
+    return parent!.getBoundingClientRect().height
+  })
+  width = computed(() => {
+    const parent = this.canvas.parentElement
+    return parent!.getBoundingClientRect().width
+  })
 
   get canvas() {
     return document.getElementById(this.id()) as HTMLCanvasElement
@@ -73,9 +78,11 @@ export class TestChartComponent implements OnDestroy {
                 type: "initChart",
                 canvas: this.offscreenCanvas,
                 phase: this.phase,
+                devicePixelRatio: window.devicePixelRatio,
               },
               [this.offscreenCanvas]
             )
+            this.resizeChart()
           }
           this.worker!.postMessage({
             type: "handleChanges",
@@ -88,7 +95,6 @@ export class TestChartComponent implements OnDestroy {
             this.worker!.postMessage({
               type: "stopUpdates",
             })
-            this.worker!.terminate()
           }
         }
         return s
@@ -97,7 +103,16 @@ export class TestChartComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.worker?.terminate()
     this.destroyed$.next()
     this.destroyed$.complete()
+  }
+
+  private resizeChart() {
+    this.worker!.postMessage({
+      type: "resizeChart",
+      width: this.width(),
+      height: this.height(),
+    })
   }
 }

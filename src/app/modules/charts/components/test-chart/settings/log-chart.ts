@@ -10,7 +10,8 @@ export class LogChart extends TestChart {
   constructor(
     canvas: HTMLCanvasElement,
     i18nStore: I18nStore,
-    private phase: ChartPhase
+    private phase: ChartPhase,
+    options: { [key: string]: any }
   ) {
     super(
       canvas,
@@ -20,7 +21,7 @@ export class LogChart extends TestChart {
         datasets: [new TestChartDataset(phase)],
         labels: generateIndexesOfLength(8),
       },
-      new LogChartOptions(i18nStore)
+      options
     )
   }
 

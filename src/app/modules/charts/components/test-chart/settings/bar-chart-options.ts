@@ -85,5 +85,5 @@ export class BarChartOptions {
     },
   }
 
-  constructor(private t: I18nStore) {}
+  constructor(private t: I18nStore, private devicePixelRatio: number) {}
 }

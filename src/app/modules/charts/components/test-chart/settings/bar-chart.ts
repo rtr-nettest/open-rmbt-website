@@ -18,7 +18,8 @@ export class BarChart extends TestChart {
   constructor(
     canvas: HTMLCanvasElement,
     i18nStore: I18nStore,
-    private phase: ChartPhase
+    private phase: ChartPhase,
+    options: { [key: string]: any }
   ) {
     super(
       canvas,
@@ -28,7 +29,7 @@ export class BarChart extends TestChart {
         datasets: [],
         labels: [],
       },
-      new BarChartOptions(i18nStore),
+      options,
       [new PingBarChartPlugin()]
     )
   }
