@@ -79,6 +79,7 @@ export class TestChartComponent implements OnDestroy {
                 canvas: this.offscreenCanvas,
                 phase: this.phase,
                 devicePixelRatio: window.devicePixelRatio,
+                translations: this.i18nStore.translations,
               },
               [this.offscreenCanvas]
             )

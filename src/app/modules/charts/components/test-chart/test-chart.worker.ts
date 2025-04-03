@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-import { I18nStore } from "../../../i18n/store/i18n.store"
+import { I18nStore, Translation } from "../../../i18n/store/i18n.store"
 import { EMeasurementStatus } from "../../../test/constants/measurement-status.enum"
 import { STATE_UPDATE_TIMEOUT } from "../../../test/constants/numbers"
 import { ITestVisualizationState } from "../../../test/interfaces/test-visualization-state.interface"
@@ -49,6 +49,7 @@ addEventListener("message", ({ data }) => {
       phase = data.phase
       canvas = data.canvas
       devicePixelRatio = data.devicePixelRatio
+      i18nStore.setTranslations(data.translations as Translation)
       initChart()
       break
     case "resizeChart":
