@@ -16,6 +16,8 @@ export class LogChartOptions {
   parsing = false as const
   scales = {
     x: {
+      minRotation: 0,
+      maxRotation: 0,
       grid: {
         color: EColors.SECONDARY_10,
       },

@@ -7,6 +7,7 @@ import { ScrollStrategyOptions } from "@angular/cdk/overlay"
 import { map } from "rxjs"
 import { TestService } from "../../test/services/test.service"
 import { TestStore } from "../../test/store/test.store"
+import { EMeasurementStatus } from "../../test/constants/measurement-status.enum"
 
 export const unloadOnlyFor: (
   allowedPaths: ERoutes[]
@@ -17,28 +18,31 @@ export const unloadOnlyFor: (
     const testStore = inject(TestStore)
     const testService = inject(TestService)
     if (
-      nextState.url &&
-      !allowedPaths.some((path) => nextState.url.includes(path))
+      !nextState.url ||
+      allowedPaths.some((path) => nextState.url.includes(path)) ||
+      (testStore.visualization$.value.currentPhaseName ===
+        EMeasurementStatus.ERROR &&
+        !testService.isLoopModeEnabled)
     ) {
-      return dialog
-        .open(ConfirmDialogComponent, {
-          data: {
-            text: "Are you sure you want to leave this page? The data may be lost as a result.",
-            canCancel: true,
-          },
-          scrollStrategy: scrollStrategyOptions.noop(),
-        })
-        .afterClosed()
-        .pipe(
-          map((result) => {
-            const proceed = result?.confirmAction === true
-            if (proceed) {
-              testStore.shouldAbort.set(true)
-              testService.sendAbort(testStore.basicNetworkInfo().testUuid)
-            }
-            return proceed
-          })
-        )
+      return true
     }
-    return true
+    return dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          text: "Are you sure you want to leave this page? The data may be lost as a result.",
+          canCancel: true,
+        },
+        scrollStrategy: scrollStrategyOptions.noop(),
+      })
+      .afterClosed()
+      .pipe(
+        map((result) => {
+          const proceed = result?.confirmAction === true
+          if (proceed) {
+            testStore.shouldAbort.set(true)
+            testService.sendAbort(testStore.basicNetworkInfo().testUuid)
+          }
+          return proceed
+        })
+      )
   }

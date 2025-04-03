@@ -8,7 +8,7 @@ import { SeoComponent } from "../seo/seo.component"
 })
 export class LoadOnScrollComponent extends SeoComponent {
   loading = signal(true)
-  private allLoaded = signal(false)
+  protected allLoaded = signal(false)
 
   protected get dataLimit() {
     return -1

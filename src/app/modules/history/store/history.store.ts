@@ -4,7 +4,7 @@ import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interf
 import { IPaginator } from "../../tables/interfaces/paginator.interface"
 import { ISort } from "../../tables/interfaces/sort.interface"
 
-export const HISTORY_LIMIT = 10
+export const HISTORY_LIMIT = 100
 
 @Injectable({
   providedIn: "root",

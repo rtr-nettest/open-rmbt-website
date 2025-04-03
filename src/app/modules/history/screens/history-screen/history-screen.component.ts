@@ -84,6 +84,7 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
   > | null> = this.service.getHistoryGroupedByLoop({
     grouped: this.shouldGroupHistory,
   })
+  tableId = "historyTable"
   text$ = of("")
 
   protected override get dataLimit() {
@@ -122,7 +123,22 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
   ngOnInit(): void {
     if (this.uuid) {
       this.service.resetMeasurementHistory()
-      this.updateData({ reset: true })
+      this.updateData({ reset: true }).then(async () => {
+        while (
+          document.getElementById(this.tableId)!.getBoundingClientRect()
+            .height <
+            document.querySelector("body")!.getBoundingClientRect().height /
+              2 &&
+          !this.allLoaded()
+        ) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 0)
+          })
+          await this.updateData()
+        }
+      })
     } else {
       this.loading.set(false)
     }

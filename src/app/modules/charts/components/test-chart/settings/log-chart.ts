@@ -41,6 +41,7 @@ export class LogChart extends TestChart {
         labels.push(lastIndex)
       }
     }
+    this.finished = true
     this.update()
   }
 

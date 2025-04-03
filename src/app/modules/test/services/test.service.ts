@@ -45,6 +45,10 @@ export class TestService {
   private stateChangeMs = 0
   private worker?: Worker
 
+  get isLoopModeEnabled() {
+    return this.loopStore.isLoopModeEnabled()
+  }
+
   constructor(
     private readonly historyStore: HistoryStore,
     private readonly loopStore: LoopStoreService,
