@@ -32,6 +32,7 @@ import { Router } from "@angular/router"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { ChartPhase } from "../../../charts/dto/test-chart-dataset"
+import { NUMBERS_LOCALE } from "../../../shared/constants/strings"
 
 @Component({
   selector: "app-recent-history",
@@ -217,7 +218,7 @@ export class RecentHistoryComponent implements OnChanges {
     const { klass, phase, units } = options
     return (
       this.classification.getPhaseIconByClass(phase, klass) +
-      value.toLocaleString(this.i18nStore.activeLang) +
+      value.toLocaleString(NUMBERS_LOCALE) +
       " " +
       this.i18nStore.translate(units)
     )

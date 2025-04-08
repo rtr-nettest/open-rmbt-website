@@ -3,6 +3,7 @@ import { IDynamicComponent } from "../../../shared/interfaces/dynamic-component.
 import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
+import { NUMBERS_LOCALE } from "../../../shared/constants/strings"
 
 export type PercentileParametes = {
   red: number | undefined
@@ -25,7 +26,7 @@ export class PercentileComponent
 {
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger
   @Input() set parameters(value: PercentileParametes) {
-    this.label = value.label.toLocaleString(this.i18nStore.activeLang)
+    this.label = value.label.toLocaleString(NUMBERS_LOCALE)
     this.provider = value.provider
     this.units = value.units
     const yellow =

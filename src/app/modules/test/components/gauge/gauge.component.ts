@@ -9,6 +9,7 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { ITestVisualizationState } from "../../interfaces/test-visualization-state.interface"
 import { roundToSignificantDigits, speedLog } from "../../../shared/util/math"
 import { TestService } from "../../services/test.service"
+import { NUMBERS_LOCALE } from "../../../shared/constants/strings"
 
 @Component({
   selector: "app-gauge",
@@ -129,7 +130,7 @@ export class GaugeComponent {
         '<tspan style="fill:#59b200">' +
         directionSymbol +
         "</tspan>\u200a" +
-        roundToSignificantDigits(speedMbit).toLocaleString(locale)
+        roundToSignificantDigits(speedMbit).toLocaleString(NUMBERS_LOCALE)
       speedUnitEl.textContent = this.i18nStore.translate("Mbps")
 
       //enable smoothing animations on speed gauge, as soon as initial speed value is set

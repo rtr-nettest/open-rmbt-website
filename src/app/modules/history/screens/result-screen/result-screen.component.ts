@@ -57,6 +57,7 @@ import { ActionButtonsComponent } from "../../components/action-buttons/action-b
 import { TestService } from "../../../test/services/test.service"
 import { MIN_ACCURACY_FOR_SHOWING_MAP } from "../../../opendata/constants/recent-measurements-columns"
 import { QoeBarComponent } from "../../components/qoe-bar/qoe-bar.component"
+import { NUMBERS_LOCALE } from "../../../shared/constants/strings"
 
 @Component({
   selector: "app-result-screen",
@@ -231,18 +232,16 @@ export class ResultScreenComponent extends SeoComponent {
   }
 
   getSpeedInMbps(speed: number) {
-    const locale = this.i18nStore.activeLang
     return (
-      roundToSignificantDigits(speed / 1e3).toLocaleString(locale) +
+      roundToSignificantDigits(speed / 1e3).toLocaleString(NUMBERS_LOCALE) +
       " " +
       this.i18nStore.translate("Mbps")
     )
   }
 
   getPingInMs(ping: number) {
-    const locale = this.i18nStore.activeLang
     return (
-      roundToSignificantDigits(ping).toLocaleString(locale) +
+      roundToSignificantDigits(ping).toLocaleString(NUMBERS_LOCALE) +
       " " +
       this.i18nStore.translate("millis")
     )
