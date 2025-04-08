@@ -22,7 +22,7 @@ export function roundToSignificantDigits(number: number) {
 }
 
 export function formatNumber(number: number, digits: number) {
-  return new Intl.NumberFormat("en-IN", {
+  return new Intl.NumberFormat("fr", {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   }).format(number)
