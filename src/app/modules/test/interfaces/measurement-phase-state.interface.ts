@@ -17,4 +17,5 @@ export interface IMeasurementPhaseState {
   time: number
   startTimeMs: number
   endTimeMs: number
+  loopUuid: string
 }

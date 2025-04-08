@@ -1,24 +1,19 @@
-import { Inject, Injectable, NgZone, PLATFORM_ID } from "@angular/core"
+import { Injectable, NgZone } from "@angular/core"
 import { environment } from "../../../../environments/environment"
-import { isPlatformBrowser } from "@angular/common"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
 import { IMeasurementPhaseState } from "../interfaces/measurement-phase-state.interface"
 import { IBasicNetworkInfo } from "../interfaces/basic-network-info.interface"
 import { EMeasurementStatus } from "../constants/measurement-status.enum"
-import { IOverallResult } from "../../history/interfaces/overall-result.interface"
 import { TestStore } from "../store/test.store"
 import { ITestVisualizationState } from "../interfaces/test-visualization-state.interface"
 import { TestVisualizationState } from "../dto/test-visualization-state.dto"
 import { BasicNetworkInfo } from "../dto/basic-network-info.dto"
 import { UUID } from "../constants/strings"
-import { STATE_UPDATE_TIMEOUT } from "../constants/numbers"
 import { MainStore } from "../../shared/store/main.store"
 import { HistoryStore } from "../../history/store/history.store"
 import { LoopStoreService } from "../../loop/store/loop-store.service"
-import { RmbtwsDelegateService } from "./rmbtws-delegate.service"
-import { MessageService } from "../../shared/services/message.service"
 import { OptionsStoreService } from "../../options/store/options-store.service"
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -38,11 +33,6 @@ declare global {
   providedIn: "root",
 })
 export class TestService {
-  private downs: IOverallResult[] = []
-  private ups: IOverallResult[] = []
-  private startTimeMs = 0
-  private endTimeMs = 0
-  private stateChangeMs = 0
   private worker?: Worker
 
   get isLoopModeEnabled() {
@@ -53,11 +43,9 @@ export class TestService {
     private readonly historyStore: HistoryStore,
     private readonly loopStore: LoopStoreService,
     private readonly mainStore: MainStore,
-    private readonly message: MessageService,
     private readonly ngZone: NgZone,
     private readonly testStore: TestStore,
-    private readonly optionsStore: OptionsStoreService,
-    @Inject(PLATFORM_ID) private readonly platformId: object
+    private readonly optionsStore: OptionsStoreService
   ) {}
 
   triggerNextIframeTest() {
@@ -67,36 +55,33 @@ export class TestService {
   }
 
   async triggerNextTest(options?: TestOptions) {
-    let rmbtws = await import("rmbtws/dist/esm/rmbtws.js" as any)
-    if (!rmbtws.TestEnvironment) {
-      rmbtws = rmbtws.default
-    }
-    if (!isPlatformBrowser(this.platformId) || !rmbtws) {
-      this.message.openSnackbar("Error loading test environment")
-      return
-    }
+    this.stopUpdates()
     if (!this.loopStore.isLoopModeEnabled()) {
       this.loopStore.loopUuid.set(null)
     }
-
-    this.ngZone.runOutsideAngular(() => {
-      rmbtws.TestEnvironment.init(
-        new RmbtwsDelegateService(
-          () => this.testStore.basicNetworkInfo(),
-          (v) => this.testStore.basicNetworkInfo.set(v)
-        ),
-        null
-      )
-      const config = this.getConfig(rmbtws, options)
-      const communication = new rmbtws.RMBTControlServerCommunication(config, {
-        register: (data: any) => {
-          if (data.response["loop_uuid"]) {
-            this.loopStore.loopUuid.set(data.response["loop_uuid"])
-          }
-        },
+    this.worker = new Worker(new URL("./test-timer.worker", import.meta.url))
+    this.worker.addEventListener("message", ({ data }) => {
+      this.ngZone.run(() => {
+        switch (data.type) {
+          case "timer":
+            this.setTestState(data.state, this.testStore.visualization$.value)
+            break
+          case "error":
+            this.mainStore.error$.next(data.error)
+            break
+        }
       })
-      const rmbtTest = this.startTest(rmbtws, config, communication)
-      this.watchForUpdates(rmbtTest)
+    })
+    const config = this.getConfig(options)
+    const controlProxy = this.getControlProxy()
+    if (controlProxy && controlProxy !== environment.api.baseUrl) {
+      config["additionalRegistrationParameters"]["protocol_version"] =
+        this.optionsStore.ipVersion()
+    }
+    this.worker.postMessage({
+      type: "startTimer",
+      config,
+      controlProxy,
     })
   }
 
@@ -104,23 +89,14 @@ export class TestService {
     this.worker?.terminate()
   }
 
-  updateEndTime() {
-    this.endTimeMs = this.stateChangeMs
-    this.testStore.lastTestFinishedAt.set(Date.now())
-  }
-
-  private getConfig(rmbtws: any, options?: { referrer?: string }) {
-    const controlProxy = this.getControlProxy()
-    const config = new rmbtws.RMBTTestConfig(
-      "en",
-      controlProxy,
-      `RMBTControlServer`
-    )
-    config.uuid = localStorage.getItem(UUID)
-    config.timezone = dayjs.tz.guess()
+  private getConfig(options?: { referrer?: string }) {
+    const config: { [key: string]: any } = {}
+    config["uuid"] = localStorage.getItem(UUID)
+    config["timezone"] = dayjs.tz.guess()
+    config["additionalRegistrationParameters"] = {}
 
     if (this.loopStore.isLoopModeEnabled()) {
-      config.additionalRegistrationParameters = {
+      config["additionalRegistrationParameters"] = {
         loopmode_info: {
           max_delay: (this.loopStore.testIntervalMinutes() ?? 0) / 60,
           test_counter: this.loopStore.loopCounter(),
@@ -129,18 +105,13 @@ export class TestService {
       }
       const loopUuid = this.loopStore.loopUuid()
       if (loopUuid) {
-        config.additionalRegistrationParameters.loopmode_info.loop_uuid =
+        config["additionalRegistrationParameters"].loopmode_info.loop_uuid =
           loopUuid
       }
     }
 
     if (options?.referrer) {
-      config.additionalRegistrationParameters["referrer"] = options.referrer
-    }
-
-    if (controlProxy && controlProxy !== environment.api.baseUrl) {
-      config.additionalRegistrationParameters["protocol_version"] =
-        this.optionsStore.ipVersion()
+      config["additionalRegistrationParameters"]["referrer"] = options.referrer
     }
     return config
   }
@@ -158,45 +129,13 @@ export class TestService {
     return controlProxy
   }
 
-  private startTest(rmbtws: any, config: any, communication: any) {
-    const rmbtTest = new rmbtws.RMBTTest(config, communication)
-    rmbtTest.onStateChange(() => {
-      this.stateChangeMs = Date.now()
-    })
-    rmbtTest.onError((error: any) => {
-      this.ngZone.run(() => {
-        if (error) this.mainStore.error$.next(error)
-      })
-    })
-    this.startTimeMs = Date.now()
-    rmbtTest.startTest()
-    return rmbtTest
-  }
-
-  private watchForUpdates(rmbtTest: any) {
-    this.stopUpdates()
-    this.worker = new Worker(new URL("./test-timer.worker", import.meta.url))
-    this.worker.addEventListener("message", (event) => {
-      if (event.data.type === "timer") {
-        this.ngZone.run(() => {
-          this.getMeasurementState(rmbtTest).then((state) => {
-            this.ngZone.run(() => {
-              this.setTestState(state, this.testStore.visualization$.value)
-            })
-          })
-        })
-      }
-    })
-    this.worker.postMessage({
-      type: "startTimer",
-      payload: STATE_UPDATE_TIMEOUT,
-    })
-  }
-
   private setTestState = (
     phaseState: IMeasurementPhaseState & IBasicNetworkInfo,
     oldVisualization: ITestVisualizationState
   ) => {
+    if (this.isLoopModeEnabled && !this.loopStore.loopUuid()) {
+      this.loopStore.loopUuid.set(phaseState.loopUuid)
+    }
     const oldPhaseName = oldVisualization.currentPhaseName
     const oldPhaseIsOfFinishType =
       oldPhaseName === EMeasurementStatus.END ||
@@ -207,7 +146,7 @@ export class TestService {
       phaseState.phase === EMeasurementStatus.ERROR ||
       phaseState.phase === EMeasurementStatus.ABORTED
     if (newPhaseIsOfFinishType && phaseState.phase !== oldPhaseName) {
-      this.updateEndTime()
+      this.testStore.lastTestFinishedAt.set(Date.now())
       if (phaseState.phase === EMeasurementStatus.ERROR) {
         this.sendAbort(phaseState.testUuid)
         if (oldPhaseName === EMeasurementStatus.NOT_STARTED) {
@@ -233,79 +172,7 @@ export class TestService {
     this.testStore.visualization$.next(new TestVisualizationState())
     this.historyStore.simpleHistoryResult$.next(null)
     this.mainStore.error$.next(null)
-    this.downs = []
-    this.ups = []
-    this.startTimeMs = 0
-    this.endTimeMs = 0
     this.stopUpdates()
-  }
-
-  async getMeasurementState(
-    rmbtTest: any
-  ): Promise<IMeasurementPhaseState & IBasicNetworkInfo> {
-    const result = rmbtTest?.getIntermediateResult()
-    const basicInfo = this.testStore.basicNetworkInfo()
-    const diffTimeMs = Date.now() - this.stateChangeMs
-    const phase: EMeasurementStatus =
-      result?.status?.toString() ?? EMeasurementStatus.NOT_STARTED
-    const down =
-      result?.downBitPerSec && result.downBitPerSec !== -1
-        ? (result.downBitPerSec as number) / 1e6
-        : -1
-    if (down >= 0 && phase === EMeasurementStatus.DOWN) {
-      this.downs.push({
-        speed: result.downBitPerSec,
-        bytes: 0,
-        nsec: diffTimeMs * 1e6,
-      })
-    }
-    const up =
-      result?.upBitPerSec && result.upBitPerSec !== -1
-        ? (result.upBitPerSec as number) / 1e6
-        : -1
-    if (up >= 0 && phase === EMeasurementStatus.UP) {
-      this.ups.push({
-        speed: result.upBitPerSec,
-        bytes: 0,
-        nsec: diffTimeMs * 1e6,
-      })
-    }
-    const ping =
-      result?.pingNano && result?.pingNano !== -1
-        ? (result.pingNano as number) / 1e6
-        : -1
-    const pings = []
-    if (phase === EMeasurementStatus.DOWN && result.pings) {
-      const startTimeNs = result.pings[0]?.timeNs || 0
-      for (const p of result.pings) {
-        pings.push({
-          value_server: p.server,
-          value: p.client,
-          time_ns: p.timeNs - startTimeNs,
-        })
-      }
-    }
-
-    return {
-      duration: diffTimeMs / 1e3,
-      progress: result.progress,
-      time: Date.now(),
-      ping,
-      pings,
-      down,
-      downs: this.downs ?? [],
-      up,
-      ups: this.ups ?? [],
-      phase,
-      testUuid: basicInfo.testUuid ?? "",
-      openTestUuid: basicInfo.openTestUuid ?? "",
-      ipAddress: basicInfo.ipAddress ?? "-",
-      serverName: basicInfo.serverName ?? "-",
-      providerName: basicInfo.providerName ?? "-",
-      coordinates: basicInfo.coordinates,
-      startTimeMs: this.startTimeMs,
-      endTimeMs: this.endTimeMs,
-    }
   }
 
   getProgressSegment(status: EMeasurementStatus, progress: number) {

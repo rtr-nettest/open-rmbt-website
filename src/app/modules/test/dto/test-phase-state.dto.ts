@@ -26,6 +26,7 @@ export class TestPhaseState implements ITestPhaseState {
   startTimeMs: number = 0
   endTimeMs: number = 0
   openTestUuid: string = ""
+  loopUuid: string = ""
 
   constructor(options?: Partial<ITestPhaseState>) {
     if (options) {
