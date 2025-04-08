@@ -1,3 +1,5 @@
+import { NUMBERS_LOCALE } from "../constants/strings"
+
 export function roundMs(value: number) {
   const resultNum = Math.round(value)
   let rounder = 1
@@ -22,7 +24,7 @@ export function roundToSignificantDigits(number: number) {
 }
 
 export function formatNumber(number: number, digits: number) {
-  return new Intl.NumberFormat("fr", {
+  return new Intl.NumberFormat(NUMBERS_LOCALE, {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   }).format(number)
