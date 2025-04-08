@@ -74,12 +74,12 @@ export class CertifiedStoreService {
   })
 
   constructor(private readonly i18nStore: I18nStore) {
-    if (globalThis.localStorage) {
-      const dataForm = localStorage.getItem(DATA_FORM)
+    if (globalThis.sessionStorage) {
+      const dataForm = sessionStorage.getItem(DATA_FORM)
       if (dataForm) {
         this.dataForm.set(JSON.parse(dataForm))
       }
-      const envForm = localStorage.getItem(ENV_FORM)
+      const envForm = sessionStorage.getItem(ENV_FORM)
       if (envForm) {
         this.envForm.set(JSON.parse(envForm))
       }
@@ -87,14 +87,14 @@ export class CertifiedStoreService {
         const dataForm = this.dataForm()
         const envForm = this.envForm()
         if (dataForm) {
-          localStorage.setItem(DATA_FORM, JSON.stringify(dataForm))
+          sessionStorage.setItem(DATA_FORM, JSON.stringify(dataForm))
         } else {
-          localStorage.removeItem(DATA_FORM)
+          sessionStorage.removeItem(DATA_FORM)
         }
         if (envForm) {
-          localStorage.setItem(ENV_FORM, JSON.stringify(envForm))
+          sessionStorage.setItem(ENV_FORM, JSON.stringify(envForm))
         } else {
-          localStorage.removeItem(ENV_FORM)
+          sessionStorage.removeItem(ENV_FORM)
         }
       })
     }
