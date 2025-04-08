@@ -42,6 +42,12 @@ export type MapSourceOptions = Partial<{
   }>
 }>
 
+const DUMMY_STYLE = {
+  version: 8 as const,
+  sources: {},
+  layers: [],
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -51,11 +57,7 @@ export class MapService {
       !this.mainStore.api().url_web_osm_tiles ||
       !this.mainStore.api().url_web_basemap_tiles
     ) {
-      return {
-        version: 8 as const,
-        sources: {},
-        layers: [],
-      }
+      return DUMMY_STYLE
     }
     const sources = {
       [EBasemapType.OSM]: {
@@ -74,26 +76,14 @@ export class MapService {
       layers: this.getLayersFromSources(sources),
     }
   })
-  basemapAtStyle = computed<StyleSpecification>(() => {
+  basemapAtHdpiStyle = computed<StyleSpecification>(() => {
     if (!this.mainStore.api().url_web_basemap_tiles) {
-      return {
-        version: 8 as const,
-        sources: {},
-        layers: [],
-      }
+      return DUMMY_STYLE
     }
     const sources = {
-      [EBasemapType.BMAPOVERLAY]: {
-        ...BASE_SOURCE,
-        tiles: [this.getTilesByType(EBasemapType.BMAPOVERLAY)!],
-      },
-      [EBasemapType.BMAPORTHO]: {
-        ...BASE_SOURCE,
-        tiles: [this.getTilesByType(EBasemapType.BMAPORTHO, "jpeg")!],
-      },
       [EBasemapType.BMAPHDPI]: {
         ...BASE_SOURCE,
-        tiles: [this.getTilesByType(EBasemapType.BMAPHDPI)!],
+        tiles: [this.getTilesByType(EBasemapType.BMAPHDPI, "jpeg")!],
       },
     }
     return {
@@ -102,23 +92,44 @@ export class MapService {
       layers: this.getLayersFromSources(sources),
     }
   })
-  fullStyle = computed<StyleSpecification>(() => {
-    const defaultStyle = this.defaultStyle()
-    const basemapAtStyle = this.basemapAtStyle()
-    if (!defaultStyle.layers.length || !basemapAtStyle.layers.length) {
-      return {
-        version: 8 as const,
-        sources: {},
-        layers: [],
-      }
+  basemapAtOrthoStyle = computed<StyleSpecification>(() => {
+    if (!this.mainStore.api().url_web_basemap_tiles) {
+      return DUMMY_STYLE
+    }
+    const sources = {
+      [EBasemapType.BMAPORTHO]: {
+        ...BASE_SOURCE,
+        tiles: [this.getTilesByType(EBasemapType.BMAPORTHO, "jpeg")!],
+      },
     }
     return {
-      ...defaultStyle,
-      sources: {
-        ...defaultStyle.sources,
-        ...basemapAtStyle.sources,
+      version: 8 as const,
+      sources,
+      layers: this.getLayersFromSources(sources),
+    }
+  })
+  basemapAtOverlayStyle = computed<StyleSpecification>(() => {
+    if (
+      !this.mainStore.api().url_web_osm_tiles ||
+      !this.mainStore.api().url_web_basemap_tiles
+    ) {
+      return DUMMY_STYLE
+    }
+    const sources = {
+      [EBasemapType.OSM]: {
+        ...BASE_SOURCE,
+        tiles: [this.mainStore.api().url_web_osm_tiles!],
+        attribution: "&copy; OpenStreetMap Contributors",
       },
-      layers: [...defaultStyle.layers, ...basemapAtStyle.layers],
+      [EBasemapType.BMAPOVERLAY]: {
+        ...BASE_SOURCE,
+        tiles: [this.getTilesByType(EBasemapType.BMAPOVERLAY)!],
+      },
+    }
+    return {
+      version: 8 as const,
+      sources,
+      layers: this.getLayersFromSources(sources),
     }
   })
 
@@ -138,23 +149,6 @@ export class MapService {
 
   createMap(options: MapOptions) {
     return new Map(options)
-  }
-
-  switchBasemap(map: Map, layerId: string) {
-    if (!map) {
-      return
-    }
-    map.setLayoutProperty(EBasemapType.BMAPGRAU, "visibility", "none")
-    const currentLayer = map.getLayer(layerId)
-    const basemapAtStyle = this.basemapAtStyle()
-    if (currentLayer && basemapAtStyle) {
-      for (const layer of Object.values(basemapAtStyle.layers)) {
-        if (layer.id !== layerId) {
-          map.setLayoutProperty(layer.id, "visibility", "none")
-        }
-      }
-      map.setLayoutProperty(layerId, "visibility", "visible")
-    }
   }
 
   getFilters() {

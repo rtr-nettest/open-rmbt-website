@@ -143,7 +143,7 @@ export class MapScreenComponent extends SeoComponent {
   }
 
   private async setMap() {
-    const style = this.mapService.fullStyle()
+    const style = this.mapService.defaultStyle()
     if (!style.layers.length) {
       this.messageService.openSnackbar("Could not load the map style")
       return
@@ -176,7 +176,6 @@ export class MapScreenComponent extends SeoComponent {
         })
       )
       this.map.on("load", () => {
-        this.switchBasemap(EBasemapType.BMAPGRAU)
         this.mapStore.initFilters(this.mapInfo)
         this.map.on("zoom", () => {
           this.setTilesVisibility()
@@ -213,7 +212,21 @@ export class MapScreenComponent extends SeoComponent {
 
   switchBasemap(layerId: string) {
     this.zone.runOutsideAngular(() => {
-      this.mapService.switchBasemap(this.map, layerId)
+      switch (layerId) {
+        case EBasemapType.BMAPHDPI:
+          this.map.setStyle(this.mapService.basemapAtHdpiStyle())
+          break
+        case EBasemapType.BMAPORTHO:
+          this.map.setStyle(this.mapService.basemapAtOrthoStyle())
+          break
+        case EBasemapType.BMAPOVERLAY:
+          this.map.setStyle(this.mapService.basemapAtOverlayStyle())
+          break
+        default:
+          this.map.setStyle(this.mapService.defaultStyle())
+          break
+      }
+      this.setTiles()
     })
   }
 
