@@ -41,7 +41,6 @@ class TestTimerWorker {
       this.handleError("RMBT WebSocket library not found")
       return
     }
-    rmbtws.log.disable()
 
     rmbtws.TestEnvironment.init(
       new RmbtwsDelegateService(
