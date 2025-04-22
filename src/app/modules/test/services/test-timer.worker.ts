@@ -16,17 +16,23 @@ addEventListener("message", ({ data }) => {
       worker = new TestTimerWorker(data.config, data.controlProxy)
       worker.triggerNextTest()
       break
+    case "setLocation":
+      if (worker) {
+        worker.delegateService?.setLocation(data.coordinates)
+      }
+      break
   }
 })
 
 class TestTimerWorker {
+  public delegateService: RmbtwsDelegateService | null = null
+  public rmbtTest: any
   private basicNetworkInfo: IBasicNetworkInfo = new BasicNetworkInfo()
   private downs: IOverallResult[] = []
   private ups: IOverallResult[] = []
   private startTimeMs = 0
   private endTimeMs = 0
   private stateChangeMs = 0
-  private rmbtTest: any
   private loopUuid = ""
   private interval: NodeJS.Timeout | null = null
 
@@ -42,13 +48,12 @@ class TestTimerWorker {
       return
     }
 
-    rmbtws.TestEnvironment.init(
-      new RmbtwsDelegateService(
-        () => this.basicNetworkInfo,
-        (v) => (this.basicNetworkInfo = v)
-      ),
-      null
+    this.delegateService = new RmbtwsDelegateService(
+      () => this.basicNetworkInfo,
+      (v) => (this.basicNetworkInfo = v)
     )
+
+    rmbtws.TestEnvironment.init(this.delegateService, null)
 
     this.config = Object.assign(
       new rmbtws.RMBTTestConfig("en", this.controlProxy, `RMBTControlServer`),

@@ -15,6 +15,7 @@ import { MainStore } from "../../shared/store/main.store"
 import { HistoryStore } from "../../history/store/history.store"
 import { LoopStoreService } from "../../loop/store/loop-store.service"
 import { OptionsStoreService } from "../../options/store/options-store.service"
+import { GeoTrackerService } from "./geotracker.service"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -41,6 +42,7 @@ export class TestService {
 
   constructor(
     private readonly historyStore: HistoryStore,
+    private readonly geoTrackerService: GeoTrackerService,
     private readonly loopStore: LoopStoreService,
     private readonly mainStore: MainStore,
     private readonly ngZone: NgZone,
@@ -78,7 +80,13 @@ export class TestService {
       config["additionalRegistrationParameters"]["protocol_version"] =
         this.optionsStore.ipVersion()
     }
-    this.worker.postMessage({
+    this.geoTrackerService.startGeoTracking(console.log, (data) => {
+      this.worker?.postMessage({
+        type: "setLocation",
+        coordinates: data,
+      })
+    })
+    this.worker?.postMessage({
       type: "startTimer",
       config,
       controlProxy,
@@ -147,6 +155,7 @@ export class TestService {
       phaseState.phase === EMeasurementStatus.ABORTED
     if (newPhaseIsOfFinishType && phaseState.phase !== oldPhaseName) {
       this.testStore.lastTestFinishedAt.set(Date.now())
+      this.geoTrackerService.stopGeoTracking()
       if (phaseState.phase === EMeasurementStatus.ERROR) {
         this.sendAbort(phaseState.testUuid)
         if (oldPhaseName === EMeasurementStatus.NOT_STARTED) {
