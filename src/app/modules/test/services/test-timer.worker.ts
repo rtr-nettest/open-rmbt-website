@@ -161,7 +161,7 @@ class TestTimerWorker {
   private handleError(error: any) {
     postMessage({
       type: "error",
-      message: error.message || error,
+      error: error.message || error,
     })
   }
 }
