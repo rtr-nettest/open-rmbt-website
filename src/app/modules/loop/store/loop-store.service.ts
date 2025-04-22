@@ -59,6 +59,8 @@ export class LoopStoreService {
     return Date.now() + singleTestDuration * this.maxTestsAllowed()
   })
   isCertifiedMeasurement = signal<boolean>(false)
+  lastTestFinishedAt = signal<number>(0)
+  lastTestStartedAt = signal<number>(0)
   maxTestsAllowed = signal<number>(environment.loopModeDefaults.max_tests)
   maxTestsReached = signal<boolean>(false)
 }

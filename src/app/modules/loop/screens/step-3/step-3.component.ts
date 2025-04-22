@@ -35,7 +35,7 @@ export class Step3Component extends TestScreenComponent {
   protected waitingProgressMs = 0
   protected shouldGetHistory$ = new BehaviorSubject<boolean>(false)
   protected currentTestUuid$ = new BehaviorSubject<string | null>(null)
-  lastTestFinishedAt$ = toObservable(this.store.lastTestFinishedAt)
+  lastTestFinishedAt$ = toObservable(this.loopStore.lastTestFinishedAt)
   finishedTests = 0
   testsFinishedWhileActive = 0
 
@@ -163,8 +163,9 @@ export class Step3Component extends TestScreenComponent {
       return
     }
     this.waitingProgressMs += STATE_UPDATE_TIMEOUT
-    const endTimeMs = state.endTimeMs
-    const timeTillEndMs = state.startTimeMs + fullIntervalMs - endTimeMs
+    const endTimeMs = this.loopStore.lastTestFinishedAt()
+    const timeTillEndMs =
+      this.loopStore.lastTestStartedAt() + fullIntervalMs - endTimeMs
     const currentMs = Math.max(0, timeTillEndMs - this.waitingProgressMs + 1000)
     if (currentMs <= 0 || currentMs > fullIntervalMs) {
       this.progressMode$.next("indeterminate")

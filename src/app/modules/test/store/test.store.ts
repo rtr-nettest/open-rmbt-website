@@ -13,6 +13,5 @@ export class TestStore {
   visualization$ = new BehaviorSubject<ITestVisualizationState>(
     new TestVisualizationState()
   )
-  lastTestFinishedAt = signal<number>(0)
   shouldAbort = signal<boolean>(false)
 }

@@ -91,6 +91,7 @@ export class TestService {
       config,
       controlProxy,
     })
+    this.loopStore.lastTestStartedAt.set(Date.now())
   }
 
   stopUpdates() {
@@ -154,7 +155,7 @@ export class TestService {
       phaseState.phase === EMeasurementStatus.ERROR ||
       phaseState.phase === EMeasurementStatus.ABORTED
     if (newPhaseIsOfFinishType && phaseState.phase !== oldPhaseName) {
-      this.testStore.lastTestFinishedAt.set(Date.now())
+      this.loopStore.lastTestFinishedAt.set(Date.now())
       this.geoTrackerService.stopGeoTracking()
       if (phaseState.phase === EMeasurementStatus.ERROR) {
         this.sendAbort(phaseState.testUuid)

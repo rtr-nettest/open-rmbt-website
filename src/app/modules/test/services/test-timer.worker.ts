@@ -30,8 +30,6 @@ class TestTimerWorker {
   private basicNetworkInfo: IBasicNetworkInfo = new BasicNetworkInfo()
   private downs: IOverallResult[] = []
   private ups: IOverallResult[] = []
-  private startTimeMs = 0
-  private endTimeMs = 0
   private stateChangeMs = 0
   private loopUuid = ""
   private interval: NodeJS.Timeout | null = null
@@ -145,8 +143,6 @@ class TestTimerWorker {
       serverName: basicInfo.serverName ?? "-",
       providerName: basicInfo.providerName ?? "-",
       coordinates: basicInfo.coordinates,
-      startTimeMs: this.startTimeMs,
-      endTimeMs: this.endTimeMs,
       loopUuid: this.loopUuid,
     }
   }
@@ -159,7 +155,6 @@ class TestTimerWorker {
     this.rmbtTest.onError((error: any) => {
       if (error) this.handleError(error)
     })
-    this.startTimeMs = Date.now()
     this.rmbtTest.startTest()
   }
 
