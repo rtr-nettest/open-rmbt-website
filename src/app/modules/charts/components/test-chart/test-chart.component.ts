@@ -167,9 +167,7 @@ export class TestChartComponent implements OnDestroy {
         } else {
           this.chart = new LogChart(ctx!, this.i18nStore, this.phase)
         }
-      } catch (e) {
-        console.warn(this.phase, e)
-      }
+      } catch (_) {}
     }
   }
 }
