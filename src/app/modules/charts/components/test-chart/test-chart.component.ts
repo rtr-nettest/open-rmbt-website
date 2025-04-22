@@ -105,9 +105,6 @@ export class TestChartComponent implements OnDestroy {
             this.updateUpload(visualization)
             break
           case EMeasurementStatus.SHOWING_RESULTS:
-            this.initChart({ force: true })
-            this.showResults(visualization)
-            break
           case EMeasurementStatus.END:
             this.showResults(visualization)
             break
@@ -161,9 +158,9 @@ export class TestChartComponent implements OnDestroy {
     }
   }
 
-  private initChart(options?: { force: boolean }) {
+  private initChart() {
     const ctx = this.canvas?.getContext("2d")
-    if (ctx && (options?.force || !this.updateTimer)) {
+    if (ctx && !this.updateTimer) {
       try {
         if (this.phase === "ping") {
           this.chart = new BarChart(ctx!, this.i18nStore, this.phase)
