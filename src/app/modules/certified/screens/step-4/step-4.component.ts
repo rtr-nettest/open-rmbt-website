@@ -33,8 +33,8 @@ export class Step4Component extends LoopScreenComponent {
   override scheduleLoop() {
     this.loopService.scheduleLoop({
       isCertifiedMeasurement: true,
-      maxTestsAllowed: environment.loopModeDefaults.max_tests,
-      testIntervalMinutes: environment.loopModeDefaults.max_delay,
+      maxTestsAllowed: environment.certifiedDefaults.max_tests,
+      testIntervalMinutes: environment.certifiedDefaults.max_delay,
     })
   }
 }

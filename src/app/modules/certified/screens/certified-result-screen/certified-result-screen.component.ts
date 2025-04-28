@@ -7,6 +7,7 @@ import { LoopResultScreenComponent } from "../../../loop/screens/loop-result-scr
 import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interface"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { CertifiedExportService } from "../../services/certified-export.service"
+import { environment } from "../../../../../environments/environment"
 
 @Component({
   selector: "app-loop-result-screen",
@@ -32,6 +33,8 @@ export class CertifiedResultScreenComponent
   ]
   override redirectUrl = `/${this.i18nStore.activeLang}/${ERoutes.CERTIFIED_1}`
   override text$ = this.i18nStore.getLocalizedHtml("certified-result")
+  override excludeColumns =
+    environment.certifiedDefaults.exclude_from_result ?? []
 
   ngAfterViewInit(): void {
     this.exporter.openCertifiedPdf(this.loopStore.loopUuid()).subscribe()
