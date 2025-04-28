@@ -33,7 +33,7 @@ import { NUMBERS_LOCALE } from "../../../shared/constants/strings"
 export class InterimResultsComponent {
   basicNetworkInfo$!: Observable<IBasicNetworkInfo>
   visualization$!: Observable<ITestVisualizationState>
-  estimatedEndTime = signal<string>("")
+  estimatedEndTime = signal<Date | null>(null)
 
   ping: string = "-"
   download: string = "-"
@@ -52,11 +52,8 @@ export class InterimResultsComponent {
       tap((state) => {
         const estimatedEndTime = this.loopStore.estimatedEndTime()
         if (estimatedEndTime) {
-          this.estimatedEndTime.set(
-            new Date(estimatedEndTime).toLocaleString(this.i18nStore.activeLang)
-          )
+          this.estimatedEndTime.set(new Date(estimatedEndTime))
         }
-        const locale = this.i18nStore.activeLang
         const ping = roundToSignificantDigits(
           state.phases[EMeasurementStatus.DOWN].ping
         )

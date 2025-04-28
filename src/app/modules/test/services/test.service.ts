@@ -16,6 +16,7 @@ import { HistoryStore } from "../../history/store/history.store"
 import { LoopStoreService } from "../../loop/store/loop-store.service"
 import { OptionsStoreService } from "../../options/store/options-store.service"
 import { GeoTrackerService } from "./geotracker.service"
+import { STATE_UPDATE_TIMEOUT } from "../constants/numbers"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -34,6 +35,8 @@ declare global {
   providedIn: "root",
 })
 export class TestService {
+  private lastState?: IMeasurementPhaseState & IBasicNetworkInfo
+  private waitingTimer?: NodeJS.Timeout
   private worker?: Worker
 
   get isLoopModeEnabled() {
@@ -57,7 +60,7 @@ export class TestService {
   }
 
   async triggerNextTest(options?: TestOptions) {
-    this.stopUpdates()
+    clearInterval(this.waitingTimer)
     if (!this.loopStore.isLoopModeEnabled()) {
       this.loopStore.loopUuid.set(null)
     }
@@ -66,6 +69,7 @@ export class TestService {
       this.ngZone.run(() => {
         switch (data.type) {
           case "timer":
+            this.lastState = data.state
             this.setTestState(data.state, this.testStore.visualization$.value)
             break
           case "error":
@@ -94,8 +98,17 @@ export class TestService {
     this.loopStore.lastTestStartedAt.set(Date.now())
   }
 
-  stopUpdates() {
+  private stopUpdates() {
     this.worker?.terminate()
+    this.worker = undefined
+    clearInterval(this.waitingTimer)
+    if (this.isLoopModeEnabled && !this.loopStore.maxTestsReached()) {
+      this.waitingTimer = setInterval(() => {
+        if (this.lastState) {
+          this.setTestState(this.lastState, this.testStore.visualization$.value)
+        }
+      }, STATE_UPDATE_TIMEOUT)
+    }
   }
 
   private getConfig(options?: { referrer?: string }) {
@@ -156,6 +169,7 @@ export class TestService {
       phaseState.phase === EMeasurementStatus.ABORTED
     if (newPhaseIsOfFinishType && phaseState.phase !== oldPhaseName) {
       this.loopStore.lastTestFinishedAt.set(Date.now())
+      this.stopUpdates()
       this.geoTrackerService.stopGeoTracking()
       if (phaseState.phase === EMeasurementStatus.ERROR) {
         this.sendAbort(phaseState.testUuid)
@@ -182,7 +196,7 @@ export class TestService {
     this.testStore.visualization$.next(new TestVisualizationState())
     this.historyStore.simpleHistoryResult$.next(null)
     this.mainStore.error$.next(null)
-    this.stopUpdates()
+    this.lastState = undefined
   }
 
   getProgressSegment(status: EMeasurementStatus, progress: number) {
