@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   HostListener,
   inject,
   NgZone,
@@ -21,7 +22,7 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
-import { AsyncPipe, DatePipe, NgIf } from "@angular/common"
+import { AsyncPipe, DatePipe, NgIf, NgTemplateOutlet } from "@angular/common"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatProgressBarModule } from "@angular/material/progress-bar"
 import { TestStore } from "../../store/test.store"
@@ -43,13 +44,11 @@ import { HistoryService } from "../../../history/services/history.service"
 import { RecentHistoryComponent } from "../../../history/components/recent-history/recent-history.component"
 import { LoopStoreService } from "../../../loop/store/loop-store.service"
 import { toObservable } from "@angular/core/rxjs-interop"
-import { setGoBackLocation } from "../../../shared/util/nav"
 import { SprintfPipe } from "../../../shared/pipes/sprintf.pipe"
 import { SettingsService } from "../../../shared/services/settings.service"
-import {
-  EPlatform,
-  PlatformService,
-} from "../../../shared/services/platform.service"
+import { PlatformService } from "../../../shared/services/platform.service"
+import { environment } from "../../../../../environments/environment"
+import { IframeTestComponent } from "../../components/iframe-test/iframe-test.component"
 
 export const imports = [
   AsyncPipe,
@@ -58,6 +57,7 @@ export const imports = [
   HeaderComponent,
   FooterComponent,
   GaugeComponent,
+  IframeTestComponent,
   InterimResultsComponent,
   MatProgressBarModule,
   NgIf,
@@ -67,6 +67,7 @@ export const imports = [
   SpacerComponent,
   SprintfPipe,
   BreadcrumbsComponent,
+  NgTemplateOutlet,
 ]
 
 @Component({
@@ -78,6 +79,11 @@ export const imports = [
 })
 export class TestScreenComponent extends SeoComponent implements OnInit {
   addMedian = false
+  disableGraphics = computed(
+    () =>
+      // this.loopStore.isCertifiedMeasurement() &&
+      environment.certifiedDefaults.disable_graphics
+  )
   historyService = inject(HistoryService)
   router = inject(Router)
   mainStore = inject(MainStore)
@@ -91,16 +97,14 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   loopCount$ = toObservable(this.loopStore.loopCounter)
   stopped$: Subject<void> = new Subject()
   visualization$!: Observable<ITestVisualizationState>
-  loopWaiting$ = new BehaviorSubject(false)
+  loopWaiting = signal(false)
   result$ = this.historyService.getHistoryGroupedByLoop({
     grouped: false,
     loopUuid: this.loopStore.loopUuid(),
   })
-  ms$ = new BehaviorSubject(0)
-  progress$ = new BehaviorSubject(0)
-  progressMode$ = new BehaviorSubject<"determinate" | "indeterminate">(
-    "determinate"
-  )
+  progressMs = signal(0)
+  progress = signal(0)
+  progressMode = signal<"determinate" | "indeterminate">("determinate")
   platform = inject(PlatformService)
   testStartDisabled = signal(false)
   protected excludeColumns: string[] = []

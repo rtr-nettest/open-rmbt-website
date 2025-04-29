@@ -118,7 +118,7 @@ export class Step3Component extends TestScreenComponent {
     if (lastTestUuid !== testUuid) {
       // New test started
       this.currentTestUuid$.next(testUuid)
-      this.loopWaiting$.next(false)
+      this.loopWaiting.set(false)
       this.waitingProgressMs = 0
     }
   }
@@ -139,7 +139,7 @@ export class Step3Component extends TestScreenComponent {
       return
     }
     // Waiting for a new test to start
-    this.loopWaiting$.next(true)
+    this.loopWaiting.set(true)
     this.shouldGetHistory$.next(true)
     this.mainStore.error$.next(null)
   }
@@ -159,7 +159,7 @@ export class Step3Component extends TestScreenComponent {
 
   private checkIfWaiting(state: ITestVisualizationState) {
     const fullIntervalMs = this.loopStore.fullTestIntervalMs()
-    if (!this.loopWaiting$.value || fullIntervalMs == null) {
+    if (!this.loopWaiting() || fullIntervalMs == null) {
       return
     }
     this.waitingProgressMs += STATE_UPDATE_TIMEOUT
@@ -168,11 +168,11 @@ export class Step3Component extends TestScreenComponent {
       this.loopStore.lastTestStartedAt() + fullIntervalMs - endTimeMs
     const currentMs = Math.max(0, timeTillEndMs - this.waitingProgressMs + 1000)
     if (currentMs <= 0 || currentMs > fullIntervalMs) {
-      this.progressMode$.next("indeterminate")
+      this.progressMode.set("indeterminate")
     } else {
-      this.progressMode$.next("determinate")
-      this.ms$.next(currentMs)
-      this.progress$.next((this.waitingProgressMs / timeTillEndMs) * 100)
+      this.progressMode.set("determinate")
+      this.progressMs.set(currentMs)
+      this.progress.set((this.waitingProgressMs / timeTillEndMs) * 100)
     }
   }
 }

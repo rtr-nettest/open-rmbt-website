@@ -8,6 +8,7 @@ import { map } from "rxjs"
 import { TestService } from "../../test/services/test.service"
 import { TestStore } from "../../test/store/test.store"
 import { EMeasurementStatus } from "../../test/constants/measurement-status.enum"
+import { CertifiedStoreService } from "../../certified/store/certified-store.service"
 
 export const unloadOnlyFor: (
   allowedPaths: ERoutes[]
@@ -17,12 +18,14 @@ export const unloadOnlyFor: (
     const scrollStrategyOptions = inject(ScrollStrategyOptions)
     const testStore = inject(TestStore)
     const testService = inject(TestService)
+    const certifiedStore = inject(CertifiedStoreService)
     if (
       !nextState.url ||
       allowedPaths.some((path) => nextState.url.includes(path)) ||
       (testStore.visualization$.value.currentPhaseName ===
         EMeasurementStatus.ERROR &&
-        !testService.isLoopModeEnabled)
+        !testService.isLoopModeEnabled) ||
+      certifiedStore.testStartDisabled()
     ) {
       return true
     }

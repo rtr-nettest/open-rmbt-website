@@ -1,9 +1,22 @@
-@if(visualization$ | async) {
+@if(visualization$ | async) { @if (isWaitingForNextTest()) {
+<div
+  id="testprogress"
+  class="app-progressbar app-progressbar--waiting"
+  role="progressbar"
+  [attr.aria-valuenow]="100 - waitingProgress()"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  style="min-width: 3em"
+  [style.width.%]="100 - waitingProgress()"
+>
+  {{ waitingProgressMs() | date : "mm:ss" }}
+</div>
+} @else {
 <div
   id="testprogress"
   class="app-progressbar"
   role="progressbar"
-  aria-valuenow="45"
+  [attr.aria-valuenow]="progress()"
   aria-valuemin="0"
   aria-valuemax="100"
   style="min-width: 3em"
@@ -11,6 +24,7 @@
 >
   {{ progress() }}%
 </div>
+}
 <table class="app-table">
   <tr class="app-row">
     <td class="app-col">{{ "Status" }}</td>
@@ -67,7 +81,7 @@
     <td class="app-col">{{ provider() }}</td>
   </tr>
 </table>
-@if (currentPhaseName() === "END") {
+@if (currentPhaseName() === "END" && showFooter()) {
 <footer class="app-footer">
   <button mat-stroked-button class="app-button" (click)="restart()">
     <span class="app-form-text">{{ "New measurement" | translate }}</span>

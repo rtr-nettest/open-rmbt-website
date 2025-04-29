@@ -2,11 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  input,
   signal,
 } from "@angular/core"
 import { TestStore } from "../../store/test.store"
 import { distinctUntilChanged, tap } from "rxjs"
-import { AsyncPipe } from "@angular/common"
+import { AsyncPipe, DatePipe } from "@angular/common"
 import { TestService } from "../../services/test.service"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { I18nStore } from "../../../i18n/store/i18n.store"
@@ -27,6 +28,7 @@ const DEFAULT_VALUE = "-"
   selector: "app-iframe-test",
   imports: [
     AsyncPipe,
+    DatePipe,
     MatButtonModule,
     MatProgressSpinnerModule,
     TranslatePipe,
@@ -48,6 +50,7 @@ export class IframeTestComponent {
   progress = signal(0)
   provider = signal(DEFAULT_VALUE)
   resultUrl = signal("")
+  showFooter = input(true)
   status = signal(DEFAULT_VALUE)
   testServer = signal(DEFAULT_VALUE)
   up = signal(DEFAULT_VALUE)
@@ -111,6 +114,9 @@ export class IframeTestComponent {
       this.notifyParent(state)
     })
   )
+  isWaitingForNextTest = input(false)
+  waitingProgress = input(0)
+  waitingProgressMs = input(0)
 
   private parentWindowMessage = ""
 

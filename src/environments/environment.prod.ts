@@ -15,5 +15,6 @@ export const environment = {
     max_delay: 15,
     max_tests: 8,
     exclude_from_result: ["networkType"],
+    disable_graphics: true,
   },
 }

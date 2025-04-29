@@ -2,36 +2,29 @@
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
 @defer { @if(visualization$ | async; as visualization) {
-<ng-container *ngIf="(isLoopModeEnabled$ | async) === true">
-  <div class="app-wrapper" *ngIf="loopCount$ | async as loopCount">
-    <h2
-      *ngIf="(loopWaiting$ | async) !== true"
-      class="app-title"
-      aria-live="polite"
-    >
-      {{ ("Measurement" | translate) + " " + loopCount }}
-    </h2>
-    <h2
-      *ngIf="(loopWaiting$ | async) === true"
-      class="app-title"
-      aria-live="polite"
-    >
-      {{
-        "Result of measurement %0 - waiting" | translate | sprintf : loopCount
-      }}
-    </h2>
-  </div>
-</ng-container>
+<ng-container *ngTemplateOutlet="loopHeader"></ng-container>
 <div class="app-wrapper">
+  @if (disableGraphics()) {
+  <div style="margin-bottom: 40px">
+    <app-iframe-test
+      [showFooter]="false"
+      [isWaitingForNextTest]="loopWaiting()"
+      [waitingProgress]="progress()"
+      [waitingProgressMs]="progressMs()"
+    >
+    </app-iframe-test>
+  </div>
+  } @else {
   <div class="app-main">
     <div class="app-progress-bar-wrapper">
       <app-gauge
-        *ngIf="(loopWaiting$ | async) !== true; else loopWaitProgressBar"
+        *ngIf="loopWaiting() !== true; else loopWaitProgressBar"
       ></app-gauge>
     </div>
     <app-spacer></app-spacer>
     <app-interim-results></app-interim-results>
   </div>
+  }
 </div>
 <div
   class="app-wrapper"
@@ -64,7 +57,7 @@
 
 <ng-template #loopWaitProgressBar>
   <div
-    *ngIf="progressMode$ | async as progressMode"
+    *ngIf="progressMode() as progressMode"
     style="
       display: flex;
       flex-direction: column;
@@ -79,15 +72,30 @@
           {{
             ("Next measurement in" | translate) +
               " " +
-              (ms$ | async | date : "mm:ss")
+              (progressMs() | date : "mm:ss")
           }}
         </h4>
       </ng-container>
       <mat-progress-bar
         class="app-progress-bar--loop"
         [mode]="progressMode"
-        [value]="progress$ | async"
+        [value]="progress()"
       ></mat-progress-bar>
     </div>
   </div>
+</ng-template>
+
+<ng-template #loopHeader>
+  <ng-container *ngIf="(isLoopModeEnabled$ | async) === true">
+    <div class="app-wrapper" *ngIf="loopCount$ | async as loopCount">
+      <h2 *ngIf="loopWaiting() !== true" class="app-title" aria-live="polite">
+        {{ ("Measurement" | translate) + " " + loopCount }}
+      </h2>
+      <h2 *ngIf="loopWaiting() === true" class="app-title" aria-live="polite">
+        {{
+          "Result of measurement %0 - waiting" | translate | sprintf : loopCount
+        }}
+      </h2>
+    </div>
+  </ng-container>
 </ng-template>
