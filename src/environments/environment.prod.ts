@@ -14,6 +14,7 @@ export const environment = {
   certifiedDefaults: {
     max_delay: 15,
     max_tests: 8,
+    max_speed_firefox_mbps: 900,
     exclude_from_result: ["networkType"],
     disable_graphics: true,
   },

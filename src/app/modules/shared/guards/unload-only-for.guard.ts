@@ -9,6 +9,7 @@ import { TestService } from "../../test/services/test.service"
 import { TestStore } from "../../test/store/test.store"
 import { EMeasurementStatus } from "../../test/constants/measurement-status.enum"
 import { CertifiedStoreService } from "../../certified/store/certified-store.service"
+import { LoopStoreService } from "../../loop/store/loop-store.service"
 
 export const unloadOnlyFor: (
   allowedPaths: ERoutes[]
@@ -19,13 +20,15 @@ export const unloadOnlyFor: (
     const testStore = inject(TestStore)
     const testService = inject(TestService)
     const certifiedStore = inject(CertifiedStoreService)
+    const loopStore = inject(LoopStoreService)
     if (
       !nextState.url ||
       allowedPaths.some((path) => nextState.url.includes(path)) ||
       (testStore.visualization$.value.currentPhaseName ===
         EMeasurementStatus.ERROR &&
         !testService.isLoopModeEnabled) ||
-      certifiedStore.testStartDisabled()
+      certifiedStore.testStartDisabled() ||
+      loopStore.maxTestsReached()
     ) {
       return true
     }

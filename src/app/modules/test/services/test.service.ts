@@ -98,7 +98,7 @@ export class TestService {
     this.loopStore.lastTestStartedAt.set(Date.now())
   }
 
-  private stopUpdates() {
+  stopUpdates() {
     this.worker?.terminate()
     this.worker = undefined
     clearInterval(this.waitingTimer)
