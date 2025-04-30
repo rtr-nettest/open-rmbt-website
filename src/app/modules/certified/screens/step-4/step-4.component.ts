@@ -47,12 +47,9 @@ export class Step4Component extends LoopScreenComponent {
 
   override goToResult = (s: ITestVisualizationState) => {
     const { down, up } = s.phases[s.currentPhaseName]
+    const { max_speed_firefox_mbps: max } = environment.certifiedDefaults
     const isFirefox = navigator.userAgent.toLowerCase().includes("firefox")
-    if (
-      isFirefox &&
-      (down >= environment.certifiedDefaults.max_speed_firefox_mbps ||
-        up >= environment.certifiedDefaults.max_speed_firefox_mbps)
-    ) {
+    if (isFirefox && max > 0 && (down >= max || up >= max)) {
       this.loopStore.maxTestsReached.set(true)
       this.testService.stopUpdates()
       this.abortTest({
