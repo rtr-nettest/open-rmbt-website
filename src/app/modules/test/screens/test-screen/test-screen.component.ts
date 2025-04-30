@@ -81,7 +81,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   addMedian = false
   disableGraphics = computed(
     () =>
-      // this.loopStore.isCertifiedMeasurement() &&
+      this.loopStore.isCertifiedMeasurement() &&
       environment.certifiedDefaults.disable_graphics
   )
   historyService = inject(HistoryService)
