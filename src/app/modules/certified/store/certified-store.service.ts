@@ -11,7 +11,7 @@ import { DATA_FORM, ENV_FORM } from "../constants/strings"
   providedIn: "root",
 })
 export class CertifiedStoreService {
-  activeBreadcrumbIndex = signal(0)
+  activeBreadcrumbIndex = signal<number | null>(null)
   breadcrumbs = computed<IBreadcrumb[]>(() => {
     return [
       {
@@ -32,7 +32,7 @@ export class CertifiedStoreService {
       {
         index: ECertifiedSteps.MEASUREMENT,
         label: "Measurement",
-        route: `/${this.i18nStore.activeLang}/${ERoutes.TEST}`,
+        route: `/${this.i18nStore.activeLang}/${ERoutes.CERTIFIED_4}`,
       },
       {
         index: ECertifiedSteps.RESULT,
@@ -43,7 +43,7 @@ export class CertifiedStoreService {
       .map((link, index) => ({
         ...link,
         active: index === this.activeBreadcrumbIndex(),
-        visited: index < this.activeBreadcrumbIndex(),
+        visited: index < (this.activeBreadcrumbIndex() ?? 0),
       }))
       .sort((a, b) => a.index - b.index)
   })
@@ -56,14 +56,16 @@ export class CertifiedStoreService {
     return (
       this.activeBreadcrumbIndex() === ECertifiedSteps.INFO ||
       (!this.isReady() &&
-        this.activeBreadcrumbIndex() < ECertifiedSteps.ENVIRONMENT)
+        this.activeBreadcrumbIndex() != null &&
+        this.activeBreadcrumbIndex()! < ECertifiedSteps.ENVIRONMENT)
     )
   })
   testStartAvailable = computed(() => {
     return (
       (this.isReady() &&
+        this.activeBreadcrumbIndex() != null &&
         this.activeBreadcrumbIndex() != ECertifiedSteps.INFO &&
-        this.activeBreadcrumbIndex() < ECertifiedSteps.MEASUREMENT) ||
+        this.activeBreadcrumbIndex()! < ECertifiedSteps.MEASUREMENT) ||
       this.activeBreadcrumbIndex() == ECertifiedSteps.ENVIRONMENT
     )
   })

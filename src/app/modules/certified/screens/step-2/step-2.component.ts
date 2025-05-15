@@ -27,7 +27,6 @@ import { map, takeUntil } from "rxjs"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input"
 import { MatRadioModule } from "@angular/material/radio"
-import { LoopService } from "../../../loop/services/loop.service"
 import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
 import { NgIf } from "@angular/common"
 
@@ -76,6 +75,10 @@ export class Step2Component extends SeoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.store.activeBreadcrumbIndex() == null) {
+      this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_1])
+      return
+    }
     this.store.activeBreadcrumbIndex.set(ECertifiedSteps.DATA)
     const savedForm = this.store.dataForm()
     this.form = this.fb.group({

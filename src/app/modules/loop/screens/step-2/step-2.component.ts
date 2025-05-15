@@ -21,11 +21,11 @@ import { Title } from "@angular/platform-browser"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { LoopStoreService } from "../../store/loop-store.service"
 import { Router } from "@angular/router"
-import { LoopService } from "../../services/loop.service"
 import { ILoopDataFormControls } from "../../interfaces/loop-data-form-controls.interface"
 import { ECertifiedSteps } from "../../../certified/constants/certified-steps.enum"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { environment } from "../../../../../environments/environment"
+import { CertifiedStoreService } from "../../../certified/store/certified-store.service"
 
 @Component({
   selector: "app-step-2",
@@ -57,6 +57,7 @@ export class Step2Component extends SeoComponent implements OnInit {
   constructor(
     ts: Title,
     i18nStore: I18nStore,
+    private readonly certifiedStore: CertifiedStoreService,
     private readonly fb: FormBuilder,
     private readonly router: Router,
     private readonly store: LoopStoreService
@@ -65,6 +66,13 @@ export class Step2Component extends SeoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (
+      this.store.activeBreadcrumbIndex() == null &&
+      this.certifiedStore.activeBreadcrumbIndex() == null
+    ) {
+      this.router.navigate([this.i18nStore.activeLang, ERoutes.LOOP_1])
+      return
+    }
     this.store.activeBreadcrumbIndex.set(ECertifiedSteps.DATA)
     this.form = this.fb.group({
       maxTestsAllowed: new FormControl(this.store.maxTestsAllowed(), {

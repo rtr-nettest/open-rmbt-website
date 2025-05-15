@@ -10,7 +10,7 @@ import { ELoopSteps } from "../constants/certified-steps.enum"
 })
 export class LoopStoreService {
   i18nStore = inject(I18nStore)
-  activeBreadcrumbIndex = signal(0)
+  activeBreadcrumbIndex = signal<number | null>(null)
   breadcrumbs = computed<IBreadcrumb[]>(() => {
     return [
       {
@@ -37,7 +37,7 @@ export class LoopStoreService {
       .map((link, index) => ({
         ...link,
         active: index === this.activeBreadcrumbIndex(),
-        visited: index < this.activeBreadcrumbIndex(),
+        visited: index < (this.activeBreadcrumbIndex() ?? 0),
       }))
       .sort((a, b) => a.index - b.index)
   })

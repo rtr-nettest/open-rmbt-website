@@ -15,11 +15,13 @@ import { TOO_FAST_FOR_FIREFOX } from "../../../loop/constants/strings"
   styleUrl: "../../../test/screens/test-screen/test-screen.component.scss",
 })
 export class Step4Component extends LoopScreenComponent {
-  private readonly certifiedStore = inject(CertifiedStoreService)
-
   override currentRoute: string | null = ERoutes.CERTIFIED_1
 
   override initVisualization(): void {
+    if (this.certifiedStore.activeBreadcrumbIndex() == null) {
+      this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_1])
+      return
+    }
     if (this.certifiedStore.testStartDisabled()) {
       this.testStartDisabled.set(true)
     } else {

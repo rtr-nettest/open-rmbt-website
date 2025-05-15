@@ -88,6 +88,10 @@ export class Step3Component extends SeoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.store.activeBreadcrumbIndex() == null) {
+      this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_1])
+      return
+    }
     if (!this.store.dataForm()) {
       this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_2])
     } else {

@@ -19,6 +19,7 @@ import { LoopService } from "../../services/loop.service"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { environment } from "../../../../../environments/environment"
 import { toObservable } from "@angular/core/rxjs-interop"
+import { CertifiedStoreService } from "../../../certified/store/certified-store.service"
 
 @Component({
   selector: "app-step-3",
@@ -36,6 +37,7 @@ export class Step3Component extends TestScreenComponent {
   protected waitingProgressMs = 0
   protected shouldGetHistory$ = new BehaviorSubject<boolean>(false)
   protected currentTestUuid$ = new BehaviorSubject<string | null>(null)
+  protected readonly certifiedStore = inject(CertifiedStoreService)
   lastTestFinishedAt$ = toObservable(this.loopStore.lastTestFinishedAt)
   finishedTests = 0
   testsFinishedWhileActive = 0
@@ -53,6 +55,13 @@ export class Step3Component extends TestScreenComponent {
   }
 
   override initVisualization(): void {
+    if (
+      this.loopStore.activeBreadcrumbIndex() == null &&
+      this.certifiedStore.activeBreadcrumbIndex() == null
+    ) {
+      this.router.navigate([this.i18nStore.activeLang, ERoutes.LOOP_1])
+      return
+    }
     document.addEventListener("visibilitychange", this.tabActivityListener)
     this.visualization$ = this.store.visualization$.pipe(
       withLatestFrom(this.mainStore.error$, this.loopCount$),

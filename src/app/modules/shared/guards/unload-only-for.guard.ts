@@ -24,10 +24,17 @@ export const unloadOnlyFor: (
     if (
       !nextState.url ||
       allowedPaths.some((path) => nextState.url.includes(path)) ||
+      // Don't show dialog when there's an error
       (testStore.visualization$.value.currentPhaseName ===
         EMeasurementStatus.ERROR &&
         !testService.isLoopModeEnabled) ||
-      certifiedStore.testStartDisabled() ||
+      // Don't show dialog when it is a certified measurement and a tab is accessed out of order
+      (loopStore.isCertifiedMeasurement() &&
+        certifiedStore.testStartDisabled()) ||
+      // Don't show dialog when it is a certified or loop measurement and a tab is accessed out of order
+      (loopStore.activeBreadcrumbIndex() == null &&
+        certifiedStore.activeBreadcrumbIndex() == null) ||
+      // Don't show dialog when it is a loop measurement and the test is finished
       loopStore.maxTestsReached()
     ) {
       return true
