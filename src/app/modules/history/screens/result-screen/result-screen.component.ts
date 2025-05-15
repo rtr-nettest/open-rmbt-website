@@ -194,6 +194,10 @@ export class ResultScreenComponent extends SeoComponent {
               .get("test_uuid")
               ?.replace("T", "") ?? null,
         } as ITestResultRequest
+        if (!params.openTestUuid && !params.testUuid) {
+          // No test uuid or open test uuid, return null
+          return of(null)
+        }
         if (!this.canStartTest) {
           // We're on the open details result page
           if (params.testUuid) {
