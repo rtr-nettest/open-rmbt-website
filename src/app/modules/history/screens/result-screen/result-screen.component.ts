@@ -54,10 +54,8 @@ import {
 } from "../../interfaces/measurement-result.interface"
 import { HistoryService } from "../../services/history.service"
 import { ActionButtonsComponent } from "../../components/action-buttons/action-buttons.component"
-import { TestService } from "../../../test/services/test.service"
 import { MIN_ACCURACY_FOR_SHOWING_MAP } from "../../../opendata/constants/recent-measurements-columns"
 import { QoeBarComponent } from "../../components/qoe-bar/qoe-bar.component"
-import { NUMBERS_LOCALE } from "../../../shared/constants/strings"
 
 @Component({
   selector: "app-result-screen",
@@ -232,7 +230,9 @@ export class ResultScreenComponent extends SeoComponent {
 
   getSpeedInMbps(speed: number) {
     return (
-      roundToSignificantDigits(speed / 1e3).toLocaleString(NUMBERS_LOCALE) +
+      roundToSignificantDigits(speed / 1e3).toLocaleString(
+        this.i18nStore.activeLang
+      ) +
       " " +
       this.i18nStore.translate("Mbps")
     )
@@ -240,7 +240,7 @@ export class ResultScreenComponent extends SeoComponent {
 
   getPingInMs(ping: number) {
     return (
-      roundToSignificantDigits(ping).toLocaleString(NUMBERS_LOCALE) +
+      roundToSignificantDigits(ping).toLocaleString(this.i18nStore.activeLang) +
       " " +
       this.i18nStore.translate("millis")
     )
@@ -395,7 +395,11 @@ export class ResultScreenComponent extends SeoComponent {
   private formatSearchableItem(openTestResponse: any, key: string, value: any) {
     const searchable = SEARCHED_FIELDS[key] !== undefined
     let v = FORMATTED_FIELDS[key]
-      ? FORMATTED_FIELDS[key](openTestResponse, this.i18nStore.translations)
+      ? FORMATTED_FIELDS[key](
+          openTestResponse,
+          this.i18nStore.translations,
+          this.i18nStore.activeLang
+        )
       : value
     if (!searchable) {
       return {

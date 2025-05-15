@@ -31,7 +31,6 @@ import { DynamicComponentDirective } from "../../../shared/directives/dynamic-co
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { APP_DATE_TIME_FORMAT } from "../../../shared/adapters/app-date.adapter"
-import { NUMBERS_LOCALE } from "../../../shared/constants/strings"
 
 @Component({
   selector: "app-table",
@@ -115,7 +114,7 @@ export class TableComponent implements OnInit, OnChanges {
     if (column.transformValue) {
       const transformed = column.transformValue(element, column, i)
       if (typeof transformed === "number") {
-        return transformed.toLocaleString(NUMBERS_LOCALE)
+        return transformed.toLocaleString(this.i18nStore.activeLang)
       }
       return transformed
     }
@@ -127,7 +126,7 @@ export class TableComponent implements OnInit, OnChanges {
   toString(value: any, column: ITableColumn): string {
     const date = Date.parse(value)
     if (typeof value === "number") {
-      return value.toLocaleString(NUMBERS_LOCALE)
+      return value.toLocaleString(this.i18nStore.activeLang)
     } else if (!isNaN(date) && column.isDate) {
       return dayjs(date).format(APP_DATE_TIME_FORMAT)
     }

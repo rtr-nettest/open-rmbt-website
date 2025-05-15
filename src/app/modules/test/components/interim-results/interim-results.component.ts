@@ -13,7 +13,6 @@ import { ITestVisualizationState } from "../../interfaces/test-visualization-sta
 import { roundToSignificantDigits } from "../../../shared/util/math"
 import { LoopStoreService } from "../../../loop/store/loop-store.service"
 import { toObservable } from "@angular/core/rxjs-interop"
-import { NUMBERS_LOCALE } from "../../../shared/constants/strings"
 
 @Component({
   selector: "app-interim-results",
@@ -60,7 +59,7 @@ export class InterimResultsComponent {
         this.ping =
           ping < 0
             ? "-"
-            : ping.toLocaleString(NUMBERS_LOCALE) +
+            : ping.toLocaleString(this.i18nStore.activeLang) +
               " " +
               this.i18nStore.translate("millis")
         const download = roundToSignificantDigits(
@@ -69,7 +68,7 @@ export class InterimResultsComponent {
         this.download =
           download < 0
             ? "-"
-            : download.toLocaleString(NUMBERS_LOCALE) +
+            : download.toLocaleString(this.i18nStore.activeLang) +
               " " +
               this.i18nStore.translate("Mbps")
         const upload = roundToSignificantDigits(
@@ -78,7 +77,7 @@ export class InterimResultsComponent {
         this.upload =
           upload < 0
             ? "-"
-            : upload.toLocaleString(NUMBERS_LOCALE) +
+            : upload.toLocaleString(this.i18nStore.activeLang) +
               " " +
               this.i18nStore.translate("Mbps")
       })

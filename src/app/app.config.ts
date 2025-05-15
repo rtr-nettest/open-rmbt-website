@@ -31,6 +31,7 @@ import {
 import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm"
 import { errorInterceptor } from "./modules/shared/interceptors/error.interceptor"
 import { LonlatPipe } from "./modules/shared/pipes/lonlat.pipe"
+import { patchToLocaleString } from "./modules/shared/util/number"
 
 Chart.register(
   BarElement,
@@ -43,6 +44,8 @@ Chart.register(
   TimeScale,
   Filler
 )
+
+patchToLocaleString()
 
 export async function provideConfig(): Promise<ApplicationConfig> {
   ;[localeCs, localeDe, localeEs, localeFr, localeIt].forEach((locale) =>

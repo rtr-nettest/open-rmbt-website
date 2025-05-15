@@ -1,4 +1,4 @@
-import { NUMBERS_LOCALE } from "../constants/strings"
+import { NUMBER_LOCALES } from "../constants/strings"
 
 export function roundMs(value: number) {
   const resultNum = Math.round(value)
@@ -23,11 +23,15 @@ export function roundToSignificantDigits(number: number) {
   return Math.round(number * rounder) / rounder
 }
 
-export function formatNumber(number: number, digits: number) {
-  return new Intl.NumberFormat(NUMBERS_LOCALE, {
+export function formatNumber(number: number, digits: number, locale: string) {
+  const newDigit = new Intl.NumberFormat(NUMBER_LOCALES[locale], {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   }).format(number)
+  if (locale.includes("en")) {
+    return newDigit.replace(/’/g, " ")
+  }
+  return newDigit
 }
 
 export function speedLog(speedMbps?: number) {
@@ -40,7 +44,7 @@ export function speedLog(speedMbps?: number) {
   return yPercent
 }
 
-export function formatBytes(bytes: any, t: any) {
+export function formatBytes(bytes: any, t: any, locale: string) {
   if (bytes === null) return ""
   var unit = t["bytes"]
   if (bytes > 1000) {
@@ -51,7 +55,9 @@ export function formatBytes(bytes: any, t: any) {
     bytes = bytes / 1000
     unit = t["MB"]
   }
-  return roundToSignificantDigits(bytes) + "&nbsp;" + unit
+  return (
+    roundToSignificantDigits(bytes).toLocaleString(locale) + "&nbsp;" + unit
+  )
 }
 
 export function median(arr: number[]) {

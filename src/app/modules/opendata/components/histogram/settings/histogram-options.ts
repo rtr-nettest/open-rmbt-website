@@ -50,13 +50,13 @@ export class HistogramOptions {
           if (v >= 1000000) {
             if (v >= 10000000) {
               return (
-                formatNumber(v / 1000000, 0) +
+                formatNumber(v / 1000000, 0, this.t.activeLang) +
                 " " +
                 this.t.translate("Mio_abbr")
               )
             } else {
               return (
-                formatNumber(v / 1000000, 1) +
+                formatNumber(v / 1000000, 1, this.t.activeLang) +
                 " " +
                 this.t.translate("Mio_abbr")
               )
@@ -64,11 +64,15 @@ export class HistogramOptions {
           } else if (v > 1000) {
             if (v >= 10000) {
               return (
-                formatNumber(v / 1000, 0) + " " + this.t.translate("Thou_abbr")
+                formatNumber(v / 1000, 0, this.t.activeLang) +
+                " " +
+                this.t.translate("Thou_abbr")
               )
             } else {
               return (
-                formatNumber(v / 1000, 1) + " " + this.t.translate("Thou_abbr")
+                formatNumber(v / 1000, 1, this.t.activeLang) +
+                " " +
+                this.t.translate("Thou_abbr")
               )
             }
           }

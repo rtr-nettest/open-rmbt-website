@@ -8,60 +8,72 @@ import { formatBytes, roundToSignificantDigits } from "../../shared/util/math"
 import { RESULT_DATE_FORMAT } from "../../test/constants/strings"
 
 export const FORMATTED_FIELDS: {
-  [key: string]: null | ((testData: any, translations?: Translation) => string)
+  [key: string]:
+    | null
+    | ((testData: any, translations?: Translation, locale?: string) => string)
 } = {
   test_duration: (testData: any) => `${testData.test_duration} s`,
 
   // Download
-  bytes_download: (testData: any, t: any) =>
-    formatBytes(testData.bytes_download, t),
-  test_if_bytes_download: (testData: any, t: any) =>
-    formatBytes(testData.test_if_bytes_download, t),
-  testdl_if_bytes_download: (testData: any, t: any) =>
-    formatBytes(testData.testdl_if_bytes_download, t),
-  testdl_if_bytes_upload: (testData: any, t: any) =>
-    formatBytes(testData.testdl_if_bytes_upload, t),
-  ndt_download_kbit: (testData: any, t: any) =>
-    `${roundToSignificantDigits(testData.ndt_download_kbit / 1e3)} ${
-      t["MB"] || "MB"
-    }`,
-  download_kbit: (testData: any, t: any) =>
-    `${roundToSignificantDigits(testData.download_kbit / 1e3)} ${
-      t["Mbps"] || "Mbps"
-    }`,
+  bytes_download: (testData: any, t: any, locale?: string) =>
+    formatBytes(testData.bytes_download, t, locale!),
+  test_if_bytes_download: (testData: any, t: any, locale?: string) =>
+    formatBytes(testData.test_if_bytes_download, t, locale!),
+  testdl_if_bytes_download: (testData: any, t: any, locale?: string) =>
+    formatBytes(testData.testdl_if_bytes_download, t, locale!),
+  testdl_if_bytes_upload: (testData: any, t: any, locale?: string) =>
+    formatBytes(testData.testdl_if_bytes_upload, t, locale!),
+  ndt_download_kbit: (testData: any, t: any, locale?: string) =>
+    `${roundToSignificantDigits(
+      testData.ndt_download_kbit / 1e3
+    ).toLocaleString(locale!)} ${t["MB"] || "MB"}`,
+  download_kbit: (testData: any, t: any, locale?: string) =>
+    `${roundToSignificantDigits(testData.download_kbit / 1e3).toLocaleString(
+      locale!
+    )} ${t["Mbps"] || "Mbps"}`,
 
   // Upload
-  bytes_upload: (testData: any, t: any) =>
-    formatBytes(testData.bytes_upload, t),
-  test_if_bytes_upload: (testData: any, t: any) =>
-    formatBytes(testData.test_if_bytes_upload, t),
-  testul_if_bytes_download: (testData: any, t: any) =>
-    formatBytes(testData.testul_if_bytes_download, t),
-  testul_if_bytes_upload: (testData: any, t: any) =>
-    formatBytes(testData.testul_if_bytes_upload, t),
-  ndt_upload_kbit: (testData: any, t: any) =>
-    `${roundToSignificantDigits(testData.ndt_upload_kbit / 1e3)} ${
-      t["MB"] || "MB"
-    }`,
-  upload_kbit: (testData: any, t: any) =>
-    `${roundToSignificantDigits(testData.upload_kbit / 1e3)} ${
-      t["Mbps"] || "Mbps"
-    }`,
+  bytes_upload: (testData: any, t: any, locale?: string) =>
+    formatBytes(testData.bytes_upload, t, locale!),
+  test_if_bytes_upload: (testData: any, t: any, locale?: string) =>
+    formatBytes(testData.test_if_bytes_upload, t, locale!),
+  testul_if_bytes_download: (testData: any, t: any, locale?: string) =>
+    formatBytes(testData.testul_if_bytes_download, t, locale!),
+  testul_if_bytes_upload: (testData: any, t: any, locale?: string) =>
+    formatBytes(testData.testul_if_bytes_upload, t, locale!),
+  ndt_upload_kbit: (testData: any, t: any, locale?: string) =>
+    `${roundToSignificantDigits(testData.ndt_upload_kbit / 1e3).toLocaleString(
+      locale!
+    )} ${t["MB"] || "MB"}`,
+  upload_kbit: (testData: any, t: any, locale?: string) =>
+    `${roundToSignificantDigits(testData.upload_kbit / 1e3).toLocaleString(
+      locale!
+    )} ${t["Mbps"] || "Mbps"}`,
 
   wifi_link_speed: (testData: any, t: any) =>
     `${testData.wifi_link_speed} ${t["Mbps"] || "Mbps"}`,
 
-  ping_ms: (testData: any, t: any) =>
-    `${roundToSignificantDigits(testData.ping_ms)} ${t["millis"] || "millis"}`,
-  time_dl_ms: (testData: any, t: any) =>
-    `${Math.round(testData.time_dl_ms)} ${t["millis"] || "millis"}`,
-  time_ul_ms: (testData: any, t: any) =>
-    `${Math.round(testData.time_ul_ms)} ${t["millis"] || "millis"}`,
+  ping_ms: (testData: any, t: any, locale?: string) =>
+    `${roundToSignificantDigits(testData.ping_ms).toLocaleString(locale!)} ${
+      t["millis"] || "millis"
+    }`,
+  time_dl_ms: (testData: any, t: any, locale?: string) =>
+    `${Math.round(testData.time_dl_ms).toLocaleString(locale!)} ${
+      t["millis"] || "millis"
+    }`,
+  time_ul_ms: (testData: any, t: any, locale?: string) =>
+    `${Math.round(testData.time_ul_ms).toLocaleString(locale!)} ${
+      t["millis"] || "millis"
+    }`,
 
-  duration_download_ms: (testData: any) =>
-    `${Math.round(testData.duration_download_ms / 100) / 10} s`,
-  duration_upload_ms: (testData: any) =>
-    `${Math.round(testData.duration_upload_ms / 100) / 10} s`,
+  duration_download_ms: (testData: any, t: any, locale?: string) =>
+    `${(Math.round(testData.duration_download_ms / 100) / 10).toLocaleString(
+      locale!
+    )} s`,
+  duration_upload_ms: (testData: any, t: any, locale?: string) =>
+    `${(Math.round(testData.duration_upload_ms / 100) / 10).toLocaleString(
+      locale!
+    )} s`,
 
   ip_anonym: (testData: any) => {
     var ip = testData?.ip_anonym ?? ""
