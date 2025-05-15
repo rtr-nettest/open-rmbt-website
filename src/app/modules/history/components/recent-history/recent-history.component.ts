@@ -140,9 +140,16 @@ export class RecentHistoryComponent implements OnChanges {
   handleRowClick = (row: IHistoryRow) => {
     if (!row.id?.startsWith("L")) {
       // navigation to one of the loop results
-      this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
-        queryParams: { test_uuid: row.id },
-      })
+      if (this.interruptsTests()) {
+        window.open(
+          `${window.location.origin}/${this.i18nStore.activeLang}/${ERoutes.RESULT}?test_uuid=${row.id}`,
+          "_blank"
+        )
+      } else {
+        this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
+          queryParams: { test_uuid: row.id },
+        })
+      }
       return
     }
     this.toggleLoopResults(row.id)
