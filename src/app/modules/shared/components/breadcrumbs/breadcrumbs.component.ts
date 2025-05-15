@@ -1,4 +1,4 @@
-import { Component } from "@angular/core"
+import { Component, input } from "@angular/core"
 import {
   ActivatedRoute,
   Route,
@@ -14,12 +14,13 @@ import { ERoutes } from "../../constants/routes.enum"
 import { routes } from "../../../../app.routes"
 
 @Component({
-    selector: "app-breadcrumbs",
-    imports: [AsyncPipe, RouterModule],
-    templateUrl: "./breadcrumbs.component.html",
-    styleUrl: "./breadcrumbs.component.scss"
+  selector: "app-breadcrumbs",
+  imports: [AsyncPipe, RouterModule],
+  templateUrl: "./breadcrumbs.component.html",
+  styleUrl: "./breadcrumbs.component.scss",
 })
 export class BreadcrumbsComponent {
+  currentRoute = input<string | null>()
   breadcrumbs$!: Observable<ILink[]>
 
   constructor(
@@ -47,7 +48,9 @@ export class BreadcrumbsComponent {
               if (route) {
                 return {
                   label: t[route.data?.["title"]] || route.data?.["title"],
-                  route: `/${this.i18nStore.activeLang}/${s.path}`,
+                  route: `/${this.i18nStore.activeLang}/${
+                    this.currentRoute() ?? s.path
+                  }`,
                 }
               }
               return null

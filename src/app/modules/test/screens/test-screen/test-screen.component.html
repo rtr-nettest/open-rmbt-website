@@ -1,6 +1,6 @@
 <app-header></app-header>
 <app-top-nav></app-top-nav>
-<app-breadcrumbs></app-breadcrumbs>
+<app-breadcrumbs [currentRoute]="currentRoute"></app-breadcrumbs>
 @defer { @if(visualization$ | async; as visualization) {
 <ng-container *ngTemplateOutlet="loopHeader"></ng-container>
 <div class="app-wrapper">

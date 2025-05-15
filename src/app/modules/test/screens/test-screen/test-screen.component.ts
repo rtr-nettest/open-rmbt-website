@@ -79,6 +79,7 @@ export const imports = [
 })
 export class TestScreenComponent extends SeoComponent implements OnInit {
   addMedian = false
+  currentRoute: string | null = null
   disableGraphics = computed(
     () =>
       this.loopStore.isCertifiedMeasurement() &&

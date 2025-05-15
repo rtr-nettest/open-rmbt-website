@@ -17,6 +17,8 @@ import { TOO_FAST_FOR_FIREFOX } from "../../../loop/constants/strings"
 export class Step4Component extends LoopScreenComponent {
   private readonly certifiedStore = inject(CertifiedStoreService)
 
+  override currentRoute: string | null = ERoutes.CERTIFIED_1
+
   override initVisualization(): void {
     if (this.certifiedStore.testStartDisabled()) {
       this.testStartDisabled.set(true)

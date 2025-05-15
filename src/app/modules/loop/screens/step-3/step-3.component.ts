@@ -29,6 +29,7 @@ import { toObservable } from "@angular/core/rxjs-interop"
 })
 export class Step3Component extends TestScreenComponent {
   override addMedian = true
+  override currentRoute: string | null = ERoutes.LOOP_1
   override excludeColumns =
     environment.loopModeDefaults.exclude_from_result ?? []
   protected readonly loopService = inject(LoopService)
