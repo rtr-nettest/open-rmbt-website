@@ -7,7 +7,7 @@ export function truncate(text: string, max: number) {
   if (lastSpace > -1) {
     retVal = retVal.slice(0, lastSpace)
   }
-  return retVal + "&hellip;"
+  return retVal + "…"
 }
 
 export function pad(number: number, length: number) {
