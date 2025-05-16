@@ -31,6 +31,8 @@ declare global {
   }
 }
 
+export const PING_INTERVAL_MILLISECONDS = 1000
+
 @Injectable({
   providedIn: "root",
 })
@@ -115,6 +117,7 @@ export class TestService {
     const config: { [key: string]: any } = {}
     config["uuid"] = localStorage.getItem(UUID)
     config["timezone"] = dayjs.tz.guess()
+    config["doPingIntervalMilliseconds"] = PING_INTERVAL_MILLISECONDS
     config["additionalRegistrationParameters"] = {}
 
     if (this.loopStore.isLoopModeEnabled()) {
