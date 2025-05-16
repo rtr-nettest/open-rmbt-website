@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject } from "@angular/core"
+import { ChangeDetectorRef, Component, computed, inject } from "@angular/core"
 import { UUID } from "../../../test/constants/strings"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
@@ -54,6 +54,7 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
   cdr = inject(ChangeDetectorRef)
   dialog = inject(MatDialog)
   exporter = inject(HistoryExportService)
+  interruptsTests = computed(() => !this.shouldGroupHistory) // Loop history
   service = inject(HistoryService)
   store = inject(HistoryStore)
   excludeColumns: string[] = ["networkType"]

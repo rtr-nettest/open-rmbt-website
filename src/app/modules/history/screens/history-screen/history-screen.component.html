@@ -33,6 +33,7 @@
     [excludeColumns]="excludeColumns"
     [grouped]="shouldGroupHistory"
     (sortChange)="changeSort($event)"
+    [interruptsTests]="interruptsTests()"
   ></app-recent-history>
   } @else if (loading()) {
   <h3>{{ "Loading results" | translate }}</h3>
