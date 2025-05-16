@@ -32,9 +32,6 @@ export class LoopService {
         tap(() => {
           const newCounter = this.loopStore.loopCounter() + 1
           this.loopStore.loopCounter.set(newCounter)
-          if (newCounter >= this.loopStore.maxTestsAllowed()) {
-            this.loopStore.maxTestsReached.set(true)
-          }
         })
       )
       .subscribe()

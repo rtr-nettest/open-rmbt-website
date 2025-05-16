@@ -77,11 +77,14 @@ export class Step2Component extends SeoComponent implements OnInit {
     this.form = this.fb.group({
       maxTestsAllowed: new FormControl(this.store.maxTestsAllowed(), {
         nonNullable: true,
-        validators: Validators.required,
+        validators: [Validators.required, Validators.min(this.minTestsAllowed)],
       }),
       testIntervalMinutes: new FormControl(this.store.testIntervalMinutes(), {
         nonNullable: true,
-        validators: Validators.required,
+        validators: [
+          Validators.required,
+          Validators.min(this.minTestIntervalMinutes),
+        ],
       }),
     })
   }

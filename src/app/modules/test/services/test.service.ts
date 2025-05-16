@@ -172,6 +172,12 @@ export class TestService {
       phaseState.phase === EMeasurementStatus.ABORTED
     if (newPhaseIsOfFinishType && phaseState.phase !== oldPhaseName) {
       this.loopStore.lastTestFinishedAt.set(Date.now())
+      if (
+        this.loopStore.loopCounter() + 1 >=
+        this.loopStore.maxTestsAllowed()
+      ) {
+        this.loopStore.maxTestsReached.set(true)
+      }
       this.stopUpdates()
       this.geoTrackerService.stopGeoTracking()
       if (phaseState.phase === EMeasurementStatus.ERROR) {
