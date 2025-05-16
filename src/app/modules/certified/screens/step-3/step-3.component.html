@@ -126,9 +126,10 @@
     mat-flat-button
     class="app-button"
     (click)="onTestStart()"
-    [disabled]="!form?.valid"
+    [disabled]="disabled()"
   >
     {{ "Start certified measurement" | translate }}
   </button>
   }
 </div>
+<app-footer></app-footer>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core"
+import { Component, OnInit, signal } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import {
   ECertifiedLocationType,
@@ -34,6 +34,7 @@ import { NgFor, NgIf } from "@angular/common"
 import { MatIconModule } from "@angular/material/icon"
 import { MatCheckboxModule } from "@angular/material/checkbox"
 import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
+import { FooterComponent } from "../../../shared/components/footer/footer.component"
 
 @Component({
   selector: "app-step-3",
@@ -51,6 +52,7 @@ import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certif
     ReactiveFormsModule,
     TopNavComponent,
     TranslatePipe,
+    FooterComponent,
   ],
   templateUrl: "./step-3.component.html",
   styleUrl: "./step-3.component.scss",
@@ -67,6 +69,7 @@ export class Step3Component extends SeoComponent implements OnInit {
   ]
   fileIds = [v4()]
   files: { [key: string]: File } = {}
+  disabled = signal(false)
 
   get breadcrumbs() {
     return this.store.breadcrumbs
@@ -111,10 +114,7 @@ export class Step3Component extends SeoComponent implements OnInit {
             })
         )
       ),
-      locationTypeOther: new FormControl(
-        savedForm?.locationTypeOther || "",
-        Validators.required
-      ),
+      locationTypeOther: new FormControl(savedForm?.locationTypeOther || ""),
       typeText: new FormControl(savedForm?.typeText || ""),
       testDevice: new FormControl(savedForm?.testDevice || ""),
     })
@@ -123,25 +123,27 @@ export class Step3Component extends SeoComponent implements OnInit {
       .pipe(
         map((f) => {
           if (!f.locationType?.some((lt) => !!lt)) {
-            this.form?.markAsPristine()
+            this.disabled.set(true)
             this.onFormChange(null)
             return
           }
-          if (this.form?.valid) {
-            const locationType =
-              f.locationType?.reduce(
-                (acc, lt, i) => (lt ? [...acc, this.locationValues[i]] : acc),
-                [] as ECertifiedLocationType[]
-              ) || []
-            const formValue: ICertifiedEnvForm = {
-              ...f,
-              testPictures: this.files,
-              locationType,
-            }
-            this.onFormChange(formValue)
-          } else {
+          if (f.locationType[4]) {
+            this.disabled.set(!f.locationTypeOther)
             this.onFormChange(null)
+            return
           }
+          this.disabled.set(false)
+          const locationType =
+            f.locationType?.reduce(
+              (acc, lt, i) => (lt ? [...acc, this.locationValues[i]] : acc),
+              [] as ECertifiedLocationType[]
+            ) || []
+          const formValue: ICertifiedEnvForm = {
+            ...f,
+            testPictures: this.files,
+            locationType,
+          }
+          this.onFormChange(formValue)
         }),
         takeUntil(this.destroyed$)
       )
