@@ -8,7 +8,7 @@ export const environment = {
     max_delay: 15,
     max_tests: 8,
     min_delay: 1,
-    min_tests: 2,
+    min_tests: 1,
     exclude_from_result: ["networkType"],
   },
   certifiedDefaults: {
