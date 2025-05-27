@@ -30,7 +30,7 @@ export const routes: Routes = [
   {
     path: ERoutes.HOME,
     pathMatch: "full",
-    redirectTo: "/en",
+    redirectTo: globalThis.navigator?.language.includes("de") ? "/de" : "/en",
   },
   {
     path: ":lang",
