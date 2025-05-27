@@ -50,6 +50,10 @@ export class BreadcrumbsComponent {
                   label: t[route.data?.["title"]] || route.data?.["title"],
                   route: `/${this.i18nStore.activeLang}/${
                     this.currentRoute() ?? s.path
+                  }${
+                    globalThis.location?.search
+                      ? globalThis.location.search
+                      : ""
                   }`,
                 }
               }
