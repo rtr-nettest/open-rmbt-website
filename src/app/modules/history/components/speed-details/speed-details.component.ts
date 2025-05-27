@@ -22,23 +22,25 @@ export class SpeedDetailsComponent extends ShowDetailsComponent<IOverallResult> 
       columnDef: "nsec",
       header: "Time",
       transformValue: (row) =>
-        `${roundMs(row.nsec / 1e9)} ${this.i18nStore.translate("s")}`,
+        `${roundMs(row.nsec / 1e9).toLocaleString(
+          this.i18nStore.activeLang
+        )} ${this.i18nStore.translate("s")}`,
       getNgClass: () => "app-cell--25",
     },
     {
       columnDef: "speed",
       header: "Speed",
       transformValue: (row) =>
-        `${roundToSignificantDigits(
-          row.speed / 1e6
+        `${roundToSignificantDigits(row.speed / 1e6).toLocaleString(
+          this.i18nStore.activeLang
         )} ${this.i18nStore.translate("Mbps")}`,
     },
     {
       columnDef: "bytes",
       header: "Data volume",
       transformValue: (row) =>
-        `${roundToSignificantDigits(
-          row.bytes / 1e6
+        `${roundToSignificantDigits(row.bytes / 1e6).toLocaleString(
+          this.i18nStore.activeLang
         )} ${this.i18nStore.translate("MB")}`,
     },
   ]
