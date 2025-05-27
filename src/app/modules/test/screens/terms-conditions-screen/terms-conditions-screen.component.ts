@@ -46,6 +46,6 @@ export class TermsConditionsScreenComponent
   }
 
   onCancel() {
-    this.router.navigate([this.i18nStore.activeLang, ERoutes.HOME])
+    this.router.navigate([this.i18nStore.activeLang])
   }
 }
