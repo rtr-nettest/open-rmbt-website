@@ -120,6 +120,11 @@ export class Step3Component extends TestScreenComponent {
   override abortTest(): void {
     this.stopped$.next()
     this.loopService.cancelLoop()
+    history.replaceState(
+      {},
+      "",
+      `/${this.i18nStore.activeLang}/${ERoutes.HOME}`
+    )
     this.router.navigate([this.i18nStore.activeLang, ERoutes.LOOP_RESULT])
   }
 

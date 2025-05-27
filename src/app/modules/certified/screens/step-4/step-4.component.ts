@@ -33,15 +33,26 @@ export class Step4Component extends LoopScreenComponent {
   override abortTest(options?: { showPopup: boolean }): void {
     this.stopped$.next()
     this.loopService.cancelLoop()
+    const weAreHome = () => {
+      history.replaceState(
+        {},
+        "",
+        `/${this.i18nStore.activeLang}/${ERoutes.HOME}`
+      )
+    }
     if (options?.showPopup) {
       this.message.openConfirmDialog(
         this.i18nStore.translate(TOO_FAST_FOR_FIREFOX),
-        () => this.router.navigate([this.i18nStore.activeLang]),
+        () => {
+          weAreHome()
+          this.router.navigate([this.i18nStore.activeLang])
+        },
         {
           canCancel: false,
         }
       )
     } else {
+      weAreHome()
       this.router.navigate([
         this.i18nStore.activeLang,
         ERoutes.CERTIFIED_RESULT,
