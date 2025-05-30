@@ -48,11 +48,14 @@
         matInput
         formControlName="locationTypeOther"
         name="locationTypeOther"
+        [required]="
+          form.controls.locationType.controls[locationValues.length - 1].value
+        "
       ></textarea>
       <mat-error
         *ngIf="
-          form.controls.locationType.controls[locationValues.length - 1].value &&
-          form.controls.locationTypeOther.errors?.['required']
+          form.controls.locationType.controls[locationValues.length - 1]
+            .value && !form.controls.locationTypeOther.value
         "
         >{{ "Location is required" | translate }}</mat-error
       >
