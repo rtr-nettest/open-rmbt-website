@@ -127,7 +127,7 @@ export class Step3Component extends SeoComponent implements OnInit {
             this.onFormChange(null)
             return
           }
-          if (f.locationType[4]) {
+          if (f.locationType[4] && !f.locationTypeOther) {
             this.disabled.set(!f.locationTypeOther)
             this.onFormChange(null)
             return
