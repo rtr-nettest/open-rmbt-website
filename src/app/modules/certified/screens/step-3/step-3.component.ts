@@ -69,7 +69,7 @@ export class Step3Component extends SeoComponent implements OnInit {
   ]
   fileIds = [v4()]
   files: { [key: string]: File } = {}
-  disabled = signal(false)
+  disabled = signal(true)
 
   get breadcrumbs() {
     return this.store.breadcrumbs
