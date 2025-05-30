@@ -29,8 +29,15 @@ export class TermsConditionsScreenComponent
   settings = this.mainStore.settings
   storageItem!: [string, string]
   termsText = ""
+  route = ERoutes.TEST
 
   ngOnInit(): void {
+    this.route =
+      (globalThis.location &&
+        (new URLSearchParams(globalThis.location.search).get(
+          "next"
+        ) as ERoutes)) ||
+      ERoutes.TEST
     const settings = this.settings()
     if (settings) {
       this.storageItem = [
@@ -42,7 +49,7 @@ export class TermsConditionsScreenComponent
   }
 
   onAgree() {
-    this.router.navigate([this.i18nStore.activeLang, ERoutes.TEST])
+    this.router.navigate([this.i18nStore.activeLang, this.route])
   }
 
   onCancel() {

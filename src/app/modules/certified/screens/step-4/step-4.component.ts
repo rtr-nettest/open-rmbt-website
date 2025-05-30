@@ -16,6 +16,7 @@ import { TOO_FAST_FOR_FIREFOX } from "../../../loop/constants/strings"
 })
 export class Step4Component extends LoopScreenComponent {
   override currentRoute: string | null = ERoutes.CERTIFIED_1
+  override nextRoute = ERoutes.CERTIFIED_4
 
   override initVisualization(): void {
     if (this.certifiedStore.activeBreadcrumbIndex() == null) {

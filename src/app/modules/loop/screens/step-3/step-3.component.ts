@@ -31,6 +31,7 @@ import { CertifiedStoreService } from "../../../certified/store/certified-store.
 export class Step3Component extends TestScreenComponent {
   override addMedian = true
   override currentRoute: string | null = ERoutes.LOOP_1
+  override nextRoute = ERoutes.LOOP_3
   override excludeColumns =
     environment.loopModeDefaults.exclude_from_result ?? []
   protected readonly loopService = inject(LoopService)

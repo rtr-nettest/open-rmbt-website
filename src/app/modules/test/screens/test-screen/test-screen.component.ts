@@ -80,6 +80,7 @@ export const imports = [
 export class TestScreenComponent extends SeoComponent implements OnInit {
   addMedian = false
   currentRoute: string | null = null
+  nextRoute = ERoutes.TEST
   disableGraphics = computed(
     () =>
       this.loopStore.isCertifiedMeasurement() &&
@@ -120,7 +121,9 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
         settings.settings[0].terms_and_conditions.version.toString() !=
         localStorage.getItem(TC_VERSION_ACCEPTED)
       ) {
-        this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS])
+        this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS], {
+          queryParams: { next: this.nextRoute },
+        })
         return
       }
       this.service.resetState()
