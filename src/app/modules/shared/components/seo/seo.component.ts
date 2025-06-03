@@ -29,6 +29,7 @@ export class SeoComponent implements OnDestroy {
           const newTitle = title ? [title, siteName].join(SEP) : siteName
           this.metaTitle = newTitle
           this.ts.setTitle(newTitle)
+          document.documentElement.lang = this.i18nStore.activeLang
         })
       )
       .subscribe()
