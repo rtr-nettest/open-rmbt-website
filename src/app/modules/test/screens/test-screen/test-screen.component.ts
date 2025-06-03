@@ -97,6 +97,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   loopStore = inject(LoopStoreService)
   isLoopModeEnabled$ = toObservable(this.loopStore.isLoopModeEnabled)
   loopCount$ = toObservable(this.loopStore.loopCounter)
+  maxLoopCount = this.loopStore.maxTestsAllowed
   stopped$: Subject<void> = new Subject()
   visualization$!: Observable<ITestVisualizationState>
   loopWaiting = signal(false)

@@ -85,11 +85,15 @@
   <ng-container *ngIf="(isLoopModeEnabled$ | async) === true">
     <div class="app-wrapper" *ngIf="loopCount$ | async as loopCount">
       <h2 *ngIf="loopWaiting() !== true" class="app-title" aria-live="polite">
-        {{ ("Measurement" | translate) + " " + loopCount }}
+        {{
+          ("Measurement" | translate) + " " + loopCount + "/" + maxLoopCount()
+        }}
       </h2>
       <h2 *ngIf="loopWaiting() === true" class="app-title" aria-live="polite">
         {{
-          "Result of measurement %0 - waiting" | translate | sprintf : loopCount
+          "Result of measurement %0 - waiting"
+            | translate
+            | sprintf : loopCount + "/" + maxLoopCount()
         }}
       </h2>
     </div>
