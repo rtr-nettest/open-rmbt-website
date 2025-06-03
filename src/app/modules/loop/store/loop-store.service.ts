@@ -44,7 +44,9 @@ export class LoopStoreService {
   loopUuid = signal<string | null>(null)
   loopCounter = signal<number>(-1)
   isLoopModeEnabled = signal<boolean>(false)
-  testIntervalMinutes = signal<number>(environment.loopModeDefaults.max_delay)
+  testIntervalMinutes = signal<number>(
+    environment.loopModeDefaults.default_delay
+  )
   fullTestIntervalMs = computed(() =>
     this.testIntervalMinutes() ? this.testIntervalMinutes()! * 60 * 1000 : null
   )
@@ -61,6 +63,6 @@ export class LoopStoreService {
   isCertifiedMeasurement = signal<boolean>(false)
   lastTestFinishedAt = signal<number>(0)
   lastTestStartedAt = signal<number>(0)
-  maxTestsAllowed = signal<number>(environment.loopModeDefaults.max_tests)
+  maxTestsAllowed = signal<number>(environment.loopModeDefaults.default_tests)
   maxTestsReached = signal<boolean>(false)
 }

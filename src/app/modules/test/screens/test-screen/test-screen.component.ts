@@ -105,6 +105,14 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
     loopUuid: this.loopStore.loopUuid(),
   })
   progressMs = signal(0)
+  progressFormatted = computed(() => {
+    const h = Math.floor(this.progressMs() / 3600000)
+    const m = Math.floor((this.progressMs() % 3600000) / 60000)
+    const s = Math.floor((this.progressMs() % 60000) / 1000)
+    return `${h.toString().padStart(2, "0")}:${m
+      .toString()
+      .padStart(2, "0")}:${s.toString().padStart(2, "0")}`
+  })
   progress = signal(0)
   progressMode = signal<"determinate" | "indeterminate">("determinate")
   platform = inject(PlatformService)

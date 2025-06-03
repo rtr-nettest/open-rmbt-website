@@ -49,6 +49,8 @@ export class Step2Component extends SeoComponent implements OnInit {
   form?: FormGroup<ILoopDataFormControls>
   minTestsAllowed = environment.loopModeDefaults.min_tests
   minTestIntervalMinutes = environment.loopModeDefaults.min_delay
+  maxTestsAllowed = environment.loopModeDefaults.max_tests
+  maxTestIntervalMinutes = environment.loopModeDefaults.max_delay
 
   get breadcrumbs() {
     return this.store.breadcrumbs
@@ -77,13 +79,18 @@ export class Step2Component extends SeoComponent implements OnInit {
     this.form = this.fb.group({
       maxTestsAllowed: new FormControl(this.store.maxTestsAllowed(), {
         nonNullable: true,
-        validators: [Validators.required, Validators.min(this.minTestsAllowed)],
+        validators: [
+          Validators.required,
+          Validators.min(this.minTestsAllowed),
+          Validators.max(this.maxTestsAllowed),
+        ],
       }),
       testIntervalMinutes: new FormControl(this.store.testIntervalMinutes(), {
         nonNullable: true,
         validators: [
           Validators.required,
           Validators.min(this.minTestIntervalMinutes),
+          Validators.max(this.maxTestIntervalMinutes),
         ],
       }),
     })

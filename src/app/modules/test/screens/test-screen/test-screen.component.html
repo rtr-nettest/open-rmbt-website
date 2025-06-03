@@ -69,11 +69,7 @@
     <div style="width: 100%">
       <ng-container *ngIf="progressMode === 'determinate'">
         <h4 class="app-title">
-          {{
-            ("Next measurement in" | translate) +
-              " " +
-              (progressMs() | date : "mm:ss")
-          }}
+          {{ ("Next measurement in" | translate) + " " + progressFormatted() }}
         </h4>
       </ng-container>
       <mat-progress-bar
