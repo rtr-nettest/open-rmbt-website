@@ -3,8 +3,7 @@ import { BehaviorSubject } from "rxjs"
 import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interface"
 import { IPaginator } from "../../tables/interfaces/paginator.interface"
 import { ISort } from "../../tables/interfaces/sort.interface"
-
-export const HISTORY_LIMIT = 100
+import { environment } from "../../../../environments/environment"
 
 @Injectable({
   providedIn: "root",
@@ -14,7 +13,7 @@ export class HistoryStore {
   history$ = new BehaviorSubject<Array<ISimpleHistoryResult>>([])
   paginator = signal<IPaginator>({
     offset: 0,
-    limit: HISTORY_LIMIT,
+    limit: environment.loopModeDefaults.max_tests,
   })
   sort = signal<ISort>({
     active: "measurementDate",

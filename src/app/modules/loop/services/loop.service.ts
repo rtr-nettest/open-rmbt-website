@@ -41,5 +41,6 @@ export class LoopService {
     this.loopSub?.unsubscribe()
     this.loopStore.loopCounter.set(-1)
     this.loopStore.isLoopModeEnabled.set(false)
+    this.loopStore.isCertifiedMeasurement.set(false)
   }
 }

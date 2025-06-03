@@ -49,6 +49,8 @@ import { SettingsService } from "../../../shared/services/settings.service"
 import { PlatformService } from "../../../shared/services/platform.service"
 import { environment } from "../../../../../environments/environment"
 import { IframeTestComponent } from "../../components/iframe-test/iframe-test.component"
+import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
+import { ISimpleHistoryResult } from "../../../history/interfaces/simple-history-result.interface"
 
 export const imports = [
   AsyncPipe,
@@ -101,10 +103,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   stopped$: Subject<void> = new Subject()
   visualization$!: Observable<ITestVisualizationState>
   loopWaiting = signal(false)
-  result$ = this.historyService.getHistoryGroupedByLoop({
-    grouped: false,
-    loopUuid: this.loopStore.loopUuid(),
-  })
+  result = signal<IBasicResponse<ISimpleHistoryResult> | null>(null)
   progressMs = signal(0)
   progressFormatted = computed(() => {
     const h = Math.floor(this.progressMs() / 3600000)

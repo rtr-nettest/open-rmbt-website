@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from "@angular/router"
 import { LoopStoreService } from "../../store/loop-store.service"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { environment } from "../../../../../environments/environment"
+import { firstValueFrom } from "rxjs"
 
 @Component({
   selector: "app-loop-result-screen",
@@ -37,5 +38,22 @@ export class LoopResultScreenComponent extends HistoryScreenComponent {
     if (!this.loopStore.loopUuid()) {
       this.router.navigateByUrl(this.redirectUrl)
     }
+  }
+
+  protected override async fetchData(): Promise<Array<any>> {
+    if (!this.uuid) {
+      return []
+    }
+    const retVal = firstValueFrom(
+      this.service.getFullMeasurementHistory(
+        this.store.paginator(),
+        this.loopStore.loopUuid()!
+      )
+    )
+    this.store.paginator.set({
+      offset: this.store.paginator().offset + this.dataLimit,
+      limit: this.dataLimit,
+    })
+    return retVal
   }
 }

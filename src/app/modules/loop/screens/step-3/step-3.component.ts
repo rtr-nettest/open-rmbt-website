@@ -7,6 +7,7 @@ import {
   BehaviorSubject,
   distinctUntilChanged,
   filter,
+  firstValueFrom,
   map,
   takeUntil,
   withLatestFrom,
@@ -36,7 +37,6 @@ export class Step3Component extends TestScreenComponent {
     environment.loopModeDefaults.exclude_from_result ?? []
   protected readonly loopService = inject(LoopService)
   protected waitingProgressMs = 0
-  protected shouldGetHistory$ = new BehaviorSubject<boolean>(false)
   protected currentTestUuid$ = new BehaviorSubject<string | null>(null)
   protected readonly certifiedStore = inject(CertifiedStoreService)
   lastTestFinishedAt$ = toObservable(this.loopStore.lastTestFinishedAt)
@@ -72,8 +72,6 @@ export class Step3Component extends TestScreenComponent {
           this.openErrorDialog(state)
         } else if (state.currentPhaseName === EMeasurementStatus.END) {
           this.goToResult(state)
-        } else {
-          this.getRecentHistory(loopCount)
         }
         this.checkIfNewTestStarted(
           state.phases[state.currentPhaseName].testUuid
@@ -106,6 +104,15 @@ export class Step3Component extends TestScreenComponent {
         if (document.hidden && diff > 0) {
           this.ts.setTitle(`(${diff}) ${this.metaTitle}`)
         }
+        firstValueFrom(
+          this.historyService.getLoopHistory(this.loopStore.loopUuid()!)
+        )
+          .then((history) => {
+            this.result.set(history)
+          })
+          .catch((err) => {
+            console.error("Error fetching loop history:", err)
+          })
       })
     this.scheduleLoop()
   }
@@ -156,21 +163,7 @@ export class Step3Component extends TestScreenComponent {
     }
     // Waiting for a new test to start
     this.loopWaiting.set(true)
-    this.shouldGetHistory$.next(true)
     this.mainStore.error$.next(null)
-  }
-
-  private getRecentHistory(loopCount: number) {
-    if (!this.shouldGetHistory$.value) {
-      return
-    }
-    this.historyService
-      .getRecentMeasurementHistory({
-        offset: 0,
-        limit: loopCount - 1,
-      })
-      .subscribe()
-    this.shouldGetHistory$.next(false)
   }
 
   private checkIfWaiting(state: ITestVisualizationState) {

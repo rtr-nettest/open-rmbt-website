@@ -32,7 +32,7 @@
   style="margin-bottom: 40px"
 >
   <app-recent-history
-    *ngIf="result$ | async as result"
+    *ngIf="result() as result"
     [addMedian]="addMedian"
     [result]="result"
     [excludeColumns]="excludeColumns"

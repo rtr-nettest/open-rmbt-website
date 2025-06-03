@@ -7,7 +7,7 @@ import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/bre
 import { ScrollTopComponent } from "../../../shared/components/scroll-top/scroll-top.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interface"
-import { HISTORY_LIMIT, HistoryStore } from "../../store/history.store"
+import { HistoryStore } from "../../store/history.store"
 import { HistoryExportService } from "../../services/history-export.service"
 import { ActionButtonsComponent } from "../../components/action-buttons/action-buttons.component"
 import { RecentHistoryComponent } from "../../components/recent-history/recent-history.component"
@@ -25,6 +25,7 @@ import { SyncDialogComponent } from "../../components/sync-dialog/sync-dialog.co
 import { ScrollStrategyOptions } from "@angular/cdk/overlay"
 import { MatButtonModule } from "@angular/material/button"
 import { HtmlWrapperComponent } from "../../../shared/components/html-wrapper/html-wrapper.component"
+import { environment } from "../../../../../environments/environment"
 
 export const historyImports = [
   ActionButtonsComponent,
@@ -89,7 +90,7 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
   text$ = of("")
 
   protected override get dataLimit() {
-    return HISTORY_LIMIT
+    return environment.loopModeDefaults.max_tests
   }
 
   protected override async fetchData(): Promise<Array<any>> {

@@ -14,7 +14,6 @@ import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
 import { MainStore } from "../../shared/store/main.store"
-import { LoopStoreService } from "../../loop/store/loop-store.service"
 import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
 import { ISyncResponse } from "../interfaces/sync-response.interface"
 dayjs.extend(utc)
@@ -27,7 +26,6 @@ export class HistoryRepositoryService {
   constructor(
     private readonly http: HttpClient,
     private readonly i18nStore: I18nStore,
-    private readonly loopStore: LoopStoreService,
     private readonly mainStore: MainStore
   ) {}
 
@@ -66,7 +64,10 @@ export class HistoryRepositoryService {
     return response
   }
 
-  async getHistory(paginator?: IPaginator) {
+  async getHistory(
+    options: { paginator?: IPaginator; loopUuid?: string } = {}
+  ) {
+    const { paginator, loopUuid } = options
     const uuid = localStorage.getItem(UUID)
     if (!uuid) {
       return null
@@ -81,7 +82,6 @@ export class HistoryRepositoryService {
     if (paginator?.limit) {
       body["result_limit"] = paginator.limit
     }
-    const loopUuid = this.loopStore.loopUuid()
     if (loopUuid) {
       body["loop_uuid"] = loopUuid
     }

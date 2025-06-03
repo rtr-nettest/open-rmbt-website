@@ -19,12 +19,13 @@ import { IPaginator } from "../../tables/interfaces/paginator.interface"
 import { ITestResultRequest } from "../interfaces/measurement-result.interface"
 import { HistoryRepositoryService } from "../repository/history-repository.service"
 import { TestStore } from "../../test/store/test.store"
-import { HISTORY_LIMIT, HistoryStore } from "../store/history.store"
+import { HistoryStore } from "../store/history.store"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { MainStore } from "../../shared/store/main.store"
 import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interface"
 import { IHistoryGroupItem } from "../interfaces/history-row.interface"
 import { ISort } from "../../tables/interfaces/sort.interface"
+import { environment } from "../../../../environments/environment"
 
 @Injectable({
   providedIn: "root",
@@ -149,23 +150,34 @@ export class HistoryService {
     )
   }
 
-  getRecentMeasurementHistory(paginator: IPaginator) {
-    if (!paginator.limit) {
-      return of([])
-    }
-    return from(this.repo.getHistory(paginator)).pipe(
+  getLoopHistory(loopUuid: string) {
+    return from(
+      this.repo.getHistory({
+        paginator: {
+          offset: 0,
+          limit: environment.loopModeDefaults.max_tests,
+        },
+        loopUuid,
+      })
+    ).pipe(
       take(1),
-      tap((history) => {
-        this.historyStore.history$.next(history)
+      map((history) => {
+        const content = history.filter(
+          (hi: SimpleHistoryResult) => hi.loopUuid === loopUuid
+        )
+        return {
+          content,
+          totalElements: content.length,
+        }
       })
     )
   }
 
-  getFullMeasurementHistory(paginator: IPaginator) {
+  getFullMeasurementHistory(paginator: IPaginator, loopUuid?: string) {
     if (!paginator.limit) {
       return of([])
     }
-    return from(this.repo.getHistory(paginator)).pipe(
+    return from(this.repo.getHistory({ paginator, loopUuid })).pipe(
       take(1),
       map((history) => {
         const mergedHistory = [...this.historyStore.history$.value, ...history]
@@ -177,7 +189,10 @@ export class HistoryService {
 
   resetMeasurementHistory() {
     this.historyStore.history$.next([])
-    this.historyStore.paginator.set({ offset: 0, limit: HISTORY_LIMIT })
+    this.historyStore.paginator.set({
+      offset: 0,
+      limit: environment.loopModeDefaults.max_tests,
+    })
   }
 
   sortMeasurementHistory(sort: ISort, callback: () => any) {
