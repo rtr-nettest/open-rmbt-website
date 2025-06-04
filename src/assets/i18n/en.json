@@ -566,7 +566,7 @@
   "Location accuracy": "Location accuracy",
   "Location details": "Location details",
   "Location is required": "Location is required",
-  "Location of the measurements": "Location of the measurements",
+  "Location of the measurements": "Location of the measurements (address at which the measurements are taken)",
   "location_desc": "The address at which the measurements are taken",
   "location": "Location",
   "Loop mode": "Loop mode",

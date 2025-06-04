@@ -566,7 +566,7 @@
   "Location accuracy": "Standortgenauigkeit",
   "Location details": "Standortdetails",
   "Location is required": "Standort ist erforderlich",
-  "Location of the measurements": "Standort der Messungen",
+  "Location of the measurements": "Standort der Messungen (Adresse, an der die Messungen durchgeführt werden)",
   "location_desc": "Die Adresse, an der die Messungen durchgeführt werden",
   "location": "Standort",
   "Loop mode": "Wiederholungsmodus",
