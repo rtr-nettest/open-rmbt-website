@@ -130,7 +130,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
         localStorage.getItem(TC_VERSION_ACCEPTED)
       ) {
         this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS], {
-          queryParams: { next: this.nextRoute },
+          queryParams: { next: this.nextRoute, current: this.currentRoute },
         })
         return
       }

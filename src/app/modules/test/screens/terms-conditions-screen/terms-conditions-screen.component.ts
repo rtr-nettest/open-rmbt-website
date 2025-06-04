@@ -29,15 +29,14 @@ export class TermsConditionsScreenComponent
   settings = this.mainStore.settings
   storageItem!: [string, string]
   termsText = ""
-  route = ERoutes.TEST
+  nextRoute = ERoutes.TEST
+  currentRoute = ERoutes.HOME
 
   ngOnInit(): void {
-    this.route =
-      (globalThis.location &&
-        (new URLSearchParams(globalThis.location.search).get(
-          "next"
-        ) as ERoutes)) ||
-      ERoutes.TEST
+    const searchParams =
+      globalThis.location && new URLSearchParams(globalThis.location.search)
+    this.nextRoute = (searchParams.get("next") as ERoutes) || ERoutes.TEST
+    this.currentRoute = (searchParams.get("current") as ERoutes) || ERoutes.HOME
     const settings = this.settings()
     if (settings) {
       this.storageItem = [
@@ -49,10 +48,19 @@ export class TermsConditionsScreenComponent
   }
 
   onAgree() {
-    this.router.navigate([this.i18nStore.activeLang, this.route])
+    this.setCurrentRoute()
+    this.router.navigate([this.i18nStore.activeLang, this.nextRoute])
   }
 
   onCancel() {
     this.router.navigate([this.i18nStore.activeLang])
+  }
+
+  private setCurrentRoute() {
+    history.replaceState(
+      {},
+      "",
+      `/${this.i18nStore.activeLang}/${this.currentRoute}`
+    )
   }
 }

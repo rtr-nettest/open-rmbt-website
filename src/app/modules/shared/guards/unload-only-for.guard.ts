@@ -23,6 +23,7 @@ export const unloadOnlyFor: (
     const loopStore = inject(LoopStoreService)
     if (
       !nextState.url ||
+      // Don't show dialog when it is allowe for the next state
       allowedPaths.some((path) => nextState.url.includes(path)) ||
       // Don't show dialog when there's an error
       (testStore.visualization$.value.currentPhaseName ===
@@ -32,7 +33,9 @@ export const unloadOnlyFor: (
       (loopStore.isCertifiedMeasurement() &&
         certifiedStore.testStartDisabled()) ||
       // Don't show dialog when it is a certified or loop measurement and a tab is accessed out of order
-      (loopStore.activeBreadcrumbIndex() == null &&
+      ((allowedPaths.includes(ERoutes.CERTIFIED_RESULT) ||
+        allowedPaths.includes(ERoutes.LOOP_RESULT)) &&
+        loopStore.activeBreadcrumbIndex() == null &&
         certifiedStore.activeBreadcrumbIndex() == null) ||
       // Don't show dialog when it is a loop measurement and the test is finished
       loopStore.maxTestsReached()
