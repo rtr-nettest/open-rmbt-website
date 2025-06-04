@@ -23,8 +23,7 @@ export class SeoComponent implements OnDestroy {
       .pipe(
         takeUntil(this.destroyed$),
         tap((dict) => {
-          const titleArr = this.ts.getTitle().split(SEP)
-          const siteName = titleArr.length === 1 ? titleArr[0] : titleArr[1]
+          const siteName = this.i18nStore.translate("RTR-NetTest")
           let title = dict[t] || t
           const newTitle = title ? [title, siteName].join(SEP) : siteName
           this.metaTitle = newTitle
