@@ -27,6 +27,14 @@ export class LogChart extends TestChart {
   override setData(data: ITestPhaseState) {
     this.resetDatasets()
     this.data.datasets[0].data = this.getAllData(data)
+    const firstZeroIndex = this.data.datasets[0].data.findIndex(
+      (point) => (point as Point).x === 0
+    )
+    if (firstZeroIndex !== -1) {
+      this.data.datasets[0].data = this.data.datasets[0].data.slice(
+        firstZeroIndex + 1
+      )
+    }
     const lastIndex = Math.ceil(
       (
         this.data.datasets[0].data[
@@ -35,10 +43,15 @@ export class LogChart extends TestChart {
       ).x
     )
     const { labels } = this.data
-    if (labels && labels.length <= lastIndex) {
-      while (labels!.length <= lastIndex) {
-        labels.push(lastIndex)
+    if (labels) {
+      if (labels.length <= lastIndex) {
+        while (labels!.length <= lastIndex) {
+          labels.push(lastIndex)
+        }
       }
+    }
+    if (this.options.scales?.["x"]) {
+      this.options.scales["x"].max = Math.max(7, lastIndex)
     }
     this.finished = true
     this.update()
@@ -53,6 +66,9 @@ export class LogChart extends TestChart {
     this.data.datasets[0].data.push(lastData)
     if (this.data.labels && this.data.labels.length <= lastIndex)
       this.data.labels.push(lastIndex)
+    if (this.options.scales?.["x"]) {
+      this.options.scales["x"].max = Math.max(7, lastIndex)
+    }
     super.update()
   }
 

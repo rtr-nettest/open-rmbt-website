@@ -1,5 +1,6 @@
 import { I18nStore } from "../../../../i18n/store/i18n.store"
 import { EColors } from "../../../../shared/constants/colors.enum"
+import { roundToSignificantDigits } from "../../../../shared/util/math"
 
 export class LogChartOptions {
   animation = {
@@ -16,6 +17,9 @@ export class LogChartOptions {
   parsing = false as const
   scales = {
     x: {
+      type: "linear",
+      min: 0,
+      max: 7,
       minRotation: 0,
       maxRotation: 0,
       grid: {
@@ -29,7 +33,11 @@ export class LogChartOptions {
         },
       },
       ticks: {
-        callback: (value: any) => `${value} ${this.t.translate("s")}`,
+        stepSize: 1,
+        callback: (value: any) =>
+          `${roundToSignificantDigits(value).toLocaleString(
+            this.t.activeLang
+          )} ${this.t.translate("s")}`,
       },
     },
     y: {
