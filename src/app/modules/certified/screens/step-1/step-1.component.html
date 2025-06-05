@@ -7,7 +7,7 @@
 <div class="app-wrapper" style="margin-top: 48px; margin-bottom: 64px">
   <h1 class="app-title">{{ "Certified measurement" | translate }}</h1>
   @if (text$ | async; as text) {
-  <div [innerHTML]="text"></div>
+  <div class="app-article" [innerHTML]="text"></div>
   }
   <button
     style="margin-top: 16px"
