@@ -240,7 +240,9 @@ exports.strings = {
         "intro_tc": "Ich stimme den <a href=\"https://www.rtr.at/de/tk/rtrnetztesttermsofuse\" target=\"_blank\">Nutzungsbedingungen</a>\n" +
             "                            und <a href=\"https://www.rtr.at/de/tk/netztestprivacypolicyweb\" target=\"_blank\">Datenschutzbestimmungen</a>\n" +
             "                            zu.",
-        "start_measurement": "Messung starten"
+        "start_measurement": "Messung starten",
+        "new_measurement": "Neue Messung",
+        "further_details": "Mehr Details"
     },
     //Page titles and link descriptions
     "index" : "Startseite",

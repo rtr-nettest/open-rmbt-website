@@ -241,7 +241,9 @@ exports.strings = {
         "intro_tc": "I agree to the " +
             "<a href=\"https://www.rtr.at/de/tk/rtrnetztesttermsofuse\" target=\"_blank\">terms of use</a>\n" +
             "and <a href=\"https://www.rtr.at/de/tk/netztestprivacypolicyweb\" target=\"_blank\">privacy policy</a>.",
-        "start_measurement": "Start measurement"
+        "start_measurement": "Start measurement",
+        "new_measurement": "New measurement",
+        "further_details": "Further details"
     },
     //Page titles and link descriptions
     "index": "Home",
