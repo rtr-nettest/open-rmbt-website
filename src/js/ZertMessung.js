@@ -191,7 +191,7 @@ function step3() {
                 maxWidth: 1000,
                 maxHeight: 1000
             };
-            var compress = new Compress(options);
+            var compress = new exports.Compress(options);
             compressedImages = [];
 
             //get files
