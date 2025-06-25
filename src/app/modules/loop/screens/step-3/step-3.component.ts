@@ -64,6 +64,7 @@ export class Step3Component extends TestScreenComponent {
       return
     }
     document.addEventListener("visibilitychange", this.tabActivityListener)
+    this.loopStore.loopUuid.set(null)
     this.visualization$ = this.store.visualization$.pipe(
       withLatestFrom(this.mainStore.error$, this.loopCount$),
       distinctUntilChanged(),
