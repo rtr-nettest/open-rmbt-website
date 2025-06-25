@@ -10,25 +10,25 @@ import { Router } from "@angular/router"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { LOOP_ACCEPTED } from "../../constants/strings"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
-import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
 import { LoopStoreService } from "../../store/loop-store.service"
 import { ECertifiedSteps } from "../../../certified/constants/certified-steps.enum"
 import { MatButtonModule } from "@angular/material/button"
+import { CertifiedBreadcrumbsComponent } from "../../../certified/components/certified-breadcrumbs/certified-breadcrumbs.component"
 
 @Component({
-    selector: "app-step-1",
-    imports: [
-        AsyncPipe,
-        BreadcrumbsComponent,
-        CertifiedBreadcrumbsComponent,
-        FooterComponent,
-        HeaderComponent,
-        MatButtonModule,
-        TopNavComponent,
-        TranslatePipe,
-    ],
-    templateUrl: "./step-1.component.html",
-    styleUrl: "./step-1.component.scss"
+  selector: "app-step-1",
+  imports: [
+    AsyncPipe,
+    BreadcrumbsComponent,
+    CertifiedBreadcrumbsComponent,
+    FooterComponent,
+    HeaderComponent,
+    MatButtonModule,
+    TopNavComponent,
+    TranslatePipe,
+  ],
+  templateUrl: "./step-1.component.html",
+  styleUrl: "./step-1.component.scss",
 })
 export class Step1Component extends SeoComponent {
   loopStore = inject(LoopStoreService)

@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core"
-import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { MatButtonModule } from "@angular/material/button"
@@ -26,6 +25,7 @@ import { ECertifiedSteps } from "../../../certified/constants/certified-steps.en
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { environment } from "../../../../../environments/environment"
 import { CertifiedStoreService } from "../../../certified/store/certified-store.service"
+import { CertifiedBreadcrumbsComponent } from "../../../certified/components/certified-breadcrumbs/certified-breadcrumbs.component"
 
 @Component({
   selector: "app-step-2",

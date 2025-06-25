@@ -27,8 +27,8 @@ import { map, takeUntil } from "rxjs"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input"
 import { MatRadioModule } from "@angular/material/radio"
-import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
 import { NgIf } from "@angular/common"
+import { CertifiedBreadcrumbsComponent } from "../../components/certified-breadcrumbs/certified-breadcrumbs.component"
 
 @Component({
   selector: "app-step-2",

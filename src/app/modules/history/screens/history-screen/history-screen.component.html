@@ -1,6 +1,11 @@
 <app-header></app-header>
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
+@if (breadcrumbs() != null) {
+<app-certified-breadcrumbs
+  [breadcrumbs]="breadcrumbs()!"
+></app-certified-breadcrumbs>
+}
 <app-scroll-top></app-scroll-top>
 <div class="app-wrapper">
   <header class="app-header">

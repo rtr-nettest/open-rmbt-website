@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, computed, inject } from "@angular/core"
+import {
+  ChangeDetectorRef,
+  Component,
+  computed,
+  inject,
+  signal,
+} from "@angular/core"
 import { UUID } from "../../../test/constants/strings"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
@@ -26,11 +32,14 @@ import { ScrollStrategyOptions } from "@angular/cdk/overlay"
 import { MatButtonModule } from "@angular/material/button"
 import { HtmlWrapperComponent } from "../../../shared/components/html-wrapper/html-wrapper.component"
 import { environment } from "../../../../../environments/environment"
+import { IBreadcrumb } from "../../../shared/interfaces/breadcrumb.interface"
+import { CertifiedBreadcrumbsComponent } from "../../../certified/components/certified-breadcrumbs/certified-breadcrumbs.component"
 
 export const historyImports = [
   ActionButtonsComponent,
   AsyncPipe,
   BreadcrumbsComponent,
+  CertifiedBreadcrumbsComponent,
   FooterComponent,
   HeaderComponent,
   HtmlWrapperComponent,
@@ -52,6 +61,7 @@ export type ActionButtonsPosition = "header" | "html-wrapper"
 })
 export class HistoryScreenComponent extends LoadOnScrollComponent {
   addMedian = false
+  breadcrumbs = signal<IBreadcrumb[] | null>(null)
   cdr = inject(ChangeDetectorRef)
   dialog = inject(MatDialog)
   exporter = inject(HistoryExportService)

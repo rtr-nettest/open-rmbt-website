@@ -14,22 +14,22 @@ import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/bre
 import { ECertifiedSteps } from "../../constants/certified-steps.enum"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Title } from "@angular/platform-browser"
-import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
+import { CertifiedBreadcrumbsComponent } from "../../components/certified-breadcrumbs/certified-breadcrumbs.component"
 
 @Component({
-    selector: "app-step-1",
-    imports: [
-        AsyncPipe,
-        BreadcrumbsComponent,
-        CertifiedBreadcrumbsComponent,
-        HeaderComponent,
-        MatButtonModule,
-        TopNavComponent,
-        TranslatePipe,
-        FooterComponent,
-    ],
-    templateUrl: "./step-1.component.html",
-    styleUrl: "./step-1.component.scss"
+  selector: "app-step-1",
+  imports: [
+    AsyncPipe,
+    BreadcrumbsComponent,
+    CertifiedBreadcrumbsComponent,
+    HeaderComponent,
+    MatButtonModule,
+    TopNavComponent,
+    TranslatePipe,
+    FooterComponent,
+  ],
+  templateUrl: "./step-1.component.html",
+  styleUrl: "./step-1.component.scss",
 })
 export class Step1Component extends SeoComponent implements OnInit {
   text$!: Observable<string>

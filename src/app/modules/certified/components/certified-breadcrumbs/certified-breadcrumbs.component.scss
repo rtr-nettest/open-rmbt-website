@@ -15,9 +15,11 @@
   &__item {
     position: relative;
     border-left: none !important;
+    margin: 0;
     padding-left: 0 !important;
 
     a {
+      cursor: default;
       display: block;
       padding: 0 10px 0 30px;
       line-height: 30px;

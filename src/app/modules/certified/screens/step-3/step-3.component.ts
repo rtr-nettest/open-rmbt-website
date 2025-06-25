@@ -33,8 +33,8 @@ import { MatInputModule } from "@angular/material/input"
 import { NgFor, NgIf } from "@angular/common"
 import { MatIconModule } from "@angular/material/icon"
 import { MatCheckboxModule } from "@angular/material/checkbox"
-import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
+import { CertifiedBreadcrumbsComponent } from "../../components/certified-breadcrumbs/certified-breadcrumbs.component"
 
 @Component({
   selector: "app-step-3",

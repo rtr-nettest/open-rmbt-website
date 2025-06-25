@@ -8,6 +8,8 @@ import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interfa
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { CertifiedExportService } from "../../services/certified-export.service"
 import { environment } from "../../../../../environments/environment"
+import { CertifiedStoreService } from "../../store/certified-store.service"
+import { ECertifiedSteps } from "../../constants/certified-steps.enum"
 
 @Component({
   selector: "app-loop-result-screen",
@@ -35,6 +37,13 @@ export class CertifiedResultScreenComponent
   override text$ = this.i18nStore.getLocalizedHtml("certified-result")
   override excludeColumns =
     environment.certifiedDefaults.exclude_from_result ?? []
+  certifiedStore = inject(CertifiedStoreService)
+
+  override ngOnInit(): void {
+    this.certifiedStore.activeBreadcrumbIndex.set(ECertifiedSteps.RESULT)
+    this.breadcrumbs.set(this.certifiedStore.breadcrumbs())
+    super.ngOnInit()
+  }
 
   ngAfterViewInit(): void {
     this.exporter.openCertifiedPdf(this.loopStore.loopUuid()).subscribe()

@@ -51,8 +51,8 @@ import { environment } from "../../../../../environments/environment"
 import { IframeTestComponent } from "../../components/iframe-test/iframe-test.component"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { ISimpleHistoryResult } from "../../../history/interfaces/simple-history-result.interface"
-import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
 import { IBreadcrumb } from "../../../shared/interfaces/breadcrumb.interface"
+import { CertifiedBreadcrumbsComponent } from "../../../certified/components/certified-breadcrumbs/certified-breadcrumbs.component"
 
 export const imports = [
   AsyncPipe,
