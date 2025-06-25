@@ -66,7 +66,15 @@ export class IframeTestComponent {
           currentPhase.progress
         )
       )
-      this.status.set(this.currentPhaseName())
+      if (
+        this.currentPhaseName() === EMeasurementStatus.END &&
+        this.estimatedEndTime()
+      ) {
+        // It's a loop test, so we're waiting for the next test
+        this.status.set("Waiting")
+      } else {
+        this.status.set(this.currentPhaseName())
+      }
       this.ping.set(
         !currentPhase.ping || currentPhase.ping === -1
           ? DEFAULT_VALUE
