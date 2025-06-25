@@ -1,9 +1,9 @@
 <app-header></app-header>
 <app-top-nav></app-top-nav>
 <app-breadcrumbs [currentRoute]="currentRoute"></app-breadcrumbs>
-@if (breadcrumbs != null) {
+@if (breadcrumbs() != null) {
 <app-certified-breadcrumbs
-  [breadcrumbs]="breadcrumbs()"
+  [breadcrumbs]="breadcrumbs()!"
 ></app-certified-breadcrumbs>
 } @defer { @if(visualization$ | async; as visualization) {
 <ng-container *ngTemplateOutlet="loopHeader"></ng-container>
@@ -11,6 +11,7 @@
   @if (disableGraphics()) {
   <div style="margin-bottom: 40px">
     <app-iframe-test
+      [estimatedEndTime]="estimatedEndTime()"
       [showFooter]="false"
       [isWaitingForNextTest]="loopWaiting()"
       [waitingProgress]="progress()"
@@ -26,7 +27,9 @@
       ></app-gauge>
     </div>
     <app-spacer></app-spacer>
-    <app-interim-results></app-interim-results>
+    <app-interim-results
+      [estimatedEndTime]="estimatedEndTime()"
+    ></app-interim-results>
   </div>
   }
 </div>

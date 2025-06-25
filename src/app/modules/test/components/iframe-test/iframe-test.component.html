@@ -64,6 +64,12 @@
     </td>
   </tr>
   <tr class="app-row--separator"></tr>
+  @if (estimatedEndTime(); as endTime) {
+  <tr class="app-row">
+    <td class="app-col">{{ "Estimated end time" | translate }}</td>
+    <td class="app-col">{{ endTime | date : "HH:mm" }}</td>
+  </tr>
+  }
   <tr class="app-row">
     <td class="app-col">{{ "Coordinates" | translate }}</td>
     <td class="app-col">{{ coordinates() }}</td>

@@ -84,7 +84,7 @@ export const imports = [
 })
 export class TestScreenComponent extends SeoComponent implements OnInit {
   addMedian = false
-  breadcrumbs: Signal<IBreadcrumb[]> | null = null
+  breadcrumbs = signal<IBreadcrumb[] | null>(null)
   currentRoute: string | null = null
   nextRoute = ERoutes.TEST
   disableGraphics = computed(
@@ -92,6 +92,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
       this.loopStore.isCertifiedMeasurement() &&
       environment.certifiedDefaults.disable_graphics
   )
+  estimatedEndTime = signal<Date | null>(null)
   historyService = inject(HistoryService)
   router = inject(Router)
   mainStore = inject(MainStore)

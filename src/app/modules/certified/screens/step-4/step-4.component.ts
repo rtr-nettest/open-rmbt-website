@@ -18,14 +18,13 @@ export class Step4Component extends LoopScreenComponent {
   override currentRoute: string | null = ERoutes.CERTIFIED_1
   override nextRoute = ERoutes.CERTIFIED_4
 
-  override breadcrumbs = this.certifiedStore.breadcrumbs
-
   override initVisualization(): void {
     if (this.certifiedStore.activeBreadcrumbIndex() == null) {
       this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_1])
       return
     }
     this.certifiedStore.activeBreadcrumbIndex.set(ECertifiedSteps.MEASUREMENT)
+    this.breadcrumbs.set(this.certifiedStore.breadcrumbs())
     if (this.certifiedStore.testStartDisabled()) {
       this.testStartDisabled.set(true)
     } else {

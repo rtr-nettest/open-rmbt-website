@@ -67,7 +67,7 @@ export class Step3Component extends TestScreenComponent {
     this.visualization$ = this.store.visualization$.pipe(
       withLatestFrom(this.mainStore.error$, this.loopCount$),
       distinctUntilChanged(),
-      map(([state, error, loopCount]) => {
+      map(([state, error, _]) => {
         if (error) {
           this.openErrorDialog(state)
         } else if (state.currentPhaseName === EMeasurementStatus.END) {
@@ -87,6 +87,9 @@ export class Step3Component extends TestScreenComponent {
         takeUntil(this.stopped$)
       )
       .subscribe(() => {
+        this.estimatedEndTime.set(
+          new Date(this.loopStore.estimatedEndTime() as number)
+        )
         this.service.triggerNextTest()
       })
     this.lastTestFinishedAt$

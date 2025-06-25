@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from "@angular/core"
+import { ChangeDetectionStrategy, Component, input } from "@angular/core"
 import { distinctUntilChanged, Observable, tap } from "rxjs"
 import { EMeasurementStatus } from "../../constants/measurement-status.enum"
 import { TestStore } from "../../store/test.store"
@@ -11,7 +11,6 @@ import { LonlatPipe } from "../../../shared/pipes/lonlat.pipe"
 import { IBasicNetworkInfo } from "../../interfaces/basic-network-info.interface"
 import { ITestVisualizationState } from "../../interfaces/test-visualization-state.interface"
 import { roundToSignificantDigits } from "../../../shared/util/math"
-import { LoopStoreService } from "../../../loop/store/loop-store.service"
 import { toObservable } from "@angular/core/rxjs-interop"
 
 @Component({
@@ -32,7 +31,7 @@ import { toObservable } from "@angular/core/rxjs-interop"
 export class InterimResultsComponent {
   basicNetworkInfo$!: Observable<IBasicNetworkInfo>
   visualization$!: Observable<ITestVisualizationState>
-  estimatedEndTime = signal<Date | null>(null)
+  estimatedEndTime = input<Date | null>(null)
 
   ping: string = "-"
   download: string = "-"
@@ -40,19 +39,11 @@ export class InterimResultsComponent {
 
   phases = EMeasurementStatus
 
-  constructor(
-    private i18nStore: I18nStore,
-    private store: TestStore,
-    private loopStore: LoopStoreService
-  ) {
+  constructor(private i18nStore: I18nStore, private store: TestStore) {
     this.basicNetworkInfo$ = toObservable(this.store.basicNetworkInfo)
     this.visualization$ = this.store.visualization$.pipe(
       distinctUntilChanged(),
       tap((state) => {
-        const estimatedEndTime = this.loopStore.estimatedEndTime()
-        if (estimatedEndTime) {
-          this.estimatedEndTime.set(new Date(estimatedEndTime))
-        }
         const ping = roundToSignificantDigits(
           state.phases[EMeasurementStatus.DOWN].ping
         )

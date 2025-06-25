@@ -117,6 +117,7 @@ export class IframeTestComponent {
   isWaitingForNextTest = input(false)
   waitingProgress = input(0)
   waitingProgressMs = input(0)
+  estimatedEndTime = input<Date | null>(null)
 
   private parentWindowMessage = ""
 
