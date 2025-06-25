@@ -5,12 +5,12 @@ import {
   inject,
   NgZone,
   OnInit,
+  Signal,
   signal,
 } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Router } from "@angular/router"
 import {
-  BehaviorSubject,
   distinctUntilChanged,
   firstValueFrom,
   map,
@@ -51,10 +51,13 @@ import { environment } from "../../../../../environments/environment"
 import { IframeTestComponent } from "../../components/iframe-test/iframe-test.component"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { ISimpleHistoryResult } from "../../../history/interfaces/simple-history-result.interface"
+import { CertifiedBreadcrumbsComponent } from "../../../shared/components/certified-breadcrumbs/certified-breadcrumbs.component"
+import { IBreadcrumb } from "../../../shared/interfaces/breadcrumb.interface"
 
 export const imports = [
   AsyncPipe,
   BreadcrumbsComponent,
+  CertifiedBreadcrumbsComponent,
   DatePipe,
   HeaderComponent,
   FooterComponent,
@@ -81,6 +84,7 @@ export const imports = [
 })
 export class TestScreenComponent extends SeoComponent implements OnInit {
   addMedian = false
+  breadcrumbs: Signal<IBreadcrumb[]> | null = null
   currentRoute: string | null = null
   nextRoute = ERoutes.TEST
   disableGraphics = computed(

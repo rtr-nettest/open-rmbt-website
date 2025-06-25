@@ -1,11 +1,11 @@
-import { Component, inject } from "@angular/core"
+import { Component } from "@angular/core"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { imports } from "../../../test/screens/test-screen/test-screen.component"
 import { Step3Component as LoopScreenComponent } from "../../../loop/screens/step-3/step-3.component"
 import { environment } from "../../../../../environments/environment"
-import { CertifiedStoreService } from "../../store/certified-store.service"
 import { ITestVisualizationState } from "../../../test/interfaces/test-visualization-state.interface"
 import { TOO_FAST_FOR_FIREFOX } from "../../../loop/constants/strings"
+import { ECertifiedSteps } from "../../constants/certified-steps.enum"
 
 @Component({
   selector: "app-step-4",
@@ -18,11 +18,14 @@ export class Step4Component extends LoopScreenComponent {
   override currentRoute: string | null = ERoutes.CERTIFIED_1
   override nextRoute = ERoutes.CERTIFIED_4
 
+  override breadcrumbs = this.certifiedStore.breadcrumbs
+
   override initVisualization(): void {
     if (this.certifiedStore.activeBreadcrumbIndex() == null) {
       this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_1])
       return
     }
+    this.certifiedStore.activeBreadcrumbIndex.set(ECertifiedSteps.MEASUREMENT)
     if (this.certifiedStore.testStartDisabled()) {
       this.testStartDisabled.set(true)
     } else {
