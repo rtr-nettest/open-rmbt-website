@@ -25,7 +25,7 @@ export class Step4Component extends LoopScreenComponent {
     }
     this.certifiedStore.activeBreadcrumbIndex.set(ECertifiedSteps.MEASUREMENT)
     this.breadcrumbs.set(this.certifiedStore.breadcrumbs())
-    if (this.certifiedStore.testStartDisabled()) {
+    if (!this.certifiedStore.isReady()) {
       this.testStartDisabled.set(true)
     } else {
       this.testStartDisabled.set(false)

@@ -69,11 +69,6 @@ export class CertifiedStoreService {
       this.activeBreadcrumbIndex() == ECertifiedSteps.ENVIRONMENT
     )
   })
-  testStartDisabled = computed(() => {
-    return this.activeBreadcrumbIndex() == ECertifiedSteps.ENVIRONMENT
-      ? !this.isEnvFormValid()
-      : !this.isDataFormValid()
-  })
 
   constructor(private readonly i18nStore: I18nStore) {
     if (globalThis.sessionStorage) {

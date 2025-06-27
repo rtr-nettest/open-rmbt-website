@@ -30,8 +30,7 @@ export const unloadOnlyFor: (
         EMeasurementStatus.ERROR &&
         !testService.isLoopModeEnabled) ||
       // Don't show dialog when it is a certified measurement and a tab is accessed out of order
-      (loopStore.isCertifiedMeasurement() &&
-        certifiedStore.testStartDisabled()) ||
+      (loopStore.isCertifiedMeasurement() && !certifiedStore.isReady()) ||
       // Don't show dialog when it is a certified or loop measurement and a tab is accessed out of order
       ((allowedPaths.includes(ERoutes.CERTIFIED_RESULT) ||
         allowedPaths.includes(ERoutes.LOOP_RESULT)) &&
