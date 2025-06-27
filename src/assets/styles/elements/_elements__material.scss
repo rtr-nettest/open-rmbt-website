@@ -66,9 +66,8 @@
   .mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--outlined
     .mdc-notched-outline--upgraded
     .mdc-floating-label--float-above {
-    transform: translateY(
-        calc(calc(26px + var(--mat-form-field-container-height) / 2) * -1)
-      )
+    top: 0 !important;
+    transform: translate(0, -50%)
       scale(var(--mat-mdc-form-field-floating-label-scale, 0.75));
   }
 }
