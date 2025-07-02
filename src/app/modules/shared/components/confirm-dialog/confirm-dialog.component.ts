@@ -9,13 +9,14 @@ export type ConfirmDialogOpts = {
   proceedButtonText?: string
   cancelButtonText?: string
   okButtonText?: string
+  disableClose?: boolean
 }
 
 @Component({
-    selector: "app-confirm-dialog",
-    templateUrl: "./confirm-dialog.component.html",
-    styleUrls: ["./confirm-dialog.component.scss"],
-    imports: [NgIf, MatButtonModule, TranslatePipe]
+  selector: "app-confirm-dialog",
+  templateUrl: "./confirm-dialog.component.html",
+  styleUrls: ["./confirm-dialog.component.scss"],
+  imports: [NgIf, MatButtonModule, TranslatePipe],
 })
 export class ConfirmDialogComponent {
   get text() {

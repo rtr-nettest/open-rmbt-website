@@ -46,6 +46,7 @@ export class MessageService {
             ...options,
           },
           scrollStrategy: this.scrollStrategyOptions.noop(),
+          disableClose: options?.disableClose ?? false,
         })
         .afterClosed()
         .subscribe((result) => {
