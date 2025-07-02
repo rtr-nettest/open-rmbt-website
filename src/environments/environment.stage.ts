@@ -14,10 +14,10 @@ export const environment = {
     exclude_from_result: ["networkType"],
   },
   certifiedDefaults: {
-    default_delay: 2,
-    default_tests: 6,
-    max_speed_firefox_mbps: 300,
+    default_delay: 1,
+    default_tests: 5,
+    max_speed_firefox_mbps: 400,
     exclude_from_result: ["networkType"],
-    disable_graphics: true,
+    disable_graphics: false,
   },
 }
