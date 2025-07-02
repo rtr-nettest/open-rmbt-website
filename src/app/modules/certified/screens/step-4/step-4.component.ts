@@ -52,6 +52,7 @@ export class Step4Component extends LoopScreenComponent {
         },
         {
           canCancel: false,
+          disableClose: true,
         }
       )
     } else {
