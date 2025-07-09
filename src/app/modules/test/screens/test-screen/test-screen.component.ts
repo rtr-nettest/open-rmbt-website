@@ -31,7 +31,7 @@ import { ITestVisualizationState } from "../../interfaces/test-visualization-sta
 import {
   ERROR_OCCURED,
   ERROR_OCCURED_SENDING_RESULTS,
-  TC_VERSION_ACCEPTED,
+  TERMS_VERSION,
 } from "../../constants/strings"
 import { MessageService } from "../../../shared/services/message.service"
 import { SpacerComponent } from "../../../shared/components/spacer/spacer.component"
@@ -132,7 +132,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
     firstValueFrom(this.settingsService.getSettings()).then((settings) => {
       if (
         settings.settings[0].terms_and_conditions.version.toString() !=
-        localStorage.getItem(TC_VERSION_ACCEPTED)
+        localStorage.getItem(TERMS_VERSION)
       ) {
         this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS], {
           queryParams: { next: this.nextRoute, current: this.currentRoute },

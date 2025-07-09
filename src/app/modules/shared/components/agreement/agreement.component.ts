@@ -2,12 +2,14 @@ import { Component, input, OnInit, output } from "@angular/core"
 import { MatButtonModule } from "@angular/material/button"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { ScrollBottomComponent } from "../scroll-bottom/scroll-bottom.component"
+import Cookies from "js-cookie"
+import { RMBTTermsV6 } from "../../../test/constants/strings"
 
 @Component({
-    selector: "app-agreement",
-    imports: [MatButtonModule, TranslatePipe, ScrollBottomComponent],
-    templateUrl: "./agreement.component.html",
-    styleUrl: "./agreement.component.scss"
+  selector: "app-agreement",
+  imports: [MatButtonModule, TranslatePipe, ScrollBottomComponent],
+  templateUrl: "./agreement.component.html",
+  styleUrl: "./agreement.component.scss",
 })
 export class AgreementComponent implements OnInit {
   agreeChange = output<void>()
@@ -47,6 +49,9 @@ export class AgreementComponent implements OnInit {
 
   agree() {
     const value = this.storageItem()
+    if (value && value.length > 1) {
+      Cookies.set(RMBTTermsV6, "true") // Legacy cookie for compatibility
+    }
     if (globalThis.localStorage && value && value.length > 1) {
       localStorage.setItem(value[0], value[1])
     }

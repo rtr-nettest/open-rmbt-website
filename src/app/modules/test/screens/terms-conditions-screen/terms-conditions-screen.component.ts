@@ -7,7 +7,7 @@ import { MatButtonModule } from "@angular/material/button"
 import { TestService } from "../../services/test.service"
 import { AgreementComponent } from "../../../shared/components/agreement/agreement.component"
 import { ERoutes } from "../../../shared/constants/routes.enum"
-import { TC_VERSION_ACCEPTED } from "../../constants/strings"
+import { TERMS_VERSION } from "../../constants/strings"
 import { SettingsService } from "../../../shared/services/settings.service"
 import { MainStore } from "../../../shared/store/main.store"
 
@@ -40,7 +40,7 @@ export class TermsConditionsScreenComponent
     const settings = this.settings()
     if (settings) {
       this.storageItem = [
-        TC_VERSION_ACCEPTED,
+        TERMS_VERSION,
         settings.settings[0].terms_and_conditions.version.toString(),
       ]
     }
