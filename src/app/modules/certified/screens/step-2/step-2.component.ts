@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core"
+import { Component, inject, OnInit } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { MatButtonModule } from "@angular/material/button"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
@@ -29,6 +29,8 @@ import { MatInputModule } from "@angular/material/input"
 import { MatRadioModule } from "@angular/material/radio"
 import { NgIf } from "@angular/common"
 import { CertifiedBreadcrumbsComponent } from "../../components/certified-breadcrumbs/certified-breadcrumbs.component"
+import { LoopStoreService } from "../../../loop/store/loop-store.service"
+import { environment } from "../../../../../environments/environment"
 
 @Component({
   selector: "app-step-2",
@@ -51,6 +53,7 @@ import { CertifiedBreadcrumbsComponent } from "../../components/certified-breadc
 })
 export class Step2Component extends SeoComponent implements OnInit {
   form?: FormGroup<ICertifiedDataFormControls>
+  loopStore = inject(LoopStoreService)
 
   get breadcrumbs() {
     return this.store.breadcrumbs
@@ -120,6 +123,9 @@ export class Step2Component extends SeoComponent implements OnInit {
   }
 
   onTestStart() {
+    this.loopStore.testIntervalMinutes.set(
+      environment.certifiedDefaults.default_delay
+    )
     this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_4])
   }
 

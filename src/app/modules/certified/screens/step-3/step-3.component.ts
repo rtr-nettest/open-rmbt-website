@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from "@angular/core"
+import { Component, inject, OnInit, signal } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import {
   ECertifiedLocationType,
@@ -7,7 +7,6 @@ import {
 } from "../../interfaces/certified-env-form.interface"
 import { Title } from "@angular/platform-browser"
 import { I18nStore } from "../../../i18n/store/i18n.store"
-import { TestStore } from "../../../test/store/test.store"
 import { CertifiedStoreService } from "../../store/certified-store.service"
 import { Router } from "@angular/router"
 import { ERoutes } from "../../../shared/constants/routes.enum"
@@ -35,6 +34,8 @@ import { MatIconModule } from "@angular/material/icon"
 import { MatCheckboxModule } from "@angular/material/checkbox"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { CertifiedBreadcrumbsComponent } from "../../components/certified-breadcrumbs/certified-breadcrumbs.component"
+import { LoopStoreService } from "../../../loop/store/loop-store.service"
+import { environment } from "../../../../../environments/environment"
 
 @Component({
   selector: "app-step-3",
@@ -67,6 +68,7 @@ export class Step3Component extends SeoComponent implements OnInit {
     "Rural area",
     "Other",
   ]
+  loopStore = inject(LoopStoreService)
   fileIds = [v4()]
   files: { [key: string]: File } = {}
   disabled = signal(true)
@@ -174,6 +176,9 @@ export class Step3Component extends SeoComponent implements OnInit {
   }
 
   onTestStart() {
+    this.loopStore.testIntervalMinutes.set(
+      environment.certifiedDefaults.default_delay
+    )
     this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_4])
   }
 

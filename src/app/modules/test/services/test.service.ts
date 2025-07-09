@@ -123,7 +123,7 @@ export class TestService {
     if (this.loopStore.isLoopModeEnabled()) {
       config["additionalRegistrationParameters"] = {
         loopmode_info: {
-          max_delay: (this.loopStore.testIntervalMinutes() ?? 0) / 60,
+          max_delay: this.loopStore.testIntervalMinutes(),
           test_counter: this.loopStore.loopCounter(),
           max_tests: this.loopStore.maxTestsAllowed(),
         },
