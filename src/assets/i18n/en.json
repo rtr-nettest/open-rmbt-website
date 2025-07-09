@@ -974,6 +974,7 @@
   "Test": "Test",
   "testdl_if_bytes_download": "Data if_dl (dl-test)",
   "testdl_if_bytes_upload": "Data if_ul (dl-test)",
+  "Test failed": "Test failed",
   "tests": "Number of tests",
   "testul_if_bytes_download": "Data if_dl (ul-test)",
   "testul_if_bytes_upload": "Data if_ul (ul-test)",

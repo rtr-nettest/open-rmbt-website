@@ -20,13 +20,20 @@ import { IQoeItem } from "../interfaces/qoe-item.interface"
 
 export class SimpleHistoryResult implements ISimpleHistoryResult {
   static fromHistoryResponse(response: any) {
-    const down = response?.speed_download
-      ? parseFloat(response.speed_download.replace(",", ""))
-      : 0
-    const up = response?.speed_upload
-      ? parseFloat(response.speed_upload.replace(",", ""))
-      : 0
-    const ping = response?.ping ? parseFloat(response.ping.replace(",", "")) : 0
+    const down =
+      (!response?.speed_download && response?.speed_download != 0) ||
+      response.speed_download.trim() === ""
+        ? null
+        : parseFloat(response.speed_download.replace(",", ""))
+    const up =
+      (!response?.speed_upload && response?.speed_upload != 0) ||
+      response.speed_upload.trim() === ""
+        ? null
+        : parseFloat(response.speed_upload.replace(",", ""))
+    const ping =
+      (!response?.ping && response?.ping != 0) || response.ping.trim() === ""
+        ? null
+        : parseFloat(response.ping.replace(",", ""))
     return new SimpleHistoryResult(
       response?.time
         ? dayjs(response.time)
@@ -37,27 +44,36 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
       "",
       {
         value: down,
-        classification: ClassificationService.I.classify(
-          down * 1e3,
-          THRESHOLD_DOWNLOAD,
-          "biggerBetter"
-        ),
+        classification:
+          down != null
+            ? ClassificationService.I.classify(
+                down * 1e3,
+                THRESHOLD_DOWNLOAD,
+                "biggerBetter"
+              )
+            : null,
       },
       {
         value: up,
-        classification: ClassificationService.I.classify(
-          up * 1e3,
-          THRESHOLD_UPLOAD,
-          "biggerBetter"
-        ),
+        classification:
+          up != null
+            ? ClassificationService.I.classify(
+                up * 1e3,
+                THRESHOLD_UPLOAD,
+                "biggerBetter"
+              )
+            : null,
       },
       {
         value: ping,
-        classification: ClassificationService.I.classify(
-          ping,
-          THRESHOLD_PING,
-          "smallerBetter"
-        ),
+        classification:
+          ping != null
+            ? ClassificationService.I.classify(
+                ping,
+                THRESHOLD_PING,
+                "smallerBetter"
+              )
+            : null,
       },
       {
         value: response?.signal_strength

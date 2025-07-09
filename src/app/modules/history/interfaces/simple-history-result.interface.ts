@@ -6,8 +6,8 @@ export interface ISimpleHistoryPaginator {
 }
 
 export interface ISimpleHistoryTestMetric {
-  classification: number
-  value: number
+  classification: number | null
+  value: number | null
   chart?: any[]
   tags?: string[]
   metric?: string

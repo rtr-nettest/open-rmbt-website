@@ -43,7 +43,7 @@ export class ClassificationService {
     return Math.min(retVal, CLASSIFICATION_ITEMS)
   }
 
-  getPhaseIconByClass(phase: Phase, classification?: number) {
+  getPhaseIconByClass(phase: Phase, classification?: number | null) {
     switch (classification) {
       case 1:
         return `<i class="app-icon--phase app-icon--phase-${phase}-red"></i>`
@@ -58,7 +58,7 @@ export class ClassificationService {
     }
   }
 
-  getSignalIconByClass(classification?: number, metric?: string) {
+  getSignalIconByClass(classification?: number | null, metric?: string) {
     if (!classification) {
       return `<i class="svg-icon svg24 svg-empty"`
     }

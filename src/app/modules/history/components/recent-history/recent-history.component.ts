@@ -181,9 +181,16 @@ export class RecentHistoryComponent implements OnChanges {
           ping: " ",
         }
       }
-      const down = roundToSignificantDigits(hi.download?.value || 0)
-      const up = roundToSignificantDigits(hi.upload?.value || 0)
-      const ping = roundToSignificantDigits(hi.ping?.value || 0)
+      const down =
+        hi.download?.value != null
+          ? roundToSignificantDigits(hi.download?.value)
+          : null
+      const up =
+        hi.upload?.value != null
+          ? roundToSignificantDigits(hi.upload?.value)
+          : null
+      const ping =
+        hi.ping?.value != null ? roundToSignificantDigits(hi.ping?.value) : null
       return {
         ...hi,
         id: hi.testUuid,
@@ -195,32 +202,41 @@ export class RecentHistoryComponent implements OnChanges {
           upload: (hi.upload?.value || 0) * 1000,
           ping: hi.ping?.value || 0,
         },
-        download: this.getHtmlValueByColumnName(down, {
-          klass: hi.download?.classification || 0,
-          phase: "down",
-          units: "Mbps",
-        }),
+        download:
+          down == null
+            ? " "
+            : this.getHtmlValueByColumnName(down, {
+                klass: hi.download?.classification || 0,
+                phase: "down",
+                units: "Mbps",
+              }),
         upload: this.getHtmlValueByColumnName(up, {
           klass: hi.upload?.classification || 0,
           phase: "up",
           units: "Mbps",
         }),
-        ping: this.getHtmlValueByColumnName(ping || 0, {
-          klass: hi.ping?.classification || 0,
-          phase: "ping",
-          units: "millis",
-        }),
+        ping:
+          ping == null
+            ? " "
+            : this.getHtmlValueByColumnName(ping, {
+                klass: hi.ping?.classification || 0,
+                phase: "ping",
+                units: "millis",
+              }),
       }
     }
 
   private getHtmlValueByColumnName(
-    value: number,
+    value: number | null,
     options: {
       klass: number
       phase: Phase
       units: "Mbps" | "millis"
     }
   ) {
+    if (value === null) {
+      return this.i18nStore.translate("Test failed")
+    }
     const { klass, phase, units } = options
     return (
       this.classification.getPhaseIconByClass(phase, klass) +
