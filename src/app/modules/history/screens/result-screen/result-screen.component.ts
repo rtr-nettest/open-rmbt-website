@@ -147,6 +147,8 @@ export class ResultScreenComponent extends SeoComponent {
   detailedResults = signal<IBasicResponse<IDetailedHistoryResultItem> | null>(
     null
   )
+  failedDetailedResults =
+    signal<IBasicResponse<IDetailedHistoryResultItem> | null>(null)
   qoeResults = signal<IBasicResponse<IDetailedHistoryResultItem> | null>(null)
 
   downloadTable = signal<IOverallResult[]>([])
@@ -215,10 +217,12 @@ export class ResultScreenComponent extends SeoComponent {
         }
       }),
       tap((result) => {
-        if (result) {
+        if (result && result.openTestResponse?.["error"] != true) {
           this.basicResults.set(this.getBasicResults(result))
           this.detailedResults.set(this.getDetailedResults(result))
           this.qoeResults.set(this.getQoeResults(result))
+        } else if (result && result.openTestResponse?.["error"] == true) {
+          this.failedDetailedResults.set(this.getDetailedResults(result))
         }
         this.loading.set(false)
       })

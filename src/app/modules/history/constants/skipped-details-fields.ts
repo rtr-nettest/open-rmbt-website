@@ -17,5 +17,5 @@ export const SKIPPED_FIELDS = new Set([
   "share_subject",
   "share_text",
   "time_string",
-  "status",
+  "error",
 ])
