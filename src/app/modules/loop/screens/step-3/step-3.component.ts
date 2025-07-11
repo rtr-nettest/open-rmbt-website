@@ -69,9 +69,7 @@ export class Step3Component extends TestScreenComponent {
       withLatestFrom(this.mainStore.error$, this.loopCount$),
       distinctUntilChanged(),
       map(([state, error, _]) => {
-        if (error) {
-          this.openErrorDialog(state)
-        } else if (state.currentPhaseName === EMeasurementStatus.END) {
+        if (error || state.currentPhaseName === EMeasurementStatus.END) {
           this.goToResult(state)
         }
         this.checkIfNewTestStarted(
@@ -148,16 +146,6 @@ export class Step3Component extends TestScreenComponent {
       this.loopWaiting.set(false)
       this.waitingProgressMs = 0
     }
-  }
-
-  protected override openErrorDialog(state: ITestVisualizationState) {
-    this.message.closeAllDialogs()
-    const message =
-      this.i18nStore.translate(ERROR_OCCURED_DURING_LOOP) +
-      " " +
-      this.loopStore.loopCounter()
-    this.message.openConfirmDialog(message, () => void 0)
-    this.goToResult(state)
   }
 
   protected override goToResult = (_: ITestVisualizationState) => {
