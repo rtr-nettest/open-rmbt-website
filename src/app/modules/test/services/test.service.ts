@@ -66,6 +66,7 @@ export class TestService {
     if (!this.loopStore.isLoopModeEnabled()) {
       this.loopStore.loopUuid.set(null)
     }
+    this.loopStore.lastTestFinishedAt.set(0)
     this.worker = new Worker(new URL("./test-timer.worker", import.meta.url))
     this.worker.addEventListener("message", ({ data }) => {
       this.ngZone.run(() => {

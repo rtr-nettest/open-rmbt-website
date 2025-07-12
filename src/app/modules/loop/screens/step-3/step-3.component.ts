@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core"
+import { Component, HostListener, inject } from "@angular/core"
 import {
   imports,
   TestScreenComponent,
@@ -64,7 +64,6 @@ export class Step3Component extends TestScreenComponent {
       return
     }
     document.addEventListener("visibilitychange", this.tabActivityListener)
-    this.loopStore.loopUuid.set(null)
     this.visualization$ = this.store.visualization$.pipe(
       withLatestFrom(this.mainStore.error$, this.loopCount$),
       distinctUntilChanged(),
@@ -106,17 +105,20 @@ export class Step3Component extends TestScreenComponent {
         if (document.hidden && diff > 0) {
           this.ts.setTitle(`(${diff}) ${this.metaTitle}`)
         }
-        firstValueFrom(
-          this.historyService.getLoopHistory(this.loopStore.loopUuid()!)
-        )
-          .then((history) => {
-            this.result.set(history)
-          })
-          .catch((err) => {
-            console.error("Error fetching loop history:", err)
-          })
+        this.setHistory()
       })
     this.scheduleLoop()
+  }
+
+  private async setHistory() {
+    try {
+      const history = await firstValueFrom(
+        this.historyService.getLoopHistory(this.loopStore.loopUuid()!)
+      )
+      this.result.set(history)
+    } catch (err) {
+      console.error("Error fetching loop history:", err)
+    }
   }
 
   protected scheduleLoop() {
@@ -175,5 +177,18 @@ export class Step3Component extends TestScreenComponent {
       this.progressMs.set(currentMs)
       this.progress.set((this.waitingProgressMs / timeTillEndMs) * 100)
     }
+  }
+
+  @HostListener("window:beforeunload", ["$event"])
+  override preventReload(event: BeforeUnloadEvent) {
+    event.preventDefault()
+    event.returnValue = true
+    this.loopService.pauseLoop()
+    return true
+  }
+
+  @HostListener("window:focus")
+  resumeLoop() {
+    this.loopService.resumeLoop()
   }
 }

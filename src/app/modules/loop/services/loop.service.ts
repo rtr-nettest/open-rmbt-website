@@ -12,7 +12,8 @@ export type LoopOpts = {
   providedIn: "root",
 })
 export class LoopService {
-  loopSub?: Subscription
+  private worker?: Worker
+  private isLoopPaused = false
 
   constructor(private readonly loopStore: LoopStoreService) {}
 
@@ -26,19 +27,37 @@ export class LoopService {
     this.loopStore.maxTestsAllowed.set(maxTestsAllowed)
     this.loopStore.maxTestsReached.set(false)
     this.loopStore.testIntervalMinutes.set(testIntervalMinutes)
-    this.loopSub?.unsubscribe()
-    this.loopSub = interval(this.loopStore.fullTestIntervalMs()!)
-      .pipe(
-        tap(() => {
+    this.worker = new Worker(new URL("./loop-timer.worker", import.meta.url))
+    this.worker.addEventListener("message", ({ data }) => {
+      switch (data.type) {
+        case "timer":
           const newCounter = this.loopStore.loopCounter() + 1
           this.loopStore.loopCounter.set(newCounter)
-        })
-      )
-      .subscribe()
+          break
+      }
+    })
+    this.worker.postMessage({
+      type: "startTimer",
+      interval: testIntervalMinutes * 60,
+    })
+    this.isLoopPaused = false
+  }
+
+  pauseLoop() {
+    if (this.isLoopPaused) return
+    this.isLoopPaused = true
+    this.worker?.postMessage({ type: "pauseTimer" })
+  }
+
+  resumeLoop() {
+    if (!this.isLoopPaused) return
+    this.isLoopPaused = false
+    this.worker?.postMessage({ type: "resumeTimer" })
   }
 
   cancelLoop() {
-    this.loopSub?.unsubscribe()
+    this.worker?.terminate()
+    this.worker = undefined
     this.loopStore.loopCounter.set(-1)
     this.loopStore.isLoopModeEnabled.set(false)
     this.loopStore.isCertifiedMeasurement.set(false)
