@@ -159,8 +159,13 @@ export class TestService {
     phaseState: IMeasurementPhaseState & IBasicNetworkInfo,
     oldVisualization: ITestVisualizationState
   ) => {
-    if (this.isLoopModeEnabled && !this.loopStore.loopUuid()) {
-      this.loopStore.loopUuid.set(phaseState.loopUuid)
+    if (this.isLoopModeEnabled) {
+      if (!this.loopStore.loopUuid()) {
+        this.loopStore.loopUuid.set(phaseState.loopUuid)
+      }
+      if (this.loopStore.loopCounter() >= this.loopStore.maxTestsAllowed()) {
+        this.loopStore.maxTestsReached.set(true)
+      }
     }
     const oldPhaseName = oldVisualization.currentPhaseName
     const oldPhaseIsOfFinishType =
@@ -173,9 +178,6 @@ export class TestService {
       phaseState.phase === EMeasurementStatus.ABORTED
     if (newPhaseIsOfFinishType && phaseState.phase !== oldPhaseName) {
       this.loopStore.lastTestFinishedAt.set(Date.now())
-      if (this.loopStore.loopCounter() >= this.loopStore.maxTestsAllowed()) {
-        this.loopStore.maxTestsReached.set(true)
-      }
       this.stopUpdates()
       this.geoTrackerService.stopGeoTracking()
       if (phaseState.phase === EMeasurementStatus.ERROR) {
