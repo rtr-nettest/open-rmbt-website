@@ -18,6 +18,9 @@ export class LoopService {
   constructor(private readonly loopStore: LoopStoreService) {}
 
   scheduleLoop(options: LoopOpts) {
+    if (this.loopStore.isLoopModeEnabled()) {
+      return
+    }
     const { isCertifiedMeasurement, maxTestsAllowed, testIntervalMinutes } =
       options
     this.loopStore.isCertifiedMeasurement.set(isCertifiedMeasurement)
