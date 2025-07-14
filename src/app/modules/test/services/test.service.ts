@@ -181,7 +181,7 @@ export class TestService {
       this.stopUpdates()
       this.geoTrackerService.stopGeoTracking()
       if (phaseState.phase === EMeasurementStatus.ERROR) {
-        this.sendAbort(phaseState.testUuid)
+        this.sendFail(phaseState.testUuid)
         if (oldPhaseName === EMeasurementStatus.NOT_STARTED) {
           // Probably the server is not reachable
           this.optionsStore.ipVersion.set("default")
@@ -273,6 +273,17 @@ export class TestService {
         break
     }
     return Math.round((progressSegments / ProgressSegmentsTotal) * 100)
+  }
+
+  sendFail(testUuid: string | undefined) {
+    navigator.sendBeacon(
+      `${environment.api.baseUrl}/RMBTControlServer/resultUpdate`,
+      JSON.stringify({
+        uuid: localStorage.getItem(UUID),
+        test_uuid: testUuid,
+        failed: true,
+      })
+    )
   }
 
   sendAbort(testUuid: string | undefined) {
