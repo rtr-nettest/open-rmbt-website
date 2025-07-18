@@ -5,7 +5,7 @@ import {
   inject,
   signal,
 } from "@angular/core"
-import { UUID } from "../../../test/constants/strings"
+import { TERMS_VERSION, UUID } from "../../../test/constants/strings"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
@@ -34,6 +34,9 @@ import { HtmlWrapperComponent } from "../../../shared/components/html-wrapper/ht
 import { environment } from "../../../../../environments/environment"
 import { IBreadcrumb } from "../../../shared/interfaces/breadcrumb.interface"
 import { CertifiedBreadcrumbsComponent } from "../../../certified/components/certified-breadcrumbs/certified-breadcrumbs.component"
+import { SettingsService } from "../../../shared/services/settings.service"
+import { Router } from "@angular/router"
+import { ERoutes } from "../../../shared/constants/routes.enum"
 
 export const historyImports = [
   ActionButtonsComponent,
@@ -63,15 +66,19 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
   addMedian = false
   breadcrumbs = signal<IBreadcrumb[] | null>(null)
   cdr = inject(ChangeDetectorRef)
+  currentRoute: string | null = null
   dialog = inject(MatDialog)
   exporter = inject(HistoryExportService)
   interruptsTests = computed(() => !this.shouldGroupHistory) // Loop history
+  router = inject(Router)
   service = inject(HistoryService)
+  settingsService = inject(SettingsService)
   store = inject(HistoryStore)
   excludeColumns: string[] = ["networkType"]
   scrollStrategyOptions = inject(ScrollStrategyOptions)
   loopResults = false
   actionButtonsPosition: ActionButtonsPosition = "header"
+  nextRoute = ERoutes.HISTORY
 
   actionButtons: IMainMenuItem[] = [
     {
@@ -152,7 +159,19 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
         }
       })
     } else {
-      this.loading.set(false)
+      firstValueFrom(this.settingsService.getSettings()).then((settings) => {
+        if (
+          settings.settings[0].terms_and_conditions.version.toString() !=
+          localStorage.getItem(TERMS_VERSION)
+        ) {
+          this.router.navigate([this.i18nStore.activeLang, ERoutes.TERMS], {
+            queryParams: { next: this.nextRoute, current: this.currentRoute },
+          })
+          return
+        }
+        this.loading.set(false)
+        return
+      })
     }
   }
 

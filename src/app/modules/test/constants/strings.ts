@@ -7,5 +7,5 @@ export const ERROR_OCCURED_SENDING_RESULTS =
 export const TERMS_AND_CONDITIONS = "Terms and conditions text"
 export const UUID = "RMBTuuid"
 export const RMBTTermsV6 = "RMBTTermsV6"
-export const TC_VERSION_ACCEPTED = "RTR_NETZTEST_TC_VERSION"
+export const TERMS_VERSION = "RMBTTermsVersion"
 export const RESULT_DATE_FORMAT = "YYYY-MM-DD HH:mm:ss"

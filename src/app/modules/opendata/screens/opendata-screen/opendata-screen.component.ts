@@ -91,16 +91,10 @@ export class OpendataScreenComponent
   router = inject(Router)
   columns = RECENT_MEASUREMENTS_COLUMNS
   data$ = toObservable(this.opendataStoreService.data).pipe(
-    map((data) => {
-      const content: IRecentMeasurement[] = []
-      for (const item of data) {
-        content.push(formatTime(item))
-      }
-      return {
-        content: data,
-        totalElements: data?.length,
-      }
-    })
+    map((data) => ({
+      content: data,
+      totalElements: data?.length,
+    }))
   )
   recentMeasurementSub = interval(5000)
     .pipe(takeUntil(this.destroyed$))
@@ -136,12 +130,16 @@ export class OpendataScreenComponent
     return firstValueFrom(
       this.opendataService.search(newFilters).pipe(
         map((response) => {
-          this.opendataStoreService.cursor.set(response.next_cursor)
+          const { results, next_cursor } = response
+          results.forEach((item) => {
+            formatTime(item)
+          })
+          this.opendataStoreService.cursor.set(next_cursor)
           this.opendataStoreService.data.set([
             ...this.opendataStoreService.data(),
-            ...response.results,
+            ...results,
           ])
-          return response.results
+          return results
         })
       )
     )
@@ -193,6 +191,9 @@ export class OpendataScreenComponent
     ).then((resp) => {
       const oldContent = this.opendataStoreService.data()
       let newContent = resp?.results?.length ? resp.results : []
+      newContent.forEach((item) => {
+        formatTime(item)
+      })
       const lastTestUuid = newContent[newContent.length - 1]?.open_test_uuid
       const lastOldItemIndex = oldContent.findIndex(
         (item) => item.open_test_uuid === lastTestUuid

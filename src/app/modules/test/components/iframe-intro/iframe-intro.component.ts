@@ -9,11 +9,12 @@ import {
 import { MainStore } from "../../../shared/store/main.store"
 import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interface"
 import { I18nStore } from "../../../i18n/store/i18n.store"
-import { TC_VERSION_ACCEPTED } from "../../constants/strings"
+import { RMBTTermsV6, TERMS_VERSION } from "../../constants/strings"
 import { AsyncPipe } from "@angular/common"
 import { MatButtonModule } from "@angular/material/button"
 import { MatCheckboxModule } from "@angular/material/checkbox"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
+import Cookies from "js-cookie"
 
 @Component({
   selector: "app-iframe-intro",
@@ -64,7 +65,7 @@ export class IframeIntroComponent {
           disabled:
             this.mainStore.settings()?.settings[0].terms_and_conditions
               .version ===
-            parseFloat(localStorage.getItem(TC_VERSION_ACCEPTED) ?? ""),
+            parseFloat(localStorage.getItem(TERMS_VERSION) ?? ""),
         },
         Validators.requiredTrue
       ),
@@ -76,8 +77,11 @@ export class IframeIntroComponent {
     if (!this.form.invalid) {
       const termsVersion =
         this.mainStore.settings()?.settings[0].terms_and_conditions.version
+      if (termsVersion) {
+        Cookies.set(RMBTTermsV6, "true") // Legacy cookie for compatibility
+      }
       if (globalThis.localStorage && termsVersion) {
-        localStorage.setItem(TC_VERSION_ACCEPTED, termsVersion.toString())
+        localStorage.setItem(TERMS_VERSION, termsVersion.toString())
         this.onSubmit.emit()
       }
     }

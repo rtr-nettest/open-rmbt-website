@@ -66,6 +66,7 @@ export class TestService {
     if (!this.loopStore.isLoopModeEnabled()) {
       this.loopStore.loopUuid.set(null)
     }
+    this.loopStore.lastTestFinishedAt.set(0)
     this.worker = new Worker(new URL("./test-timer.worker", import.meta.url))
     this.worker.addEventListener("message", ({ data }) => {
       this.ngZone.run(() => {
@@ -123,7 +124,7 @@ export class TestService {
     if (this.loopStore.isLoopModeEnabled()) {
       config["additionalRegistrationParameters"] = {
         loopmode_info: {
-          max_delay: (this.loopStore.testIntervalMinutes() ?? 0) / 60,
+          max_delay: this.loopStore.testIntervalMinutes(),
           test_counter: this.loopStore.loopCounter(),
           max_tests: this.loopStore.maxTestsAllowed(),
         },
@@ -158,8 +159,13 @@ export class TestService {
     phaseState: IMeasurementPhaseState & IBasicNetworkInfo,
     oldVisualization: ITestVisualizationState
   ) => {
-    if (this.isLoopModeEnabled && !this.loopStore.loopUuid()) {
-      this.loopStore.loopUuid.set(phaseState.loopUuid)
+    if (this.isLoopModeEnabled) {
+      if (!this.loopStore.loopUuid()) {
+        this.loopStore.loopUuid.set(phaseState.loopUuid)
+      }
+      if (this.loopStore.loopCounter() >= this.loopStore.maxTestsAllowed()) {
+        this.loopStore.maxTestsReached.set(true)
+      }
     }
     const oldPhaseName = oldVisualization.currentPhaseName
     const oldPhaseIsOfFinishType =
@@ -172,13 +178,10 @@ export class TestService {
       phaseState.phase === EMeasurementStatus.ABORTED
     if (newPhaseIsOfFinishType && phaseState.phase !== oldPhaseName) {
       this.loopStore.lastTestFinishedAt.set(Date.now())
-      if (this.loopStore.loopCounter() >= this.loopStore.maxTestsAllowed()) {
-        this.loopStore.maxTestsReached.set(true)
-      }
       this.stopUpdates()
       this.geoTrackerService.stopGeoTracking()
       if (phaseState.phase === EMeasurementStatus.ERROR) {
-        this.sendAbort(phaseState.testUuid)
+        this.sendFail(phaseState.testUuid)
         if (oldPhaseName === EMeasurementStatus.NOT_STARTED) {
           // Probably the server is not reachable
           this.optionsStore.ipVersion.set("default")
@@ -270,6 +273,17 @@ export class TestService {
         break
     }
     return Math.round((progressSegments / ProgressSegmentsTotal) * 100)
+  }
+
+  sendFail(testUuid: string | undefined) {
+    navigator.sendBeacon(
+      `${environment.api.baseUrl}/RMBTControlServer/resultUpdate`,
+      JSON.stringify({
+        uuid: localStorage.getItem(UUID),
+        test_uuid: testUuid,
+        failed: true,
+      })
+    )
   }
 
   sendAbort(testUuid: string | undefined) {

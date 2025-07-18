@@ -21,7 +21,6 @@ import { firstValueFrom } from "rxjs"
 export class LoopResultScreenComponent extends HistoryScreenComponent {
   activatedRoute: ActivatedRoute = inject(ActivatedRoute)
   loopStore = inject(LoopStoreService)
-  router = inject(Router)
   redirectUrl = `/${this.i18nStore.activeLang}/${ERoutes.LOOP_1}`
   override loopResults = true
   override shouldGroupHistory = false

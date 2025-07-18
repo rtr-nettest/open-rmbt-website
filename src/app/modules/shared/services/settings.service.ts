@@ -2,11 +2,7 @@ import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { IUserSetingsResponse } from "../../test/interfaces/user-settings-response.interface"
 import { environment } from "../../../../environments/environment"
-import {
-  RMBTTermsV6,
-  TC_VERSION_ACCEPTED,
-  UUID,
-} from "../../test/constants/strings"
+import { RMBTTermsV6, TERMS_VERSION, UUID } from "../../test/constants/strings"
 import { tap } from "rxjs"
 import { NO_ERROR_HANDLING } from "../constants/strings"
 import Cookies from "js-cookie"
@@ -19,10 +15,10 @@ export class SettingsService {
 
   getSettings() {
     let uuid = localStorage.getItem(UUID) || Cookies.get(UUID) || undefined
-    let tcVersion = localStorage.getItem(TC_VERSION_ACCEPTED) || undefined
+    let tcVersion = localStorage.getItem(TERMS_VERSION) || undefined
     if (!tcVersion && Cookies.get(RMBTTermsV6)) {
       tcVersion = "6"
-      localStorage.setItem(TC_VERSION_ACCEPTED, tcVersion)
+      localStorage.setItem(TERMS_VERSION, tcVersion)
     }
     return this.http
       .post<IUserSetingsResponse>(
@@ -50,6 +46,7 @@ export class SettingsService {
           uuid = settings?.settings[0]?.uuid
           if (uuid) {
             localStorage.setItem(UUID, uuid)
+            Cookies.set(UUID, uuid)
           }
         })
       )

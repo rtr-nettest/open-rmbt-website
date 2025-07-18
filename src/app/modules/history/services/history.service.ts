@@ -26,6 +26,8 @@ import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interf
 import { IHistoryGroupItem } from "../interfaces/history-row.interface"
 import { ISort } from "../../tables/interfaces/sort.interface"
 import { environment } from "../../../../environments/environment"
+import dayjs from "dayjs"
+import { RESULT_DATE_FORMAT } from "../../test/constants/strings"
 
 @Injectable({
   providedIn: "root",
@@ -52,6 +54,9 @@ export class HistoryService {
       from(this.repo.getResult(params)).pipe(
         switchMap((response) => {
           params.openTestUuid = response.open_test_uuid
+          if (response.status === "error") {
+            return forkJoin([of(response), of(null)])
+          }
           return forkJoin([of(response), this.repo.getOpenResult(params)])
         })
       )
@@ -91,12 +96,20 @@ export class HistoryService {
             }
           }
         }
+        if (response.status === "error") {
+          historyResult.openTestResponse = {
+            external_ip: response.external_ip,
+            time: dayjs(response.time).format(RESULT_DATE_FORMAT),
+            status: this.i18nStore.translate(response.status),
+            error: true,
+          }
+        }
         this.historyStore.simpleHistoryResult$.next(historyResult)
         const newPhase = new TestPhaseState({
           phase: EMeasurementStatus.SHOWING_RESULTS,
-          down: historyResult.download.value / 1000,
-          up: historyResult.upload.value / 1000,
-          ping: historyResult.ping.value / 1e6,
+          down: (historyResult.download.value || 0) / 1000,
+          up: (historyResult.upload.value || 0) / 1000,
+          ping: (historyResult.ping.value || 0) / 1e6,
         })
         const newState = TestVisualizationState.fromHistoryResult(
           historyResult,
