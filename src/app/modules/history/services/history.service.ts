@@ -96,7 +96,7 @@ export class HistoryService {
             }
           }
         }
-        if (response.status === "error") {
+        if (response?.status === "error") {
           historyResult.openTestResponse = {
             external_ip: response.external_ip,
             time: dayjs(response.time).format(RESULT_DATE_FORMAT),
