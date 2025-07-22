@@ -137,7 +137,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   }
 
   private setMeasurements() {
-    firstValueFrom(this.measurements.search()).then((resp) => {
+    firstValueFrom(this.measurements.getRecentMeasurements()).then((resp) => {
       const content = (resp?.results.slice(0, 5) ?? []).map((r) =>
         formatTime(r)
       )
