@@ -54,7 +54,7 @@ export class HistoryService {
       from(this.repo.getResult(params)).pipe(
         switchMap((response) => {
           params.openTestUuid = response.open_test_uuid
-          if (response.status === "error") {
+          if (response.status !== "finished") {
             return forkJoin([of(response), of(null)])
           }
           return forkJoin([of(response), this.repo.getOpenResult(params)])
@@ -96,7 +96,7 @@ export class HistoryService {
             }
           }
         }
-        if (response?.status === "error") {
+        if (response?.status !== "finished") {
           historyResult.openTestResponse = {
             external_ip: response.external_ip,
             time: dayjs(response.time).format(RESULT_DATE_FORMAT),
