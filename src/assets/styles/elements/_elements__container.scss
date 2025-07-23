@@ -13,7 +13,7 @@
   justify-content: center;
 }
 
-.app-marker-cell {
+.app-marker-cell:not(mat-header-cell) {
   align-items: center;
   display: inline-flex;
   height: rem(40);
