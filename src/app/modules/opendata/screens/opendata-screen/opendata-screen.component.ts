@@ -13,6 +13,7 @@ import {
   map,
   of,
   takeUntil,
+  tap,
 } from "rxjs"
 import { toObservable } from "@angular/core/rxjs-interop"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
@@ -97,10 +98,15 @@ export class OpendataScreenComponent
     }))
   )
   recentMeasurementSub = interval(5000)
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe(() => {
-      this.addRecentMeasurements()
-    })
+    .pipe(
+      takeUntil(this.destroyed$),
+      tap(() => {
+        if (!this.loading()) {
+          this.addRecentMeasurements()
+        }
+      })
+    )
+    .subscribe()
   filterCount = signal<string | null>(null)
   filters$ = toObservable(this.opendataStoreService.filters).pipe(
     concatMap((filters) => {
@@ -189,6 +195,9 @@ export class OpendataScreenComponent
     firstValueFrom(
       this.opendataService.search({ ...DEFAULT_FILTERS, ...filters })
     ).then((resp) => {
+      if (this.loading()) {
+        return
+      }
       const oldContent = this.opendataStoreService.data()
       let newContent = resp?.results?.length ? resp.results : []
       newContent.forEach((item) => {
