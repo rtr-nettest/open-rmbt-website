@@ -203,35 +203,35 @@ export class FiltersComponent implements OnDestroy {
     const filters = this.store.filters()
     this.form = this.fb.group({
       download_kbit_from: new FormControl<string | null>(
-        filters.download_kbit_from || null
+        filters.download_kbit_from ?? null
       ),
       download_kbit_to: new FormControl<string | null>(
-        filters.download_kbit_to || null
+        filters.download_kbit_to ?? null
       ),
       upload_kbit_from: new FormControl<string | null>(
-        filters.upload_kbit_from || null
+        filters.upload_kbit_from ?? null
       ),
       upload_kbit_to: new FormControl<string | null>(
-        filters.upload_kbit_to || null
+        filters.upload_kbit_to ?? null
       ),
       ping_ms_from: new FormControl<string | null>(
-        filters.ping_ms_from || null
+        filters.ping_ms_from ?? null
       ),
-      ping_ms_to: new FormControl<string | null>(filters.ping_ms_to || null),
+      ping_ms_to: new FormControl<string | null>(filters.ping_ms_to ?? null),
       signal_strength_from: new FormControl<string | null>(
-        filters.signal_strength_from || null
+        filters.signal_strength_from ?? null
       ),
       signal_strength_to: new FormControl<string | null>(
-        filters.signal_strength_to || null
+        filters.signal_strength_to ?? null
       ),
       loc_accuracy_from: new FormControl<string | null>(
-        filters.loc_accuracy_from || null
+        filters.loc_accuracy_from ?? null
       ),
       loc_accuracy_to: new FormControl<string | null>(
-        filters.loc_accuracy_to || null
+        filters.loc_accuracy_to ?? null
       ),
-      gkz_from: new FormControl<string | null>(filters.gkz_from || null),
-      gkz_to: new FormControl<string | null>(filters.gkz_to || null),
+      gkz_from: new FormControl<string | null>(filters.gkz_from ?? null),
+      gkz_to: new FormControl<string | null>(filters.gkz_to ?? null),
       cat_technology: new FormControl<EConnectionType | null>(
         (filters.cat_technology as EConnectionType) || null
       ),
@@ -242,7 +242,7 @@ export class FiltersComponent implements OnDestroy {
       public_ip_as_name: new FormControl<string | null>(
         filters.public_ip_as_name || null
       ),
-      timespan: new FormControl<number | null>(filters.timespan || null),
+      timespan: new FormControl<number | null>(filters.timespan ?? null),
       timespan_unit: new FormControl<ETimeUnit | null>(
         (filters.timespan_unit as ETimeUnit) || null
       ),
@@ -254,7 +254,7 @@ export class FiltersComponent implements OnDestroy {
       client_version: new FormControl<EClientVersion | null>(
         (filters.client_version as EClientVersion) || null
       ),
-      land_cover: new FormControl<number | null>(filters.land_cover || null),
+      land_cover: new FormControl<number | null>(filters.land_cover ?? null),
       network_name: new FormControl<string | null>(
         filters.network_name || null
       ),
@@ -269,14 +269,14 @@ export class FiltersComponent implements OnDestroy {
       ),
       sim_country: new FormControl<string | null>(filters.sim_country || null),
       sim_mcc_mnc: new FormControl<string | null>(filters.sim_mcc_mnc || null),
-      asn: new FormControl<number | null>(filters.asn || null),
+      asn: new FormControl<number | null>(filters.asn ?? null),
       cell_area_code: new FormControl<number | null>(
-        filters.cell_area_code || null
+        filters.cell_area_code ?? null
       ),
       cell_location_id: new FormControl<number | null>(
-        filters.cell_location_id || null
+        filters.cell_location_id ?? null
       ),
-      radio_band: new FormControl<number | null>(filters.radio_band || null),
+      radio_band: new FormControl<number | null>(filters.radio_band ?? null),
       open_uuid: new FormControl<string | null>(filters.open_uuid || null),
       client_uuid: new FormControl<string | null>(filters.client_uuid || null),
       pinned: new FormControl<boolean | null>(filters.pinned || null),
