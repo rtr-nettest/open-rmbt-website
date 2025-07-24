@@ -252,9 +252,9 @@ export class MapService {
         }
         map.setZoom(zoom)
       }
-      if (params.has("lat") && params.has("lon")) {
+      if (params.has("lat") && params.has("long")) {
         map.setCenter([
-          parseFloat(params.get("lon")!),
+          parseFloat(params.get("long")!),
           parseFloat(params.get("lat")!),
         ])
       }

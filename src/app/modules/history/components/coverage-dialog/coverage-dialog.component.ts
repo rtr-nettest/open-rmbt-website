@@ -127,7 +127,7 @@ export class CoverageDialogComponent implements AfterViewInit, OnDestroy {
     private readonly mapService: MapService,
     private readonly zone: NgZone
   ) {
-    const lon = +data.query.get("lon")!
+    const lon = +data.query.get("long")!
     const lat = +data.query.get("lat")!
     this.coverageText$ = this.i18nStore
       .getLocalizedHtml("coverage")
