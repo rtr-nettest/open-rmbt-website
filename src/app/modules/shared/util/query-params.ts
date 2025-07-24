@@ -72,7 +72,19 @@ export const filtersFromSearch = (
         continue
       }
     } else {
-      filters[key] = conversions?.[key] ? conversions[key](value) : value
+      if (value.startsWith("<")) {
+        const newKey = `${key.replace("[]", "")}_to`
+        filters[newKey] = conversions?.[newKey]
+          ? conversions[newKey](value.slice(1))
+          : value.slice(1)
+      } else if (value.startsWith(">")) {
+        const newKey = `${key.replace("[]", "")}_from`
+        filters[newKey] = conversions?.[newKey]
+          ? conversions[newKey](value.slice(1))
+          : value.slice(1)
+      } else {
+        filters[key] = conversions?.[key] ? conversions[key](value) : value
+      }
     }
   }
   return filters

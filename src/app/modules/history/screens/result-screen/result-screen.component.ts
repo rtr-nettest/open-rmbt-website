@@ -443,7 +443,7 @@ export class ResultScreenComponent extends SeoComponent {
     const search = [
       `lat=${openTestResponse["lat"]}`,
       `lon=${openTestResponse["long"]}`,
-      `accuracy=${openTestResponse["loc_accuracy"]}`,
+      `loc_accuracy=${openTestResponse["loc_accuracy"]}`,
     ]
     if (openTestResponse["distance"]) {
       search.push(`distance=${openTestResponse["distance"]}`)

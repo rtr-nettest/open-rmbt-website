@@ -45,7 +45,7 @@ export class MapComponent implements AfterViewInit {
       `lat=${this.lat()}`,
       `lon=${this.lon()}`,
       `radius=700`,
-      `accuracy=<700`,
+      `loc_accuracy=<700`,
     ]
     return `/${this.i18nStore.activeLang}/${ERoutes.OPEN_DATA}?${search.join(
       "&"
