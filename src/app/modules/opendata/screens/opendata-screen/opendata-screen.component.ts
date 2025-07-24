@@ -140,6 +140,7 @@ export class OpendataScreenComponent
           results.forEach((item) => {
             formatTime(item)
           })
+          results.forEach((item) => this.ensureSignal(item))
           this.opendataStoreService.cursor.set(next_cursor)
           this.opendataStoreService.data.set([
             ...this.opendataStoreService.data(),
@@ -180,6 +181,14 @@ export class OpendataScreenComponent
     })
   }
 
+  private ensureSignal(measurement: IRecentMeasurement) {
+    if (measurement.signal_strength || measurement.signal_strength === 0) {
+      return measurement
+    }
+    measurement.signal_strength = measurement.lte_rsrp
+    return measurement
+  }
+
   private updateFilterCount(filters: IOpendataFilters) {
     const filtersCount = Object.keys(filters).filter(
       (k) =>
@@ -203,6 +212,7 @@ export class OpendataScreenComponent
       newContent.forEach((item) => {
         formatTime(item)
       })
+      newContent.forEach((item) => this.ensureSignal(item))
       const lastTestUuid = newContent[newContent.length - 1]?.open_test_uuid
       const lastOldItemIndex = oldContent.findIndex(
         (item) => item.open_test_uuid === lastTestUuid
