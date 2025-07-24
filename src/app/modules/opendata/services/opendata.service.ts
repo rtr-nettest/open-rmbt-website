@@ -93,6 +93,12 @@ export class OpendataService {
     )
   }
 
+  getRecentMeasurements() {
+    return this.http.get<IRecentMeasurementsResponse>(
+      `${this.mainStore.api().url_web_recent_server}?_=${Date.now()}`
+    )
+  }
+
   private getSearchFromFilters(filters: IOpendataFilters) {
     const newFilters = JSON.parse(JSON.stringify(filters))
     delete newFilters.timespan

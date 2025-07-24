@@ -11,7 +11,8 @@
 
   &-wrapper {
     max-height: 320px;
-    overflow-y: scroll;
+    overflow-y: auto;
+    padding-right: 1em;
   }
 
   &-cell {

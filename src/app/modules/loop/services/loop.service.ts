@@ -35,6 +35,11 @@ export class LoopService {
       switch (data.type) {
         case "timer":
           const newCounter = this.loopStore.loopCounter() + 1
+          if (newCounter > maxTestsAllowed) {
+            this.loopStore.maxTestsReached.set(true)
+            this.cancelLoop()
+            return
+          }
           this.loopStore.loopCounter.set(newCounter)
           break
       }
