@@ -442,8 +442,8 @@ export class ResultScreenComponent extends SeoComponent {
     } +/- ${Math.round(openTestResponse["loc_accuracy"])}m)`
     const search = [
       `lat=${openTestResponse["lat"]}`,
-      `lon=${openTestResponse["long"]}`,
-      `accuracy=${openTestResponse["loc_accuracy"]}`,
+      `long=${openTestResponse["long"]}`,
+      `loc_accuracy=${openTestResponse["loc_accuracy"]}`,
     ]
     if (openTestResponse["distance"]) {
       search.push(`distance=${openTestResponse["distance"]}`)

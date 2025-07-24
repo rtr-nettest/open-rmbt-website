@@ -38,14 +38,14 @@ export class MapComponent implements AfterViewInit {
   resizeSub!: Subscription
   coverages = signal<IBasicResponse<ICoverage> | null>(null)
   lat = computed(() => this.params().get("lat"))
-  lon = computed(() => this.params().get("lon"))
+  lon = computed(() => this.params().get("long"))
 
   get href() {
     const search = [
       `lat=${this.lat()}`,
-      `lon=${this.lon()}`,
+      `long=${this.lon()}`,
       `radius=700`,
-      `accuracy=<700`,
+      `loc_accuracy=<700`,
     ]
     return `/${this.i18nStore.activeLang}/${ERoutes.OPEN_DATA}?${search.join(
       "&"

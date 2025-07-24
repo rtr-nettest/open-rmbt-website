@@ -6,7 +6,7 @@ export interface IDetailedHistoryResultItem {
   mappable?: boolean
   mapProps?: {
     coordinates: [number, number]
-    accuracy?: number
+    loc_accuracy?: number
     distance?: number
   }
   initial?: boolean

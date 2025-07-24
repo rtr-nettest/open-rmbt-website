@@ -237,9 +237,9 @@ export class MapService {
 
   setCoordinatesAndZoom(map: Map, params: URLSearchParams) {
     this.zone.runOutsideAngular(() => {
-      if (params.has("accuracy")) {
+      if (params.has("loc_accuracy")) {
         let zoom = 11
-        const accuracy = parseInt(params.get("accuracy")!)
+        const accuracy = parseInt(params.get("loc_accuracy")!)
         const distance = params.get("distance")!
         if (accuracy !== null) {
           let totalAccuracy =
@@ -252,9 +252,9 @@ export class MapService {
         }
         map.setZoom(zoom)
       }
-      if (params.has("lat") && params.has("lon")) {
+      if (params.has("lat") && params.has("long")) {
         map.setCenter([
-          parseFloat(params.get("lon")!),
+          parseFloat(params.get("long")!),
           parseFloat(params.get("lat")!),
         ])
       }
