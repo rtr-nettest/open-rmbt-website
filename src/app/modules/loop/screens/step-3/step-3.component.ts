@@ -70,7 +70,7 @@ export class Step3Component extends TestScreenComponent {
         if (
           error ||
           state.currentPhaseName === EMeasurementStatus.END ||
-          this.loopStore.maxTestsReached()
+          this.loopStore.loopCounter() > this.loopStore.maxTestsAllowed()
         ) {
           this.goToResult(state)
         }
