@@ -14,7 +14,6 @@ import {
 } from "rxjs"
 import { EMeasurementStatus } from "../../../test/constants/measurement-status.enum"
 import { ITestVisualizationState } from "../../../test/interfaces/test-visualization-state.interface"
-import { ERROR_OCCURED_DURING_LOOP } from "../../constants/strings"
 import { STATE_UPDATE_TIMEOUT } from "../../../test/constants/numbers"
 import { LoopService } from "../../services/loop.service"
 import { ERoutes } from "../../../shared/constants/routes.enum"
@@ -68,7 +67,11 @@ export class Step3Component extends TestScreenComponent {
       withLatestFrom(this.mainStore.error$, this.loopCount$),
       distinctUntilChanged(),
       map(([state, error, _]) => {
-        if (error || state.currentPhaseName === EMeasurementStatus.END) {
+        if (
+          error ||
+          state.currentPhaseName === EMeasurementStatus.END ||
+          this.loopStore.loopCounter() > this.loopStore.maxTestsAllowed()
+        ) {
           this.goToResult(state)
         }
         this.checkIfNewTestStarted(
