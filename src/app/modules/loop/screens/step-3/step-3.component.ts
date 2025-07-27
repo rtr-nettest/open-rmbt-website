@@ -67,11 +67,7 @@ export class Step3Component extends TestScreenComponent {
       withLatestFrom(this.mainStore.error$, this.loopCount$),
       distinctUntilChanged(),
       map(([state, error, _]) => {
-        if (
-          error ||
-          state.currentPhaseName === EMeasurementStatus.END ||
-          this.loopStore.loopCounter() > this.loopStore.maxTestsAllowed()
-        ) {
+        if (error || state.currentPhaseName === EMeasurementStatus.END) {
           this.goToResult(state)
         }
         this.checkIfNewTestStarted(
@@ -87,7 +83,12 @@ export class Step3Component extends TestScreenComponent {
         distinctUntilChanged(),
         takeUntil(this.stopped$)
       )
-      .subscribe(() => {
+      .subscribe((count) => {
+        if (count > this.loopStore.maxTestsAllowed()) {
+          console.log("Max tests reached, aborting loop")
+          this.abortTest()
+          return
+        }
         this.estimatedEndTime.set(
           new Date(this.loopStore.estimatedEndTime() as number)
         )
