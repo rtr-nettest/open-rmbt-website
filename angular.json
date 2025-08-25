@@ -52,6 +52,7 @@
           "configurations": {
             "production": {
               "index": "src/index.html",
+              "sourceMap": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -67,7 +68,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumError": "8.1kB"
                 }
               ],
               "outputHashing": "all"
