@@ -115,20 +115,20 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
           features.push(coordinates)
           if (
             document.fullscreenElement &&
-            i == cachedMarkers.length - 1 &&
+            i == 0 &&
             (m.long != this.lastPopupLonLat?.[0] ||
               m.lat != this.lastPopupLonLat?.[1])
           ) {
             this.popup.removePopup()
             this.popup.addPopup(this.map, [m])
           }
-          if (i == cachedMarkers.length - 1) {
+          if (i == 0) {
             this.lastPopupLonLat = [m.long, m.lat]
           }
           return this.mapService.addMarker(this.map, {
             lon: m.long,
             lat: m.lat,
-            diameter: i == this.measurements.length - 1 ? 24 : 18,
+            diameter: i == 0 ? 24 : 18,
             classification: m.download_classification,
             onClick: () => {
               this.popup.addPopup(this.map, [m])
