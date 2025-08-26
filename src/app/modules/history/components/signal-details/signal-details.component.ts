@@ -31,6 +31,7 @@ export class SignalDetailsComponent extends ShowDetailsComponent<ISimpleHistoryS
       header: "Signal strength",
       component: CellInfoComponent,
       getComponentParameters: (row) => row,
+      getNgClass: () => "app-cell--signal-strength",
     },
     {
       columnDef: "cat_technology",

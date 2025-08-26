@@ -5,18 +5,21 @@ import { I18nStore } from "../../../i18n/store/i18n.store"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 
 @Component({
-    selector: "app-cell-info",
-    imports: [],
-    templateUrl: "./cell-info.component.html",
-    styleUrl: "./cell-info.component.scss"
+  selector: "app-cell-info",
+  imports: [],
+  templateUrl: "./cell-info.component.html",
+  styleUrl: "./cell-info.component.scss",
 })
 export class CellInfoComponent
   implements IDynamicComponent<ISimpleHistorySignal>
 {
   @Input() set parameters(value: ISimpleHistorySignal) {
     this.rows = []
-    this.makeSignalInfo(value)
-    this.makeCellInfo(value)
+    if (value.cellInfoHeader) {
+      this.makeCellInfo(value)
+    } else {
+      this.makeSignalInfo(value)
+    }
   }
   rows: string[] = []
 

@@ -36,6 +36,7 @@ export interface ISimpleHistorySignal {
   signal_strength: number
   time_elapsed: number
   timing_advance: number | null
+  cellInfoHeader?: boolean
 }
 
 export interface ISimpleHistoryResult {

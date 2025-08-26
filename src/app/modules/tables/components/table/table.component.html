@@ -241,6 +241,7 @@
       [class.mat-row--hidden]="row.hidden === true"
       [class.mat-row--visible]="row.hidden === false"
       [class.mat-row--group-header]="row.groupHeader"
+      [class.mat-row--cell-info-header]="row.cellInfoHeader"
       (click)="onRowClick.emit(row)"
       (keydown.enter)="onRowClick.emit(row)"
       tabindex="0"

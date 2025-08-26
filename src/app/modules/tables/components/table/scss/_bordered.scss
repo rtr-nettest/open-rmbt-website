@@ -27,4 +27,10 @@
       }
     }
   }
+
+  .mat-row--cell-info-header {
+    .app-cell--signal-strength {
+      border-right: none;
+    }
+  }
 }
