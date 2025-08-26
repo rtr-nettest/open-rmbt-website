@@ -16,18 +16,18 @@ import { arrowRotate } from "../../animations/arrow-rotate.animation"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 @Component({
-    selector: "app-top-nav",
-    animations: [expandToFixedHeight, expandVertically, arrowRotate],
-    imports: [
-        AsyncPipe,
-        MatButtonModule,
-        MatIconModule,
-        MatMenuModule,
-        RouterModule,
-        TranslatePipe,
-    ],
-    templateUrl: "./top-nav.component.html",
-    styleUrl: "./top-nav.component.scss"
+  selector: "app-top-nav",
+  animations: [expandToFixedHeight, expandVertically, arrowRotate],
+  imports: [
+    AsyncPipe,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    RouterModule,
+    TranslatePipe,
+  ],
+  templateUrl: "./top-nav.component.html",
+  styleUrl: "./top-nav.component.scss",
 })
 export class TopNavComponent {
   mainItems$!: Observable<ILink[]>
@@ -101,7 +101,7 @@ export class TopNavComponent {
     return `/${this.activeLang}/${route}`
   }
 
-  toggleSubmenu(event: MouseEvent) {
+  toggleSubmenu(event: MouseEvent | FocusEvent) {
     event.stopPropagation()
     this.submenuOpen = !this.submenuOpen
   }
@@ -111,8 +111,12 @@ export class TopNavComponent {
     this.mobileSubmenuOpen = !this.mobileSubmenuOpen
   }
 
+  showSubmenu() {
+    this.submenuOpen = true
+  }
+
   @HostListener("document:click")
-  hideMenu() {
+  hideSubmenu() {
     this.submenuOpen = false
   }
 }
