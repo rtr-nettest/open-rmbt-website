@@ -101,11 +101,6 @@ export class TopNavComponent {
     return `/${this.activeLang}/${route}`
   }
 
-  toggleSubmenu(event: MouseEvent | FocusEvent) {
-    event.stopPropagation()
-    this.submenuOpen = !this.submenuOpen
-  }
-
   toggleMobileSubmenu(event: MouseEvent) {
     event.stopPropagation()
     this.mobileSubmenuOpen = !this.mobileSubmenuOpen
@@ -113,6 +108,10 @@ export class TopNavComponent {
 
   showSubmenu() {
     this.submenuOpen = true
+  }
+
+  toggleSubmenu(event: MouseEvent | FocusEvent) {
+    event.stopPropagation()
   }
 
   @HostListener("document:click")
