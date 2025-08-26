@@ -22,6 +22,8 @@ export class QoeBarComponent
     this.bars = this.bars.map((_, i) => {
       return i + 1 <= fill ? value.classification : 0
     })
+    this.fill = Math.round(fill * 100) + "%"
   }
   bars: number[] = Array.from({ length: BAR_COUNT })
+  fill: string = "0%"
 }
