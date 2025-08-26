@@ -29,6 +29,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   cachedMarkers: Marker[] = []
   destroyed$ = new Subject<void>()
   fullScreen = inject(FullScreenService)
+  lastPopupLonLat: [number, number] | null = null
   mapId = "map"
   map!: Map
   mapService = inject(MapService)
@@ -112,7 +113,12 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.cachedMarkers = cachedMarkers.map((m, i) => {
           const coordinates: [number, number] = [m.long, m.lat]
           features.push(coordinates)
-          if (i == cachedMarkers.length - 1) {
+          if (
+            i == cachedMarkers.length - 1 &&
+            (m.long != this.lastPopupLonLat?.[0] ||
+              m.lat != this.lastPopupLonLat?.[1])
+          ) {
+            this.lastPopupLonLat = [m.long, m.lat]
             this.popup.removePopup()
             this.popup.addPopup(this.map, [m])
           }
