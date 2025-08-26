@@ -45,7 +45,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   ngOnDestroy(): void {
     this.destroyed$.next()
     this.destroyed$.complete()
-    this.map?.off("resize", this.showStats)
+    globalThis?.document.removeEventListener("fullscreenchange", this.showStats)
   }
 
   ngAfterViewInit(): void {
@@ -79,7 +79,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
       for (const control of this.controls) {
         this.map.addControl(control)
       }
-      this.map.on("resize", this.showStats)
+      globalThis?.document.addEventListener("fullscreenchange", this.showStats)
     })
   }
 
@@ -106,21 +106,26 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
       if (this.measurements.length) {
         this.cachedMarkers.forEach((m) => m.remove())
         const features: [number, number][] = []
-        this.cachedMarkers = [...this.measurements]
-          .filter((m) => m.lat && m.long)
-          .map((m, i) => {
-            const coordinates: [number, number] = [m.long, m.lat]
-            features.push(coordinates)
-            return this.mapService.addMarker(this.map, {
-              lon: m.long,
-              lat: m.lat,
-              diameter: i == this.measurements.length - 1 ? 24 : 18,
-              classification: m.download_classification,
-              onClick: () => {
-                this.popup.addPopup(this.map, [m])
-              },
-            })
+        const cachedMarkers = [...this.measurements].filter(
+          (m) => m.lat && m.long
+        )
+        this.cachedMarkers = cachedMarkers.map((m, i) => {
+          const coordinates: [number, number] = [m.long, m.lat]
+          features.push(coordinates)
+          if (i == cachedMarkers.length - 1) {
+            this.popup.removePopup()
+            this.popup.addPopup(this.map, [m])
+          }
+          return this.mapService.addMarker(this.map, {
+            lon: m.long,
+            lat: m.lat,
+            diameter: i == this.measurements.length - 1 ? 24 : 18,
+            classification: m.download_classification,
+            onClick: () => {
+              this.popup.addPopup(this.map, [m])
+            },
           })
+        })
         if (features.length > 1) {
           const line = lineString(features)
           const box = bbox(line) as [number, number, number, number]
