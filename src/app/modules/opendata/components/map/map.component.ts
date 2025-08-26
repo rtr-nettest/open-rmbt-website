@@ -119,10 +119,10 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
             (m.long != this.lastPopupLonLat?.[0] ||
               m.lat != this.lastPopupLonLat?.[1])
           ) {
-            this.lastPopupLonLat = [m.long, m.lat]
             this.popup.removePopup()
             this.popup.addPopup(this.map, [m])
           }
+          this.lastPopupLonLat = [m.long, m.lat]
           return this.mapService.addMarker(this.map, {
             lon: m.long,
             lat: m.lat,
