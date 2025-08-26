@@ -39,4 +39,5 @@ export class SignalDetailsComponent extends ShowDetailsComponent<ISimpleHistoryS
       getNgClass: () => "app-cell--20",
     },
   ]
+  override width: string = "min(600px, 100%)"
 }
