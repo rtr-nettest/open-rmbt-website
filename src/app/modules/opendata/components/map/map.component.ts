@@ -122,7 +122,9 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
             this.popup.removePopup()
             this.popup.addPopup(this.map, [m])
           }
-          this.lastPopupLonLat = [m.long, m.lat]
+          if (i == cachedMarkers.length - 1) {
+            this.lastPopupLonLat = [m.long, m.lat]
+          }
           return this.mapService.addMarker(this.map, {
             lon: m.long,
             lat: m.lat,
