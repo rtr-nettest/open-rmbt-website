@@ -114,6 +114,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
           const coordinates: [number, number] = [m.long, m.lat]
           features.push(coordinates)
           if (
+            document.fullscreenElement &&
             i == cachedMarkers.length - 1 &&
             (m.long != this.lastPopupLonLat?.[0] ||
               m.lat != this.lastPopupLonLat?.[1])
