@@ -601,6 +601,10 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
         max_tests: repetitions,
         loop_uuid: loopUUID
     };
+    if (certTest) {
+        config.additionalRegistrationParameters["loopmode_info"].cert_mode = true;
+    }
+
     var websocketTest = new RMBTTest(config, ctrl);
     $("#testcount").text((i + 1));
 
