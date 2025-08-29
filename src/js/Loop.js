@@ -601,7 +601,7 @@ function startSingleTest(i, testSuccessCallback, testErrorCallback) {
         max_tests: repetitions,
         loop_uuid: loopUUID
     };
-    if (certTest) {
+    if (typeof certTest !== 'undefined' && certTest) {
         config.additionalRegistrationParameters["loopmode_info"].cert_mode = true;
     }
 
