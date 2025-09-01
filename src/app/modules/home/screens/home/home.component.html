@@ -12,6 +12,7 @@
         title="Start RTR-NetTest"
         [primary]="true"
         [mobileLink]="mobileLink"
+        tabindex="-1"
       ></app-card-button>
       } @else {
       <app-card-button
@@ -20,6 +21,7 @@
         title="Start RTR-NetTest"
         [primary]="true"
         [routerLink]="eRoutes.TEST"
+        tabindex="-1"
       ></app-card-button>
       }
     </div>
@@ -37,6 +39,7 @@
           smallText="Conduct repeated measurements"
           title="Loop mode"
           [routerLink]="eRoutes.LOOP_1"
+          tabindex="-1"
         ></app-card-button>
       </div>
       <div class="app-col app-col--padded">
@@ -44,6 +47,7 @@
           smallText="Conduct certified measurements"
           title="Certified measurement"
           [routerLink]="eRoutes.CERTIFIED_1"
+          tabindex="-1"
         ></app-card-button>
       </div>
       <div class="app-col app-col--padded">
@@ -51,6 +55,7 @@
           smallText="Map with test results"
           title="Map view"
           [routerLink]="eRoutes.MAP"
+          tabindex="-1"
         ></app-card-button>
       </div>
       <div class="app-col app-col--padded">
@@ -58,6 +63,7 @@
           smallText="Statistics on the results"
           title="Statistics"
           [routerLink]="eRoutes.STATISTICS"
+          tabindex="-1"
         ></app-card-button>
       </div>
       <div class="app-col app-col--padded">
@@ -72,6 +78,7 @@
           smallText="Explore open data test results"
           title="Open data"
           [routerLink]="eRoutes.OPEN_DATA"
+          tabindex="-1"
         ></app-card-button>
       </div>
       <div class="app-col app-col--padded">

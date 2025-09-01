@@ -31,6 +31,7 @@ export class SignalDetailsComponent extends ShowDetailsComponent<ISimpleHistoryS
       header: "Signal strength",
       component: CellInfoComponent,
       getComponentParameters: (row) => row,
+      getNgClass: () => "app-cell--signal-strength",
     },
     {
       columnDef: "cat_technology",
@@ -38,4 +39,5 @@ export class SignalDetailsComponent extends ShowDetailsComponent<ISimpleHistoryS
       getNgClass: () => "app-cell--20",
     },
   ]
+  override width: string = "min(600px, 100%)"
 }

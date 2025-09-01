@@ -16,9 +16,9 @@ const ID = "fullScreenStats"
 
 type PopupData = {
   time: string
-  minutesTests?: number
+  minutesTests?: string
   minutes?: number
-  hoursTests?: number
+  hoursTests?: string
   hours?: number
 }
 
@@ -80,9 +80,13 @@ export class FullScreenService {
     this.data = {
       ...(this.data ?? { time: dayjs().format("HH:mm:ss") }),
       minutes: 30,
-      minutesTests: stats["30min"],
+      minutesTests: stats["30min"]
+        ? stats["30min"].toLocaleString(this.i18nStore.activeLang)
+        : undefined,
       hours: 24,
-      hoursTests: stats["24h"],
+      hoursTests: stats["24h"]
+        ? stats["24h"].toLocaleString(this.i18nStore.activeLang)
+        : undefined,
     }
 
     return this.parseTpl()

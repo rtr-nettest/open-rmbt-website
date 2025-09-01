@@ -178,3 +178,14 @@ mat-paginator {
     position: absolute;
   }
 }
+
+.app-cell--signal-strength {
+  flex: auto;
+}
+
+.mat-row--cell-info-header {
+  .mat-column-cat_technology,
+  .mat-column-time_elapsed * {
+    display: none;
+  }
+}

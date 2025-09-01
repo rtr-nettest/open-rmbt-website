@@ -1,4 +1,4 @@
-import { Component, signal } from "@angular/core"
+import { Component, computed, signal } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
@@ -156,6 +156,24 @@ export class ResultScreenComponent extends SeoComponent {
   pingTable = signal<IPing[]>([])
   locationTable = signal<ISimpleHistoryTestLocation[]>([])
   signalTable = signal<ISimpleHistorySignal[]>([])
+  signalTableGrouped = computed(() => {
+    const signalTable = this.signalTable()
+    const out: ISimpleHistorySignal[] = []
+    let currentHeader: string | undefined
+    for (const signal of signalTable) {
+      out.push(signal)
+      const newHeader =
+        JSON.stringify(signal.cell_info_2G) +
+        JSON.stringify(signal.cell_info_3G) +
+        JSON.stringify(signal.cell_info_4G) +
+        JSON.stringify(signal.cell_info_5G)
+      if (currentHeader !== newHeader) {
+        currentHeader = newHeader
+        out.push({ ...signal, cellInfoHeader: true })
+      }
+    }
+    return out
+  })
   phaseDurations = signal<PhaseDurations>({})
   loading = signal<boolean>(true)
 

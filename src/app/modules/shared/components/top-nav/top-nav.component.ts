@@ -16,18 +16,18 @@ import { arrowRotate } from "../../animations/arrow-rotate.animation"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 @Component({
-    selector: "app-top-nav",
-    animations: [expandToFixedHeight, expandVertically, arrowRotate],
-    imports: [
-        AsyncPipe,
-        MatButtonModule,
-        MatIconModule,
-        MatMenuModule,
-        RouterModule,
-        TranslatePipe,
-    ],
-    templateUrl: "./top-nav.component.html",
-    styleUrl: "./top-nav.component.scss"
+  selector: "app-top-nav",
+  animations: [expandToFixedHeight, expandVertically, arrowRotate],
+  imports: [
+    AsyncPipe,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    RouterModule,
+    TranslatePipe,
+  ],
+  templateUrl: "./top-nav.component.html",
+  styleUrl: "./top-nav.component.scss",
 })
 export class TopNavComponent {
   mainItems$!: Observable<ILink[]>
@@ -101,18 +101,21 @@ export class TopNavComponent {
     return `/${this.activeLang}/${route}`
   }
 
-  toggleSubmenu(event: MouseEvent) {
-    event.stopPropagation()
-    this.submenuOpen = !this.submenuOpen
-  }
-
   toggleMobileSubmenu(event: MouseEvent) {
     event.stopPropagation()
     this.mobileSubmenuOpen = !this.mobileSubmenuOpen
   }
 
+  showSubmenu() {
+    this.submenuOpen = true
+  }
+
+  toggleSubmenu(event: MouseEvent | FocusEvent) {
+    event.stopPropagation()
+  }
+
   @HostListener("document:click")
-  hideMenu() {
+  hideSubmenu() {
     this.submenuOpen = false
   }
 }

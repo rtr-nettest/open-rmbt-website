@@ -20,7 +20,7 @@
   <ng-container *ngTemplateOutlet="card"></ng-container>
 </div>
 } @else {
-<div class="app-card">
+<div class="app-card app-card--static">
   <ng-container *ngTemplateOutlet="card"></ng-container>
 </div>
 }
@@ -29,7 +29,7 @@
   @if (iconImage) {
   <div class="app-card-media-top">
     <span class="app-icon">
-      <img [src]="iconImage" />
+      <img [src]="iconImage" alt="{{ title | translate }}" />
     </span>
   </div>
   }

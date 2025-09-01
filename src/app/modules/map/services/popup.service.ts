@@ -70,6 +70,10 @@ export class PopupService {
     this.popup.setLngLat([lon, lat]).addTo(mapContainer).setHTML(content)
   }
 
+  removePopup() {
+    this.popup?.remove()
+  }
+
   private async getPopupContent(measurements: IRecentMeasurement[]) {
     const retVal = await Promise.all(
       measurements.map((measurement) => this.getSingleMeasurement(measurement))

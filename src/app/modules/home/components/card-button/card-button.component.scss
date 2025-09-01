@@ -45,6 +45,10 @@
   &:hover {
     text-decoration: none;
     transform: translateY(0.4rem) scale(0.98);
+
+    &.app-card--static {
+      transform: none;
+    }
   }
 
   &--primary {

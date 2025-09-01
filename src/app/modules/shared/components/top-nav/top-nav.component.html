@@ -20,6 +20,8 @@
           } @else {
           <a
             class="app-link app-link--dark"
+            tabIndex="0"
+            (focus)="showSubmenu()"
             (click)="toggleSubmenu($event)"
             mat-button
             >{{ item.label
@@ -54,17 +56,27 @@
   <div class="app-wrapper">
     <nav class="app-sub-nav">
       <ul class="app-list">
-        @for (item of subItems$ | async; track $index) {
+        @if (subItems$ | async; as subItems){ @for (item of subItems; track
+        $index) {
         <li class="app-li">
           @if(item.route) {
-          <a class="app-link" [routerLink]="item.route">{{ item.label }}</a>
+          <a
+            class="app-link"
+            [routerLink]="item.route"
+            (blur)="$index == subItems.length - 1 ? hideSubmenu() : null"
+            >{{ item.label }}</a
+          >
           } @else {
-          <a class="app-link" [href]="item.url" target="_blank">{{
-            item.label
-          }}</a>
+          <a
+            class="app-link"
+            [href]="item.url"
+            target="_blank"
+            (blur)="$index == subItems.length - 1 ? hideSubmenu() : null"
+            >{{ item.label }}</a
+          >
           }
         </li>
-        }
+        } }
       </ul>
     </nav>
   </div>
@@ -128,7 +140,13 @@
         mat-icon-button
         class="app-icon-button"
       >
-        <img src="/assets/images/mailto.svg" />
+        <img
+          src="/assets/images/mailto.svg"
+          [alt]="
+            'mailto:netztest@rtr.at?subject=Supportanfrage%20RTR-Netztest%20%28Web%29'
+              | translate
+          "
+        />
       </a>
     </li>
   </ul>
