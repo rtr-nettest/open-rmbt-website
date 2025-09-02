@@ -127,6 +127,9 @@ export class TestService {
           max_delay: this.loopStore.testIntervalMinutes(),
           test_counter: this.loopStore.loopCounter(),
           max_tests: this.loopStore.maxTestsAllowed(),
+          ...(this.loopStore.isCertifiedMeasurement()
+            ? { cert_mode: true }
+            : {}),
         },
       }
       const loopUuid = this.loopStore.loopUuid()
