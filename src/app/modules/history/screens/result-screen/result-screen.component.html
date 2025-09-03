@@ -182,7 +182,7 @@
     *ngIf="error$ | async as error"
     class="app-wrapper app-wrapper--no-result"
   >
-    {{ "Measurement failed." | translate }} {{ error.message }}
+    {{ "Measurement failed" | translate }} {{ error.message }}
   </main>
   <main
     *ngIf="(error$ | async) === null"
