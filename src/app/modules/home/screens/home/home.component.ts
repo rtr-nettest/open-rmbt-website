@@ -102,6 +102,8 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
     }
     return null
   })
+  private isInitialized = false
+  private isReplaying = false
 
   constructor(
     i18nStore: I18nStore,
@@ -119,7 +121,11 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
       interval(UPDATE_INTERVAL)
         .pipe(takeUntil(this.destroyed$))
         .subscribe(() => {
-          this.setMeasurements()
+          if (this.isInitialized) {
+            this.setMeasurements()
+          } else {
+            this.setReplayMeasurements()
+          }
         })
       const testCard = document.querySelector(
         `a[href*="${ERoutes.TEST}"]`
@@ -138,14 +144,53 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
 
   private setMeasurements() {
     firstValueFrom(this.measurements.getRecentMeasurements()).then((resp) => {
-      const content = (resp?.results.slice(0, 5) ?? []).map((r) =>
-        formatTime(r)
-      )
+      const content = (resp?.results ?? []).map((r) => formatTime(r))
       this.tableData.set({
-        content,
-        totalElements: content.length,
+        content: content.slice(0, 5),
+        totalElements: 5,
       })
-      this.recentMeasurements.set(content)
+      this.recentMeasurements.set(
+        content.filter((m) => m.lat && m.long).slice(0, 20)
+      )
+    })
+  }
+
+  private setReplayMeasurements() {
+    if (this.isReplaying) {
+      return
+    }
+    firstValueFrom(this.measurements.getRecentMeasurements()).then((resp) => {
+      this.isReplaying = true
+      const content = (resp?.results ?? []).map((r) => formatTime(r))
+      const forMap = content.filter((m) => m.lat && m.long)
+      this.recentMeasurements.set(forMap.slice(3, 23))
+      this.tableData.set({
+        content: forMap.slice(3, 8),
+        totalElements: 5,
+      })
+      setTimeout(() => {
+        this.recentMeasurements.set(forMap.slice(2, 22))
+        this.tableData.set({
+          content: forMap.slice(2, 7),
+          totalElements: 5,
+        })
+      }, 4000)
+      setTimeout(() => {
+        this.recentMeasurements.set(forMap.slice(1, 21))
+        this.tableData.set({
+          content: forMap.slice(1, 6),
+          totalElements: 5,
+        })
+      }, 7000)
+      setTimeout(() => {
+        this.recentMeasurements.set(forMap.slice(0, 20))
+        this.tableData.set({
+          content: forMap.slice(0, 5),
+          totalElements: 5,
+        })
+        this.isInitialized = true
+        this.isReplaying = false
+      }, 10000)
     })
   }
 }
