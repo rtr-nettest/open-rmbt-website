@@ -138,14 +138,14 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
 
   private setMeasurements() {
     firstValueFrom(this.measurements.getRecentMeasurements()).then((resp) => {
-      const content = (resp?.results.slice(0, 5) ?? []).map((r) =>
-        formatTime(r)
-      )
+      const content = (resp?.results ?? []).map((r) => formatTime(r))
       this.tableData.set({
-        content,
+        content: content.slice(0, 5),
         totalElements: content.length,
       })
-      this.recentMeasurements.set(content)
+      this.recentMeasurements.set(
+        content.filter((m) => m.lat && m.long).slice(0, 20)
+      )
     })
   }
 }
