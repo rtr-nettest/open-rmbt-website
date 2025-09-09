@@ -30,6 +30,10 @@ jobs:
         run: |
           npm install
           node build netztest
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-staging-zip
+          path: build/
         
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.2.5
