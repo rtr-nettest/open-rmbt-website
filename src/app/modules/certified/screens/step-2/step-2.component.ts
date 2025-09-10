@@ -60,11 +60,7 @@ export class Step2Component extends SeoComponent implements OnInit {
   }
 
   get nextStepAvailable() {
-    return this.store.nextStepAvailable
-  }
-
-  get testStartAvailable() {
-    return this.store.testStartAvailable
+    return !!this.form?.controls.isFirstCycle.value
   }
 
   constructor(
@@ -123,6 +119,7 @@ export class Step2Component extends SeoComponent implements OnInit {
   }
 
   onTestStart() {
+    this.store.envForm.set(null)
     this.loopStore.testIntervalMinutes.set(
       environment.certifiedDefaults.default_delay
     )

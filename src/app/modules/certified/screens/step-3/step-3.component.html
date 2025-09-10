@@ -28,19 +28,9 @@
           let i = index
         "
       >
-        <mat-checkbox
-          *ngIf="i < locationValues.length - 1"
-          [value]="locationValues[i]"
-          [formControl]="control"
-          >{{ locationNames[i] | translate }}</mat-checkbox
-        >
-        <mat-checkbox
-          *ngIf="i === locationValues.length - 1"
-          (change)="toggleLocationTypeOther(!$event.checked)"
-          [value]="locationValues[i]"
-          [formControl]="control"
-          >{{ locationNames[i] | translate }}:</mat-checkbox
-        >
+        <mat-checkbox [value]="locationValues[i]" [formControl]="control">{{
+          locationNames[i] | translate
+        }}</mat-checkbox>
       </li>
     </ul>
     <mat-form-field appearance="outline">
@@ -49,7 +39,7 @@
         formControlName="locationTypeOther"
         name="locationTypeOther"
         [required]="
-          form.controls.locationType.controls[locationValues.length - 1].value
+          !!form.controls.locationType.controls[locationValues.length - 1].value
         "
       ></textarea>
       <mat-error
@@ -123,7 +113,7 @@
       </button>
     </p>
   </form>
-  } @if (testStartAvailable()) {
+  }
   <button
     style="margin-top: 16px"
     mat-flat-button
@@ -133,6 +123,5 @@
   >
     {{ "Start certified measurement" | translate }}
   </button>
-  }
 </div>
 <app-footer></app-footer>

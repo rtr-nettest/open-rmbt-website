@@ -79,7 +79,7 @@
       }}</mat-radio-button>
     </mat-radio-group>
   </form>
-  } @if (nextStepAvailable()) {
+  } @if (nextStepAvailable) {
   <button
     style="margin-top: 16px"
     mat-flat-button
@@ -89,7 +89,7 @@
   >
     {{ "Next" | translate }}
   </button>
-  } @else if (testStartAvailable()) {
+  } @else {
   <button
     style="margin-top: 16px"
     mat-flat-button
