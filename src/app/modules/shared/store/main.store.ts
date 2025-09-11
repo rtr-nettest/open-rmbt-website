@@ -1,6 +1,12 @@
 import { computed, Injectable, signal } from "@angular/core"
 import { BehaviorSubject } from "rxjs"
 import { IUserSetingsResponse } from "../../test/interfaces/user-settings-response.interface"
+import * as pack from "../../../../../package.json"
+
+export type GitInfo = {
+  branch: string
+  hash: string
+}
 
 @Injectable({
   providedIn: "root",
@@ -54,4 +60,8 @@ export class MainStore {
       url_web_basemap_tiles,
     }
   })
+
+  get gitInfo() {
+    return pack.gitInfo as GitInfo
+  }
 }

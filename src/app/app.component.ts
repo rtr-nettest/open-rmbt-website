@@ -5,7 +5,6 @@ import { Observable, retry, tap, timer } from "rxjs"
 import { MatProgressBarModule } from "@angular/material/progress-bar"
 import { AsyncPipe } from "@angular/common"
 import { SettingsService } from "./modules/shared/services/settings.service"
-import * as pack from "../../package.json"
 import { TranslatePipe } from "./modules/i18n/pipes/translate.pipe"
 
 @Component({
@@ -34,11 +33,9 @@ export class AppComponent {
 
   constructor(private readonly mainStore: MainStore) {
     this.inProgress$ = this.mainStore.inProgress$
-    const gitInfo = pack.gitInfo as any
-    if (gitInfo["branch"] && gitInfo["hash"]) {
-      console.log(
-        `Branch-hash: ${gitInfo["branch"]}-${gitInfo["hash"].slice(0, 8)}`
-      )
+    const gitInfo = this.mainStore.gitInfo
+    if (gitInfo.branch && gitInfo.hash) {
+      console.log(`GIT: ${gitInfo.branch}-${gitInfo.hash.slice(0, 8)}`)
     }
     window.addEventListener("popstate", () => {
       this.mainStore.routingEvent.set("popstate")

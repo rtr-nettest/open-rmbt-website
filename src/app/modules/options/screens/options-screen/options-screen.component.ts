@@ -23,6 +23,7 @@ import { UUID } from "../../../test/constants/strings"
 import { IpService } from "../../../shared/services/ip.service"
 import { AsyncPipe } from "@angular/common"
 import { MessageService } from "../../../shared/services/message.service"
+import { MainStore } from "../../../shared/store/main.store"
 
 @Component({
   selector: "app-options-screen",
@@ -46,6 +47,7 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
   fb = inject(FormBuilder)
   store = inject(OptionsStoreService)
   ipService = inject(IpService)
+  mainStore = inject(MainStore)
   message = inject(MessageService)
   ipVersionOptions: { label: string; value: IpVersion }[] = [
     {
@@ -73,6 +75,10 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
   loading = signal<boolean>(true)
   error = signal<string | null>(null)
   text$ = this.i18nStore.getLocalizedHtml("options")
+
+  get gitInfo() {
+    return this.mainStore.gitInfo
+  }
 
   ngOnInit(): void {
     Promise.all([this.ipService.getIpV4(), this.ipService.getIpV6()])
