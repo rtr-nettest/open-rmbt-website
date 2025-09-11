@@ -6,6 +6,7 @@
   <h2>{{ "Client-UUID" | translate }}</h2>
   <p>{{ "Your UUID is: %0" | translate | sprintf : uuid() }}</p>
   <p [innerHTML]="'E-Mail: netztest@rtr.at' | translate"></p>
+  <p>GIT: {{ gitInfo.branch }} {{ gitInfo.hash.slice(0, 8) }}</p>
   <h2>{{ "Options" | translate }}</h2>
   <h3>{{ "IP-Version" | translate }}</h3>
   <p>

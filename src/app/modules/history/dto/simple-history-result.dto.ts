@@ -89,6 +89,7 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
         openTestUuid: response?.open_test_uuid,
         device: response?.model,
         networkType: response?.network_type,
+        status: response?.status,
       }
     )
   }

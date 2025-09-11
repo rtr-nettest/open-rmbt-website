@@ -171,7 +171,6 @@ export class HistogramComponent implements AfterViewInit {
         filters.download_kbit_to = to.toString()
         break
     }
-    console.log(filters)
     this.service.applyFilters(filters)
   }
 }

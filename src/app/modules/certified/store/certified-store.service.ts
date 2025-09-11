@@ -7,6 +7,8 @@ import { ICertifiedEnvForm } from "../interfaces/certified-env-form.interface"
 import { IBreadcrumb } from "../../shared/interfaces/breadcrumb.interface"
 import { DATA_FORM, ENV_FORM } from "../constants/strings"
 
+const CERTIFIED_CACHE = "certified-test-pictures"
+
 @Injectable({
   providedIn: "root",
 })
@@ -52,23 +54,6 @@ export class CertifiedStoreService {
   isReady = signal(false)
   isDataFormValid = signal(false)
   isEnvFormValid = signal(false)
-  nextStepAvailable = computed(() => {
-    return (
-      this.activeBreadcrumbIndex() === ECertifiedSteps.INFO ||
-      (!this.isReady() &&
-        this.activeBreadcrumbIndex() != null &&
-        this.activeBreadcrumbIndex()! < ECertifiedSteps.ENVIRONMENT)
-    )
-  })
-  testStartAvailable = computed(() => {
-    return (
-      (this.isReady() &&
-        this.activeBreadcrumbIndex() != null &&
-        this.activeBreadcrumbIndex() != ECertifiedSteps.INFO &&
-        this.activeBreadcrumbIndex()! < ECertifiedSteps.MEASUREMENT) ||
-      this.activeBreadcrumbIndex() == ECertifiedSteps.ENVIRONMENT
-    )
-  })
 
   constructor(private readonly i18nStore: I18nStore) {
     if (globalThis.sessionStorage) {
@@ -78,7 +63,13 @@ export class CertifiedStoreService {
       }
       const envForm = sessionStorage.getItem(ENV_FORM)
       if (envForm) {
-        this.envForm.set(JSON.parse(envForm))
+        const parsedEnvForm: ICertifiedEnvForm = JSON.parse(envForm)
+        this.getFilesFromCache(parsedEnvForm.testPictures).then((files) => {
+          if (files) {
+            parsedEnvForm.testPictures = files
+          }
+          this.envForm.set(parsedEnvForm)
+        })
       }
       effect(() => {
         const dataForm = this.dataForm()
@@ -90,10 +81,64 @@ export class CertifiedStoreService {
         }
         if (envForm) {
           sessionStorage.setItem(ENV_FORM, JSON.stringify(envForm))
+          this.saveFilesToCache(envForm.testPictures)
         } else {
           sessionStorage.removeItem(ENV_FORM)
         }
       })
+    }
+  }
+
+  addFile(uuid: string, file: File) {
+    const form = this.envForm()!
+    const files = form.testPictures ?? {}
+    files[uuid] = file
+    this.envForm.set({ ...form, testPictures: files })
+  }
+
+  deleteFile(uuid: string) {
+    const form = this.envForm()!
+    const files = form.testPictures ?? {}
+    delete files[uuid]
+    this.envForm.set({ ...form, testPictures: files })
+  }
+
+  private async getFilesFromCache(testPictures: Record<string, File>) {
+    if (!testPictures) {
+      return
+    }
+    const cache = await caches.open(CERTIFIED_CACHE)
+    const retVal: Record<string, File> = {}
+    for (const key in testPictures) {
+      const response = await cache.match(key)
+      if (response?.ok) {
+        const blob = await response.blob()
+        const headers = response.headers
+        retVal[key] = new File([blob], headers.get("File-Name") || key, {
+          type: headers.get("Content-Type") || blob.type,
+        })
+      }
+    }
+    return retVal
+  }
+
+  private async saveFilesToCache(testPictures: Record<string, File>) {
+    const cache = await caches.open(CERTIFIED_CACHE)
+    const keys = await cache.keys()
+    keys.forEach((key) => {
+      cache.delete(key)
+    })
+    if (!testPictures) {
+      return
+    }
+    for (const [key, file] of Object.entries(testPictures)) {
+      const response = new Response(file, {
+        headers: {
+          "Content-Type": file.type,
+          "File-Name": file.name,
+        },
+      })
+      cache.put(key, response)
     }
   }
 

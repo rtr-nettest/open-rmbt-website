@@ -46,7 +46,7 @@ export class SettingsService {
           uuid = settings?.settings[0]?.uuid
           if (uuid) {
             localStorage.setItem(UUID, uuid)
-            Cookies.set(UUID, uuid)
+            Cookies.set(UUID, uuid, { expires: 365 })
           }
         })
       )

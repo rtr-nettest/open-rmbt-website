@@ -46,9 +46,10 @@ export class CertifiedExportService extends HistoryExportService {
       address: "address",
     }
     formData.append("loop_uuid", loopUuid)
-    if (envForm?.locationType.length) {
+    const locationType = envForm?.locationType ?? []
+    if (locationType.length) {
       for (const [i, l] of Object.values(ECertifiedLocationType).entries()) {
-        if (envForm.locationType.includes(l)) {
+        if (locationType[i]) {
           formData.append(`location_type_${i}`, l)
         }
       }
@@ -60,14 +61,14 @@ export class CertifiedExportService extends HistoryExportService {
         formData.append(targetField, (dataForm as any)?.[srcField])
       }
     }
-    if (!!dataForm?.isFirstCycle) {
+    if (envForm) {
       formData.append("first", "y")
     } else {
       formData.append("first", "n")
     }
-    if (envForm && Object.keys(envForm.testPictures).length > 0) {
+    if (envForm?.testPictures && Object.keys(envForm.testPictures).length > 0) {
       for (const file of Object.values(envForm.testPictures)) {
-        formData.append("test_pictures[]", file)
+        formData.append("test_pictures[]", file, file.name)
       }
     }
     return formData

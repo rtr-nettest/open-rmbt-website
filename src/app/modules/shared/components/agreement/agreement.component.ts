@@ -50,7 +50,7 @@ export class AgreementComponent implements OnInit {
   agree() {
     const value = this.storageItem()
     if (value && value.length > 1) {
-      Cookies.set(RMBTTermsV6, "true") // Legacy cookie for compatibility
+      Cookies.set(RMBTTermsV6, "true", { expires: 365 }) // Legacy cookie for compatibility
     }
     if (globalThis.localStorage && value && value.length > 1) {
       localStorage.setItem(value[0], value[1])

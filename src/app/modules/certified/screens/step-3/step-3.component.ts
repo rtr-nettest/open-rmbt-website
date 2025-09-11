@@ -36,6 +36,7 @@ import { FooterComponent } from "../../../shared/components/footer/footer.compon
 import { CertifiedBreadcrumbsComponent } from "../../components/certified-breadcrumbs/certified-breadcrumbs.component"
 import { LoopStoreService } from "../../../loop/store/loop-store.service"
 import { environment } from "../../../../../environments/environment"
+import { MainStore } from "../../../shared/store/main.store"
 
 @Component({
   selector: "app-step-3",
@@ -70,15 +71,14 @@ export class Step3Component extends SeoComponent implements OnInit {
   ]
   loopStore = inject(LoopStoreService)
   fileIds = [v4()]
-  files: { [key: string]: File } = {}
   disabled = signal(true)
 
   get breadcrumbs() {
     return this.store.breadcrumbs
   }
 
-  get testStartAvailable() {
-    return this.store.testStartAvailable
+  get files() {
+    return this.store.envForm()?.testPictures ?? {}
   }
 
   constructor(
@@ -86,6 +86,7 @@ export class Step3Component extends SeoComponent implements OnInit {
     i18nStore: I18nStore,
     private readonly fb: FormBuilder,
     private readonly fs: FileService,
+    private readonly mainStore: MainStore,
     private readonly router: Router,
     private readonly store: CertifiedStoreService
   ) {
@@ -116,51 +117,87 @@ export class Step3Component extends SeoComponent implements OnInit {
             })
         )
       ),
-      locationTypeOther: new FormControl(savedForm?.locationTypeOther || ""),
+      locationTypeOther: new FormControl({
+        value: savedForm?.locationTypeOther || "",
+        disabled: !savedForm?.locationType[4],
+      }),
       typeText: new FormControl(savedForm?.typeText || ""),
       testDevice: new FormControl(savedForm?.testDevice || ""),
+      testPictures: new FormControl(savedForm?.testPictures || this.files),
     })
-    this.toggleLocationTypeOther(true)
-    this.form.valueChanges
+    this.form.controls.locationType.valueChanges
+      .pipe(map(this.onCheckboxChange.bind(this)), takeUntil(this.destroyed$))
+      .subscribe()
+    this.form.controls.locationTypeOther.valueChanges
       .pipe(
-        map((f) => {
-          if (!f.locationType?.some((lt) => !!lt)) {
-            this.disabled.set(true)
-            this.onFormChange(null)
-            return
-          }
-          if (f.locationType[4] && !f.locationTypeOther) {
-            this.disabled.set(!f.locationTypeOther)
-            this.onFormChange(null)
-            return
-          }
-          this.disabled.set(false)
-          const locationType =
-            f.locationType?.reduce(
-              (acc, lt, i) => (lt ? [...acc, this.locationValues[i]] : acc),
-              [] as ECertifiedLocationType[]
-            ) || []
-          const formValue: ICertifiedEnvForm = {
-            ...f,
-            testPictures: this.files,
-            locationType,
-          }
-          this.onFormChange(formValue)
-        }),
+        map(this.onLocationTypeOtherChange.bind(this)),
         takeUntil(this.destroyed$)
       )
       .subscribe()
+    this.form.controls.typeText.valueChanges
+      .pipe(
+        map(() => this.onFormChange()),
+        takeUntil(this.destroyed$)
+      )
+      .subscribe()
+    this.form.controls.testDevice.valueChanges
+      .pipe(
+        map(() => this.onFormChange()),
+        takeUntil(this.destroyed$)
+      )
+      .subscribe()
+    this.onCheckboxChange(this.form.controls.locationType.value)
+    this.onLocationTypeOtherChange(this.form.controls.locationTypeOther.value)
+    this.initFiles()
+  }
+
+  private initFiles() {
+    if (Object.keys(this.files).length) {
+      this.fileIds = []
+      for (const fileId in this.files) {
+        this.fileIds.push(fileId)
+      }
+      this.fileIds.push(v4())
+    }
+  }
+
+  private onLocationTypeOtherChange = (locationTypeOther: string | null) => {
+    if (!this.form?.controls.locationType.value[4]) {
+      return
+    }
+    this.disabled.set(!locationTypeOther)
+    this.onFormChange()
+  }
+
+  private onCheckboxChange = (boxes: boolean[]) => {
+    if (boxes.some(Boolean)) {
+      let isDisabled = false
+      if (boxes[4]) {
+        this.form?.controls.locationTypeOther.enable()
+        isDisabled = !this.form?.controls.locationTypeOther.value
+      } else {
+        this.form?.controls.locationTypeOther.disable()
+      }
+      this.disabled.set(isDisabled)
+    } else {
+      this.disabled.set(true)
+      this.form?.controls.locationTypeOther.disable()
+    }
+    this.onFormChange()
   }
 
   async onFileSelected(event: Event, fileId: string) {
+    this.mainStore.inProgress$.next(true)
     const file = (event.target as HTMLInputElement).files![0]
     const compressed = await this.fs.compress(file)
     if (compressed) {
       if (!Object.hasOwn(this.files, fileId)) {
+        // add a new file field
         this.fileIds.push(v4())
       }
-      this.files[fileId] = compressed
+      this.store.addFile(fileId, compressed)
     }
+    this.mainStore.inProgress$.next(false)
   }
 
   onFileUploadClick(uuid: string) {
@@ -168,7 +205,7 @@ export class Step3Component extends SeoComponent implements OnInit {
   }
 
   onDeleteFile(uuid: string) {
-    delete this.files[uuid]
+    this.store.deleteFile(uuid)
     if (this.fileIds.length > 1) {
       const uuidIndex = this.fileIds.findIndex((fileId) => fileId === uuid)
       this.fileIds.splice(uuidIndex, 1)
@@ -176,21 +213,21 @@ export class Step3Component extends SeoComponent implements OnInit {
   }
 
   onTestStart() {
+    const envForm = this.store.envForm()!
+    this.store.envForm.set({
+      ...envForm,
+      locationTypeOther: this.form?.controls.locationTypeOther.disabled
+        ? null
+        : envForm.locationTypeOther,
+    })
     this.loopStore.testIntervalMinutes.set(
       environment.certifiedDefaults.default_delay
     )
     this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_4])
   }
 
-  toggleLocationTypeOther(isEnabled: boolean) {
-    if (isEnabled) {
-      this.form?.controls.locationTypeOther.disable()
-    } else {
-      this.form?.controls.locationTypeOther.enable()
-    }
-  }
-
-  private onFormChange(value: ICertifiedEnvForm | null) {
+  private onFormChange() {
+    const value = this.form?.getRawValue() as ICertifiedEnvForm
     if (value) {
       this.store.isEnvFormValid.set(true)
       this.store.isReady.set(true)

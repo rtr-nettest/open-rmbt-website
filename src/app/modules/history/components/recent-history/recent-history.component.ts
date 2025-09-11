@@ -197,11 +197,14 @@ export class RecentHistoryComponent implements OnChanges {
         openUuid: hi.openTestResponse?.["openTestUuid"],
         device: hi.openTestResponse?.["device"],
         networkType: hi.openTestResponse?.["networkType"],
-        intValues: {
-          download: (hi.download?.value || 0) * 1000,
-          upload: (hi.upload?.value || 0) * 1000,
-          ping: hi.ping?.value || 0,
-        },
+        intValues:
+          hi.openTestResponse?.["status"] == "finished"
+            ? {
+                download: (hi.download?.value || 0) * 1000,
+                upload: (hi.upload?.value || 0) * 1000,
+                ping: hi.ping?.value || 0,
+              }
+            : undefined,
         download:
           down == null
             ? " "
@@ -252,9 +255,12 @@ export class RecentHistoryComponent implements OnChanges {
   ) {
     const medianForField = (field: ChartPhase) =>
       median(
-        data.content.map((c) =>
-          c.intValues?.[field] ? c.intValues?.[field] : 0
-        )
+        data.content
+          .filter(
+            (c) =>
+              c.intValues?.[field] != undefined && c.intValues?.[field] != null
+          )
+          .map((c) => c.intValues?.[field] || 0)
       )
     let med = 0
     switch (col.columnDef) {
