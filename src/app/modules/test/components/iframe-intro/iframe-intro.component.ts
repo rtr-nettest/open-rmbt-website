@@ -73,12 +73,11 @@ export class IframeIntroComponent {
   }
 
   async submit() {
-    console.log(this.form.invalid)
     if (!this.form.invalid) {
       const termsVersion =
         this.mainStore.settings()?.settings[0].terms_and_conditions.version
       if (termsVersion) {
-        Cookies.set(RMBTTermsV6, "true") // Legacy cookie for compatibility
+        Cookies.set(RMBTTermsV6, "true", { expires: 365 }) // Legacy cookie for compatibility
       }
       if (globalThis.localStorage && termsVersion) {
         localStorage.setItem(TERMS_VERSION, termsVersion.toString())

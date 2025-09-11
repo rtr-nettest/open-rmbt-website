@@ -94,7 +94,6 @@ export class CertifiedStoreService {
     const files = form.testPictures ?? {}
     files[uuid] = file
     this.envForm.set({ ...form, testPictures: files })
-    console.log("Added file", uuid, file, this.envForm())
   }
 
   deleteFile(uuid: string) {
