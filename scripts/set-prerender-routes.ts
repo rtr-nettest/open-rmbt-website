@@ -22,7 +22,6 @@ function main() {
     if (!file.endsWith(".json")) {
       continue
     }
-    console.log(file)
     const [locale, _] = file.split(".")
     for (const path of out) {
       ws.write("/" + locale + path + "\n")

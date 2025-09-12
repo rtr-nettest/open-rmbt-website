@@ -159,6 +159,12 @@ export class PopupService {
       if (key === "operator" && val?.toString().toLowerCase() === "unknown") {
         tpl = tpl.replace(`id="popupOperatorRow"`, `style="display:none;"`)
       }
+      if (key === "detailsUrl") {
+        tpl = tpl.replace(
+          `id="moreInfoButton"`,
+          `onclick="window.open('${val.toString()}', '_blank')"`
+        )
+      }
     }
     if (tpl.includes("{{signal}}")) {
       tpl = tpl.replace(`id="popupSignalRow"`, `style="display:none;"`)
