@@ -19,6 +19,10 @@ function main() {
     path.resolve(__dirname, "..", "src", "assets", "i18n")
   )
   for (const file of localeFiles) {
+    if (!file.endsWith(".json")) {
+      continue
+    }
+    console.log(file)
     const [locale, _] = file.split(".")
     for (const path of out) {
       ws.write("/" + locale + path + "\n")
