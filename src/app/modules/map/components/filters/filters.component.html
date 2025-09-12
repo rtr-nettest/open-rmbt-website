@@ -151,7 +151,7 @@
   <form [formGroup]="this.form">
     @if (activeControlGroup == "tiles") {
     <h6>{{ "Layers" | translate }}</h6>
-    <mat-radio-group formControlName="tiles">
+    <mat-radio-group formControlName="tiles" style="height: 210px">
       @for (item of tilesTypes; track $index) {
       <mat-radio-button [value]="item">{{
         item | titlecase | translate
