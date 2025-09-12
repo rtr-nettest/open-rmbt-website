@@ -2,7 +2,7 @@ export const environment = {
   baseUrl: "http://localhost:4200",
   deployedUrl: "http://localhost:4200",
   api: {
-    baseUrl: "https://dev2.netztest.at",
+    baseUrl: "http://localhost:3000",
   },
   loopModeDefaults: {
     default_delay: 1,

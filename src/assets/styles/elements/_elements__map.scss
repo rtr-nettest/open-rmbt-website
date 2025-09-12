@@ -63,6 +63,10 @@
 
   .app-link {
     color: $color-primary !important;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
   }
 }
 

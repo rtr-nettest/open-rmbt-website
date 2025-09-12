@@ -22,10 +22,15 @@ export class TranslationHttpLoader {
 
   static async getTranslations(lang: string): Promise<{ [key: string]: any }> {
     try {
-      const localTranslations = await (
-        await fetch(`${environment.baseUrl}/assets/i18n/${lang}.json`)
-      ).json()
-      return localTranslations
+      const data = await Promise.all([
+        fetch(`${environment.baseUrl}/assets/i18n/${lang}.json`).then((res) =>
+          res.json()
+        ),
+        fetch(`${environment.baseUrl}/assets/i18n/countries/${lang}.json`).then(
+          (res) => res.json()
+        ),
+      ])
+      return { ...data[0], ...data[1] }
     } catch (e) {
       console.warn(e)
       return defTranslations
