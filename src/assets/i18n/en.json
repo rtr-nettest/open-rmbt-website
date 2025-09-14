@@ -508,7 +508,7 @@
   "software_version": "Software version",
   "Something went wrong": "Something went wrong",
   "source_code_github": "Source Code on GitHub",
-  "Sources: RTR, basemap.at, ArcData, Statistik Austria, BEV 2012": "Sources: RTR, <a href=\"http://www.basemap.at/\" target=\"_blank\">basemap.at</a>, ArcData, Statistik Austria, BEV 2012",
+  "Sources: RTR, basemap.at, ArcData, Statistik Austria, BEV": "Sources: RTR, <a href=\"http://www.basemap.at/\" target=\"_blank\">basemap.at</a>, ArcData, Statistik Austria, BEV",
   "sources": "Sources",
   "Speed curve": "Speed curve",
   "speed_download_ndt": "Download (NDT)",
