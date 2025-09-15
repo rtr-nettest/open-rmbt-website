@@ -6,7 +6,7 @@ import {
   OnDestroy,
 } from "@angular/core"
 import { I18nStore } from "../../../i18n/store/i18n.store"
-import { map, Observable, Subject, Subscription } from "rxjs"
+import { map, Observable, Subject, Subscription, takeUntil } from "rxjs"
 import { HtmlWrapperComponent } from "../../../shared/components/html-wrapper/html-wrapper.component"
 import { AsyncPipe } from "@angular/common"
 import { TableComponent } from "../../../tables/components/table/table.component"
@@ -188,12 +188,17 @@ export class CoverageDialogComponent implements AfterViewInit, OnDestroy {
 
   private async setMap() {
     this.zone.runOutsideAngular(() => {
-      this.map = this.mapService.createMap({
-        container: this.mapId,
-        style: this.mapService.defaultStyle(),
-        center: DEFAULT_CENTER,
-      })
-      this.map.addControl(new NavigationControl())
+      this.mapService
+        .createMap({
+          container: this.mapId,
+          style: this.mapService.defaultStyle(),
+          center: DEFAULT_CENTER,
+        })
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((map) => {
+          this.map = map
+          this.map.addControl(new NavigationControl())
+        })
     })
   }
 

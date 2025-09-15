@@ -29,8 +29,11 @@ export class TranslationHttpLoader {
         fetch(`${environment.baseUrl}/assets/i18n/countries/${lang}.json`).then(
           (res) => res.json()
         ),
+        fetch(`${environment.baseUrl}/assets/i18n/map/${lang}.json`).then(
+          (res) => res.json()
+        ),
       ])
-      return { ...data[0], ...data[1] }
+      return { ...data[0], ...data[1], ...data[2] }
     } catch (e) {
       console.warn(e)
       return defTranslations

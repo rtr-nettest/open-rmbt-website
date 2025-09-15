@@ -148,7 +148,12 @@ export class MapService {
   ) {}
 
   createMap(options: MapOptions) {
-    return new Map(options)
+    return this.i18nStore.getTranslations().pipe(
+      map((translations) => {
+        options.locale = translations
+        return new Map(options)
+      })
+    )
   }
 
   getFilters() {

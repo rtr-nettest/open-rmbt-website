@@ -9,7 +9,7 @@ import {
   SimpleChanges,
 } from "@angular/core"
 import { IRecentMeasurement } from "../../interfaces/recent-measurements-response.interface"
-import { Subject, Subscription } from "rxjs"
+import { Subject, Subscription, takeUntil } from "rxjs"
 import { Marker, Map, NavigationControl, IControl } from "maplibre-gl"
 import { bbox } from "@turf/bbox"
 import { lineString } from "@turf/helpers"
@@ -71,15 +71,20 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   private async setMap() {
     this.zone.runOutsideAngular(() => {
-      this.map = this.mapService.createMap({
-        container: this.mapId,
-        style: this.mapService.defaultStyle(),
-        center: DEFAULT_CENTER,
-        zoom: 3,
-      })
-      for (const control of this.controls) {
-        this.map.addControl(control)
-      }
+      this.mapService
+        .createMap({
+          container: this.mapId,
+          style: this.mapService.defaultStyle(),
+          center: DEFAULT_CENTER,
+          zoom: 3,
+        })
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((map) => {
+          this.map = map
+          for (const control of this.controls) {
+            this.map.addControl(control)
+          }
+        })
       globalThis?.document.addEventListener("fullscreenchange", this.showStats)
     })
   }

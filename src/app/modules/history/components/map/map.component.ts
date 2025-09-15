@@ -8,7 +8,7 @@ import {
   NgZone,
   signal,
 } from "@angular/core"
-import { firstValueFrom, Subject, Subscription } from "rxjs"
+import { firstValueFrom, Subject, Subscription, takeUntil } from "rxjs"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
 import { Map, NavigationControl } from "maplibre-gl"
 import { MatButtonModule } from "@angular/material/button"
@@ -115,13 +115,18 @@ export class MapComponent implements AfterViewInit {
 
   private async setMap() {
     this.zone.runOutsideAngular(() => {
-      this.map = this.mapService.createMap({
-        container: this.mapId,
-        style: this.mapService.defaultStyle(),
-        center: DEFAULT_CENTER,
-        preserveDrawingBuffer: true,
-      })
-      this.map.addControl(new NavigationControl())
+      this.mapService
+        .createMap({
+          container: this.mapId,
+          style: this.mapService.defaultStyle(),
+          center: DEFAULT_CENTER,
+          preserveDrawingBuffer: true,
+        })
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((map) => {
+          this.map = map
+          this.map.addControl(new NavigationControl())
+        })
     })
   }
 

@@ -148,44 +148,49 @@ export class MapScreenComponent extends SeoComponent {
       this.messageService.openSnackbar("Could not load the map style")
       return
     }
-    this.zone.runOutsideAngular(async () => {
-      this.map = this.mapService.createMap({
-        container: this.mapId,
-        style,
-        center: DEFAULT_CENTER,
-        zoom: 6,
-      })
-      this.map.addControl(new FullscreenControl())
-      this.map.addControl(new NavigationControl())
-      this.map.addControl(
-        new FiltersControl(this.i18nStore, () => {
-          this.zone.run(() => {
-            this.dialog.open(FiltersComponent, {
-              scrollStrategy: this.scrollStrategyOptions.noop(),
+    this.zone.runOutsideAngular(() => {
+      this.mapService
+        .createMap({
+          container: this.mapId,
+          style,
+          center: DEFAULT_CENTER,
+          zoom: 6,
+        })
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((map) => {
+          this.map = map
+          this.map.addControl(new FullscreenControl())
+          this.map.addControl(new NavigationControl())
+          this.map.addControl(
+            new FiltersControl(this.i18nStore, () => {
+              this.zone.run(() => {
+                this.dialog.open(FiltersComponent, {
+                  scrollStrategy: this.scrollStrategyOptions.noop(),
+                })
+              })
             })
+          )
+          this.map.addControl(
+            new BasemapControl(this.i18nStore, () => {
+              this.zone.run(() => {
+                this.dialog.open(BasemapPickerComponent, {
+                  scrollStrategy: this.scrollStrategyOptions.noop(),
+                })
+              })
+            })
+          )
+          this.map.on("load", () => {
+            this.mapStore.initFilters(this.mapInfo)
+            this.map.on("zoom", () => {
+              this.setTilesVisibility()
+            })
+            this.map.on("styledata", () => {
+              this.setTilesVisibility()
+            })
+            this.map.on("click", this.onClick.bind(this))
+            this.map.on("error", (event) => console.log(event))
           })
         })
-      )
-      this.map.addControl(
-        new BasemapControl(this.i18nStore, () => {
-          this.zone.run(() => {
-            this.dialog.open(BasemapPickerComponent, {
-              scrollStrategy: this.scrollStrategyOptions.noop(),
-            })
-          })
-        })
-      )
-      this.map.on("load", () => {
-        this.mapStore.initFilters(this.mapInfo)
-        this.map.on("zoom", () => {
-          this.setTilesVisibility()
-        })
-        this.map.on("styledata", () => {
-          this.setTilesVisibility()
-        })
-        this.map.on("click", this.onClick.bind(this))
-        this.map.on("error", (event) => console.log(event))
-      })
     })
   }
 
