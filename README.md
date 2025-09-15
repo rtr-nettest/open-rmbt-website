@@ -1,7 +1,8 @@
-RTR-NetTest Website
-===================
+Historic RTR-NetTest Website 2015-2025
+======================================
 
-This repository hosts the web page sources for ```www.netztest.at```
+This branch hosts the historic web page sources for ```www.netztest.at```. 
+It is no longer maintained.
 
 Requirements
 ------------
