@@ -167,7 +167,7 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
       uuid,
       response?.loop_uuid,
       openTestResponse,
-      response?.qoe_classification
+      response?.qoe_classification || openTestResponse?.qoe_classification
     )
   }
 
