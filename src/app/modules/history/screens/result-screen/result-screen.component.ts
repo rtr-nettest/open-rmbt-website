@@ -406,6 +406,10 @@ export class ResultScreenComponent extends SeoComponent {
         content = [...content, ...this.formatLandCovers(openTestResponse)]
       }
       const item = this.formatSearchableItem(openTestResponse, key, value)
+      if (item?.value?.toString().includes("[object Object]")) {
+        // Unknown object, skip
+        continue
+      }
       content.push(item)
       if (INITIAL_FIELDS.has(key)) {
         this.initialDetails().content.push(item)
