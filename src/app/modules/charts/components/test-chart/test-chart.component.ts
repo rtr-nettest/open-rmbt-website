@@ -19,7 +19,7 @@ import { I18nStore } from "../../../i18n/store/i18n.store"
 import { TestStore } from "../../../test/store/test.store"
 import { ChartPhase } from "../../dto/test-chart-dataset"
 import { TestChart } from "../../dto/test-chart"
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, NgIf } from "@angular/common"
 import { BarChart } from "./settings/bar-chart"
 import { LogChart } from "./settings/log-chart"
 import { STATE_UPDATE_TIMEOUT } from "../../../test/constants/numbers"
@@ -29,7 +29,7 @@ import { STATE_UPDATE_TIMEOUT } from "../../../test/constants/numbers"
   templateUrl: "./test-chart.component.html",
   styleUrls: ["./test-chart.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AsyncPipe],
+  imports: [NgIf, AsyncPipe],
 })
 export class TestChartComponent implements OnDestroy {
   @Input() phase: ChartPhase = "download"

@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core"
 import { BehaviorSubject } from "rxjs"
 import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interface"
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, NgFor, NgIf } from "@angular/common"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatButtonModule } from "@angular/material/button"
 
@@ -9,7 +9,7 @@ import { MatButtonModule } from "@angular/material/button"
     selector: "app-action-buttons",
     templateUrl: "./action-buttons.component.html",
     styleUrls: ["./action-buttons.component.scss"],
-    imports: [AsyncPipe, TranslatePipe, MatButtonModule]
+    imports: [AsyncPipe, TranslatePipe, MatButtonModule, NgIf, NgFor]
 })
 export class ActionButtonsComponent {
   @Input() items?: IMainMenuItem[]

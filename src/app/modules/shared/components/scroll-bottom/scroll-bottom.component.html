@@ -1,12 +1,11 @@
-@if (isVisible) {
-<button
-  type="button"
-  color="primary"
-  mat-icon-button
-  (click)="handleClick()"
-  style="box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); background: white"
-  [title]="'Scroll to bottom' | translate"
->
-  <img src="/assets/images/btn-scroll-down.png" alt="Scroll to bottom" />
-</button>
-}
+<ng-container *ngIf="isVisible">
+  <button
+    color="primary"
+    mat-icon-button
+    (click)="handleClick()"
+    style="box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); background: white"
+    [title]="'Scroll to bottom' | translate"
+  >
+    <img src="/assets/images/btn-scroll-down.png" />
+  </button>
+</ng-container>

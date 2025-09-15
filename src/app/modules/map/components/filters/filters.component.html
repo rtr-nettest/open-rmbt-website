@@ -52,8 +52,7 @@
         }}</span>
       </button>
     </li>
-    @if (periodOptions) {
-    <li class="app-li">
+    <li *ngIf="periodOptions" class="app-li">
       <button
         mat-button
         class="app-link app-link--dark app-link--flexible"
@@ -71,8 +70,7 @@
         }}</span>
       </button>
     </li>
-    } @if (operatorOptions) {
-    <li class="app-li">
+    <li *ngIf="operatorOptions" class="app-li">
       <button
         mat-button
         class="app-link app-link--dark app-link--flexible"
@@ -90,8 +88,7 @@
         }}</span>
       </button>
     </li>
-    } @if (providerOptions) {
-    <li class="app-li">
+    <li *ngIf="providerOptions" class="app-li">
       <button
         mat-button
         class="app-link app-link--dark app-link--flexible"
@@ -109,8 +106,7 @@
         }}</span>
       </button>
     </li>
-    } @if (technologyOptions) {
-    <li class="app-li">
+    <li *ngIf="technologyOptions" class="app-li">
       <button
         mat-button
         class="app-link app-link--dark app-link--flexible"
@@ -128,8 +124,7 @@
         }}</span>
       </button>
     </li>
-    } @if (statisticalOptions && showStatistics) {
-    <li class="app-li">
+    <li *ngIf="statisticalOptions && showStatistics" class="app-li">
       <button
         mat-button
         class="app-link app-link--dark app-link--flexible"
@@ -147,7 +142,6 @@
         }}</span>
       </button>
     </li>
-    }
   </ul>
 </ng-template>
 
@@ -185,55 +179,65 @@
     <div class="app-filters" formGroupName="filters">
       @if (activeControlGroup=="statisticalOptions") {
       <h6>{{ statisticalOptions?.title }}</h6>
-      @if (statisticalOptions?.options?.length) {
-      <mat-radio-group formControlName="statistical_method">
+      <mat-radio-group
+        *ngIf="statisticalOptions?.options?.length"
+        formControlName="statistical_method"
+      >
         @for (item of statisticalOptions!.options; track $index) {
         <mat-radio-button [value]="item.params?.statistical_method">{{
           item.title
         }}</mat-radio-button>
         }
       </mat-radio-group>
-      } } @if (activeControlGroup == "providerOptions") {
+      } @if (activeControlGroup == "providerOptions") {
       <h6>{{ providerOptions?.title }}</h6>
-      @if (providerOptions?.options?.length) {
-      <mat-radio-group formControlName="provider">
+      <mat-radio-group
+        *ngIf="providerOptions?.options?.length"
+        formControlName="provider"
+      >
         @for (item of providerOptions!.options; track $index) {
         <mat-radio-button [value]="item.params?.provider">{{
           item.title
         }}</mat-radio-button>
         }
       </mat-radio-group>
-      } } @if (activeControlGroup == "operatorOptions") {
+      } @if (activeControlGroup == "operatorOptions") {
       <h6>{{ operatorOptions?.title }}</h6>
-      @if (operatorOptions?.options?.length) {
-      <mat-radio-group formControlName="operator">
+      <mat-radio-group
+        *ngIf="operatorOptions?.options?.length"
+        formControlName="operator"
+      >
         @for (item of operatorOptions!.options; track $index) {
         <mat-radio-button [value]="item.params?.operator">{{
           item.title
         }}</mat-radio-button>
         }
       </mat-radio-group>
-      } } @if (activeControlGroup == "periodOptions") {
+      } @if (activeControlGroup == "periodOptions") {
       <h6>{{ periodOptions?.title }}</h6>
-      @if (periodOptions?.options?.length) {
-      <mat-radio-group formControlName="period">
+      <mat-radio-group
+        *ngIf="periodOptions?.options?.length"
+        formControlName="period"
+      >
         @for (item of periodOptions!.options; track $index) {
         <mat-radio-button [value]="item.params?.period">{{
           item.title
         }}</mat-radio-button>
         }
       </mat-radio-group>
-      } } @if (activeControlGroup == "technologyOptions") {
+      } @if (activeControlGroup == "technologyOptions") {
       <h6>{{ technologyOptions?.title }}</h6>
-      @if (technologyOptions?.options?.length) {
-      <mat-radio-group formControlName="technology">
+      <mat-radio-group
+        *ngIf="technologyOptions?.options?.length"
+        formControlName="technology"
+      >
         @for (item of technologyOptions?.options; track $index) {
         <mat-radio-button [value]="item.params?.technology">{{
           item.title
         }}</mat-radio-button>
         }
       </mat-radio-group>
-      } }
+      }
     </div>
     }
   </form>

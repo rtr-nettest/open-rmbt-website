@@ -25,11 +25,9 @@
             formControlName="code"
             placeholder="{{ 'Synchronization code' | translate }}"
           />
-          @if (form.get('code')!.hasError('required')) {
-          <mat-error>
+          <mat-error *ngIf="form.get('code')!.hasError('required')">
             {{ "Code is required" | translate }}
           </mat-error>
-          }
         </mat-form-field>
       </form>
     </div>

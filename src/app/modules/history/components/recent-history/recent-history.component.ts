@@ -15,7 +15,7 @@ import {
 import { ISort } from "../../../tables/interfaces/sort.interface"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { HistoryStore } from "../../../history/store/history.store"
-import { DatePipe } from "@angular/common";
+import { DatePipe, NgIf } from "@angular/common"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.interface"
@@ -37,7 +37,7 @@ import { ChartPhase } from "../../../charts/dto/test-chart-dataset"
   selector: "app-recent-history",
   templateUrl: "./recent-history.component.html",
   styleUrls: ["./recent-history.component.scss"],
-  imports: [TableComponent, TranslatePipe],
+  imports: [NgIf, TableComponent, TranslatePipe],
 })
 export class RecentHistoryComponent implements OnChanges {
   addMedian = input(false)

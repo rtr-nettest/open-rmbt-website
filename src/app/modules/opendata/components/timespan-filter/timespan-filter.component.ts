@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core"
 import { BaseFilterComponent } from "../base-filter/base-filter.component"
-
+import { NgFor } from "@angular/common"
 import { ReactiveFormsModule } from "@angular/forms"
 import { MatOptionModule } from "@angular/material/core"
 import { MatFormFieldModule } from "@angular/material/form-field"

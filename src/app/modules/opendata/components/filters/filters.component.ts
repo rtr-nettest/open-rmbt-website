@@ -28,7 +28,7 @@ import { I18nStore } from "../../../i18n/store/i18n.store"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatDatepickerModule } from "@angular/material/datepicker"
 import { OpendataService } from "../../services/opendata.service"
-
+import { NgIf } from "@angular/common"
 import { Subject, takeUntil } from "rxjs"
 import { Range } from "../../dto/range.dto"
 import { RangesFilterComponent } from "../ranges-filter/ranges-filter.component"
@@ -112,12 +112,13 @@ const ALL_FIELDS = [
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
+    NgIf,
     RangesFilterComponent,
     ReactiveFormsModule,
     SelectsFilterComponent,
     TranslatePipe,
-    TimespanFilterComponent
-],
+    TimespanFilterComponent,
+  ],
   templateUrl: "./filters.component.html",
   styleUrl: "./filters.component.scss",
 })

@@ -11,20 +11,23 @@
   </header>
   @if (result$ | async; as result) {
   <div class="app-header">
-    @if (result.measurementDate) {
-    <h2 aria-live="polite">
+    <h2 *ngIf="result.measurementDate" aria-live="polite">
       {{ "Measurement result from" | translate }}
       {{ result.measurementDate | date : "dd.MM.yyyy, HH:mm:ss" }}
     </h2>
-    } @if (!result.measurementDate && !failedDetailedResults()) {
-    <h2 aria-live="polite">
+    <h2
+      *ngIf="!result.measurementDate && !failedDetailedResults()"
+      aria-live="polite"
+    >
       {{ "Measurement result" | translate }}
     </h2>
-    } @if (!result.measurementDate && failedDetailedResults()) {
-    <h2 aria-live="polite">
+    <h2
+      *ngIf="!result.measurementDate && failedDetailedResults()"
+      aria-live="polite"
+    >
       {{ "Measurement failed" | translate }}
     </h2>
-    } @if (canStartTest) {
+    @if (canStartTest) {
     <a
       [routerLink]="'/' + activeLang + '/' + routes.TEST"
       class="app-button"
@@ -34,8 +37,8 @@
     </a>
     }
   </div>
-  @if (basicResults(); as basicResults) { @if (basicResults.content.length) {
-  <div class="app-container">
+  @if (basicResults(); as basicResults) {
+  <div *ngIf="basicResults.content.length" class="app-container">
     <app-table
       [columns]="columns"
       [data]="basicResults"
@@ -45,8 +48,8 @@
       aria-live="polite"
     ></app-table>
   </div>
-  } } @if (qoeResults(); as qoeResults) { @if (qoeResults.content.length) {
-  <div class="app-container">
+  } @if (qoeResults(); as qoeResults) {
+  <div *ngIf="qoeResults.content.length" class="app-container">
     <h4>{{ "Quality" | translate }}</h4>
     <app-table
       [columns]="qoeColumns"
@@ -57,102 +60,106 @@
       aria-live="polite"
     ></app-table>
   </div>
-  } } @if (detailedResults(); as detailedResult) { @if
-  (detailedResult.content.length) { @defer () { @if (locationTable().length) {
-  <div class="app-container" [id]="mapContainerId" style="margin-top: 24px">
-    <h4>{{ "Position" | translate }}</h4>
-    <app-map [params]="mapParams()" [mapContainerId]="mapContainerId"></app-map>
-    <app-location-details
-      [details]="locationTable()"
-      style="display: block; margin-top: 24px"
-      a11yTitle="Location details"
-    ></app-location-details>
-  </div>
-  }
-  <h3 class="app-title">{{ "Speed curve" | translate }}</h3>
-  <div class="app-charts">
-    <div class="app-charts-row">
-      <header class="app-charts-row__base">
-        <h4>{{ "Ping" | translate }}</h4>
-        <app-test-chart phase="ping"></app-test-chart>
-      </header>
-      <app-ping-details
-        [details]="pingTable()"
-        a11yTitle="Ping details"
-      ></app-ping-details>
-    </div>
-    <div class="app-charts-row">
-      <header class="app-charts-row__base">
-        <h4>{{ "Download" | translate }}</h4>
-        <app-test-chart phase="download"></app-test-chart>
-      </header>
-      <app-speed-details
-        [details]="downloadTable()"
-        a11yTitle="Download details"
-      ></app-speed-details>
-    </div>
-    <div class="app-charts-row">
-      <header class="app-charts-row__base">
-        <h4>{{ "Upload" | translate }}</h4>
-        <app-test-chart phase="upload"></app-test-chart>
-      </header>
-      <app-speed-details
-        [details]="uploadTable()"
-        a11yTitle="Upload details"
-      ></app-speed-details>
-    </div>
-    @if (signalTable().length) {
-    <div class="app-charts-row">
-      <header class="app-charts-row__base">
-        <h4>{{ "Signal" | translate }}</h4>
-        <app-signal-chart
-          [signal]="signalTable()"
-          [phaseDurations]="phaseDurations()"
-        ></app-signal-chart>
-      </header>
-      <app-signal-details
-        [details]="signalTableGrouped()"
-        a11yTitle="Signal details"
-      ></app-signal-details>
+  } @if (detailedResults(); as detailedResult) {
+  <ng-container *ngIf="detailedResult.content.length">
+    @defer () { @if (locationTable().length) {
+    <div class="app-container" [id]="mapContainerId" style="margin-top: 24px">
+      <h4>{{ "Position" | translate }}</h4>
+      <app-map
+        [params]="mapParams()"
+        [mapContainerId]="mapContainerId"
+      ></app-map>
+      <app-location-details
+        [details]="locationTable()"
+        style="display: block; margin-top: 24px"
+        a11yTitle="Location details"
+      ></app-location-details>
     </div>
     }
-  </div>
-  }
-  <h3 class="app-title">{{ "Detailed results" | translate }}</h3>
-  <div class="app-container">
-    @if (showFullDetails()) {
-    <app-table
-      [columns]="columns"
-      [data]="detailedResult"
-      [shouldHideHeader]="true"
-      [tableClassNames]="['app-table--bordered']"
-      [sort]="sort"
-    ></app-table>
-    } @else {
-    <app-table
-      [columns]="columns"
-      [data]="initialDetails()"
-      [shouldHideHeader]="true"
-      [tableClassNames]="['app-table--bordered']"
-      [sort]="sort"
-    ></app-table>
-    <button
-      (click)="showFullDetails.set(true)"
-      class="app-button"
-      style="margin-top: 24px"
-      mat-stroked-button
-    >
-      {{ "Show additional information..." | translate }}
-    </button>
+    <h3 class="app-title">{{ "Speed curve" | translate }}</h3>
+    <div class="app-charts">
+      <div class="app-charts-row">
+        <header class="app-charts-row__base">
+          <h4>{{ "Ping" | translate }}</h4>
+          <app-test-chart phase="ping"></app-test-chart>
+        </header>
+        <app-ping-details
+          [details]="pingTable()"
+          a11yTitle="Ping details"
+        ></app-ping-details>
+      </div>
+      <div class="app-charts-row">
+        <header class="app-charts-row__base">
+          <h4>{{ "Download" | translate }}</h4>
+          <app-test-chart phase="download"></app-test-chart>
+        </header>
+        <app-speed-details
+          [details]="downloadTable()"
+          a11yTitle="Download details"
+        ></app-speed-details>
+      </div>
+      <div class="app-charts-row">
+        <header class="app-charts-row__base">
+          <h4>{{ "Upload" | translate }}</h4>
+          <app-test-chart phase="upload"></app-test-chart>
+        </header>
+        <app-speed-details
+          [details]="uploadTable()"
+          a11yTitle="Upload details"
+        ></app-speed-details>
+      </div>
+      @if (signalTable().length) {
+      <div class="app-charts-row">
+        <header class="app-charts-row__base">
+          <h4>{{ "Signal" | translate }}</h4>
+          <app-signal-chart
+            [signal]="signalTable()"
+            [phaseDurations]="phaseDurations()"
+          ></app-signal-chart>
+        </header>
+        <app-signal-details
+          [details]="signalTableGrouped()"
+          a11yTitle="Signal details"
+        ></app-signal-details>
+      </div>
+      }
+    </div>
     }
-  </div>
-  <div class="app-container">
-    <h4>{{ "Share" | translate }}</h4>
-    <app-share-result [result]="result"></app-share-result>
-  </div>
-  } } @if (failedDetailedResults(); as failedDetailedResults) { @if
-  (failedDetailedResults.content.length) {
-  <div class="app-container">
+    <h3 class="app-title">{{ "Detailed results" | translate }}</h3>
+    <div class="app-container">
+      @if (showFullDetails()) {
+      <app-table
+        [columns]="columns"
+        [data]="detailedResult"
+        [shouldHideHeader]="true"
+        [tableClassNames]="['app-table--bordered']"
+        [sort]="sort"
+      ></app-table>
+      } @else {
+      <app-table
+        [columns]="columns"
+        [data]="initialDetails()"
+        [shouldHideHeader]="true"
+        [tableClassNames]="['app-table--bordered']"
+        [sort]="sort"
+      ></app-table>
+      <button
+        (click)="showFullDetails.set(true)"
+        class="app-button"
+        style="margin-top: 24px"
+        mat-stroked-button
+      >
+        {{ "Show additional information..." | translate }}
+      </button>
+      }
+    </div>
+    <div class="app-container">
+      <h4>{{ "Share" | translate }}</h4>
+      <app-share-result [result]="result"></app-share-result>
+    </div>
+  </ng-container>
+  } @if (failedDetailedResults(); as failedDetailedResults) {
+  <div class="app-container" *ngIf="failedDetailedResults.content.length">
     <app-table
       [columns]="columns"
       [data]="failedDetailedResults"
@@ -161,7 +168,7 @@
       [sort]="sort"
     ></app-table>
   </div>
-  } } } @else if (loading()) {
+  } } @else if (loading()) {
   <h3>{{ "Loading results" | translate }}</h3>
   } @else {
   <h3>{{ "No results available" | translate }}</h3>
@@ -171,13 +178,16 @@
 <app-footer></app-footer>
 
 <ng-template #noResult>
-  @if (error$ | async; as error) {
-  <main class="app-wrapper app-wrapper--no-result">
+  <main
+    *ngIf="error$ | async as error"
+    class="app-wrapper app-wrapper--no-result"
+  >
     {{ "Measurement failed" | translate }} {{ error.message }}
   </main>
-  } @if ((error$ | async) === null) {
-  <main class="app-wrapper app-wrapper--no-result">
+  <main
+    *ngIf="(error$ | async) === null"
+    class="app-wrapper app-wrapper--no-result"
+  >
     {{ "Fetching the result..." | translate }}
   </main>
-  }
 </ng-template>

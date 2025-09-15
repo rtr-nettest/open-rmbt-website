@@ -12,11 +12,9 @@
       canSelectNullableOptions="true"
     >
       <mat-option [value]="null"> --{{ "all" | translate }}-- </mat-option>
-      @for (option of selects.get(key); track option) {
-      <mat-option [value]="option[1]">
+      <mat-option *ngFor="let option of selects.get(key)" [value]="option[1]">
         {{ option[0].toString() | translate }}
       </mat-option>
-      }
     </mat-select>
   </div>
 </div>

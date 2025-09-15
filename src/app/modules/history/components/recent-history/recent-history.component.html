@@ -1,18 +1,21 @@
-@if (data(); as data) { @if (data.totalElements > 0) { @if(title(); as title) {
-<h3 class="app-title" style="margin-bottom: 1em">
-  {{ title | translate }}
-</h3>
+@if (data(); as data) {
+<ng-container *ngIf="data.totalElements > 0">
+  @if(title(); as title) {
+  <h3 class="app-title" style="margin-bottom: 1em">
+    {{ title | translate }}
+  </h3>
+  }
+  <app-table
+    [action]="changeSort"
+    [columns]="columns()"
+    [data]="data"
+    [expandedElements]="expandedElements"
+    [footerColumns]="footerColumns()"
+    [rowsAreCLickable]="true"
+    [sort]="sort"
+    [shouldHideHeader]="false"
+    [tableClassNames]="tableClassNames ?? []"
+    (onRowClick)="handleRowClick($event)"
+  ></app-table>
+</ng-container>
 }
-<app-table
-  [action]="changeSort"
-  [columns]="columns()"
-  [data]="data"
-  [expandedElements]="expandedElements"
-  [footerColumns]="footerColumns()"
-  [rowsAreCLickable]="true"
-  [sort]="sort"
-  [shouldHideHeader]="false"
-  [tableClassNames]="tableClassNames ?? []"
-  (onRowClick)="handleRowClick($event)"
-></app-table>
-} }

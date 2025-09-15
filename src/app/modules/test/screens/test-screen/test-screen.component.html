@@ -22,34 +22,9 @@
   } @else {
   <div class="app-main">
     <div class="app-progress-bar-wrapper">
-      @if (loopWaiting() !== true) {
-      <app-gauge></app-gauge>
-      } @else { @if (progressMode(); as progressMode) {
-      <div
-        style="
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          margin-bottom: 40px;
-          padding-right: 4rem;
-        "
-      >
-        <div style="width: 100%">
-          @if (progressMode === 'determinate') {
-          <h4 class="app-title">
-            {{
-              ("Next measurement in" | translate) + " " + progressFormatted()
-            }}
-          </h4>
-          }
-          <mat-progress-bar
-            class="app-progress-bar--loop"
-            [mode]="progressMode"
-            [value]="progress()"
-          ></mat-progress-bar>
-        </div>
-      </div>
-      } }
+      <app-gauge
+        *ngIf="loopWaiting() !== true; else loopWaitProgressBar"
+      ></app-gauge>
     </div>
     <app-spacer></app-spacer>
     <app-interim-results
@@ -58,19 +33,21 @@
   </div>
   }
 </div>
-@if ((isLoopModeEnabled$ | async) === true) {
-<div class="app-wrapper" style="margin-bottom: 40px">
-  @if (result(); as result) {
+<div
+  class="app-wrapper"
+  *ngIf="(isLoopModeEnabled$ | async) === true"
+  style="margin-bottom: 40px"
+>
   <app-recent-history
+    *ngIf="result() as result"
     [addMedian]="addMedian"
     [result]="result"
     [excludeColumns]="excludeColumns"
     [interruptsTests]="true"
     title="Recent measurements"
   ></app-recent-history>
-  }
 </div>
-} } } @if (testStartDisabled()) {
+} } @if (testStartDisabled()) {
 <div class="app-wrapper">
   <h2 class="app-title" aria-live="polite">
     {{ "Measurement" | translate }}
@@ -85,23 +62,47 @@
 }
 <app-footer></app-footer>
 
-<ng-template #loopHeader>
-  @if ((isLoopModeEnabled$ | async) === true) { @if (loopCount$ | async; as
-  loopCount) {
-  <div class="app-wrapper">
-    @if (loopWaiting() !== true) {
-    <h2 class="app-title" aria-live="polite">
-      {{ ("Measurement" | translate) + " " + loopCount + "/" + maxLoopCount() }}
-    </h2>
-    } @if (loopWaiting() === true) {
-    <h2 class="app-title" aria-live="polite">
-      {{
-        "Result of measurement %0 - waiting"
-          | translate
-          | sprintf : loopCount + "/" + maxLoopCount()
-      }}
-    </h2>
-    }
+<ng-template #loopWaitProgressBar>
+  <div
+    *ngIf="progressMode() as progressMode"
+    style="
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-bottom: 40px;
+      padding-right: 4rem;
+    "
+  >
+    <div style="width: 100%">
+      <ng-container *ngIf="progressMode === 'determinate'">
+        <h4 class="app-title">
+          {{ ("Next measurement in" | translate) + " " + progressFormatted() }}
+        </h4>
+      </ng-container>
+      <mat-progress-bar
+        class="app-progress-bar--loop"
+        [mode]="progressMode"
+        [value]="progress()"
+      ></mat-progress-bar>
+    </div>
   </div>
-  } }
+</ng-template>
+
+<ng-template #loopHeader>
+  <ng-container *ngIf="(isLoopModeEnabled$ | async) === true">
+    <div class="app-wrapper" *ngIf="loopCount$ | async as loopCount">
+      <h2 *ngIf="loopWaiting() !== true" class="app-title" aria-live="polite">
+        {{
+          ("Measurement" | translate) + " " + loopCount + "/" + maxLoopCount()
+        }}
+      </h2>
+      <h2 *ngIf="loopWaiting() === true" class="app-title" aria-live="polite">
+        {{
+          "Result of measurement %0 - waiting"
+            | translate
+            | sprintf : loopCount + "/" + maxLoopCount()
+        }}
+      </h2>
+    </div>
+  </ng-container>
 </ng-template>

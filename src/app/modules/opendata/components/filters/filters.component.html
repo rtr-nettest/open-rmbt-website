@@ -31,11 +31,14 @@
     } } }
     <div class="app-footer">
       <div class="app-row" style="justify-content: center">
-        @if (!allFieldsAreVisible()) {
-        <a mat-button class="app-button" (click)="showAllFields()">
+        <a
+          *ngIf="!allFieldsAreVisible()"
+          mat-button
+          class="app-button"
+          (click)="showAllFields()"
+        >
           {{ "Further filters" | translate }}
         </a>
-        }
       </div>
       <div class="app-row" style="flex-direction: row">
         <button

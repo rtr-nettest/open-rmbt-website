@@ -1,95 +1,100 @@
 <div class="app-wrapper app-wrapper--charts" aria-live="assertive">
-  @if (visualization$ | async; as state) {
-  <div class="app-container">
-    <h4 class="app-title">
-      <span>{{ "Ping" | translate }}:</span>
-      @if (state.currentPhaseName === phases.PING) {
-      <div class="app-spinner">
-        <mat-spinner></mat-spinner>
+  <ng-container *ngIf="visualization$ | async as state">
+    <div class="app-container">
+      <h4 class="app-title">
+        <span>{{ "Ping" | translate }}:</span>
+        <div class="app-spinner" *ngIf="state.currentPhaseName === phases.PING">
+          <mat-spinner></mat-spinner>
+        </div>
+        <span *ngIf="state.currentPhaseName !== phases.PING && ping">
+          {{ ping }}
+        </span>
+      </h4>
+      <div class="app-chart app-chart--ping">
+        <app-test-chart
+          class="nt-canvas__wrapper"
+          phase="ping"
+        ></app-test-chart>
       </div>
-      } @if (state.currentPhaseName !== phases.PING && ping) {
-      <span>
-        {{ ping }}
-      </span>
-      }
-    </h4>
-    <div class="app-chart app-chart--ping">
-      <app-test-chart class="nt-canvas__wrapper" phase="ping"></app-test-chart>
     </div>
-  </div>
-  <div class="app-container">
-    <h4 class="app-title">
-      <span>{{ "Download" | translate }}:</span>
-      @if (state.currentPhaseName === phases.DOWN) {
-      <div class="app-spinner">
-        <mat-spinner></mat-spinner>
+    <div class="app-container">
+      <h4 class="app-title">
+        <span>{{ "Download" | translate }}:</span>
+        <div class="app-spinner" *ngIf="state.currentPhaseName === phases.DOWN">
+          <mat-spinner></mat-spinner>
+        </div>
+        <span *ngIf="state.currentPhaseName !== phases.DOWN && download">
+          {{ download }}
+        </span>
+      </h4>
+      <div class="app-chart app-chart--down">
+        <app-test-chart
+          class="nt-canvas__wrapper"
+          phase="download"
+        ></app-test-chart>
       </div>
-      } @if (state.currentPhaseName !== phases.DOWN && download) {
-      <span>
-        {{ download }}
-      </span>
-      }
-    </h4>
-    <div class="app-chart app-chart--down">
-      <app-test-chart
-        class="nt-canvas__wrapper"
-        phase="download"
-      ></app-test-chart>
     </div>
-  </div>
-  <div class="app-container">
-    <h4 class="app-title">
-      <span>{{ "Upload" | translate }}:</span>
-      @if ( state.currentPhaseName === phases.UP || state.currentPhaseName ===
-      phases.INIT_UP ) {
-      <div class="app-spinner">
-        <mat-spinner></mat-spinner>
+    <div class="app-container">
+      <h4 class="app-title">
+        <span>{{ "Upload" | translate }}:</span>
+        <div
+          class="app-spinner"
+          *ngIf="
+            state.currentPhaseName === phases.UP ||
+            state.currentPhaseName === phases.INIT_UP
+          "
+        >
+          <mat-spinner></mat-spinner>
+        </div>
+        <span
+          *ngIf="
+            state.currentPhaseName !== phases.UP &&
+            state.currentPhaseName !== phases.INIT_UP &&
+            upload
+          "
+        >
+          {{ upload }}
+        </span>
+      </h4>
+      <div class="app-chart app-chart--up">
+        <app-test-chart
+          class="nt-canvas__wrapper"
+          phase="upload"
+        ></app-test-chart>
       </div>
-      } @if ( state.currentPhaseName !== phases.UP && state.currentPhaseName !==
-      phases.INIT_UP && upload ) {
-      <span>
-        {{ upload }}
-      </span>
-      }
-    </h4>
-    <div class="app-chart app-chart--up">
-      <app-test-chart
-        class="nt-canvas__wrapper"
-        phase="upload"
-      ></app-test-chart>
     </div>
-  </div>
-  @if (basicNetworkInfo$ | async; as info) {
-  <div class="app-container">
-    <table class="app-table">
-      @if (estimatedEndTime(); as endTime) {
-      <tr class="app-row">
-        <th>{{ "Estimated end time" | translate }}</th>
-        <td>{{ endTime | date : "HH:mm" }}</td>
-      </tr>
-      }
-      <tr class="app-row">
-        <th>{{ "Coordinates" | translate }}</th>
-        <td>
-          @if (info.coordinates) {
-          {{ info.coordinates | lonlat }}} @else {
-          {{ "Not available" | translate }}
-          }
-        </td>
-      </tr>
-      <tr class="app-row">
-        <th class="app-cell">{{ "Testserver" | translate }}</th>
-        <td class="app-cell">{{ info.serverName }}</td>
-      </tr>
-      <tr class="app-row">
-        <th class="app-cell">{{ "IP" | translate }}</th>
-        <td class="app-cell">{{ info.ipAddress }}</td>
-      </tr>
-      <tr class="app-row">
-        <th class="app-cell">{{ "Provider" | translate }}</th>
-        <td class="app-cell">{{ info.providerName }}</td>
-      </tr>
-    </table>
-  </div>
-  } }
+    @if (basicNetworkInfo$ | async; as info) {
+    <div class="app-container">
+      <table class="app-table">
+        @if (estimatedEndTime(); as endTime) {
+        <tr class="app-row">
+          <th>{{ "Estimated end time" | translate }}</th>
+          <td>{{ endTime | date : "HH:mm" }}</td>
+        </tr>
+        }
+        <tr class="app-row">
+          <th>{{ "Coordinates" | translate }}</th>
+          <td>
+            @if (info.coordinates) {
+            {{ info.coordinates | lonlat }}} @else {
+            {{ "Not available" | translate }}
+            }
+          </td>
+        </tr>
+        <tr class="app-row">
+          <th class="app-cell">{{ "Testserver" | translate }}</th>
+          <td class="app-cell">{{ info.serverName }}</td>
+        </tr>
+        <tr class="app-row">
+          <th class="app-cell">{{ "IP" | translate }}</th>
+          <td class="app-cell">{{ info.ipAddress }}</td>
+        </tr>
+        <tr class="app-row">
+          <th class="app-cell">{{ "Provider" | translate }}</th>
+          <td class="app-cell">{{ info.providerName }}</td>
+        </tr>
+      </table>
+    </div>
+    }
+  </ng-container>
 </div>

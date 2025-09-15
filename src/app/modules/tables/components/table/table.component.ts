@@ -21,7 +21,7 @@ import { IPaginator } from "../../interfaces/paginator.interface"
 import { ISort } from "../../interfaces/sort.interface"
 import { TableSortService } from "../../services/table-sort.service"
 import dayjs from "dayjs"
-import { NgClass } from "@angular/common";
+import { NgClass, NgFor, NgIf } from "@angular/common"
 import { MatButtonModule } from "@angular/material/button"
 import { MatTooltipModule } from "@angular/material/tooltip"
 import { MatIconModule } from "@angular/material/icon"
@@ -39,6 +39,8 @@ import { APP_DATE_TIME_FORMAT } from "../../../shared/adapters/app-date.adapter"
   animations: [arrowRotate, expandVertically],
   imports: [
     DynamicComponentDirective,
+    NgFor,
+    NgIf,
     NgClass,
     MatButtonModule,
     MatTableModule,
@@ -47,8 +49,8 @@ import { APP_DATE_TIME_FORMAT } from "../../../shared/adapters/app-date.adapter"
     MatIconModule,
     MatProgressSpinner,
     PaginatorComponent,
-    TranslatePipe
-],
+    TranslatePipe,
+  ],
 })
 export class TableComponent implements OnInit, OnChanges {
   @Input() action?: (...ars: any[]) => any

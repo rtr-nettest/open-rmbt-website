@@ -18,7 +18,7 @@ import { MatTabGroup, MatTabsModule } from "@angular/material/tabs"
 import { IMapInfo } from "../../interfaces/map-info.interface"
 import { MatIconModule } from "@angular/material/icon"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
-import { NgTemplateOutlet, TitleCasePipe } from "@angular/common";
+import { NgIf, NgTemplateOutlet, TitleCasePipe } from "@angular/common"
 import { IMapFilter } from "../../interfaces/map-filter.interface"
 import { MapStoreService } from "../../store/map-store.service"
 import {
@@ -55,9 +55,10 @@ type ActiveControlGroup =
     MatRadioModule,
     MatTabsModule,
     NgTemplateOutlet,
+    NgIf,
     TranslatePipe,
-    TitleCasePipe
-],
+    TitleCasePipe,
+  ],
   templateUrl: "./filters.component.html",
   styleUrl: "./filters.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
