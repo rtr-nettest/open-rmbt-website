@@ -3,7 +3,7 @@
     <a [href]="'/' + activeLang" class="app-logo">
       <img
         src="/assets/images/logo-header.svg"
-        [alt]="'RTR-Nettest' | translate"
+        alt="{{ 'RTR-Nettest' | translate }}"
       />
     </a>
     <nav class="app-main-nav">
@@ -142,10 +142,10 @@
       >
         <img
           src="/assets/images/mailto.svg"
-          [alt]="
+          alt="{{
             'mailto:netztest@rtr.at?subject=Supportanfrage%20RTR-Netztest%20%28Web%29'
               | translate
-          "
+          }}"
         />
       </a>
     </li>

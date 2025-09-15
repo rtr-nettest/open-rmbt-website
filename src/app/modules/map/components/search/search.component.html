@@ -7,11 +7,11 @@
       [ngModel]="geocodeRequest"
       (ngModelChange)="this.geocodeRequestChanged.next($event)"
       (keyup.enter)="flyToCandidate()"
-      [placeholder]="'Search for an address or city' | translate"
+      placeholder="{{ 'Search for an address or city' | translate }}"
     />
   </mat-form-field>
   <div *ngIf="geocodeResponse" class="app-suggestions-wrapper">
-    <ul class="app-geocoder-suggestions" role="menu">
+    <ul class="app-geocoder-suggestions">
       <li *ngIf="!geocodeResponse?.length">
         <div class="app-geocoder--error app-geocoder--no-results">
           {{ "No results" | translate }}
