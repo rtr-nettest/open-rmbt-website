@@ -1,4 +1,5 @@
-<div *ngIf="visualization$ | async" class="gauge uk-width-1-2@s">
+@if (visualization$ | async) {
+<div class="gauge uk-width-1-2@s">
   <!-- [START] For screen readers only -->
   <div aria-live="polite" style="position: absolute; left: -9999px">
     {{ ("Test progress" | translate) + " " + measurementProgress }}
@@ -57,3 +58,4 @@
     ></text>
   </svg>
 </div>
+}

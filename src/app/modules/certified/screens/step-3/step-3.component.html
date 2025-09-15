@@ -22,16 +22,14 @@
       }}<sup>*</sup>
     </h4>
     <ul>
-      <li
-        *ngFor="
-          let control of form.controls.locationType.controls;
-          let i = index
-        "
-      >
+      @for ( control of form.controls.locationType.controls; track control; let
+      i = $index) {
+      <li>
         <mat-checkbox [value]="locationValues[i]" [formControl]="control">{{
           locationNames[i] | translate
         }}</mat-checkbox>
       </li>
+      }
     </ul>
     <mat-form-field appearance="outline">
       <textarea
@@ -42,13 +40,10 @@
           !!form.controls.locationType.controls[locationValues.length - 1].value
         "
       ></textarea>
-      <mat-error
-        *ngIf="
-          form.controls.locationType.controls[locationValues.length - 1]
-            .value && !form.controls.locationTypeOther.value
-        "
-        >{{ "Location is required" | translate }}</mat-error
-      >
+      @if ( form.controls.locationType.controls[locationValues.length - 1]
+      .value && !form.controls.locationTypeOther.value ) {
+      <mat-error>{{ "Location is required" | translate }}</mat-error>
+      }
     </mat-form-field>
     <h4>
       {{ "Please describe your Internet access" | translate }}
@@ -80,8 +75,8 @@
     <p>
       {{ "Please send us a photo of the modem" | translate }}
     </p>
+    @for (fileId of fileIds; track fileId) {
     <p
-      *ngFor="let fileId of fileIds"
       style="
         align-items: center;
         display: flex;
@@ -99,19 +94,17 @@
       <button mat-button (click)="onFileUploadClick(fileId)">
         <mat-icon>attach_file</mat-icon>{{ "Upload file" | translate }}
       </button>
-      <span
-        *ngIf="files[fileId]?.name"
-        style="margin-left: 1em; margin-right: 1em"
-        >{{ files[fileId].name }}</span
-      >
-      <button
-        *ngIf="files[fileId]?.name"
-        mat-icon-button
-        (click)="onDeleteFile(fileId)"
-      >
+      @if (files[fileId].name) {
+      <span style="margin-left: 1em; margin-right: 1em">{{
+        files[fileId].name
+      }}</span>
+      } @if (files[fileId].name) {
+      <button mat-icon-button (click)="onDeleteFile(fileId)">
         <mat-icon>delete</mat-icon>
       </button>
+      }
     </p>
+    }
   </form>
   }
   <button

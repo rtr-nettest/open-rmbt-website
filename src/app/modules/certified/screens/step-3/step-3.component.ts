@@ -29,7 +29,7 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatButtonModule } from "@angular/material/button"
 import { MatInputModule } from "@angular/material/input"
-import { NgFor, NgIf } from "@angular/common"
+
 import { MatIconModule } from "@angular/material/icon"
 import { MatCheckboxModule } from "@angular/material/checkbox"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
@@ -49,13 +49,11 @@ import { MainStore } from "../../../shared/store/main.store"
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    NgFor,
-    NgIf,
     ReactiveFormsModule,
     TopNavComponent,
     TranslatePipe,
-    FooterComponent,
-  ],
+    FooterComponent
+],
   templateUrl: "./step-3.component.html",
   styleUrl: "./step-3.component.scss",
 })

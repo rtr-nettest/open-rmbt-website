@@ -10,33 +10,33 @@
       [placeholder]="'Search for an address or city' | translate"
     />
   </mat-form-field>
-  <div *ngIf="geocodeResponse" class="app-suggestions-wrapper">
-    <ul class="app-geocoder-suggestions" role="menu">
-      <li *ngIf="!geocodeResponse?.length">
+  @if (geocodeResponse) {
+  <div class="app-suggestions-wrapper">
+    <ul class="app-geocoder-suggestions">
+      @if (!geocodeResponse.length) {
+      <li>
         <div class="app-geocoder--error app-geocoder--no-results">
           {{ "No results" | translate }}
         </div>
       </li>
-      <ng-container *ngIf="geocodeResponse?.length">
-        <li
-          *ngFor="let candidate of geocodeResponse; let i = index"
-          class="app-li"
-          [class.app-li--active]="i === activeCandidate"
+      } @if (geocodeResponse.length) { @for (candidate of geocodeResponse; track
+      candidate; let i = $index) {
+      <li class="app-li" [class.app-li--active]="i === activeCandidate">
+        <button
+          class="app-button app-button--li"
+          mat-button
+          (click)="flyToCandidate(i)"
+          (mouseover)="activeCandidate = i"
         >
-          <button
-            class="app-button app-button--li"
-            mat-button
-            (click)="flyToCandidate(i)"
-            (mouseover)="activeCandidate = i"
-          >
-            <dl class="app-geocoder--suggestion">
-              <dt class="app-geocoder--suggestion-title">
-                {{ candidate.formatted_address }}
-              </dt>
-            </dl>
-          </button>
-        </li>
-      </ng-container>
+          <dl class="app-geocoder--suggestion">
+            <dt class="app-geocoder--suggestion-title">
+              {{ candidate.formatted_address }}
+            </dt>
+          </dl>
+        </button>
+      </li>
+      } }
     </ul>
   </div>
+  }
 </div>

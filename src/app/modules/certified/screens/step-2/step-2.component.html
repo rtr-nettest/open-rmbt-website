@@ -10,95 +10,101 @@
     {{ "Basic information on the certified measurement" | translate }}
   </h3>
   @if (form) {
-  <form [formGroup]="form">
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "Title" | translate }}</mat-label>
-      <input
-        matInput
-        type="text"
-        formControlName="titlePrepend"
-        name="titlePrepend"
-      />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "First name" | translate }}</mat-label>
-      <input
-        matInput
-        type="text"
-        formControlName="firstName"
-        name="firstName"
-        required
-      />
-      <mat-error *ngIf="form.get('firstName')!.hasError('required')">
-        {{ "First name is required" | translate }}
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "Last name" | translate }}</mat-label>
-      <input
-        matInput
-        type="text"
-        formControlName="lastName"
-        name="lastName"
-        required
-      />
-      <mat-error *ngIf="form.get('lastName')!.hasError('required')">
-        {{ "Last name is required" | translate }}
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "Academic degree" | translate }}</mat-label>
-      <input
-        matInput
-        type="text"
-        formControlName="titleAppend"
-        name="titleAppend"
-      />
-    </mat-form-field>
-    <mat-form-field class="app-textarea" appearance="outline">
-      <mat-label>{{ "Location of the measurements" | translate }}</mat-label>
-      <textarea
-        matInput
-        type="text"
-        formControlName="address"
-        name="address"
-        rows="3"
-        required
-      ></textarea>
-      <mat-error *ngIf="form.get('address')!.hasError('required')">
-        {{ "Address is required" | translate }}
-      </mat-error>
-    </mat-form-field>
-    <h4>{{ "Is it the first measurement cycle?" | translate }}<sup>*</sup></h4>
-    <mat-radio-group formControlName="isFirstCycle" name="isFirstCycle">
-      <mat-radio-button [value]="true">{{
-        "Yes, first cycle" | translate
-      }}</mat-radio-button>
-      <mat-radio-button [value]="false">{{
-        "No, follow-up cycle" | translate
-      }}</mat-radio-button>
-    </mat-radio-group>
-  </form>
-  } @if (nextStepAvailable) {
-  <button
-    style="margin-top: 16px"
-    mat-flat-button
-    class="app-button"
-    (click)="onNext()"
-    [disabled]="!form?.valid"
-  >
-    {{ "Next" | translate }}
-  </button>
+    <form [formGroup]="form">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "Title" | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="titlePrepend"
+          name="titlePrepend"
+          />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "First name" | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="firstName"
+          name="firstName"
+          required
+          />
+        @if (form.get('firstName')!.hasError('required')) {
+          <mat-error>
+            {{ "First name is required" | translate }}
+          </mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "Last name" | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="lastName"
+          name="lastName"
+          required
+          />
+        @if (form.get('lastName')!.hasError('required')) {
+          <mat-error>
+            {{ "Last name is required" | translate }}
+          </mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "Academic degree" | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="titleAppend"
+          name="titleAppend"
+          />
+      </mat-form-field>
+      <mat-form-field class="app-textarea" appearance="outline">
+        <mat-label>{{ "Location of the measurements" | translate }}</mat-label>
+        <textarea
+          matInput
+          type="text"
+          formControlName="address"
+          name="address"
+          rows="3"
+          required
+        ></textarea>
+        @if (form.get('address')!.hasError('required')) {
+          <mat-error>
+            {{ "Address is required" | translate }}
+          </mat-error>
+        }
+      </mat-form-field>
+      <h4>{{ "Is it the first measurement cycle?" | translate }}<sup>*</sup></h4>
+      <mat-radio-group formControlName="isFirstCycle" name="isFirstCycle">
+        <mat-radio-button [value]="true">{{
+          "Yes, first cycle" | translate
+        }}</mat-radio-button>
+        <mat-radio-button [value]="false">{{
+          "No, follow-up cycle" | translate
+        }}</mat-radio-button>
+      </mat-radio-group>
+    </form>
+    } @if (nextStepAvailable) {
+    <button
+      style="margin-top: 16px"
+      mat-flat-button
+      class="app-button"
+      (click)="onNext()"
+      [disabled]="!form?.valid"
+      >
+      {{ "Next" | translate }}
+    </button>
   } @else {
-  <button
-    style="margin-top: 16px"
-    mat-flat-button
-    class="app-button"
-    (click)="onTestStart()"
-    [disabled]="!form?.valid"
-  >
-    {{ "Start certified measurement" | translate }}
-  </button>
+    <button
+      style="margin-top: 16px"
+      mat-flat-button
+      class="app-button"
+      (click)="onTestStart()"
+      [disabled]="!form?.valid"
+      >
+      {{ "Start certified measurement" | translate }}
+    </button>
   }
 </div>
 <app-footer></app-footer>

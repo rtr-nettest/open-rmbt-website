@@ -19,7 +19,7 @@ import { MatInputModule } from "@angular/material/input"
 import { CloseDialogHeaderComponent } from "../../../shared/components/close-dialog-header/close-dialog-header.component"
 import { catchError, finalize, of } from "rxjs"
 import { MainStore } from "../../../shared/store/main.store"
-import { NgIf } from "@angular/common"
+
 
 @Component({
   selector: "app-sync-dialog",
@@ -30,10 +30,9 @@ import { NgIf } from "@angular/common"
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    NgIf,
     ReactiveFormsModule,
-    TranslatePipe,
-  ],
+    TranslatePipe
+],
   templateUrl: "./sync-dialog.component.html",
   styleUrl: "./sync-dialog.component.scss",
 })

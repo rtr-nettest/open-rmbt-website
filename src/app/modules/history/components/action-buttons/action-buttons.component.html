@@ -1,12 +1,13 @@
-@if (items?.length) {
+@if (items?.length) { @for (item of items; track item; let i = $index) {
 <button
   class="app-button"
   mat-icon-button
-  *ngFor="let item of items; let i = index"
   (click)="handleClick($event, i)"
   [disabled]="(disabledItems$ | async)!.has(i)"
   [title]="item.label | translate"
 >
-  <i class="app-icon app-icon--{{ item.icon }}" *ngIf="item.icon"></i>
+  @if (item.icon) {
+  <i class="app-icon app-icon--{{ item.icon }}"></i>
+  }
 </button>
-}
+} }
