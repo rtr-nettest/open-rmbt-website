@@ -156,7 +156,7 @@ export class PopupService {
       if (val) {
         tpl = tpl.replace(`{{${key}}}`, val.toString())
       }
-      if (key === "operator" && val?.toString().toLowerCase() === "unknown") {
+      if (key === "operator" && val?.toString() === t[UNKNOWN]) {
         tpl = tpl.replace(`id="popupOperatorRow"`, `style="display:none;"`)
       }
       if (key === "detailsUrl") {
