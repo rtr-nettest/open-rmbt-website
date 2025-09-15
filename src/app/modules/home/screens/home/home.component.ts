@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   computed,
+  HostListener,
   inject,
   signal,
 } from "@angular/core"
@@ -33,6 +34,7 @@ import { OpendataService } from "../../../opendata/services/opendata.service"
 import { RECENT_MEASUREMENTS_COLUMNS } from "../../../opendata/constants/recent-measurements-columns"
 import { FullscreenControl, NavigationControl } from "maplibre-gl"
 import { formatTime } from "../../../shared/adapters/app-date.adapter"
+import { FullScreenService } from "../../../opendata/services/full-screen.service"
 
 const UPDATE_INTERVAL = 5000
 
@@ -102,6 +104,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
     }
     return null
   })
+  private fullScreen = inject(FullScreenService)
   private isInitialized = false
   private isReplaying = false
 
@@ -192,5 +195,12 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
         this.isReplaying = false
       }, 10000)
     })
+  }
+
+  @HostListener("document:keypress", ["$event"])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === "m") {
+      this.fullScreen.toggleFullScreen()
+    }
   }
 }

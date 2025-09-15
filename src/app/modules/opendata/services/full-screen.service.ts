@@ -70,6 +70,16 @@ export class FullScreenService {
     delete this.popup
   }
 
+  toggleFullScreen() {
+    const fullScreenControl = (document.querySelector(
+      ".maplibregl-ctrl-shrink"
+    ) ||
+      document.querySelector(
+        ".maplibregl-ctrl-fullscreen"
+      )) as HTMLButtonElement
+    fullScreenControl?.click()
+  }
+
   private async getTime(): Promise<string> {
     this.data!.time = dayjs().format("HH:mm:ss")
     return this.parseTpl()
