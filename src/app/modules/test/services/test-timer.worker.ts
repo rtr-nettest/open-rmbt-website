@@ -31,6 +31,7 @@ class TestTimerWorker {
   private downs: IOverallResult[] = []
   private ups: IOverallResult[] = []
   private stateChangeMs = 0
+  private nominalTestDuration = 0
   private loopUuid = ""
   private interval: NodeJS.Timeout | null = null
 
@@ -64,6 +65,11 @@ class TestTimerWorker {
         register: (data: any) => {
           if (data.response["loop_uuid"]) {
             this.loopUuid = data.response["loop_uuid"]
+          }
+          if (data.response["test_duration"]) {
+            this.nominalTestDuration = parseFloat(
+              data.response["test_duration"]
+            )
           }
         },
       }
@@ -144,6 +150,7 @@ class TestTimerWorker {
       providerName: basicInfo.providerName ?? "-",
       coordinates: basicInfo.coordinates,
       loopUuid: this.loopUuid,
+      nominalDuration: this.nominalTestDuration,
     }
   }
 

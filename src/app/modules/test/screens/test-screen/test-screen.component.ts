@@ -5,7 +5,6 @@ import {
   inject,
   NgZone,
   OnInit,
-  Signal,
   signal,
 } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
@@ -16,6 +15,7 @@ import {
   map,
   Observable,
   Subject,
+  takeUntil,
   withLatestFrom,
 } from "rxjs"
 import { ERoutes } from "../../../shared/constants/routes.enum"
@@ -53,6 +53,7 @@ import { IBasicResponse } from "../../../tables/interfaces/basic-response.interf
 import { ISimpleHistoryResult } from "../../../history/interfaces/simple-history-result.interface"
 import { IBreadcrumb } from "../../../shared/interfaces/breadcrumb.interface"
 import { CertifiedBreadcrumbsComponent } from "../../../certified/components/certified-breadcrumbs/certified-breadcrumbs.component"
+import { ConnectivityService } from "../../services/connectivity.service"
 
 export const imports = [
   AsyncPipe,
@@ -85,6 +86,7 @@ export const imports = [
 export class TestScreenComponent extends SeoComponent implements OnInit {
   addMedian = false
   breadcrumbs = signal<IBreadcrumb[] | null>(null)
+  connectivity = inject(ConnectivityService)
   currentRoute: string | null = null
   nextRoute = ERoutes.TEST
   disableGraphics = computed(
@@ -122,6 +124,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   progressMode = signal<"determinate" | "indeterminate">("determinate")
   platform = inject(PlatformService)
   testStartDisabled = signal(false)
+  offlineTimeout: NodeJS.Timeout | null = null
   protected excludeColumns: string[] = []
 
   ngOnInit(): void {
@@ -129,6 +132,15 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
       return
     }
     this.historyService.resetMeasurementHistory()
+    this.connectivity.isOnline$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((isOnline) => {
+        if (!isOnline) {
+          this.handleOffline()
+        } else {
+          this.handleOnline()
+        }
+      })
     firstValueFrom(this.settingsService.getSettings()).then((settings) => {
       if (
         settings.settings[0].terms_and_conditions.version.toString() !=
@@ -201,5 +213,30 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   @HostListener("window:unload")
   unload() {
     this.service.sendAbort(this.store.basicNetworkInfo().testUuid)
+  }
+
+  private handleOnline() {
+    clearTimeout(this.offlineTimeout!)
+    this.offlineTimeout = null
+  }
+
+  private handleOffline() {
+    const latestState = this.store.visualization$.value
+    let timeout = 10_000
+    if (
+      latestState.currentPhaseName === EMeasurementStatus.DOWN ||
+      latestState.currentPhaseName === EMeasurementStatus.UP
+    ) {
+      timeout =
+        3_000 * latestState.phases[latestState.currentPhaseName].nominalDuration
+      if (isNaN(timeout)) {
+        timeout = 10_000
+      }
+    }
+    this.offlineTimeout = setTimeout(() => {
+      console.log("Aborting test due to offline status")
+      this.service.stopUpdates()
+      this.openErrorDialog(latestState)
+    }, timeout)
   }
 }

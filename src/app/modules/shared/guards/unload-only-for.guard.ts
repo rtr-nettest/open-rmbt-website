@@ -10,6 +10,7 @@ import { TestStore } from "../../test/store/test.store"
 import { EMeasurementStatus } from "../../test/constants/measurement-status.enum"
 import { CertifiedStoreService } from "../../certified/store/certified-store.service"
 import { LoopStoreService } from "../../loop/store/loop-store.service"
+import { ConnectivityService } from "../../test/services/connectivity.service"
 
 export const unloadOnlyFor: (
   allowedPaths: ERoutes[]
@@ -21,9 +22,10 @@ export const unloadOnlyFor: (
     const testService = inject(TestService)
     const certifiedStore = inject(CertifiedStoreService)
     const loopStore = inject(LoopStoreService)
+    const connectivity = inject(ConnectivityService)
     if (
       !nextState.url ||
-      // Don't show dialog when it is allowe for the next state
+      // Don't show dialog when it is allowed for the next state
       allowedPaths.some((path) => nextState.url.includes(path)) ||
       // Don't show dialog when there's an error
       (testStore.visualization$.value.currentPhaseName ===
@@ -37,7 +39,9 @@ export const unloadOnlyFor: (
         loopStore.activeBreadcrumbIndex() == null &&
         certifiedStore.activeBreadcrumbIndex() == null) ||
       // Don't show dialog when it is a loop measurement and the test is finished
-      loopStore.maxTestsReached()
+      loopStore.maxTestsReached() ||
+      // Don't show dialog when we're offline
+      !connectivity.isOnline()
     ) {
       return true
     }

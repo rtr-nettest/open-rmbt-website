@@ -105,6 +105,8 @@ export class TestService {
     this.worker?.terminate()
     this.worker = undefined
     clearInterval(this.waitingTimer)
+    this.geoTrackerService.stopGeoTracking()
+    this.loopStore.lastTestFinishedAt.set(Date.now())
     if (this.isLoopModeEnabled && !this.loopStore.maxTestsReached()) {
       this.waitingTimer = setInterval(() => {
         if (this.lastState) {
@@ -180,9 +182,7 @@ export class TestService {
       phaseState.phase === EMeasurementStatus.ERROR ||
       phaseState.phase === EMeasurementStatus.ABORTED
     if (newPhaseIsOfFinishType && phaseState.phase !== oldPhaseName) {
-      this.loopStore.lastTestFinishedAt.set(Date.now())
       this.stopUpdates()
-      this.geoTrackerService.stopGeoTracking()
       if (phaseState.phase === EMeasurementStatus.ERROR) {
         this.sendFail(phaseState.testUuid)
         if (oldPhaseName === EMeasurementStatus.NOT_STARTED) {
