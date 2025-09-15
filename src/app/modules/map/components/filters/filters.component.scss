@@ -30,7 +30,7 @@ mat-icon {
 
 .app-footer {
   align-items: center;
-  background: var(--mdc-dialog-container-color, var(--mat-app-surface, white));
+  background: var(--mat-dialog-container-color, var(--mat-app-surface, white));
   display: flex;
   justify-content: center;
   flex: 0 0 rem(64);
@@ -43,7 +43,7 @@ mat-icon {
 }
 
 h6 {
-  background: var(--mdc-dialog-container-color, var(--mat-app-surface, white));
+  background: var(--mat-dialog-container-color, var(--mat-app-surface, white));
   position: sticky;
   padding: rem(10);
   top: 0;

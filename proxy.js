@@ -24,7 +24,6 @@ app.use(
         proxyRes.headers["Access-Control-Allow-Origin"] = "*"
         proxyRes.headers["Access-Control-Allow-Methods"] =
           "GET,POST,PUT,DELETE,OPTIONS"
-        console.log("Proxying response:", proxyRes.headers)
       },
     },
   })

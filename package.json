@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "concurrently \"node proxy\" \"ng serve\"",
     "start:prod": "ng build && npx lite-server --baseDir=dist/open-rmbt-angular/browser",
     "start:stage": "ng serve --configuration=stage",
     "start:preprod": "ng serve --configuration=preprod",
@@ -21,12 +21,12 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^20.3.0",
-    "@angular/cdk": "^19.1.4",
+    "@angular/cdk": "^20.2.3",
     "@angular/common": "^20.3.0",
     "@angular/compiler": "^20.3.0",
     "@angular/core": "^20.3.0",
     "@angular/forms": "^20.3.0",
-    "@angular/material": "^19.1.4",
+    "@angular/material": "^20.2.3",
     "@angular/platform-browser": "^20.3.0",
     "@angular/platform-browser-dynamic": "^20.3.0",
     "@angular/platform-server": "^20.3.0",
@@ -63,6 +63,8 @@
     "@types/jasmine": "~5.1.0",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^18.18.0",
+    "concurrently": "^9.2.1",
+    "http-proxy-middleware": "^3.0.5",
     "husky": "^9.1.7",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
@@ -71,30 +73,6 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.9.2"
-  },
-  "overrides": {
-    "@angular/build": {
-      "vite": {
-        ".": "^6.3.5",
-        "esbuild": "^0.25.0"
-      }
-    },
-    "vite": {
-      ".": "^6.3.5",
-      "esbuild": "^0.25.0"
-    },
-    "esbuild": "^0.25.0",
-    "@angular-devkit/build-angular": {
-      "@babel/runtime": {
-        ".": "^7.27.1",
-        "http-proxy-middleware": "^3.0.5"
-      }
-    },
-    "@babel/runtime": {
-      ".": "^7.27.1",
-      "http-proxy-middleware": "^3.0.5"
-    },
-    "http-proxy-middleware": "^3.0.5"
   },
   "gitInfo": {}
 }
