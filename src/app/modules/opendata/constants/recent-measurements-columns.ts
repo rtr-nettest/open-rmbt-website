@@ -67,9 +67,11 @@ export const truncatePlatform = (value: IRecentMeasurement) => {
     retVal = arr.join(", ")
   }
   if (value.platform) {
+    const platform = value.platform.trim()
+    const platformWidth = platform.length
     retVal = retVal.length
-      ? `${truncate(retVal, 50)} (${value.platform.trim()})`
-      : value.platform.trim()
+      ? `${truncate(retVal, 53 - platformWidth)} (${platform})`
+      : platform
   }
   return retVal
 }
