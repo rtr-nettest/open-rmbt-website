@@ -201,6 +201,10 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   handleKeyDown(event: KeyboardEvent) {
     if (event.key === "m") {
       this.fullScreen.toggleFullScreen()
+    } else if (event.key === "o") {
+      this.router.navigate([this.i18nStore.activeLang, ERoutes.OPEN_DATA])
+    } else if (event.key === "s") {
+      this.router.navigate([this.i18nStore.activeLang, ERoutes.TEST])
     }
   }
 }
