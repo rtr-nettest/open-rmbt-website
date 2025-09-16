@@ -136,4 +136,6 @@ export const FORMATTED_FIELDS: Record<
       t[`settlement_type_${testData.settlement_type}`]
     }`,
   implausible: (_: any, t: any) => t["implausibleResult"],
+  dtm_level: (testData: any, t: any) =>
+    `${testData.dtm_level} ${t[`dtm_level_units`] || "m"}`,
 }
