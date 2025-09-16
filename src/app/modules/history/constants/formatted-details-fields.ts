@@ -6,6 +6,7 @@ dayjs.extend(tz)
 import { Translation } from "../../i18n/store/i18n.store"
 import { formatBytes, roundToSignificantDigits } from "../../shared/util/math"
 import { RESULT_DATE_FORMAT } from "../../test/constants/strings"
+import { ERoutes } from "../../shared/constants/routes.enum"
 
 export const FORMATTED_FIELDS: Record<
   string,
@@ -136,6 +137,9 @@ export const FORMATTED_FIELDS: Record<
       t[`settlement_type_${testData.settlement_type}`]
     }`,
   implausible: (_: any, t: any) => t["implausibleResult"],
+
   dtm_level: (testData: any, t: any) =>
     `${testData.dtm_level} ${t[`dtm_level_units`] || "m"}`,
+  open_test_uuid: (testData: any, _: any, locale?: string) =>
+    `<a href="/${locale}/${ERoutes.OPEN_RESULT}?open_test_uuid=${testData.open_test_uuid}">${testData.open_test_uuid}</a>}`,
 }

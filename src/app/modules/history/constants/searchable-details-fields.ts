@@ -5,7 +5,7 @@ import tz from "dayjs/plugin/timezone"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
-export const SEARCHED_FIELDS: {
+export const SEARCHABLE_FIELDS: {
   [key: string]: null | ((testData: any) => string | string[])
 } = {
   cat_technology: null,

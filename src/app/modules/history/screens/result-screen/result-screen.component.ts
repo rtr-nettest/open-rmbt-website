@@ -35,7 +35,7 @@ import {
 import formatcoords from "formatcoords"
 import { LOC_FORMAT } from "../../../shared/pipes/lonlat.pipe"
 import { INITIAL_FIELDS } from "../../constants/initial-details-fields"
-import { SEARCHED_FIELDS } from "../../constants/searched-details-fields"
+import { SEARCHABLE_FIELDS } from "../../constants/searchable-details-fields"
 import { SignalDetailsComponent } from "../../components/signal-details/signal-details.component"
 import { ShareResultComponent } from "../../components/share-result/share-result.component"
 import { SKIPPED_FIELDS } from "../../constants/skipped-details-fields"
@@ -387,15 +387,6 @@ export class ResultScreenComponent extends SeoComponent {
       return null
     }
     const { openTestResponse } = result
-    let entries = new Array(Object.entries(openTestResponse).length)
-    const entriesMap = new Map(Object.entries(openTestResponse))
-    const initialKeys = [...INITIAL_FIELDS]
-    for (let i = 0; i < initialKeys.length; i++) {
-      entries[i] = [initialKeys[i], openTestResponse[initialKeys[i]]]
-      entriesMap.delete(initialKeys[i])
-    }
-    entries = [...entries, ...entriesMap].filter((v) => !!v)
-
     let content: IDetailedHistoryResultItem[] = []
     const location = this.formatLocation("location", openTestResponse)
     if (location) {
@@ -403,6 +394,7 @@ export class ResultScreenComponent extends SeoComponent {
     }
     this.initialDetails().content = [...content]
 
+    const entries = this.orderEntries(openTestResponse)
     for (const [key, value] of entries) {
       this.setPhaseDurations({ title: key, value })
       if (SKIPPED_FIELDS.has(key) || !value) {
@@ -428,8 +420,20 @@ export class ResultScreenComponent extends SeoComponent {
     }
   }
 
+  private orderEntries(openTestResponse: Record<string, any>) {
+    let entries = new Array(Object.entries(openTestResponse).length)
+    const entriesMap = new Map(Object.entries(openTestResponse))
+    const initialKeys = [...INITIAL_FIELDS]
+    for (let i = 0; i < initialKeys.length; i++) {
+      entries[i] = [initialKeys[i], openTestResponse[initialKeys[i]]]
+      entriesMap.delete(initialKeys[i])
+    }
+    entries = [...entries, ...entriesMap].filter((v) => !!v)
+    return entries
+  }
+
   private formatSearchableItem(openTestResponse: any, key: string, value: any) {
-    const searchable = SEARCHED_FIELDS[key] !== undefined
+    const searchable = SEARCHABLE_FIELDS[key] !== undefined
     let v = FORMATTED_FIELDS[key]
       ? FORMATTED_FIELDS[key](
           openTestResponse,
@@ -443,8 +447,8 @@ export class ResultScreenComponent extends SeoComponent {
         value: v,
       }
     }
-    const searchTerm = SEARCHED_FIELDS[key]
-      ? SEARCHED_FIELDS[key](openTestResponse)
+    const searchTerm = SEARCHABLE_FIELDS[key]
+      ? SEARCHABLE_FIELDS[key](openTestResponse)
       : undefined
     const search = Array.isArray(searchTerm)
       ? searchTerm.map((term) => `${key}=${term}`).join("&")
