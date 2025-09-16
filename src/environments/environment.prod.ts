@@ -21,6 +21,6 @@ export const environment = {
     disable_graphics: true,
   },
   features: {
-    show_server_selection: true,
+    show_server_selection: false,
   },
 }
