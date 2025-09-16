@@ -4,6 +4,11 @@
   background: white;
   border: 1px solid $color-primary;
   box-shadow: none !important;
+
+  &__toggle {
+    display: block;
+    margin: 20px 0 0;
+  }
 }
 
 .app-title {

@@ -9,4 +9,11 @@
     >
   </mat-expansion-panel-header>
   <ng-content></ng-content>
+  <button
+    mat-button
+    class="app-expansion-panel__toggle app-button app-button--bold"
+    (click)="panel.close()"
+  >
+    {{ "Close" | translate }}
+  </button>
 </mat-expansion-panel>
