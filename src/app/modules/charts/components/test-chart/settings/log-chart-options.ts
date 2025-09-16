@@ -68,6 +68,9 @@ export class LogChartOptions {
           if (index > 0) {
             retVal = 10 ** (index - 1)
           }
+          if (this.maxValue && this.maxValue > 10) {
+            retVal *= 10
+          }
           if (retVal >= 1000) {
             return `${retVal / 1000} ${this.t.translate("Gbps")}`
           }
@@ -85,5 +88,15 @@ export class LogChartOptions {
     },
   }
 
-  constructor(private t: I18nStore) {}
+  constructor(private t: I18nStore, private maxValue?: number) {
+    if (this.maxValue !== undefined) {
+      if (this.maxValue > 10) {
+        this.scales.y.max = 1
+        this.scales.y.min = 0.2
+      } else {
+        this.scales.y.max = 0.8
+        this.scales.y.min = 0
+      }
+    }
+  }
 }

@@ -165,9 +165,36 @@ export class TestChartComponent implements OnDestroy {
         if (this.phase === "ping") {
           this.chart = new BarChart(ctx!, this.i18nStore, this.phase)
         } else {
-          this.chart = new LogChart(ctx!, this.i18nStore, this.phase)
+          this.chart = new LogChart(
+            ctx!,
+            this.i18nStore,
+            this.phase,
+            this.getMaxSpeed()
+          )
         }
       } catch (_) {}
     }
+  }
+
+  private getMaxSpeed() {
+    const visualization = this.store.visualization$.value
+    if (visualization.currentPhaseName !== EMeasurementStatus.SHOWING_RESULTS) {
+      return
+    }
+    let retVal = 0
+    if (this.phase === "download") {
+      retVal = Math.max(
+        ...visualization.phases[EMeasurementStatus.DOWN].downs!.map(
+          (v) => v.speed / 1e6
+        )
+      )
+    } else if (this.phase === "upload") {
+      retVal = Math.max(
+        ...visualization.phases[EMeasurementStatus.UP].ups!.map(
+          (v) => v.speed / 1e6
+        )
+      )
+    }
+    return retVal
   }
 }

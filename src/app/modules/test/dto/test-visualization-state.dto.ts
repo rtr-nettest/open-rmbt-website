@@ -61,12 +61,16 @@ export class TestVisualizationState implements ITestVisualizationState {
     newState.phases[EMeasurementStatus.DOWN].setChartFromOverallSpeed?.(
       result.download?.chart ?? []
     )
+    newState.phases[EMeasurementStatus.DOWN].downs =
+      result.download?.chart ?? []
     newState.phases[EMeasurementStatus.UP].setChartFromOverallSpeed?.(
       result.upload?.chart ?? []
     )
+    newState.phases[EMeasurementStatus.UP].ups = result.upload?.chart ?? []
     newState.phases[EMeasurementStatus.PING].setChartFromPings?.(
       result.ping?.chart ?? []
     )
+    newState.phases[EMeasurementStatus.PING].pings = result.ping?.chart ?? []
     return newState
   }
 
