@@ -11,7 +11,13 @@ import { ERROR_OCCURED } from "../../test/constants/strings"
   providedIn: "root",
 })
 export class HistoryExportService {
-  protected get basePdfUrl() {
+  protected get quickPdfUrl() {
+    return `${this.mainStore.api().url_statistic_server}/export/pdf/${
+      this.i18nStore.activeLang
+    }`
+  }
+
+  protected get slowPdfUrl() {
     return `${this.mainStore.api().url_web_statistic_server}/export/pdf/${
       this.i18nStore.activeLang
     }`
@@ -41,17 +47,25 @@ export class HistoryExportService {
       .pipe(tap(this.saveFile(format)), catchError(this.handleError))
   }
 
-  exportAsPdf(results: any[]) {
-    if (!this.basePdfUrl) {
+  quickPdfExport(results: any[]) {
+    return this.exportAsPdf(results, this.quickPdfUrl)
+  }
+
+  slowPdfExport(results: any[]) {
+    return this.exportAsPdf(results, this.slowPdfUrl)
+  }
+
+  private exportAsPdf(results: any[], basePdfUrl: string) {
+    if (!basePdfUrl) {
       return of(null)
     }
     this.mainStore.inProgress$.next(true)
     return this.http
-      .post(this.basePdfUrl, this.getExportParams("pdf", results))
+      .post(basePdfUrl, this.getExportParams("pdf", results))
       .pipe(
         concatMap((resp: any) => {
           if (resp?.["file"]) {
-            return this.http.get(`${this.basePdfUrl}/${resp["file"]}`, {
+            return this.http.get(`${basePdfUrl}/${resp["file"]}`, {
               responseType: "blob",
               observe: "response",
             })

@@ -11,16 +11,16 @@ export class CertifiedExportService extends HistoryExportService {
   private certifiedStore = inject(CertifiedStoreService)
 
   openCertifiedPdf(loopUuid?: string | null) {
-    if (!this.basePdfUrl || !loopUuid) {
+    if (!this.quickPdfUrl || !loopUuid) {
       return of(null)
     }
     this.mainStore.inProgress$.next(true)
     return this.http
-      .post<any>(this.basePdfUrl, this.getCertifiedFormData(loopUuid))
+      .post<any>(this.quickPdfUrl, this.getCertifiedFormData(loopUuid))
       .pipe(
         map((resp: any) => {
           if (resp?.["file"]) {
-            const url = `${this.basePdfUrl}/${resp["file"]}`
+            const url = `${this.quickPdfUrl}/${resp["file"]}`
             window.open(url, "_blank")
             return url
           }

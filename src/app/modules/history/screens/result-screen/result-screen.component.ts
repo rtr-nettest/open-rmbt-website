@@ -133,7 +133,13 @@ export class ResultScreenComponent extends SeoComponent {
       label: "Export as PDF",
       icon: "filetype-pdf",
       action: () =>
-        this.exporter.exportAsPdf([this.store.simpleHistoryResult$.value!]),
+        !this.canStartTest
+          ? this.exporter.slowPdfExport([
+              this.store.simpleHistoryResult$.value!,
+            ])
+          : this.exporter.quickPdfExport([
+              this.store.simpleHistoryResult$.value!,
+            ]),
     },
   ]
   mapContainerId = "mapContainer"

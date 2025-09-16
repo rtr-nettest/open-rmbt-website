@@ -89,7 +89,7 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
     {
       label: "Export as PDF",
       icon: "filetype-pdf",
-      action: () => this.exporter.exportAsPdf(this.store.history$.value),
+      action: () => this.exporter.slowPdfExport(this.store.history$.value),
     },
     {
       label: "Export as XLSX",
