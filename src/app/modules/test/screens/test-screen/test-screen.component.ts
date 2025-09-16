@@ -233,10 +233,15 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
         timeout = 10_000
       }
     }
+    let latestPhaseDurationMs =
+      latestState.phases[latestState.currentPhaseName].duration * 1000
+    if (isNaN(latestPhaseDurationMs)) {
+      latestPhaseDurationMs = 0
+    }
     this.offlineTimeout = setTimeout(() => {
       console.log("Aborting test due to offline status")
       this.service.stopUpdates()
       this.openErrorDialog(latestState)
-    }, timeout)
+    }, timeout - latestPhaseDurationMs)
   }
 }
