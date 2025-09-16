@@ -8,12 +8,12 @@
   <p [innerHTML]="'E-Mail: netztest@rtr.at' | translate"></p>
   <p>GIT: {{ gitInfo.branch }} {{ gitInfo.hash.slice(0, 8) }}</p>
   <h2>{{ "Options" | translate }}</h2>
-  <h3>{{ "IP-Version" | translate }}</h3>
-  <p>
-    {{ "IP-Version description" | translate }}
-  </p>
   @if (form) {
   <form [formGroup]="form" (ngSubmit)="submit()">
+    <h3>{{ "IP-Version" | translate }}</h3>
+    <p>
+      {{ "IP-Version description" | translate }}
+    </p>
     <mat-radio-group formControlName="ipVersion">
       @for (item of ipVersionOptions; track $index) {
       <div>
@@ -26,6 +26,18 @@
       </div>
       }
     </mat-radio-group>
+    @if (form.get("preferredServer")) {
+    <h3>{{ "Test server" | translate }}</h3>
+    <mat-radio-group formControlName="preferredServer">
+      @for (item of servers; track $index) {
+      <div>
+        <mat-radio-button class="app-option" [value]="item.uuid">{{
+          item.name | translate
+        }}</mat-radio-button>
+      </div>
+      }
+    </mat-radio-group>
+    }
     <p style="margin-top: 2rem">
       <button
         mat-flat-button

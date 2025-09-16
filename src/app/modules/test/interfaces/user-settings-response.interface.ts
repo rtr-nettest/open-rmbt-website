@@ -3,7 +3,13 @@ export interface IUserSetingsResponse {
   error: string[]
 }
 
+export interface IServer {
+  name: string
+  uuid: string
+}
+
 export interface IUserSettings {
+  servers_ws?: IServer[]
   urls?: {
     url_ipv6_check: string
     control_ipv4_only: string

@@ -9,11 +9,13 @@ export type IpVersion = "ipv4" | "ipv6" | "default"
 export class OptionsStoreService {
   ipVersion = signal<IpVersion>("default")
   disabledIpVersions = signal<IpVersion[]>([])
+  preferredServer = signal<string>("default")
 
   constructor() {
     if (globalThis.localStorage) {
-      const ipVersion = this.getOptions()?.ipVersion
+      const { ipVersion, preferredServer } = this.getOptions() || {}
       this.ipVersion.set((ipVersion as IpVersion) || "default")
+      this.preferredServer.set(preferredServer || "default")
 
       effect(() => {
         this.setOptions()
@@ -40,6 +42,7 @@ export class OptionsStoreService {
       RMBTOptions,
       JSON.stringify({
         ipVersion: this.ipVersion(),
+        preferredServer: this.preferredServer(),
       })
     )
   }

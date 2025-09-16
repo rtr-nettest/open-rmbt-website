@@ -24,6 +24,7 @@ import { IpService } from "../../../shared/services/ip.service"
 import { AsyncPipe } from "@angular/common"
 import { MessageService } from "../../../shared/services/message.service"
 import { MainStore } from "../../../shared/store/main.store"
+import { environment } from "../../../../../environments/environment"
 
 @Component({
   selector: "app-options-screen",
@@ -80,6 +81,13 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
     return this.mainStore.gitInfo
   }
 
+  get servers() {
+    return [
+      { uuid: "default", name: "Default server" },
+      ...this.mainStore.servers(),
+    ]
+  }
+
   ngOnInit(): void {
     Promise.all([this.ipService.getIpV4(), this.ipService.getIpV6()])
       .then(([v4, v6]) => {
@@ -89,9 +97,17 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
         if (!v6) {
           this.store.disableIpVersion("ipv6")
         }
-        this.form = this.fb.group({
-          ipVersion: new FormControl(this.store.ipVersion() || "default"),
-        })
+        this.form = this.fb.group({})
+        this.form.addControl(
+          "ipVersion",
+          new FormControl(this.store.ipVersion() || "default")
+        )
+        if (environment.features.show_server_selection) {
+          this.form.addControl(
+            "preferredServer",
+            new FormControl(this.store.preferredServer() || "default")
+          )
+        }
       })
       .catch(() => {
         this.error.set("Failed to load IP information")
@@ -104,6 +120,9 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
   submit(): void {
     if (this.form) {
       this.store.ipVersion.set(this.form.value.ipVersion)
+      if (environment.features.show_server_selection) {
+        this.store.preferredServer.set(this.form.value.preferredServer)
+      }
       this.message.openSnackbar("The configuration has been saved.")
     }
   }

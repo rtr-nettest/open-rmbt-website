@@ -20,4 +20,7 @@ export const environment = {
     exclude_from_result: ["networkType"],
     disable_graphics: true,
   },
+  features: {
+    show_server_selection: true,
+  },
 }

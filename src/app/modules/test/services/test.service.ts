@@ -87,6 +87,14 @@ export class TestService {
       config["additionalRegistrationParameters"]["protocol_version"] =
         this.optionsStore.ipVersion()
     }
+    if (
+      environment.features.show_server_selection &&
+      this.optionsStore.preferredServer() !== "default"
+    ) {
+      config["additionalRegistrationParameters"]["prefer_server"] =
+        this.optionsStore.preferredServer()
+      config["additionalRegistrationParameters"]["user_server_selection"] = true
+    }
     this.geoTrackerService.startGeoTracking(console.log, (data) => {
       this.worker?.postMessage({
         type: "setLocation",

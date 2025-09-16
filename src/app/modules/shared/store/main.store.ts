@@ -60,6 +60,7 @@ export class MainStore {
       url_web_basemap_tiles,
     }
   })
+  servers = computed(() => this.settings()?.settings?.[0]?.servers_ws || [])
 
   get gitInfo() {
     return pack.gitInfo as GitInfo
