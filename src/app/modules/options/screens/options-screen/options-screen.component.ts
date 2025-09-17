@@ -1,4 +1,11 @@
-import { Component, computed, inject, OnInit, signal } from "@angular/core"
+import {
+  Component,
+  computed,
+  HostListener,
+  inject,
+  OnInit,
+  signal,
+} from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
@@ -25,6 +32,8 @@ import { AsyncPipe } from "@angular/common"
 import { MessageService } from "../../../shared/services/message.service"
 import { MainStore } from "../../../shared/store/main.store"
 import { environment } from "../../../../../environments/environment"
+import { toObservable } from "@angular/core/rxjs-interop"
+import { takeUntil } from "rxjs"
 
 @Component({
   selector: "app-options-screen",
@@ -75,6 +84,13 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
   })
   loading = signal<boolean>(true)
   error = signal<string | null>(null)
+  secretString = ""
+  secret = "showall"
+  showServerSelection = signal<boolean>(
+    environment.features.show_server_selection ||
+      globalThis.location.hash === "#showAll"
+  )
+  showServerSelection$ = toObservable(this.showServerSelection)
   text$ = this.i18nStore.getLocalizedHtml("options")
 
   get gitInfo() {
@@ -102,11 +118,8 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
           "ipVersion",
           new FormControl(this.store.ipVersion() || "default")
         )
-        if (environment.features.show_server_selection) {
-          this.form.addControl(
-            "preferredServer",
-            new FormControl(this.store.preferredServer() || "default")
-          )
+        if (this.showServerSelection()) {
+          this.addServerSelectionField()
         }
       })
       .catch(() => {
@@ -115,15 +128,45 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
       .finally(() => {
         this.loading.set(false)
       })
+    this.showServerSelection$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((show) => {
+        if (show) {
+          this.addServerSelectionField()
+        }
+      })
   }
 
   submit(): void {
     if (this.form) {
       this.store.ipVersion.set(this.form.value.ipVersion)
-      if (environment.features.show_server_selection) {
+      if (this.showServerSelection()) {
         this.store.preferredServer.set(this.form.value.preferredServer)
       }
       this.message.openSnackbar("The configuration has been saved.")
+    }
+  }
+
+  @HostListener("document:keypress", ["$event"])
+  handleKeyDown(event: KeyboardEvent) {
+    this.secretString += event.key
+    if (this.secretString.length === this.secret.length) {
+      if (this.secretString === this.secret) {
+        this.secretString = ""
+        this.showServerSelection.set(true)
+        globalThis.location.hash = "#showAll"
+      } else {
+        this.secretString = this.secretString.slice(1)
+      }
+    }
+  }
+
+  addServerSelectionField(): void {
+    if (!this.form?.get("preferredServer")) {
+      this.form?.addControl(
+        "preferredServer",
+        new FormControl(this.store.preferredServer() || "default")
+      )
     }
   }
 }
