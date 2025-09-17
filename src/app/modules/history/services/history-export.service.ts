@@ -48,20 +48,27 @@ export class HistoryExportService {
   }
 
   quickPdfExport(results: any[]) {
-    return this.exportAsPdf(results, this.quickPdfUrl)
+    const pdfParams = this.getExportParams("pdf", results)
+      .delete("max_results")
+      .delete("format")
+    return this.exportAsPdf(results, this.quickPdfUrl, pdfParams)
   }
 
   slowPdfExport(results: any[]) {
     return this.exportAsPdf(results, this.slowPdfUrl)
   }
 
-  private exportAsPdf(results: any[], basePdfUrl: string) {
+  private exportAsPdf(
+    results: any[],
+    basePdfUrl: string,
+    httpParams?: HttpParams
+  ) {
     if (!basePdfUrl) {
       return of(null)
     }
     this.mainStore.inProgress$.next(true)
     return this.http
-      .post(basePdfUrl, this.getExportParams("pdf", results))
+      .post(basePdfUrl, httpParams || this.getExportParams("pdf", results))
       .pipe(
         concatMap((resp: any) => {
           if (resp?.["file"]) {
