@@ -99,6 +99,7 @@ $color-border: rgba(0, 0, 0, 0.1);
   .mat-mdc-footer-cell.app-cell {
     &--flex-10 {
       flex: 0 1 10%;
+      width: auto;
     }
     &--10 {
       flex: 0 0 10%;
