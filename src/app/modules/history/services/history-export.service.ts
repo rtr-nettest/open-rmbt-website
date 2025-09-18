@@ -48,10 +48,12 @@ export class HistoryExportService {
   }
 
   quickPdfExport(results: any[]) {
-    const pdfParams = this.getExportParams("pdf", results)
-      .delete("max_results")
-      .delete("format")
-    return this.exportAsPdf(results, this.quickPdfUrl, pdfParams)
+    const formdata = new FormData()
+    formdata.append(
+      "open_test_uuid",
+      results[0].openTestResponse?.["open_test_uuid"]
+    )
+    return this.exportAsPdf(results, this.quickPdfUrl, formdata)
   }
 
   slowPdfExport(results: any[]) {
@@ -61,7 +63,7 @@ export class HistoryExportService {
   private exportAsPdf(
     results: any[],
     basePdfUrl: string,
-    httpParams?: HttpParams
+    httpParams?: HttpParams | FormData
   ) {
     if (!basePdfUrl) {
       return of(null)
