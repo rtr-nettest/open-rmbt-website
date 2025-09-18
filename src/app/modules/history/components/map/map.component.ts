@@ -21,6 +21,7 @@ import { CoverageDialogComponent } from "../coverage-dialog/coverage-dialog.comp
 import { HistoryRepositoryService } from "../../repository/history-repository.service"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { ICoverage } from "../../interfaces/coverage.interface"
+import { ISimpleHistoryTestLocation } from "../../interfaces/simple-history-result.interface"
 
 @Component({
   selector: "app-map",
@@ -31,6 +32,7 @@ import { ICoverage } from "../../interfaces/coverage.interface"
 })
 export class MapComponent implements AfterViewInit {
   destroyed$ = new Subject<void>()
+  locations = input.required<ISimpleHistoryTestLocation[]>()
   mapContainerId = input.required<string>()
   mapId = "map"
   map!: Map
@@ -81,8 +83,10 @@ export class MapComponent implements AfterViewInit {
       this.setSize()
       this.setMap().then(() => {
         this.setResizeSub()
-        this.mapService.setCoordinatesAndZoom(this.map, this.params())
+        this.addPath()
         this.addMarker()
+        // TODO:
+        // this.mapService.setCoordinatesAndZoom(this.map, this.params())
       })
     }
   }
@@ -120,7 +124,6 @@ export class MapComponent implements AfterViewInit {
           container: this.mapId,
           style: this.mapService.defaultStyle(),
           center: DEFAULT_CENTER,
-          preserveDrawingBuffer: true,
         })
         .pipe(takeUntil(this.destroyed$))
         .subscribe((map) => {
@@ -142,6 +145,12 @@ export class MapComponent implements AfterViewInit {
         lat: parseFloat(lat!),
         diameter: 24,
       })
+    })
+  }
+
+  private addPath() {
+    this.zone.runOutsideAngular(() => {
+      this.mapService.addPath(this.map, this.locations())
     })
   }
 }

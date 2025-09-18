@@ -197,7 +197,7 @@ export class CoverageDialogComponent implements AfterViewInit, OnDestroy {
         .pipe(takeUntil(this.destroyed$))
         .subscribe((map) => {
           this.map = map
-          this.map.addControl(new NavigationControl())
+          this.map!.addControl(new NavigationControl())
         })
     })
   }

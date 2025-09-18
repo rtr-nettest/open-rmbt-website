@@ -25,6 +25,9 @@ import { IMarkerResponse } from "../interfaces/marker-response.interface"
 import { IRecentMeasurement } from "../../opendata/interfaces/recent-measurements-response.interface"
 import { formatTime } from "../../shared/adapters/app-date.adapter"
 import { Coordinate } from "ol/coordinate"
+import { ISimpleHistoryTestLocation } from "../../history/interfaces/simple-history-result.interface"
+import { lineString } from "@turf/helpers"
+import bbox from "@turf/bbox"
 
 export const DEFAULT_CENTER: [number, number] = [
   13.786457000803567, 47.57838319858735,
@@ -273,21 +276,102 @@ export class MapService {
       lat: number
       diameter: number
       classification?: number
+      rotation?: number
       onClick?: () => any
     }
   ) {
     const { lon, lat, diameter, classification, onClick } = options
     const el = document.createElement("div")
-    el.className = "app-marker"
-    el.style.backgroundImage = `url(${this.getIconByClass(classification)})`
-    el.style.width = `${diameter}px`
-    el.style.height = `${diameter}px`
+    if (options.rotation) {
+      const child = document.createElement("div")
+      child.className = "app-marker"
+      child.style.backgroundImage = `url(${this.getIconByClass(
+        classification
+      )})`
+      child.style.width = `${diameter}px`
+      child.style.height = `${diameter}px`
+      child.style.transform = `rotate(${options.rotation}deg)`
+      el.appendChild(child)
+    } else {
+      el.className = "app-marker"
+      el.style.backgroundImage = `url(${this.getIconByClass(classification)})`
+      el.style.width = `${diameter}px`
+      el.style.height = `${diameter}px`
+    }
     if (onClick) {
       el.addEventListener("click", () => {
         onClick()
       })
     }
     return new Marker({ element: el }).setLngLat([lon, lat]).addTo(map)
+  }
+
+  addPath(map: Map, locations: ISimpleHistoryTestLocation[]) {
+    // if (locations.length < 2) {
+    //   return
+    // }
+    let coordinates = locations.map(
+      (loc) => [loc.long, loc.lat] as [number, number]
+    )
+    coordinates = [
+      ...coordinates,
+      [locations[0].long + 0.002, locations[0].lat + 0.002],
+    ]
+    const [currentCoordinate, nextCoordinate] = coordinates.slice(-2)
+    let rotation =
+      (Math.atan2(
+        nextCoordinate[0] - currentCoordinate[0],
+        nextCoordinate[1] - currentCoordinate[1]
+      ) *
+        180) /
+      Math.PI
+    if (rotation < 0.0) rotation += 360.0
+    this.zone.runOutsideAngular(() => {
+      for (const [i, loc] of coordinates.entries()) {
+        this.addMarker(map, {
+          lon: loc[0],
+          lat: loc[1],
+          diameter: i === 0 || i === coordinates.length - 1 ? 24 : 12,
+          classification: i === 0 ? 10 : i === coordinates.length - 1 ? 20 : 30,
+          rotation,
+        })
+      }
+
+      const line = lineString(coordinates)
+      const box = bbox(line) as [number, number, number, number]
+      map?.fitBounds(box, {
+        animate: false,
+        padding: { top: 100, bottom: 100 },
+      })
+
+      // TODO: not working, needs workaround
+      // map.on("load", () => {
+      //   map.addSource("route", {
+      //     type: "geojson",
+      //     data: {
+      //       type: "Feature",
+      //       properties: {},
+      //       geometry: {
+      //         type: "LineString",
+      //         coordinates,
+      //       },
+      //     },
+      //   })
+      //   map.addLayer({
+      //     id: "route",
+      //     type: "line",
+      //     source: "route",
+      //     layout: {
+      //       "line-join": "round",
+      //       "line-cap": "round",
+      //     },
+      //     paint: {
+      //       "line-color": "#999",
+      //       "line-width": 8,
+      //     },
+      //   })
+      // })
+    })
   }
 
   private getIconByClass(classification?: number) {
@@ -300,6 +384,12 @@ export class MapService {
         return `/assets/images/map-icon-green.svg`
       case 4:
         return `/assets/images/map-icon-deep-green.svg`
+      case 10:
+        return `/assets/images/map-icon-start.svg`
+      case 20:
+        return `/assets/images/map-icon-finish.svg`
+      case 30:
+        return `/assets/images/map-icon-black.svg`
       default:
         return `/assets/images/map-icon-blue.svg`
     }
