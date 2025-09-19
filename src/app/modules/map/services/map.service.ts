@@ -51,6 +51,8 @@ const DUMMY_STYLE = {
   layers: [],
 }
 
+declare const maplibregl: any
+
 @Injectable({
   providedIn: "root",
 })
@@ -154,7 +156,8 @@ export class MapService {
     return this.i18nStore.getTranslations().pipe(
       map((translations) => {
         options.locale = translations
-        return new Map(options)
+        // Using the UMD version of maplibre-gl as the NPM version can not draw the lines on the map
+        return new maplibregl.Map(options) as Map
       })
     )
   }
@@ -269,6 +272,20 @@ export class MapService {
     })
   }
 
+  fitBounds(map: Map, coordinates: [number, number][]) {
+    this.zone.runOutsideAngular(() => {
+      if (coordinates.length < 2) {
+        return
+      }
+      const line = lineString(coordinates)
+      const box = bbox(line) as [number, number, number, number]
+      map.fitBounds(box, {
+        animate: false,
+        padding: { top: 100, bottom: 100 },
+      })
+    })
+  }
+
   addMarker(
     map: Map,
     options: {
@@ -306,72 +323,70 @@ export class MapService {
     return new Marker({ element: el }).setLngLat([lon, lat]).addTo(map)
   }
 
-  addPath(map: Map, locations: ISimpleHistoryTestLocation[]) {
-    // if (locations.length < 2) {
-    //   return
-    // }
-    let coordinates = locations.map(
-      (loc) => [loc.long, loc.lat] as [number, number]
-    )
-    coordinates = [
-      ...coordinates,
-      [locations[0].long + 0.002, locations[0].lat + 0.002],
-    ]
-    const [currentCoordinate, nextCoordinate] = coordinates.slice(-2)
-    let rotation =
-      (Math.atan2(
-        nextCoordinate[0] - currentCoordinate[0],
-        nextCoordinate[1] - currentCoordinate[1]
-      ) *
-        180) /
-      Math.PI
-    if (rotation < 0.0) rotation += 360.0
-    this.zone.runOutsideAngular(() => {
-      for (const [i, loc] of coordinates.entries()) {
-        this.addMarker(map, {
-          lon: loc[0],
-          lat: loc[1],
-          diameter: i === 0 || i === coordinates.length - 1 ? 24 : 12,
-          classification: i === 0 ? 10 : i === coordinates.length - 1 ? 20 : 30,
-          rotation,
-        })
+  addPathMarkers(map: Map, coordinates: [number, number][]) {
+    return new Promise<void>(async (resolve) => {
+      if (coordinates.length < 2) {
+        return resolve()
       }
-
-      const line = lineString(coordinates)
-      const box = bbox(line) as [number, number, number, number]
-      map?.fitBounds(box, {
-        animate: false,
-        padding: { top: 100, bottom: 100 },
+      const [currentCoordinate, nextCoordinate] = coordinates.slice(-2)
+      let rotation =
+        (Math.atan2(
+          nextCoordinate[0] - currentCoordinate[0],
+          nextCoordinate[1] - currentCoordinate[1]
+        ) *
+          180) /
+        Math.PI
+      if (rotation < 0.0) rotation += 360.0
+      this.zone.runOutsideAngular(() => {
+        for (const [i, loc] of coordinates.entries()) {
+          this.addMarker(map, {
+            lon: loc[0],
+            lat: loc[1],
+            diameter: i === 0 || i === coordinates.length - 1 ? 24 : 12,
+            classification:
+              i === 0 ? 10 : i === coordinates.length - 1 ? 20 : 30,
+            rotation,
+          })
+        }
       })
-
-      // TODO: not working, needs workaround
-      // map.on("load", () => {
-      //   map.addSource("route", {
-      //     type: "geojson",
-      //     data: {
-      //       type: "Feature",
-      //       properties: {},
-      //       geometry: {
-      //         type: "LineString",
-      //         coordinates,
-      //       },
-      //     },
-      //   })
-      //   map.addLayer({
-      //     id: "route",
-      //     type: "line",
-      //     source: "route",
-      //     layout: {
-      //       "line-join": "round",
-      //       "line-cap": "round",
-      //     },
-      //     paint: {
-      //       "line-color": "#999",
-      //       "line-width": 8,
-      //     },
-      //   })
-      // })
+      resolve()
     })
+  }
+
+  getLineStyle(coordinates: [number, number][]): StyleSpecification {
+    return {
+      ...this.defaultStyle(),
+      sources: {
+        ...this.defaultStyle().sources,
+        route: {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "LineString",
+              coordinates,
+            },
+          },
+        },
+      },
+      layers: [
+        ...this.defaultStyle().layers,
+        {
+          id: "route",
+          type: "line",
+          source: "route",
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
+          paint: {
+            "line-color": "#000000",
+            "line-width": 2,
+          },
+        },
+      ],
+    }
   }
 
   private getIconByClass(classification?: number) {
