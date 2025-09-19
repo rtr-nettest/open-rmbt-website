@@ -25,9 +25,9 @@ import { IMarkerResponse } from "../interfaces/marker-response.interface"
 import { IRecentMeasurement } from "../../opendata/interfaces/recent-measurements-response.interface"
 import { formatTime } from "../../shared/adapters/app-date.adapter"
 import { Coordinate } from "ol/coordinate"
-import { ISimpleHistoryTestLocation } from "../../history/interfaces/simple-history-result.interface"
 import { lineString } from "@turf/helpers"
 import bbox from "@turf/bbox"
+import drawCircle from "@turf/circle"
 
 export const DEFAULT_CENTER: [number, number] = [
   13.786457000803567, 47.57838319858735,
@@ -289,8 +289,8 @@ export class MapService {
   addMarker(
     map: Map,
     options: {
-      lon: number
-      lat: number
+      lon: number | null
+      lat: number | null
       diameter: number
       classification?: number
       rotation?: number
@@ -300,6 +300,9 @@ export class MapService {
   ) {
     const { lon, lat, diameter, classification, onClick, rotation, zIndex } =
       options
+    if (lon === null || lat === null) {
+      return new Marker()
+    }
     const el = document.createElement("div")
     el.className = "app-marker"
     el.style.backgroundImage = `url(${this.getIconByClass(classification)})`
@@ -318,6 +321,29 @@ export class MapService {
       .addTo(map)
   }
 
+  addCircleLayer(map: Map) {
+    if (!map) {
+      return
+    }
+    map.addLayer({
+      id: `accuracy-circle`,
+      type: "fill",
+      source: "circle",
+      layout: {},
+      paint: {
+        "fill-color": "#347fbc",
+        "fill-opacity": 0.2,
+      },
+    })
+  }
+
+  removeCircleLayer(map: Map) {
+    if (!map) {
+      return
+    }
+    map.removeLayer(`accuracy-circle`)
+  }
+
   addPathMarkers(map: Map, coordinates: [number, number][]) {
     if (coordinates.length < 2) {
       return []
@@ -333,6 +359,9 @@ export class MapService {
     if (rotation < 0.0) rotation += 360.0
     const markers: Marker[] = []
     for (const [i, loc] of coordinates.entries()) {
+      if (loc[0] === null || loc[1] === null) {
+        continue
+      }
       const marker = this.addMarker(map, {
         lon: loc[0],
         lat: loc[1],
@@ -340,9 +369,37 @@ export class MapService {
         classification: i === 0 ? 10 : i === coordinates.length - 1 ? 20 : 30,
         rotation,
       })
-      markers.push(marker)
+      markers.push(marker!)
     }
     return markers
+  }
+
+  getCircleStyle(options: {
+    path: [number, number][]
+    lon: number | null
+    lat: number | null
+    accuracy: number | null
+  }) {
+    const { lon, lat, accuracy, path } = options
+    if (lon === null || lat === null || accuracy === null) {
+      return this.getLineStyle(path)
+    }
+    const radius = accuracy / 500 // in km
+    const circle = drawCircle([lon, lat], radius, {
+      steps: 64,
+      units: "kilometers",
+    })
+    const base = this.getLineStyle(path)
+    return {
+      ...base,
+      sources: {
+        ...base.sources,
+        circle: {
+          type: "geojson" as const,
+          data: circle,
+        },
+      },
+    }
   }
 
   getLineStyle(coordinates: [number, number][]): StyleSpecification {

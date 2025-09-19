@@ -32,7 +32,7 @@ import { ISimpleHistoryTestLocation } from "../../interfaces/simple-history-resu
 export class MapComponent implements AfterViewInit {
   destroyed$ = new Subject<void>()
   locations = input.required<ISimpleHistoryTestLocation[]>()
-  coordinates = computed(() =>
+  path = computed(() =>
     this.locations().map((loc) => [loc.long, loc.lat] as [number, number])
   )
   mapContainerId = input.required<string>()
@@ -41,8 +41,18 @@ export class MapComponent implements AfterViewInit {
   params = input.required<URLSearchParams>()
   resizeSub!: Subscription
   coverages = signal<IBasicResponse<ICoverage> | null>(null)
-  lat = computed(() => this.params().get("lat"))
-  lon = computed(() => this.params().get("long"))
+  lat = computed(() => {
+    const lat = this.params().get("lat")
+    return lat ? +lat : null
+  })
+  lon = computed(() => {
+    const lon = this.params().get("long")
+    return lon ? +lon : null
+  })
+  accuracy = computed(() => {
+    const acc = this.params().get("loc_accuracy")
+    return acc ? +acc : null
+  })
   showPath = input<boolean>(false)
   pathMarkers: maplibregl.Marker[] = []
 
@@ -126,7 +136,12 @@ export class MapComponent implements AfterViewInit {
     this.mapService
       .createMap({
         container: this.mapId,
-        style: this.mapService.getLineStyle(this.coordinates()),
+        style: this.mapService.getCircleStyle({
+          path: this.path(),
+          accuracy: this.accuracy(),
+          lat: this.lat(),
+          lon: this.lon(),
+        }),
         center: DEFAULT_CENTER,
       })
       .pipe(takeUntil(this.destroyed$))
@@ -137,14 +152,9 @@ export class MapComponent implements AfterViewInit {
   }
 
   private addMarker() {
-    const lon = this.lon()
-    const lat = this.lat()
-    if (!lon && !lat) {
-      return
-    }
     this.mapService.addMarker(this.map, {
-      lon: parseFloat(lon!),
-      lat: parseFloat(lat!),
+      lon: this.lon(),
+      lat: this.lat(),
       diameter: 24,
       zIndex: 1,
     })
@@ -154,21 +164,20 @@ export class MapComponent implements AfterViewInit {
     if (!this.map) {
       return
     }
-    if (this.coordinates().length < 2) {
+    this.mapService.addCircleLayer(this.map)
+    if (this.path().length < 2) {
       return
     }
-    this.pathMarkers = this.mapService.addPathMarkers(
-      this.map,
-      this.coordinates()
-    )
+    this.pathMarkers = this.mapService.addPathMarkers(this.map, this.path())
     this.mapService.addLineLayer(this.map)
-    this.mapService.fitBounds(this.map, this.coordinates())
+    this.mapService.fitBounds(this.map, this.path())
   }
 
   private async removePath() {
     if (!this.map) {
       return
     }
+    this.mapService.removeCircleLayer(this.map)
     for (const marker of this.pathMarkers) {
       marker.remove()
     }
