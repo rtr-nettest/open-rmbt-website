@@ -25,6 +25,9 @@ import { IMarkerResponse } from "../interfaces/marker-response.interface"
 import { IRecentMeasurement } from "../../opendata/interfaces/recent-measurements-response.interface"
 import { formatTime } from "../../shared/adapters/app-date.adapter"
 import { Coordinate } from "ol/coordinate"
+import { lineString } from "@turf/helpers"
+import bbox from "@turf/bbox"
+import drawCircle from "@turf/circle"
 
 export const DEFAULT_CENTER: [number, number] = [
   13.786457000803567, 47.57838319858735,
@@ -47,6 +50,8 @@ const DUMMY_STYLE = {
   sources: {},
   layers: [],
 }
+
+declare const maplibregl: any
 
 @Injectable({
   providedIn: "root",
@@ -151,7 +156,8 @@ export class MapService {
     return this.i18nStore.getTranslations().pipe(
       map((translations) => {
         options.locale = translations
-        return new Map(options)
+        // Using the UMD version of maplibre-gl as the NPM version can not draw the lines on the map
+        return new maplibregl.Map(options) as Map
       })
     )
   }
@@ -266,28 +272,180 @@ export class MapService {
     })
   }
 
+  fitBounds(map: Map, coordinates: [number, number][]) {
+    this.zone.runOutsideAngular(() => {
+      if (coordinates.length < 2) {
+        return
+      }
+      const line = lineString(coordinates)
+      const box = bbox(line) as [number, number, number, number]
+      map.fitBounds(box, {
+        animate: false,
+        padding: { top: 100, bottom: 100 },
+      })
+    })
+  }
+
   addMarker(
     map: Map,
     options: {
-      lon: number
-      lat: number
+      lon: number | null
+      lat: number | null
       diameter: number
       classification?: number
+      rotation?: number
       onClick?: () => any
+      zIndex?: number
     }
   ) {
-    const { lon, lat, diameter, classification, onClick } = options
+    const { lon, lat, diameter, classification, onClick, rotation, zIndex } =
+      options
+    if (lon === null || lat === null) {
+      return new Marker()
+    }
     const el = document.createElement("div")
     el.className = "app-marker"
     el.style.backgroundImage = `url(${this.getIconByClass(classification)})`
     el.style.width = `${diameter}px`
     el.style.height = `${diameter}px`
+    if (zIndex) {
+      el.style.zIndex = zIndex.toString()
+    }
     if (onClick) {
       el.addEventListener("click", () => {
         onClick()
       })
     }
-    return new Marker({ element: el }).setLngLat([lon, lat]).addTo(map)
+    return new Marker({ element: el, rotation })
+      .setLngLat([lon, lat])
+      .addTo(map)
+  }
+
+  addCircleLayer(map: Map) {
+    if (!map) {
+      return
+    }
+    map.addLayer({
+      id: `accuracy-circle`,
+      type: "fill",
+      source: "circle",
+      layout: {},
+      paint: {
+        "fill-color": "#347fbc",
+        "fill-opacity": 0.2,
+      },
+    })
+  }
+
+  removeCircleLayer(map: Map) {
+    if (!map) {
+      return
+    }
+    map.removeLayer(`accuracy-circle`)
+  }
+
+  addPathMarkers(map: Map, coordinates: [number, number][]) {
+    if (coordinates.length < 2) {
+      return []
+    }
+    const [currentCoordinate, nextCoordinate] = coordinates.slice(-2)
+    let rotation =
+      (Math.atan2(
+        nextCoordinate[0] - currentCoordinate[0],
+        nextCoordinate[1] - currentCoordinate[1]
+      ) *
+        180) /
+      Math.PI
+    if (rotation < 0.0) rotation += 360.0
+    const markers: Marker[] = []
+    for (const [i, loc] of coordinates.entries()) {
+      if (loc[0] === null || loc[1] === null) {
+        continue
+      }
+      const marker = this.addMarker(map, {
+        lon: loc[0],
+        lat: loc[1],
+        diameter: i === 0 || i === coordinates.length - 1 ? 24 : 12,
+        classification: i === 0 ? 10 : i === coordinates.length - 1 ? 20 : 30,
+        rotation,
+      })
+      markers.push(marker!)
+    }
+    return markers
+  }
+
+  getCircleStyle(options: {
+    path: [number, number][]
+    lon: number | null
+    lat: number | null
+    accuracy: number | null
+  }) {
+    const { lon, lat, accuracy, path } = options
+    if (lon === null || lat === null || accuracy === null) {
+      return this.getLineStyle(path)
+    }
+    const radius = accuracy / 500 // in km
+    const circle = drawCircle([lon, lat], radius, {
+      steps: 64,
+      units: "kilometers",
+    })
+    const base = this.getLineStyle(path)
+    return {
+      ...base,
+      sources: {
+        ...base.sources,
+        circle: {
+          type: "geojson" as const,
+          data: circle,
+        },
+      },
+    }
+  }
+
+  getLineStyle(coordinates: [number, number][]): StyleSpecification {
+    return {
+      ...this.defaultStyle(),
+      sources: {
+        ...this.defaultStyle().sources,
+        route: {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "LineString",
+              coordinates,
+            },
+          },
+        },
+      },
+    }
+  }
+
+  addLineLayer(map: Map) {
+    if (map.getLayer("route")) {
+      return
+    }
+    map.addLayer({
+      id: "route",
+      type: "line",
+      source: "route",
+      layout: {
+        "line-join": "round",
+        "line-cap": "round",
+      },
+      paint: {
+        "line-color": "#2f2f2f",
+        "line-width": 2,
+      },
+    })
+  }
+
+  removeLineLayer(map: Map) {
+    if (!map.getLayer("route")) {
+      return
+    }
+    map.removeLayer("route")
   }
 
   private getIconByClass(classification?: number) {
@@ -300,6 +458,12 @@ export class MapService {
         return `/assets/images/map-icon-green.svg`
       case 4:
         return `/assets/images/map-icon-deep-green.svg`
+      case 10:
+        return `/assets/images/map-icon-start.svg`
+      case 20:
+        return `/assets/images/map-icon-finish.svg`
+      case 30:
+        return `/assets/images/map-icon-black.svg`
       default:
         return `/assets/images/map-icon-blue.svg`
     }

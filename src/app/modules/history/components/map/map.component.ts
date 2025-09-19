@@ -5,7 +5,6 @@ import {
   computed,
   effect,
   input,
-  NgZone,
   signal,
 } from "@angular/core"
 import { firstValueFrom, Subject, Subscription, takeUntil } from "rxjs"
@@ -21,6 +20,7 @@ import { CoverageDialogComponent } from "../coverage-dialog/coverage-dialog.comp
 import { HistoryRepositoryService } from "../../repository/history-repository.service"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { ICoverage } from "../../interfaces/coverage.interface"
+import { ISimpleHistoryTestLocation } from "../../interfaces/simple-history-result.interface"
 
 @Component({
   selector: "app-map",
@@ -31,14 +31,30 @@ import { ICoverage } from "../../interfaces/coverage.interface"
 })
 export class MapComponent implements AfterViewInit {
   destroyed$ = new Subject<void>()
+  locations = input.required<ISimpleHistoryTestLocation[]>()
+  path = computed(() =>
+    this.locations().map((loc) => [loc.long, loc.lat] as [number, number])
+  )
   mapContainerId = input.required<string>()
   mapId = "map"
   map!: Map
   params = input.required<URLSearchParams>()
   resizeSub!: Subscription
   coverages = signal<IBasicResponse<ICoverage> | null>(null)
-  lat = computed(() => this.params().get("lat"))
-  lon = computed(() => this.params().get("long"))
+  lat = computed(() => {
+    const lat = this.params().get("lat")
+    return lat ? +lat : null
+  })
+  lon = computed(() => {
+    const lon = this.params().get("long")
+    return lon ? +lon : null
+  })
+  accuracy = computed(() => {
+    const acc = this.params().get("loc_accuracy")
+    return acc ? +acc : null
+  })
+  showPath = input<boolean>(false)
+  pathMarkers: maplibregl.Marker[] = []
 
   get href() {
     const search = [
@@ -57,8 +73,7 @@ export class MapComponent implements AfterViewInit {
     private readonly i18nStore: I18nStore,
     private readonly mapService: MapService,
     private readonly repo: HistoryRepositoryService,
-    private readonly scrollStrategyOptions: ScrollStrategyOptions,
-    private readonly zone: NgZone
+    private readonly scrollStrategyOptions: ScrollStrategyOptions
   ) {
     effect(() => {
       const lon = +this.lon()!
@@ -74,16 +89,22 @@ export class MapComponent implements AfterViewInit {
         })
       })
     })
+    effect(() => {
+      if (this.showPath() && this.map) {
+        this.addPath()
+      } else {
+        this.removePath()
+      }
+    })
   }
 
   ngAfterViewInit(): void {
     if (globalThis.document) {
       this.setSize()
-      this.setMap().then(() => {
-        this.setResizeSub()
-        this.mapService.setCoordinatesAndZoom(this.map, this.params())
-        this.addMarker()
-      })
+      this.setMap()
+      this.setResizeSub()
+      this.addMarker()
+      this.mapService.setCoordinatesAndZoom(this.map, this.params())
     }
   }
 
@@ -103,45 +124,64 @@ export class MapComponent implements AfterViewInit {
   }
 
   private setSize() {
-    this.zone.runOutsideAngular(() => {
-      if (!this.mapContainerId) {
-        return
-      }
-      document
-        .getElementById(this.mapId)!
-        .setAttribute("style", `height:350px;width:100%`)
-    })
+    if (!this.mapContainerId) {
+      return
+    }
+    document
+      .getElementById(this.mapId)!
+      .setAttribute("style", `height:350px;width:100%`)
   }
 
-  private async setMap() {
-    this.zone.runOutsideAngular(() => {
-      this.mapService
-        .createMap({
-          container: this.mapId,
-          style: this.mapService.defaultStyle(),
-          center: DEFAULT_CENTER,
-          preserveDrawingBuffer: true,
-        })
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((map) => {
-          this.map = map
-          this.map.addControl(new NavigationControl())
-        })
-    })
+  private setMap() {
+    this.mapService
+      .createMap({
+        container: this.mapId,
+        style: this.mapService.getCircleStyle({
+          path: this.path(),
+          accuracy: this.accuracy(),
+          lat: this.lat(),
+          lon: this.lon(),
+        }),
+        center: DEFAULT_CENTER,
+      })
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((map) => {
+        this.map = map
+        this.map.addControl(new NavigationControl())
+      })
   }
 
   private addMarker() {
-    this.zone.runOutsideAngular(() => {
-      const lon = this.lon()
-      const lat = this.lat()
-      if (!lon && !lat) {
-        return
-      }
-      this.mapService.addMarker(this.map, {
-        lon: parseFloat(lon!),
-        lat: parseFloat(lat!),
-        diameter: 24,
-      })
+    this.mapService.addMarker(this.map, {
+      lon: this.lon(),
+      lat: this.lat(),
+      diameter: 24,
+      zIndex: 1,
     })
+  }
+
+  private addPath() {
+    if (!this.map) {
+      return
+    }
+    this.mapService.addCircleLayer(this.map)
+    if (this.path().length < 2) {
+      return
+    }
+    this.pathMarkers = this.mapService.addPathMarkers(this.map, this.path())
+    this.mapService.addLineLayer(this.map)
+    this.mapService.fitBounds(this.map, this.path())
+  }
+
+  private async removePath() {
+    if (!this.map) {
+      return
+    }
+    this.mapService.removeCircleLayer(this.map)
+    for (const marker of this.pathMarkers) {
+      marker.remove()
+    }
+    this.pathMarkers = []
+    this.mapService.removeLineLayer(this.map)
   }
 }

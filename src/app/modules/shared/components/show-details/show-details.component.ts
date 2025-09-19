@@ -32,4 +32,8 @@ export class ShowDetailsComponent<T> {
   width = "min(500px, 100%)"
 
   constructor(protected readonly i18nStore: I18nStore) {}
+
+  onExpand($event: boolean) {
+    // to be overridden if needed
+  }
 }

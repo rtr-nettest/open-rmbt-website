@@ -182,6 +182,7 @@ export class ResultScreenComponent extends SeoComponent {
   })
   phaseDurations = signal<PhaseDurations>({})
   loading = signal<boolean>(true)
+  showMeasurementPath = signal<boolean>(false)
 
   get activeLang() {
     return this.i18nStore.activeLang
@@ -286,7 +287,8 @@ export class ResultScreenComponent extends SeoComponent {
       result.openTestResponse?.["loc_accuracy"] !== null &&
       result.openTestResponse?.["loc_accuracy"] <= MIN_ACCURACY_FOR_SHOWING_MAP
     ) {
-      this.locationTable.set(result.openTestResponse?.["speed_curve"]?.location)
+      const location = result.openTestResponse?.["speed_curve"]?.location
+      this.locationTable.set(location)
     }
     if (result.ping?.chart) this.pingTable.set(result.ping.chart)
     if (result.download?.chart)

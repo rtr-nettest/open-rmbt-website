@@ -1,4 +1,8 @@
-<app-expansion-panel title="Show details" [a11yTitle]="a11yTitle()">
+<app-expansion-panel
+  title="Show details"
+  [a11yTitle]="a11yTitle()"
+  (expand)="onExpand($event)"
+>
   <app-table
     [data]="data()"
     [columns]="columns"

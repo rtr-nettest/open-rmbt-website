@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core"
+import { ChangeDetectionStrategy, Component, output } from "@angular/core"
 import {
   imports,
   ShowDetailsComponent,
@@ -19,6 +19,7 @@ import { ISimpleHistoryTestLocation } from "../../../history/interfaces/simple-h
     "../../../shared/components/show-details/show-details.component.scss",
 })
 export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistoryTestLocation> {
+  expand = output<boolean>()
   override columns: ITableColumn<ISimpleHistoryTestLocation>[] = [
     {
       columnDef: "time_elapsed",
@@ -41,4 +42,8 @@ export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistor
       getNgClass: () => "app-cell--25",
     },
   ]
+
+  override onExpand($event: boolean): void {
+    this.expand.emit($event)
+  }
 }

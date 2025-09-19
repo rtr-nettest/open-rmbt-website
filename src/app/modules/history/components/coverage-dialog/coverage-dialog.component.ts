@@ -197,7 +197,7 @@ export class CoverageDialogComponent implements AfterViewInit, OnDestroy {
         .pipe(takeUntil(this.destroyed$))
         .subscribe((map) => {
           this.map = map
-          this.map.addControl(new NavigationControl())
+          this.map!.addControl(new NavigationControl())
         })
     })
   }
@@ -226,12 +226,10 @@ export class CoverageDialogComponent implements AfterViewInit, OnDestroy {
           "line-width": 1,
         },
       })
-      const line = lineString(polygon.coordinates[0][0])
-      const box = bbox(line) as [number, number, number, number]
-      this.map?.fitBounds(box, {
-        animate: false,
-        padding: { top: 100, bottom: 100 },
-      })
+      this.mapService.fitBounds(
+        this.map!,
+        polygon.coordinates[0][0] as [number, number][]
+      )
     })
   }
 }
