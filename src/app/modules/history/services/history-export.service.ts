@@ -70,20 +70,12 @@ export class HistoryExportService {
     }
     this.mainStore.inProgress$.next(true)
     return this.http
-      .post(basePdfUrl, httpParams || this.getExportParams("pdf", results))
-      .pipe(
-        concatMap((resp: any) => {
-          if (resp?.["file"]) {
-            return this.http.get(`${basePdfUrl}/${resp["file"]}`, {
-              responseType: "blob",
-              observe: "response",
-            })
-          }
-          return of(null)
-        }),
-        tap(this.saveFile("pdf")),
-        catchError(this.handleError)
-      )
+      .post(basePdfUrl, httpParams || this.getExportParams("pdf", results), {
+        headers: { Accept: "application/pdf" },
+        responseType: "blob",
+        observe: "response",
+      })
+      .pipe(tap(this.saveFile("pdf")), catchError(this.handleError))
   }
 
   protected saveFile = (format: string) => (data: any) => {
