@@ -141,5 +141,5 @@ export const FORMATTED_FIELDS: Record<
   dtm_level: (testData: any, t: any) =>
     `${testData.dtm_level} ${t[`dtm_level_units`] || "m"}`,
   open_test_uuid: (testData: any, _: any, locale?: string) =>
-    `<a href="/${locale}/${ERoutes.OPEN_RESULT}?open_test_uuid=${testData.open_test_uuid}">${testData.open_test_uuid}</a>}`,
+    `<a href="/${locale}/${ERoutes.OPEN_RESULT}?open_test_uuid=${testData.open_test_uuid}">${testData.open_test_uuid}</a>`,
 }
