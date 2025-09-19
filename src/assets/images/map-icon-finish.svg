@@ -39,10 +39,10 @@
      stroke="white"
      stroke-width="4"
      id="circle9"
-     style="fill:#000000;fill-opacity:1"
+     style="fill:#2f2f2f;fill-opacity:1"
      r="10" />
   <path
-     d="M 11,7.8250001 5.4000001,13.425 4.0000001,12 12,4.0000001 20,12 18.6,13.425 13,7.8250001 V 20 h -2 z"
-     id="path2271"
+     d="M 6.9999998,13.745826 12,8.7458268 17,13.745826 Z"
+     id="path909"
      style="fill:#ffffff;stroke-width:0.025" />
 </svg>

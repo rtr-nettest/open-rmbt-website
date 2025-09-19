@@ -182,6 +182,7 @@ export class ResultScreenComponent extends SeoComponent {
   })
   phaseDurations = signal<PhaseDurations>({})
   loading = signal<boolean>(true)
+  showMeasurementPath = signal<boolean>(false)
 
   get activeLang() {
     return this.i18nStore.activeLang

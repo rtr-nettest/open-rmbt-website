@@ -69,9 +69,11 @@
         [params]="mapParams()"
         [mapContainerId]="mapContainerId"
         [locations]="locationTable()"
+        [showPath]="showMeasurementPath()"
       ></app-map>
       <app-location-details
         [details]="locationTable()"
+        (expand)="this.showMeasurementPath.set($event)"
         style="display: block; margin-top: 24px"
         a11yTitle="Location details"
       ></app-location-details>

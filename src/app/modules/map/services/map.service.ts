@@ -295,62 +295,54 @@ export class MapService {
       classification?: number
       rotation?: number
       onClick?: () => any
+      zIndex?: number
     }
   ) {
-    const { lon, lat, diameter, classification, onClick } = options
+    const { lon, lat, diameter, classification, onClick, rotation, zIndex } =
+      options
     const el = document.createElement("div")
-    if (options.rotation) {
-      const child = document.createElement("div")
-      child.className = "app-marker"
-      child.style.backgroundImage = `url(${this.getIconByClass(
-        classification
-      )})`
-      child.style.width = `${diameter}px`
-      child.style.height = `${diameter}px`
-      child.style.transform = `rotate(${options.rotation}deg)`
-      el.appendChild(child)
-    } else {
-      el.className = "app-marker"
-      el.style.backgroundImage = `url(${this.getIconByClass(classification)})`
-      el.style.width = `${diameter}px`
-      el.style.height = `${diameter}px`
+    el.className = "app-marker"
+    el.style.backgroundImage = `url(${this.getIconByClass(classification)})`
+    el.style.width = `${diameter}px`
+    el.style.height = `${diameter}px`
+    if (zIndex) {
+      el.style.zIndex = zIndex.toString()
     }
     if (onClick) {
       el.addEventListener("click", () => {
         onClick()
       })
     }
-    return new Marker({ element: el }).setLngLat([lon, lat]).addTo(map)
+    return new Marker({ element: el, rotation })
+      .setLngLat([lon, lat])
+      .addTo(map)
   }
 
   addPathMarkers(map: Map, coordinates: [number, number][]) {
-    return new Promise<void>(async (resolve) => {
-      if (coordinates.length < 2) {
-        return resolve()
-      }
-      const [currentCoordinate, nextCoordinate] = coordinates.slice(-2)
-      let rotation =
-        (Math.atan2(
-          nextCoordinate[0] - currentCoordinate[0],
-          nextCoordinate[1] - currentCoordinate[1]
-        ) *
-          180) /
-        Math.PI
-      if (rotation < 0.0) rotation += 360.0
-      this.zone.runOutsideAngular(() => {
-        for (const [i, loc] of coordinates.entries()) {
-          this.addMarker(map, {
-            lon: loc[0],
-            lat: loc[1],
-            diameter: i === 0 || i === coordinates.length - 1 ? 24 : 12,
-            classification:
-              i === 0 ? 10 : i === coordinates.length - 1 ? 20 : 30,
-            rotation,
-          })
-        }
+    if (coordinates.length < 2) {
+      return []
+    }
+    const [currentCoordinate, nextCoordinate] = coordinates.slice(-2)
+    let rotation =
+      (Math.atan2(
+        nextCoordinate[0] - currentCoordinate[0],
+        nextCoordinate[1] - currentCoordinate[1]
+      ) *
+        180) /
+      Math.PI
+    if (rotation < 0.0) rotation += 360.0
+    const markers: Marker[] = []
+    for (const [i, loc] of coordinates.entries()) {
+      const marker = this.addMarker(map, {
+        lon: loc[0],
+        lat: loc[1],
+        diameter: i === 0 || i === coordinates.length - 1 ? 24 : 12,
+        classification: i === 0 ? 10 : i === coordinates.length - 1 ? 20 : 30,
+        rotation,
       })
-      resolve()
-    })
+      markers.push(marker)
+    }
+    return markers
   }
 
   getLineStyle(coordinates: [number, number][]): StyleSpecification {
@@ -370,23 +362,33 @@ export class MapService {
           },
         },
       },
-      layers: [
-        ...this.defaultStyle().layers,
-        {
-          id: "route",
-          type: "line",
-          source: "route",
-          layout: {
-            "line-join": "round",
-            "line-cap": "round",
-          },
-          paint: {
-            "line-color": "#000000",
-            "line-width": 2,
-          },
-        },
-      ],
     }
+  }
+
+  addLineLayer(map: Map) {
+    if (map.getLayer("route")) {
+      return
+    }
+    map.addLayer({
+      id: "route",
+      type: "line",
+      source: "route",
+      layout: {
+        "line-join": "round",
+        "line-cap": "round",
+      },
+      paint: {
+        "line-color": "#2f2f2f",
+        "line-width": 2,
+      },
+    })
+  }
+
+  removeLineLayer(map: Map) {
+    if (!map.getLayer("route")) {
+      return
+    }
+    map.removeLayer("route")
   }
 
   private getIconByClass(classification?: number) {

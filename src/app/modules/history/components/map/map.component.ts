@@ -43,6 +43,8 @@ export class MapComponent implements AfterViewInit {
   coverages = signal<IBasicResponse<ICoverage> | null>(null)
   lat = computed(() => this.params().get("lat"))
   lon = computed(() => this.params().get("long"))
+  showPath = input<boolean>(false)
+  pathMarkers: maplibregl.Marker[] = []
 
   get href() {
     const search = [
@@ -77,16 +79,22 @@ export class MapComponent implements AfterViewInit {
         })
       })
     })
+    effect(() => {
+      if (this.showPath() && this.map) {
+        this.addPath()
+      } else {
+        this.removePath()
+      }
+    })
   }
 
   ngAfterViewInit(): void {
     if (globalThis.document) {
       this.setSize()
-      this.setMap().then(() => {
-        this.setResizeSub()
-        this.addPathMarkers()
-        this.addMarker()
-      })
+      this.setMap()
+      this.setResizeSub()
+      this.addMarker()
+      this.mapService.setCoordinatesAndZoom(this.map, this.params())
     }
   }
 
@@ -114,7 +122,7 @@ export class MapComponent implements AfterViewInit {
       .setAttribute("style", `height:350px;width:100%`)
   }
 
-  private async setMap() {
+  private setMap() {
     this.mapService
       .createMap({
         container: this.mapId,
@@ -138,15 +146,33 @@ export class MapComponent implements AfterViewInit {
       lon: parseFloat(lon!),
       lat: parseFloat(lat!),
       diameter: 24,
+      zIndex: 1,
     })
   }
 
-  private async addPathMarkers() {
-    await this.mapService.addPathMarkers(this.map, this.coordinates())
-    if (this.coordinates().length < 2) {
-      this.mapService.setCoordinatesAndZoom(this.map, this.params())
+  private addPath() {
+    if (!this.map) {
       return
     }
+    if (this.coordinates().length < 2) {
+      return
+    }
+    this.pathMarkers = this.mapService.addPathMarkers(
+      this.map,
+      this.coordinates()
+    )
+    this.mapService.addLineLayer(this.map)
     this.mapService.fitBounds(this.map, this.coordinates())
+  }
+
+  private async removePath() {
+    if (!this.map) {
+      return
+    }
+    for (const marker of this.pathMarkers) {
+      marker.remove()
+    }
+    this.pathMarkers = []
+    this.mapService.removeLineLayer(this.map)
   }
 }
