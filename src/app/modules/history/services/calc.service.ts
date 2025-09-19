@@ -8,6 +8,8 @@ type CurveItem = {
   speed?: number
 }
 
+const noTransferThreshold = 1400
+
 export class CalcService {
   private static instance = new CalcService()
 
@@ -67,6 +69,21 @@ export class CalcService {
     for (const ci of curve) {
       const result = this.calcResultForStep(ci, options)
       if (result) {
+        const prevResult = resp[resp.length - 1]
+        if (
+          prevResult &&
+          result.nsec - prevResult.nsec > noTransferThreshold * 1e6
+        ) {
+          // fill gap with zero-speed entries
+          resp.push({
+            ...prevResult,
+            speed: 0,
+          })
+          resp.push({
+            ...result,
+            speed: 0,
+          })
+        }
         resp.push(result)
       }
     }
