@@ -18,7 +18,7 @@ export class QoeBarComponent
     const value = item.value as IQoeItem
     const fill = value.quality
       ? Math.max(1, Math.round(value.quality * this.bars.length))
-      : 0
+      : 1
     this.bars = this.bars.map((_, i) => {
       return i + 1 <= fill ? value.classification : 0
     })
