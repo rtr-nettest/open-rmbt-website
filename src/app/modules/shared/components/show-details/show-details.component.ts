@@ -1,4 +1,4 @@
-import { Component, computed, input } from "@angular/core"
+import { Component, computed, input, signal } from "@angular/core"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
@@ -25,6 +25,7 @@ export class ShowDetailsComponent<T> {
     }
   })
   columns: ITableColumn<T>[] = []
+  isExpanded = signal(false)
   sort: ISort = {
     direction: "asc",
     active: "",
@@ -34,6 +35,6 @@ export class ShowDetailsComponent<T> {
   constructor(protected readonly i18nStore: I18nStore) {}
 
   onExpand($event: boolean) {
-    // to be overridden if needed
+    this.isExpanded.set($event)
   }
 }

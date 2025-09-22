@@ -1,5 +1,5 @@
 <app-expansion-panel
-  title="Show details"
+  [title]="isExpanded() ? 'Details' : 'Show details'"
   [a11yTitle]="a11yTitle()"
   (expand)="onExpand($event)"
 >

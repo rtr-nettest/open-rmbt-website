@@ -172,7 +172,7 @@
   "Describe the computer that you are running the test with.": "Beschreiben Sie den Computer, mit dem Sie den Test durchführen. Wie ist dieser mit dem Modem/Router verbunden? Sind Ihre Geräte über Kabel verbunden (LAN), oder kabellos (WLAN)? Werden die elektrischen Leitungen in Ihrem Haus auch zur Übertragung von Daten benutzt (PowerLAN)? Bei WLAN: Befinden sich Testgerät und Modem/Router im selben Raum?",
   "Detailed results": "Detailergebnisse",
   "detailed_measurements": "Detailergebnisse",
-  "details": "Details",
+  "Details": "Details",
   "Device": "Gerät",
   "devices": "Geräte",
   "Dismiss": "Verwerfen",

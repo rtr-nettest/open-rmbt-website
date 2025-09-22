@@ -45,5 +45,6 @@ export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistor
 
   override onExpand($event: boolean): void {
     this.expand.emit($event)
+    super.onExpand($event)
   }
 }

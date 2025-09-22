@@ -172,7 +172,7 @@
   "Describe the computer that you are running the test with.": "Describe the computer that you are running the test with. How is the computer connected to the modem/router? Are your devices connected wired (LAN) or wireless (WLAN)? Are the electrical wires in your house also used to transmit data (PowerLAN)? For WLAN: Are the test device and modem / router in the same room?",
   "Detailed results": "Detailed results",
   "detailed_measurements": "Detailed measurements",
-  "details": "Details",
+  "Details": "Details",
   "Device": "Device",
   "devices": "Devices",
   "Dismiss": "Dismiss",
