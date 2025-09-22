@@ -9,7 +9,11 @@ if (window.location.href.indexOf("github") !== -1) {
     //default for localhost -> change to your server!
     statisticProxy = "";
     controlProxy = "";
-} else if (window.location.href.indexOf("https://www.netztest.at") !== 0) {
+} else if (window.location.href.indexOf("https://www.netztest.at") !== 0 &&
+    window.location.href.indexOf("https://w01.netztest.at") !== 0 &&
+    window.location.href.indexOf("https://w02.netztest.at") !== 0 &&
+    window.location.href.indexOf("https://w03.netztest.at") !== 0 &&
+    window.location.href.indexOf("https://w04.netztest.at") !== 0) {
     statisticProxy = "";
     controlProxy = "";
 }
