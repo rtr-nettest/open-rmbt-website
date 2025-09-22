@@ -505,7 +505,7 @@ export class MapService {
             formatTime({
               open_uuid: "",
               open_test_uuid: m.open_test_uuid,
-              time: m.time_string,
+              time: new Date(m.time).toString(),
               lat: m.lat,
               long: m.lon,
               download_classification:
