@@ -46,6 +46,7 @@
     "maplibre-gl": "^5.7.2",
     "material-icons": "^1.13.12",
     "material-symbols": "^0.27.0",
+    "ngx-matomo-client": "^8.0.0",
     "ol": "^10.4.0",
     "rmbtws": "https://github.com/rtr-nettest/rmbtws.git",
     "rxjs": "~7.8.0",

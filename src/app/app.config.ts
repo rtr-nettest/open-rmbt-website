@@ -32,6 +32,13 @@ import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm"
 import { errorInterceptor } from "./modules/shared/interceptors/error.interceptor"
 import { LonlatPipe } from "./modules/shared/pipes/lonlat.pipe"
 import { patchToLocaleString } from "./modules/shared/util/number"
+import {
+  MATOMO_PAGE_URL_PROVIDER,
+  provideMatomo,
+  withRouter,
+} from "ngx-matomo-client"
+import { environment } from "../environments/environment"
+import { MatomoUrlProviderService } from "./modules/shared/services/matomo-url-provider.service"
 
 Chart.register(
   BarElement,
@@ -61,6 +68,18 @@ export async function provideConfig(): Promise<ApplicationConfig> {
       await provideI18n(),
       { provide: DatePipe },
       { provide: LonlatPipe },
+      ...(environment.matomo
+        ? [
+            provideMatomo(
+              { ...environment.matomo, requireConsent: "cookie" },
+              withRouter()
+            ),
+            {
+              provide: MATOMO_PAGE_URL_PROVIDER,
+              useClass: MatomoUrlProviderService,
+            },
+          ]
+        : []),
     ],
   }
 }

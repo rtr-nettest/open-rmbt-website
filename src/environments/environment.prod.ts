@@ -23,4 +23,8 @@ export const environment = {
   features: {
     show_server_selection: false,
   },
+  matomo: {
+    trackerUrl: "https://piwik.netztest.at",
+    siteId: "1",
+  },
 }
