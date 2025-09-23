@@ -1,4 +1,6 @@
-export const environment = {
+import { IEnvironment } from "./environment.interface"
+
+export const environment: IEnvironment = {
   baseUrl: "http://localhost:4200",
   deployedUrl: "http://localhost:4200",
   api: {

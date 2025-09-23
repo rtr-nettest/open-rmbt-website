@@ -1,4 +1,6 @@
-export const environment = {
+import { IEnvironment } from "./environment.interface"
+
+export const environment: IEnvironment = {
   baseUrl: "http://localhost:4200",
   deployedUrl: "http://localhost:4200",
   api: {
@@ -22,9 +24,5 @@ export const environment = {
   },
   features: {
     show_server_selection: true,
-  },
-  matomo: {
-    trackerUrl: "https://piwik.netztest.at",
-    siteId: "1",
   },
 }
