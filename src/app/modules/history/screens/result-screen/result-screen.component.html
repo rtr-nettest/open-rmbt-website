@@ -179,18 +179,3 @@
 </div>
 <div class="app-separator"></div>
 <app-footer></app-footer>
-
-<ng-template #noResult>
-  <main
-    *ngIf="error$ | async as error"
-    class="app-wrapper app-wrapper--no-result"
-  >
-    {{ "Measurement failed" | translate }} {{ error.message }}
-  </main>
-  <main
-    *ngIf="(error$ | async) === null"
-    class="app-wrapper app-wrapper--no-result"
-  >
-    {{ "Fetching the result..." | translate }}
-  </main>
-</ng-template>
