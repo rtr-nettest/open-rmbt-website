@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "concurrently \"node proxy\" \"ng serve  --port 4201\"",
+    "start": "concurrently \"node proxy\" \"ng serve\"",
     "start:prod": "ng build && npx lite-server --baseDir=dist/open-rmbt-angular/browser",
     "start:stage": "ng serve --configuration=stage",
     "start:preprod": "ng serve --configuration=preprod",

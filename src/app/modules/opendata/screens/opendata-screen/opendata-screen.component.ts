@@ -42,6 +42,8 @@ import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interfa
 import { OpendataExportService } from "../../services/opendata-export.service"
 import { ActionButtonsComponent } from "../../../history/components/action-buttons/action-buttons.component"
 
+export const AUTOREFRESH_INTERVAL = 15_000
+
 @Component({
   selector: "app-opendata-screen",
   imports: [
@@ -97,16 +99,7 @@ export class OpendataScreenComponent
       totalElements: data?.length,
     }))
   )
-  recentMeasurementSub = interval(5000)
-    .pipe(
-      takeUntil(this.destroyed$),
-      tap(() => {
-        if (!this.loading()) {
-          this.addRecentMeasurements()
-        }
-      })
-    )
-    .subscribe()
+
   filterCount = signal<string | null>(null)
   filters$ = toObservable(this.opendataStoreService.filters).pipe(
     concatMap((filters) => {
@@ -124,6 +117,8 @@ export class OpendataScreenComponent
   intradayData = signal<IIntradayResponseItem[]>([])
   showUuids = signal(false)
   startMs = Date.now()
+
+  private lastRefreshDurationMs = 0
 
   protected override get dataLimit(): number {
     return OPEN_DATA_LIMIT
@@ -154,6 +149,7 @@ export class OpendataScreenComponent
 
   ngOnInit(): void {
     this.opendataService.initFilters()
+    this.setAutoRefresh()
   }
 
   override ngOnDestroy(): void {
@@ -199,28 +195,36 @@ export class OpendataScreenComponent
     this.filterCount.set(filtersCount > 0 ? ` (${filtersCount})` : "")
   }
 
-  private addRecentMeasurements() {
+  private setAutoRefresh() {
+    setTimeout(async () => {
+      const start = Date.now()
+      await this.addRecentMeasurements()
+      this.lastRefreshDurationMs = Date.now() - start
+      this.setAutoRefresh()
+    }, this.lastRefreshDurationMs * 2 + AUTOREFRESH_INTERVAL)
+  }
+
+  private async addRecentMeasurements() {
+    if (this.loading()) {
+      return
+    }
     const filters = this.opendataStoreService.filters()
-    firstValueFrom(
+    const resp = await firstValueFrom(
       this.opendataService.search({ ...DEFAULT_FILTERS, ...filters })
-    ).then((resp) => {
-      if (this.loading()) {
-        return
-      }
-      const oldContent = this.opendataStoreService.data()
-      let newContent = resp?.results?.length ? resp.results : []
-      newContent.forEach((item) => {
-        formatTime(item)
-      })
-      newContent.forEach((item) => this.ensureSignal(item))
-      const lastTestUuid = newContent[newContent.length - 1]?.open_test_uuid
-      const lastOldItemIndex = oldContent.findIndex(
-        (item) => item.open_test_uuid === lastTestUuid
-      )
-      if (lastOldItemIndex !== -1) {
-        newContent = newContent.concat(oldContent.slice(lastOldItemIndex + 1))
-      }
-      this.opendataStoreService.data.set(newContent)
+    )
+    const oldContent = this.opendataStoreService.data()
+    let newContent = resp?.results?.length ? resp.results : []
+    newContent.forEach((item) => {
+      formatTime(item)
     })
+    newContent.forEach((item) => this.ensureSignal(item))
+    const lastTestUuid = newContent[newContent.length - 1]?.open_test_uuid
+    const lastOldItemIndex = oldContent.findIndex(
+      (item) => item.open_test_uuid === lastTestUuid
+    )
+    if (lastOldItemIndex !== -1) {
+      newContent = newContent.concat(oldContent.slice(lastOldItemIndex + 1))
+    }
+    this.opendataStoreService.data.set(newContent)
   }
 }
