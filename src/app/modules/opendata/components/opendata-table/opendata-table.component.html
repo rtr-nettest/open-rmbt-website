@@ -40,7 +40,10 @@
       </ng-container>
 
       <ng-template #defaultCell>
-        <mat-cell *matCellDef="let element; let i = dataIndex">
+        <mat-cell
+          *matCellDef="let element; let i = dataIndex"
+          [attr.data-value]="getDefaultValue(column, element, i)"
+        >
           <span class="app-table__mobile-label">{{ column.header }}</span>
           <span [matTooltip]="column.getTooltip?.(element, column) ?? ''">
             {{ getDefaultValue(column, element, i) }}

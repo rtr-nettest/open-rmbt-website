@@ -86,5 +86,9 @@
       flex: auto;
       width: auto;
     }
+
+    .mat-column-signal_strength[data-value="-"] {
+      display: none;
+    }
   }
 }
