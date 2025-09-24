@@ -12,6 +12,6 @@ export class LonlatPipe implements PipeTransform {
     if (!value) {
       return null
     }
-    return formatcoords(value[0], value[1]).format(LOC_FORMAT)
+    return formatcoords(value[1], value[0]).format(LOC_FORMAT)
   }
 }
