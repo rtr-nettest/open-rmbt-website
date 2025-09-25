@@ -27,7 +27,7 @@ export const environment: IEnvironment = {
     history_filter: true,
   },
   matomo: {
-    trackerUrl: "https://piwik.netztest.at",
-    siteId: "1",
+    trackerUrl: "https://matomo.netztest.at",
+    siteId: "2",
   },
 }
