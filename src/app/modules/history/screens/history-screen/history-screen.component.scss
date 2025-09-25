@@ -20,3 +20,11 @@ app-action-buttons {
   margin-right: rem(16);
   margin-top: rem(4);
 }
+
+.app-failed-tests-toggle-container {
+  align-items: center;
+  display: flex;
+  width: rem(96);
+  justify-content: center;
+  margin-right: rem(16);
+}

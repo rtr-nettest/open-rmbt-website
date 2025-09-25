@@ -12,6 +12,17 @@
     <h1 class="app-result-h1">{{ title | translate }}</h1>
     @if (actionButtonsPosition === 'header') {
     <app-action-buttons [items]="actionButtons"></app-action-buttons>
+    } @if (showHistoryFilter) {
+    <div class="app-failed-tests-toggle-container">
+      <mat-slide-toggle
+        class="app-failed-tests-toggle"
+        [(ngModel)]="includeFailed"
+        (ngModelChange)="onToggleChange($event)"
+        >{{
+          (includeFailed() ? "All" : "Completed") | translate
+        }}</mat-slide-toggle
+      >
+    </div>
     } @if (!loopResults) {
     <button class="app-button" mat-flat-button (click)="showSyncDialog()">
       {{ "Synchronization code" | translate }}

@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   inject,
+  model,
   signal,
 } from "@angular/core"
 import { TERMS_VERSION, UUID } from "../../../test/constants/strings"
@@ -37,6 +38,8 @@ import { CertifiedBreadcrumbsComponent } from "../../../certified/components/cer
 import { SettingsService } from "../../../shared/services/settings.service"
 import { Router } from "@angular/router"
 import { ERoutes } from "../../../shared/constants/routes.enum"
+import { MatSlideToggleModule } from "@angular/material/slide-toggle"
+import { FormsModule } from "@angular/forms"
 
 export const historyImports = [
   ActionButtonsComponent,
@@ -52,6 +55,8 @@ export const historyImports = [
   ScrollTopComponent,
   TopNavComponent,
   TranslatePipe,
+  FormsModule,
+  MatSlideToggleModule,
 ]
 
 export type ActionButtonsPosition = "header" | "html-wrapper"
@@ -79,6 +84,8 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
   loopResults = false
   actionButtonsPosition: ActionButtonsPosition = "header"
   nextRoute = ERoutes.HISTORY
+  showHistoryFilter = environment.features.history_filter ?? false
+  includeFailed = model(true)
 
   actionButtons: IMainMenuItem[] = [
     {
@@ -141,6 +148,7 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
 
   ngOnInit(): void {
     if (this.uuid) {
+      this.includeFailed.set(this.store.includeFailed())
       this.service.resetMeasurementHistory()
       this.updateData({ reset: true }).then(async () => {
         while (
@@ -191,5 +199,10 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
       },
       scrollStrategy: this.scrollStrategyOptions.noop(),
     })
+  }
+
+  onToggleChange($event: boolean) {
+    this.store.includeFailed.set($event)
+    this.ngOnInit()
   }
 }

@@ -16,6 +16,7 @@ import tz from "dayjs/plugin/timezone"
 import { MainStore } from "../../shared/store/main.store"
 import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
 import { ISyncResponse } from "../interfaces/sync-response.interface"
+import { HistoryStore } from "../store/history.store"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -25,6 +26,7 @@ dayjs.extend(tz)
 export class HistoryRepositoryService {
   constructor(
     private readonly http: HttpClient,
+    private readonly historyStore: HistoryStore,
     private readonly i18nStore: I18nStore,
     private readonly mainStore: MainStore
   ) {}
@@ -77,7 +79,9 @@ export class HistoryRepositoryService {
       timezone: dayjs.tz.guess(),
       uuid,
       result_offset: paginator?.offset,
-      include_failed_tests: true,
+      include_failed_tests: environment.features.history_filter
+        ? this.historyStore.includeFailed()
+        : true,
     }
     if (paginator?.limit) {
       body["result_limit"] = paginator.limit

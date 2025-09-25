@@ -3,7 +3,7 @@ import {
   historyImports,
   HistoryScreenComponent,
 } from "../../../history/screens/history-screen/history-screen.component"
-import { ActivatedRoute, Router } from "@angular/router"
+import { ActivatedRoute } from "@angular/router"
 import { LoopStoreService } from "../../store/loop-store.service"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { environment } from "../../../../../environments/environment"
@@ -30,6 +30,7 @@ export class LoopResultScreenComponent extends HistoryScreenComponent {
   })
   override excludeColumns =
     environment.loopModeDefaults.exclude_from_result ?? []
+  override showHistoryFilter = false
 
   override ngOnInit(): void {
     super.ngOnInit()
