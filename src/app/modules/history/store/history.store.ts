@@ -20,5 +20,5 @@ export class HistoryStore {
     direction: "desc",
   })
   openLoops$ = new BehaviorSubject<string[]>([])
-  includeFailed = signal<boolean>(true)
+  includeFailed = signal<boolean>(false)
 }

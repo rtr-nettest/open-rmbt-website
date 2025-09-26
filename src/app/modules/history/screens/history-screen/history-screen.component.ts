@@ -85,7 +85,7 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
   actionButtonsPosition: ActionButtonsPosition = "header"
   nextRoute = ERoutes.HISTORY
   showHistoryFilter = environment.features.history_filter ?? false
-  includeFailed = model(true)
+  includeFailed = model(false)
 
   actionButtons: IMainMenuItem[] = [
     {
