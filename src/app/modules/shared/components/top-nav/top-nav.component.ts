@@ -1,4 +1,4 @@
-import { Component, HostListener } from "@angular/core"
+import { Component, computed, HostListener, inject } from "@angular/core"
 import { map, Observable } from "rxjs"
 import { ILink } from "../../interfaces/link.interface"
 import { I18nStore } from "../../../i18n/store/i18n.store"
@@ -14,6 +14,7 @@ import {
 } from "../../animations/detail-expand.animation"
 import { arrowRotate } from "../../animations/arrow-rotate.animation"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
+import { TestStore } from "../../../test/store/test.store"
 
 @Component({
   selector: "app-top-nav",
@@ -32,15 +33,26 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 export class TopNavComponent {
   mainItems$!: Observable<ILink[]>
   subItems$!: Observable<ILink[]>
-  startButton$!: Observable<ILink>
   submenuOpen = false
   mobileSubmenuOpen = false
+  i18nStore = inject(I18nStore)
+  testStore = inject(TestStore)
+  startButton = computed(() => {
+    if (this.testStore.isRunning()) {
+      return null
+    }
+    const label = this.i18nStore.translate("Start test")
+    return {
+      label,
+      route: this.localiseRoute(ERoutes.TEST),
+    }
+  })
 
   get activeLang() {
     return this.i18nStore.activeLang
   }
 
-  constructor(private readonly i18nStore: I18nStore) {
+  constructor() {
     this.mainItems$ = this.i18nStore.getTranslations().pipe(
       map((v) => [
         {
@@ -88,12 +100,6 @@ export class TopNavComponent {
           url: v["https://www.netztest.at/redirect/en/help"],
         },
       ])
-    )
-    this.startButton$ = this.i18nStore.getTranslations().pipe(
-      map((v) => ({
-        label: v["Start test"],
-        route: this.localiseRoute(ERoutes.TEST),
-      }))
     )
   }
 

@@ -33,7 +33,7 @@
         </li>
         }
       </ul>
-      @if (startButton$ | async; as btn) {
+      @if (startButton(); as btn) {
       <a
         [routerLink]="btn.route"
         mat-stroked-button
@@ -124,7 +124,7 @@
       </ul>
       }
     </li>
-    }@if (startButton$ | async; as btn) {
+    } @if (startButton(); as btn) {
     <li class="app-row">
       <a class="app-link" mat-button [routerLink]="btn.route">{{
         btn.label

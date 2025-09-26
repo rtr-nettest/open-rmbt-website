@@ -14,4 +14,5 @@ export class TestStore {
     new TestVisualizationState()
   )
   shouldAbort = signal<boolean>(false)
+  isRunning = signal<boolean>(false)
 }

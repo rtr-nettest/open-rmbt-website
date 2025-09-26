@@ -6,7 +6,7 @@
           mat-button
           class="app-button"
           [matMenuTriggerFor]="rtr"
-          (onMenuOpen)="rtrOpen = true"
+          (menuOpened)="rtrOpen = true"
           style="padding-left: 0"
         >
           RTR
@@ -18,7 +18,7 @@
           mat-button
           class="app-button"
           [matMenuTriggerFor]="lang"
-          (onMenuOpen)="langOpen = true"
+          (menuOpened)="langOpen = true"
         >
           {{ activeLang }}
           <mat-icon iconPositionEnd>{{

@@ -131,6 +131,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
     if (!globalThis.localStorage) {
       return
     }
+    this.store.isRunning.set(true)
     this.historyService.resetMeasurementHistory()
     this.connectivity.isOnline$
       .pipe(takeUntil(this.destroyed$))
@@ -155,6 +156,11 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
       this.initVisualization()
       return
     })
+  }
+
+  override ngOnDestroy(): void {
+    this.store.isRunning.set(false)
+    super.ngOnDestroy()
   }
 
   protected abortTest() {
