@@ -225,6 +225,16 @@ export class OpendataScreenComponent
     if (lastOldItemIndex !== -1) {
       newContent = newContent.concat(oldContent.slice(lastOldItemIndex + 1))
     }
+    if (newContent.length > oldContent.length) {
+      this.scrollByRowAmount(newContent.length - oldContent.length)
+    }
     this.opendataStoreService.data.set(newContent)
+  }
+
+  private scrollByRowAmount(amount: number) {
+    const rowHeight = document.querySelector("mat-row")?.clientHeight || 0
+    const currentScrollTop = document.body.scrollTop || 0
+    const newScrollTop = currentScrollTop + rowHeight * amount
+    document.body?.scrollTo(0, newScrollTop)
   }
 }
