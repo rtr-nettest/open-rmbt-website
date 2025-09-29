@@ -5,16 +5,7 @@ import {
   OpendataStoreService,
 } from "../../store/opendata-store.service"
 import { OpendataService } from "../../services/opendata.service"
-import {
-  concatMap,
-  firstValueFrom,
-  forkJoin,
-  interval,
-  map,
-  of,
-  takeUntil,
-  tap,
-} from "rxjs"
+import { concatMap, firstValueFrom, forkJoin, map, of } from "rxjs"
 import { toObservable } from "@angular/core/rxjs-interop"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
@@ -115,6 +106,7 @@ export class OpendataScreenComponent
   mapContainerId = "mapContainer"
   sort: ISort = { active: "times", direction: "desc" }
   intradayData = signal<IIntradayResponseItem[]>([])
+  selectedRowId?: string | null = null
   showUuids = signal(false)
   startMs = Date.now()
 
@@ -155,6 +147,16 @@ export class OpendataScreenComponent
   override ngOnDestroy(): void {
     super.ngOnDestroy()
     this.opendataStoreService.reset()
+  }
+
+  override afterEveryRender(): void {
+    if (!this.selectedRowId) {
+      return
+    }
+    const row = document.querySelector(`[data-value="${this.selectedRowId}"]`)
+      ?.parentElement as HTMLElement
+    row?.focus()
+    this.selectedRowId = null
   }
 
   loadIntradayData(load: boolean) {
@@ -226,15 +228,36 @@ export class OpendataScreenComponent
       newContent = newContent.concat(oldContent.slice(lastOldItemIndex + 1))
     }
     if (newContent.length > oldContent.length) {
-      this.scrollByRowAmount(newContent.length - oldContent.length)
+      this.scrollToCurrentPosition(newContent, oldContent)
     }
     this.opendataStoreService.data.set(newContent)
   }
 
-  private scrollByRowAmount(amount: number) {
-    const rowHeight = document.querySelector("mat-row")?.clientHeight || 0
+  private scrollToCurrentPosition(
+    newContent: IRecentMeasurement[],
+    oldContent: IRecentMeasurement[]
+  ) {
+    const currentFirstItem =
+      document.querySelector(".mat-row--selected") ||
+      document.querySelector("mat-row")
+    if (!currentFirstItem) {
+      return
+    }
+    this.selectedRowId = currentFirstItem
+      .querySelector(".mat-column-open_test_uuid")
+      ?.getAttribute("data-value")
+    if (!this.selectedRowId) {
+      return
+    }
+    const rowHeight = currentFirstItem?.clientHeight || 0
     const currentScrollTop = document.body.scrollTop || 0
-    const newScrollTop = currentScrollTop + rowHeight * amount
-    document.body?.scrollTo(0, newScrollTop)
+    const currentFirstItemId = oldContent[0]?.open_test_uuid
+    const newFirstItemIndex = newContent.findIndex(
+      (item) => item.open_test_uuid === currentFirstItemId
+    )
+    if (newFirstItemIndex > 0) {
+      const newScrollTop = currentScrollTop + rowHeight * newFirstItemIndex
+      document.body?.scrollTo(0, newScrollTop)
+    }
   }
 }

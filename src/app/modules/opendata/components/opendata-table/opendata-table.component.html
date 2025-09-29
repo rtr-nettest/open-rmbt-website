@@ -59,6 +59,10 @@
       class="mat-row--clickable"
       (click)="onRowClick.emit(row)"
       (keydown.enter)="onRowClick.emit(row)"
+      (focus)="select($event)"
+      (mouseover)="select($event)"
+      (blur)="unselect($event)"
+      (mouseout)="unselect($event)"
     >
     </mat-row>
 

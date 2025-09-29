@@ -130,4 +130,8 @@ export const RECENT_MEASUREMENTS_COLUMNS: Array<
     header: "Signal (dBm)",
     justify: "flex-end",
   },
+  {
+    columnDef: "open_test_uuid",
+    header: "",
+  },
 ]

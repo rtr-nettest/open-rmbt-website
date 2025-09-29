@@ -40,4 +40,14 @@ export class OpendataTableComponent extends TableComponent {
       this.displayedColumns.push(this.columns[i].columnDef)
     }
   }
+
+  select(evt: FocusEvent) {
+    const row = (evt.target as HTMLElement).closest("mat-row")
+    row?.classList.add("mat-row--selected")
+  }
+
+  unselect(evt: FocusEvent) {
+    const row = (evt.target as HTMLElement).closest("mat-row")
+    row?.classList.remove("mat-row--selected")
+  }
 }

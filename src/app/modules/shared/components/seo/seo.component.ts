@@ -1,4 +1,10 @@
-import { Component, inject, Input, OnDestroy } from "@angular/core"
+import {
+  Component,
+  inject,
+  Input,
+  OnDestroy,
+  afterEveryRender,
+} from "@angular/core"
 import { Title } from "@angular/platform-browser"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { Subject, Subscription, takeUntil, tap } from "rxjs"
@@ -49,10 +55,17 @@ export class SeoComponent implements OnDestroy {
       this.testStore.shouldAbort.set(false)
       location.reload()
     }
+    afterEveryRender(() => {
+      this.afterEveryRender()
+    })
   }
 
   ngOnDestroy(): void {
     this.destroyed$.next()
     this.destroyed$.complete()
+  }
+
+  afterEveryRender() {
+    // to be overridden
   }
 }
