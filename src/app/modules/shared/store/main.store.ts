@@ -6,6 +6,8 @@ import * as pack from "../../../../../package.json"
 export type GitInfo = {
   branch: string
   hash: string
+  rmbtwsBranch: string
+  rmbtwsHash: string
 }
 
 @Injectable({

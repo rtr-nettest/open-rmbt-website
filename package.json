@@ -14,7 +14,7 @@
     "test": "ng test",
     "set-prerender-routes": "npx ts-node scripts/set-prerender-routes.ts",
     "prepare": "husky",
-    "postinstall": "npm update rmbtws",
+    "preinstall": "git submodule init && git submodule update",
     "prestart": "node scripts/set-package-info.js",
     "prebuild": "node scripts/set-package-info.js"
   },
@@ -48,7 +48,7 @@
     "material-symbols": "^0.27.0",
     "ngx-matomo-client": "^8.0.0",
     "ol": "^10.4.0",
-    "rmbtws": "https://github.com/rtr-nettest/rmbtws.git",
+    "rmbtws": "./rmbtws",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "uuid": "^11.0.3",
