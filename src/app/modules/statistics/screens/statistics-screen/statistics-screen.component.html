@@ -1,6 +1,8 @@
+@if (!hideMenu) {
 <app-header></app-header>
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
+}
 <app-html-wrapper [html]="statisticsText$ | async">
   <ng-container header>
     <app-filters></app-filters>
@@ -42,7 +44,8 @@
   [progressInterval]="progressInterval"
   [progress]="progress"
 ></app-loading-overlay>
-}
+} @if (!hideMenu) {
 <div style="margin-top: 40px">
   <app-footer></app-footer>
 </div>
+}
