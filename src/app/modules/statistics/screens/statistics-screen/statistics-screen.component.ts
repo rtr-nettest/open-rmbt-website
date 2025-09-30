@@ -263,11 +263,6 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
     },
   ]
 
-  get hideMenu() {
-    const hash = globalThis.location?.hash ?? ""
-    return hash == "#noMMenu"
-  }
-
   ngOnInit(): void {
     this.initForm()
   }

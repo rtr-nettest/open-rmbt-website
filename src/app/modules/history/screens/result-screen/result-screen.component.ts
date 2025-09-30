@@ -460,7 +460,9 @@ export class ResultScreenComponent extends SeoComponent {
       title: this.i18nStore.translate(key),
       value: `<a href="/${this.i18nStore.activeLang}/${
         ERoutes.OPEN_DATA
-      }?${search}">${values[0]}</a>&nbsp;${values[1] ?? ""}`,
+      }?${search}${this.fragment ? `#${this.fragment}` : ""}">${
+        values[0]
+      }</a>&nbsp;${values[1] ?? ""}`,
     }
   }
 
