@@ -1,6 +1,6 @@
 # Open RMBT Website
 
-This repository contains the Open Source of the web page for ```www.netztest.at```.
+This repository contains the Open Source of the web page for `www.netztest.at`.
 
 The site has been in production since September 11, 2025. It replaced the original, no longer maintained
 [JQuery site](https://github.com/rtr-nettest/open-rmbt-website/tree/jquerysite) which dates back to 2012.
@@ -24,7 +24,7 @@ Run `npm run start:prod` to launch a prod version of the application on a local 
 
 ## Build
 
-The code depends on  [rmbtws](https://github.com/rtr-nettest/rmbtws), this code is included as a submodule by executing
+The code depends on [rmbtws](https://github.com/rtr-nettest/rmbtws), this code is included as a submodule by executing
 `git submodule update --init --recursive`.
 
 Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
@@ -32,3 +32,7 @@ Run `npm run build` to build the project. The build artifacts will be stored in 
 ## Deployment
 
 Information regarding the deployment of this page can be found under `/deployment`.
+
+## Dependencies
+
+Run `npm run compile-deps-info` to compile a list of the project's dependencies with such info as licenses and authors in `dependencies.json`.
