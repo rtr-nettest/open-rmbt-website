@@ -176,6 +176,7 @@ export class OpendataScreenComponent
   handleRowClick = (row: IRecentMeasurement) => {
     this.router.navigate([this.i18nStore.activeLang, ERoutes.OPEN_RESULT], {
       queryParams: { open_test_uuid: row.open_test_uuid },
+      ...(this.fragment ? { fragment: this.fragment } : {}),
     })
   }
 

@@ -1,11 +1,13 @@
+@if (!hideMenu) {
 <app-header></app-header>
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
+}
 <div class="app-wrapper" style="margin-bottom: 40px">
   <header class="app-header">
     <h1 class="app-title">{{ "Open data" | translate }}</h1>
     <app-action-buttons [items]="actionButtons"></app-action-buttons>
-    <a style="margin-left: 20px" [routerLink]="apiLink()"
+    <a style="margin-left: 20px" [routerLink]="apiLink()" [fragment]="fragment"
       >{{ "API" | translate }}
     </a>
   </header>
@@ -98,8 +100,8 @@
   </div>
   } }
 </div>
+@if (!hideMenu) {
 <app-footer></app-footer>
-
-@if (loading()) {
+} @if (loading()) {
 <app-loading-overlay></app-loading-overlay>
 }

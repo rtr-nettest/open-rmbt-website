@@ -2,6 +2,7 @@
   "name": "open-rmbt-angular",
   "version": "0.0.0",
   "scripts": {
+    "compile-deps-info": "npx ts-node scripts/compile-deps-info.ts",
     "ng": "ng",
     "start": "concurrently \"node proxy\" \"ng serve\"",
     "start:prod": "ng build && npx lite-server --baseDir=dist/open-rmbt-angular/browser",

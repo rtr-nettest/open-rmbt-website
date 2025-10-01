@@ -43,6 +43,15 @@ export class SeoComponent implements OnDestroy {
   protected readonly testService = inject(TestService)
   private _title!: string
 
+  get fragment() {
+    return globalThis?.location?.hash?.replace("#", "") ?? ""
+  }
+
+  get hideMenu() {
+    const hash = globalThis.location?.hash ?? ""
+    return hash == "#noMMenu"
+  }
+
   get title() {
     return this._title
   }

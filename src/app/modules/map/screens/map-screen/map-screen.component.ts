@@ -134,11 +134,6 @@ export class MapScreenComponent extends SeoComponent {
   private readonly dialog = inject(MatDialog)
   private readonly scrollStrategyOptions = inject(ScrollStrategyOptions)
 
-  get hideMenu() {
-    const hash = globalThis.location?.hash ?? ""
-    return hash == "#noMMenu"
-  }
-
   private get heatmapAndPointsActive() {
     return (
       (!this.mapSourceOptions?.tiles ||

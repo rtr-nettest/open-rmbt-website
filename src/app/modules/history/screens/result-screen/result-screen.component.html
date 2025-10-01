@@ -1,6 +1,8 @@
+@if (!hideMenu) {
 <app-header></app-header>
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
+}
 <app-scroll-top></app-scroll-top>
 <div class="app-wrapper">
   <header class="app-header">
@@ -178,4 +180,6 @@
   }
 </div>
 <div class="app-separator"></div>
+@if (!hideMenu) {
 <app-footer></app-footer>
+}

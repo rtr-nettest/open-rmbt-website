@@ -1,6 +1,8 @@
+@if (!hideMenu) {
 <app-header></app-header>
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
+}
 <div style="margin-bottom: 40px">
   <div class="app-wrapper">
     <h2 class="app-title">{{ "open_data_specification" | translate }}</h2>
@@ -52,4 +54,6 @@
   </app-html-wrapper>
   }
 </div>
+@if (!hideMenu) {
 <app-footer></app-footer>
+}
