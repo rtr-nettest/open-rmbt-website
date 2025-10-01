@@ -25,10 +25,11 @@ Run `npm run start:prod` to launch a prod version of the application on a local 
 ## Build
 
 The code depends on  [rmbtws](https://github.com/rtr-nettest/rmbtws), this code is included as a submodule by executing
-`git submodule update --init --recursive`.
+`git submodule update --init --recursive`. The GIT fingerprint of `rmbtws` can found on the website under [Options](https://www.netztest.at/en/options).
 
 Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ## Deployment
 
 Information regarding the deployment of this page can be found under `/deployment`.
+
