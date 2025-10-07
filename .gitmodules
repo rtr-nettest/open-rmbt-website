@@ -1,3 +1,4 @@
 [submodule "rmbtws"]
 	path = rmbtws
 	url = https://github.com/rtr-nettest/rmbtws
+	branch = feature/intermediate-progress
