@@ -112,16 +112,33 @@ export class TopNavComponent {
     this.mobileSubmenuOpen = !this.mobileSubmenuOpen
   }
 
-  showSubmenu() {
-    this.submenuOpen = true
-  }
-
-  toggleSubmenu(event: MouseEvent | FocusEvent) {
+  toggleSubmenu(event: Event) {
     event.stopPropagation()
+    this.submenuOpen = !this.submenuOpen
   }
 
   @HostListener("document:click")
   hideSubmenu() {
-    this.submenuOpen = false
+    if (this.submenuOpen) {
+      document.getElementById("submenuTrigger")?.focus()
+      this.submenuOpen = false
+    }
+  }
+
+  @HostListener("document:keydown.enter", ["$event"])
+  handleEnterKey(event: KeyboardEvent) {
+    const activeElement = document.activeElement as HTMLElement
+    if (activeElement && activeElement.id === "submenuTrigger") {
+      event.preventDefault()
+      this.toggleSubmenu(event)
+    }
+  }
+
+  @HostListener("document:keydown.escape", ["$event"])
+  handleEscapeKey(event: KeyboardEvent) {
+    if (this.submenuOpen) {
+      event.preventDefault()
+      this.hideSubmenu()
+    }
   }
 }

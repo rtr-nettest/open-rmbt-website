@@ -21,7 +21,7 @@
           <a
             class="app-link app-link--dark"
             tabIndex="0"
-            (focus)="showSubmenu()"
+            id="submenuTrigger"
             (click)="toggleSubmenu($event)"
             mat-button
             >{{ item.label
@@ -38,6 +38,7 @@
         [routerLink]="btn.route"
         mat-stroked-button
         class="app-button app-button--bold"
+        [tabIndex]="submenuOpen ? -1 : 0"
         >{{ btn.label }}</a
       >
       }
@@ -64,6 +65,7 @@
             class="app-link"
             [routerLink]="item.route"
             (blur)="$index == subItems.length - 1 ? hideSubmenu() : null"
+            [tabIndex]="submenuOpen ? 0 : -1"
             >{{ item.label }}</a
           >
           } @else {
@@ -72,6 +74,7 @@
             [href]="item.url"
             target="_blank"
             (blur)="$index == subItems.length - 1 ? hideSubmenu() : null"
+            [tabIndex]="submenuOpen ? 0 : -1"
             >{{ item.label }}</a
           >
           }
