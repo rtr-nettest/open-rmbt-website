@@ -3,10 +3,10 @@
     <ul class="app-list">
       <li>
         <button
+          id="rtrSubmenuTrigger"
           mat-button
           class="app-button"
-          [matMenuTriggerFor]="rtr"
-          (menuOpened)="rtrOpen = true"
+          (click)="toggleSubmenu($event, 'rtr')"
           style="padding-left: 0"
         >
           RTR
@@ -15,10 +15,11 @@
           }}</mat-icon>
         </button>
         <button
+          id="langSubmenuTrigger"
           mat-button
           class="app-button"
-          [matMenuTriggerFor]="lang"
-          (menuOpened)="langOpen = true"
+          (click)="toggleSubmenu($event, 'lang')"
+          [tabIndex]="rtrOpen ? -1 : 0"
         >
           {{ activeLang }}
           <mat-icon iconPositionEnd>{{
@@ -30,35 +31,35 @@
   </nav>
 </header>
 
-<mat-menu
-  backdropClass="app-header-menu-backdrop"
-  class="app-header-menu"
-  #rtr
-  (closed)="rtrOpen = false"
+<div
+  [@expandVertically]="rtrOpen"
+  class="app-header-menu app-dropdown app-header-menu-backdrop"
 >
   <nav class="app-wrapper">
+    @if (rtrLinks$ | async; as subItems) {
     <ul class="app-list">
-      @for (link of rtrLinks$ | async; track $index) {
+      @for (link of subItems; track $index) {
       <li>
         <a
           [href]="link.url"
           mat-button
           class="app-link app-link--dark"
           target="_blank"
+          (blur)="$index == subItems.length - 1 ? hideSubmenu() : null"
+          [tabIndex]="rtrOpen ? 0 : -1"
         >
           {{ link.label }}
         </a>
       </li>
       }
     </ul>
+    }
   </nav>
-</mat-menu>
+</div>
 
-<mat-menu
-  backdropClass="app-header-menu-backdrop"
-  class="app-header-menu"
-  #lang
-  (closed)="langOpen = false"
+<div
+  [@expandVertically]="langOpen"
+  class="app-header-menu app-dropdown app-header-menu-backdrop"
 >
   <nav class="app-wrapper">
     <ul class="app-list">
@@ -68,11 +69,13 @@
           (click)="setLocale(locale)"
           mat-button
           class="app-link app-link--dark"
+          (blur)="$index == availableLocales.length - 1 ? hideSubmenu() : null"
+          [tabIndex]="langOpen ? 0 : -1"
         >
           {{ locale.name }}
         </button>
       </li>
       }
     </ul>
-  </nav></mat-menu
->
+  </nav>
+</div>

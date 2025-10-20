@@ -5,9 +5,8 @@
   position: absolute;
   z-index: 1000;
 
-  &-backdrop + .cdk-overlay-connected-position-bounding-box {
-    left: 0 !important;
-    width: calc(100% - 16px) !important;
+  &-backdrop {
+    background-color: white;
   }
 
   &-mobile-backdrop + .cdk-overlay-connected-position-bounding-box {
