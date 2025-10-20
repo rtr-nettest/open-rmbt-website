@@ -97,11 +97,11 @@
       </div>
       <div class="app-spacer"></div>
       <div class="app-col">
-        <a
+        <button
+          type="button"
           (click)="setShowMore()"
           class="app-link"
-          iconPositionEnd
-          role="button"
+          iconPositionEnd="end"
         >
           @if (!showMore) {
           <span>{{ "More" | translate }}</span
@@ -110,7 +110,7 @@
           <span>{{ "Less" | translate }}</span
           ><mat-icon>arrow_drop_up</mat-icon>
           }
-        </a>
+        </button>
       </div>
     </div>
     @if (showMore) {

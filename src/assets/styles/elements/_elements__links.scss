@@ -18,3 +18,10 @@ app-top-nav {
     font-size: rem(14);
   }
 }
+
+button.app-link {
+  background: none;
+  border: none;
+  color: $color-link;
+  cursor: pointer;
+}
