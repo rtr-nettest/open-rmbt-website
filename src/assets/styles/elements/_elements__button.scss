@@ -30,3 +30,18 @@
     text-decoration: none;
   }
 }
+
+.app-button:focus-visible,
+.app-link:focus-visible {
+  outline: 0;
+  & > .mdc-button__label {
+    outline: solid 2px blue;
+    outline-offset: 1px;
+  }
+}
+
+.app-link:focus-visible:not(.mdc-button),
+.mat-mdc-icon-button:focus-visible .mat-focus-indicator {
+  outline: solid 2px blue;
+  outline-offset: 1px;
+}
