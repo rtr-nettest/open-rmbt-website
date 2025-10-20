@@ -131,7 +131,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
           }
         })
       const testCard = document.querySelector(
-        `a[href*="${ERoutes.TEST}"]`
+        `a[href*="${ERoutes.TEST}"].app-card`
       ) as HTMLAnchorElement
       testCard.focus()
     }
