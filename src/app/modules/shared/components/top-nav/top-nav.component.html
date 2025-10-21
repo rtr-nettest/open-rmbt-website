@@ -44,12 +44,17 @@
       }
     </nav>
     <nav class="app-mobile-nav">
-      <button mat-icon-button [matMenuTriggerFor]="mobileMenu">
+      <button
+        id="mobileSubmenuTrigger"
+        mat-icon-button
+        (click)="toggleMobileSubmenu($event)"
+      >
         <mat-icon>menu</mat-icon>
       </button>
     </nav>
   </div>
 </header>
+
 <div
   [@expandVertically]="submenuOpen"
   class="app-header-menu app-header-menu--primary app-dropdown"
@@ -85,20 +90,23 @@
   </div>
 </div>
 
-<mat-menu
-  #mobileMenu
-  backdropClass="app-header-menu-mobile-backdrop"
+<div
+  [@expandVertically]="mobileSubmenuOpen"
   class="app-header-menu app-header-menu--primary app-header-menu--mobile"
 >
   <ul class="app-list">
     @for (item of mainItems$ | async; track $index) {
     <li class="app-row">
       @if (item.route) {
-      <a [routerLink]="item.route" mat-button class="app-link">{{
-        item.label
-      }}</a>
+      <a
+        [routerLink]="item.route"
+        mat-button
+        class="app-link"
+        [tabIndex]="mobileSubmenuOpen ? 0 : -1"
+        >{{ item.label }}</a
+      >
       } @else {
-      <a class="app-link" mat-button (click)="toggleMobileSubmenu($event)"
+      <a class="app-link" mat-button [tabIndex]="mobileSubmenuOpen ? 0 : -1"
         >{{ item.label
         }}<mat-icon [@arrowRotate]="mobileSubmenuOpen" iconPositionEnd
           >keyboard_arrow_down</mat-icon
@@ -116,11 +124,20 @@
         @for (item of subItems$ | async; track $index) {
         <li class="app-li">
           @if(item.route) {
-          <a class="app-link" [routerLink]="item.route">{{ item.label }}</a>
+          <a
+            class="app-link"
+            [routerLink]="item.route"
+            [tabIndex]="mobileSubmenuOpen ? 0 : -1"
+            >{{ item.label }}</a
+          >
           } @else {
-          <a class="app-link" [href]="item.url" target="_blank">{{
-            item.label
-          }}</a>
+          <a
+            class="app-link"
+            [href]="item.url"
+            target="_blank"
+            [tabIndex]="mobileSubmenuOpen ? 0 : -1"
+            >{{ item.label }}</a
+          >
           }
         </li>
         }
@@ -129,9 +146,13 @@
     </li>
     } @if (startButton(); as btn) {
     <li class="app-row">
-      <a class="app-link" mat-button [routerLink]="btn.route">{{
-        btn.label
-      }}</a>
+      <a
+        class="app-link"
+        mat-button
+        [routerLink]="btn.route"
+        [tabIndex]="mobileSubmenuOpen ? 0 : -1"
+        >{{ btn.label }}</a
+      >
     </li>
     }
     <li class="app-social">
@@ -142,6 +163,8 @@
         "
         mat-icon-button
         class="app-icon-button"
+        (blur)="hideMobileSubmenu()"
+        [tabIndex]="mobileSubmenuOpen ? 0 : -1"
       >
         <img
           src="/assets/images/mailto.svg"
@@ -153,4 +176,4 @@
       </a>
     </li>
   </ul>
-</mat-menu>
+</div>

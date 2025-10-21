@@ -21,3 +21,9 @@
     height: rem(40);
   }
 }
+
+#mapContainer {
+  .app-marker-cell {
+    height: auto;
+  }
+}

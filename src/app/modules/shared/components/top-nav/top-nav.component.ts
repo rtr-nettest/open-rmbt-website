@@ -125,6 +125,14 @@ export class TopNavComponent {
     }
   }
 
+  @HostListener("document:click")
+  hideMobileSubmenu() {
+    if (this.mobileSubmenuOpen) {
+      document.getElementById("mobileSubmenuTrigger")?.focus()
+      this.mobileSubmenuOpen = false
+    }
+  }
+
   @HostListener("document:keydown.enter", ["$event"])
   handleEnterKey(event: KeyboardEvent) {
     const activeElement = document.activeElement as HTMLElement
@@ -139,6 +147,10 @@ export class TopNavComponent {
     if (this.submenuOpen) {
       event.preventDefault()
       this.hideSubmenu()
+    }
+    if (this.mobileSubmenuOpen) {
+      event.preventDefault()
+      this.hideMobileSubmenu()
     }
   }
 }

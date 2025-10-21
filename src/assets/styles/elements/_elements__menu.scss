@@ -38,7 +38,8 @@
 
     .app-list {
       flex-direction: column;
-      margin: rem(24) rem(24) rem(8);
+      margin: rem(24) 0 rem(8);
+      padding: 3px rem(24);
 
       .app-li {
         margin-bottom: rem(16);
