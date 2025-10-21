@@ -12,7 +12,6 @@ import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.comp
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { FiltersComponent } from "../../components/filters/filters.component"
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 import { HtmlWrapperComponent } from "../../../shared/components/html-wrapper/html-wrapper.component"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import {
@@ -27,14 +26,12 @@ import { adjustTimePeriod } from "../../../shared/util/time"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { ISort } from "../../../tables/interfaces/sort.interface"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
-import {
-  EPlatform,
-  PlatformService,
-} from "../../../shared/services/platform.service"
+import { PlatformService } from "../../../shared/services/platform.service"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatButtonModule } from "@angular/material/button"
 import { roundToSignificantDigits } from "../../../shared/util/math"
 import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 @Component({
   selector: "app-statistics-screen",
@@ -50,6 +47,7 @@ import { LoadingOverlayComponent } from "../../../shared/components/loading-over
     AsyncPipe,
     TableComponent,
     TranslatePipe,
+    MainContentComponent,
   ],
   templateUrl: "./statistics-screen.component.html",
   styleUrl: "./statistics-screen.component.scss",

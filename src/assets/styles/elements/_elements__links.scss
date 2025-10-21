@@ -7,6 +7,16 @@
     }
   }
 
+  &--sr-only {
+    position: absolute;
+    top: -3em;
+    background: white;
+
+    &:focus {
+      top: 0;
+    }
+  }
+
   .mdc-button__ripple {
     display: none;
   }

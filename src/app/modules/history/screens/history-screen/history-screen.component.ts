@@ -40,6 +40,7 @@ import { Router } from "@angular/router"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { MatSlideToggleModule } from "@angular/material/slide-toggle"
 import { FormsModule } from "@angular/forms"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 export const historyImports = [
   ActionButtonsComponent,
@@ -50,6 +51,7 @@ export const historyImports = [
   HeaderComponent,
   HtmlWrapperComponent,
   LoadingOverlayComponent,
+  MainContentComponent,
   MatButtonModule,
   RecentHistoryComponent,
   ScrollTopComponent,

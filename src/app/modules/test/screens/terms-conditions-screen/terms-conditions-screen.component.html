@@ -1,9 +1,11 @@
-@if (storageItem) {
-<app-agreement
-  title="Privacy Policy and Terms of Use"
-  [text]="(terms$ | async)!"
-  [storageItem]="storageItem"
-  (cancelChange)="onCancel()"
-  (agreeChange)="onAgree()"
-></app-agreement>
-}
+<app-main-content>
+  @if (storageItem) {
+  <app-agreement
+    title="Privacy Policy and Terms of Use"
+    [text]="(terms$ | async)!"
+    [storageItem]="storageItem"
+    (cancelChange)="onCancel()"
+    (agreeChange)="onAgree()"
+  ></app-agreement>
+  }
+</app-main-content>

@@ -56,6 +56,7 @@ import { HistoryService } from "../../services/history.service"
 import { ActionButtonsComponent } from "../../components/action-buttons/action-buttons.component"
 import { MIN_ACCURACY_FOR_SHOWING_MAP } from "../../../opendata/constants/recent-measurements-columns"
 import { QoeBarComponent } from "../../components/qoe-bar/qoe-bar.component"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 @Component({
   selector: "app-result-screen",
@@ -65,6 +66,7 @@ import { QoeBarComponent } from "../../components/qoe-bar/qoe-bar.component"
     BreadcrumbsComponent,
     DatePipe,
     HeaderComponent,
+    MainContentComponent,
     MatButtonModule,
     NgIf,
     RouterModule,
@@ -73,7 +75,6 @@ import { QoeBarComponent } from "../../components/qoe-bar/qoe-bar.component"
     TopNavComponent,
     TranslatePipe,
     FooterComponent,
-    ScrollTopComponent,
     SignalChartComponent,
     SignalDetailsComponent,
     ShareResultComponent,

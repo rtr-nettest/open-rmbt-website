@@ -3,42 +3,44 @@
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
 }
-<app-html-wrapper [html]="statisticsText$ | async">
-  <ng-container header>
-    <app-filters></app-filters>
-    @if (statistics$ | async; as statistics) {
-    <div style="margin-top: 24px">
-      <app-table
-        [data]="statistics"
-        [columns]="statisticsColumns"
-        [footerColumns]="footerColumns"
-        [sort]="statisticsSort"
-      ></app-table>
-    </div>
-    }
-  </ng-container>
-  <ng-container body>
-    @if (devicesSlice()) {
-    <div style="margin-top: 24px; margin-bottom: 24px">
-      <app-table
-        [data]="devicesSlice()"
-        [columns]="deviceColumns"
-        [sort]="statisticsSort"
-      ></app-table>
-    </div>
-    @if ( devices() && devicesSlice()!.totalElements < devices()!.totalElements)
-    {
-    <button
-      (click)="devicesCount.set(devices()!.totalElements)"
-      class="app-button"
-      style="margin-top: 24px"
-      mat-stroked-button
-    >
-      {{ "Further devices" | translate }}
-    </button>
-    } }
-  </ng-container>
-</app-html-wrapper>
+<app-main-content>
+  <app-html-wrapper [html]="statisticsText$ | async">
+    <ng-container header>
+      <app-filters></app-filters>
+      @if (statistics$ | async; as statistics) {
+      <div style="margin-top: 24px">
+        <app-table
+          [data]="statistics"
+          [columns]="statisticsColumns"
+          [footerColumns]="footerColumns"
+          [sort]="statisticsSort"
+        ></app-table>
+      </div>
+      }
+    </ng-container>
+    <ng-container body>
+      @if (devicesSlice()) {
+      <div style="margin-top: 24px; margin-bottom: 24px">
+        <app-table
+          [data]="devicesSlice()"
+          [columns]="deviceColumns"
+          [sort]="statisticsSort"
+        ></app-table>
+      </div>
+      @if ( devices() && devicesSlice()!.totalElements <
+      devices()!.totalElements) {
+      <button
+        (click)="devicesCount.set(devices()!.totalElements)"
+        class="app-button"
+        style="margin-top: 24px"
+        mat-stroked-button
+      >
+        {{ "Further devices" | translate }}
+      </button>
+      } }
+    </ng-container>
+  </app-html-wrapper>
+</app-main-content>
 @if (loading()) {
 <app-loading-overlay
   [progressInterval]="progressInterval"

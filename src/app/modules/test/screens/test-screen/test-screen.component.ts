@@ -54,6 +54,7 @@ import { ISimpleHistoryResult } from "../../../history/interfaces/simple-history
 import { IBreadcrumb } from "../../../shared/interfaces/breadcrumb.interface"
 import { CertifiedBreadcrumbsComponent } from "../../../certified/components/certified-breadcrumbs/certified-breadcrumbs.component"
 import { ConnectivityService } from "../../services/connectivity.service"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 export const imports = [
   AsyncPipe,
@@ -65,6 +66,7 @@ export const imports = [
   GaugeComponent,
   IframeTestComponent,
   InterimResultsComponent,
+  MainContentComponent,
   MatProgressBarModule,
   NgIf,
   RecentHistoryComponent,

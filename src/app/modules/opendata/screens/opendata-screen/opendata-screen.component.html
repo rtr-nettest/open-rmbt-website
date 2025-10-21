@@ -3,103 +3,108 @@
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
 }
-<div class="app-wrapper" style="margin-bottom: 40px">
-  <header class="app-header">
-    <h1 class="app-title">{{ "Open data" | translate }}</h1>
-    <app-action-buttons [items]="actionButtons"></app-action-buttons>
-    <a style="margin-left: 20px" [routerLink]="apiLink()" [fragment]="fragment"
-      >{{ "API" | translate }}
-    </a>
-  </header>
-  @if (filters$ | async; as filters) {
-  <div class="app-expansion-panel">
-    <app-expansion-panel
-      [title]="('Advanced search' | translate) + filterCount()"
-      [a11yTitle]="('Advanced search' | translate) + filterCount()"
-    >
-      <app-filters></app-filters>
-    </app-expansion-panel>
+<app-main-content>
+  <div class="app-wrapper" style="margin-bottom: 40px">
+    <header class="app-header">
+      <h1 class="app-title">{{ "Open data" | translate }}</h1>
+      <app-action-buttons [items]="actionButtons"></app-action-buttons>
+      <a
+        style="margin-left: 20px"
+        [routerLink]="apiLink()"
+        [fragment]="fragment"
+        >{{ "API" | translate }}
+      </a>
+    </header>
+    @if (filters$ | async; as filters) {
+    <div class="app-expansion-panel">
+      <app-expansion-panel
+        [title]="('Advanced search' | translate) + filterCount()"
+        [a11yTitle]="('Advanced search' | translate) + filterCount()"
+      >
+        <app-filters></app-filters>
+      </app-expansion-panel>
+    </div>
+    @if (data$ | async; as data) { @if (!loading()) {
+    <div [id]="mapContainerId" class="app-expansion-panel">
+      <app-expansion-panel
+        [title]="'Map view' | translate"
+        (expand)="loadMap.set($event)"
+        [a11yTitle]="'Map view' | translate"
+      >
+        @if (loadMap()) {
+        <app-map
+          [measurements]="data.content"
+          [mapContainerId]="mapContainerId"
+        ></app-map>
+        }
+      </app-expansion-panel>
+    </div>
+    <div class="app-expansion-panel">
+      <app-expansion-panel
+        [title]="'Histogram' | translate"
+        (expand)="loadHistograms.set($event)"
+        [a11yTitle]="'Histogram' | translate"
+      >
+        @if (loadHistograms()) {
+        <h5>{{ "Download" | translate }}</h5>
+        <div class="app-expansion-panel__row">
+          <app-histogram phase="download"></app-histogram>
+        </div>
+        <h5>{{ "Upload" | translate }}</h5>
+        <div class="app-expansion-panel__row">
+          <app-histogram phase="upload"></app-histogram>
+        </div>
+        <h5>{{ "Ping" | translate }}</h5>
+        <div class="app-expansion-panel__row">
+          <app-histogram phase="ping"></app-histogram>
+        </div>
+        }
+      </app-expansion-panel>
+    </div>
+    <div class="app-expansion-panel">
+      <app-expansion-panel
+        [title]="'Intraday' | translate"
+        (expand)="loadIntradayData($event)"
+        [a11yTitle]="'Intraday' | translate"
+      >
+        @if (loadIntraday()) {
+        <h5>{{ "Download/Upload" | translate }}</h5>
+        <div class="app-expansion-panel__row">
+          <app-intraday
+            phase="download"
+            [data]="intradayData()"
+            [loading]="loadingIntraday()"
+          ></app-intraday>
+        </div>
+        <h5>{{ "Ping" | translate }}</h5>
+        <div class="app-expansion-panel__row">
+          <app-intraday
+            phase="ping"
+            [data]="intradayData()"
+            [loading]="loadingIntraday()"
+          ></app-intraday>
+        </div>
+        }
+      </app-expansion-panel>
+    </div>
+    }
+    <app-opendata-table
+      [data]="data"
+      [columns]="columns"
+      [sort]="sort"
+      (onRowClick)="handleRowClick($event)"
+      [showUuids]="showUuids()"
+      identifyField="open_test_uuid"
+    ></app-opendata-table>
+    <div class="app-counter">
+      ({{ data.totalElements }} {{ "Results" | translate }}) |
+      <a href="javascript:;" (click)="showUuids.set(true)">{{
+        "Show Open-Test-UUID" | translate
+      }}</a>
+    </div>
+    } }
   </div>
-  @if (data$ | async; as data) { @if (!loading()) {
-  <div [id]="mapContainerId" class="app-expansion-panel">
-    <app-expansion-panel
-      [title]="'Map view' | translate"
-      (expand)="loadMap.set($event)"
-      [a11yTitle]="'Map view' | translate"
-    >
-      @if (loadMap()) {
-      <app-map
-        [measurements]="data.content"
-        [mapContainerId]="mapContainerId"
-      ></app-map>
-      }
-    </app-expansion-panel>
-  </div>
-  <div class="app-expansion-panel">
-    <app-expansion-panel
-      [title]="'Histogram' | translate"
-      (expand)="loadHistograms.set($event)"
-      [a11yTitle]="'Histogram' | translate"
-    >
-      @if (loadHistograms()) {
-      <h5>{{ "Download" | translate }}</h5>
-      <div class="app-expansion-panel__row">
-        <app-histogram phase="download"></app-histogram>
-      </div>
-      <h5>{{ "Upload" | translate }}</h5>
-      <div class="app-expansion-panel__row">
-        <app-histogram phase="upload"></app-histogram>
-      </div>
-      <h5>{{ "Ping" | translate }}</h5>
-      <div class="app-expansion-panel__row">
-        <app-histogram phase="ping"></app-histogram>
-      </div>
-      }
-    </app-expansion-panel>
-  </div>
-  <div class="app-expansion-panel">
-    <app-expansion-panel
-      [title]="'Intraday' | translate"
-      (expand)="loadIntradayData($event)"
-      [a11yTitle]="'Intraday' | translate"
-    >
-      @if (loadIntraday()) {
-      <h5>{{ "Download/Upload" | translate }}</h5>
-      <div class="app-expansion-panel__row">
-        <app-intraday
-          phase="download"
-          [data]="intradayData()"
-          [loading]="loadingIntraday()"
-        ></app-intraday>
-      </div>
-      <h5>{{ "Ping" | translate }}</h5>
-      <div class="app-expansion-panel__row">
-        <app-intraday
-          phase="ping"
-          [data]="intradayData()"
-          [loading]="loadingIntraday()"
-        ></app-intraday>
-      </div>
-      }
-    </app-expansion-panel>
-  </div>
-  }
-  <app-opendata-table
-    [data]="data"
-    [columns]="columns"
-    [sort]="sort"
-    (onRowClick)="handleRowClick($event)"
-    [showUuids]="showUuids()"
-    identifyField="open_test_uuid"
-  ></app-opendata-table>
-  <div class="app-counter">
-    ({{ data.totalElements }} {{ "Results" | translate }}) |
-    <a href="javascript:;" (click)="showUuids.set(true)">{{
-      "Show Open-Test-UUID" | translate
-    }}</a>
-  </div>
-  } }
-</div>
+</app-main-content>
 @if (!hideMenu) {
 <app-footer></app-footer>
 } @if (loading()) {

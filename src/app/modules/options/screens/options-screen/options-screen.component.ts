@@ -34,6 +34,7 @@ import { MainStore } from "../../../shared/store/main.store"
 import { environment } from "../../../../../environments/environment"
 import { toObservable } from "@angular/core/rxjs-interop"
 import { takeUntil } from "rxjs"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 @Component({
   selector: "app-options-screen",
@@ -49,6 +50,7 @@ import { takeUntil } from "rxjs"
     ReactiveFormsModule,
     MatRadioModule,
     MatButtonModule,
+    MainContentComponent,
   ],
   templateUrl: "./options-screen.component.html",
   styleUrl: "./options-screen.component.scss",
