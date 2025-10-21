@@ -1,10 +1,16 @@
 <div class="app-container">
-  <button mat-flat-button class="app-button" (click)="getForumBanner()">
+  <button
+    mat-flat-button
+    class="app-button"
+    (click)="getForumBanner()"
+    [attr.aria-expanded]="!!forumBanner()"
+    [attr.aria-controls]="'forumBanner'"
+  >
     {{ "Get forum banner" | translate }}
   </button>
 </div>
 @if (forumBanner()) {
-<div>
+<div id="forumBanner">
   <p><img [src]="forumBanner()" alt="Forum banner" class="app-image" /></p>
   <mat-form-field appearance="outline">
     <mat-label>HTML</mat-label>

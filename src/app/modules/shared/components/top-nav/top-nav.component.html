@@ -23,7 +23,8 @@
             tabIndex="0"
             id="submenuTrigger"
             (click)="toggleSubmenu($event)"
-            [aria-expanded]="submenuOpen"
+            [attr.aria-expanded]="submenuOpen"
+            [attr.aria-controls]="'submenu'"
             mat-button
             >{{ item.label
             }}<mat-icon iconPositionEnd>{{
@@ -49,7 +50,8 @@
         id="mobileSubmenuTrigger"
         mat-icon-button
         (click)="toggleMobileSubmenu($event)"
-        [aria-expanded]="mobileSubmenuOpen"
+        [attr.aria-expanded]="mobileSubmenuOpen"
+        [attr.aria-controls]="'mobileSubmenu'"
       >
         <mat-icon>menu</mat-icon>
       </button>
@@ -59,6 +61,7 @@
 
 <div
   [@expandVertically]="submenuOpen"
+  id="submenu"
   class="app-header-menu app-header-menu--primary app-dropdown"
 >
   <div class="app-wrapper">
@@ -94,6 +97,7 @@
 
 <div
   [@expandVertically]="mobileSubmenuOpen"
+  id="mobileSubmenu"
   class="app-header-menu app-header-menu--primary app-header-menu--mobile"
 >
   <ul class="app-list">

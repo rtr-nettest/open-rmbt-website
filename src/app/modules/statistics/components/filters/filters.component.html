@@ -102,6 +102,8 @@
           (click)="setShowMore()"
           class="app-link"
           iconPositionEnd="end"
+          [attr.aria-expanded]="showMore"
+          [attr.aria-controls]="'additionalFilters'"
         >
           @if (!showMore) {
           <span>{{ "More" | translate }}</span
@@ -114,7 +116,7 @@
       </div>
     </div>
     @if (showMore) {
-    <div class="app-row">
+    <div id="additionalFilters" class="app-row">
       <div class="app-col">
         <label class="app-label" for="network_type_group">{{
           "Technology" | translate

@@ -134,6 +134,7 @@
     <div class="app-container">
       @if (showFullDetails()) {
       <app-table
+        id="fullDetails"
         [columns]="columns"
         [data]="detailedResult"
         [shouldHideHeader]="true"
@@ -153,6 +154,8 @@
         class="app-button"
         style="margin-top: 24px"
         mat-stroked-button
+        [attr.aria-expanded]="showFullDetails()"
+        [attr.aria-controls]="'fullDetails'"
       >
         {{ "Show additional information..." | translate }}
       </button>
