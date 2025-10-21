@@ -62,8 +62,10 @@ export class HeaderComponent {
     event.stopPropagation()
     if (type === "rtr") {
       this.rtrOpen = !this.rtrOpen
+      this.langOpen = false
     } else {
       this.langOpen = !this.langOpen
+      this.rtrOpen = false
     }
   }
 

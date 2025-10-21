@@ -7,6 +7,7 @@
           mat-button
           class="app-button"
           (click)="toggleSubmenu($event, 'rtr')"
+          [aria-expanded]="rtrOpen"
           style="padding-left: 0"
         >
           RTR
@@ -20,6 +21,7 @@
           class="app-button"
           (click)="toggleSubmenu($event, 'lang')"
           [tabIndex]="rtrOpen ? -1 : 0"
+          [aria-expanded]="langOpen"
         >
           {{ activeLang }}
           <mat-icon iconPositionEnd>{{
@@ -45,7 +47,7 @@
           mat-button
           class="app-link app-link--dark"
           target="_blank"
-          (blur)="$index == subItems.length - 1 ? hideSubmenu() : null"
+          (keydown.tab)="$index == subItems.length - 1 ? hideSubmenu() : null"
           [tabIndex]="rtrOpen ? 0 : -1"
         >
           {{ link.label }}
@@ -69,7 +71,9 @@
           (click)="setLocale(locale)"
           mat-button
           class="app-link app-link--dark"
-          (blur)="$index == availableLocales.length - 1 ? hideSubmenu() : null"
+          (keydown.tab)="
+            $index == availableLocales.length - 1 ? hideSubmenu() : null
+          "
           [tabIndex]="langOpen ? 0 : -1"
         >
           {{ locale.name }}

@@ -123,10 +123,6 @@ export class TopNavComponent {
       document.getElementById("submenuTrigger")?.focus()
       this.submenuOpen = false
     }
-  }
-
-  @HostListener("document:click")
-  hideMobileSubmenu() {
     if (this.mobileSubmenuOpen) {
       document.getElementById("mobileSubmenuTrigger")?.focus()
       this.mobileSubmenuOpen = false
@@ -144,13 +140,9 @@ export class TopNavComponent {
 
   @HostListener("document:keydown.escape", ["$event"])
   handleEscapeKey(event: KeyboardEvent) {
-    if (this.submenuOpen) {
+    if (this.submenuOpen || this.mobileSubmenuOpen) {
       event.preventDefault()
       this.hideSubmenu()
-    }
-    if (this.mobileSubmenuOpen) {
-      event.preventDefault()
-      this.hideMobileSubmenu()
     }
   }
 }

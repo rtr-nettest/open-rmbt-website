@@ -23,6 +23,7 @@
             tabIndex="0"
             id="submenuTrigger"
             (click)="toggleSubmenu($event)"
+            [aria-expanded]="submenuOpen"
             mat-button
             >{{ item.label
             }}<mat-icon iconPositionEnd>{{
@@ -48,6 +49,7 @@
         id="mobileSubmenuTrigger"
         mat-icon-button
         (click)="toggleMobileSubmenu($event)"
+        [aria-expanded]="mobileSubmenuOpen"
       >
         <mat-icon>menu</mat-icon>
       </button>
@@ -69,7 +71,7 @@
           <a
             class="app-link"
             [routerLink]="item.route"
-            (blur)="$index == subItems.length - 1 ? hideSubmenu() : null"
+            (keydown.tab)="$index == subItems.length - 1 ? hideSubmenu() : null"
             [tabIndex]="submenuOpen ? 0 : -1"
             >{{ item.label }}</a
           >
@@ -78,7 +80,7 @@
             class="app-link"
             [href]="item.url"
             target="_blank"
-            (blur)="$index == subItems.length - 1 ? hideSubmenu() : null"
+            (keydown.tab)="$index == subItems.length - 1 ? hideSubmenu() : null"
             [tabIndex]="submenuOpen ? 0 : -1"
             >{{ item.label }}</a
           >
@@ -163,7 +165,7 @@
         "
         mat-icon-button
         class="app-icon-button"
-        (blur)="hideMobileSubmenu()"
+        (keydown.tab)="hideSubmenu()"
         [tabIndex]="mobileSubmenuOpen ? 0 : -1"
       >
         <img
