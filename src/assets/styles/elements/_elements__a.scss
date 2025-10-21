@@ -25,13 +25,3 @@ a {
     }
   }
 }
-
-:focus-visible,
-.app-focus-visible[focused-via-mouse="false"] {
-  outline: solid 2px blue;
-  outline-offset: 1px;
-}
-
-.app-focus-visible[focused-via-mouse="true"] {
-  outline: 0;
-}
