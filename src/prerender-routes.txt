@@ -19,6 +19,7 @@
 /options
 /result
 /terms-and-conditions
+/sitemap
 /de/
 /de/history
 /de/iframe
@@ -40,6 +41,7 @@
 /de/options
 /de/result
 /de/terms-and-conditions
+/de/sitemap
 /en/
 /en/history
 /en/iframe
@@ -61,3 +63,4 @@
 /en/options
 /en/result
 /en/terms-and-conditions
+/en/sitemap

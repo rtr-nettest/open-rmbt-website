@@ -1,0 +1,94 @@
+{
+  "en": {
+    "path": "/en",
+    "title": "Home",
+    "children": [
+      {
+        "path": "/en/test",
+        "title": "Test"
+      },
+      {
+        "path": "/en/history",
+        "title": "History"
+      },
+      {
+        "path": "/en/map",
+        "title": "Map view"
+      },
+      {
+        "path": "/en/statistics",
+        "title": "Statistics"
+      },
+      {
+        "path": "/en/series-step-1",
+        "title": "Loop mode"
+      },
+      {
+        "path": "/en/certified-step-1",
+        "title": "Certified measurement"
+      },
+      {
+        "path": "/en/opentests",
+        "title": "Open data"
+      },
+      {
+        "path": "/en/interface",
+        "title": "open_data_specification"
+      },
+      {
+        "path": "/en/options",
+        "title": "Options"
+      },
+      {
+        "path": "/en/sitemap",
+        "title": "Sitemap"
+      }
+    ]
+  },
+  "de": {
+    "path": "/de",
+    "title": "Home",
+    "children": [
+      {
+        "path": "/de/test",
+        "title": "Test"
+      },
+      {
+        "path": "/de/history",
+        "title": "History"
+      },
+      {
+        "path": "/de/map",
+        "title": "Map view"
+      },
+      {
+        "path": "/de/statistics",
+        "title": "Statistics"
+      },
+      {
+        "path": "/de/series-step-1",
+        "title": "Loop mode"
+      },
+      {
+        "path": "/de/certified-step-1",
+        "title": "Certified measurement"
+      },
+      {
+        "path": "/de/opentests",
+        "title": "Open data"
+      },
+      {
+        "path": "/de/interface",
+        "title": "open_data_specification"
+      },
+      {
+        "path": "/de/options",
+        "title": "Options"
+      },
+      {
+        "path": "/de/sitemap",
+        "title": "Sitemap"
+      }
+    ]
+  }
+}
