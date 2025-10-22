@@ -7,9 +7,9 @@
 <app-main-content>
   <div class="app-wrapper" style="margin-top: 48px; margin-bottom: 64px">
     <h1 class="app-title">{{ "Certified measurement" | translate }}</h1>
-    <h3 class="app-subtitle">
+    <h2 class="app-h3 app-subtitle">
       {{ "Further information on the certified measurement" | translate }}
-    </h3>
+    </h2>
     <p>
       {{
         "Since this is the first measurement cycle, we ask you to answer the following questions"
@@ -18,10 +18,10 @@
     </p>
     @if (form) {
     <form [formGroup]="form">
-      <h4>
+      <h3 class="app-h4">
         {{ "Please describe the location of your Internet access" | translate
         }}<sup>*</sup>
-      </h4>
+      </h3>
       <ul>
         <li
           *ngFor="
@@ -43,6 +43,7 @@
             !!form.controls.locationType.controls[locationValues.length - 1]
               .value
           "
+          [attr.aria-label]="'Other location description' | translate"
         ></textarea>
         <mat-error
           *ngIf="
@@ -52,38 +53,42 @@
           >{{ "Location is required" | translate }}</mat-error
         >
       </mat-form-field>
-      <h4>
+      <h3 class="app-h4">
         {{ "Please describe your Internet access" | translate }}
-      </h4>
+      </h3>
       <p>
-        {{ "What kind of Internet access do you have?" | translate }}
+        <label for="typeText">{{
+          "What kind of Internet access do you have?" | translate
+        }}</label>
       </p>
       <mat-form-field appearance="outline">
         <textarea
           matInput
+          id="typeText"
           formControlName="typeText"
           name="typeText"
         ></textarea>
       </mat-form-field>
-      <h4>
+      <h3 class="app-h4">
         {{ "Please describe your device used for measuring" | translate }}
-      </h4>
+      </h3>
       <p>
-        {{
+        <label for="testDevice">{{
           "Describe the computer that you are running the test with."
             | translate
-        }}
+        }}</label>
       </p>
       <mat-form-field appearance="outline">
         <textarea
           matInput
+          id="testDevice"
           formControlName="testDevice"
           name="testDevice"
         ></textarea>
       </mat-form-field>
-      <h4>
+      <h3 class="app-h4">
         {{ "Photo upload" | translate }}
-      </h4>
+      </h3>
       <p>
         {{ "Please send us a photo of the modem" | translate }}
       </p>
@@ -102,6 +107,7 @@
           style="display: none"
           type="file"
           (change)="onFileSelected($event, fileId)"
+          [attr.aria-label]="'Upload file' | translate"
         />
         <button mat-button (click)="onFileUploadClick(fileId)">
           <mat-icon>attach_file</mat-icon>{{ "Upload file" | translate }}

@@ -22,6 +22,7 @@
     <mat-select
       class="app-field app-select"
       [formControl]="getFormControl(key)"
+      [attr.aria-label]="'Time Unit' | translate"
     >
       @for (options of timeUnits; track $index) {
       <mat-option [value]="options[1]">

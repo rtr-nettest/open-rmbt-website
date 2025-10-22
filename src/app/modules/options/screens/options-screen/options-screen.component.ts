@@ -9,7 +9,6 @@ import {
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
-import { ScrollTopComponent } from "../../../shared/components/scroll-top/scroll-top.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
@@ -43,7 +42,6 @@ import { MainContentComponent } from "../../../shared/components/main-content/ma
     HeaderComponent,
     TopNavComponent,
     BreadcrumbsComponent,
-    ScrollTopComponent,
     FooterComponent,
     TranslatePipe,
     SprintfPipe,

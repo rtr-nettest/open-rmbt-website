@@ -1,7 +1,7 @@
 @if (form) {
 <div class="app-row">
   <div class="app-col">
-    <label class="app-label" [for]="key">{{ key | translate }}</label>
+    <span class="app-label">{{ key | translate }}</span>
   </div>
   <div class="app-col app-col--two-thirds">
     <span class="app-field-prefix"></span>
@@ -10,6 +10,7 @@
       class="app-field app-field--half app-select"
       [formControl]="getFormControl(key)"
       canSelectNullableOptions="true"
+      [attr.aria-label]="key | translate"
     >
       <mat-option [value]="null"> --{{ "all" | translate }}-- </mat-option>
       <mat-option *ngFor="let option of selects.get(key)" [value]="option[1]">

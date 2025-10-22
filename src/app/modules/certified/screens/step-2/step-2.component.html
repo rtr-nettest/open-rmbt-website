@@ -7,9 +7,9 @@
 <app-main-content>
   <div class="app-wrapper" style="margin-top: 48px; margin-bottom: 64px">
     <h1 class="app-title">{{ "Certified measurement" | translate }}</h1>
-    <h3 class="app-subtitle">
+    <h2 class="app-h3 app-subtitle">
       {{ "Basic information on the certified measurement" | translate }}
-    </h3>
+    </h2>
     @if (form) {
     <form [formGroup]="form">
       <mat-form-field appearance="outline">
@@ -70,9 +70,9 @@
           {{ "Address is required" | translate }}
         </mat-error>
       </mat-form-field>
-      <h4>
+      <h3 class="app-h4">
         {{ "Is it the first measurement cycle?" | translate }}<sup>*</sup>
-      </h4>
+      </h3>
       <mat-radio-group formControlName="isFirstCycle" name="isFirstCycle">
         <mat-radio-button [value]="true">{{
           "Yes, first cycle" | translate

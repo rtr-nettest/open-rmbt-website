@@ -6,8 +6,7 @@ import { Subject } from "rxjs"
 @Component({
   selector: "app-base-filter",
   imports: [],
-  templateUrl: "./base-filter.component.html",
-  styleUrl: "./base-filter.component.scss",
+  template: "",
 })
 export class BaseFilterComponent implements OnDestroy {
   @Input({ required: true }) form!: FormGroup<FiltersForm>

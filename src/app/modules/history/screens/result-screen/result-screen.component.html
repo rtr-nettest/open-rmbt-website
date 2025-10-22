@@ -52,7 +52,7 @@
     </div>
     } @if (qoeResults(); as qoeResults) {
     <div *ngIf="qoeResults.content.length" class="app-container">
-      <h4>{{ "Quality" | translate }}</h4>
+      <h3 class="app-h4">{{ "Quality" | translate }}</h3>
       <app-table
         [columns]="qoeColumns"
         [data]="qoeResults"
