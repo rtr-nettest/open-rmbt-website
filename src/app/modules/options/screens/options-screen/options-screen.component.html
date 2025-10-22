@@ -8,8 +8,12 @@
     <p>{{ "Your UUID is: %0" | translate | sprintf : uuid() }}</p>
     <p [innerHTML]="'E-Mail: netztest@rtr.at' | translate"></p>
     <p>
-      GIT: webpage {{ gitInfo.branch }} {{ gitInfo.hash.slice(0, 8) }}, rmbtws
-      {{ gitInfo.rmbtwsBranch }} {{ gitInfo.rmbtwsHash.slice(0, 8) }}
+      GIT: webpage {{ gitInfo.branch }} @if(gitInfo.hash) {
+      {{ gitInfo.hash.slice(0, 8) }}
+      }, rmbtws
+      {{ gitInfo.rmbtwsBranch }} @if(gitInfo.rmbtwsHash) {
+      {{ gitInfo.rmbtwsHash.slice(0, 8) }}
+      }
     </p>
     <h2>{{ "Options" | translate }}</h2>
     @if (form) {

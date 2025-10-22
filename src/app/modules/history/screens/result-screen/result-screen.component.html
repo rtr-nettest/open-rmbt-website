@@ -84,7 +84,7 @@
       <h3 class="app-title">{{ "Speed curve" | translate }}</h3>
       <div class="app-charts">
         <div class="app-charts-row">
-          <header class="app-charts-row__base">
+          <header class="app-charts-row__base" [attr.aria-hidden]="true">
             <h4>{{ "Ping" | translate }}</h4>
             <app-test-chart phase="ping"></app-test-chart>
           </header>
@@ -94,7 +94,7 @@
           ></app-ping-details>
         </div>
         <div class="app-charts-row">
-          <header class="app-charts-row__base">
+          <header class="app-charts-row__base" [attr.aria-hidden]="true">
             <h4>{{ "Download" | translate }}</h4>
             <app-test-chart phase="download"></app-test-chart>
           </header>
@@ -104,7 +104,7 @@
           ></app-speed-details>
         </div>
         <div class="app-charts-row">
-          <header class="app-charts-row__base">
+          <header class="app-charts-row__base" [attr.aria-hidden]="true">
             <h4>{{ "Upload" | translate }}</h4>
             <app-test-chart phase="upload"></app-test-chart>
           </header>
@@ -115,7 +115,7 @@
         </div>
         @if (signalTable().length) {
         <div class="app-charts-row">
-          <header class="app-charts-row__base">
+          <header class="app-charts-row__base" [attr.aria-hidden]="true">
             <h4>{{ "Signal" | translate }}</h4>
             <app-signal-chart
               [signal]="signalTable()"

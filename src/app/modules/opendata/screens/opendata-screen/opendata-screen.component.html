@@ -39,7 +39,7 @@
         }
       </app-expansion-panel>
     </div>
-    <div class="app-expansion-panel">
+    <div class="app-expansion-panel" [attr.aria-hidden]="true">
       <app-expansion-panel
         [title]="'Histogram' | translate"
         (expand)="loadHistograms.set($event)"
@@ -61,7 +61,7 @@
         }
       </app-expansion-panel>
     </div>
-    <div class="app-expansion-panel">
+    <div class="app-expansion-panel" [attr.aria-hidden]="true">
       <app-expansion-panel
         [title]="'Intraday' | translate"
         (expand)="loadIntradayData($event)"
