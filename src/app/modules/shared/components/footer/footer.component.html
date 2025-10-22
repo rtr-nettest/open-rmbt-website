@@ -40,9 +40,13 @@
       <ul class="app-list">
         @for (item of menu$ | async; track $index) {
         <li class="app-li">
+          @if (item.route) {
+          <a [routerLink]="item.route">{{ item.label! | translate }}</a>
+          } @else {
           <a [href]="item.url | translate" target="_blank">{{
             item.label! | translate
           }}</a>
+          }
         </li>
         }
       </ul>
