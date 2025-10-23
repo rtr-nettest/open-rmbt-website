@@ -141,7 +141,7 @@ export class SignalChartComponent implements AfterViewInit {
         this.phaseDurations()!.upStart! + this.phaseDurations()!.upDuration!
       )
       const lastSignal = currentDataset?.data[currentDataset.data.length - 1]
-      if (lastSignal && lastSignal.x < lastX) {
+      if (lastSignal?.x && lastSignal.x < lastX) {
         currentDataset?.data.push({
           x: lastX,
           y: lastSignal.y,

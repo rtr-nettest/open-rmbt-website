@@ -146,7 +146,7 @@ export class HistogramComponent implements AfterViewInit {
       const { x, y } = lineDataset.data[i]
       lineDataset.data[i] = {
         x,
-        y: y / total,
+        y: (y || 0) / total,
       }
     }
     datasets.push(lineDataset)
