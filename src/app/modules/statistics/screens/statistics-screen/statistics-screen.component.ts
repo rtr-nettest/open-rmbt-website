@@ -67,8 +67,19 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
     const content = this.devices()?.content.slice(0, this.devicesCount()) ?? []
     return { content, totalElements: content.length }
   })
-  statisticsText$: Observable<string> =
-    this.i18nStore.getLocalizedHtml("statistics")
+  statisticsText$: Observable<string> = this.i18nStore
+    .getLocalizedHtml("statistics")
+    .pipe(
+      map((page) => {
+        if (this.fragment) {
+          return page.replaceAll(
+            `/${ERoutes.OPEN_DATA}`,
+            `/${ERoutes.OPEN_DATA}#${this.fragment}`
+          )
+        }
+        return page
+      })
+    )
   statisticsColumns: ITableColumn<IStatisticsProvider>[] = [
     {
       header: "Name",
@@ -173,9 +184,13 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
           if (country) {
             params += `&country_geoip=${country.toLowerCase()}`
           }
-          return `/${this.i18nStore.activeLang}/${ERoutes.OPEN_DATA}?${params}`
+          return `/${this.i18nStore.activeLang}/${ERoutes.OPEN_DATA}?${params}${
+            this.fragment ? `#${this.fragment}` : ""
+          }`
         }
-        return `/${this.i18nStore.activeLang}/${ERoutes.OPEN_DATA}`
+        return `/${this.i18nStore.activeLang}/${ERoutes.OPEN_DATA}${
+          this.fragment ? `#${this.fragment}` : ""
+        }`
       },
       justify: "flex-end",
     },
@@ -253,9 +268,13 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
           if (country) {
             params += `&country_geoip=${country.toLowerCase()}`
           }
-          return `/${this.i18nStore.activeLang}/${ERoutes.OPEN_DATA}?${params}`
+          return `/${this.i18nStore.activeLang}/${ERoutes.OPEN_DATA}?${params}${
+            this.fragment ? `#${this.fragment}` : ""
+          }`
         }
-        return `/${this.i18nStore.activeLang}/${ERoutes.OPEN_DATA}`
+        return `/${this.i18nStore.activeLang}/${ERoutes.OPEN_DATA}${
+          this.fragment ? `#${this.fragment}` : ""
+        }`
       },
       justify: "flex-end",
     },
