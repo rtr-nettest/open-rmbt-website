@@ -1,4 +1,4 @@
-<div class="app-wrapper">
+<nav class="app-wrapper" aria-label="{{ 'Breadcrumbs' | translate }}">
   <ul class="app-list">
     @if (breadcrumbs$ | async; as br) { @for (item of br; track $index) {
     <li class="app-li">
@@ -8,4 +8,4 @@
     </li>
     } }
   </ul>
-</div>
+</nav>

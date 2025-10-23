@@ -1,0 +1,41 @@
+<app-header></app-header>
+<app-top-nav></app-top-nav>
+<app-breadcrumbs></app-breadcrumbs>
+<app-main-content>
+  <div class="app-wrapper">
+    <h1>{{ "Sitemap" | translate }}</h1>
+    <div class="app-sitemap">
+      @if (sitemap$ | async; as sitemap) {
+      <ng-container
+        *ngTemplateOutlet="sitemapList; context: { $implicit: sitemap }"
+      ></ng-container>
+      }
+    </div>
+  </div>
+</app-main-content>
+<app-footer></app-footer>
+
+<ng-template #sitemapList let-sitemap>
+  <p>
+    @if (sitemap.path?.startsWith('http')) {
+    <a class="app-link" [href]="sitemap.path">{{
+      sitemap.title | translate
+    }}</a>
+    } @else {
+    <a class="app-link" [routerLink]="sitemap.path">{{
+      sitemap.title | translate
+    }}</a>
+    }
+  </p>
+  @if (sitemap.children?.length > 0) {
+  <ul class="app-ul">
+    @for (child of sitemap.children; track child.path) {
+    <li class="app-li">
+      <ng-container
+        *ngTemplateOutlet="sitemapList; context: { $implicit: child }"
+      ></ng-container>
+    </li>
+    }
+  </ul>
+  }
+</ng-template>

@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "compile-deps-info": "npx ts-node scripts/compile-deps-info.ts",
+    "generate-sitemap": "npx ts-node scripts/prepare-routes-for-sitemap.ts && npx ts-node scripts/generate-sitemap.ts",
     "ng": "ng",
     "start": "concurrently \"node proxy\" \"ng serve\"",
     "start:prod": "ng build && npx lite-server --baseDir=dist/open-rmbt-angular/browser",

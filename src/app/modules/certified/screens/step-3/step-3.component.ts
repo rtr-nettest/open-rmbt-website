@@ -37,6 +37,7 @@ import { CertifiedBreadcrumbsComponent } from "../../components/certified-breadc
 import { LoopStoreService } from "../../../loop/store/loop-store.service"
 import { environment } from "../../../../../environments/environment"
 import { MainStore } from "../../../shared/store/main.store"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 @Component({
   selector: "app-step-3",
@@ -44,6 +45,7 @@ import { MainStore } from "../../../shared/store/main.store"
     BreadcrumbsComponent,
     CertifiedBreadcrumbsComponent,
     HeaderComponent,
+    MainContentComponent,
     MatButtonModule,
     MatCheckboxModule,
     MatFormFieldModule,

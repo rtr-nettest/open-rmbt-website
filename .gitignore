@@ -37,6 +37,7 @@ yarn-error.log
 testem.log
 /typings
 index.dev.html
+src/app/app.routes.simplified.ts
 
 # System files
 .DS_Store

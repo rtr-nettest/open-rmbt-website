@@ -31,6 +31,7 @@ import { NgIf } from "@angular/common"
 import { CertifiedBreadcrumbsComponent } from "../../components/certified-breadcrumbs/certified-breadcrumbs.component"
 import { LoopStoreService } from "../../../loop/store/loop-store.service"
 import { environment } from "../../../../../environments/environment"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 @Component({
   selector: "app-step-2",
@@ -38,6 +39,7 @@ import { environment } from "../../../../../environments/environment"
     CertifiedBreadcrumbsComponent,
     BreadcrumbsComponent,
     HeaderComponent,
+    MainContentComponent,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

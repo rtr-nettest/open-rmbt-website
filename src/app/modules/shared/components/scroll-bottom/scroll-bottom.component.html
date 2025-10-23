@@ -3,9 +3,13 @@
     color="primary"
     mat-icon-button
     (click)="handleClick()"
-    style="box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); background: white"
-    [title]="'Scroll to bottom' | translate"
+    class="app-scroll-button"
+    title="{{ 'Scroll to bottom to continue' | translate }}"
+    type="button"
   >
-    <img src="/assets/images/btn-scroll-down.png" />
+    <img
+      src="/assets/images/btn-scroll-down.png"
+      alt="{{ 'Scroll to bottom to continue' | translate }}"
+    />
   </button>
 </ng-container>

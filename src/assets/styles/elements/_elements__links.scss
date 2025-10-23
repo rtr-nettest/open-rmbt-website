@@ -7,6 +7,16 @@
     }
   }
 
+  &--sr-only {
+    position: absolute;
+    top: -3em;
+    background: white;
+
+    &:focus {
+      top: 0;
+    }
+  }
+
   .mdc-button__ripple {
     display: none;
   }
@@ -17,4 +27,11 @@ app-top-nav {
   .app-link {
     font-size: rem(14);
   }
+}
+
+button.app-link {
+  background: none;
+  border: none;
+  color: $color-link;
+  cursor: pointer;
 }

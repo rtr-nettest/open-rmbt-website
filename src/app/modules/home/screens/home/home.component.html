@@ -1,114 +1,116 @@
 <app-header></app-header>
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
-<div class="app-wrapper">
-  <h1>{{ "RTR-NetTest" | translate }}</h1>
-  <div class="app-row app-row--main">
-    <div class="app-col app-col--padded">
-      @if (mobileLink(); as mobileLink) {
-      <app-card-button
-        iconImage="/assets/images/start-button-icon.svg"
-        smallText="Start test"
-        title="Start RTR-NetTest"
-        [primary]="true"
-        [mobileLink]="mobileLink"
-        tabindex="-1"
-      ></app-card-button>
-      } @else {
-      <app-card-button
-        iconImage="/assets/images/start-button-icon.svg"
-        smallText="Start test"
-        title="Start RTR-NetTest"
-        [primary]="true"
-        [routerLink]="eRoutes.TEST"
-        tabindex="-1"
-      ></app-card-button>
-      }
-    </div>
-    <div class="app-col app-col--padded">
-      <div [innerHTML]="text$ | async"></div>
-    </div>
-  </div>
-</div>
-<div class="app-wrapper" style="padding-bottom: 80px">
-  <div class="app-row" [id]="mapContainerId">
-    <div class="app-col app-col--main">
+<app-main-content>
+  <div class="app-wrapper">
+    <h1>{{ "RTR-NetTest" | translate }}</h1>
+    <div class="app-row app-row--main">
       <div class="app-col app-col--padded">
+        @if (mobileLink(); as mobileLink) {
         <app-card-button
-          iconImage="/assets/images/loop-button-icon.svg"
-          smallText="Conduct repeated measurements"
-          title="Loop mode"
-          [routerLink]="eRoutes.LOOP_1"
+          iconImage="/assets/images/start-button-icon.svg"
+          smallText="Start test"
+          title="Start RTR-NetTest"
+          [primary]="true"
+          [mobileLink]="mobileLink"
           tabindex="-1"
         ></app-card-button>
-      </div>
-      <div class="app-col app-col--padded">
+        } @else {
         <app-card-button
-          smallText="Conduct certified measurements"
-          title="Certified measurement"
-          [routerLink]="eRoutes.CERTIFIED_1"
+          iconImage="/assets/images/start-button-icon.svg"
+          smallText="Start test"
+          title="Start RTR-NetTest"
+          [primary]="true"
+          [routerLink]="eRoutes.TEST"
           tabindex="-1"
         ></app-card-button>
-      </div>
-      <div class="app-col app-col--padded">
-        <app-card-button
-          smallText="Map with test results"
-          title="Map view"
-          [routerLink]="eRoutes.MAP"
-          tabindex="-1"
-        ></app-card-button>
-      </div>
-      <div class="app-col app-col--padded">
-        <app-card-button
-          smallText="Statistics on the results"
-          title="Statistics"
-          [routerLink]="eRoutes.STATISTICS"
-          tabindex="-1"
-        ></app-card-button>
-      </div>
-      <div class="app-col app-col--padded">
-        <app-card-button
-          [smallText]="(appLinksText$ | async)!"
-          title="App and Browser Test"
-          url="https://www.rtr.at/en/tk/rtrnetztest_tests"
-        ></app-card-button>
-      </div>
-      <div class="app-col app-col--padded">
-        <app-card-button
-          smallText="Explore open data test results"
-          title="Open data"
-          [routerLink]="eRoutes.OPEN_DATA"
-          tabindex="-1"
-        ></app-card-button>
-      </div>
-      <div class="app-col app-col--padded">
-        <app-card-button smallText="Your IP address">
-          <app-ip-info></app-ip-info>
-        </app-card-button>
-      </div>
-    </div>
-    <div class="app-col app-col--main app-col--padded" style="display: block">
-      @defer () {
-      <h4>{{ "Recent tests" | translate }}</h4>
-      <app-map
-        [controls]="mapControls"
-        [measurements]="recentMeasurements()"
-        [mapContainerId]="mapContainerId"
-      ></app-map
-      >}
-      <div style="margin-top: 24px">
-        @if(tableData()) {
-        <app-table
-          [data]="tableData()!"
-          [columns]="tableColumns"
-          [sort]="{ active: 'time', direction: 'desc' }"
-          [rowsAreCLickable]="true"
-          (onRowClick)="goToResult($event)"
-          style="width: 100%"
-        ></app-table>
         }
       </div>
+      <div class="app-col app-col--padded">
+        <div [innerHTML]="text$ | async"></div>
+      </div>
     </div>
   </div>
-</div>
+  <div class="app-wrapper" style="padding-bottom: 80px">
+    <div class="app-row" [id]="mapContainerId">
+      <div class="app-col app-col--main">
+        <div class="app-col app-col--padded">
+          <app-card-button
+            iconImage="/assets/images/loop-button-icon.svg"
+            smallText="Conduct repeated measurements"
+            title="Loop mode"
+            [routerLink]="eRoutes.LOOP_1"
+            tabindex="-1"
+          ></app-card-button>
+        </div>
+        <div class="app-col app-col--padded">
+          <app-card-button
+            smallText="Conduct certified measurements"
+            title="Certified measurement"
+            [routerLink]="eRoutes.CERTIFIED_1"
+            tabindex="-1"
+          ></app-card-button>
+        </div>
+        <div class="app-col app-col--padded">
+          <app-card-button
+            smallText="Map with test results"
+            title="Map view"
+            [routerLink]="eRoutes.MAP"
+            tabindex="-1"
+          ></app-card-button>
+        </div>
+        <div class="app-col app-col--padded">
+          <app-card-button
+            smallText="Statistics on the results"
+            title="Statistics"
+            [routerLink]="eRoutes.STATISTICS"
+            tabindex="-1"
+          ></app-card-button>
+        </div>
+        <div class="app-col app-col--padded">
+          <app-card-button
+            [smallText]="(appLinksText$ | async)!"
+            title="App and Browser Test"
+            url="https://www.rtr.at/en/tk/rtrnetztest_tests"
+          ></app-card-button>
+        </div>
+        <div class="app-col app-col--padded">
+          <app-card-button
+            smallText="Explore open data test results"
+            title="Open data"
+            [routerLink]="eRoutes.OPEN_DATA"
+            tabindex="-1"
+          ></app-card-button>
+        </div>
+        <div class="app-col app-col--padded">
+          <app-card-button smallText="Your IP address">
+            <app-ip-info></app-ip-info>
+          </app-card-button>
+        </div>
+      </div>
+      <div class="app-col app-col--main app-col--padded" style="display: block">
+        @defer () {
+        <h4>{{ "Recent tests" | translate }}</h4>
+        <app-map
+          [controls]="mapControls"
+          [measurements]="recentMeasurements()"
+          [mapContainerId]="mapContainerId"
+        ></app-map
+        >}
+        <div style="margin-top: 24px">
+          @if(tableData()) {
+          <app-table
+            [data]="tableData()!"
+            [columns]="tableColumns"
+            [sort]="{ active: 'time', direction: 'desc' }"
+            [rowsAreCLickable]="true"
+            (onRowClick)="goToResult($event)"
+            style="width: 100%"
+          ></app-table>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</app-main-content>
 <app-footer></app-footer>

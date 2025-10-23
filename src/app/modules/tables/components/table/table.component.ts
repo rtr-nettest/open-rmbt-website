@@ -161,6 +161,15 @@ export class TableComponent implements OnInit, OnChanges {
     return this.expandedElements.includes(elementId)
   }
 
+  elementControls(elementId: number | string) {
+    return (
+      this.data?.content
+        ?.filter((el) => el.loopUuid === elementId)
+        .map((el) => "item-" + el.id)
+        .join(" ") || null
+    )
+  }
+
   justify(column: ITableColumn) {
     const { justify } = column
     switch (justify) {

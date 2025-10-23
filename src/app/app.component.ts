@@ -31,6 +31,10 @@ export class AppComponent {
       })
     )
 
+  get skipLink() {
+    return `${document.URL.replace(/#.*$/, "")}#mainContent`
+  }
+
   constructor(private readonly mainStore: MainStore) {
     this.inProgress$ = this.mainStore.inProgress$
     const gitInfo = this.mainStore.gitInfo

@@ -1,7 +1,7 @@
 @if (form) {
 <div class="app-row">
   <div class="app-col">
-    <label class="app-label" [for]="key">{{ key | translate }}</label>
+    <span class="app-label">{{ key | translate }}</span>
   </div>
   <div class="app-col app-col--third">
     <span class="app-field-prefix"></span>
@@ -12,10 +12,10 @@
     >
       <input
         matInput
-        [id]="key"
         [max]="maxDate()"
         [matDatepicker]="datepicker"
         [formControl]="getFormControl(key)"
+        [attr.aria-label]="(key | translate) + ' ' + ('date' | translate)"
       />
       <mat-datepicker #datepicker />
       <mat-datepicker-toggle [for]="datepicker" matSuffix />
@@ -34,6 +34,7 @@
         [max]="maxDate()"
         [matTimepicker]="timepicker"
         [(ngModel)]="time"
+        [attr.aria-label]="(key | translate) + ' ' + ('time' | translate)"
       />
       <mat-timepicker #timepicker />
       <mat-timepicker-toggle [for]="timepicker" matSuffix />

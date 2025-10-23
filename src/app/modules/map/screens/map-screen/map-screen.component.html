@@ -3,23 +3,25 @@
 <app-top-nav></app-top-nav>
 <app-breadcrumbs></app-breadcrumbs>
 }
-<div class="app-wrapper" [innerHTML]="text$ | async"></div>
-<div class="app-wrapper" style="padding-bottom: 80px">
-  @if (map) {
-  <app-search [map]="map"></app-search>
-  } @else if (mapError()) {
-  <h3>{{ "Failed to load map, please retry later" | translate }}</h3>
-  }
-  <div class="app-row" [id]="mapContainerId">
-    <div class="app-map" [id]="mapId"></div>
+<app-main-content>
+  <div class="app-wrapper" [innerHTML]="text$ | async"></div>
+  <div class="app-wrapper" style="padding-bottom: 80px">
+    @if (map) {
+    <app-search [map]="map"></app-search>
+    } @else if (mapError()) {
+    <h3>{{ "Failed to load map, please retry later" | translate }}</h3>
+    }
+    <div class="app-row" [id]="mapContainerId">
+      <div class="app-map" [id]="mapId"></div>
+    </div>
+    @if (activeLayers && mapInfo) {
+    <app-heatmap-legend
+      [activeLayer]="activeLayers[0]"
+      [mapInfo]="mapInfo"
+    ></app-heatmap-legend>
+    }
   </div>
-  @if (activeLayers && mapInfo) {
-  <app-heatmap-legend
-    [activeLayer]="activeLayers[0]"
-    [mapInfo]="mapInfo"
-  ></app-heatmap-legend>
-  }
-</div>
+</app-main-content>
 @if (!hideMenu) {
 <app-footer></app-footer>
 }

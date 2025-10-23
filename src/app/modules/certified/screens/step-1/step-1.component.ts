@@ -15,6 +15,7 @@ import { ECertifiedSteps } from "../../constants/certified-steps.enum"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Title } from "@angular/platform-browser"
 import { CertifiedBreadcrumbsComponent } from "../../components/certified-breadcrumbs/certified-breadcrumbs.component"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 @Component({
   selector: "app-step-1",
@@ -23,6 +24,7 @@ import { CertifiedBreadcrumbsComponent } from "../../components/certified-breadc
     BreadcrumbsComponent,
     CertifiedBreadcrumbsComponent,
     HeaderComponent,
+    MainContentComponent,
     MatButtonModule,
     TopNavComponent,
     TranslatePipe,

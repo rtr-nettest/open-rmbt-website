@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core"
 import imageCompression from "browser-image-compression"
 import { MessageService } from "./message.service"
+import { environment } from "../../../../environments/environment"
 
 export const COMPRESSOR_OPTIONS = {
   maxSizeMB: 0.4,
@@ -23,6 +24,18 @@ export class FileService {
     } catch (e) {
       this.message.openSnackbar("The file is not an image")
       return null
+    }
+  }
+
+  async getJsonAsset(path: string): Promise<Record<string, any>> {
+    try {
+      const json = await (
+        await fetch(`${environment.baseUrl}/assets${path}`)
+      ).json()
+      return json
+    } catch (e) {
+      console.warn(e)
+      return {}
     }
   }
 }

@@ -12,10 +12,11 @@ import { AsyncPipe } from "@angular/common"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { ERoutes } from "../../constants/routes.enum"
 import { routes } from "../../../../app.routes"
+import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 @Component({
   selector: "app-breadcrumbs",
-  imports: [AsyncPipe, RouterModule],
+  imports: [AsyncPipe, RouterModule, TranslatePipe],
   templateUrl: "./breadcrumbs.component.html",
   styleUrl: "./breadcrumbs.component.scss",
 })

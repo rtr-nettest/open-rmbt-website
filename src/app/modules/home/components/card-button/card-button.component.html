@@ -35,7 +35,15 @@
   }
   <div class="app-card-body">
     <p class="app-small-text" [innerHTML]="smallText | translate"></p>
-    @if (title) {
+    @if (title) { @if (primary) {
+    <h2 class="app-card-title app-margin-top">
+      @if (url) {
+      <a class="app-link" [href]="url">{{ title | translate }}</a>
+      } @else {
+      {{ title | translate }}
+      }
+    </h2>
+    } @else {
     <h3 class="app-card-title app-margin-top">
       @if (url) {
       <a class="app-link" [href]="url">{{ title | translate }}</a>
@@ -43,7 +51,7 @@
       {{ title | translate }}
       }
     </h3>
-    } @else {
+    } } @else {
     <ng-content></ng-content>
     }
   </div>

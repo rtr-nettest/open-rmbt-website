@@ -32,6 +32,7 @@ import { OpendataTableComponent } from "../../components/opendata-table/opendata
 import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interface"
 import { OpendataExportService } from "../../services/opendata-export.service"
 import { ActionButtonsComponent } from "../../../history/components/action-buttons/action-buttons.component"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 export const AUTOREFRESH_INTERVAL = 15_000
 
@@ -54,6 +55,7 @@ export const AUTOREFRESH_INTERVAL = 15_000
     TopNavComponent,
     TranslatePipe,
     HistogramComponent,
+    MainContentComponent,
   ],
   templateUrl: "./opendata-screen.component.html",
   styleUrl: "./opendata-screen.component.scss",

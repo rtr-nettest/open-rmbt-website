@@ -42,6 +42,7 @@ import { MessageService } from "../../../shared/services/message.service"
 import { PopupService } from "../../services/popup.service"
 import { fromLonLat, toLonLat } from "ol/proj.js"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 export const POINTS_HEATMAP_SWITCH_LEVEL = 12
 
@@ -57,6 +58,7 @@ export const POINTS_HEATMAP_SWITCH_LEVEL = 12
     MatDialogModule,
     SearchComponent,
     TranslatePipe,
+    MainContentComponent,
   ],
   templateUrl: "./map-screen.component.html",
   styleUrl: "./map-screen.component.scss",

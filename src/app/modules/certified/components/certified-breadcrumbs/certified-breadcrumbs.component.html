@@ -1,5 +1,8 @@
 <div class="app-wrapper">
-  <div class="app-breadcrumbs-wrapper">
+  <aside
+    class="app-breadcrumbs-wrapper"
+    aria-label="{{ 'Breadcrumbs' | translate }}"
+  >
     <ul class="app-breadcrumbs">
       <li
         *ngFor="let bc of breadcrumbs()"
@@ -10,5 +13,5 @@
         <a>{{ bc.index + 1 }}. {{ bc.label | translate }}</a>
       </li>
     </ul>
-  </div>
+  </aside>
 </div>

@@ -4,46 +4,48 @@
 <app-certified-breadcrumbs
   [breadcrumbs]="breadcrumbs()"
 ></app-certified-breadcrumbs>
-<div class="app-wrapper" style="margin-top: 48px; margin-bottom: 64px">
-  <h1 class="app-title">{{ "Loop mode" | translate }}</h1>
-  @if (form) {
-  <form [formGroup]="form">
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "Number of tests in loop mode" | translate }}</mat-label>
-      <input
-        matInput
-        type="integer"
-        formControlName="maxTestsAllowed"
-        name="maxTestsAllowed"
-        [min]="minTestsAllowed"
-        [max]="maxTestsAllowed"
-        required
-      />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>{{
-        "Waiting time (in minutes) between two tests in loop mode" | translate
-      }}</mat-label>
-      <input
-        matInput
-        type="integer"
-        formControlName="testIntervalMinutes"
-        name="testIntervalMinutes"
-        [min]="minTestIntervalMinutes"
-        [max]="maxTestIntervalMinutes"
-        required
-      />
-    </mat-form-field>
-  </form>
-  }
-  <button
-    style="margin-top: 16px"
-    mat-flat-button
-    class="app-button"
-    (click)="onTestStart()"
-    [disabled]="!form?.valid"
-  >
-    {{ "Start loop mode" | translate }}
-  </button>
-</div>
+<app-main-content>
+  <div class="app-wrapper" style="margin-top: 48px; margin-bottom: 64px">
+    <h1 class="app-title">{{ "Loop mode" | translate }}</h1>
+    @if (form) {
+    <form [formGroup]="form">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "Number of tests in loop mode" | translate }}</mat-label>
+        <input
+          matInput
+          type="integer"
+          formControlName="maxTestsAllowed"
+          name="maxTestsAllowed"
+          [min]="minTestsAllowed"
+          [max]="maxTestsAllowed"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          "Waiting time (in minutes) between two tests in loop mode" | translate
+        }}</mat-label>
+        <input
+          matInput
+          type="integer"
+          formControlName="testIntervalMinutes"
+          name="testIntervalMinutes"
+          [min]="minTestIntervalMinutes"
+          [max]="maxTestIntervalMinutes"
+          required
+        />
+      </mat-form-field>
+    </form>
+    }
+    <button
+      style="margin-top: 16px"
+      mat-flat-button
+      class="app-button"
+      (click)="onTestStart()"
+      [disabled]="!form?.valid"
+    >
+      {{ "Start loop mode" | translate }}
+    </button>
+  </div>
+</app-main-content>
 <app-footer></app-footer>

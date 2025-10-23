@@ -1,6 +1,6 @@
 @if (colorStops(); as colorStops) {
 <div class="app-container">
-  <h4>{{ "Map key" | translate }}</h4>
+  <h2 class="app-h4">{{ "Map key" | translate }}</h2>
   <div class="app-container-bar" [style.background]="colorStops"></div>
   <div class="app-container" style="display: flex">
     <ul class="app-container-captions">
@@ -14,8 +14,7 @@
   </div>
   <p
     [innerHTML]="
-      'Sources: RTR, basemap.at, ArcData, Statistik Austria, BEV'
-        | translate
+      'Sources: RTR, basemap.at, ArcData, Statistik Austria, BEV' | translate
     "
   ></p>
 </div>

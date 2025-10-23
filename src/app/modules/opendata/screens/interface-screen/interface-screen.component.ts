@@ -10,14 +10,10 @@ import { FooterComponent } from "../../../shared/components/footer/footer.compon
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from "@angular/forms"
+import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms"
 import { MainStore } from "../../../shared/store/main.store"
 import { map } from "rxjs"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 @Component({
   selector: "app-interface-screen",
@@ -32,6 +28,7 @@ import { map } from "rxjs"
     TranslatePipe,
     FooterComponent,
     ReactiveFormsModule,
+    MainContentComponent,
   ],
   templateUrl: "./interface-screen.component.html",
   styleUrl: "./interface-screen.component.scss",

@@ -9,11 +9,14 @@
     >
   </mat-expansion-panel-header>
   <ng-content></ng-content>
+  @if (panel) {
   <button
     mat-button
     class="app-expansion-panel__toggle app-button app-button--bold"
     (click)="panel.close()"
+    [attr.aria-expanded]="panel.expanded"
   >
     {{ "Close" | translate }}
   </button>
+  }
 </mat-expansion-panel>

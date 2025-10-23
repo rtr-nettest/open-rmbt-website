@@ -35,6 +35,7 @@ import { RECENT_MEASUREMENTS_COLUMNS } from "../../../opendata/constants/recent-
 import { FullscreenControl, NavigationControl } from "maplibre-gl"
 import { formatTime } from "../../../shared/adapters/app-date.adapter"
 import { FullScreenService } from "../../../opendata/services/full-screen.service"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 const UPDATE_INTERVAL = 5000
 
@@ -47,6 +48,7 @@ const UPDATE_INTERVAL = 5000
     HeaderComponent,
     IpInfoComponent,
     FooterComponent,
+    MainContentComponent,
     MapComponent,
     MatButtonModule,
     RouterModule,
@@ -131,7 +133,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
           }
         })
       const testCard = document.querySelector(
-        `a[href*="${ERoutes.TEST}"]`
+        `a[href*="${ERoutes.TEST}"].app-card`
       ) as HTMLAnchorElement
       testCard.focus()
     }

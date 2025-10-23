@@ -25,6 +25,7 @@ import { InterfaceScreenComponent } from "./modules/opendata/screens/interface-s
 import { IframeComponent } from "./modules/test/screens/iframe/iframe.component"
 import { OptionsScreenComponent } from "./modules/options/screens/options-screen/options-screen.component"
 import { clearStoreGuard } from "./modules/certified/guards/clear-store.guard"
+import { SitemapComponent } from "./modules/sitemap/screens/sitemap/sitemap.component"
 
 export const routes: Routes = [
   {
@@ -64,22 +65,6 @@ export const routes: Routes = [
         },
       },
       {
-        path: ERoutes.MAP,
-        component: MapScreenComponent,
-        resolve: [localeResolver],
-        data: {
-          title: "Map view",
-        },
-      },
-      {
-        path: ERoutes.STATISTICS,
-        component: StatisticsScreenComponent,
-        resolve: [localeResolver],
-        data: {
-          title: "Statistics",
-        },
-      },
-      {
         path: ERoutes.RESULT,
         component: ResultScreenComponent,
         resolve: [localeResolver],
@@ -93,6 +78,22 @@ export const routes: Routes = [
         resolve: [localeResolver],
         data: {
           title: "History",
+        },
+      },
+      {
+        path: ERoutes.MAP,
+        component: MapScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Map view",
+        },
+      },
+      {
+        path: ERoutes.STATISTICS,
+        component: StatisticsScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Statistics",
         },
       },
       {
@@ -181,7 +182,7 @@ export const routes: Routes = [
         component: OpendataScreenComponent,
         resolve: [localeResolver],
         data: {
-          title: "opentest",
+          title: "Open data",
         },
       },
       {
@@ -214,6 +215,14 @@ export const routes: Routes = [
         resolve: [localeResolver],
         data: {
           title: "Options",
+        },
+      },
+      {
+        path: ERoutes.SITEMAP,
+        component: SitemapComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Sitemap",
         },
       },
       {

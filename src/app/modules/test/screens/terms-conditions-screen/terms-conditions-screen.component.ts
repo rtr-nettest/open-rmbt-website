@@ -10,12 +10,18 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
 import { TERMS_VERSION } from "../../constants/strings"
 import { SettingsService } from "../../../shared/services/settings.service"
 import { MainStore } from "../../../shared/store/main.store"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 @Component({
   selector: "app-terms-conditions-screen",
   templateUrl: "./terms-conditions-screen.component.html",
   styleUrls: ["./terms-conditions-screen.component.scss"],
-  imports: [AgreementComponent, AsyncPipe, MatButtonModule],
+  imports: [
+    AgreementComponent,
+    AsyncPipe,
+    MatButtonModule,
+    MainContentComponent,
+  ],
 })
 export class TermsConditionsScreenComponent
   extends SeoComponent

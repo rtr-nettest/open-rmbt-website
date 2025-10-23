@@ -14,6 +14,7 @@ import { LoopStoreService } from "../../store/loop-store.service"
 import { ECertifiedSteps } from "../../../certified/constants/certified-steps.enum"
 import { MatButtonModule } from "@angular/material/button"
 import { CertifiedBreadcrumbsComponent } from "../../../certified/components/certified-breadcrumbs/certified-breadcrumbs.component"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 @Component({
   selector: "app-step-1",
@@ -23,6 +24,7 @@ import { CertifiedBreadcrumbsComponent } from "../../../certified/components/cer
     CertifiedBreadcrumbsComponent,
     FooterComponent,
     HeaderComponent,
+    MainContentComponent,
     MatButtonModule,
     TopNavComponent,
     TranslatePipe,

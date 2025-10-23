@@ -1,5 +1,6 @@
 <div class="app-geocoder">
   <mat-form-field appearance="outline">
+    <mat-label>{{ "Search for an address or city" | translate }}</mat-label>
     <input
       matInput
       type="text"
@@ -7,7 +8,6 @@
       [ngModel]="geocodeRequest"
       (ngModelChange)="this.geocodeRequestChanged.next($event)"
       (keyup.enter)="flyToCandidate()"
-      placeholder="{{ 'Search for an address or city' | translate }}"
     />
   </mat-form-field>
   <div *ngIf="geocodeResponse" class="app-suggestions-wrapper">

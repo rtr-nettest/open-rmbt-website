@@ -26,6 +26,7 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
 import { environment } from "../../../../../environments/environment"
 import { CertifiedStoreService } from "../../../certified/store/certified-store.service"
 import { CertifiedBreadcrumbsComponent } from "../../../certified/components/certified-breadcrumbs/certified-breadcrumbs.component"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 @Component({
   selector: "app-step-2",
@@ -33,6 +34,7 @@ import { CertifiedBreadcrumbsComponent } from "../../../certified/components/cer
     CertifiedBreadcrumbsComponent,
     BreadcrumbsComponent,
     HeaderComponent,
+    MainContentComponent,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

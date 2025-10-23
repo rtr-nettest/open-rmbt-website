@@ -236,9 +236,16 @@
 
     <mat-row
       *matRowDef="let row; columns: displayedColumns"
+      [id]="'item-' + row.id"
       [class.mat-row--clickable]="rowsAreCLickable === true"
-      [class.mat-row--collapsed]="!isElementExpanded(row.id)"
-      [class.mat-row--expanded]="isElementExpanded(row.id)"
+      [class.mat-row--collapsed]="
+        row.groupHeader ? !isElementExpanded(row.id) : null
+      "
+      [class.mat-row--expanded]="
+        row.groupHeader ? isElementExpanded(row.id) : null
+      "
+      [attr.aria-expanded]="row.groupHeader ? isElementExpanded(row.id) : null"
+      [attr.aria-controls]="row.groupHeader ? elementControls(row.id) : null"
       [class.mat-row--hidden]="row.hidden === true"
       [class.mat-row--visible]="row.hidden === false"
       [class.mat-row--group-header]="row.groupHeader"

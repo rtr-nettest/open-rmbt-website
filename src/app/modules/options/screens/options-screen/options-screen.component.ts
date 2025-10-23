@@ -9,7 +9,6 @@ import {
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
-import { ScrollTopComponent } from "../../../shared/components/scroll-top/scroll-top.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
@@ -34,6 +33,7 @@ import { MainStore } from "../../../shared/store/main.store"
 import { environment } from "../../../../../environments/environment"
 import { toObservable } from "@angular/core/rxjs-interop"
 import { takeUntil } from "rxjs"
+import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 
 @Component({
   selector: "app-options-screen",
@@ -42,13 +42,13 @@ import { takeUntil } from "rxjs"
     HeaderComponent,
     TopNavComponent,
     BreadcrumbsComponent,
-    ScrollTopComponent,
     FooterComponent,
     TranslatePipe,
     SprintfPipe,
     ReactiveFormsModule,
     MatRadioModule,
     MatButtonModule,
+    MainContentComponent,
   ],
   templateUrl: "./options-screen.component.html",
   styleUrl: "./options-screen.component.scss",

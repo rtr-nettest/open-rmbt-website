@@ -3,6 +3,12 @@
 .mat-column {
   &-date_time {
     flex: 0 0 20%;
+
+    @media screen and (max-width: 660px) and (min-width: 600px) {
+      .svg-icon.svg-browser {
+        display: none;
+      }
+    }
   }
   &-platform {
     align-items: center;
