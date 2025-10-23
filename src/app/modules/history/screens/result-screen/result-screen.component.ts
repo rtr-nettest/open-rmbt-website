@@ -23,7 +23,7 @@ import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/bre
 import { roundToSignificantDigits } from "../../../shared/util/math"
 import { MapComponent } from "../../components/map/map.component"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
-import { Title } from "@angular/platform-browser"
+import { Meta, Title } from "@angular/platform-browser"
 import { SpeedDetailsComponent } from "../../components/speed-details/speed-details.component"
 import { IOverallResult } from "../../interfaces/overall-result.interface"
 import { PingDetailsComponent } from "../../components/ping-details/ping-details.component"
@@ -205,14 +205,16 @@ export class ResultScreenComponent extends SeoComponent {
   constructor(
     i18nStore: I18nStore,
     title: Title,
-    private classification: ClassificationService,
-    private exporter: HistoryExportService,
-    private mainStore: MainStore,
-    private service: HistoryService,
-    private store: HistoryStore,
-    private route: ActivatedRoute
+    private readonly classification: ClassificationService,
+    private readonly exporter: HistoryExportService,
+    private readonly mainStore: MainStore,
+    private readonly meta: Meta,
+    private readonly service: HistoryService,
+    private readonly store: HistoryStore,
+    private readonly route: ActivatedRoute
   ) {
     super(title, i18nStore)
+    meta.addTag({ name: "robots", content: "noindex, nofollow" })
     this.result$ = this.i18nStore.getTranslations().pipe(
       switchMap(() => {
         const params = {
@@ -260,6 +262,7 @@ export class ResultScreenComponent extends SeoComponent {
     this.destroyed$.next()
     this.destroyed$.complete()
     this.mainStore.error$.next(null)
+    this.meta.removeTag("name='robots'")
   }
 
   getSpeedInMbps(speed: number) {
