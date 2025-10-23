@@ -1,6 +1,8 @@
-<a [href]="skipLink" class="app-link--sr-only">{{
-  "Skip to main content" | translate
-}}</a>
+<aside attr.aria-label="{{ 'Skip to main content' | translate }}">
+  <a [href]="skipLink" class="app-link--sr-only">{{
+    "Skip to main content" | translate
+  }}</a>
+</aside>
 @if(inProgress$ | async) {
 <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 } @if(settings$ | async) {

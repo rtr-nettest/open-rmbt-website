@@ -9,11 +9,18 @@ import { ILink } from "../../interfaces/link.interface"
 import { AsyncPipe } from "@angular/common"
 import { TranslationService } from "../../../i18n/services/translation.service"
 import { expandVertically } from "../../animations/detail-expand.animation"
+import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 @Component({
   selector: "app-header",
   animations: [expandVertically],
-  imports: [AsyncPipe, MatIconModule, MatButtonModule, MatMenuModule],
+  imports: [
+    AsyncPipe,
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+    TranslatePipe,
+  ],
   templateUrl: "./header.component.html",
   styleUrl: "./header.component.scss",
 })

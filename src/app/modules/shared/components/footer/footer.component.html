@@ -36,7 +36,7 @@
         </a>
       </p>
     </section>
-    <nav>
+    <nav aria-label="{{ 'Footer navigation' | translate }}">
       <ul class="app-list">
         @for (item of menu$ | async; track $index) {
         <li class="app-li">

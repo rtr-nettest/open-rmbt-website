@@ -1,5 +1,11 @@
-<header class="app-container app-container--primary">
-  <nav class="app-wrapper">
+<header
+  class="app-container app-container--primary"
+  aria-labelledby="rtrSubmenuTrigger langSubmenuTrigger"
+>
+  <nav
+    class="app-wrapper"
+    aria-labelledby="rtrSubmenuTrigger langSubmenuTrigger"
+  >
     <ul class="app-list">
       <li>
         <button
@@ -40,7 +46,7 @@
   id="rtrSubmenu"
   class="app-header-menu app-dropdown app-header-menu-backdrop"
 >
-  <nav class="app-wrapper">
+  <nav class="app-wrapper" aria-label="{{ 'RTR Navigation' | translate }}">
     @if (rtrLinks$ | async; as subItems) {
     <ul class="app-list">
       @for (link of subItems; track $index) {
@@ -67,7 +73,7 @@
   id="langSubmenu"
   class="app-header-menu app-dropdown app-header-menu-backdrop"
 >
-  <nav class="app-wrapper">
+  <nav class="app-wrapper" aria-label="{{ 'Language' | translate }}">
     <ul class="app-list">
       @for (locale of availableLocales; track $index) {
       <li>

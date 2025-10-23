@@ -39,7 +39,7 @@
         }
       </app-expansion-panel>
     </div>
-    <div class="app-expansion-panel" [attr.aria-hidden]="true">
+    <div class="app-expansion-panel">
       <app-expansion-panel
         [title]="'Histogram' | translate"
         (expand)="loadHistograms.set($event)"
@@ -61,28 +61,30 @@
         }
       </app-expansion-panel>
     </div>
-    <div class="app-expansion-panel" [attr.aria-hidden]="true">
+    <div class="app-expansion-panel">
       <app-expansion-panel
         [title]="'Intraday' | translate"
         (expand)="loadIntradayData($event)"
         [a11yTitle]="'Intraday' | translate"
       >
         @if (loadIntraday()) {
-        <h5>{{ "Download/Upload" | translate }}</h5>
-        <div class="app-expansion-panel__row">
-          <app-intraday
-            phase="download"
-            [data]="intradayData()"
-            [loading]="loadingIntraday()"
-          ></app-intraday>
-        </div>
-        <h5>{{ "Ping" | translate }}</h5>
-        <div class="app-expansion-panel__row">
-          <app-intraday
-            phase="ping"
-            [data]="intradayData()"
-            [loading]="loadingIntraday()"
-          ></app-intraday>
+        <div [attr.aria-hidden]="true">
+          <h5>{{ "Download/Upload" | translate }}</h5>
+          <div class="app-expansion-panel__row">
+            <app-intraday
+              phase="download"
+              [data]="intradayData()"
+              [loading]="loadingIntraday()"
+            ></app-intraday>
+          </div>
+          <h5>{{ "Ping" | translate }}</h5>
+          <div class="app-expansion-panel__row">
+            <app-intraday
+              phase="ping"
+              [data]="intradayData()"
+              [loading]="loadingIntraday()"
+            ></app-intraday>
+          </div>
         </div>
         }
       </app-expansion-panel>

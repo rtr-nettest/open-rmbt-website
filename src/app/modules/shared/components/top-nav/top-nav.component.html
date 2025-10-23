@@ -1,4 +1,4 @@
-<header class="app-container">
+<header class="app-container" aria-label="{{ 'RTR-Nettest' | translate }}">
   <div class="app-wrapper">
     <a [href]="'/' + activeLang" class="app-logo">
       <img
@@ -6,7 +6,7 @@
         alt="{{ 'RTR-Nettest' | translate }}"
       />
     </a>
-    <nav class="app-main-nav">
+    <nav class="app-main-nav" aria-label="{{ 'Main navigation' | translate }}">
       <ul class="app-list">
         @for (item of mainItems$ | async; track $index) {
         <li>
@@ -25,6 +25,7 @@
             (click)="toggleSubmenu($event)"
             [attr.aria-expanded]="submenuOpen"
             [attr.aria-controls]="'submenu'"
+            role="button"
             mat-button
             >{{ item.label
             }}<mat-icon iconPositionEnd>{{
@@ -95,10 +96,11 @@
   </div>
 </div>
 
-<div
+<nav
   [@expandVertically]="mobileSubmenuOpen"
   id="mobileSubmenu"
   class="app-header-menu app-header-menu--primary app-header-menu--mobile"
+  aria-label="{{ 'Menu' | translate }}"
 >
   <ul class="app-list">
     @for (item of mainItems$ | async; track $index) {
@@ -182,4 +184,4 @@
       </a>
     </li>
   </ul>
-</div>
+</nav>

@@ -303,7 +303,7 @@ export class MapService {
     if (lon === null || lat === null) {
       return new Marker()
     }
-    const el = document.createElement("div")
+    const el = document.createElement("figure")
     el.className = "app-marker"
     el.style.backgroundImage = `url(${this.getIconByClass(classification)})`
     el.style.width = `${diameter}px`
