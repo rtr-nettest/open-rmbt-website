@@ -250,8 +250,8 @@
       [class.mat-row--visible]="row.hidden === false"
       [class.mat-row--group-header]="row.groupHeader"
       [class.mat-row--cell-info-header]="row.cellInfoHeader"
-      (click)="onRowClick.emit(row)"
-      (keydown.enter)="onRowClick.emit(row)"
+      (click)="onRowClickHandler($event, row)"
+      (keydown.enter)="onRowClickHandler($event, row)"
       tabindex="0"
     >
     </mat-row>

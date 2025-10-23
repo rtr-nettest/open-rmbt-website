@@ -95,6 +95,7 @@
       [columns]="columns"
       [sort]="sort"
       (onRowClick)="handleRowClick($event)"
+      (onRowShiftClick)="handleRowShiftClick($event)"
       [showUuids]="showUuids()"
       identifyField="open_test_uuid"
     ></app-opendata-table>

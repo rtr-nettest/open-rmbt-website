@@ -70,6 +70,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() footerColumns: string[] = []
 
   @Output() onRowClick = new EventEmitter<any>()
+  @Output() onRowShiftClick = new EventEmitter<any>()
   onContentChange = output<void>()
 
   @ViewChild(MatTable) table?: MatTable<any>
@@ -189,6 +190,15 @@ export class TableComponent implements OnInit, OnChanges {
           justifyContent: "flex-start",
           textAlign: "left",
         }
+    }
+  }
+
+  onRowClickHandler(event: Event, row: any) {
+    const mouseEvent = event as MouseEvent
+    if (mouseEvent.shiftKey) {
+      this.onRowShiftClick.emit(row)
+    } else {
+      this.onRowClick.emit(row)
     }
   }
 }

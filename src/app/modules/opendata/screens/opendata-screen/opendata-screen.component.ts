@@ -182,6 +182,15 @@ export class OpendataScreenComponent
     })
   }
 
+  handleRowShiftClick = (row: IRecentMeasurement) => {
+    window.open(
+      `/${this.i18nStore.activeLang}/${ERoutes.OPEN_RESULT}?open_test_uuid=${
+        row.open_test_uuid
+      }${this.fragment ? `#${this.fragment}` : ""}`,
+      "_blank"
+    )
+  }
+
   private ensureSignal(measurement: IRecentMeasurement) {
     if (measurement.signal_strength || measurement.signal_strength === 0) {
       return measurement

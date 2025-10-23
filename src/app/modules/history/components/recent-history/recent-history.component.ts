@@ -155,6 +155,17 @@ export class RecentHistoryComponent implements OnChanges {
     this.toggleLoopResults(row.id)
   }
 
+  handleRowShiftClick = (row: IHistoryRow) => {
+    if (row.id?.startsWith("L")) {
+      this.toggleLoopResults(row.id)
+      return
+    }
+    window.open(
+      `${window.location.origin}/${this.i18nStore.activeLang}/${ERoutes.RESULT}?test_uuid=${row.id}`,
+      "_blank"
+    )
+  }
+
   toggleLoopResults(loopUuid: string) {
     const openLoops = this.store.openLoops$.value
     const index = openLoops.indexOf(loopUuid)
