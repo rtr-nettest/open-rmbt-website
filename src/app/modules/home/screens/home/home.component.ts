@@ -97,6 +97,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   opendataService = inject(OpendataService)
   tableColumns: ITableColumn<IRecentMeasurement>[] = RECENT_MEASUREMENTS_COLUMNS
   tableData = signal<IBasicResponse<IRecentMeasurement> | null>(null)
+  mapDisabled = signal(false)
   mobileLink = computed(() => {
     const platform = this.platform.detectPlatform()
     if (platform === EPlatform.ANDROID) {

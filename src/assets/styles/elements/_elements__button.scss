@@ -15,6 +15,16 @@
   &--outlined {
     background-color: white !important;
   }
+
+  &--sr-only {
+    position: absolute;
+    top: -9999em;
+    background: white;
+
+    &:focus {
+      top: 0;
+    }
+  }
 }
 
 .app-wrapper {

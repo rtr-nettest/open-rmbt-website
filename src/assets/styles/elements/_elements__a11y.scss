@@ -22,7 +22,8 @@ $outline-color: #0096ff;
 
 .app-link:focus-visible:not(.mdc-button),
 .mat-mdc-select:focus-visible,
-.cdk-keyboard-focused .mat-focus-indicator {
+.cdk-keyboard-focused .mat-focus-indicator,
+.app-button--sr-only:focus {
   outline: solid 2px $outline-color;
   outline-offset: 1px;
 }

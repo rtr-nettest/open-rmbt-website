@@ -89,14 +89,25 @@
         </div>
       </div>
       <div class="app-col app-col--main app-col--padded" style="display: block">
-        @defer () {
         <h4>{{ "Recent tests" | translate }}</h4>
-        <app-map
-          [controls]="mapControls"
-          [measurements]="recentMeasurements()"
-          [mapContainerId]="mapContainerId"
-        ></app-map
-        >}
+        @defer () {
+        <div class="app-map-container">
+          <button
+            type="button"
+            class="app-button--sr-only"
+            (click)="mapDisabled.set(true)"
+          >
+            {{ "Disable map" | translate }}
+          </button>
+          @if (!mapDisabled()) {
+          <app-map
+            [controls]="mapControls"
+            [measurements]="recentMeasurements()"
+            [mapContainerId]="mapContainerId"
+          ></app-map>
+          }
+        </div>
+        }
         <div style="margin-top: 24px">
           @if(tableData()) {
           <app-table

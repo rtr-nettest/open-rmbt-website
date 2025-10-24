@@ -66,3 +66,18 @@
   margin-bottom: rem(50);
   width: 100%;
 }
+
+.app-map-container {
+  overflow: hidden;
+  position: relative;
+
+  .app-button--sr-only {
+    background: white;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 10;
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+}
