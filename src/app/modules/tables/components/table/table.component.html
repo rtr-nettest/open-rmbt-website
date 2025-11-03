@@ -50,7 +50,9 @@
           [style]="justify(column)"
           [ngClass]="column.getNgClass?.(element, column)"
         >
-          <span class="app-table__mobile-label">{{ column.header }}</span>
+          <span class="app-table__mobile-label">{{
+            column.header | translate
+          }}</span>
           @if(column.isExpandable) {
           <div [@expandVertically]="isElementExpanded(element.id)">
             <ng-template
@@ -72,7 +74,9 @@
           *matCellDef="let element; let i = dataIndex"
           [ngClass]="column.getNgClass?.(element, column)"
         >
-          <span class="app-table__mobile-label">{{ column.header }}</span>
+          <span class="app-table__mobile-label">{{
+            column.header | translate
+          }}</span>
           <div
             class="app-flex-wrapper"
             [style]="justify(column)"
@@ -86,7 +90,9 @@
           *matCellDef="let element; let i = dataIndex"
           [ngClass]="column.getNgClass?.(element, column)"
         >
-          <span class="app-table__mobile-label">{{ column.header }}</span>
+          <span class="app-table__mobile-label">{{
+            column.header | translate
+          }}</span>
           <div class="app-flex-wrapper" [style]="justify(column)">
             <i [ngClass]="column.getIconClass(element, column)"></i
             ><span>{{ getDefaultValue(column, element, i) }}</span>
@@ -114,7 +120,9 @@
           [ngClass]="column.getNgClass?.(element, column)"
           [attr.data-value]="getDefaultValue(column, element, i)"
         >
-          <span class="app-table__mobile-label">{{ column.header }}</span>
+          <span class="app-table__mobile-label">{{
+            column.header | translate
+          }}</span>
           <a
             *ngIf="!shouldShowText(column, element)"
             [href]="column.getLink?.(element, column)"
@@ -206,7 +214,9 @@
         [ngClass]="column.getNgClass?.('', column)"
       >
         @if (column.footer) {
-        <span class="app-table__mobile-label">{{ column.header }}</span>
+        <span class="app-table__mobile-label">{{
+          column.header | translate
+        }}</span>
         @if (column.getLink) {
         <a
           [href]="column.getLink(null, column)"
@@ -229,8 +239,10 @@
       matColumnDef="{{ column.columnDef }}"
     >
       <mat-header-cell *matHeaderCellDef [style]="justify(column)">
-        <span class="app-table__mobile-label">{{ column.header }}</span>
-        <span *ngIf="column.subHeader">{{ column.subHeader }}</span>
+        <span class="app-table__mobile-label">{{
+          column.header | translate
+        }}</span>
+        <span *ngIf="column.subHeader">{{ column.subHeader | translate }}</span>
       </mat-header-cell>
     </ng-container>
 

@@ -24,7 +24,9 @@
 
       <ng-container *ngIf="column.getIconClass; else defaultCell">
         <mat-cell *matCellDef="let element; let i = dataIndex">
-          <span class="app-table__mobile-label">{{ column.header }}</span>
+          <span class="app-table__mobile-label">{{
+            column.header | translate
+          }}</span>
           <div class="app-flex-wrapper">
             <i [ngClass]="column.getIconClass(element, column)"></i
             ><span
@@ -44,7 +46,9 @@
           *matCellDef="let element; let i = dataIndex"
           [attr.data-value]="getDefaultValue(column, element, i)"
         >
-          <span class="app-table__mobile-label">{{ column.header }}</span>
+          <span class="app-table__mobile-label">{{
+            column.header | translate
+          }}</span>
           <span [matTooltip]="column.getTooltip?.(element, column) ?? ''">
             {{ getDefaultValue(column, element, i) }}
           </span>
