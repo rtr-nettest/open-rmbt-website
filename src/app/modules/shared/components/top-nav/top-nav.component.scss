@@ -107,7 +107,7 @@
   display: inline-flex;
   border: 1px solid white;
 
-  &:last-child {
+  &:last-child:not(:only-child) {
     margin-left: rem(16);
   }
 }

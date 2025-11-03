@@ -42,7 +42,7 @@
         mat-stroked-button
         class="app-button app-button--bold"
         [tabIndex]="submenuOpen ? -1 : 0"
-        >{{ btn.label }}</a
+        >{{ btn.label | translate }}</a
       >
       }
     </nav>
@@ -174,13 +174,7 @@
         (keydown.tab)="hideSubmenu()"
         [tabIndex]="mobileSubmenuOpen ? 0 : -1"
       >
-        <img
-          src="/assets/images/mailto.svg"
-          alt="{{
-            'mailto:netztest@rtr.at?subject=Supportanfrage%20RTR-Netztest%20%28Web%29'
-              | translate
-          }}"
-        />
+        <img src="/assets/images/mailto.svg" alt="{{ 'Email' | translate }}" />
       </a>
     </li>
   </ul>
