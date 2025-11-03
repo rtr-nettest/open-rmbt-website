@@ -124,6 +124,10 @@ export class TableComponent implements OnInit, OnChanges {
     return this.toString(value, column)
   }
 
+  getRowId(row: any): string {
+    return `item-${row.id || row.open_test_uuid}`
+  }
+
   toString(value: any, column: ITableColumn): string {
     const date = Date.parse(value)
     if (typeof value === "number") {
@@ -166,7 +170,7 @@ export class TableComponent implements OnInit, OnChanges {
     return (
       this.data?.content
         ?.filter((el) => el.loopUuid === elementId)
-        .map((el) => "item-" + el.id)
+        .map((el) => this.getRowId(el))
         .join(" ") || null
     )
   }
