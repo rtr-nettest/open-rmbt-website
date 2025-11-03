@@ -3,6 +3,7 @@
   [routerLink]="routerLink"
   class="app-card"
   [class.app-card--primary]="primary"
+  aria-label="{{ ariaLabel | translate }}"
 >
   <ng-container *ngTemplateOutlet="card"></ng-container>
 </a>
@@ -12,6 +13,7 @@
   class="app-card"
   [class.app-card--primary]="primary"
   target="_blank"
+  aria-label="{{ ariaLabel | translate }}"
 >
   <ng-container *ngTemplateOutlet="card"></ng-container>
 </a>

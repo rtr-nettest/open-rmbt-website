@@ -436,6 +436,7 @@
   "port": "Testserver port",
   "Position": "Position",
   "preferred_test_type": "Preferred Test Type",
+  "Press 'Enter' to start test or 'T' to go to the top of the page": "Press \"Enter\" to start test or \"T\" to go to the top of the page",
   "print": "Print",
   "Privacy Policy and Terms of Use": "Privacy Policy and Terms of Use",
   "privacy": "Privacy",

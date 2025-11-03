@@ -17,4 +17,11 @@ export class CardButtonComponent {
   @Input() mobileLink?: string
   @Input() routerLink?: string
   @Input() url?: string
+
+  get ariaLabel(): string {
+    const action = this.primary
+      ? `Press 'Enter' to start test or 'T' to go to the top of the page`
+      : ""
+    return action
+  }
 }

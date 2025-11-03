@@ -208,6 +208,11 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
       this.router.navigate([this.i18nStore.activeLang, ERoutes.OPEN_DATA])
     } else if (event.key === "s") {
       this.router.navigate([this.i18nStore.activeLang, ERoutes.TEST])
+    } else if (event.key === "t") {
+      const skipLink = document.getElementById("skipLink")
+      if (skipLink) {
+        skipLink.focus()
+      }
     }
   }
 }
