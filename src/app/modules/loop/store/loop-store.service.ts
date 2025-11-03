@@ -58,7 +58,7 @@ export class LoopStoreService {
     if (!singleTestDuration) {
       return null
     }
-    return Date.now() + singleTestDuration * this.maxTestsAllowed()
+    return Date.now() + singleTestDuration * (this.maxTestsAllowed() > 0 ? this.maxTestsAllowed() - 1 : 0)
   })
   isCertifiedMeasurement = signal<boolean>(false)
   lastTestFinishedAt = signal<number>(0)
