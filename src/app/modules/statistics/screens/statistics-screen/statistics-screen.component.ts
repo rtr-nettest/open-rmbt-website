@@ -235,7 +235,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
             duration,
             end_date,
           } = this.store.filters
-          let params = `pinned=true&model=${device.model}`
+          let params = `pinned=true&model=${encodeURIComponent(device.model)}`
           if (type == "mobile") {
             params += `&mobile_provider_name=*`
             if (
