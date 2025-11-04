@@ -94,6 +94,10 @@ export class Step3Component extends TestScreenComponent {
         )
         this.service.triggerNextTest()
       })
+    this.scheduleLoop()
+  }
+
+  protected watchFinishedTests() {
     this.lastTestFinishedAt$
       .pipe(
         filter((v) => v > 0),
@@ -111,7 +115,6 @@ export class Step3Component extends TestScreenComponent {
         }
         this.setHistory()
       })
-    this.scheduleLoop()
   }
 
   private async setHistory() {
@@ -131,6 +134,7 @@ export class Step3Component extends TestScreenComponent {
       maxTestsAllowed: this.loopStore.maxTestsAllowed(),
       testIntervalMinutes: this.loopStore.testIntervalMinutes(),
     })
+    this.watchFinishedTests()
   }
 
   override abortTest(): void {

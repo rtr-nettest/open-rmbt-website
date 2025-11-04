@@ -91,5 +91,6 @@ export class Step4Component extends LoopScreenComponent {
       maxTestsAllowed: environment.certifiedDefaults.default_tests,
       testIntervalMinutes: environment.certifiedDefaults.default_delay,
     })
+    this.watchFinishedTests()
   }
 }
