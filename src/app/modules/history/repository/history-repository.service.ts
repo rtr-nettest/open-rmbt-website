@@ -20,6 +20,12 @@ import { HistoryStore } from "../store/history.store"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
+export type GetHistoryOptions = {
+  paginator?: IPaginator
+  loopUuid?: string
+  includeFailed?: boolean
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -66,10 +72,8 @@ export class HistoryRepositoryService {
     return response
   }
 
-  async getHistory(
-    options: { paginator?: IPaginator; loopUuid?: string } = {}
-  ) {
-    const { paginator, loopUuid } = options
+  async getHistory(options: GetHistoryOptions = {}) {
+    const { paginator, loopUuid, includeFailed } = options
     const uuid = localStorage.getItem(UUID)
     if (!uuid) {
       return null
@@ -80,7 +84,7 @@ export class HistoryRepositoryService {
       uuid,
       result_offset: paginator?.offset,
       include_failed_tests: environment.features.history_filter
-        ? this.historyStore.includeFailed()
+        ? includeFailed
         : true,
     }
     if (paginator?.limit) {

@@ -45,10 +45,11 @@ export class LoopResultScreenComponent extends HistoryScreenComponent {
       return []
     }
     const retVal = firstValueFrom(
-      this.service.getFullMeasurementHistory(
-        this.store.paginator(),
-        this.loopStore.loopUuid()!
-      )
+      this.service.getFullMeasurementHistory({
+        paginator: this.store.paginator(),
+        loopUuid: this.loopStore.loopUuid()!,
+        includeFailed: true,
+      })
     )
     this.store.paginator.set({
       offset: this.store.paginator().offset + this.dataLimit,

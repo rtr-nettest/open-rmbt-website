@@ -17,7 +17,10 @@ import { EMeasurementStatus } from "../../test/constants/measurement-status.enum
 import { TestVisualizationState } from "../../test/dto/test-visualization-state.dto"
 import { IPaginator } from "../../tables/interfaces/paginator.interface"
 import { ITestResultRequest } from "../interfaces/measurement-result.interface"
-import { HistoryRepositoryService } from "../repository/history-repository.service"
+import {
+  GetHistoryOptions,
+  HistoryRepositoryService,
+} from "../repository/history-repository.service"
 import { TestStore } from "../../test/store/test.store"
 import { HistoryStore } from "../store/history.store"
 import { I18nStore } from "../../i18n/store/i18n.store"
@@ -171,6 +174,7 @@ export class HistoryService {
           limit: environment.loopModeDefaults.max_tests,
         },
         loopUuid,
+        includeFailed: true,
       })
     ).pipe(
       take(1),
@@ -186,11 +190,18 @@ export class HistoryService {
     )
   }
 
-  getFullMeasurementHistory(paginator: IPaginator, loopUuid?: string) {
-    if (!paginator.limit) {
+  getFullMeasurementHistory(options: GetHistoryOptions) {
+    const { paginator, loopUuid, includeFailed } = options
+    if (!paginator?.limit) {
       return of([])
     }
-    return from(this.repo.getHistory({ paginator, loopUuid })).pipe(
+    return from(
+      this.repo.getHistory({
+        paginator,
+        loopUuid,
+        includeFailed,
+      })
+    ).pipe(
       take(1),
       map((history) => {
         const mergedHistory = [...this.historyStore.history$.value, ...history]
