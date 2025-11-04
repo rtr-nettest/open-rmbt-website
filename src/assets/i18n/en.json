@@ -560,6 +560,7 @@
   "testul_if_bytes_upload": "Data if_ul (ul-test)",
   "The configuration has been saved.": "The configuration has been saved.",
   "The measurement is not configured. Please fill the form and try again.": "The measurement is not configured. Please fill the form and try again.",
+  "The test has finished. Showing the results page.": "The test has finished. Showing the results page.",
   "Thou_abbr": "k",
   "Time span": "Time span",
   "time_dl_ms": "Rel. start download",

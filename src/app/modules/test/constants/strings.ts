@@ -9,3 +9,5 @@ export const UUID = "RMBTuuid"
 export const RMBTTermsV6 = "RMBTTermsV6"
 export const TERMS_VERSION = "RMBTTermsVersion"
 export const RESULT_DATE_FORMAT = "YYYY-MM-DD HH:mm:ss"
+export const TEST_FINISHED_ANNOUNCEMENT =
+  "The test has finished. Showing the results page."

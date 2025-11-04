@@ -32,6 +32,7 @@ import {
   ERROR_OCCURED,
   ERROR_OCCURED_SENDING_RESULTS,
   TERMS_VERSION,
+  TEST_FINISHED_ANNOUNCEMENT,
 } from "../../constants/strings"
 import { MessageService } from "../../../shared/services/message.service"
 import { SpacerComponent } from "../../../shared/components/spacer/spacer.component"
@@ -55,6 +56,7 @@ import { IBreadcrumb } from "../../../shared/interfaces/breadcrumb.interface"
 import { CertifiedBreadcrumbsComponent } from "../../../certified/components/certified-breadcrumbs/certified-breadcrumbs.component"
 import { ConnectivityService } from "../../services/connectivity.service"
 import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
+import { AnnouncerService } from "../../../shared/services/announcer.service"
 
 export const imports = [
   AsyncPipe,
@@ -87,6 +89,7 @@ export const imports = [
 })
 export class TestScreenComponent extends SeoComponent implements OnInit {
   addMedian = false
+  announcerService = inject(AnnouncerService)
   breadcrumbs = signal<IBreadcrumb[] | null>(null)
   connectivity = inject(ConnectivityService)
   currentRoute: string | null = null
@@ -162,6 +165,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
 
   override ngOnDestroy(): void {
     this.store.isRunning.set(false)
+    this.announcerService.assertive(TEST_FINISHED_ANNOUNCEMENT)
     super.ngOnDestroy()
   }
 

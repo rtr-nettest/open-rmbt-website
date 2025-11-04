@@ -27,3 +27,11 @@
     height: auto;
   }
 }
+
+.app-container {
+  &--sr-only {
+    position: absolute;
+    top: -9999em;
+    background: white;
+  }
+}

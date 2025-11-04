@@ -1,0 +1,10 @@
+@if (message$ | async; as message) {
+<div
+  class="app-container--sr-only"
+  role="alert"
+  aria-live="{{ message.type }}"
+  aria-atomic="true"
+>
+  {{ message.text | translate }}
+</div>
+}

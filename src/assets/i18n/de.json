@@ -560,6 +560,7 @@
   "testul_if_bytes_upload": "Daten If_Ul (Ul-Test)",
   "The configuration has been saved.": "Die Änderungen wurden gespeichert.",
   "The measurement is not configured. Please fill the form and try again.": "Die Messung ist nicht konfiguriert. Bitte füllen Sie das Formular aus und versuchen Sie es erneut.",
+  "The test has finished. Showing the results page.": "Der Test wurde abgeschlossen. Die Ergebnisse werden angezeigt.",
   "Thou_abbr": "Tsd",
   "Time span": "Zeitraum",
   "time_dl_ms": "Rel. Startzeitpunkt Download",

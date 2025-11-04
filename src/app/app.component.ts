@@ -7,10 +7,17 @@ import { AsyncPipe } from "@angular/common"
 import { SettingsService } from "./modules/shared/services/settings.service"
 import { TranslatePipe } from "./modules/i18n/pipes/translate.pipe"
 import { Meta } from "@angular/platform-browser"
+import { AnnouncerComponent } from "./modules/shared/components/announcer/announcer.component"
 
 @Component({
   selector: "app-root",
-  imports: [AsyncPipe, RouterOutlet, TranslatePipe, MatProgressBarModule],
+  imports: [
+    AsyncPipe,
+    RouterOutlet,
+    TranslatePipe,
+    MatProgressBarModule,
+    AnnouncerComponent,
+  ],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
 })
