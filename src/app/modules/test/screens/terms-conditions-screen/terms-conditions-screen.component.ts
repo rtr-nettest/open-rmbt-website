@@ -11,6 +11,7 @@ import { TERMS_VERSION } from "../../constants/strings"
 import { SettingsService } from "../../../shared/services/settings.service"
 import { MainStore } from "../../../shared/store/main.store"
 import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
+import { SkipLinkComponent } from "../../../shared/components/skip-link/skip-link.component"
 
 @Component({
   selector: "app-terms-conditions-screen",
@@ -21,6 +22,7 @@ import { MainContentComponent } from "../../../shared/components/main-content/ma
     AsyncPipe,
     MatButtonModule,
     MainContentComponent,
+    SkipLinkComponent,
   ],
 })
 export class TermsConditionsScreenComponent
@@ -37,6 +39,10 @@ export class TermsConditionsScreenComponent
   termsText = ""
   nextRoute = ERoutes.TEST
   currentRoute = ERoutes.HOME
+
+  get exitLink() {
+    return `/${this.i18nStore.activeLang}/${this.currentRoute}`
+  }
 
   ngOnInit(): void {
     const searchParams =

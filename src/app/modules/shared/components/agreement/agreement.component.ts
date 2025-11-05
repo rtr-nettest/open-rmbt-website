@@ -39,6 +39,7 @@ export class AgreementComponent implements OnInit {
       if (Math.abs(articleY) > articleHeight) {
         this.isRead = true
         clearInterval(interval)
+        document.getElementById("cancelButton")?.focus()
       }
     }, 300)
   }

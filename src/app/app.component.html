@@ -1,9 +1,9 @@
 <app-announcer></app-announcer>
-<nav attr.aria-label="{{ 'Skip to main content' | translate }}">
-  <a id="skipLink" [href]="skipLink" class="app-link--sr-only">{{
-    "Skip to main content" | translate
-  }}</a>
-</nav>
+<app-skip-link
+  linkId="skipLink"
+  label="Skip to main content"
+  [href]="skipLink"
+></app-skip-link>
 @if(inProgress$ | async) {
 <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 } @if(settings$ | async) {

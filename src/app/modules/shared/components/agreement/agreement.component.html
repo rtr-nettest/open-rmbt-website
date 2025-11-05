@@ -3,10 +3,11 @@
   <div class="app-article" [innerHTML]="text()"></div>
   <app-scroll-bottom [isVisible]="!isRead"></app-scroll-bottom>
   <footer class="app-footer">
-    <button mat-button color="primary" (click)="cancel()">
+    <button id="cancelButton" mat-button color="primary" (click)="cancel()">
       {{ "Cancel" | translate }}
     </button>
     <button
+      id="agreeButton"
       [disabled]="!isRead"
       mat-flat-button
       type="submit"

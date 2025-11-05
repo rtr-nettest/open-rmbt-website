@@ -8,6 +8,7 @@ import { SettingsService } from "./modules/shared/services/settings.service"
 import { TranslatePipe } from "./modules/i18n/pipes/translate.pipe"
 import { Meta } from "@angular/platform-browser"
 import { AnnouncerComponent } from "./modules/shared/components/announcer/announcer.component"
+import { SkipLinkComponent } from "./modules/shared/components/skip-link/skip-link.component"
 
 @Component({
   selector: "app-root",
@@ -17,6 +18,7 @@ import { AnnouncerComponent } from "./modules/shared/components/announcer/announ
     TranslatePipe,
     MatProgressBarModule,
     AnnouncerComponent,
+    SkipLinkComponent,
   ],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
