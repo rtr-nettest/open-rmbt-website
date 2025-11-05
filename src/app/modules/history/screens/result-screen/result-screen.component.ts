@@ -57,6 +57,7 @@ import { ActionButtonsComponent } from "../../components/action-buttons/action-b
 import { MIN_ACCURACY_FOR_SHOWING_MAP } from "../../../opendata/constants/recent-measurements-columns"
 import { QoeBarComponent } from "../../components/qoe-bar/qoe-bar.component"
 import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
+import { deHtmlize } from "../../../shared/util/string"
 
 @Component({
   selector: "app-result-screen",
@@ -281,6 +282,24 @@ export class ResultScreenComponent extends SeoComponent {
       " " +
       this.i18nStore.translate("millis")
     )
+  }
+
+  getRowLabel: (row: any) => string = (row: any) => {
+    if (!row.a11yLabel) {
+      let value = deHtmlize(row.value)
+      if (value == "[object Object]") {
+        if (row.value["quality"] !== undefined) {
+          value = Math.min(100, Math.round(row.value["quality"] * 100)) + "%"
+        } else {
+          value = JSON.stringify(row.value)
+        }
+      }
+      row.a11yLabel = `${this.i18nStore.translate("Row details")} - ${deHtmlize(
+        row.title
+      )}: ${value}`
+    }
+
+    return row.a11yLabel
   }
 
   private getBasicResults(

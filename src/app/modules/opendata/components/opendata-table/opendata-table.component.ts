@@ -35,8 +35,9 @@ export class OpendataTableComponent extends TableComponent {
 
   override ngOnInit() {
     for (let i = 0; i < this.columns.length; i++) {
-      this.displayedColumns.push(this.columns[i].columnDef)
+      this.displayedColumns.push(this.columns[i])
     }
+    this.displayedColumnDefs = this.displayedColumns.map((col) => col.columnDef)
   }
 
   select(evt: FocusEvent) {

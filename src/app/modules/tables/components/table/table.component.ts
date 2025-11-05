@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   EventEmitter,
+  input,
   Input,
   OnChanges,
   OnInit,
@@ -31,6 +32,7 @@ import { DynamicComponentDirective } from "../../../shared/directives/dynamic-co
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { APP_DATE_TIME_FORMAT } from "../../../shared/adapters/app-date.adapter"
+import { deHtmlize } from "../../../shared/util/string"
 
 @Component({
   selector: "app-table",
@@ -66,6 +68,27 @@ export class TableComponent implements OnInit, OnChanges {
   @Input({ required: true }) sort?: ISort
   @Input() subHeaderColumns: ITableColumn[] = []
   @Input() footerColumns: string[] = []
+  rowA11yLabelFunc = input<(row: any) => string>((row: any) => {
+    if (!row.a11yLabel) {
+      const labels = this.displayedColumns
+        .reduce((acc, col, i) => {
+          let value = deHtmlize(this.getDefaultValue(col, row, i))
+          if (value === "[object Object]") {
+            value = JSON.stringify(row[col.key || col.columnDef])
+          }
+          if (col.header && value && value !== "-") {
+            acc.push(`${this.i18nStore.translate(col.header)}: ${value}`)
+          }
+          return acc
+        }, [] as string[])
+        .join(", ")
+        .trim()
+      row.a11yLabel = labels.length
+        ? `${this.i18nStore.translate("Row details")} - ` + labels
+        : ""
+    }
+    return row.a11yLabel
+  })
 
   @Output() onRowClick = new EventEmitter<any>()
   @Output() onRowShiftClick = new EventEmitter<any>()
@@ -74,13 +97,18 @@ export class TableComponent implements OnInit, OnChanges {
   @ViewChild(MatTable) table?: MatTable<any>
 
   AVAILABLE_SIZES = [10, 20, 50, 100]
-  displayedColumns: string[] = []
+  displayedColumns: ITableColumn[] = []
+  displayedColumnDefs: string[] = []
   displayedSubHeaderColumns: string[] = []
   filters: ITableColumn[] = []
 
   ngClass = computed(() =>
     this.tableClassNames?.length ? this.tableClassNames : "app-table--default"
   )
+
+  get getRowLabel() {
+    return this.rowA11yLabelFunc()
+  }
 
   constructor(
     private tableSortService: TableSortService,
@@ -96,9 +124,8 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.displayedColumns = this.columns
-      ?.filter((c) => !c.isExpandable)
-      .map((col) => col.columnDef)
+    this.displayedColumns = this.columns?.filter((c) => !c.isExpandable)
+    this.displayedColumnDefs = this.displayedColumns.map((col) => col.columnDef)
     this.displayedSubHeaderColumns = this.subHeaderColumns?.map(
       (col) => col.columnDef
     )
@@ -122,8 +149,15 @@ export class TableComponent implements OnInit, OnChanges {
     return this.toString(value, column)
   }
 
-  getRowId(row: any): string {
-    return `item-${row.id || row.open_test_uuid}`
+  getRowId(index: number, row: any): string {
+    return `item-${
+      this.identifyField ||
+      row.id ||
+      row.open_test_uuid ||
+      row.title ||
+      index ||
+      Date.now()
+    }`
   }
 
   toString(value: any, column: ITableColumn): string {
@@ -156,10 +190,6 @@ export class TableComponent implements OnInit, OnChanges {
     return !column.getLink || !!isLinkDisabled
   }
 
-  identify(index: number, item: any) {
-    return item[this.identifyField || "id"]
-  }
-
   isElementExpanded(elementId: number | string): boolean {
     return this.expandedElements.includes(elementId)
   }
@@ -168,7 +198,7 @@ export class TableComponent implements OnInit, OnChanges {
     return (
       this.data?.content
         ?.filter((el) => el.loopUuid === elementId)
-        .map((el) => this.getRowId(el))
+        .map((el, i) => this.getRowId(i, el))
         .join(" ") || null
     )
   }

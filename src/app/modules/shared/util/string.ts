@@ -18,3 +18,14 @@ export function pad(number: number, length: number) {
 
   return str
 }
+
+export function deHtmlize(text: string) {
+  try {
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(text, "text/html")
+    const textContent = doc.body.textContent || ""
+    return textContent.trim()
+  } catch (_) {
+    return text
+  }
+}

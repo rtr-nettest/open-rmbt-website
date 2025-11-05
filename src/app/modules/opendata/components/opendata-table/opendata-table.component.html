@@ -7,7 +7,7 @@
   <mat-table
     [dataSource]="data.content"
     multiTemplateDataRows
-    [trackBy]="identify"
+    [trackBy]="getRowId"
     (contentChanged)="onContentChange.emit()"
   >
     @for (column of columns; track column.columnDef) {
@@ -57,7 +57,7 @@
     }
 
     <mat-row
-      *matRowDef="let row; columns: displayedColumns"
+      *matRowDef="let row; columns: displayedColumnDefs"
       tabindex="0"
       class="mat-row--clickable"
       (click)="onRowClickHandler($event, row)"
@@ -66,12 +66,13 @@
       (mouseover)="select($event)"
       (blur)="unselect($event)"
       (mouseout)="unselect($event)"
+      [attr.aria-label]="getRowLabel(row)"
     >
     </mat-row>
 
     <mat-header-row
       tabindex="0"
-      *matHeaderRowDef="displayedColumns; sticky: true"
+      *matHeaderRowDef="displayedColumnDefs; sticky: true"
     ></mat-header-row>
   </mat-table>
   }

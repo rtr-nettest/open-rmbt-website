@@ -5,7 +5,7 @@
     matSort
     matSortDisableClear
     multiTemplateDataRows
-    [trackBy]="identify"
+    [trackBy]="getRowId"
     (matSortChange)="changeSort($event)"
     [matSortActive]="sort.active"
     [matSortDirection]="sort.direction"
@@ -217,8 +217,8 @@
     }
 
     <mat-row
-      *matRowDef="let row; columns: displayedColumns"
-      [id]="getRowId(row)"
+      *matRowDef="let row; columns: displayedColumnDefs"
+      [id]="getRowId(0, row)"
       [class.mat-row--clickable]="rowsAreCLickable === true"
       [class.mat-row--collapsed]="
         row.groupHeader ? !isElementExpanded(row.id) : null
@@ -228,6 +228,7 @@
       "
       [attr.aria-expanded]="row.groupHeader ? isElementExpanded(row.id) : null"
       [attr.aria-controls]="row.groupHeader ? elementControls(row.id) : null"
+      [attr.aria-label]="getRowLabel(row)"
       [class.mat-row--hidden]="row.hidden === true"
       [class.mat-row--visible]="row.hidden === false"
       [class.mat-row--group-header]="row.groupHeader"
@@ -247,7 +248,7 @@
     } @if (!shouldHideHeader) {
     <mat-header-row
       tabindex="0"
-      *matHeaderRowDef="displayedColumns; sticky: true"
+      *matHeaderRowDef="displayedColumnDefs; sticky: true"
     ></mat-header-row>
 
     @if (displayedSubHeaderColumns.length) {

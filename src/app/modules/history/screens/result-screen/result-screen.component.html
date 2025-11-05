@@ -47,6 +47,7 @@
         [sort]="sort"
         [shouldHideHeader]="true"
         [tableClassNames]="['app-table--bordered']"
+        [rowA11yLabelFunc]="getRowLabel"
         aria-live="polite"
       ></app-table>
     </div>
@@ -59,6 +60,7 @@
         [sort]="sort"
         [shouldHideHeader]="true"
         [tableClassNames]="['app-table--bordered']"
+        [rowA11yLabelFunc]="getRowLabel"
         aria-live="polite"
       ></app-table>
     </div>
@@ -140,6 +142,7 @@
           [shouldHideHeader]="true"
           [tableClassNames]="['app-table--bordered']"
           [sort]="sort"
+          [rowA11yLabelFunc]="getRowLabel"
         ></app-table>
         } @else {
         <app-table
@@ -148,6 +151,7 @@
           [shouldHideHeader]="true"
           [tableClassNames]="['app-table--bordered']"
           [sort]="sort"
+          [rowA11yLabelFunc]="getRowLabel"
         ></app-table>
         <button
           (click)="showFullDetails.set(true)"
@@ -174,6 +178,7 @@
         [shouldHideHeader]="true"
         [tableClassNames]="['app-table--bordered']"
         [sort]="sort"
+        [rowA11yLabelFunc]="getRowLabel"
       ></app-table>
     </div>
     } } @else if (loading()) {
