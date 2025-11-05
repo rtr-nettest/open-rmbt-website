@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, input } from "@angular/core"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { arrowRotate } from "../../../shared/animations/arrow-rotate.animation"
 import { expandVertically } from "../../../shared/animations/detail-expand.animation"
-import { NgClass, NgFor, NgIf } from "@angular/common"
+import { NgClass } from "@angular/common"
 import { MatButtonModule } from "@angular/material/button"
 import { MatTableModule } from "@angular/material/table"
 import { MatTooltipModule } from "@angular/material/tooltip"
@@ -14,8 +14,6 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
   selector: "app-opendata-table",
   animations: [arrowRotate, expandVertically],
   imports: [
-    NgFor,
-    NgIf,
     NgClass,
     MatButtonModule,
     MatTableModule,
