@@ -3,9 +3,6 @@
   id="testprogress"
   class="app-progressbar app-progressbar--waiting"
   role="progressbar"
-  [attr.aria-valuenow]="100 - waitingProgress()"
-  aria-valuemin="0"
-  aria-valuemax="100"
   style="min-width: 3em"
   [style.width.%]="100 - waitingProgress()"
 >
@@ -16,9 +13,6 @@
   id="testprogress"
   class="app-progressbar"
   role="progressbar"
-  [attr.aria-valuenow]="progress()"
-  aria-valuemin="0"
-  aria-valuemax="100"
   style="min-width: 3em"
   [style.width.%]="progress()"
 >

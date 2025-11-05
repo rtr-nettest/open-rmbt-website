@@ -9,6 +9,7 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { ITestVisualizationState } from "../../interfaces/test-visualization-state.interface"
 import { roundToSignificantDigits, speedLog } from "../../../shared/util/math"
 import { TestService } from "../../services/test.service"
+import { PROGRESS_ANNOUNCEMENT_RATE } from "../../constants/numbers"
 
 @Component({
   selector: "app-gauge",
@@ -45,7 +46,6 @@ export class GaugeComponent {
   }
 
   private drawLoop(phaseState: ITestPhaseState) {
-    const locale = this.i18nStore.activeLang
     let { phase: status, progress, counter } = phaseState
     let barSelector = null
     let directionSymbol = null
@@ -54,7 +54,7 @@ export class GaugeComponent {
     const percents = document.querySelector("#percents")
     if (percents) {
       percents.textContent = fullProgress + "\u200a%"
-      if (fullProgress % 10 == 0) {
+      if (fullProgress % PROGRESS_ANNOUNCEMENT_RATE == 0) {
         this.measurementProgress = percents.textContent
       }
     }

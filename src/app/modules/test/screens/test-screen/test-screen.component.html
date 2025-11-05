@@ -95,13 +95,13 @@
 <ng-template #loopHeader>
   @if ((isLoopModeEnabled$ | async) === true) { @if (loopCount$ | async; as
   loopCount) {
-  <div class="app-wrapper">
+  <div class="app-wrapper" aria-live="polite">
     @if (loopWaiting() !== true) {
-    <h2 class="app-title" aria-live="polite">
+    <h2 class="app-title">
       {{ ("Measurement" | translate) + " " + loopCount + "/" + maxLoopCount() }}
     </h2>
     } @else {
-    <h2 class="app-title" aria-live="polite">
+    <h2 class="app-title">
       {{
         "Result of measurement %0 - waiting"
           | translate

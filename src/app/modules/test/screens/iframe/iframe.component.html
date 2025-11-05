@@ -2,7 +2,7 @@
   <a [href]="'/' + activeLang" class="app-logo" target="_blank">
     <img
       src="/assets/images/logo-header.svg"
-      [alt]="'RTR-Nettest' | translate"
+      alt="{{ 'RTR-Nettest' | translate }}"
     />
   </a>
   @if (warning(); as warning) {

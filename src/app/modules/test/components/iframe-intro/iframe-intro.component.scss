@@ -7,7 +7,7 @@
 }
 
 .app-li {
-  color: #999;
+  color: #545454;
   display: inline-block;
   &:not(:last-of-type)::after {
     content: "·";
@@ -18,5 +18,5 @@
 }
 
 .app-link {
-  color: #999;
+  color: #545454;
 }

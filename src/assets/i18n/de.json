@@ -608,6 +608,7 @@
   "voip": "VoIP",
   "WAIT": "Warte auf Server",
   "Waiting": "Warte",
+  "Waiting progress": "Wartefortschritt",
   "Waiting time (in minutes) between two tests in loop mode": "Wartezeit (in Minuten) zwischen zwei Tests im Wiederholungsmodus",
   "Waiting time": "Wartezeit",
   "web": "Web",

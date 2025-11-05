@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   inject,
   input,
   signal,
@@ -21,6 +22,8 @@ import { MatButtonModule } from "@angular/material/button"
 import { BasicNetworkInfo } from "../../dto/basic-network-info.dto"
 import { TestVisualizationState } from "../../dto/test-visualization-state.dto"
 import { ITestVisualizationState } from "../../interfaces/test-visualization-state.interface"
+import { AnnouncerService } from "../../../shared/services/announcer.service"
+import { PROGRESS_ANNOUNCEMENT_RATE } from "../../constants/numbers"
 
 const DEFAULT_VALUE = "-"
 
@@ -38,6 +41,7 @@ const DEFAULT_VALUE = "-"
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IframeTestComponent {
+  announcerService = inject(AnnouncerService)
   i18nStore = inject(I18nStore)
   lonlatPipe = inject(LonlatPipe)
   testService = inject(TestService)
@@ -126,8 +130,36 @@ export class IframeTestComponent {
   waitingProgress = input(0)
   waitingProgressMs = input(0)
   estimatedEndTime = input<Date | null>(null)
+  announcedWaitingProgress: number | null = null
 
   private parentWindowMessage = ""
+
+  constructor() {
+    effect(() => {
+      if (this.isWaitingForNextTest()) {
+        const progress =
+          Math.floor(this.waitingProgress() / PROGRESS_ANNOUNCEMENT_RATE) *
+          PROGRESS_ANNOUNCEMENT_RATE
+        if (
+          progress % PROGRESS_ANNOUNCEMENT_RATE === 0 &&
+          progress !== this.announcedWaitingProgress
+        ) {
+          this.announcedWaitingProgress = progress
+          this.announcerService.polite(
+            this.i18nStore.translate("Waiting progress") + " " + progress + "%"
+          )
+        }
+      } else if (this.progress() % PROGRESS_ANNOUNCEMENT_RATE === 0) {
+        this.announcedWaitingProgress = null
+        this.announcerService.polite(
+          this.i18nStore.translate("Test progress") +
+            " " +
+            this.progress() +
+            "%"
+        )
+      }
+    })
+  }
 
   notifyParent(state: ITestVisualizationState) {
     if (parent.window && typeof parent.window.postMessage === "function") {
