@@ -21,7 +21,11 @@ export class CertifiedExportService extends HistoryExportService {
         responseType: "blob",
         observe: "response",
       })
-      .pipe(tap(this.saveFile("pdf")), catchError(this.handleError))
+      .pipe(
+        tap(this.saveFile("pdf")),
+        catchError(this.handleError),
+        finalize(() => this.mainStore.inProgress$.next(false))
+      )
   }
 
   openCertifiedPdf(loopUuid?: string | null) {

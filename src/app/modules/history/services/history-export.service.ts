@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core"
-import { catchError, concatMap, of, tap } from "rxjs"
+import { catchError, concatMap, finalize, of, tap } from "rxjs"
 import { HttpClient, HttpParams } from "@angular/common/http"
 import saveAs from "file-saver"
 import { I18nStore } from "../../i18n/store/i18n.store"
@@ -44,7 +44,11 @@ export class HistoryExportService {
         responseType: "blob",
         observe: "response",
       })
-      .pipe(tap(this.saveFile(format)), catchError(this.handleError))
+      .pipe(
+        tap(this.saveFile(format)),
+        catchError(this.handleError),
+        finalize(() => this.mainStore.inProgress$.next(false))
+      )
   }
 
   quickPdfExport(results: any[]) {
@@ -73,7 +77,11 @@ export class HistoryExportService {
         responseType: "blob",
         observe: "response",
       })
-      .pipe(tap(this.saveFile("pdf")), catchError(this.handleError))
+      .pipe(
+        tap(this.saveFile("pdf")),
+        catchError(this.handleError),
+        finalize(() => this.mainStore.inProgress$.next(false))
+      )
   }
 
   protected saveFile = (format: string) => (data: any) => {
