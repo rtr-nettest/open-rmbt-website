@@ -1,6 +1,6 @@
 import { HttpInterceptorFn, HttpRequest } from "@angular/common/http"
 import { inject } from "@angular/core"
-import { catchError } from "rxjs"
+import { catchError, of } from "rxjs"
 import { MatSnackBar } from "@angular/material/snack-bar"
 import { NO_ERROR_HANDLING } from "../constants/strings"
 
@@ -49,7 +49,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       if (!req.headers.has(NO_ERROR_HANDLING)) {
         showFriendlyMessage(snackBar, req, err)
       }
-      return next(req)
+      return of(err)
     })
   )
 }
