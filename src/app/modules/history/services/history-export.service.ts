@@ -49,28 +49,26 @@ export class HistoryExportService {
 
   quickPdfExport(results: any[]) {
     const formdata = new FormData()
-    formdata.append(
-      "open_test_uuid",
-      results[0].openTestResponse?.["open_test_uuid"]
-    )
-    return this.exportAsPdf(results, this.quickPdfUrl, formdata)
+    const openTestUuid =
+      this.getExportParams("pdf", results).get("open_test_uuid") || ""
+    formdata.append("open_test_uuid", openTestUuid)
+    return this.exportAsPdf(this.quickPdfUrl, formdata)
   }
 
   slowPdfExport(results: any[]) {
-    return this.exportAsPdf(results, this.slowPdfUrl)
+    return this.exportAsPdf(
+      this.slowPdfUrl,
+      this.getExportParams("pdf", results)
+    )
   }
 
-  private exportAsPdf(
-    results: any[],
-    basePdfUrl: string,
-    httpParams?: HttpParams | FormData
-  ) {
+  private exportAsPdf(basePdfUrl: string, request: HttpParams | FormData) {
     if (!basePdfUrl) {
       return of(null)
     }
     this.mainStore.inProgress$.next(true)
     return this.http
-      .post(basePdfUrl, httpParams || this.getExportParams("pdf", results), {
+      .post(basePdfUrl, request, {
         headers: { Accept: "application/pdf" },
         responseType: "blob",
         observe: "response",
