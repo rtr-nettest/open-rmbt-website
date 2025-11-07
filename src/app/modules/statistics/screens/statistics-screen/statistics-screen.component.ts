@@ -148,7 +148,9 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
 
           if (type == "mobile") {
             if (provider) {
-              params += `&mobile_provider_name=${provider.name}`
+              params += `&mobile_provider_name=${encodeURIComponent(
+                provider.name
+              )}`
             }
             if (
               network_type_group &&
@@ -159,7 +161,7 @@ export class StatisticsScreenComponent extends SeoComponent implements OnInit {
             }
           } else {
             if (provider) {
-              params += `&provider_name=${provider.name}`
+              params += `&provider_name=${encodeURIComponent(provider.name)}`
             }
             if (type == "browser") {
               params += `&cat_technology=LAN`
