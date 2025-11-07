@@ -5,7 +5,7 @@
       <span>{{ "Ping" | translate }}:</span>
       @if (state.currentPhaseName === phases.PING) {
       <div class="app-spinner">
-        <mat-spinner></mat-spinner>
+        <mat-spinner aria-hidden="true"></mat-spinner>
       </div>
       } @if (state.currentPhaseName !== phases.PING && ping) {
       <span>
@@ -22,7 +22,7 @@
       <span>{{ "Download" | translate }}:</span>
       @if (state.currentPhaseName === phases.DOWN) {
       <div class="app-spinner">
-        <mat-spinner></mat-spinner>
+        <mat-spinner aria-hidden="true"></mat-spinner>
       </div>
       } @if (state.currentPhaseName !== phases.DOWN && download) {
       <span>
@@ -43,7 +43,7 @@
       @if ( state.currentPhaseName === phases.UP || state.currentPhaseName ===
       phases.INIT_UP ) {
       <div class="app-spinner">
-        <mat-spinner></mat-spinner>
+        <mat-spinner aria-hidden="true"></mat-spinner>
       </div>
       } @if ( state.currentPhaseName !== phases.UP && state.currentPhaseName !==
       phases.INIT_UP && upload ) {
