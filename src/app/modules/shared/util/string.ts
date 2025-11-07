@@ -29,3 +29,10 @@ export function deHtmlize(text: string) {
     return text
   }
 }
+
+export function capitalize(text: string) {
+  if (!text) {
+    return text
+  }
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}

@@ -57,7 +57,7 @@ import { ActionButtonsComponent } from "../../components/action-buttons/action-b
 import { MIN_ACCURACY_FOR_SHOWING_MAP } from "../../../opendata/constants/recent-measurements-columns"
 import { QoeBarComponent } from "../../components/qoe-bar/qoe-bar.component"
 import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
-import { deHtmlize } from "../../../shared/util/string"
+import { capitalize, deHtmlize } from "../../../shared/util/string"
 
 @Component({
   selector: "app-result-screen",
@@ -468,7 +468,7 @@ export class ResultScreenComponent extends SeoComponent {
       : value
     if (!searchable) {
       return {
-        title: this.i18nStore.translate(key),
+        title: capitalize(this.i18nStore.translate(key)),
         value: v,
       }
     }
@@ -480,7 +480,7 @@ export class ResultScreenComponent extends SeoComponent {
       : `${key}=${searchTerm || value}`
     const values = key === "time" ? v.split(" ") : [v]
     return {
-      title: this.i18nStore.translate(key),
+      title: capitalize(this.i18nStore.translate(key)),
       value: `<a href="/${this.i18nStore.activeLang}/${
         ERoutes.OPEN_DATA
       }?${search}${this.fragment ? `#${this.fragment}` : ""}">${
