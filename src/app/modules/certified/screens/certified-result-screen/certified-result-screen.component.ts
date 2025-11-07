@@ -30,7 +30,7 @@ export class CertifiedResultScreenComponent
     {
       label: "",
       icon: "filetype-pdf",
-      action: () => this.exporter.openCertifiedPdf(this.loopStore.loopUuid()),
+      action: () => this.exporter.exportCertifiedPdf(this.loopStore.loopUuid()),
     },
   ]
   override redirectUrl = `/${this.i18nStore.activeLang}/${ERoutes.CERTIFIED_1}`

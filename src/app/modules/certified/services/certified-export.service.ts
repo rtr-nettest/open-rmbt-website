@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core"
 import { HistoryExportService } from "../../history/services/history-export.service"
 import { CertifiedStoreService } from "../store/certified-store.service"
-import { catchError, finalize, map, of } from "rxjs"
+import { catchError, finalize, map, of, tap } from "rxjs"
 import { ECertifiedLocationType } from "../interfaces/certified-env-form.interface"
 
 @Injectable({
@@ -9,6 +9,20 @@ import { ECertifiedLocationType } from "../interfaces/certified-env-form.interfa
 })
 export class CertifiedExportService extends HistoryExportService {
   private certifiedStore = inject(CertifiedStoreService)
+
+  exportCertifiedPdf(loopUuid?: string | null) {
+    if (!this.quickPdfUrl || !loopUuid) {
+      return of(null)
+    }
+    this.mainStore.inProgress$.next(true)
+    return this.http
+      .post(this.quickPdfUrl, this.getCertifiedFormData(loopUuid), {
+        headers: { Accept: "application/pdf" },
+        responseType: "blob",
+        observe: "response",
+      })
+      .pipe(tap(this.saveFile("pdf")), catchError(this.handleError))
+  }
 
   openCertifiedPdf(loopUuid?: string | null) {
     if (!this.quickPdfUrl || !loopUuid) {
