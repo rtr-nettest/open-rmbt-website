@@ -13,8 +13,9 @@ export class GeoTrackerService {
   constructor() {}
 
   async startGeoTracking(
-    onError: (reason: string) => void,
-    onData: (data: ICoords) => void
+    onError: (error: GeolocationPositionError) => void,
+    onData: (data: ICoords) => void,
+    isPermissionDenied: () => boolean
   ) {
     const onSuccess = (position: any, precise = false) => {
       const p = {
@@ -31,36 +32,49 @@ export class GeoTrackerService {
       onData(p)
     }
 
-    if (navigator.geolocation) {
-      //try to get an rough first position
-      navigator.geolocation.getCurrentPosition(
-        (success) => {
-          onSuccess(success)
-        },
-        (error) => {
-          onError(error.message)
-        },
-        {
-          enableHighAccuracy: false,
-          timeout: _errorTimeout, //2 seconds
-          maximumAge: _maxAge, //one minute
-        }
-      )
-      //and refine this position later
-      this._watcher = navigator.geolocation.watchPosition(
-        (success) => {
-          onSuccess(success, true)
-        },
-        (error) => {
-          onError(error.message)
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: Infinity,
-          maximumAge: 0,
-        }
-      )
+    if (!navigator.geolocation || isPermissionDenied()) {
+      const message = !navigator.geolocation
+        ? "Geolocation not supported"
+        : "Geolocation permission denied"
+      onError({
+        code: 0,
+        message,
+        PERMISSION_DENIED: 1,
+        POSITION_UNAVAILABLE: 2,
+        TIMEOUT: 3,
+      })
+      return
     }
+
+    //try to get an rough first position
+    navigator.geolocation.getCurrentPosition(
+      (success) => {
+        onSuccess(success)
+
+        //and refine this position later
+        this._watcher = navigator.geolocation.watchPosition(
+          (success) => {
+            onSuccess(success, true)
+          },
+          (error) => {
+            onError(error)
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: Infinity,
+            maximumAge: 0,
+          }
+        )
+      },
+      (error) => {
+        onError(error)
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: _errorTimeout, //2 seconds
+        maximumAge: _maxAge, //one minute
+      }
+    )
   }
 
   stopGeoTracking() {

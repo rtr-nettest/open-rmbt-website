@@ -6,7 +6,6 @@ export class RmbtwsDelegateService {
   private _positions: ICoords[] = []
 
   constructor(
-    private readonly getFunc: () => IBasicNetworkInfo,
     private readonly setFunc: (newValue: IBasicNetworkInfo) => void
   ) {}
 
@@ -30,21 +29,14 @@ export class RmbtwsDelegateService {
     )
   }
 
-  setLocation(coordinates: ICoords) {
-    const { geo_lat: lat, geo_long: lon } = coordinates
-    this._positions.push(coordinates)
-    if (!lat || !lon) {
-      return
-    }
-    const info = this.getFunc()
-    info.coordinates = [lon, lat]
-    this.setFunc(info)
+  getLatestCoords() {
+    const { geo_lat: lat, geo_long: lon } = this._positions.slice(-1)[0] || {}
+    return lat && lon ? [lon, lat] : undefined
   }
 
-  getGeoResults() {
-    //filter duplicate results that can occur when using hardware GPS devices
-    //with certain Browsers
+  setLocation(coordinates: ICoords) {
     let previousItem: ICoords | null = null
+    this._positions.push(coordinates)
     this._positions = this._positions.filter((position) => {
       if (!position?.precise) {
         return false
@@ -62,7 +54,5 @@ export class RmbtwsDelegateService {
         return true
       }
     })
-
-    return this._positions
   }
 }

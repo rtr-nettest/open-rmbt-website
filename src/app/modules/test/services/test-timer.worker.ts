@@ -48,7 +48,6 @@ class TestTimerWorker {
     }
 
     this.delegateService = new RmbtwsDelegateService(
-      () => this.basicNetworkInfo,
       (v) => (this.basicNetworkInfo = v)
     )
 
@@ -91,6 +90,10 @@ class TestTimerWorker {
   > {
     const result = this.rmbtTest?.getIntermediateResult()
     const basicInfo = this.basicNetworkInfo
+    basicInfo.coordinates = this.delegateService?.getLatestCoords() as [
+      number,
+      number
+    ]
     const diffTimeMs = Date.now() - this.stateChangeMs
     const phase: EMeasurementStatus =
       result?.status?.toString() ?? EMeasurementStatus.NOT_STARTED

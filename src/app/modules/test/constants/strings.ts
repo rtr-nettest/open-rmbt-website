@@ -11,3 +11,5 @@ export const TERMS_VERSION = "RMBTTermsVersion"
 export const RESULT_DATE_FORMAT = "YYYY-MM-DD HH:mm:ss"
 export const TEST_FINISHED_ANNOUNCEMENT =
   "The test has finished. Showing the results page."
+export const LOCATION_PERMISSION_DENIED =
+  "RTR_NETZTEST_LOCATION_PERMISSION_DENIED"

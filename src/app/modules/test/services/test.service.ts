@@ -92,12 +92,19 @@ export class TestService {
         this.optionsStore.preferredServer()
       config["additionalRegistrationParameters"]["user_server_selection"] = true
     }
-    this.geoTrackerService.startGeoTracking(console.log, (data) => {
-      this.worker?.postMessage({
-        type: "setLocation",
-        coordinates: data,
-      })
-    })
+    this.geoTrackerService.startGeoTracking(
+      (error) => {
+        this.testStore.locationPermissionDenied.set(true)
+        console.error("Geotracking error:", error)
+      },
+      (data) => {
+        this.worker?.postMessage({
+          type: "setLocation",
+          coordinates: data,
+        })
+      },
+      () => this.testStore.locationPermissionDenied()
+    )
     this.worker?.postMessage({
       type: "startTimer",
       config,
