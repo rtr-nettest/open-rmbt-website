@@ -168,6 +168,10 @@ export class Step3Component extends TestScreenComponent {
     this.mainStore.error$.next(null)
   }
 
+  protected override openErrorDialog(state: ITestVisualizationState): void {
+    this.goToResult(state)
+  }
+
   private checkIfWaiting(state: ITestVisualizationState) {
     const fullIntervalMs = this.loopStore.fullTestIntervalMs()
     if (!this.loopWaiting() || fullIntervalMs == null) {
