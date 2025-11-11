@@ -34,15 +34,14 @@ export class CertifiedExportService extends HistoryExportService {
     }
     this.mainStore.inProgress$.next(true)
     return this.http
-      .post<any>(this.quickPdfUrl, this.getCertifiedFormData(loopUuid))
+      .post(this.quickPdfUrl, this.getCertifiedFormData(loopUuid), {
+        headers: { Accept: "application/pdf" },
+        responseType: "blob",
+      })
       .pipe(
-        map((resp: any) => {
-          if (resp?.["file"]) {
-            const url = `${this.quickPdfUrl}/${resp["file"]}`
-            window.open(url, "_blank")
-            return url
-          }
-          return null
+        tap((resp) => {
+          const url = URL.createObjectURL(resp)
+          window.open(url, "_blank")
         }),
         catchError(this.handleError),
         finalize(() => this.mainStore.inProgress$.next(false))
