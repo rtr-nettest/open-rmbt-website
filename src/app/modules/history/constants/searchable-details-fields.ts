@@ -12,11 +12,13 @@ export const SEARCHABLE_FIELDS: {
   land_cover: (testData: any) => testData["land_cover"],
   radio_band: null,
   network_name: null,
-  provider_name: null,
+  provider_name: (testData: any) =>
+    encodeURIComponent(testData["provider_name"]),
   network_country: null,
   country_sim: (testData: any) => testData["sim_country"],
   country_geoip: (testData: any) => testData.country_geoip?.toLowerCase(),
-  public_ip_as_name: null,
+  public_ip_as_name: (testData: any) =>
+    encodeURIComponent(testData["public_ip_as_name"]),
   country_asn: (testData: any) => testData.country_asn?.toLowerCase(),
   platform: null,
   model: null,
