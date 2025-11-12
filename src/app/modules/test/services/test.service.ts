@@ -69,10 +69,6 @@ export class TestService {
         switch (data.type) {
           case "timer":
             this.lastState = data.state
-            console.log(
-              "Setting test state",
-              this.testStore.visualization$.value
-            )
             this.setTestState(data.state, this.testStore.visualization$.value)
             break
           case "error":
@@ -223,7 +219,6 @@ export class TestService {
     this.loopStore.lastTestFinishedAt.set(0)
     this.testStore.basicNetworkInfo.set(new BasicNetworkInfo())
     this.testStore.visualization$.next(new TestVisualizationState())
-    console.log("Resetting test state", this.testStore.visualization$.value)
     this.historyStore.simpleHistoryResult$.next(null)
     this.mainStore.error$.next(null)
     this.lastState = undefined
