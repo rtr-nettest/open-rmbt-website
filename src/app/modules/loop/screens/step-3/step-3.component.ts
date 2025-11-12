@@ -36,7 +36,7 @@ export class Step3Component extends TestScreenComponent {
     environment.loopModeDefaults.exclude_from_result ?? []
   protected readonly loopService = inject(LoopService)
   protected waitingProgressMs = 0
-  protected currentTestUuid$ = new BehaviorSubject<string | null>(null)
+  protected currentTestUuid: string | null = null
   protected readonly certifiedStore = inject(CertifiedStoreService)
   lastTestFinishedAt$ = toObservable(this.loopStore.lastTestFinishedAt)
   finishedTests = 0
@@ -85,7 +85,6 @@ export class Step3Component extends TestScreenComponent {
       )
       .subscribe((count) => {
         if (count > this.loopStore.maxTestsAllowed()) {
-          console.log("Max tests reached, aborting loop")
           this.abortTest()
           return
         }
@@ -93,6 +92,12 @@ export class Step3Component extends TestScreenComponent {
           new Date(this.loopStore.estimatedEndTime() as number)
         )
         this.service.triggerNextTest()
+
+        if (this.connectivity.isOnline()) {
+          this.handleOnline()
+        } else {
+          this.handleOffline()
+        }
       })
     this.scheduleLoop()
   }
@@ -149,10 +154,9 @@ export class Step3Component extends TestScreenComponent {
   }
 
   private checkIfNewTestStarted(testUuid: string) {
-    const lastTestUuid = this.currentTestUuid$.value
-    if (lastTestUuid !== testUuid) {
+    if (this.currentTestUuid !== testUuid) {
       // New test started
-      this.currentTestUuid$.next(testUuid)
+      this.currentTestUuid = testUuid
       this.loopWaiting.set(false)
       this.waitingProgressMs = 0
     }
@@ -169,6 +173,7 @@ export class Step3Component extends TestScreenComponent {
   }
 
   protected override openErrorDialog(state: ITestVisualizationState): void {
+    this.waitingProgressMs = 0
     this.goToResult(state)
   }
 

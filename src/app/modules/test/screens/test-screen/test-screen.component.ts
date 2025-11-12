@@ -227,12 +227,12 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
     this.service.sendAbort(this.store.basicNetworkInfo().testUuid)
   }
 
-  private handleOnline() {
+  protected handleOnline() {
     clearTimeout(this.offlineTimeout!)
     this.offlineTimeout = null
   }
 
-  private handleOffline() {
+  protected handleOffline() {
     const latestState = this.store.visualization$.value
     let timeout = 10_000
     if (
