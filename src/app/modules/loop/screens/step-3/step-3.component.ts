@@ -132,14 +132,7 @@ export class Step3Component extends TestScreenComponent {
       const history = await firstValueFrom(
         this.historyService.getLoopHistory(this.loopStore.loopUuid()!)
       )
-      // Pull real entries from history, keep existing ones if not in history
-      content = [
-        ...content.filter((c) => !c.testUuid),
-        ...history.content,
-      ].sort((a, b) => {
-        return dayjs(b.measurementDate).diff(dayjs(a.measurementDate))
-      })
-      this.result.set({ content, totalElements: content.length })
+      this.result.set(history)
     } catch (err) {
       console.error("Error fetching loop history:", err)
       content.unshift({

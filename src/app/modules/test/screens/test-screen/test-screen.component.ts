@@ -157,7 +157,6 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
         })
         return
       }
-      this.service.resetState()
       this.initVisualization()
       return
     })

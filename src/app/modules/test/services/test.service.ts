@@ -62,17 +62,17 @@ export class TestService {
   }
 
   async triggerNextTest(options?: TestOptions) {
-    clearInterval(this.waitingTimer)
-    if (!this.loopStore.isLoopModeEnabled()) {
-      this.loopStore.loopUuid.set(null)
-    }
-    this.loopStore.lastTestFinishedAt.set(0)
+    this.resetState()
     this.worker = new Worker(new URL("./test-timer.worker", import.meta.url))
     this.worker.addEventListener("message", ({ data }) => {
       this.ngZone.run(() => {
         switch (data.type) {
           case "timer":
             this.lastState = data.state
+            console.log(
+              "Setting test state",
+              this.testStore.visualization$.value
+            )
             this.setTestState(data.state, this.testStore.visualization$.value)
             break
           case "error":
@@ -216,8 +216,14 @@ export class TestService {
   }
 
   resetState() {
+    clearInterval(this.waitingTimer)
+    if (!this.loopStore.isLoopModeEnabled()) {
+      this.loopStore.loopUuid.set(null)
+    }
+    this.loopStore.lastTestFinishedAt.set(0)
     this.testStore.basicNetworkInfo.set(new BasicNetworkInfo())
     this.testStore.visualization$.next(new TestVisualizationState())
+    console.log("Resetting test state", this.testStore.visualization$.value)
     this.historyStore.simpleHistoryResult$.next(null)
     this.mainStore.error$.next(null)
     this.lastState = undefined
