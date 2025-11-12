@@ -245,6 +245,12 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
         timeout = 10_000
       }
     }
+    if (
+      latestState.currentPhaseName === EMeasurementStatus.ERROR ||
+      latestState.currentPhaseName === EMeasurementStatus.END
+    ) {
+      timeout = 0
+    }
     let latestPhaseDurationMs =
       latestState.phases[latestState.currentPhaseName].duration * 1000
     if (isNaN(latestPhaseDurationMs)) {

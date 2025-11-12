@@ -44,6 +44,7 @@ export class Step3Component extends TestScreenComponent {
   finishedTests = 0
   testsFinishedWhileActive = 0
   private startedTestsMap: Record<string, ISimpleHistoryResult> = {}
+  private triggeredOnSchedule = false
 
   tabActivityListener = () => {
     if (!document.hidden) {
@@ -99,6 +100,7 @@ export class Step3Component extends TestScreenComponent {
         if (this.connectivity.isOnline()) {
           this.handleOnline()
         } else {
+          this.triggeredOnSchedule = true
           this.handleOffline()
         }
       })
@@ -147,6 +149,7 @@ export class Step3Component extends TestScreenComponent {
       if (this.currentTestUuid && this.startedTestsMap[this.currentTestUuid]) {
         content.unshift({
           ...this.startedTestsMap[this.currentTestUuid],
+          measurementDate: dayjs().format(RESULT_DATE_FORMAT),
           openTestResponse: {
             status: "error",
           },
@@ -217,6 +220,17 @@ export class Step3Component extends TestScreenComponent {
   protected override openErrorDialog(state: ITestVisualizationState): void {
     this.waitingProgressMs = 0
     this.goToResult(state)
+  }
+
+  protected override handleOffline(): void {
+    if (!this.loopWaiting()) {
+      super.handleOffline()
+      return
+    }
+    if (this.triggeredOnSchedule) {
+      this.triggeredOnSchedule = false
+      super.handleOffline()
+    }
   }
 
   private checkIfWaiting(state: ITestVisualizationState) {
