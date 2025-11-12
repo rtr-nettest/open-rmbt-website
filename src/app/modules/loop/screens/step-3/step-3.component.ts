@@ -43,7 +43,6 @@ export class Step3Component extends TestScreenComponent {
   lastTestFinishedAt$ = toObservable(this.loopStore.lastTestFinishedAt)
   finishedTests = 0
   testsFinishedWhileActive = 0
-  private startedTestsMap: Record<string, ISimpleHistoryResult> = {}
   private triggeredOnSchedule = false
 
   tabActivityListener = () => {
@@ -143,29 +142,17 @@ export class Step3Component extends TestScreenComponent {
       this.result.set({ content, totalElements: content.length })
     } catch (err) {
       console.error("Error fetching loop history:", err)
-      if (content.length >= this.finishedTests) {
-        return
-      }
-      if (this.currentTestUuid && this.startedTestsMap[this.currentTestUuid]) {
-        content.unshift({
-          ...this.startedTestsMap[this.currentTestUuid],
-          measurementDate: dayjs().format(RESULT_DATE_FORMAT),
-          openTestResponse: {
-            status: "error",
-          },
-        })
-        delete this.startedTestsMap[this.currentTestUuid]
-      } else {
-        content.unshift({
-          measurementDate: dayjs().format(RESULT_DATE_FORMAT),
-          measurementServerName: "",
-          providerName: "",
-          ipAddress: "",
-          openTestResponse: {
-            status: "error",
-          },
-        })
-      }
+      content.unshift({
+        measurementDate: dayjs(
+          new Date(this.loopStore.lastTestStartedAt())
+        ).format(RESULT_DATE_FORMAT),
+        measurementServerName: "",
+        providerName: "",
+        ipAddress: "",
+        openTestResponse: {
+          status: "error",
+        },
+      })
       this.result.set({ content, totalElements: content.length })
     }
   }
@@ -196,14 +183,6 @@ export class Step3Component extends TestScreenComponent {
       // Reset waiting state
       this.loopWaiting.set(false)
       this.waitingProgressMs = 0
-      // Record test start for history
-      this.startedTestsMap[testUuid] = {
-        testUuid,
-        measurementDate: dayjs().format(RESULT_DATE_FORMAT),
-        measurementServerName: "",
-        providerName: "",
-        ipAddress: "",
-      }
     }
   }
 
