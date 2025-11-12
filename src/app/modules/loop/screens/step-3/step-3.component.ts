@@ -4,7 +4,6 @@ import {
   TestScreenComponent,
 } from "../../../test/screens/test-screen/test-screen.component"
 import {
-  BehaviorSubject,
   distinctUntilChanged,
   filter,
   firstValueFrom,
@@ -20,6 +19,9 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
 import { environment } from "../../../../../environments/environment"
 import { toObservable } from "@angular/core/rxjs-interop"
 import { CertifiedStoreService } from "../../../certified/store/certified-store.service"
+import dayjs from "dayjs"
+import { RESULT_DATE_FORMAT } from "../../../test/constants/strings"
+import { ISimpleHistoryResult } from "../../../history/interfaces/simple-history-result.interface"
 
 @Component({
   selector: "app-step-3",
@@ -41,6 +43,7 @@ export class Step3Component extends TestScreenComponent {
   lastTestFinishedAt$ = toObservable(this.loopStore.lastTestFinishedAt)
   finishedTests = 0
   testsFinishedWhileActive = 0
+  private startedTestsMap: Record<string, ISimpleHistoryResult> = {}
 
   tabActivityListener = () => {
     if (!document.hidden) {
@@ -123,13 +126,44 @@ export class Step3Component extends TestScreenComponent {
   }
 
   private async setHistory() {
+    let content = this.result()?.content || []
     try {
       const history = await firstValueFrom(
         this.historyService.getLoopHistory(this.loopStore.loopUuid()!)
       )
-      this.result.set(history)
+      // Pull real entries from history, keep existing ones if not in history
+      content = [
+        ...content.filter((c) => !c.testUuid),
+        ...history.content,
+      ].sort((a, b) => {
+        return dayjs(b.measurementDate).diff(dayjs(a.measurementDate))
+      })
+      this.result.set({ content, totalElements: content.length })
     } catch (err) {
       console.error("Error fetching loop history:", err)
+      if (content.length >= this.finishedTests) {
+        return
+      }
+      if (this.currentTestUuid && this.startedTestsMap[this.currentTestUuid]) {
+        content.unshift({
+          ...this.startedTestsMap[this.currentTestUuid],
+          openTestResponse: {
+            status: "error",
+          },
+        })
+        delete this.startedTestsMap[this.currentTestUuid]
+      } else {
+        content.unshift({
+          measurementDate: dayjs().format(RESULT_DATE_FORMAT),
+          measurementServerName: "",
+          providerName: "",
+          ipAddress: "",
+          openTestResponse: {
+            status: "error",
+          },
+        })
+      }
+      this.result.set({ content, totalElements: content.length })
     }
   }
 
@@ -155,10 +189,18 @@ export class Step3Component extends TestScreenComponent {
 
   private checkIfNewTestStarted(testUuid: string) {
     if (this.currentTestUuid !== testUuid) {
-      // New test started
       this.currentTestUuid = testUuid
+      // Reset waiting state
       this.loopWaiting.set(false)
       this.waitingProgressMs = 0
+      // Record test start for history
+      this.startedTestsMap[testUuid] = {
+        testUuid,
+        measurementDate: dayjs().format(RESULT_DATE_FORMAT),
+        measurementServerName: "",
+        providerName: "",
+        ipAddress: "",
+      }
     }
   }
 

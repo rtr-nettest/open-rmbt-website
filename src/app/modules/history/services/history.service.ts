@@ -180,7 +180,7 @@ export class HistoryService {
       take(1),
       map((history) => {
         const content = history.filter(
-          (hi: SimpleHistoryResult) => hi.loopUuid === loopUuid
+          (hi: ISimpleHistoryResult) => hi.loopUuid === loopUuid
         )
         return {
           content,

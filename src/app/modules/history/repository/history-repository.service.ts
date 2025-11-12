@@ -17,6 +17,7 @@ import { MainStore } from "../../shared/store/main.store"
 import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
 import { ISyncResponse } from "../interfaces/sync-response.interface"
 import { HistoryStore } from "../store/history.store"
+import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interface"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
@@ -72,11 +73,13 @@ export class HistoryRepositoryService {
     return response
   }
 
-  async getHistory(options: GetHistoryOptions = {}) {
+  async getHistory(
+    options: GetHistoryOptions = {}
+  ): Promise<ISimpleHistoryResult[]> {
     const { paginator, loopUuid, includeFailed } = options
     const uuid = localStorage.getItem(UUID)
     if (!uuid) {
-      return null
+      return []
     }
     const body: { [key: string]: any } = {
       language: this.i18nStore.activeLang,

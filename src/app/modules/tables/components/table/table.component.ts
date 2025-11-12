@@ -151,12 +151,7 @@ export class TableComponent implements OnInit, OnChanges {
 
   getRowId(index: number, row: any): string {
     return `item-${
-      this.identifyField ||
-      row.id ||
-      row.open_test_uuid ||
-      row.title ||
-      index ||
-      Date.now()
+      this.identifyField || row.id || row.open_test_uuid || row.title || index
     }`
   }
 
