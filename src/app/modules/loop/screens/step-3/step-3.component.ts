@@ -21,7 +21,8 @@ import { toObservable } from "@angular/core/rxjs-interop"
 import { CertifiedStoreService } from "../../../certified/store/certified-store.service"
 import dayjs from "dayjs"
 import { RESULT_DATE_FORMAT } from "../../../test/constants/strings"
-import { ISimpleHistoryResult } from "../../../history/interfaces/simple-history-result.interface"
+import { IMeasurementPhaseState } from "../../../test/interfaces/measurement-phase-state.interface"
+import { IBasicNetworkInfo } from "../../../test/interfaces/basic-network-info.interface"
 
 @Component({
   selector: "app-step-3",
@@ -44,6 +45,8 @@ export class Step3Component extends TestScreenComponent {
   finishedTests = 0
   testsFinishedWhileActive = 0
   private triggeredOnSchedule = false
+  private lastState?: IMeasurementPhaseState & IBasicNetworkInfo
+  private waitingTimer?: NodeJS.Timeout
 
   tabActivityListener = () => {
     if (!document.hidden) {
@@ -80,6 +83,11 @@ export class Step3Component extends TestScreenComponent {
         return state
       })
     )
+    this.watchLoops()
+    this.scheduleLoop()
+  }
+
+  private watchLoops() {
     this.loopCount$
       .pipe(
         filter((v) => v > 0),
@@ -94,7 +102,7 @@ export class Step3Component extends TestScreenComponent {
         this.estimatedEndTime.set(
           new Date(this.loopStore.estimatedEndTime() as number)
         )
-        this.service.triggerNextTest()
+        this.triggerNextTest()
 
         if (this.connectivity.isOnline()) {
           this.handleOnline()
@@ -103,7 +111,6 @@ export class Step3Component extends TestScreenComponent {
           this.handleOffline()
         }
       })
-    this.scheduleLoop()
   }
 
   protected watchFinishedTests() {
@@ -126,13 +133,64 @@ export class Step3Component extends TestScreenComponent {
       })
   }
 
+  private triggerNextTest() {
+    const checkUuidAndCounter = (
+      state: IMeasurementPhaseState & IBasicNetworkInfo
+    ) => {
+      if (!this.loopStore.loopUuid()) {
+        this.loopStore.loopUuid.set(state.loopUuid)
+      }
+      if (this.loopStore.loopCounter() >= this.loopStore.maxTestsAllowed()) {
+        this.loopStore.maxTestsReached.set(true)
+      }
+    }
+    this.service.triggerNextTest({
+      beforeStart: () => {
+        clearInterval(this.waitingTimer)
+        this.loopStore.lastTestFinishedAt.set(0)
+        this.lastState = undefined
+      },
+      afterFinish: () => {
+        clearInterval(this.waitingTimer)
+        this.loopStore.lastTestFinishedAt.set(Date.now())
+        if (!this.loopStore.maxTestsReached()) {
+          this.waitingTimer = setInterval(() => {
+            if (!this.lastState) {
+              return
+            }
+            checkUuidAndCounter(this.lastState)
+            this.testService.setTestState(
+              this.lastState,
+              this.testStore.visualization$.value
+            )
+          }, STATE_UPDATE_TIMEOUT)
+        }
+      },
+      onStateUpdate: (state) => {
+        this.lastState = state
+        checkUuidAndCounter(state)
+      },
+    })
+  }
+
   private async setHistory() {
     let content = this.result()?.content || []
     try {
       const history = await firstValueFrom(
         this.historyService.getLoopHistory(this.loopStore.loopUuid()!)
       )
-      this.result.set(history)
+      content = [
+        ...content.filter(
+          (entry) => entry.openTestResponse?.["status"] !== "finished"
+        ),
+        ...history.content.filter(
+          (entry) => entry.openTestResponse?.["status"] === "finished"
+        ),
+      ].sort(
+        (a, b) =>
+          dayjs(b.measurementDate).toDate().getTime() -
+          dayjs(a.measurementDate).toDate().getTime()
+      )
     } catch (err) {
       console.error("Error fetching loop history:", err)
       content.unshift({
@@ -146,8 +204,8 @@ export class Step3Component extends TestScreenComponent {
           status: "error",
         },
       })
-      this.result.set({ content, totalElements: content.length })
     }
+    this.result.set({ content, totalElements: content.length })
   }
 
   protected scheduleLoop() {

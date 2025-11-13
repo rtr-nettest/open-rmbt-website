@@ -22,6 +22,9 @@ dayjs.extend(tz)
 
 export type TestOptions = {
   referrer?: string
+  beforeStart?: () => void
+  afterFinish?: () => void
+  onStateUpdate?: (state: IMeasurementPhaseState & IBasicNetworkInfo) => void
 }
 
 declare global {
@@ -37,13 +40,8 @@ export const PING_INTERVAL_MILLISECONDS = 1000
   providedIn: "root",
 })
 export class TestService {
-  private lastState?: IMeasurementPhaseState & IBasicNetworkInfo
-  private waitingTimer?: NodeJS.Timeout
   private worker?: Worker
-
-  get isLoopModeEnabled() {
-    return this.loopStore.isLoopModeEnabled()
-  }
+  private testOptions?: TestOptions
 
   constructor(
     private readonly historyStore: HistoryStore,
@@ -62,66 +60,22 @@ export class TestService {
   }
 
   async triggerNextTest(options?: TestOptions) {
-    this.resetState()
-    this.worker = new Worker(new URL("./test-timer.worker", import.meta.url))
-    this.worker.addEventListener("message", ({ data }) => {
-      this.ngZone.run(() => {
-        switch (data.type) {
-          case "timer":
-            this.lastState = data.state
-            this.setTestState(data.state, this.testStore.visualization$.value)
-            break
-          case "error":
-            this.mainStore.error$.next(data.error)
-            break
-        }
-      })
-    })
-    const config = this.getConfig(options)
-    const controlProxy = this.getControlProxy()
-    if (controlProxy && controlProxy !== environment.api.baseUrl) {
-      config["additionalRegistrationParameters"]["protocol_version"] =
-        this.optionsStore.ipVersion()
+    options?.beforeStart?.()
+    if (!this.loopStore.isLoopModeEnabled()) {
+      this.loopStore.loopUuid.set(null)
     }
-    if (this.optionsStore.preferredServer() !== "default") {
-      config["additionalRegistrationParameters"]["prefer_server"] =
-        this.optionsStore.preferredServer()
-      config["additionalRegistrationParameters"]["user_server_selection"] = true
-    }
-    this.geoTrackerService.startGeoTracking(
-      (error) => {
-        this.testStore.locationPermissionDenied.set(true)
-        console.error("Geotracking error:", error)
-      },
-      (data) => {
-        this.worker?.postMessage({
-          type: "setLocation",
-          coordinates: data,
-        })
-      },
-      () => this.testStore.locationPermissionDenied()
-    )
-    this.worker?.postMessage({
-      type: "startTimer",
-      config,
-      controlProxy,
-    })
-    this.loopStore.lastTestStartedAt.set(Date.now())
+    this.resetTestState()
+    this.setUpWorker()
+    this.startGeoTracking()
+    this.startTest(options)
+    this.testOptions = options
   }
 
   stopUpdates() {
     this.worker?.terminate()
     this.worker = undefined
-    clearInterval(this.waitingTimer)
     this.geoTrackerService.stopGeoTracking()
-    this.loopStore.lastTestFinishedAt.set(Date.now())
-    if (this.isLoopModeEnabled && !this.loopStore.maxTestsReached()) {
-      this.waitingTimer = setInterval(() => {
-        if (this.lastState) {
-          this.setTestState(this.lastState, this.testStore.visualization$.value)
-        }
-      }, STATE_UPDATE_TIMEOUT)
-    }
+    this.testOptions?.afterFinish?.()
   }
 
   private getConfig(options?: { referrer?: string }) {
@@ -168,18 +122,10 @@ export class TestService {
     return controlProxy
   }
 
-  private setTestState = (
+  setTestState = (
     phaseState: IMeasurementPhaseState & IBasicNetworkInfo,
     oldVisualization: ITestVisualizationState
   ) => {
-    if (this.isLoopModeEnabled) {
-      if (!this.loopStore.loopUuid()) {
-        this.loopStore.loopUuid.set(phaseState.loopUuid)
-      }
-      if (this.loopStore.loopCounter() >= this.loopStore.maxTestsAllowed()) {
-        this.loopStore.maxTestsReached.set(true)
-      }
-    }
     const oldPhaseName = oldVisualization.currentPhaseName
     const oldPhaseIsOfFinishType =
       oldPhaseName === EMeasurementStatus.END ||
@@ -211,17 +157,66 @@ export class TestService {
     return newState
   }
 
-  resetState() {
-    clearInterval(this.waitingTimer)
-    if (!this.loopStore.isLoopModeEnabled()) {
-      this.loopStore.loopUuid.set(null)
-    }
-    this.loopStore.lastTestFinishedAt.set(0)
+  private resetTestState() {
     this.testStore.basicNetworkInfo.set(new BasicNetworkInfo())
     this.testStore.visualization$.next(new TestVisualizationState())
     this.historyStore.simpleHistoryResult$.next(null)
     this.mainStore.error$.next(null)
-    this.lastState = undefined
+  }
+
+  private setUpWorker() {
+    this.worker = new Worker(new URL("./test-timer.worker", import.meta.url))
+    this.worker.addEventListener("message", ({ data }) => {
+      this.ngZone.run(() => {
+        switch (data.type) {
+          case "timer":
+            if (this.testOptions?.onStateUpdate) {
+              this.testOptions.onStateUpdate(data.state)
+            }
+            this.setTestState(data.state, this.testStore.visualization$.value)
+            break
+          case "error":
+            this.mainStore.error$.next(data.error)
+            break
+        }
+      })
+    })
+  }
+
+  private startGeoTracking() {
+    this.geoTrackerService.startGeoTracking(
+      (error) => {
+        this.testStore.locationPermissionDenied.set(true)
+        console.error("Geotracking error:", error)
+      },
+      (data) => {
+        this.worker?.postMessage({
+          type: "setLocation",
+          coordinates: data,
+        })
+      },
+      () => this.testStore.locationPermissionDenied()
+    )
+  }
+
+  private startTest(options?: TestOptions) {
+    const config = this.getConfig(options)
+    const controlProxy = this.getControlProxy()
+    if (controlProxy && controlProxy !== environment.api.baseUrl) {
+      config["additionalRegistrationParameters"]["protocol_version"] =
+        this.optionsStore.ipVersion()
+    }
+    if (this.optionsStore.preferredServer() !== "default") {
+      config["additionalRegistrationParameters"]["prefer_server"] =
+        this.optionsStore.preferredServer()
+      config["additionalRegistrationParameters"]["user_server_selection"] = true
+    }
+    this.worker?.postMessage({
+      type: "startTimer",
+      config,
+      controlProxy,
+    })
+    this.loopStore.lastTestStartedAt.set(Date.now())
   }
 
   getProgressSegment(status: EMeasurementStatus, progress: number) {

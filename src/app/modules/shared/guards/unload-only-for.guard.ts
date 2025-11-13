@@ -30,7 +30,7 @@ export const unloadOnlyFor: (
       // Don't show dialog when there's an error
       (testStore.visualization$.value.currentPhaseName ===
         EMeasurementStatus.ERROR &&
-        !testService.isLoopModeEnabled) ||
+        !loopStore.isLoopModeEnabled()) ||
       // Don't show dialog when it is a certified measurement and a tab is accessed out of order
       (loopStore.isCertifiedMeasurement() && !certifiedStore.isReady()) ||
       // Don't show dialog when it is a certified or loop measurement and a tab is accessed out of order

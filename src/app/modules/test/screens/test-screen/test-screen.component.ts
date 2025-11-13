@@ -232,6 +232,8 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   }
 
   protected handleOffline() {
+    clearTimeout(this.offlineTimeout!)
+    this.offlineTimeout = null
     const latestState = this.store.visualization$.value
     let timeout = 10_000
     if (
