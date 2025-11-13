@@ -73,7 +73,10 @@ export class Step3Component extends TestScreenComponent {
       withLatestFrom(this.mainStore.error$, this.loopCount$),
       distinctUntilChanged(),
       map(([state, error, _]) => {
-        if (error || state.currentPhaseName === EMeasurementStatus.END) {
+        if (
+          this.connectivity.isOnline() &&
+          (error || state.currentPhaseName === EMeasurementStatus.END) // offline is handled separately
+        ) {
           this.goToResult(state)
         }
         this.checkIfNewTestStarted(
@@ -99,18 +102,63 @@ export class Step3Component extends TestScreenComponent {
           this.abortTest()
           return
         }
-        this.estimatedEndTime.set(
-          new Date(this.loopStore.estimatedEndTime() as number)
-        )
-        this.triggerNextTest()
-
         if (this.connectivity.isOnline()) {
           this.handleOnline()
+          this.triggerNextTest()
         } else {
           this.triggeredOnSchedule = true
           this.handleOffline()
         }
       })
+  }
+
+  private triggerNextTest() {
+    this.estimatedEndTime.set(
+      new Date(this.loopStore.estimatedEndTime() as number)
+    )
+    this.service.triggerNextTest({
+      beforeStart: () => {
+        clearInterval(this.waitingTimer)
+        this.loopStore.lastTestFinishedAt.set(0)
+        this.lastState = undefined
+      },
+      afterFinish: () => {
+        clearInterval(this.waitingTimer)
+        this.loopStore.lastTestFinishedAt.set(Date.now())
+        this.waitingTimer = setInterval(() => {
+          if (
+            this.loopStore.loopCounter() >= this.loopStore.maxTestsAllowed()
+          ) {
+            this.loopStore.maxTestsReached.set(true)
+            clearInterval(this.waitingTimer)
+            this.goToResult(this.testStore.visualization$.value)
+            return
+          }
+          if (!this.lastState) {
+            return
+          }
+          this.testService.setTestState(
+            this.lastState,
+            this.testStore.visualization$.value
+          )
+        }, STATE_UPDATE_TIMEOUT)
+      },
+      onStateUpdate: (state) => {
+        this.lastState = state
+        if (!this.loopStore.loopUuid()) {
+          this.loopStore.loopUuid.set(state.loopUuid)
+        }
+      },
+    })
+  }
+
+  protected scheduleLoop() {
+    this.loopService.scheduleLoop({
+      isCertifiedMeasurement: false,
+      maxTestsAllowed: this.loopStore.maxTestsAllowed(),
+      testIntervalMinutes: this.loopStore.testIntervalMinutes(),
+    })
+    this.watchFinishedTests()
   }
 
   protected watchFinishedTests() {
@@ -131,46 +179,6 @@ export class Step3Component extends TestScreenComponent {
         }
         this.setHistory()
       })
-  }
-
-  private triggerNextTest() {
-    const checkUuidAndCounter = (
-      state: IMeasurementPhaseState & IBasicNetworkInfo
-    ) => {
-      if (!this.loopStore.loopUuid()) {
-        this.loopStore.loopUuid.set(state.loopUuid)
-      }
-      if (this.loopStore.loopCounter() >= this.loopStore.maxTestsAllowed()) {
-        this.loopStore.maxTestsReached.set(true)
-      }
-    }
-    this.service.triggerNextTest({
-      beforeStart: () => {
-        clearInterval(this.waitingTimer)
-        this.loopStore.lastTestFinishedAt.set(0)
-        this.lastState = undefined
-      },
-      afterFinish: () => {
-        clearInterval(this.waitingTimer)
-        this.loopStore.lastTestFinishedAt.set(Date.now())
-        if (!this.loopStore.maxTestsReached()) {
-          this.waitingTimer = setInterval(() => {
-            if (!this.lastState) {
-              return
-            }
-            checkUuidAndCounter(this.lastState)
-            this.testService.setTestState(
-              this.lastState,
-              this.testStore.visualization$.value
-            )
-          }, STATE_UPDATE_TIMEOUT)
-        }
-      },
-      onStateUpdate: (state) => {
-        this.lastState = state
-        checkUuidAndCounter(state)
-      },
-    })
   }
 
   private async setHistory() {
@@ -206,15 +214,6 @@ export class Step3Component extends TestScreenComponent {
       })
     }
     this.result.set({ content, totalElements: content.length })
-  }
-
-  protected scheduleLoop() {
-    this.loopService.scheduleLoop({
-      isCertifiedMeasurement: false,
-      maxTestsAllowed: this.loopStore.maxTestsAllowed(),
-      testIntervalMinutes: this.loopStore.testIntervalMinutes(),
-    })
-    this.watchFinishedTests()
   }
 
   override abortTest(): void {
@@ -254,12 +253,16 @@ export class Step3Component extends TestScreenComponent {
 
   protected override handleOffline(): void {
     if (!this.loopWaiting()) {
+      // Stop the test after a timeout and trigger openErrorDialog
       super.handleOffline()
       return
     }
     if (this.triggeredOnSchedule) {
       this.triggeredOnSchedule = false
-      super.handleOffline()
+      // Stop the test immediately and mock start of a new test
+      this.waitingProgressMs = 0
+      this.service.stopUpdates() // this will trigger afterFinish in scheduleLoop
+      this.loopStore.lastTestStartedAt.set(Date.now())
     }
   }
 
