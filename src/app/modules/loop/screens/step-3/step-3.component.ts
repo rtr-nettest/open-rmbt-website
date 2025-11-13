@@ -169,6 +169,9 @@ export class Step3Component extends TestScreenComponent {
         takeUntil(this.stopped$)
       )
       .subscribe(() => {
+        if (!this.loopWaiting()) {
+          return
+        }
         this.finishedTests++
         if (!document.hidden) {
           this.testsFinishedWhileActive++
