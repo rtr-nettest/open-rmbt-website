@@ -5,8 +5,10 @@ import tz from "dayjs/plugin/timezone"
 dayjs.extend(utc)
 dayjs.extend(tz)
 
+export type SearchableFieldFormatter = (testData: any) => string | string[]
+
 export const SEARCHABLE_FIELDS: {
-  [key: string]: null | ((testData: any) => string | string[])
+  [key: string]: null | SearchableFieldFormatter
 } = {
   cat_technology: null,
   land_cover: (testData: any) => testData["land_cover"],
@@ -21,7 +23,7 @@ export const SEARCHABLE_FIELDS: {
     encodeURIComponent(testData["public_ip_as_name"]),
   country_asn: (testData: any) => testData.country_asn?.toLowerCase(),
   platform: null,
-  model: null,
+  model: (testData: any) => encodeURIComponent(testData.model),
   client_version: null,
   open_uuid: null,
   time: (testData: any) => {
