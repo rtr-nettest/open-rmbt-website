@@ -9,7 +9,7 @@
 </a>
 } @else if (mobileLink) {
 <a
-  [href]="mobileLink"
+  [href]="mobileLink | translate"
   class="app-card"
   [class.app-card--primary]="primary"
   target="_blank"
@@ -40,7 +40,7 @@
     @if (title) { @if (primary) {
     <h2 class="app-card-title app-margin-top">
       @if (url) {
-      <a class="app-link" [href]="url">{{ title | translate }}</a>
+      <a class="app-link" [href]="url | translate">{{ title | translate }}</a>
       } @else {
       {{ title | translate }}
       }
@@ -48,7 +48,7 @@
     } @else {
     <h3 class="app-card-title app-margin-top">
       @if (url) {
-      <a class="app-link" [href]="url">{{ title | translate }}</a>
+      <a class="app-link" [href]="url | translate">{{ title | translate }}</a>
       } @else {
       {{ title | translate }}
       }
