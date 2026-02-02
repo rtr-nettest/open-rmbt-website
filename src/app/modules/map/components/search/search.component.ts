@@ -27,16 +27,16 @@ import { Map, Marker } from "maplibre-gl"
 import { MatButtonModule } from "@angular/material/button"
 
 @Component({
-    selector: "app-search",
-    imports: [
+  selector: "app-search",
+  imports: [
     FormsModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    TranslatePipe
-],
-    templateUrl: "./search.component.html",
-    styleUrl: "./search.component.scss"
+    TranslatePipe,
+  ],
+  templateUrl: "./search.component.html",
+  styleUrl: "./search.component.scss",
 })
 export class SearchComponent implements OnDestroy {
   @Input({ required: true }) map!: Map
@@ -59,7 +59,7 @@ export class SearchComponent implements OnDestroy {
 
   async initGeocoder(): Promise<void> {
     const { Geocoder } = (await google.maps.importLibrary(
-      "geocoding"
+      "geocoding",
     )) as google.maps.GeocodingLibrary
     this.geocoder = new Geocoder()
   }
@@ -72,7 +72,7 @@ export class SearchComponent implements OnDestroy {
       debounceTime(300),
       distinctUntilChanged(),
       switchMap((evt) => this.search(evt)),
-      tap((res) => (this.geocodeResponse = res))
+      tap((res) => (this.geocodeResponse = res)),
     )
     .subscribe()
 
@@ -120,20 +120,20 @@ export class SearchComponent implements OnDestroy {
         }),
         catchError(() => {
           return of([])
-        })
+        }),
       )
     }
     return of(undefined)
   }
 
   @HostListener("keyup.esc")
-  private resetGeocoder(evt?: MouseEvent) {
+  resetGeocoder(evt?: MouseEvent) {
     this.geocodeResponse = undefined
     this.activeCandidate = 0
   }
 
   @HostListener("keyup.arrowdown")
-  private selectCandidateDown() {
+  selectCandidateDown() {
     if (this.geocodeResponse?.length) {
       this.activeCandidate++
       if (this.activeCandidate > this.geocodeResponse?.length - 1) {
@@ -143,7 +143,7 @@ export class SearchComponent implements OnDestroy {
   }
 
   @HostListener("keyup.arrowup")
-  private selectCandidateUp() {
+  selectCandidateUp() {
     if (this.geocodeResponse?.length) {
       this.activeCandidate--
       if (this.activeCandidate < 0) {
