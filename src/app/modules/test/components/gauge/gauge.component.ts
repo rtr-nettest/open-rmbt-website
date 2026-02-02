@@ -4,7 +4,7 @@ import { TestStore } from "../../store/test.store"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { EMeasurementStatus } from "../../constants/measurement-status.enum"
 import { ITestPhaseState } from "../../interfaces/test-phase-state.interface"
-import { AsyncPipe, NgIf } from "@angular/common"
+import { AsyncPipe } from "@angular/common";
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { ITestVisualizationState } from "../../interfaces/test-visualization-state.interface"
 import { roundToSignificantDigits, speedLog } from "../../../shared/util/math"
@@ -16,7 +16,7 @@ import { PROGRESS_ANNOUNCEMENT_RATE } from "../../constants/numbers"
   templateUrl: "./gauge.component.html",
   styleUrls: ["./gauge.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AsyncPipe, NgIf, TranslatePipe],
+  imports: [AsyncPipe, TranslatePipe],
 })
 export class GaugeComponent {
   visualization$!: Observable<ITestVisualizationState>

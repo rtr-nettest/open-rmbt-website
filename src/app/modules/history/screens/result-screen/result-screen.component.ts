@@ -5,7 +5,7 @@ import { FooterComponent } from "../../../shared/components/footer/footer.compon
 import { ScrollTopComponent } from "../../../shared/components/scroll-top/scroll-top.component"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
-import { AsyncPipe, DatePipe, NgIf } from "@angular/common"
+import { AsyncPipe, DatePipe } from "@angular/common";
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { Observable, of, switchMap, tap } from "rxjs"
 import { ERoutes } from "../../../shared/constants/routes.enum"
@@ -69,7 +69,6 @@ import { capitalize, deHtmlize } from "../../../shared/util/string"
     HeaderComponent,
     MainContentComponent,
     MatButtonModule,
-    NgIf,
     RouterModule,
     TableComponent,
     TestChartComponent,
@@ -82,8 +81,8 @@ import { capitalize, deHtmlize } from "../../../shared/util/string"
     SpeedDetailsComponent,
     LocationDetailsComponent,
     MapComponent,
-    PingDetailsComponent,
-  ],
+    PingDetailsComponent
+],
   templateUrl: "./result-screen.component.html",
   styleUrl: "./result-screen.component.scss",
 })

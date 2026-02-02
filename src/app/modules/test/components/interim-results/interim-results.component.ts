@@ -3,7 +3,7 @@ import { distinctUntilChanged, Observable, tap } from "rxjs"
 import { EMeasurementStatus } from "../../constants/measurement-status.enum"
 import { TestStore } from "../../store/test.store"
 import { I18nStore } from "../../../i18n/store/i18n.store"
-import { AsyncPipe, DatePipe, NgIf } from "@angular/common"
+import { AsyncPipe, DatePipe } from "@angular/common";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 import { TestChartComponent } from "../../../charts/components/test-chart/test-chart.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"

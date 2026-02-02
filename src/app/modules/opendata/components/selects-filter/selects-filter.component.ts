@@ -5,7 +5,7 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { BaseFilterComponent } from "../base-filter/base-filter.component"
 import { MatOptionModule } from "@angular/material/core"
 import { MatSelectModule } from "@angular/material/select"
-import { NgFor } from "@angular/common"
+
 
 @Component({
   selector: "app-selects-filter",
@@ -13,10 +13,9 @@ import { NgFor } from "@angular/common"
     MatFormFieldModule,
     MatOptionModule,
     MatSelectModule,
-    NgFor,
     ReactiveFormsModule,
-    TranslatePipe,
-  ],
+    TranslatePipe
+],
   templateUrl: "./selects-filter.component.html",
   styleUrl: "./selects-filter.component.scss",
 })

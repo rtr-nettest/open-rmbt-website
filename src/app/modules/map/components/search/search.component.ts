@@ -9,7 +9,7 @@ import { FormsModule } from "@angular/forms"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
-import { NgFor, NgIf } from "@angular/common"
+
 import {
   BehaviorSubject,
   catchError,
@@ -29,14 +29,12 @@ import { MatButtonModule } from "@angular/material/button"
 @Component({
     selector: "app-search",
     imports: [
-        FormsModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        NgIf,
-        NgFor,
-        TranslatePipe,
-    ],
+    FormsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    TranslatePipe
+],
     templateUrl: "./search.component.html",
     styleUrl: "./search.component.scss"
 })

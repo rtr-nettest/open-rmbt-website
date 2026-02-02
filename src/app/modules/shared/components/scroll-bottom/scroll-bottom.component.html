@@ -1,4 +1,4 @@
-<ng-container *ngIf="isVisible">
+@if (isVisible) {
   <button
     color="primary"
     mat-icon-button
@@ -6,10 +6,10 @@
     class="app-scroll-button"
     title="{{ 'Scroll to bottom to continue' | translate }}"
     type="button"
-  >
+    >
     <img
       src="/assets/images/btn-scroll-down.png"
       alt="{{ 'Scroll to bottom to continue' | translate }}"
-    />
+      />
   </button>
-</ng-container>
+}

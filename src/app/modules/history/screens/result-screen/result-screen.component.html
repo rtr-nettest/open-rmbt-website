@@ -1,194 +1,204 @@
 @if (!hideMenu) {
-<app-header></app-header>
-<app-top-nav></app-top-nav>
-<app-breadcrumbs></app-breadcrumbs>
+  <app-header></app-header>
+  <app-top-nav></app-top-nav>
+  <app-breadcrumbs></app-breadcrumbs>
 }
 <app-main-content>
   <div class="app-wrapper">
     <header class="app-header">
       <h1 class="app-result-h1">{{ title | translate }}</h1>
       @if (!failedDetailedResults()) {
-      <app-action-buttons [items]="actionButtons"></app-action-buttons>
+        <app-action-buttons [items]="actionButtons"></app-action-buttons>
       }
     </header>
     @if (result$ | async; as result) {
-    <div class="app-header">
-      <h2 *ngIf="result.measurementDate" aria-live="polite">
-        {{ "Measurement result from" | translate }}
-        {{ result.measurementDate | date : "dd.MM.yyyy, HH:mm:ss" }}
-      </h2>
-      <h2
-        *ngIf="!result.measurementDate && !failedDetailedResults()"
-        aria-live="polite"
-      >
-        {{ "Measurement result" | translate }}
-      </h2>
-      <h2
-        *ngIf="!result.measurementDate && failedDetailedResults()"
-        aria-live="polite"
-      >
-        {{ "Measurement failed" | translate }}
-      </h2>
-      @if (canStartTest) {
-      <a
-        [routerLink]="'/' + activeLang + '/' + routes.TEST"
-        class="app-button"
-        mat-flat-button
-      >
-        {{ "Run test again" | translate }}
-      </a>
-      }
-    </div>
-    @if (basicResults(); as basicResults) {
-    <div *ngIf="basicResults.content.length" class="app-container">
-      <app-table
-        [columns]="columns"
-        [data]="basicResults"
-        [sort]="sort"
-        [shouldHideHeader]="true"
-        [tableClassNames]="['app-table--bordered']"
-        [rowA11yLabelFunc]="getRowLabel"
-        aria-live="polite"
-      ></app-table>
-    </div>
-    } @if (qoeResults(); as qoeResults) {
-    <div *ngIf="qoeResults.content.length" class="app-container">
-      <h3 class="app-h4">{{ "Quality" | translate }}</h3>
-      <app-table
-        [columns]="qoeColumns"
-        [data]="qoeResults"
-        [sort]="sort"
-        [shouldHideHeader]="true"
-        [tableClassNames]="['app-table--bordered']"
-        [rowA11yLabelFunc]="getRowLabel"
-        aria-live="polite"
-      ></app-table>
-    </div>
-    } @if (detailedResults(); as detailedResult) {
-    <ng-container *ngIf="detailedResult.content.length">
-      @defer () { @if (locationTable().length) {
-      <div class="app-container" [id]="mapContainerId" style="margin-top: 24px">
-        <h4>{{ "Position" | translate }}</h4>
-        <app-map
-          [params]="mapParams()"
-          [mapContainerId]="mapContainerId"
-          [locations]="locationTable()"
-          [showPath]="showMeasurementPath()"
-        ></app-map>
-        <app-location-details
-          [details]="locationTable()"
-          (expand)="this.showMeasurementPath.set($event)"
-          style="display: block; margin-top: 24px"
-          a11yTitle="Location details"
-        ></app-location-details>
-      </div>
-      }
-      <h3 class="app-title">{{ "Speed curve" | translate }}</h3>
-      <div class="app-charts">
-        <div class="app-charts-row">
-          <header class="app-charts-row__base" [attr.aria-hidden]="true">
-            <h4>{{ "Ping" | translate }}</h4>
-            <app-test-chart phase="ping"></app-test-chart>
-          </header>
-          <app-ping-details
-            [details]="pingTable()"
-            a11yTitle="Ping details"
-          ></app-ping-details>
-        </div>
-        <div class="app-charts-row">
-          <header class="app-charts-row__base" [attr.aria-hidden]="true">
-            <h4>{{ "Download" | translate }}</h4>
-            <app-test-chart phase="download"></app-test-chart>
-          </header>
-          <app-speed-details
-            [details]="downloadTable()"
-            a11yTitle="Download details"
-          ></app-speed-details>
-        </div>
-        <div class="app-charts-row">
-          <header class="app-charts-row__base" [attr.aria-hidden]="true">
-            <h4>{{ "Upload" | translate }}</h4>
-            <app-test-chart phase="upload"></app-test-chart>
-          </header>
-          <app-speed-details
-            [details]="uploadTable()"
-            a11yTitle="Upload details"
-          ></app-speed-details>
-        </div>
-        @if (signalTable().length) {
-        <div class="app-charts-row">
-          <header class="app-charts-row__base" [attr.aria-hidden]="true">
-            <h4>{{ "Signal" | translate }}</h4>
-            <app-signal-chart
-              [signal]="signalTable()"
-              [phaseDurations]="phaseDurations()"
-            ></app-signal-chart>
-          </header>
-          <app-signal-details
-            [details]="signalTableGrouped()"
-            a11yTitle="Signal details"
-          ></app-signal-details>
-        </div>
+      <div class="app-header">
+        @if (result.measurementDate) {
+          <h2 aria-live="polite">
+            {{ "Measurement result from" | translate }}
+            {{ result.measurementDate | date : "dd.MM.yyyy, HH:mm:ss" }}
+          </h2>
+        }
+        @if (!result.measurementDate && !failedDetailedResults()) {
+          <h2
+            aria-live="polite"
+            >
+            {{ "Measurement result" | translate }}
+          </h2>
+        }
+        @if (!result.measurementDate && failedDetailedResults()) {
+          <h2
+            aria-live="polite"
+            >
+            {{ "Measurement failed" | translate }}
+          </h2>
+        }
+        @if (canStartTest) {
+          <a
+            [routerLink]="'/' + activeLang + '/' + routes.TEST"
+            class="app-button"
+            mat-flat-button
+            >
+            {{ "Run test again" | translate }}
+          </a>
         }
       </div>
+      @if (basicResults(); as basicResults) {
+        @if (basicResults.content.length) {
+          <div class="app-container">
+            <app-table
+              [columns]="columns"
+              [data]="basicResults"
+              [sort]="sort"
+              [shouldHideHeader]="true"
+              [tableClassNames]="['app-table--bordered']"
+              [rowA11yLabelFunc]="getRowLabel"
+              aria-live="polite"
+            ></app-table>
+          </div>
+        }
+        } @if (qoeResults(); as qoeResults) {
+        @if (qoeResults.content.length) {
+          <div class="app-container">
+            <h3 class="app-h4">{{ "Quality" | translate }}</h3>
+            <app-table
+              [columns]="qoeColumns"
+              [data]="qoeResults"
+              [sort]="sort"
+              [shouldHideHeader]="true"
+              [tableClassNames]="['app-table--bordered']"
+              [rowA11yLabelFunc]="getRowLabel"
+              aria-live="polite"
+            ></app-table>
+          </div>
+        }
+        } @if (detailedResults(); as detailedResult) {
+        @if (detailedResult.content.length) {
+          @defer () { @if (locationTable().length) {
+          <div class="app-container" [id]="mapContainerId" style="margin-top: 24px">
+            <h4>{{ "Position" | translate }}</h4>
+            <app-map
+              [params]="mapParams()"
+              [mapContainerId]="mapContainerId"
+              [locations]="locationTable()"
+              [showPath]="showMeasurementPath()"
+            ></app-map>
+            <app-location-details
+              [details]="locationTable()"
+              (expand)="this.showMeasurementPath.set($event)"
+              style="display: block; margin-top: 24px"
+              a11yTitle="Location details"
+            ></app-location-details>
+          </div>
+        }
+        <h3 class="app-title">{{ "Speed curve" | translate }}</h3>
+        <div class="app-charts">
+          <div class="app-charts-row">
+            <header class="app-charts-row__base" [attr.aria-hidden]="true">
+              <h4>{{ "Ping" | translate }}</h4>
+              <app-test-chart phase="ping"></app-test-chart>
+            </header>
+            <app-ping-details
+              [details]="pingTable()"
+              a11yTitle="Ping details"
+            ></app-ping-details>
+          </div>
+          <div class="app-charts-row">
+            <header class="app-charts-row__base" [attr.aria-hidden]="true">
+              <h4>{{ "Download" | translate }}</h4>
+              <app-test-chart phase="download"></app-test-chart>
+            </header>
+            <app-speed-details
+              [details]="downloadTable()"
+              a11yTitle="Download details"
+            ></app-speed-details>
+          </div>
+          <div class="app-charts-row">
+            <header class="app-charts-row__base" [attr.aria-hidden]="true">
+              <h4>{{ "Upload" | translate }}</h4>
+              <app-test-chart phase="upload"></app-test-chart>
+            </header>
+            <app-speed-details
+              [details]="uploadTable()"
+              a11yTitle="Upload details"
+            ></app-speed-details>
+          </div>
+          @if (signalTable().length) {
+            <div class="app-charts-row">
+              <header class="app-charts-row__base" [attr.aria-hidden]="true">
+                <h4>{{ "Signal" | translate }}</h4>
+                <app-signal-chart
+                  [signal]="signalTable()"
+                  [phaseDurations]="phaseDurations()"
+                ></app-signal-chart>
+              </header>
+              <app-signal-details
+                [details]="signalTableGrouped()"
+                a11yTitle="Signal details"
+              ></app-signal-details>
+            </div>
+          }
+        </div>
       }
       <h3 class="app-title">{{ "Detailed results" | translate }}</h3>
       <div class="app-container">
         @if (showFullDetails()) {
-        <app-table
-          id="fullDetails"
-          [columns]="columns"
-          [data]="detailedResult"
-          [shouldHideHeader]="true"
-          [tableClassNames]="['app-table--bordered']"
-          [sort]="sort"
-          [rowA11yLabelFunc]="getRowLabel"
-        ></app-table>
+          <app-table
+            id="fullDetails"
+            [columns]="columns"
+            [data]="detailedResult"
+            [shouldHideHeader]="true"
+            [tableClassNames]="['app-table--bordered']"
+            [sort]="sort"
+            [rowA11yLabelFunc]="getRowLabel"
+          ></app-table>
         } @else {
-        <app-table
-          [columns]="columns"
-          [data]="initialDetails()"
-          [shouldHideHeader]="true"
-          [tableClassNames]="['app-table--bordered']"
-          [sort]="sort"
-          [rowA11yLabelFunc]="getRowLabel"
-        ></app-table>
-        <button
-          (click)="showFullDetails.set(true)"
-          class="app-button"
-          style="margin-top: 24px"
-          mat-stroked-button
-          [attr.aria-expanded]="showFullDetails()"
-          [attr.aria-controls]="'fullDetails'"
-        >
-          {{ "Show additional information..." | translate }}
-        </button>
+          <app-table
+            [columns]="columns"
+            [data]="initialDetails()"
+            [shouldHideHeader]="true"
+            [tableClassNames]="['app-table--bordered']"
+            [sort]="sort"
+            [rowA11yLabelFunc]="getRowLabel"
+          ></app-table>
+          <button
+            (click)="showFullDetails.set(true)"
+            class="app-button"
+            style="margin-top: 24px"
+            mat-stroked-button
+            [attr.aria-expanded]="showFullDetails()"
+            [attr.aria-controls]="'fullDetails'"
+            >
+            {{ "Show additional information..." | translate }}
+          </button>
         }
       </div>
       <div class="app-container">
         <h4>{{ "Share" | translate }}</h4>
         <app-share-result [result]="result"></app-share-result>
       </div>
-    </ng-container>
+    }
     } @if (failedDetailedResults(); as failedDetailedResults) {
-    <div class="app-container" *ngIf="failedDetailedResults.content.length">
-      <app-table
-        [columns]="columns"
-        [data]="failedDetailedResults"
-        [shouldHideHeader]="true"
-        [tableClassNames]="['app-table--bordered']"
-        [sort]="sort"
-        [rowA11yLabelFunc]="getRowLabel"
-      ></app-table>
-    </div>
+    @if (failedDetailedResults.content.length) {
+      <div class="app-container">
+        <app-table
+          [columns]="columns"
+          [data]="failedDetailedResults"
+          [shouldHideHeader]="true"
+          [tableClassNames]="['app-table--bordered']"
+          [sort]="sort"
+          [rowA11yLabelFunc]="getRowLabel"
+        ></app-table>
+      </div>
+    }
     } } @else if (loading()) {
     <h3>{{ "Loading results" | translate }}</h3>
-    } @else {
+  } @else {
     <h3>{{ "No results available" | translate }}</h3>
-    }
-  </div>
+  }
+</div>
 </app-main-content>
 <div class="app-separator"></div>
 @if (!hideMenu) {
-<app-footer></app-footer>
+  <app-footer></app-footer>
 }
