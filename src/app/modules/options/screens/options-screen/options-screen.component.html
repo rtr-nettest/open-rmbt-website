@@ -5,64 +5,69 @@
   <div class="app-wrapper">
     <h1 class="app-title">{{ "Options" | translate }}</h1>
     <h2>{{ "Client-UUID" | translate }}</h2>
-    <p>{{ "Your UUID is: %0" | translate | sprintf : uuid() }}</p>
+    <p>{{ "Your UUID is: %0" | translate | sprintf: uuid() }}</p>
     <p [innerHTML]="'E-Mail: netztest@rtr.at' | translate"></p>
     <p>
-      GIT: webpage {{ gitInfo.branch }} @if(gitInfo.hash) {
-      {{ gitInfo.hash.slice(0, 8) }}
-      }, rmbtws
-      {{ gitInfo.rmbtwsBranch }} @if(gitInfo.rmbtwsHash) {
-      {{ gitInfo.rmbtwsHash.slice(0, 8) }}
+      GIT: webpage {{ gitInfo.branch }}
+      @if (gitInfo.hash) {
+        {{ gitInfo.hash.slice(0, 8) }}
+      }
+      , rmbtws {{ gitInfo.rmbtwsBranch }}
+      @if (gitInfo.rmbtwsHash) {
+        {{ gitInfo.rmbtwsHash.slice(0, 8) }}
       }
     </p>
     @if (form) {
-    <form [formGroup]="form" (ngSubmit)="submit()" style="margin-top: 2rem">
-      <h3>{{ "IP-Version" | translate }}</h3>
-      <p>
-        {{ "IP-Version description" | translate }}
-      </p>
-      <mat-radio-group formControlName="ipVersion">
-        @for (item of ipVersionOptions; track $index) {
-        <div>
-          <mat-radio-button
-            class="app-option"
-            [value]="item.value"
-            [disabled]="disabledIpVersions().includes(item.value)"
-            >{{ item.label | translate }}</mat-radio-button
+      <form [formGroup]="form" (ngSubmit)="submit()" style="margin-top: 2rem">
+        <h3>{{ "IP-Version" | translate }}</h3>
+        <p>
+          {{ "IP-Version description" | translate }}
+        </p>
+        @if (loading()) {
+          <p>{{ "Loading IP information..." | translate }}</p>
+        } @else if (error()) {
+          <p>{{ error() | translate }}</p>
+        } @else {
+          <mat-radio-group formControlName="ipVersion">
+            @for (item of ipVersionOptions; track $index) {
+              <div>
+                <mat-radio-button
+                  class="app-option"
+                  [value]="item.value"
+                  [disabled]="disabledIpVersions().includes(item.value)"
+                  >{{ item.label | translate }}</mat-radio-button
+                >
+              </div>
+            }
+          </mat-radio-group>
+        }
+        @if (form.get("preferredServer")) {
+          <h3>{{ "Test server" | translate }}</h3>
+          <mat-radio-group formControlName="preferredServer">
+            @for (item of servers; track $index) {
+              <div>
+                <mat-radio-button class="app-option" [value]="item.uuid">{{
+                  item.name | translate
+                }}</mat-radio-button>
+              </div>
+            }
+          </mat-radio-group>
+        }
+        <p style="margin-top: 2rem">
+          <button
+            mat-flat-button
+            class="app-button"
+            color="primary"
+            type="submit"
+            [disabled]="form.invalid"
           >
-        </div>
-        }
-      </mat-radio-group>
-      @if (form.get("preferredServer")) {
-      <h3>{{ "Test server" | translate }}</h3>
-      <mat-radio-group formControlName="preferredServer">
-        @for (item of servers; track $index) {
-        <div>
-          <mat-radio-button class="app-option" [value]="item.uuid">{{
-            item.name | translate
-          }}</mat-radio-button>
-        </div>
-        }
-      </mat-radio-group>
-      }
-      <p style="margin-top: 2rem">
-        <button
-          mat-flat-button
-          class="app-button"
-          color="primary"
-          type="submit"
-          [disabled]="form.invalid"
-        >
-          {{ "Save" | translate }}
-        </button>
-      </p>
-    </form>
-    } @else if (error()) {
-    <p>{{ error() | translate }}</p>
-    } @else {
-    <p>{{ "Loading the form..." | translate }}</p>
-    } @if (text$ | async; as text) {
-    <div [innerHTML]="text" style="margin: 40px 0"></div>
+            {{ "Save" | translate }}
+          </button>
+        </p>
+      </form>
+    }
+    @if (text$ | async; as text) {
+      <div [innerHTML]="text" style="margin: 40px 0"></div>
     }
   </div>
 </app-main-content>

@@ -88,7 +88,7 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
   secret = "showall"
   showServerSelection = signal<boolean>(
     environment.features.show_server_selection ||
-      globalThis.location.hash === "#showAll"
+      globalThis.location.hash === "#showAll",
   )
   showServerSelection$ = toObservable(this.showServerSelection)
   text$ = this.i18nStore.getLocalizedHtml("options")
@@ -105,36 +105,9 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    Promise.all([this.ipService.getIpV4(), this.ipService.getIpV6()])
-      .then(([v4, v6]) => {
-        if (!v4) {
-          this.store.disableIpVersion("ipv4")
-        }
-        if (!v6) {
-          this.store.disableIpVersion("ipv6")
-        }
-        this.form = this.fb.group({})
-        this.form.addControl(
-          "ipVersion",
-          new FormControl(this.store.ipVersion() || "default")
-        )
-        if (this.showServerSelection()) {
-          this.addServerSelectionField()
-        }
-      })
-      .catch(() => {
-        this.error.set("Failed to load IP information")
-      })
-      .finally(() => {
-        this.loading.set(false)
-      })
-    this.showServerSelection$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((show) => {
-        if (show) {
-          this.addServerSelectionField()
-        }
-      })
+    this.form = this.fb.group({})
+    this.addIpVersionControl()
+    this.addServerSelectionField()
   }
 
   submit(): void {
@@ -161,12 +134,38 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
     }
   }
 
-  addServerSelectionField(): void {
-    if (!this.form?.get("preferredServer")) {
-      this.form?.addControl(
-        "preferredServer",
-        new FormControl(this.store.preferredServer() || "default")
-      )
-    }
+  private addServerSelectionField(): void {
+    this.showServerSelection$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((show) => {
+        if (show && !this.form?.get("preferredServer")) {
+          this.form?.addControl(
+            "preferredServer",
+            new FormControl(this.store.preferredServer() || "default"),
+          )
+        }
+      })
+  }
+
+  private addIpVersionControl(): void {
+    this.form?.addControl(
+      "ipVersion",
+      new FormControl(this.store.ipVersion() || "default"),
+    )
+    Promise.all([this.ipService.getIpV4(), this.ipService.getIpV6()])
+      .then(([v4, v6]) => {
+        if (!v4) {
+          this.store.disableIpVersion("ipv4")
+        }
+        if (!v6) {
+          this.store.disableIpVersion("ipv6")
+        }
+      })
+      .catch(() => {
+        this.error.set("Failed to load IP information")
+      })
+      .finally(() => {
+        this.loading.set(false)
+      })
   }
 }

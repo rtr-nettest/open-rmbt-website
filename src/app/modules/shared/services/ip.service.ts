@@ -9,7 +9,7 @@ import { MainStore } from "../store/main.store"
 export class IpService {
   constructor(
     private readonly i18nStore: I18nStore,
-    private readonly mainStore: MainStore
+    private readonly mainStore: MainStore,
   ) {}
 
   async getIpV4() {
@@ -31,6 +31,7 @@ export class IpService {
           body: JSON.stringify({
             language: this.i18nStore.activeLang,
           }),
+          signal: AbortSignal.timeout(1000),
         })
       ).json()
     } catch (_) {
