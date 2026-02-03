@@ -12,88 +12,89 @@
     </h2>
     <p>
       {{
-        "Since this is the first measurement cycle, we ask you to answer the following questions"
-          | translate
+      "Since this is the first measurement cycle, we ask you to answer the following questions"
+      | translate
       }}
     </p>
     @if (form) {
-    <form [formGroup]="form">
-      <h3 class="app-h4">
-        {{ "Please describe the location of your Internet access" | translate
-        }}<sup>*</sup>
-      </h3>
-      <ul>
-        <li
-          *ngFor="
-            let control of form.controls.locationType.controls;
-            let i = index
-          "
-        >
-          <mat-checkbox [value]="locationValues[i]" [formControl]="control">{{
-            locationNames[i] | translate
-          }}</mat-checkbox>
-        </li>
-      </ul>
-      <mat-form-field appearance="outline">
-        <textarea
-          matInput
-          formControlName="locationTypeOther"
-          name="locationTypeOther"
+      <form [formGroup]="form">
+        <h3 class="app-h4">
+          {{ "Please describe the location of your Internet access" | translate
+          }}<sup>*</sup>
+        </h3>
+        <ul>
+          @for (
+            control of form.controls.locationType.controls; track
+            control; let i = $index) {
+            <li
+              >
+              <mat-checkbox [value]="locationValues[i]" [formControl]="control">{{
+                locationNames[i] | translate
+              }}</mat-checkbox>
+            </li>
+          }
+        </ul>
+        <mat-form-field appearance="outline">
+          <textarea
+            matInput
+            formControlName="locationTypeOther"
+            name="locationTypeOther"
           [required]="
             !!form.controls.locationType.controls[locationValues.length - 1]
               .value
           "
-          [attr.aria-label]="'Other location description' | translate"
-        ></textarea>
-        <mat-error
-          *ngIf="
+            [attr.aria-label]="'Other location description' | translate"
+          ></textarea>
+          @if (
             form.controls.locationType.controls[locationValues.length - 1]
-              .value && !form.controls.locationTypeOther.value
-          "
-          >{{ "Location is required" | translate }}</mat-error
-        >
-      </mat-form-field>
-      <h3 class="app-h4">
-        {{ "Please describe your Internet access" | translate }}
-      </h3>
-      <p>
-        <label for="typeText">{{
-          "What kind of Internet access do you have?" | translate
-        }}</label>
-      </p>
-      <mat-form-field appearance="outline">
-        <textarea
-          matInput
-          id="typeText"
-          formControlName="typeText"
-          name="typeText"
-        ></textarea>
-      </mat-form-field>
-      <h3 class="app-h4">
-        {{ "Please describe your device used for measuring" | translate }}
-      </h3>
-      <p>
-        <label for="testDevice">{{
-          "Describe the computer that you are running the test with."
-            | translate
-        }}</label>
-      </p>
-      <mat-form-field appearance="outline">
-        <textarea
-          matInput
-          id="testDevice"
-          formControlName="testDevice"
-          name="testDevice"
-        ></textarea>
-      </mat-form-field>
-      <h3 class="app-h4">
-        {{ "Photo upload" | translate }}
-      </h3>
-      <p>
-        {{ "Please send us a photo of the modem" | translate }}
-      </p>
-      <p
-        *ngFor="let fileId of fileIds"
+            .value && !form.controls.locationTypeOther.value
+            ) {
+            <mat-error
+              >{{ "Location is required" | translate }}</mat-error
+              >
+            }
+          </mat-form-field>
+          <h3 class="app-h4">
+            {{ "Please describe your Internet access" | translate }}
+          </h3>
+          <p>
+            <label for="typeText">{{
+              "What kind of Internet access do you have?" | translate
+            }}</label>
+          </p>
+          <mat-form-field appearance="outline">
+            <textarea
+              matInput
+              id="typeText"
+              formControlName="typeText"
+              name="typeText"
+            ></textarea>
+          </mat-form-field>
+          <h3 class="app-h4">
+            {{ "Please describe your device used for measuring" | translate }}
+          </h3>
+          <p>
+            <label for="testDevice">{{
+              "Describe the computer that you are running the test with."
+              | translate
+            }}</label>
+          </p>
+          <mat-form-field appearance="outline">
+            <textarea
+              matInput
+              id="testDevice"
+              formControlName="testDevice"
+              name="testDevice"
+            ></textarea>
+          </mat-form-field>
+          <h3 class="app-h4">
+            {{ "Photo upload" | translate }}
+          </h3>
+          <p>
+            {{ "Please send us a photo of the modem" | translate }}
+          </p>
+          @for (fileId of fileIds; track fileId) {
+            <p
         style="
           align-items: center;
           display: flex;
@@ -101,41 +102,44 @@
           text-overflow: ellipsis;
           white-space: nowrap;
         "
-      >
-        <input
-          [id]="fileId"
-          style="display: none"
-          type="file"
-          (change)="onFileSelected($event, fileId)"
-          [attr.aria-label]="'Upload file' | translate"
-        />
-        <button mat-button (click)="onFileUploadClick(fileId)">
-          <mat-icon>attach_file</mat-icon>{{ "Upload file" | translate }}
-        </button>
-        <span
-          *ngIf="files[fileId]?.name"
-          style="margin-left: 1em; margin-right: 1em"
-          >{{ files[fileId].name }}</span
-        >
+              >
+              <input
+                [id]="fileId"
+                style="display: none"
+                type="file"
+                (change)="onFileSelected($event, fileId)"
+                [attr.aria-label]="'Upload file' | translate"
+                />
+              <button mat-button (click)="onFileUploadClick(fileId)">
+                <mat-icon>attach_file</mat-icon>{{ "Upload file" | translate }}
+              </button>
+              @if (files[fileId]?.name) {
+                <span
+                  style="margin-left: 1em; margin-right: 1em"
+                  >{{ files[fileId].name }}</span
+                  >
+                }
+                @if (files[fileId]?.name) {
+                  <button
+                    mat-icon-button
+                    (click)="onDeleteFile(fileId)"
+                    >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                }
+              </p>
+            }
+          </form>
+        }
         <button
-          *ngIf="files[fileId]?.name"
-          mat-icon-button
-          (click)="onDeleteFile(fileId)"
-        >
-          <mat-icon>delete</mat-icon>
+          style="margin-top: 16px"
+          mat-flat-button
+          class="app-button"
+          (click)="onTestStart()"
+          [disabled]="disabled()"
+          >
+          {{ "Start certified measurement" | translate }}
         </button>
-      </p>
-    </form>
-    }
-    <button
-      style="margin-top: 16px"
-      mat-flat-button
-      class="app-button"
-      (click)="onTestStart()"
-      [disabled]="disabled()"
-    >
-      {{ "Start certified measurement" | translate }}
-    </button>
-  </div>
-</app-main-content>
-<app-footer></app-footer>
+      </div>
+    </app-main-content>
+    <app-footer></app-footer>

@@ -43,7 +43,7 @@ export class LoadOnScrollComponent extends SeoComponent {
   }
 
   @HostListener("body:scroll", ["$event"])
-  private onScroll(event: any) {
+  onScroll(event: any) {
     if (this.loading() || this.allLoaded()) {
       return
     }

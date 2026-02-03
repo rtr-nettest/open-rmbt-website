@@ -39,7 +39,7 @@ export class HeaderComponent {
 
   constructor(
     private readonly i18nStore: I18nStore,
-    private readonly translation: TranslationService
+    private readonly translation: TranslationService,
   ) {
     this.rtrLinks$ = this.i18nStore.getTranslations().pipe(
       map((v) => [
@@ -57,7 +57,7 @@ export class HeaderComponent {
           label: v["RTR"],
           url: v["https://www.rtr.at/rtr/startseite.de.html"],
         },
-      ])
+      ]),
     )
   }
 
@@ -89,7 +89,7 @@ export class HeaderComponent {
   }
 
   @HostListener("document:keydown.escape", ["$event"])
-  handleEscapeKey(event: KeyboardEvent) {
+  handleEscapeKey(event: Event) {
     if (this.rtrOpen || this.langOpen) {
       event.preventDefault()
       this.hideSubmenu()

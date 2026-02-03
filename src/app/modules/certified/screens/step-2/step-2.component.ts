@@ -27,7 +27,7 @@ import { map, takeUntil } from "rxjs"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input"
 import { MatRadioModule } from "@angular/material/radio"
-import { NgIf } from "@angular/common"
+
 import { CertifiedBreadcrumbsComponent } from "../../components/certified-breadcrumbs/certified-breadcrumbs.component"
 import { LoopStoreService } from "../../../loop/store/loop-store.service"
 import { environment } from "../../../../../environments/environment"
@@ -44,12 +44,11 @@ import { MainContentComponent } from "../../../shared/components/main-content/ma
     MatFormFieldModule,
     MatInputModule,
     MatRadioModule,
-    NgIf,
     ReactiveFormsModule,
     TopNavComponent,
     TranslatePipe,
-    FooterComponent,
-  ],
+    FooterComponent
+],
   templateUrl: "./step-2.component.html",
   styleUrl: "./step-2.component.scss",
 })

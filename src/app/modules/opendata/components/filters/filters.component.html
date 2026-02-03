@@ -1,63 +1,64 @@
 @if (form) {
-<div class="app-container">
-  <form [formGroup]="form" (ngSubmit)="applyFilters()">
-    @for (key of formControlKeys; track $index) { @if (visibleFields().has(key))
-    { @if (ranges.has(key)) {
-    <app-ranges-filter
-      [form]="form"
-      [key]="key"
-      [ranges]="ranges"
-    ></app-ranges-filter>
-    } @else if (selects.has(key)) {
-    <app-selects-filter
-      [form]="form"
-      [key]="key"
-      [selects]="selects"
-    ></app-selects-filter>
-    } @else if (!key.endsWith("_to") && !key.includes("time")) {
-    <app-inputs-filter [form]="form" [key]="key"></app-inputs-filter>
-    } @else if (key === "timespan_unit") {
-    <app-timespan-filter
-      [form]="form"
-      [key]="key"
-      [timeUnits]="timeUnits"
-    ></app-timespan-filter>
-    } @else if (key === "time_to" || key === "time_from") {
-    <app-date-time-filter
-      [form]="form"
-      [key]="key"
-      [maxFromDate]="maxFromDate()"
-    ></app-date-time-filter>
-    } } }
-    <div class="app-footer">
-      <div class="app-row" style="justify-content: center">
-        <a
-          *ngIf="!allFieldsAreVisible()"
-          mat-button
-          class="app-button"
-          (click)="showAllFields()"
-        >
-          {{ "Further filters" | translate }}
-        </a>
-      </div>
-      <div class="app-row" style="flex-direction: row">
-        <button
-          mat-flat-button
-          class="app-button app-button--primary"
-          type="submit"
-          [disabled]="form.invalid"
-        >
-          {{ "Apply filters" | translate }}
-        </button>
-        <button
-          mat-stroked-button
-          class="app-button app-button--primary"
-          type="reset"
-        >
-          {{ "Reset" | translate }}
-        </button>
-      </div>
+  <div class="app-container">
+    <form [formGroup]="form" (ngSubmit)="applyFilters()">
+      @for (key of formControlKeys; track $index) { @if (visibleFields().has(key))
+        { @if (ranges.has(key)) {
+        <app-ranges-filter
+          [form]="form"
+          [key]="key"
+          [ranges]="ranges"
+        ></app-ranges-filter>
+      } @else if (selects.has(key)) {
+        <app-selects-filter
+          [form]="form"
+          [key]="key"
+          [selects]="selects"
+        ></app-selects-filter>
+      } @else if (!key.endsWith("_to") && !key.includes("time")) {
+        <app-inputs-filter [form]="form" [key]="key"></app-inputs-filter>
+      } @else if (key === "timespan_unit") {
+        <app-timespan-filter
+          [form]="form"
+          [key]="key"
+          [timeUnits]="timeUnits"
+        ></app-timespan-filter>
+      } @else if (key === "time_to" || key === "time_from") {
+        <app-date-time-filter
+          [form]="form"
+          [key]="key"
+          [maxFromDate]="maxFromDate()"
+        ></app-date-time-filter>
+        } } }
+        <div class="app-footer">
+          <div class="app-row" style="justify-content: center">
+            @if (!allFieldsAreVisible()) {
+              <a
+                mat-button
+                class="app-button"
+                (click)="showAllFields()"
+                >
+                {{ "Further filters" | translate }}
+              </a>
+            }
+          </div>
+          <div class="app-row" style="flex-direction: row">
+            <button
+              mat-flat-button
+              class="app-button app-button--primary"
+              type="submit"
+              [disabled]="form.invalid"
+              >
+              {{ "Apply filters" | translate }}
+            </button>
+            <button
+              mat-stroked-button
+              class="app-button app-button--primary"
+              type="reset"
+              >
+              {{ "Reset" | translate }}
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
-  </form>
-</div>
-}
+  }

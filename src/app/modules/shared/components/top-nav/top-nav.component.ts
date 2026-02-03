@@ -71,7 +71,7 @@ export class TopNavComponent {
           label: v["Further"],
           route: "",
         },
-      ])
+      ]),
     )
     this.subItems$ = this.i18nStore.getTranslations().pipe(
       map((v) => [
@@ -99,7 +99,7 @@ export class TopNavComponent {
           label: v["Help"],
           url: v["https://www.netztest.at/redirect/en/help"],
         },
-      ])
+      ]),
     )
   }
 
@@ -130,7 +130,7 @@ export class TopNavComponent {
   }
 
   @HostListener("document:keydown.enter", ["$event"])
-  handleEnterKey(event: KeyboardEvent) {
+  handleEnterKey(event: Event) {
     const activeElement = document.activeElement as HTMLElement
     if (activeElement && activeElement.id === "submenuTrigger") {
       event.preventDefault()
@@ -139,7 +139,7 @@ export class TopNavComponent {
   }
 
   @HostListener("document:keydown.escape", ["$event"])
-  handleEscapeKey(event: KeyboardEvent) {
+  handleEscapeKey(event: Event) {
     if (this.submenuOpen || this.mobileSubmenuOpen) {
       event.preventDefault()
       this.hideSubmenu()

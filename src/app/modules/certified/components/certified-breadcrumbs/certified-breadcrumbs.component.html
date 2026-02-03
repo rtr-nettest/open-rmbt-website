@@ -2,16 +2,17 @@
   <aside
     class="app-breadcrumbs-wrapper"
     aria-label="{{ 'Breadcrumbs' | translate }}"
-  >
+    >
     <ul class="app-breadcrumbs">
-      <li
-        *ngFor="let bc of breadcrumbs()"
-        class="app-breadcrumbs__item"
-        [class.active]="bc.active"
-        [class.visited]="bc.visited"
-      >
-        <a>{{ bc.index + 1 }}. {{ bc.label | translate }}</a>
-      </li>
+      @for (bc of breadcrumbs(); track bc) {
+        <li
+          class="app-breadcrumbs__item"
+          [class.active]="bc.active"
+          [class.visited]="bc.visited"
+          >
+          <a>{{ bc.index + 1 }}. {{ bc.label | translate }}</a>
+        </li>
+      }
     </ul>
   </aside>
 </div>
