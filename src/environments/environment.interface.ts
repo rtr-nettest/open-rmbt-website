@@ -23,6 +23,7 @@ export interface IEnvironment {
   features: {
     show_server_selection: boolean
     history_filter: boolean
+    ip_check_interval_ms?: number
   }
   matomo?: {
     trackerUrl: string

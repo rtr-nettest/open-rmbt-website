@@ -1,8 +1,7 @@
-import { Component, OnInit, signal } from "@angular/core"
-import { IpService } from "../../../shared/services/ip.service"
+import { Component, inject, OnDestroy } from "@angular/core"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
-import { OptionsStoreService } from "../../../options/store/options-store.service"
+import { IpService } from "../../../shared/services/ip.service"
 
 @Component({
   selector: "app-ip-info",
@@ -10,31 +9,18 @@ import { OptionsStoreService } from "../../../options/store/options-store.servic
   templateUrl: "./ip-info.component.html",
   styleUrl: "./ip-info.component.scss",
 })
-export class IpInfoComponent implements OnInit {
-  ipV4 = signal<string | null>(null)
-  ipV6 = signal<string | null>(null)
-  ipV4Loading = signal<boolean>(true)
-  ipV6Loading = signal<boolean>(true)
+export class IpInfoComponent implements OnDestroy {
+  private readonly ipService = inject(IpService)
+  ipV4 = this.ipService.ipV4
+  ipV6 = this.ipService.ipV6
+  ipV4Loading = this.ipService.ipV4Loading
+  ipV6Loading = this.ipService.ipV6Loading
 
-  constructor(
-    private readonly ip: IpService,
-    private readonly optionsStore: OptionsStoreService
-  ) {}
+  constructor() {
+    this.ipService.watchIpChanges()
+  }
 
-  ngOnInit(): void {
-    this.ip.getIpV4().then((r) => {
-      this.ipV4.set(r ? r.ip : "Not available")
-      this.ipV4Loading.set(false)
-      if (!r) {
-        this.optionsStore.disableIpVersion("ipv4")
-      }
-    })
-    this.ip.getIpV6().then((r) => {
-      this.ipV6.set(r ? r.ip : "Not available")
-      this.ipV6Loading.set(false)
-      if (!r) {
-        this.optionsStore.disableIpVersion("ipv6")
-      }
-    })
+  ngOnDestroy() {
+    this.ipService.watchIpChanges(false)
   }
 }
