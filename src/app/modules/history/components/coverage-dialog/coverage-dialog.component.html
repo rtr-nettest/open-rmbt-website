@@ -1,27 +1,29 @@
 <mat-dialog-content>
   <app-close-dialog-header [dialogRef]="dialogRef"></app-close-dialog-header>
   @if (data.coverages; as data) {
-  <app-html-wrapper [id]="mapContainerId" [html]="coverageText$ | async">
-    <ng-container header>
-      <div style="margin-top: 24px">
-        <app-table
-          [data]="data"
-          [columns]="columns"
-          [sort]="sort"
-          [tableClassNames]="['app-table--bordered']"
-        ></app-table>
-      </div>
-    </ng-container>
-    <ng-container body>
-      <div [id]="mapId"></div>
-    </ng-container>
-  </app-html-wrapper>
+    <app-html-wrapper [id]="mapContainerId" [html]="coverageText$ | async">
+      <ng-container header>
+        <div style="margin-top: 24px">
+          <app-table
+            [data]="data"
+            [columns]="columns"
+            [sort]="sort"
+            [tableClassNames]="['app-table--default', 'app-table--bordered']"
+          ></app-table>
+        </div>
+      </ng-container>
+      <ng-container body>
+        <div [id]="mapId"></div>
+      </ng-container>
+    </app-html-wrapper>
   } @else {
-  <div class="app-wrapper">
-    <h3 style="margin-top: 24px">{{ "Coverage" | translate }}</h3>
-    <p>
-      {{ "For this location, no provider open data is available." | translate }}
-    </p>
-  </div>
+    <div class="app-wrapper">
+      <h3 style="margin-top: 24px">{{ "Coverage" | translate }}</h3>
+      <p>
+        {{
+          "For this location, no provider open data is available." | translate
+        }}
+      </p>
+    </div>
   }
 </mat-dialog-content>

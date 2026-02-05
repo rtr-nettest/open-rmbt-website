@@ -28,6 +28,16 @@
     }
   }
 
+  @include screen-xxs {
+    mat-cell,
+    mat-header-cell,
+    mat-footer-cell {
+      &:not(:last-of-type) {
+        border-right: none;
+      }
+    }
+  }
+
   .mat-row--cell-info-header {
     .app-cell--signal-strength {
       border-right: none;
