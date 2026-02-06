@@ -309,6 +309,7 @@
   "link_name1": "Straße Name1",
   "link_name2": "Straße Name2",
   "Linux link": "<a href=\"/redirect/desktop-linux\" target=\"_blank\">Desktop-App</a>",
+  "LiveMapOverlayMessage": "Drücken Sie \"m\" oder tippen Sie auf die Vollbildschaltfläche, um die Karte im Vollbildmodus zu öffnen.<br />Drücken Sie eine beliebige Taste, um diese Nachricht zu schließen.",
   "Loading IP information...": "Lade IP-Informationen...",
   "Loading results": "Ergebnisse werden geladen",
   "loc_accuracy_from": "Standortgenauigkeit",

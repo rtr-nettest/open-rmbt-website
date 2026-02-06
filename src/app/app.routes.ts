@@ -26,6 +26,7 @@ import { IframeComponent } from "./modules/test/screens/iframe/iframe.component"
 import { OptionsScreenComponent } from "./modules/options/screens/options-screen/options-screen.component"
 import { clearStoreGuard } from "./modules/certified/guards/clear-store.guard"
 import { SitemapComponent } from "./modules/sitemap/screens/sitemap/sitemap.component"
+import { LiveScreenComponent } from "./modules/map/screens/live-screen/live-screen.component"
 
 export const routes: Routes = [
   {
@@ -223,6 +224,14 @@ export const routes: Routes = [
         resolve: [localeResolver],
         data: {
           title: "Sitemap",
+        },
+      },
+      {
+        path: ERoutes.LIVE_MAP,
+        component: LiveScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Live",
         },
       },
       {

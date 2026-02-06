@@ -5,12 +5,10 @@ import {
   ICertifiedEnvForm,
   ICertifiedEnvFormControls,
 } from "../../interfaces/certified-env-form.interface"
-import { Title } from "@angular/platform-browser"
-import { I18nStore } from "../../../i18n/store/i18n.store"
 import { CertifiedStoreService } from "../../store/certified-store.service"
 import { Router } from "@angular/router"
 import { ERoutes } from "../../../shared/constants/routes.enum"
-import { map, take, takeUntil } from "rxjs"
+import { map, takeUntil } from "rxjs"
 import { ECertifiedSteps } from "../../constants/certified-steps.enum"
 import {
   FormArray,
@@ -18,7 +16,6 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  Validators,
 } from "@angular/forms"
 import { v4 } from "uuid"
 import { FileService } from "../../../shared/services/file.service"
@@ -54,8 +51,8 @@ import { MainContentComponent } from "../../../shared/components/main-content/ma
     ReactiveFormsModule,
     TopNavComponent,
     TranslatePipe,
-    FooterComponent
-],
+    FooterComponent,
+  ],
   templateUrl: "./step-3.component.html",
   styleUrl: "./step-3.component.scss",
 })
@@ -73,24 +70,18 @@ export class Step3Component extends SeoComponent implements OnInit {
   fileIds = [v4()]
   disabled = signal(true)
 
+  private readonly fb = inject(FormBuilder)
+  private readonly fs = inject(FileService)
+  private readonly mainStore = inject(MainStore)
+  private readonly router = inject(Router)
+  private readonly store = inject(CertifiedStoreService)
+
   get breadcrumbs() {
     return this.store.breadcrumbs
   }
 
   get files() {
     return this.store.envForm()?.testPictures ?? {}
-  }
-
-  constructor(
-    ts: Title,
-    i18nStore: I18nStore,
-    private readonly fb: FormBuilder,
-    private readonly fs: FileService,
-    private readonly mainStore: MainStore,
-    private readonly router: Router,
-    private readonly store: CertifiedStoreService
-  ) {
-    super(ts, i18nStore)
   }
 
   ngOnInit(): void {
@@ -114,8 +105,8 @@ export class Step3Component extends SeoComponent implements OnInit {
           (_, i) =>
             new FormControl(!!savedForm?.locationType[i], {
               nonNullable: true,
-            })
-        )
+            }),
+        ),
       ),
       locationTypeOther: new FormControl({
         value: savedForm?.locationTypeOther || "",
@@ -131,19 +122,19 @@ export class Step3Component extends SeoComponent implements OnInit {
     this.form.controls.locationTypeOther.valueChanges
       .pipe(
         map(this.onLocationTypeOtherChange.bind(this)),
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       )
       .subscribe()
     this.form.controls.typeText.valueChanges
       .pipe(
         map(() => this.onFormChange()),
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       )
       .subscribe()
     this.form.controls.testDevice.valueChanges
       .pipe(
         map(() => this.onFormChange()),
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       )
       .subscribe()
     this.onCheckboxChange(this.form.controls.locationType.value)
@@ -221,7 +212,7 @@ export class Step3Component extends SeoComponent implements OnInit {
         : envForm.locationTypeOther,
     })
     this.loopStore.testIntervalMinutes.set(
-      environment.certifiedDefaults.default_delay
+      environment.certifiedDefaults.default_delay,
     )
     this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_4])
   }

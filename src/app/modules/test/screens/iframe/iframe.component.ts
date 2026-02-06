@@ -9,10 +9,8 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { SettingsService } from "../../../shared/services/settings.service"
 import { firstValueFrom } from "rxjs"
-import { TestService } from "../../services/test.service"
 import { IframeIntroComponent } from "../../components/iframe-intro/iframe-intro.component"
 import { IframeTestComponent } from "../../components/iframe-test/iframe-test.component"
-import { TestStore } from "../../store/test.store"
 import { EMeasurementStatus } from "../../constants/measurement-status.enum"
 
 @Component({

@@ -11,7 +11,7 @@ import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.comp
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
-import { firstValueFrom, interval, map, Observable, takeUntil } from "rxjs"
+import { map, Observable } from "rxjs"
 import { AsyncPipe } from "@angular/common"
 import { CardButtonComponent } from "../../components/card-button/card-button.component"
 import { ERoutes } from "../../../shared/constants/routes.enum"
@@ -20,24 +20,18 @@ import {
   EPlatform,
   PlatformService,
 } from "../../../shared/services/platform.service"
-import { MapComponent } from "../../../opendata/components/map/map.component"
+import { MapComponent } from "../../../map/components/map/map.component"
 import { IRecentMeasurement } from "../../../opendata/interfaces/recent-measurements-response.interface"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
-import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
-import { Title } from "@angular/platform-browser"
-import { I18nStore } from "../../../i18n/store/i18n.store"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatButtonModule } from "@angular/material/button"
 import { Router, RouterModule } from "@angular/router"
-import { OpendataService } from "../../../opendata/services/opendata.service"
 import { RECENT_MEASUREMENTS_COLUMNS } from "../../../opendata/constants/recent-measurements-columns"
 import { FullscreenControl, NavigationControl } from "maplibre-gl"
-import { formatTime } from "../../../shared/adapters/app-date.adapter"
-import { FullScreenService } from "../../../opendata/services/full-screen.service"
+import { FullScreenService } from "../../../map/services/full-screen.service"
 import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
-
-const UPDATE_INTERVAL = 5000
+import { LiveService } from "../../../opendata/services/live.service"
 
 @Component({
   selector: "app-landing",
@@ -70,7 +64,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
       const platform = this.platform.detectPlatform()
       if (
         new Set([EPlatform.ANDROID, EPlatform.IOS, EPlatform.WIN_PHONE]).has(
-          platform
+          platform,
         )
       ) {
         // We're on mobile, no reason to show the desktop links
@@ -90,13 +84,13 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
       }
       text = text.replace("%web", t["Browser test link"])
       return text
-    })
+    }),
   )
   eRoutes = ERoutes
-  recentMeasurements = signal<IRecentMeasurement[]>([])
-  opendataService = inject(OpendataService)
+  liveService = inject(LiveService)
+  recentMeasurements = this.liveService.recentMeasurements
   tableColumns: ITableColumn<IRecentMeasurement>[] = RECENT_MEASUREMENTS_COLUMNS
-  tableData = signal<IBasicResponse<IRecentMeasurement> | null>(null)
+  tableData = this.liveService.tableData
   mapDisabled = signal(false)
   mobileLink = computed(() => {
     const platform = this.platform.detectPlatform()
@@ -107,37 +101,23 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
     }
     return null
   })
+  platform = inject(PlatformService)
+  router = inject(Router)
   private fullScreen = inject(FullScreenService)
-  private isInitialized = false
-  private isReplaying = false
-
-  constructor(
-    i18nStore: I18nStore,
-    title: Title,
-    private readonly measurements: OpendataService,
-    private readonly platform: PlatformService,
-    private readonly router: Router
-  ) {
-    super(title, i18nStore)
-  }
 
   ngAfterViewInit(): void {
     if (globalThis.document) {
-      this.setMeasurements()
-      interval(UPDATE_INTERVAL)
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe(() => {
-          if (this.isInitialized) {
-            this.setMeasurements()
-          } else {
-            this.setReplayMeasurements()
-          }
-        })
+      this.liveService.watchMeasurements()
       const testCard = document.querySelector(
-        `a[href*="${ERoutes.TEST}"].app-card`
+        `a[href*="${ERoutes.TEST}"].app-card`,
       ) as HTMLAnchorElement
       testCard.focus()
     }
+  }
+
+  override ngOnDestroy(): void {
+    super.ngOnDestroy()
+    this.liveService.watchMeasurements(false)
   }
 
   goToResult(result: IRecentMeasurement) {
@@ -145,58 +125,6 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
       queryParams: {
         open_test_uuid: result.open_test_uuid,
       },
-    })
-  }
-
-  private setMeasurements() {
-    firstValueFrom(this.measurements.getRecentMeasurements()).then((resp) => {
-      const content = (resp?.results ?? []).map((r) => formatTime(r))
-      this.tableData.set({
-        content: content.slice(0, 5),
-        totalElements: 5,
-      })
-      this.recentMeasurements.set(
-        content.filter((m) => m.lat && m.long).slice(0, 20)
-      )
-    })
-  }
-
-  private setReplayMeasurements() {
-    if (this.isReplaying) {
-      return
-    }
-    firstValueFrom(this.measurements.getRecentMeasurements()).then((resp) => {
-      this.isReplaying = true
-      const content = (resp?.results ?? []).map((r) => formatTime(r))
-      const forMap = content.filter((m) => m.lat && m.long)
-      this.recentMeasurements.set(forMap.slice(3, 23))
-      this.tableData.set({
-        content: forMap.slice(3, 8),
-        totalElements: 5,
-      })
-      setTimeout(() => {
-        this.recentMeasurements.set(forMap.slice(2, 22))
-        this.tableData.set({
-          content: forMap.slice(2, 7),
-          totalElements: 5,
-        })
-      }, 4000)
-      setTimeout(() => {
-        this.recentMeasurements.set(forMap.slice(1, 21))
-        this.tableData.set({
-          content: forMap.slice(1, 6),
-          totalElements: 5,
-        })
-      }, 7000)
-      setTimeout(() => {
-        this.recentMeasurements.set(forMap.slice(0, 20))
-        this.tableData.set({
-          content: forMap.slice(0, 5),
-          totalElements: 5,
-        })
-        this.isInitialized = true
-        this.isReplaying = false
-      }, 10000)
     })
   }
 

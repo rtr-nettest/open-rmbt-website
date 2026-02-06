@@ -1,18 +1,16 @@
-import { Component, computed, signal } from "@angular/core"
+import { Component, computed, inject, signal } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
-import { ScrollTopComponent } from "../../../shared/components/scroll-top/scroll-top.component"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
-import { AsyncPipe, DatePipe } from "@angular/common";
+import { AsyncPipe, DatePipe } from "@angular/common"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { Observable, of, switchMap, tap } from "rxjs"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { IDetailedHistoryResultItem } from "../../interfaces/detailed-history-result-item.interface"
 import { ClassificationService } from "../../../shared/services/classification.service"
-import { I18nStore } from "../../../i18n/store/i18n.store"
 import { ActivatedRoute, RouterModule } from "@angular/router"
 import { ISort } from "../../../tables/interfaces/sort.interface"
 import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interface"
@@ -23,7 +21,7 @@ import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/bre
 import { roundToSignificantDigits } from "../../../shared/util/math"
 import { MapComponent } from "../../components/map/map.component"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
-import { Meta, Title } from "@angular/platform-browser"
+import { Meta } from "@angular/platform-browser"
 import { SpeedDetailsComponent } from "../../components/speed-details/speed-details.component"
 import { IOverallResult } from "../../interfaces/overall-result.interface"
 import { PingDetailsComponent } from "../../components/ping-details/ping-details.component"
@@ -81,8 +79,8 @@ import { capitalize, deHtmlize } from "../../../shared/util/string"
     SpeedDetailsComponent,
     LocationDetailsComponent,
     MapComponent,
-    PingDetailsComponent
-],
+    PingDetailsComponent,
+  ],
   templateUrl: "./result-screen.component.html",
   styleUrl: "./result-screen.component.scss",
 })
@@ -148,11 +146,11 @@ export class ResultScreenComponent extends SeoComponent {
   routes = ERoutes
   showFullDetails = signal<boolean>(false)
   initialDetails = signal<IBasicResponse<IDetailedHistoryResultItem>>(
-    this.defaultInitialDetails
+    this.defaultInitialDetails,
   )
   basicResults = signal<IBasicResponse<IDetailedHistoryResultItem> | null>(null)
   detailedResults = signal<IBasicResponse<IDetailedHistoryResultItem> | null>(
-    null
+    null,
   )
   failedDetailedResults =
     signal<IBasicResponse<IDetailedHistoryResultItem> | null>(null)
@@ -185,6 +183,14 @@ export class ResultScreenComponent extends SeoComponent {
   loading = signal<boolean>(true)
   showMeasurementPath = signal<boolean>(false)
 
+  private readonly classification = inject(ClassificationService)
+  private readonly exporter = inject(HistoryExportService)
+  private readonly mainStore = inject(MainStore)
+  private readonly meta = inject(Meta)
+  private readonly service = inject(HistoryService)
+  private readonly store = inject(HistoryStore)
+  private readonly route = inject(ActivatedRoute)
+
   get activeLang() {
     return this.i18nStore.activeLang
   }
@@ -202,19 +208,9 @@ export class ResultScreenComponent extends SeoComponent {
     }
   }
 
-  constructor(
-    i18nStore: I18nStore,
-    title: Title,
-    private readonly classification: ClassificationService,
-    private readonly exporter: HistoryExportService,
-    private readonly mainStore: MainStore,
-    private readonly meta: Meta,
-    private readonly service: HistoryService,
-    private readonly store: HistoryStore,
-    private readonly route: ActivatedRoute
-  ) {
-    super(title, i18nStore)
-    meta.addTag({ name: "robots", content: "noindex, nofollow" })
+  constructor() {
+    super()
+    this.meta.addTag({ name: "robots", content: "noindex, nofollow" })
     this.result$ = this.i18nStore.getTranslations().pipe(
       switchMap(() => {
         const params = {
@@ -253,7 +249,7 @@ export class ResultScreenComponent extends SeoComponent {
           this.failedDetailedResults.set(this.getDetailedResults(result))
         }
         this.loading.set(false)
-      })
+      }),
     )
     this.error$ = this.mainStore.error$
   }
@@ -268,7 +264,7 @@ export class ResultScreenComponent extends SeoComponent {
   getSpeedInMbps(speed: number) {
     return (
       roundToSignificantDigits(speed / 1e3).toLocaleString(
-        this.i18nStore.activeLang
+        this.i18nStore.activeLang,
       ) +
       " " +
       this.i18nStore.translate("Mbps")
@@ -294,7 +290,7 @@ export class ResultScreenComponent extends SeoComponent {
         }
       }
       row.a11yLabel = `${this.i18nStore.translate("Row details")} - ${deHtmlize(
-        row.title
+        row.title,
       )}: ${value}`
     }
 
@@ -302,7 +298,7 @@ export class ResultScreenComponent extends SeoComponent {
   }
 
   private getBasicResults(
-    result: ISimpleHistoryResult
+    result: ISimpleHistoryResult,
   ): IBasicResponse<IDetailedHistoryResultItem> {
     if (
       result.openTestResponse?.["speed_curve"]?.location &&
@@ -328,7 +324,7 @@ export class ResultScreenComponent extends SeoComponent {
               value:
                 this.classification.getPhaseIconByClass(
                   "down",
-                  result.download?.classification
+                  result.download?.classification,
                 ) + this.getSpeedInMbps(value.value),
             },
           ]
@@ -340,7 +336,7 @@ export class ResultScreenComponent extends SeoComponent {
               value:
                 this.classification.getPhaseIconByClass(
                   "up",
-                  result.upload?.classification
+                  result.upload?.classification,
                 ) + this.getSpeedInMbps(value.value),
             },
           ]
@@ -352,7 +348,7 @@ export class ResultScreenComponent extends SeoComponent {
               value:
                 this.classification.getPhaseIconByClass(
                   "ping",
-                  result.ping?.classification
+                  result.ping?.classification,
                 ) + this.getPingInMs(value.value),
             },
           ]
@@ -366,12 +362,12 @@ export class ResultScreenComponent extends SeoComponent {
               title: t(
                 result.signal?.tags?.includes("lte_rsrp")
                   ? "lte_rsrp"
-                  : "signal_strength"
+                  : "signal_strength",
               ),
               value:
                 this.classification.getSignalIconByClass(
                   result.signal.classification,
-                  result.signal.metric
+                  result.signal.metric,
                 ) +
                 result.signal.value +
                 " " +
@@ -393,7 +389,7 @@ export class ResultScreenComponent extends SeoComponent {
       result.qoeClassification?.map((item) => {
         return {
           title: `${this.classification.getQoeIconByCategory(
-            item.category
+            item.category,
           )}<span>${this.i18nStore.translate(item.category)}</span>`,
           value: item,
         }
@@ -405,7 +401,7 @@ export class ResultScreenComponent extends SeoComponent {
   }
 
   private getDetailedResults(
-    result: ISimpleHistoryResult
+    result: ISimpleHistoryResult,
   ): IBasicResponse<IDetailedHistoryResultItem> | null {
     if (!result.openTestResponse) {
       return null
@@ -462,7 +458,7 @@ export class ResultScreenComponent extends SeoComponent {
       ? FORMATTED_FIELDS[key](
           openTestResponse,
           this.i18nStore.translations,
-          this.i18nStore.activeLang
+          this.i18nStore.activeLang,
         )
       : value
     if (!searchable) {
@@ -494,7 +490,7 @@ export class ResultScreenComponent extends SeoComponent {
     }
     const value = `${formatcoords(
       openTestResponse["lat"],
-      openTestResponse["long"]
+      openTestResponse["long"],
     ).format(LOC_FORMAT)} (${
       openTestResponse["loc_src"] ? `${openTestResponse["loc_src"]}, ` : ""
     } +/- ${Math.round(openTestResponse["loc_accuracy"])}m)`
@@ -520,14 +516,14 @@ export class ResultScreenComponent extends SeoComponent {
         title: this.i18nStore.translate("land_cover_cat1"),
         value: FORMATTED_FIELDS["land_cover_cat1"]!(
           openTestResponse,
-          this.i18nStore.translations
+          this.i18nStore.translations,
         ),
       },
       {
         title: this.i18nStore.translate("land_cover_cat2"),
         value: FORMATTED_FIELDS["land_cover_cat2"]!(
           openTestResponse,
-          this.i18nStore.translations
+          this.i18nStore.translations,
         ),
       },
     ]

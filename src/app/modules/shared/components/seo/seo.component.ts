@@ -35,12 +35,14 @@ export class SeoComponent implements OnDestroy {
           this.metaTitle = newTitle
           this.ts.setTitle(newTitle)
           document.documentElement.lang = this.i18nStore.activeLang
-        })
+        }),
       )
       .subscribe()
   }
+  protected readonly i18nStore: I18nStore = inject(I18nStore)
   protected readonly testStore = inject(TestStore)
   protected readonly testService = inject(TestService)
+  protected readonly ts: Title = inject(Title)
   private _title!: string
 
   get fragment() {
@@ -56,10 +58,7 @@ export class SeoComponent implements OnDestroy {
     return this._title
   }
 
-  constructor(
-    protected readonly ts: Title,
-    protected readonly i18nStore: I18nStore
-  ) {
+  constructor() {
     if (this.testStore.shouldAbort()) {
       this.testStore.shouldAbort.set(false)
       location.reload()

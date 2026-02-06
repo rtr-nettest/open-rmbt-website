@@ -4,14 +4,12 @@ import { MatButtonModule } from "@angular/material/button"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
-import { I18nStore } from "../../../i18n/store/i18n.store"
 import { Router } from "@angular/router"
 import { CertifiedStoreService } from "../../store/certified-store.service"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { ECertifiedSteps } from "../../constants/certified-steps.enum"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
-import { Title } from "@angular/platform-browser"
 import {
   FormBuilder,
   FormControl,
@@ -47,14 +45,17 @@ import { MainContentComponent } from "../../../shared/components/main-content/ma
     ReactiveFormsModule,
     TopNavComponent,
     TranslatePipe,
-    FooterComponent
-],
+    FooterComponent,
+  ],
   templateUrl: "./step-2.component.html",
   styleUrl: "./step-2.component.scss",
 })
 export class Step2Component extends SeoComponent implements OnInit {
   form?: FormGroup<ICertifiedDataFormControls>
   loopStore = inject(LoopStoreService)
+  private readonly fb = inject(FormBuilder)
+  private readonly router = inject(Router)
+  private readonly store = inject(CertifiedStoreService)
 
   get breadcrumbs() {
     return this.store.breadcrumbs
@@ -62,16 +63,6 @@ export class Step2Component extends SeoComponent implements OnInit {
 
   get nextStepAvailable() {
     return !!this.form?.controls.isFirstCycle.value
-  }
-
-  constructor(
-    ts: Title,
-    i18nStore: I18nStore,
-    private readonly fb: FormBuilder,
-    private readonly router: Router,
-    private readonly store: CertifiedStoreService
-  ) {
-    super(ts, i18nStore)
   }
 
   ngOnInit(): void {
@@ -110,7 +101,7 @@ export class Step2Component extends SeoComponent implements OnInit {
             this.onFormChange(null)
           }
         }),
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       )
       .subscribe()
   }
@@ -122,7 +113,7 @@ export class Step2Component extends SeoComponent implements OnInit {
   onTestStart() {
     this.store.envForm.set(null)
     this.loopStore.testIntervalMinutes.set(
-      environment.certifiedDefaults.default_delay
+      environment.certifiedDefaults.default_delay,
     )
     this.router.navigate([this.i18nStore.activeLang, ERoutes.CERTIFIED_4])
   }

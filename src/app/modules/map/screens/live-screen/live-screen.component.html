@@ -1,0 +1,21 @@
+@if (!hideMenu) {
+  <app-header></app-header>
+  <app-top-nav></app-top-nav>
+  <app-breadcrumbs></app-breadcrumbs>
+}
+<app-main-content>
+  @if (showOverlay()) {
+    <div class="app-map-overlay">
+      <p [innerHTML]="'LiveMapOverlayMessage' | translate"></p>
+    </div>
+  }
+  <app-map
+    [class.app-overlayed]="showOverlay()"
+    [controls]="mapControls"
+    [measurements]="recentMeasurements()"
+    [mapContainerId]="mapContainerId"
+  ></app-map>
+</app-main-content>
+@if (!hideMenu) {
+  <app-footer></app-footer>
+}

@@ -8,14 +8,14 @@ import {
   OnDestroy,
   SimpleChanges,
 } from "@angular/core"
-import { IRecentMeasurement } from "../../interfaces/recent-measurements-response.interface"
+import { IRecentMeasurement } from "../../../opendata/interfaces/recent-measurements-response.interface"
 import { Subject, Subscription, takeUntil } from "rxjs"
 import { Marker, Map, NavigationControl, IControl } from "maplibre-gl"
 import { bbox } from "@turf/bbox"
 import { lineString } from "@turf/helpers"
-import { PopupService } from "../../../map/services/popup.service"
+import { PopupService } from "../../services/popup.service"
 import { FullScreenService } from "../../services/full-screen.service"
-import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
+import { DEFAULT_CENTER, MapService } from "../../services/map.service"
 
 @Component({
   selector: "app-map",
@@ -113,7 +113,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.cachedMarkers.forEach((m) => m.remove())
         const features: [number, number][] = []
         const cachedMarkers = [...this.measurements].filter(
-          (m) => m.lat && m.long
+          (m) => m.lat && m.long,
         )
         this.cachedMarkers = cachedMarkers.map((m, i) => {
           const coordinates: [number, number] = [m.long, m.lat]

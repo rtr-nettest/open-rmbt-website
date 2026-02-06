@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core"
+import { Component, inject, OnInit } from "@angular/core"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { MatButtonModule } from "@angular/material/button"
@@ -16,7 +16,6 @@ import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.comp
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
-import { Title } from "@angular/platform-browser"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { LoopStoreService } from "../../store/loop-store.service"
 import { Router } from "@angular/router"
@@ -54,19 +53,13 @@ export class Step2Component extends SeoComponent implements OnInit {
   maxTestsAllowed = environment.loopModeDefaults.max_tests
   maxTestIntervalMinutes = environment.loopModeDefaults.max_delay
 
+  private readonly certifiedStore = inject(CertifiedStoreService)
+  private readonly fb = inject(FormBuilder)
+  private readonly router = inject(Router)
+  private readonly store = inject(LoopStoreService)
+
   get breadcrumbs() {
     return this.store.breadcrumbs
-  }
-
-  constructor(
-    ts: Title,
-    i18nStore: I18nStore,
-    private readonly certifiedStore: CertifiedStoreService,
-    private readonly fb: FormBuilder,
-    private readonly router: Router,
-    private readonly store: LoopStoreService
-  ) {
-    super(ts, i18nStore)
   }
 
   ngOnInit(): void {
@@ -102,7 +95,7 @@ export class Step2Component extends SeoComponent implements OnInit {
     if (!this.form?.valid) return
     this.store.maxTestsAllowed.set(this.form.controls.maxTestsAllowed.value)
     this.store.testIntervalMinutes.set(
-      this.form.controls.testIntervalMinutes.value
+      this.form.controls.testIntervalMinutes.value,
     )
     this.router.navigate([this.i18nStore.activeLang, ERoutes.LOOP_3])
   }

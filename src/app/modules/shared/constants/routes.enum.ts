@@ -6,6 +6,7 @@ export enum ERoutes {
   MAP = "map",
   STATISTICS = "statistics",
   TEST = "test",
+  LIVE_MAP = "live",
   LOOP_1 = "series-step-1",
   LOOP_2 = "series-step-2",
   LOOP_3 = "series-step-3",

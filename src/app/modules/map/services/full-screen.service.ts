@@ -9,7 +9,7 @@ import {
   tap,
 } from "rxjs"
 import dayjs from "dayjs"
-import { OpendataService } from "./opendata.service"
+import { OpendataService } from "../../opendata/services/opendata.service"
 
 const DATA_UPDATE_INTERVAL = 5000
 const ID = "fullScreenStats"
@@ -33,7 +33,7 @@ export class FullScreenService {
 
   constructor(
     private readonly i18nStore: I18nStore,
-    private readonly measurements: OpendataService
+    private readonly measurements: OpendataService,
   ) {}
 
   async addPopup() {
@@ -50,7 +50,7 @@ export class FullScreenService {
         concatMap(() => from(this.getData())),
         tap((content) => {
           if (this.popup) this.popup!.innerHTML = content
-        })
+        }),
       )
       .subscribe()
     this.timeSub = interval(1000)
@@ -58,7 +58,7 @@ export class FullScreenService {
         concatMap(() => from(this.getTime())),
         tap((content) => {
           if (this.popup) this.popup!.innerHTML = content
-        })
+        }),
       )
       .subscribe()
   }
@@ -71,11 +71,14 @@ export class FullScreenService {
   }
 
   toggleFullScreen() {
+    if (!globalThis.document) {
+      return
+    }
     const fullScreenControl = (document.querySelector(
-      ".maplibregl-ctrl-shrink"
+      ".maplibregl-ctrl-shrink",
     ) ||
       document.querySelector(
-        ".maplibregl-ctrl-fullscreen"
+        ".maplibregl-ctrl-fullscreen",
       )) as HTMLButtonElement
     fullScreenControl?.click()
   }
@@ -104,7 +107,7 @@ export class FullScreenService {
 
   private async parseTpl() {
     let retVal = await firstValueFrom(
-      this.i18nStore.getLocalizedHtml("map-fullscreen-stats")
+      this.i18nStore.getLocalizedHtml("map-fullscreen-stats"),
     )
     for (const [key, val] of Object.entries(this.data!)) {
       if (val) {

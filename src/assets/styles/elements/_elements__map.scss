@@ -101,3 +101,36 @@
     margin: 0.5em;
   }
 }
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.app-overlayed {
+  .maplibregl-ctrl-top-right .maplibregl-ctrl-group:first-of-type,
+  .maplibregl-ctrl-bottom-right {
+    opacity: 0.2;
+  }
+
+  .maplibregl-ctrl-top-right .maplibregl-ctrl-group:last-of-type {
+    animation: pulse 2s infinite ease-out;
+
+    ::before {
+      bottom: 0;
+      color: white;
+      content: "→";
+      position: absolute;
+      font-size: 32px;
+      font-weight: bold;
+      left: -40px;
+    }
+  }
+}

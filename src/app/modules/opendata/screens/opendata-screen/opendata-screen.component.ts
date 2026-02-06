@@ -21,7 +21,7 @@ import { ExpansionPanelComponent } from "../../../shared/components/expansion-pa
 import { IOpendataFilters } from "../../interfaces/opendata-filters.interface"
 import { RECENT_MEASUREMENTS_COLUMNS } from "../../constants/recent-measurements-columns"
 import { formatTime } from "../../../shared/adapters/app-date.adapter"
-import { MapComponent } from "../../components/map/map.component"
+import { MapComponent } from "../../../map/components/map/map.component"
 import { HistogramComponent } from "../../components/histogram/histogram.component"
 import { IntradayComponent } from "../../components/intraday/intraday.component"
 import { IIntradayResponseItem } from "../../interfaces/intraday-response.interface"
@@ -90,7 +90,7 @@ export class OpendataScreenComponent
     map((data) => ({
       content: data,
       totalElements: data?.length,
-    }))
+    })),
   )
 
   filterCount = signal<string | null>(null)
@@ -99,7 +99,7 @@ export class OpendataScreenComponent
       this.updateFilterCount(filters)
       return forkJoin([of(filters), this.updateData({ reset: true })])
     }),
-    map(([filters]) => filters)
+    map(([filters]) => filters),
   )
   loadHistograms = signal(false)
   loadMap = signal(false)
@@ -136,8 +136,8 @@ export class OpendataScreenComponent
             ...results,
           ])
           return results
-        })
-      )
+        }),
+      ),
     )
   }
 
@@ -168,7 +168,7 @@ export class OpendataScreenComponent
       firstValueFrom(
         this.opendataService.getIntraday({
           ...this.opendataStoreService.filters(),
-        })
+        }),
       )
         .then((data) => this.intradayData.set(data))
         .finally(() => this.loadingIntraday.set(false))
@@ -187,7 +187,7 @@ export class OpendataScreenComponent
       `/${this.i18nStore.activeLang}/${ERoutes.OPEN_RESULT}?open_test_uuid=${
         row.open_test_uuid
       }${this.fragment ? `#${this.fragment}` : ""}`,
-      "_blank"
+      "_blank",
     )
   }
 
@@ -204,18 +204,21 @@ export class OpendataScreenComponent
       (k) =>
         !(k in DEFAULT_FILTERS) &&
         !k.startsWith("timespan") &&
-        (filters as any)[k]
+        (filters as any)[k],
     ).length
     this.filterCount.set(filtersCount > 0 ? ` (${filtersCount})` : "")
   }
 
   private setAutoRefresh() {
-    setTimeout(async () => {
-      const start = Date.now()
-      await this.addRecentMeasurements()
-      this.lastRefreshDurationMs = Date.now() - start
-      this.setAutoRefresh()
-    }, this.lastRefreshDurationMs * 2 + AUTOREFRESH_INTERVAL)
+    setTimeout(
+      async () => {
+        const start = Date.now()
+        await this.addRecentMeasurements()
+        this.lastRefreshDurationMs = Date.now() - start
+        this.setAutoRefresh()
+      },
+      this.lastRefreshDurationMs * 2 + AUTOREFRESH_INTERVAL,
+    )
   }
 
   private async addRecentMeasurements() {
@@ -224,7 +227,7 @@ export class OpendataScreenComponent
     }
     const filters = this.opendataStoreService.filters()
     const resp = await firstValueFrom(
-      this.opendataService.search({ ...DEFAULT_FILTERS, ...filters })
+      this.opendataService.search({ ...DEFAULT_FILTERS, ...filters }),
     )
     const oldContent = this.opendataStoreService.data()
     let newContent = resp?.results?.length ? resp.results : []
@@ -234,7 +237,7 @@ export class OpendataScreenComponent
     newContent.forEach((item) => this.ensureSignal(item))
     const lastTestUuid = newContent[newContent.length - 1]?.open_test_uuid
     const lastOldItemIndex = oldContent.findIndex(
-      (item) => item.open_test_uuid === lastTestUuid
+      (item) => item.open_test_uuid === lastTestUuid,
     )
     if (lastOldItemIndex !== -1) {
       newContent = newContent.concat(oldContent.slice(lastOldItemIndex + 1))
@@ -247,7 +250,7 @@ export class OpendataScreenComponent
 
   private scrollToCurrentPosition(
     newContent: IRecentMeasurement[],
-    oldContent: IRecentMeasurement[]
+    oldContent: IRecentMeasurement[],
   ) {
     const currentFirstItem =
       document.querySelector(".mat-row--selected") ||
@@ -265,7 +268,7 @@ export class OpendataScreenComponent
     const currentScrollTop = document.body.scrollTop || 0
     const currentFirstItemId = oldContent[0]?.open_test_uuid
     const newFirstItemIndex = newContent.findIndex(
-      (item) => item.open_test_uuid === currentFirstItemId
+      (item) => item.open_test_uuid === currentFirstItemId,
     )
     if (newFirstItemIndex > 0) {
       const newScrollTop = currentScrollTop + rowHeight * newFirstItemIndex

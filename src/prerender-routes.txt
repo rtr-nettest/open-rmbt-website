@@ -5,6 +5,7 @@
 /map
 /statistics
 /test
+/live
 /series-step-1
 /series-step-2
 /series-step-3
@@ -27,6 +28,7 @@
 /de/map
 /de/statistics
 /de/test
+/de/live
 /de/series-step-1
 /de/series-step-2
 /de/series-step-3
@@ -49,6 +51,7 @@
 /en/map
 /en/statistics
 /en/test
+/en/live
 /en/series-step-1
 /en/series-step-2
 /en/series-step-3
