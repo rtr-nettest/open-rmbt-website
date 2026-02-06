@@ -3,7 +3,7 @@
   <app-top-nav></app-top-nav>
   <app-breadcrumbs></app-breadcrumbs>
 }
-<app-main-content>
+<main class="app-main-content" id="{{ mapContainerId }}">
   @if (showOverlay()) {
     <div class="app-map-overlay">
       <p [innerHTML]="'LiveMapOverlayMessage' | translate"></p>
@@ -12,10 +12,11 @@
   <app-map
     [class.app-overlayed]="showOverlay()"
     [controls]="mapControls"
+    [dynamicSize]="hideMenu"
     [measurements]="recentMeasurements()"
     [mapContainerId]="mapContainerId"
   ></app-map>
-</app-main-content>
+</main>
 @if (!hideMenu) {
   <app-footer></app-footer>
 }

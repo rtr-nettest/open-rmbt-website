@@ -26,6 +26,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input({ required: true }) measurements: IRecentMeasurement[] = []
   @Input({ required: true }) mapContainerId!: string
   @Input() controls: IControl[] = [new NavigationControl()]
+  @Input() dynamicSize = false
   cachedMarkers: Marker[] = []
   destroyed$ = new Subject<void>()
   fullScreen = inject(FullScreenService)
@@ -101,9 +102,19 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
       if (!this.mapContainerId) {
         return
       }
-      document
-        .getElementById(this.mapId)!
-        .setAttribute("style", `height:440px;width:100%`)
+      const container = document.getElementById(this.mapContainerId)
+      if (this.dynamicSize && container) {
+        document
+          .getElementById(this.mapId)!
+          .setAttribute(
+            "style",
+            `height:${container.clientHeight}px;width:100%`,
+          )
+      } else {
+        document
+          .getElementById(this.mapId)!
+          .setAttribute("style", `height:440px;width:100%`)
+      }
     })
   }
 
