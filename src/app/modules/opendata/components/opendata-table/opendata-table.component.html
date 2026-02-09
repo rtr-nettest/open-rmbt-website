@@ -4,76 +4,102 @@
   }}"
 >
   @if (data) {
-  <mat-table
-    [dataSource]="data.content"
-    multiTemplateDataRows
-    [trackBy]="getRowId"
-    (contentChanged)="onContentChange.emit()"
-  >
-    @for (column of columns; track column.columnDef) {
-    <ng-container matColumnDef="{{ column.columnDef }}">
-      <!-- MAT-HEADER-CELL -->
-      <mat-header-cell *matHeaderCellDef>
-        <div class="sah-table__cell--ellipsis">
-          {{ column.header | translate }}
-        </div>
-      </mat-header-cell>
-      <!-- END MAT-HEADER-CELL-->
-
-      @if (column.getIconClass) {
-      <mat-cell *matCellDef="let element; let i = dataIndex">
-        <span class="app-table__mobile-label">{{
-          column.header | translate
-        }}</span>
-        <div class="app-flex-wrapper">
-          <i [ngClass]="column.getIconClass(element, column)"></i
-          ><span
-            >{{ getDefaultValue(column, element, i) }}
-            @if (column.columnDef === 'platform') {
-            <span class="app-open-test-uuid"
-              >, {{ element.open_test_uuid }}</span
-            >
-            }
-          </span>
-        </div>
-      </mat-cell>
-      } @else {
-
-      <mat-cell
-        *matCellDef="let element; let i = dataIndex"
-        [attr.data-value]="getDefaultValue(column, element, i)"
-      >
-        <span class="app-table__mobile-label">{{
-          column.header | translate
-        }}</span>
-        <span [matTooltip]="column.getTooltip?.(element, column) ?? ''">
-          {{ getDefaultValue(column, element, i) }}
-        </span>
-      </mat-cell>
-
-      }
-      <!-- END MAT-CELL -->
-    </ng-container>
-    }
-
-    <mat-row
-      *matRowDef="let row; columns: displayedColumnDefs"
-      tabindex="0"
-      class="mat-row--clickable"
-      (click)="onRowClickHandler($event, row)"
-      (keydown.enter)="onRowClickHandler($event, row)"
-      (focus)="select($event)"
-      (mouseover)="select($event)"
-      (blur)="unselect($event)"
-      (mouseout)="unselect($event)"
-      [attr.aria-label]="getRowLabel(row)"
+    <mat-table
+      [dataSource]="data.content"
+      multiTemplateDataRows
+      [trackBy]="getRowId"
+      (contentChanged)="onContentChange.emit()"
     >
-    </mat-row>
+      @for (column of columns; track column.columnDef) {
+        <ng-container matColumnDef="{{ column.columnDef }}">
+          <!-- MAT-HEADER-CELL -->
+          <mat-header-cell *matHeaderCellDef>
+            <div class="sah-table__cell--ellipsis">
+              {{ column.header | translate }}
+            </div>
+          </mat-header-cell>
+          <!-- END MAT-HEADER-CELL-->
 
-    <mat-header-row
-      tabindex="0"
-      *matHeaderRowDef="displayedColumnDefs; sticky: true"
-    ></mat-header-row>
-  </mat-table>
+          @if (column.getIconClass) {
+            <mat-cell *matCellDef="let element; let i = dataIndex">
+              <span class="app-table__mobile-label">{{
+                column.header | translate
+              }}</span>
+              <div>
+                @if (column.columnDef === "platform") {
+                  <a
+                    class="app-link"
+                    [routerLink]="[
+                      '/',
+                      i18nStore.activeLang,
+                      eRoutes.OPEN_RESULT,
+                    ]"
+                    [queryParams]="{ open_test_uuid: element.open_test_uuid }"
+                    ><i [ngClass]="column.getIconClass(element, column)"></i
+                    ><span
+                      >{{ getDefaultValue(column, element, i)
+                      }}<span class="app-open-test-uuid"
+                        >, {{ element.open_test_uuid }}</span
+                      >
+                    </span>
+                  </a>
+                } @else {
+                  <i [ngClass]="column.getIconClass(element, column)"></i
+                  ><span>
+                    {{ getDefaultValue(column, element, i) }}
+                  </span>
+                }
+              </div>
+            </mat-cell>
+          } @else {
+            <mat-cell
+              *matCellDef="let element; let i = dataIndex"
+              [attr.data-value]="getDefaultValue(column, element, i)"
+            >
+              <span class="app-table__mobile-label">{{
+                column.header | translate
+              }}</span>
+              <span [matTooltip]="column.getTooltip?.(element, column) ?? ''">
+                @if (column.columnDef === "platform") {
+                  <a
+                    class="app-link"
+                    [routerLink]="[
+                      '/',
+                      i18nStore.activeLang,
+                      eRoutes.OPEN_RESULT,
+                    ]"
+                    [queryParams]="{ open_test_uuid: element.open_test_uuid }"
+                  >
+                    {{ getDefaultValue(column, element, i) }}
+                  </a>
+                } @else {
+                  {{ getDefaultValue(column, element, i) }}
+                }
+              </span>
+            </mat-cell>
+          }
+          <!-- END MAT-CELL -->
+        </ng-container>
+      }
+
+      <mat-row
+        *matRowDef="let row; columns: displayedColumnDefs"
+        tabindex="0"
+        class="mat-row--clickable"
+        (click)="onRowClickHandler($event, row)"
+        (keydown.enter)="onRowClickHandler($event, row)"
+        (focus)="select($event)"
+        (mouseover)="select($event)"
+        (blur)="unselect($event)"
+        (mouseout)="unselect($event)"
+        [attr.aria-label]="getRowLabel(row)"
+      >
+      </mat-row>
+
+      <mat-header-row
+        tabindex="0"
+        *matHeaderRowDef="displayedColumnDefs; sticky: true"
+      ></mat-header-row>
+    </mat-table>
   }
 </div>

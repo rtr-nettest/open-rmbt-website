@@ -9,6 +9,8 @@ import { MatTooltipModule } from "@angular/material/tooltip"
 import { MatSortModule } from "@angular/material/sort"
 import { MatIconModule } from "@angular/material/icon"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
+import { ERoutes } from "../../../shared/constants/routes.enum"
+import { RouterModule } from "@angular/router"
 
 @Component({
   selector: "app-opendata-table",
@@ -21,12 +23,14 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
     MatSortModule,
     MatIconModule,
     TranslatePipe,
+    RouterModule,
   ],
   templateUrl: "./opendata-table.component.html",
   styleUrl: "./opendata-table.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpendataTableComponent extends TableComponent {
+  readonly eRoutes = ERoutes
   showUuids = input(false)
 
   override ngOnChanges(): void {

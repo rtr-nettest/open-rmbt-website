@@ -103,7 +103,7 @@ export class TableComponent implements OnInit, OnChanges {
   filters: ITableColumn[] = []
 
   ngClass = computed(() =>
-    this.tableClassNames?.length ? this.tableClassNames : "app-table--default"
+    this.tableClassNames?.length ? this.tableClassNames : "app-table--default",
   )
 
   get getRowLabel() {
@@ -112,8 +112,8 @@ export class TableComponent implements OnInit, OnChanges {
 
   constructor(
     private tableSortService: TableSortService,
-    private i18nStore: I18nStore,
-    private cdr: ChangeDetectorRef
+    protected i18nStore: I18nStore,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnChanges(): void {
@@ -127,7 +127,7 @@ export class TableComponent implements OnInit, OnChanges {
     this.displayedColumns = this.columns?.filter((c) => !c.isExpandable)
     this.displayedColumnDefs = this.displayedColumns.map((col) => col.columnDef)
     this.displayedSubHeaderColumns = this.subHeaderColumns?.map(
-      (col) => col.columnDef
+      (col) => col.columnDef,
     )
     this.filters = this.columns?.filter((col) => !!col.filterType)
   }
