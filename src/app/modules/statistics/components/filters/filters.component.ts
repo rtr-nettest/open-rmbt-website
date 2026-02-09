@@ -54,10 +54,13 @@ type FiltersForm = {
 })
 export class FiltersComponent implements OnDestroy {
   cdr = inject(ChangeDetectorRef)
-  countries = Object.entries(COUNTRIES).map(([code, name]) => [
-    code.toUpperCase(),
-    name,
-  ])
+  countries = Object.entries(COUNTRIES)
+    .map(([code, name]) => [code.toUpperCase(), name])
+    .sort((a, b) => {
+      if (a[0] === "AT") return -1
+      if (b[0] === "AT") return 1
+      return a[1].localeCompare(b[1])
+    })
   provinces = Object.entries(PROVINCES)
   tecnologies = [
     ["all", "All"],
@@ -100,7 +103,7 @@ export class FiltersComponent implements OnDestroy {
       this.subscription = form.valueChanges
         .pipe(
           takeUntil(this.destroyed$),
-          skipWhile(() => form.controls.end_date.invalid)
+          skipWhile(() => form.controls.end_date.invalid),
         )
         .subscribe((next) => {
           if (next.end_date !== this.store.filters$.value?.end_date) {
@@ -121,7 +124,7 @@ export class FiltersComponent implements OnDestroy {
           })
         })
       return form
-    })
+    }),
   )
   showMore = false
   destroyed$ = new Subject<void>()

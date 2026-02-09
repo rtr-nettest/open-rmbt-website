@@ -31,7 +31,6 @@ import { set } from "ol/transform"
     FooterComponent,
     MapComponent,
     MatDialogModule,
-    MainContentComponent,
     TranslatePipe,
   ],
   templateUrl: "./live-screen.component.html",

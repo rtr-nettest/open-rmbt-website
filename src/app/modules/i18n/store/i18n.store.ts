@@ -47,6 +47,10 @@ export class I18nStore {
     return this._translations$.value
   }
 
+  getActiveLocale() {
+    return this._activeLocale$.asObservable()
+  }
+
   getLocales() {
     return this._availableLocales$.asObservable()
   }
@@ -55,7 +59,7 @@ export class I18nStore {
     return this._activeLocale$.pipe(
       switchMap((locale) => {
         return TranslationHttpLoader.getLocalizedHtml(name, locale!.code)
-      })
+      }),
     )
   }
 
@@ -80,7 +84,7 @@ export class I18nStore {
       tap((translations) => {
         this._activeLocale$.next(locale)
         this._translations$.next(translations)
-      })
+      }),
     )
   }
 
