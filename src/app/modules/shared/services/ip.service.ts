@@ -1,4 +1,4 @@
-import { effect, Injectable, OnDestroy, signal } from "@angular/core"
+import { effect, inject, Injectable, OnDestroy, signal } from "@angular/core"
 import { IpResponse } from "../interfaces/ip-response.interface"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { MainStore } from "../store/main.store"
@@ -14,27 +14,16 @@ import { NOT_AVAILABLE } from "../constants/strings"
 export class IpService {
   ipV4 = signal<string | null>(null)
   ipV6 = signal<string | null>(null)
-  ipV4Loading = signal<boolean>(true)
-  ipV6Loading = signal<boolean>(true)
+  ipV4Loading = signal<boolean>(false)
+  ipV6Loading = signal<boolean>(false)
+  private readonly i18nStore: I18nStore = inject(I18nStore)
+  private readonly mainStore: MainStore = inject(MainStore)
+  private readonly optionsStore: OptionsStoreService =
+    inject(OptionsStoreService)
+  private readonly connectivity: ConnectivityService =
+    inject(ConnectivityService)
+  private connectivitySub: Subscription | null = null
   private timerSub: Subscription | null = null
-
-  constructor(
-    private readonly i18nStore: I18nStore,
-    private readonly mainStore: MainStore,
-    private readonly optionsStore: OptionsStoreService,
-    private readonly connectivity: ConnectivityService,
-  ) {
-    effect(() => {
-      if (this.connectivity.isOnline()) {
-        this.ipV4Loading.set(true)
-        this.ipV6Loading.set(true)
-        this.loadIpInfo()
-      } else {
-        this.handleIPv4(null)
-        this.handleIPv6(null)
-      }
-    })
-  }
 
   async getIpV4() {
     return this.getIp(this.mainStore.api().url_ipv4_check)
@@ -44,7 +33,7 @@ export class IpService {
     return this.getIp(this.mainStore.api().url_ipv6_check)
   }
 
-  private handleIPv4 = (r: IpResponse | null) => {
+  private setIPv4 = (r: IpResponse | null) => {
     this.ipV4.set(r ? r.ip : NOT_AVAILABLE)
     this.ipV4Loading.set(false)
     if (!r) {
@@ -52,7 +41,7 @@ export class IpService {
     }
   }
 
-  private handleIPv6 = (r: IpResponse | null) => {
+  private setIPv6 = (r: IpResponse | null) => {
     this.ipV6.set(r ? r.ip : NOT_AVAILABLE)
     this.ipV6Loading.set(false)
     if (!r) {
@@ -65,25 +54,36 @@ export class IpService {
       return
     }
     if (this.ipV4() === NOT_AVAILABLE || this.ipV4() === null) {
-      this.getIpV4().then(this.handleIPv4)
+      this.getIpV4().then(this.setIPv4)
     }
     if (this.ipV6() === NOT_AVAILABLE || this.ipV6() === null) {
-      this.getIpV6().then(this.handleIPv6)
+      this.getIpV6().then(this.setIPv6)
     }
   }
 
   watchIpChanges(watch: boolean = true) {
-    if (this.timerSub) {
-      this.timerSub.unsubscribe()
-    }
-    if (!environment.features.ip_check_interval_ms || !watch) {
+    this.timerSub?.unsubscribe()
+    this.connectivitySub?.unsubscribe()
+    if (!watch) {
       return
     }
-    this.timerSub = interval(
-      environment.features.ip_check_interval_ms,
-    ).subscribe(() => {
-      this.loadIpInfo()
+    this.connectivitySub = this.connectivity.isOnline$.subscribe((isOnline) => {
+      if (!isOnline) {
+        this.setIPv4(null)
+        this.setIPv6(null)
+      } else {
+        this.ipV4Loading.set(true)
+        this.ipV6Loading.set(true)
+        this.loadIpInfo()
+      }
     })
+    if (environment.features.ip_check_interval_ms) {
+      this.timerSub = interval(
+        environment.features.ip_check_interval_ms,
+      ).subscribe(() => {
+        this.loadIpInfo()
+      })
+    }
   }
 
   private async getIp(url?: string): Promise<IpResponse | null> {
