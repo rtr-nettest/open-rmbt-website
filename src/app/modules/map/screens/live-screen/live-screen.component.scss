@@ -1,7 +1,12 @@
 @import "core";
 
 .app-main-content {
-  height: 100%;
+  height: max(440px, calc(100% - 460px));
+  position: relative;
+
+  &--no-menu {
+    height: 100%;
+  }
 }
 
 .app-map-overlay {
@@ -11,12 +16,12 @@
   display: flex;
   flex-direction: column;
   font-size: rem(20);
-  height: 100%;
   justify-content: center;
   left: 0;
   position: absolute;
   text-align: center;
   top: 0;
+  bottom: 0;
   width: 100%;
   z-index: 1;
 }
