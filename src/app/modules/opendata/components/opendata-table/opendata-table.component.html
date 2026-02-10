@@ -28,7 +28,8 @@
               <div>
                 @if (column.columnDef === "platform") {
                   <a
-                    class="app-link"
+                    class="app-link--text-like"
+                    (click)="$event.stopPropagation()"
                     [routerLink]="[
                       '/',
                       i18nStore.activeLang,
