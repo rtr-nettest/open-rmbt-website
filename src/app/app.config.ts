@@ -39,6 +39,10 @@ import {
 } from "ngx-matomo-client"
 import { environment } from "../environments/environment"
 import { MatomoUrlProviderService } from "./modules/shared/services/matomo-url-provider.service"
+import {
+  FullscreenOverlayContainer,
+  OverlayContainer,
+} from "@angular/cdk/overlay"
 
 Chart.register(
   BarElement,
@@ -49,14 +53,14 @@ Chart.register(
   CategoryScale,
   LinearScale,
   TimeScale,
-  Filler
+  Filler,
 )
 
 patchToLocaleString()
 
 export async function provideConfig(): Promise<ApplicationConfig> {
   ;[localeCs, localeDe, localeEs, localeFr, localeIt].forEach((locale) =>
-    registerLocaleData(locale)
+    registerLocaleData(locale),
   )
   return {
     providers: [
@@ -66,13 +70,14 @@ export async function provideConfig(): Promise<ApplicationConfig> {
       provideAnimationsAsync(),
       provideHttpClient(withFetch(), withInterceptors([errorInterceptor])),
       await provideI18n(),
+      { provide: OverlayContainer, useClass: FullscreenOverlayContainer },
       { provide: DatePipe },
       { provide: LonlatPipe },
       ...(environment.matomo
         ? [
             provideMatomo(
               { ...environment.matomo, requireConsent: "cookie" },
-              withRouter()
+              withRouter(),
             ),
             {
               provide: MATOMO_PAGE_URL_PROVIDER,
