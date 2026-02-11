@@ -1,15 +1,19 @@
 import { HttpInterceptorFn, HttpRequest } from "@angular/common/http"
 import { inject } from "@angular/core"
-import { catchError, of } from "rxjs"
+import { catchError, of, tap } from "rxjs"
 import { MatSnackBar } from "@angular/material/snack-bar"
 import { NO_ERROR_HANDLING } from "../constants/strings"
+import { ConnectivityService } from "../../test/services/connectivity.service"
 
 const showFriendlyMessage = (
   snackBar: MatSnackBar,
   req: HttpRequest<any>,
-  err: any
+  err: any,
 ) => {
   let message = "Something went wrong"
+  if (err.status === 0) {
+    message = "Network error"
+  }
   if (err.status >= 400) {
     switch (err.status) {
       case 400:
@@ -44,12 +48,21 @@ const showFriendlyMessage = (
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const snackBar = inject(MatSnackBar)
+  const connectivityService = inject(ConnectivityService)
   return next(req).pipe(
+    tap(() => {
+      if (!connectivityService.isOnline()) {
+        connectivityService.isOnline.set(true)
+      }
+    }),
     catchError((err) => {
+      if (err.status === 0) {
+        connectivityService.isOnline.set(false)
+      }
       if (!req.headers.has(NO_ERROR_HANDLING)) {
         showFriendlyMessage(snackBar, req, err)
       }
       return of(err)
-    })
+    }),
   )
 }

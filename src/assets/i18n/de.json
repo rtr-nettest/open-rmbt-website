@@ -369,6 +369,7 @@
   "ndt_download_kbit": "NDT-Datenrate Download",
   "ndt_upload_kbit": "NDT-Datenrate Upload",
   "net": "Netz",
+  "Network error": "Netzwerkfehler",
   "network_country": "Land des Netzwerks",
   "network_mcc_mnc": "Mobilfunknetz MCC-MNC",
   "network_name": "Netz (Anzeige)",
