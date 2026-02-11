@@ -7,11 +7,6 @@
   class="app-main-content {{ hideMenu ? 'app-main-content--no-menu' : '' }}"
   id="{{ mapContainerId }}"
 >
-  @if (showOverlay()) {
-    <div class="app-map-overlay">
-      <p [innerHTML]="'LiveMapOverlayMessage' | translate"></p>
-    </div>
-  }
   <app-map
     [class.app-overlayed]="showOverlay()"
     [controls]="mapControls"
