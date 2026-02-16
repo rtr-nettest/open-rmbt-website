@@ -34,8 +34,12 @@ class TestTimerWorker {
   private nominalTestDuration = 0
   private loopUuid = ""
   private interval: NodeJS.Timeout | null = null
+  private testToken = ""
 
-  constructor(private config: any, private readonly controlProxy: string) {}
+  constructor(
+    private config: any,
+    private readonly controlProxy: string,
+  ) {}
 
   async triggerNextTest(): Promise<void> {
     let rmbtws = await import("rmbtws/dist/esm/rmbtws.min.js" as any)
@@ -48,14 +52,14 @@ class TestTimerWorker {
     }
 
     this.delegateService = new RmbtwsDelegateService(
-      (v) => (this.basicNetworkInfo = v)
+      (v) => (this.basicNetworkInfo = v),
     )
 
     rmbtws.TestEnvironment.init(this.delegateService, null)
 
     this.config = Object.assign(
       new rmbtws.RMBTTestConfig("en", this.controlProxy, `RMBTControlServer`),
-      this.config
+      this.config,
     )
 
     const communication = new rmbtws.RMBTControlServerCommunication(
@@ -67,11 +71,14 @@ class TestTimerWorker {
           }
           if (data.response["test_duration"]) {
             this.nominalTestDuration = parseFloat(
-              data.response["test_duration"]
+              data.response["test_duration"],
             )
           }
+          if (data.response["test_token"]) {
+            this.testToken = data.response["test_token"]
+          }
         },
-      }
+      },
     )
     this.startTest(rmbtws, this.config, communication)
     this.watchForUpdates()
@@ -89,10 +96,9 @@ class TestTimerWorker {
     IMeasurementPhaseState & IBasicNetworkInfo
   > {
     const result = this.rmbtTest?.getIntermediateResult()
-    const basicInfo = this.basicNetworkInfo
-    basicInfo.coordinates = this.delegateService?.getLatestCoords() as [
+    const coordinates = this.delegateService?.getLatestCoords() as [
       number,
-      number
+      number,
     ]
     const diffTimeMs = Date.now() - this.stateChangeMs
     const phase: EMeasurementStatus =
@@ -146,14 +152,15 @@ class TestTimerWorker {
       up,
       ups: this.ups ?? [],
       phase,
-      testUuid: basicInfo.testUuid ?? "",
-      openTestUuid: basicInfo.openTestUuid ?? "",
-      ipAddress: basicInfo.ipAddress ?? "-",
-      serverName: basicInfo.serverName ?? "-",
-      providerName: basicInfo.providerName ?? "-",
-      coordinates: basicInfo.coordinates,
+      testUuid: this.basicNetworkInfo.testUuid ?? "",
+      openTestUuid: this.basicNetworkInfo.openTestUuid ?? "",
+      ipAddress: this.basicNetworkInfo.ipAddress ?? "-",
+      serverName: this.basicNetworkInfo.serverName ?? "-",
+      providerName: this.basicNetworkInfo.providerName ?? "-",
+      coordinates,
       loopUuid: this.loopUuid,
       nominalDuration: this.nominalTestDuration,
+      testToken: this.testToken,
     }
   }
 

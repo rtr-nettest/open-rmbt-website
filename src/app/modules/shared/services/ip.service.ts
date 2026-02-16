@@ -1,12 +1,12 @@
-import { effect, inject, Injectable, OnDestroy, signal } from "@angular/core"
+import { inject, Injectable, signal } from "@angular/core"
 import { IpResponse } from "../interfaces/ip-response.interface"
-import { I18nStore } from "../../i18n/store/i18n.store"
 import { MainStore } from "../store/main.store"
 import { OptionsStoreService } from "../../options/store/options-store.service"
 import { ConnectivityService } from "../../test/services/connectivity.service"
 import { interval, Subscription } from "rxjs"
 import { environment } from "../../../../environments/environment"
 import { NOT_AVAILABLE } from "../constants/strings"
+import { TestStore } from "../../test/store/test.store"
 
 @Injectable({
   providedIn: "root",
@@ -16,10 +16,10 @@ export class IpService {
   ipV6 = signal<string | null>(null)
   ipV4Loading = signal<boolean>(false)
   ipV6Loading = signal<boolean>(false)
-  private readonly i18nStore: I18nStore = inject(I18nStore)
   private readonly mainStore: MainStore = inject(MainStore)
   private readonly optionsStore: OptionsStoreService =
     inject(OptionsStoreService)
+  private readonly testStore: TestStore = inject(TestStore)
   private readonly connectivity: ConnectivityService =
     inject(ConnectivityService)
   private connectivitySub: Subscription | null = null
@@ -95,8 +95,19 @@ export class IpService {
         await fetch(url, {
           method: "POST",
           body: JSON.stringify({
-            language: this.i18nStore.activeLang,
+            ...(this.mainStore.settings()?.settings[0].uuid
+              ? {
+                  client_uuid: this.mainStore.settings()?.settings[0].uuid,
+                }
+              : {}),
+            ...(this.testStore.isRunning() &&
+            this.testStore.basicNetworkInfo().testToken
+              ? { test_token: this.testStore.basicNetworkInfo().testToken }
+              : {}),
           }),
+          headers: {
+            "Content-Type": "application/json",
+          },
           signal: AbortSignal.timeout(1000),
         })
       ).json()
