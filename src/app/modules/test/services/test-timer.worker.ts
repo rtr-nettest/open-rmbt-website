@@ -34,7 +34,6 @@ class TestTimerWorker {
   private nominalTestDuration = 0
   private loopUuid = ""
   private interval: NodeJS.Timeout | null = null
-  private testToken = ""
 
   constructor(
     private config: any,
@@ -73,9 +72,6 @@ class TestTimerWorker {
             this.nominalTestDuration = parseFloat(
               data.response["test_duration"],
             )
-          }
-          if (data.response["test_token"]) {
-            this.testToken = data.response["test_token"]
           }
         },
       },
@@ -160,7 +156,6 @@ class TestTimerWorker {
       coordinates,
       loopUuid: this.loopUuid,
       nominalDuration: this.nominalTestDuration,
-      testToken: this.testToken,
     }
   }
 

@@ -5,5 +5,4 @@ export interface IBasicNetworkInfo {
   providerName: string
   serverName: string
   testUuid?: string
-  testToken?: string
 }

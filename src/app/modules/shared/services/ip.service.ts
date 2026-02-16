@@ -101,8 +101,8 @@ export class IpService {
                 }
               : {}),
             ...(this.testStore.isRunning() &&
-            this.testStore.basicNetworkInfo().testToken
-              ? { test_token: this.testStore.basicNetworkInfo().testToken }
+            this.testStore.basicNetworkInfo().testUuid
+              ? { test_uuid: this.testStore.basicNetworkInfo().testUuid }
               : {}),
           }),
           headers: {
