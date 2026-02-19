@@ -133,6 +133,8 @@ export class HistoryService {
         status: this.i18nStore.translate("Measurement failed"),
         error: true,
       }
+    } else if (!response && !historyResult.openTestResponse) {
+      throw new Error("No valid response or open test response available")
     }
   }
 
