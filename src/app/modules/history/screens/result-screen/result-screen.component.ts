@@ -544,9 +544,11 @@ export class ResultScreenComponent extends SeoComponent {
     }
     if (item.title == "speed_curve") {
       const pings = item.value["ping"]
-      this.phaseDurations().pingStart = pings[0].time_elapsed
-      this.phaseDurations().pingDuration =
-        pings[pings.length - 1].time_elapsed - pings[0].time_elapsed
+      if (pings && pings.length > 0) {
+        this.phaseDurations().pingStart = pings[0].time_elapsed
+        this.phaseDurations().pingDuration =
+          pings[pings.length - 1].time_elapsed - pings[0].time_elapsed
+      }
     }
   }
 }

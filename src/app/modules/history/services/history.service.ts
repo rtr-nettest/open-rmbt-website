@@ -41,13 +41,13 @@ export class HistoryService {
     private repo: HistoryRepositoryService,
     private testStore: TestStore,
     private i18nStore: I18nStore,
-    private mainStore: MainStore
+    private mainStore: MainStore,
   ) {}
 
   getOpenResult(params: ITestResultRequest) {
     return this.getMeasurementResult(
       params,
-      forkJoin([of(null), this.repo.getOpenResult(params)])
+      forkJoin([of(null), this.repo.getOpenResult(params)]),
     )
   }
 
@@ -61,14 +61,14 @@ export class HistoryService {
             return forkJoin([of(response), of(null)])
           }
           return forkJoin([of(response), this.repo.getOpenResult(params)])
-        })
-      )
+        }),
+      ),
     )
   }
 
   private getMeasurementResult(
     params: ITestResultRequest,
-    observable: Observable<[any, any]>
+    observable: Observable<[any, any]>,
   ) {
     if (!params || this.mainStore.error$.value) {
       return of(null)
@@ -78,66 +78,89 @@ export class HistoryService {
         const historyResult = SimpleHistoryResult.fromOpenTestResponse(
           params.testUuid!,
           response,
-          openTestsResponse
+          openTestsResponse,
         )
-        if (historyResult.openTestResponse && response) {
-          const trdSet = new Set(
-            Object.entries(historyResult.openTestResponse).map(([key, value]) =>
-              this.i18nStore.translate(key)
-            )
-          )
-          const details = Object.entries(response).map(([key, value]) => [
-            this.i18nStore.translate(key),
-            value,
-          ]) as [string, any][]
-          for (const [key, value] of details) {
-            if (
-              !trdSet.has(key) &&
-              (typeof value === "string" || typeof value === "number")
-            ) {
-              historyResult.openTestResponse[key] = value
-            }
-          }
-        }
-        if (response && response.status !== "finished") {
-          historyResult.openTestResponse = {
-            external_ip: response.external_ip,
-            time: dayjs(response.time).format(RESULT_DATE_FORMAT),
-            status: this.i18nStore.translate(response.status),
-            error: true,
-          }
-        }
-        this.historyStore.simpleHistoryResult$.next(historyResult)
-        const newPhase = new TestPhaseState({
-          phase: EMeasurementStatus.SHOWING_RESULTS,
-          down: (historyResult.download.value || 0) / 1000,
-          up: (historyResult.upload.value || 0) / 1000,
-          ping: (historyResult.ping.value || 0) / 1e6,
-        })
-        const newState = TestVisualizationState.fromHistoryResult(
-          historyResult,
-          this.testStore.visualization$.value,
-          newPhase
-        )
-        this.testStore.visualization$.next(newState)
-        this.testStore.basicNetworkInfo.set({
-          serverName: historyResult.measurementServerName,
-          ipAddress: historyResult.ipAddress,
-          providerName: historyResult.providerName,
-          coordinates: historyResult.openTestResponse
-            ? [
-                historyResult.openTestResponse["long"],
-                historyResult.openTestResponse["lat"],
-              ]
-            : undefined,
-        })
+        this.processDetails(historyResult, response)
+        this.validateResult(historyResult, response)
+        this.updateVisualization(historyResult)
         return historyResult
       }),
       catchError((e) => {
         console.warn(e)
         return of(null)
-      })
+      }),
     )
+  }
+
+  private processDetails(historyResult: SimpleHistoryResult, response: any) {
+    if (historyResult.openTestResponse && response) {
+      const openDetailSet = new Set(
+        Object.entries(historyResult.openTestResponse).map(([key, value]) =>
+          this.i18nStore.translate(key),
+        ),
+      )
+      const details = Object.entries(response).map(([key, value]) => [
+        this.i18nStore.translate(key),
+        value,
+      ]) as [string, any][]
+      for (const [key, value] of details) {
+        if (
+          !openDetailSet.has(key) &&
+          (typeof value === "string" || typeof value === "number")
+        ) {
+          historyResult.openTestResponse[key] = value
+        }
+      }
+    }
+  }
+
+  private validateResult(historyResult: SimpleHistoryResult, response: any) {
+    const allSpeedCurvesEmpty =
+      !historyResult.download.chart?.length &&
+      !historyResult.upload.chart?.length &&
+      !historyResult.ping.chart?.length
+    if (response && (response.status !== "finished" || allSpeedCurvesEmpty)) {
+      historyResult.openTestResponse = {
+        external_ip: response.external_ip,
+        time: dayjs(response.time).format(RESULT_DATE_FORMAT),
+        status: this.i18nStore.translate(response.status),
+        error: true,
+      }
+    } else if (historyResult.openTestResponse && allSpeedCurvesEmpty) {
+      historyResult.openTestResponse = {
+        external_ip: historyResult.ipAddress,
+        time: historyResult.measurementDate,
+        status: this.i18nStore.translate("Measurement failed"),
+        error: true,
+      }
+    }
+  }
+
+  private updateVisualization(historyResult: SimpleHistoryResult) {
+    const newPhase = new TestPhaseState({
+      phase: EMeasurementStatus.SHOWING_RESULTS,
+      down: (historyResult.download.value || 0) / 1000,
+      up: (historyResult.upload.value || 0) / 1000,
+      ping: (historyResult.ping.value || 0) / 1e6,
+    })
+    const newState = TestVisualizationState.fromHistoryResult(
+      historyResult,
+      this.testStore.visualization$.value,
+      newPhase,
+    )
+    this.historyStore.simpleHistoryResult$.next(historyResult)
+    this.testStore.visualization$.next(newState)
+    this.testStore.basicNetworkInfo.set({
+      serverName: historyResult.measurementServerName,
+      ipAddress: historyResult.ipAddress,
+      providerName: historyResult.providerName,
+      coordinates: historyResult.openTestResponse
+        ? [
+            historyResult.openTestResponse["long"],
+            historyResult.openTestResponse["lat"],
+          ]
+        : undefined,
+    })
   }
 
   getHistoryGroupedByLoop(options?: {
@@ -162,7 +185,7 @@ export class HistoryService {
           content,
           totalElements: totalElements ?? content.length,
         }
-      })
+      }),
     )
   }
 
@@ -175,18 +198,18 @@ export class HistoryService {
         },
         loopUuid,
         includeFailed: true,
-      })
+      }),
     ).pipe(
       take(1),
       map((history) => {
         const content = history.filter(
-          (hi: ISimpleHistoryResult) => hi.loopUuid === loopUuid
+          (hi: ISimpleHistoryResult) => hi.loopUuid === loopUuid,
         )
         return {
           content,
           totalElements: content.length,
         }
-      })
+      }),
     )
   }
 
@@ -200,14 +223,14 @@ export class HistoryService {
         paginator,
         loopUuid,
         includeFailed,
-      })
+      }),
     ).pipe(
       take(1),
       map((history) => {
         const mergedHistory = [...this.historyStore.history$.value, ...history]
         this.historyStore.history$.next(mergedHistory)
         return mergedHistory
-      })
+      }),
     )
   }
 
@@ -227,7 +250,7 @@ export class HistoryService {
 
   private getLoopResults(
     history: ISimpleHistoryResult[],
-    loopUuid?: string | null
+    loopUuid?: string | null,
   ) {
     if (!loopUuid) {
       return history
@@ -273,7 +296,7 @@ export class HistoryService {
         } else {
           return data.sync[0].sync_code
         }
-      })
+      }),
     )
   }
 }
