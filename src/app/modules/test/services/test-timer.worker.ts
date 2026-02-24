@@ -92,10 +92,7 @@ class TestTimerWorker {
     IMeasurementPhaseState & IBasicNetworkInfo
   > {
     const result = this.rmbtTest?.getIntermediateResult()
-    const coordinates = this.delegateService?.getLatestCoords() as [
-      number,
-      number,
-    ]
+    const coordinates = this.delegateService?.getLocation() as [number, number]
     const diffTimeMs = Date.now() - this.stateChangeMs
     const phase: EMeasurementStatus =
       result?.status?.toString() ?? EMeasurementStatus.NOT_STARTED

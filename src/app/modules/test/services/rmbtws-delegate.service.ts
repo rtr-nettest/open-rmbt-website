@@ -6,7 +6,7 @@ export class RmbtwsDelegateService {
   private _positions: ICoords[] = []
 
   constructor(
-    private readonly setFunc: (newValue: IBasicNetworkInfo) => void
+    private readonly setFunc: (newValue: IBasicNetworkInfo) => void,
   ) {}
 
   draw() {}
@@ -16,7 +16,7 @@ export class RmbtwsDelegateService {
     remoteIp: string,
     providerName: string,
     testUuid: string,
-    openTestUuid: string
+    openTestUuid: string,
   ) {
     this.setFunc(
       new BasicNetworkInfo(
@@ -24,19 +24,25 @@ export class RmbtwsDelegateService {
         remoteIp,
         providerName,
         testUuid,
-        openTestUuid
-      )
+        openTestUuid,
+      ),
     )
   }
 
-  getLatestCoords() {
+  getLocation() {
     const { geo_lat: lat, geo_long: lon } = this._positions.slice(-1)[0] || {}
     return lat && lon ? [lon, lat] : undefined
   }
 
   setLocation(coordinates: ICoords) {
-    let previousItem: ICoords | null = null
     this._positions.push(coordinates)
+  }
+
+  // Called by RMBTWS library to get the latest coordinates
+  getGeoResults() {
+    //filter duplicate results that can occur when using hardware GPS devices
+    //with certain Browsers
+    let previousItem: ICoords | null = null
     this._positions = this._positions.filter((position) => {
       if (!position?.precise) {
         return false
@@ -54,5 +60,7 @@ export class RmbtwsDelegateService {
         return true
       }
     })
+
+    return this._positions
   }
 }
