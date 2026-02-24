@@ -15,7 +15,7 @@ export class GeoTrackerService {
   async startGeoTracking(
     onError: (error: GeolocationPositionError) => void,
     onData: (data: ICoords) => void,
-    isPermissionDenied: () => boolean
+    isPermissionDenied: () => boolean,
   ) {
     const onSuccess = (position: any, precise = false) => {
       if (!position || !position.coords) {
@@ -44,12 +44,11 @@ export class GeoTrackerService {
     }
 
     if (!navigator.geolocation || isPermissionDenied()) {
-      const message = !navigator.geolocation
-        ? "Geolocation not supported"
-        : "Geolocation permission denied"
       onError({
         code: 0,
-        message,
+        message: !navigator.geolocation
+          ? "Geolocation not supported"
+          : "Geolocation permission denied",
         PERMISSION_DENIED: 1,
         POSITION_UNAVAILABLE: 2,
         TIMEOUT: 3,
@@ -57,30 +56,10 @@ export class GeoTrackerService {
       return
     }
 
-    //try to get an rough first position
+    //try to get a rough first position
     navigator.geolocation.getCurrentPosition(
       (success) => {
-        const result = onSuccess(success)
-
-        if (!result) {
-          return
-        }
-
-        //now watch position for more precise updates
-        //and refine this position later
-        this._watcher = navigator.geolocation.watchPosition(
-          (success) => {
-            onSuccess(success, true)
-          },
-          (error) => {
-            onError(error)
-          },
-          {
-            enableHighAccuracy: true,
-            timeout: Infinity,
-            maximumAge: 0,
-          }
-        )
+        onSuccess(success)
       },
       (error) => {
         onError(error)
@@ -89,7 +68,21 @@ export class GeoTrackerService {
         enableHighAccuracy: false,
         timeout: _errorTimeout, //2 seconds
         maximumAge: _maxAge, //one minute
-      }
+      },
+    )
+
+    this._watcher = navigator.geolocation.watchPosition(
+      (success) => {
+        onSuccess(success, true)
+      },
+      (error) => {
+        onError(error)
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: Infinity,
+        maximumAge: 0,
+      },
     )
   }
 

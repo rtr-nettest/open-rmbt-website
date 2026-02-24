@@ -50,7 +50,7 @@ export class TestService {
     private readonly mainStore: MainStore,
     private readonly ngZone: NgZone,
     private readonly testStore: TestStore,
-    private readonly optionsStore: OptionsStoreService
+    private readonly optionsStore: OptionsStoreService,
   ) {}
 
   triggerNextIframeTest() {
@@ -124,7 +124,7 @@ export class TestService {
 
   setTestState = (
     phaseState: IMeasurementPhaseState & IBasicNetworkInfo,
-    oldVisualization: ITestVisualizationState
+    oldVisualization: ITestVisualizationState,
   ) => {
     const oldPhaseName = oldVisualization.currentPhaseName
     const oldPhaseIsOfFinishType =
@@ -190,12 +190,13 @@ export class TestService {
         console.error("Geotracking error:", error)
       },
       (data) => {
+        this.testStore.locationPermissionDenied.set(false)
         this.worker?.postMessage({
           type: "setLocation",
           coordinates: data,
         })
       },
-      () => this.testStore.locationPermissionDenied()
+      () => this.testStore.locationPermissionDenied(),
     )
   }
 
@@ -293,7 +294,7 @@ export class TestService {
         uuid: localStorage.getItem(UUID),
         test_uuid: testUuid,
         failed: true,
-      })
+      }),
     )
   }
 
@@ -304,7 +305,7 @@ export class TestService {
         uuid: localStorage.getItem(UUID),
         test_uuid: testUuid,
         aborted: true,
-      })
+      }),
     )
   }
 }
