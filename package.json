@@ -13,6 +13,7 @@
     "build:preprod": "ng build --configuration=preprod",
     "build:stage": "ng build --configuration=stage",
     "build:dev3": "ng build --configuration=dev3",
+    "build:dev": "ng build --configuration=dev",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "set-prerender-routes": "npx ts-node scripts/set-prerender-routes.ts",
