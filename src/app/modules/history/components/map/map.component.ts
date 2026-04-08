@@ -33,7 +33,7 @@ export class MapComponent implements AfterViewInit {
   destroyed$ = new Subject<void>()
   locations = input.required<ISimpleHistoryTestLocation[]>()
   path = computed(() =>
-    this.locations().map((loc) => [loc.long, loc.lat] as [number, number])
+    this.locations().map((loc) => [loc.long, loc.lat] as [number, number]),
   )
   mapContainerId = input.required<string>()
   mapId = "map"
@@ -61,10 +61,10 @@ export class MapComponent implements AfterViewInit {
       `lat=${this.lat()}`,
       `long=${this.lon()}`,
       `radius=700`,
-      `loc_accuracy=<700`,
+      `loc_accuracy=<100`,
     ]
     return `/${this.i18nStore.activeLang}/${ERoutes.OPEN_DATA}?${search.join(
-      "&"
+      "&",
     )}`
   }
 
@@ -73,7 +73,7 @@ export class MapComponent implements AfterViewInit {
     private readonly i18nStore: I18nStore,
     private readonly mapService: MapService,
     private readonly repo: HistoryRepositoryService,
-    private readonly scrollStrategyOptions: ScrollStrategyOptions
+    private readonly scrollStrategyOptions: ScrollStrategyOptions,
   ) {
     effect(() => {
       const lon = +this.lon()!
