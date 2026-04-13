@@ -18,4 +18,5 @@ export const SKIPPED_FIELDS = new Set([
   "share_text",
   "time_string",
   "error",
+  "is_fences",
 ])

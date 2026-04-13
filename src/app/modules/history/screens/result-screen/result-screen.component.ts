@@ -56,6 +56,9 @@ import { MIN_ACCURACY_FOR_SHOWING_MAP } from "../../../opendata/constants/recent
 import { QoeBarComponent } from "../../components/qoe-bar/qoe-bar.component"
 import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 import { capitalize, deHtmlize } from "../../../shared/util/string"
+import { environment } from "../../../../../environments/environment"
+import { IFenceItem } from "../../interfaces/open-test-response"
+import { FencesMapComponent } from "../../components/fences-map/fences-map.component"
 
 @Component({
   selector: "app-result-screen",
@@ -64,6 +67,7 @@ import { capitalize, deHtmlize } from "../../../shared/util/string"
     AsyncPipe,
     BreadcrumbsComponent,
     DatePipe,
+    FencesMapComponent,
     HeaderComponent,
     MainContentComponent,
     MatButtonModule,
@@ -155,6 +159,8 @@ export class ResultScreenComponent extends SeoComponent {
   failedDetailedResults =
     signal<IBasicResponse<IDetailedHistoryResultItem> | null>(null)
   qoeResults = signal<IBasicResponse<IDetailedHistoryResultItem> | null>(null)
+  fencesResults = signal<IFenceItem[] | null>(null)
+  fencesMapContainerId = "fencesMapContainer"
 
   downloadTable = signal<IOverallResult[]>([])
   uploadTable = signal<IOverallResult[]>([])
@@ -182,6 +188,12 @@ export class ResultScreenComponent extends SeoComponent {
   phaseDurations = signal<PhaseDurations>({})
   loading = signal<boolean>(true)
   showMeasurementPath = signal<boolean>(false)
+  hideBasicReults = signal<boolean>(false)
+  hideQoEResults = signal<boolean>(false)
+  hidePosition = signal<boolean>(false)
+  hidePing = signal<boolean>(false)
+  hideDownload = signal<boolean>(false)
+  hideUpload = signal<boolean>(false)
 
   private readonly classification = inject(ClassificationService)
   private readonly exporter = inject(HistoryExportService)
@@ -245,6 +257,20 @@ export class ResultScreenComponent extends SeoComponent {
           this.basicResults.set(this.getBasicResults(result))
           this.detailedResults.set(this.getDetailedResults(result))
           this.qoeResults.set(this.getQoeResults(result))
+          if (
+            environment.features.fences_enabled &&
+            result.openTestResponse?.is_fences
+          ) {
+            this.fencesResults.set(
+              result.openTestResponse?.speed_curve?.fences || null,
+            )
+            this.hideBasicReults.set(true)
+            this.hideQoEResults.set(true)
+            this.hidePosition.set(true)
+            this.hidePing.set(true)
+            this.hideDownload.set(true)
+            this.hideUpload.set(true)
+          }
         } else if (result && result.openTestResponse?.["error"] == true) {
           this.failedDetailedResults.set(this.getDetailedResults(result))
         }

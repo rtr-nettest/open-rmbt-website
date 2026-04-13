@@ -26,13 +26,16 @@ export class ClassificationService {
   static readonly I = new ClassificationService()
 
   classify(
-    value: number,
+    value: number | undefined,
     threshold: number[],
-    condition: "smallerBetter" | "biggerBetter"
+    condition: "smallerBetter" | "biggerBetter",
   ) {
     threshold = threshold.sort((a, b) => b - a)
     let retVal = 1
     for (let i = 0; i < threshold.length; i++) {
+      if (value === undefined) {
+        break
+      }
       if (condition === "biggerBetter" && value >= threshold[i]) {
         retVal = CLASSIFICATION_ITEMS - i
         break

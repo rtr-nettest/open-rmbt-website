@@ -1,12 +1,7 @@
 import { STATE_UPDATE_TIMEOUT } from "../../test/constants/numbers"
 import { IPing } from "../interfaces/measurement-result.interface"
+import { ICurveItem, IPingItem } from "../interfaces/open-test-response"
 import { IOverallResult } from "../interfaces/overall-result.interface"
-
-type CurveItem = {
-  bytes_total: number
-  time_elapsed: number
-  speed?: number
-}
 
 const noTransferThreshold = 1400
 
@@ -19,12 +14,7 @@ export class CalcService {
 
   private constructor() {}
 
-  getOverallPings(
-    pings: {
-      ping_ms: number
-      time_elapsed: number
-    }[]
-  ): IPing[] {
+  getOverallPings(pings: IPingItem[] | undefined): IPing[] {
     if (!pings?.length) {
       return []
     }
@@ -45,8 +35,8 @@ export class CalcService {
   }
 
   getOverallResultsFromSpeedCurve(
-    curve: CurveItem[],
-    stepMs = STATE_UPDATE_TIMEOUT
+    curve: ICurveItem[] | undefined,
+    stepMs = STATE_UPDATE_TIMEOUT,
   ): IOverallResult[] {
     if (!curve?.length) {
       return []
@@ -91,12 +81,12 @@ export class CalcService {
   }
 
   private calcResultForStep(
-    ci: CurveItem,
+    ci: ICurveItem,
     options: {
       lastBytes: number
       lastMs: number
       stepMs: number
-    }
+    },
   ) {
     const { lastBytes, lastMs, stepMs } = options
     let retVal: IOverallResult | null = null
@@ -106,7 +96,7 @@ export class CalcService {
         time_elapsed: ci.time_elapsed,
         speed: this.calcSpeed(
           ci.bytes_total - lastBytes,
-          ci.time_elapsed - lastMs
+          ci.time_elapsed - lastMs,
         ),
       })
       options.lastBytes = ci.bytes_total
@@ -119,7 +109,7 @@ export class CalcService {
     return Math.max((bytes * 8) / (timeMs / 1e3), 0)
   }
 
-  private parseCurveItem = (ci: CurveItem) => ({
+  private parseCurveItem = (ci: ICurveItem) => ({
     bytes: ci.bytes_total,
     nsec: ci.time_elapsed * 1e6,
     speed: ci.speed ?? this.calcSpeed(ci.bytes_total, ci.time_elapsed),

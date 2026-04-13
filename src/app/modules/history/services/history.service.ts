@@ -81,8 +81,25 @@ export class HistoryService {
           openTestsResponse,
         )
         this.processDetails(historyResult, response)
-        this.validateResult(historyResult, response)
-        this.updateVisualization(historyResult)
+        if (
+          environment.features.fences_enabled &&
+          historyResult?.openTestResponse?.is_fences
+        ) {
+          this.validateResult(
+            historyResult,
+            response,
+            !historyResult.openTestResponse?.speed_curve?.fences?.length,
+          )
+        } else {
+          this.validateResult(
+            historyResult,
+            response,
+            !historyResult.download.chart?.length &&
+              !historyResult.upload.chart?.length &&
+              !historyResult.ping.chart?.length,
+          )
+          this.updateVisualization(historyResult)
+        }
         return historyResult
       }),
       catchError((e) => {
@@ -114,11 +131,11 @@ export class HistoryService {
     }
   }
 
-  private validateResult(historyResult: SimpleHistoryResult, response: any) {
-    const allSpeedCurvesEmpty =
-      !historyResult.download.chart?.length &&
-      !historyResult.upload.chart?.length &&
-      !historyResult.ping.chart?.length
+  private validateResult(
+    historyResult: SimpleHistoryResult,
+    response: any,
+    allSpeedCurvesEmpty?: boolean,
+  ) {
     if (response && (response.status !== "finished" || allSpeedCurvesEmpty)) {
       historyResult.openTestResponse = {
         external_ip: response.external_ip,

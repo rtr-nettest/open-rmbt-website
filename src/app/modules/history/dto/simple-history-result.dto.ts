@@ -17,6 +17,7 @@ import {
 import { CalcService } from "../services/calc.service"
 import { RESULT_DATE_FORMAT } from "../../test/constants/strings"
 import { IQoeItem } from "../interfaces/qoe-item.interface"
+import { IOpenTestResponse } from "../interfaces/open-test-response"
 
 export class SimpleHistoryResult implements ISimpleHistoryResult {
   static fromHistoryResponse(response: any) {
@@ -49,7 +50,7 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
             ? ClassificationService.I.classify(
                 down * 1e3,
                 THRESHOLD_DOWNLOAD,
-                "biggerBetter"
+                "biggerBetter",
               )
             : null,
       },
@@ -60,7 +61,7 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
             ? ClassificationService.I.classify(
                 up * 1e3,
                 THRESHOLD_UPLOAD,
-                "biggerBetter"
+                "biggerBetter",
               )
             : null,
       },
@@ -71,7 +72,7 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
             ? ClassificationService.I.classify(
                 ping,
                 THRESHOLD_PING,
-                "smallerBetter"
+                "smallerBetter",
               )
             : null,
       },
@@ -90,14 +91,14 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
         device: response?.model,
         networkType: response?.network_type,
         status: response?.status,
-      }
+      },
     )
   }
 
   static fromOpenTestResponse(
     uuid: string,
     response: any,
-    openTestResponse: any
+    openTestResponse: IOpenTestResponse,
   ) {
     return new SimpleHistoryResult(
       openTestResponse?.time
@@ -106,50 +107,50 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
             .tz(dayjs.tz.guess())
             .format(RESULT_DATE_FORMAT)
         : "",
-      openTestResponse?.server_name,
+      openTestResponse?.server_name || "",
       {
         value: openTestResponse?.download_kbit || 0,
         chart: CalcService.I.getOverallResultsFromSpeedCurve(
-          openTestResponse?.speed_curve.download
+          openTestResponse?.speed_curve?.download,
         ),
         classification: ClassificationService.I.classify(
           openTestResponse?.download_kbit,
           THRESHOLD_DOWNLOAD,
-          "biggerBetter"
+          "biggerBetter",
         ),
       },
       {
         value: openTestResponse?.upload_kbit || 0,
         chart: CalcService.I.getOverallResultsFromSpeedCurve(
-          openTestResponse?.speed_curve.upload
+          openTestResponse?.speed_curve?.upload,
         ),
         classification: ClassificationService.I.classify(
           openTestResponse?.upload_kbit,
           THRESHOLD_UPLOAD,
-          "biggerBetter"
+          "biggerBetter",
         ),
       },
       {
         value: openTestResponse?.ping_ms || 0,
         chart: CalcService.I.getOverallPings(
-          openTestResponse?.speed_curve.ping
+          openTestResponse?.speed_curve?.ping,
         ),
         classification: ClassificationService.I.classify(
           openTestResponse?.ping_ms,
           THRESHOLD_PING,
-          "smallerBetter"
+          "smallerBetter",
         ),
       },
       {
         value:
           openTestResponse?.lte_rsrp &&
           openTestResponse?.cat_technology !== null
-            ? openTestResponse?.lte_rsrp
-            : openTestResponse?.signal_strength,
+            ? openTestResponse.lte_rsrp
+            : openTestResponse?.signal_strength || null,
         chart: openTestResponse?.speed_curve?.signal?.length
           ? openTestResponse?.speed_curve?.signal
           : undefined,
-        classification: openTestResponse?.signal_classification,
+        classification: openTestResponse?.signal_classification || null,
         metric: openTestResponse?.cat_technology
           ? openTestResponse?.cat_technology
               .toLowerCase()
@@ -162,12 +163,12 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
             ? ["lte_rsrp"]
             : [],
       },
-      openTestResponse?.public_ip_as_name,
-      openTestResponse?.ip_anonym,
+      openTestResponse?.public_ip_as_name || "",
+      openTestResponse?.ip_anonym || "",
       uuid,
       response?.loop_uuid,
       openTestResponse,
-      response?.qoe_classification || openTestResponse?.qoe_classification
+      response?.qoe_classification || openTestResponse?.qoe_classification,
     )
   }
 
@@ -182,7 +183,7 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
     public ipAddress: string,
     public testUuid?: string,
     public loopUuid?: string,
-    public openTestResponse?: { [key: string]: any },
-    public qoeClassification?: IQoeItem[]
+    public openTestResponse?: IOpenTestResponse,
+    public qoeClassification?: IQoeItem[],
   ) {}
 }

@@ -2,7 +2,14 @@ import { HttpClient } from "@angular/common/http"
 import { computed, Injectable, NgZone } from "@angular/core"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { IMapInfo } from "../interfaces/map-info.interface"
-import { Map, MapOptions, Marker, StyleSpecification } from "maplibre-gl"
+import {
+  LayerSpecification,
+  Map,
+  MapOptions,
+  Marker,
+  SourceSpecification,
+  StyleSpecification,
+} from "maplibre-gl"
 import {
   catchError,
   debounceTime,
@@ -439,33 +446,39 @@ export class MapService {
     }
   }
 
-  addLineLayer(map: Map) {
+  addLineLayer(
+    map: Map,
+    options?: {
+      linePaint?: LayerSpecification["paint"]
+      pointPaint?: LayerSpecification["paint"]
+    },
+  ) {
     if (map.getLayer("route")) {
       return
+    }
+    const linePaint = options?.linePaint ?? {
+      "line-color": "#2f2f2f",
+      "line-width": 2,
     }
     map.addLayer({
       id: "route",
       type: "line",
-      source: "route",
+      source: "route" as unknown as SourceSpecification,
       layout: {
         "line-join": "round",
         "line-cap": "round",
       },
-      paint: {
-        "line-color": "#2f2f2f",
-        "line-width": 2,
-      },
+      paint: linePaint,
     })
+    const pointPaint = options?.pointPaint ?? {
+      "circle-color": "#2f2f2f",
+      "circle-radius": 4,
+    }
     map.addLayer({
       id: "route-points",
       type: "circle",
-      source: "routePoints",
-      paint: {
-        "circle-radius": 4,
-        "circle-color": "black",
-        "circle-stroke-color": "white",
-        "circle-stroke-width": 2,
-      },
+      source: "routePoints" as unknown as SourceSpecification,
+      paint: pointPaint,
     })
   }
 
