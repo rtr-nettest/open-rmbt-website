@@ -6,13 +6,33 @@
 
     mat-cell,
     mat-footer-cell {
+      flex: 1 !important;
+      width: auto !important;
+      min-height: rem(40);
+      border-bottom: none;
+
       :not(:only-child):last-child {
         border-left: none;
         justify-content: flex-start !important;
         text-align: left !important;
       }
+
       &:last-of-type {
         padding-right: 16px;
+      }
+
+      &:first-of-type {
+        border-top: 1px solid $color-border;
+        padding-left: 16px;
+      }
+
+      *:not(.svg-icon) {
+        flex: 0 0 50%;
+        justify-content: flex-start !important;
+      }
+
+      .svg-icon + span {
+        flex: 1;
       }
     }
 
@@ -53,25 +73,6 @@
       align-items: start;
       height: auto !important;
       padding: 0;
-    }
-    mat-cell,
-    mat-footer-cell {
-      min-height: rem(40);
-      border-bottom: none;
-
-      &:first-of-type {
-        border-top: 1px solid $color-border;
-        padding-left: 16px;
-      }
-
-      *:not(.svg-icon) {
-        flex: 0 0 50%;
-        justify-content: flex-start !important;
-      }
-
-      .svg-icon + span {
-        flex: 1;
-      }
     }
 
     .mat-row--hidden {

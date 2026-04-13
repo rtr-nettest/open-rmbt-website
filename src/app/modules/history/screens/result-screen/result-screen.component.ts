@@ -59,6 +59,7 @@ import { capitalize, deHtmlize } from "../../../shared/util/string"
 import { environment } from "../../../../../environments/environment"
 import { IFenceItem } from "../../interfaces/open-test-response"
 import { FencesMapComponent } from "../../components/fences-map/fences-map.component"
+import { FencesDetailsComponent } from "../../components/fences-details/fences-details.component"
 
 @Component({
   selector: "app-result-screen",
@@ -67,6 +68,7 @@ import { FencesMapComponent } from "../../components/fences-map/fences-map.compo
     AsyncPipe,
     BreadcrumbsComponent,
     DatePipe,
+    FencesDetailsComponent,
     FencesMapComponent,
     HeaderComponent,
     MainContentComponent,
@@ -84,6 +86,7 @@ import { FencesMapComponent } from "../../components/fences-map/fences-map.compo
     LocationDetailsComponent,
     MapComponent,
     PingDetailsComponent,
+    FencesDetailsComponent,
   ],
   templateUrl: "./result-screen.component.html",
   styleUrl: "./result-screen.component.scss",
