@@ -16,7 +16,6 @@ import tz from "dayjs/plugin/timezone"
 import { MainStore } from "../../shared/store/main.store"
 import { SimpleHistoryResult } from "../dto/simple-history-result.dto"
 import { ISyncResponse } from "../interfaces/sync-response.interface"
-import { HistoryStore } from "../store/history.store"
 import { ISimpleHistoryResult } from "../interfaces/simple-history-result.interface"
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -33,9 +32,8 @@ export type GetHistoryOptions = {
 export class HistoryRepositoryService {
   constructor(
     private readonly http: HttpClient,
-    private readonly historyStore: HistoryStore,
     private readonly i18nStore: I18nStore,
-    private readonly mainStore: MainStore
+    private readonly mainStore: MainStore,
   ) {}
 
   async getOpenResult(params: IOpenTestResultRequest) {
@@ -45,8 +43,8 @@ export class HistoryRepositoryService {
     }
     return await firstValueFrom(
       this.http.get(
-        `${this.mainStore.api().url_statistic_server}/opentests/${openTestUuid}`
-      )
+        `${this.mainStore.api().url_statistic_server}/opentests/${openTestUuid}`,
+      ),
     )
   }
 
@@ -63,8 +61,8 @@ export class HistoryRepositoryService {
     let response = (await firstValueFrom(
       this.http.post(
         `${environment.api.baseUrl}/RMBTControlServer/testresult`,
-        body
-      )
+        body,
+      ),
     )) as any
     if (response?.testresult?.length) {
       response = response.testresult[0]
@@ -74,7 +72,7 @@ export class HistoryRepositoryService {
   }
 
   async getHistory(
-    options: GetHistoryOptions = {}
+    options: GetHistoryOptions = {},
   ): Promise<ISimpleHistoryResult[]> {
     const { paginator, loopUuid, includeFailed } = options
     const uuid = localStorage.getItem(UUID)
@@ -99,15 +97,15 @@ export class HistoryRepositoryService {
     const resp: any = await firstValueFrom(
       this.http.post(
         `${environment.api.baseUrl}/RMBTControlServer/history`,
-        body
-      )
+        body,
+      ),
     )
     if (resp?.error.length) {
       throw new Error(resp.error)
     }
     return (
       resp?.history?.map((hi: any) =>
-        SimpleHistoryResult.fromHistoryResponse(hi)
+        SimpleHistoryResult.fromHistoryResponse(hi),
       ) ?? []
     )
   }
@@ -116,7 +114,7 @@ export class HistoryRepositoryService {
     return this.http.get<ICoverageResponse>(
       `${
         this.mainStore.api().url_web_statistic_server
-      }/coverage?long=${lon}&lat=${lat}`
+      }/coverage?long=${lon}&lat=${lat}`,
     )
   }
 
@@ -127,7 +125,7 @@ export class HistoryRepositoryService {
         language: this.i18nStore.activeLang,
         uuid: localStorage.getItem(UUID),
         ...(syncCode ? { sync_code: syncCode } : {}),
-      }
+      },
     )
   }
 }

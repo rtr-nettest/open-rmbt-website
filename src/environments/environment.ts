@@ -25,5 +25,6 @@ export const environment: IEnvironment = {
   features: {
     show_server_selection: true,
     history_filter: true,
+    fences_enabled: true,
   },
 }

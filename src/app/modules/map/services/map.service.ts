@@ -149,7 +149,7 @@ export class MapService {
     private readonly http: HttpClient,
     private readonly i18nStore: I18nStore,
     private readonly mainStore: MainStore,
-    private readonly zone: NgZone
+    private readonly zone: NgZone,
   ) {}
 
   createMap(options: MapOptions) {
@@ -158,7 +158,7 @@ export class MapService {
         options.locale = translations
         // Using the UMD version of maplibre-gl as the NPM version can not draw the lines on the map
         return new maplibregl.Map(options) as Map
-      })
+      }),
     )
   }
 
@@ -226,7 +226,7 @@ export class MapService {
     options: {
       takeUntil: Subject<void>
       onResize: () => any
-    }
+    },
   ) {
     return fromEvent(window, "resize")
       .pipe(
@@ -241,7 +241,7 @@ export class MapService {
         catchError((err) => {
           console.log(err)
           return of(err)
-        })
+        }),
       )
       .subscribe()
   }
@@ -296,7 +296,7 @@ export class MapService {
       rotation?: number
       onClick?: () => any
       zIndex?: number
-    }
+    },
   ) {
     const { lon, lat, diameter, classification, onClick, rotation, zIndex } =
       options
@@ -348,11 +348,14 @@ export class MapService {
     if (coordinates.length < 2) {
       return []
     }
+    if (coordinates.length > 2) {
+      coordinates = [coordinates[0], coordinates[coordinates.length - 1]]
+    }
     const [currentCoordinate, nextCoordinate] = coordinates.slice(-2)
     let rotation =
       (Math.atan2(
         nextCoordinate[0] - currentCoordinate[0],
-        nextCoordinate[1] - currentCoordinate[1]
+        nextCoordinate[1] - currentCoordinate[1],
       ) *
         180) /
       Math.PI
@@ -365,8 +368,8 @@ export class MapService {
       const marker = this.addMarker(map, {
         lon: loc[0],
         lat: loc[1],
-        diameter: i === 0 || i === coordinates.length - 1 ? 24 : 12,
-        classification: i === 0 ? 10 : i === coordinates.length - 1 ? 20 : 30,
+        diameter: 24,
+        classification: i === 0 ? 10 : 20,
         rotation,
       })
       markers.push(marker!)
@@ -418,6 +421,20 @@ export class MapService {
             },
           },
         },
+        routePoints: {
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: coordinates.map((coord) => ({
+              type: "Feature",
+              properties: {},
+              geometry: {
+                type: "Point",
+                coordinates: coord,
+              },
+            })),
+          },
+        },
       },
     }
   }
@@ -439,6 +456,17 @@ export class MapService {
         "line-width": 2,
       },
     })
+    map.addLayer({
+      id: "route-points",
+      type: "circle",
+      source: "routePoints",
+      paint: {
+        "circle-radius": 4,
+        "circle-color": "black",
+        "circle-stroke-color": "white",
+        "circle-stroke-width": 2,
+      },
+    })
   }
 
   removeLineLayer(map: Map) {
@@ -446,6 +474,7 @@ export class MapService {
       return
     }
     map.removeLayer("route")
+    map.removeLayer("route-points")
   }
 
   private getIconByClass(classification?: number) {
@@ -472,7 +501,7 @@ export class MapService {
   getMeasurementsAtPoint(
     mapContainer: Map,
     point: Coordinate,
-    options: MapSourceOptions = {}
+    options: MapSourceOptions = {},
   ): Observable<IRecentMeasurement[]> {
     const uuid = localStorage.getItem(UUID)
     const body: IMarkerRequest = {
@@ -485,7 +514,7 @@ export class MapService {
       filter: {
         ...Object.entries(options.filters ?? {}).reduce(
           (acc, [key, val]) => (val !== "" ? { ...acc, [key]: val } : acc),
-          {}
+          {},
         ),
         ...(uuid ? { highlight: uuid } : {}),
       },
@@ -497,7 +526,7 @@ export class MapService {
     return this.http
       .post<IMarkerResponse>(
         `${this.mainStore.api().url_map_server}/tiles/markers`,
-        body
+        body,
       )
       .pipe(
         map((res) =>
@@ -517,9 +546,9 @@ export class MapService {
               lte_rsrp: m.measurement_result.lte_rsrp,
               platform: m.network_info.network_type_label,
               provider_name: m.network_info.provider_name,
-            })
-          )
-        )
+            }),
+          ),
+        ),
       )
   }
 }

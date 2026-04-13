@@ -38,6 +38,7 @@ testem.log
 /typings
 index.dev.html
 src/app/app.routes.simplified.ts
+mock-data*
 
 # System files
 .DS_Store
