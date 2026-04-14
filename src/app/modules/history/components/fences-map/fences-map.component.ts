@@ -1,9 +1,11 @@
-import { Component, computed, input } from "@angular/core"
+import { Component, computed, inject, input } from "@angular/core"
 import { Subject, Subscription, takeUntil } from "rxjs"
 import { IFenceItem } from "../../interfaces/open-test-response"
 import { Map, NavigationControl } from "maplibre-gl"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
 import { MobileNetworkColorMap } from "../../constants/network-technology"
+import { PopupService } from "../../../map/services/popup.service"
+import { FencesPopupContentService } from "../../services/fences-popup-content.service"
 
 @Component({
   selector: "app-fences-map",
@@ -38,7 +40,9 @@ export class FencesMapComponent {
   })
   pathMarkers: maplibregl.Marker[] = []
 
-  constructor(private readonly mapService: MapService) {}
+  mapService = inject(MapService)
+  popup = inject(PopupService)
+  popupContent = inject(FencesPopupContentService)
 
   ngAfterViewInit(): void {
     if (globalThis.document) {
@@ -79,6 +83,22 @@ export class FencesMapComponent {
         this.map.addControl(new NavigationControl())
         this.map.on("load", () => {
           this.addPath()
+        })
+        this.map.on("click", (e) => {
+          const features = this.map.queryRenderedFeatures(e.point, {
+            layers: ["route-points"],
+          })
+          const fencesAtPoint = features.map((f) => f.properties as IFenceItem)
+          if (fencesAtPoint.length) {
+            this.popup.addPopup(
+              this.map,
+              this.popupContent.getPopupContent(fencesAtPoint),
+              {
+                lon: e.lngLat.lng,
+                lat: e.lngLat.lat,
+              },
+            )
+          }
         })
       })
   }

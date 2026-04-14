@@ -16,6 +16,7 @@ import { lineString } from "@turf/helpers"
 import { PopupService } from "../../services/popup.service"
 import { FullScreenService } from "../../services/full-screen.service"
 import { DEFAULT_CENTER, MapService } from "../../services/map.service"
+import { PopupContentService } from "../../services/popup-content.service"
 
 @Component({
   selector: "app-map",
@@ -35,6 +36,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
   map!: Map
   mapService = inject(MapService)
   popup = inject(PopupService)
+  popupContent = inject(PopupContentService)
   resizeSub!: Subscription
   zone = inject(NgZone)
 
@@ -136,7 +138,14 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
               m.lat != this.lastPopupLonLat?.[1])
           ) {
             this.popup.removePopup()
-            this.popup.addPopup(this.map, [m])
+            this.popup.addPopup(
+              this.map,
+              this.popupContent.getPopupContent([m]),
+              {
+                lon: m.long,
+                lat: m.lat,
+              },
+            )
           }
           if (i == 0) {
             this.lastPopupLonLat = [m.long, m.lat]
@@ -147,7 +156,14 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
             diameter: i == 0 ? 24 : 18,
             classification: m.download_classification,
             onClick: () => {
-              this.popup.addPopup(this.map, [m])
+              this.popup.addPopup(
+                this.map,
+                this.popupContent.getPopupContent([m]),
+                {
+                  lon: m.long,
+                  lat: m.lat,
+                },
+              )
             },
           })
         })

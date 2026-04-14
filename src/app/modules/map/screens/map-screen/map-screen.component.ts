@@ -43,6 +43,7 @@ import { PopupService } from "../../services/popup.service"
 import { fromLonLat, toLonLat } from "ol/proj.js"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
+import { PopupContentService } from "../../services/popup-content.service"
 
 export const POINTS_HEATMAP_SWITCH_LEVEL = 12
 
@@ -78,11 +79,12 @@ export class MapScreenComponent extends SeoComponent {
         if (basemap) {
           this.switchBasemap(basemap)
         }
-      })
+      }),
     )
     .subscribe()
   messageService = inject(MessageService)
   popupService = inject(PopupService)
+  popupContent = inject(PopupContentService)
   resizeSub!: Subscription
   filters = toObservable(this.mapStore.filters)
     .pipe(
@@ -93,7 +95,7 @@ export class MapScreenComponent extends SeoComponent {
           this.setTiles()
           this.setTilesVisibility()
         }
-      })
+      }),
     )
     .subscribe()
   mapError = signal("")
@@ -107,7 +109,7 @@ export class MapScreenComponent extends SeoComponent {
             console.error(e)
             this.mapError.set(e)
             return of(null)
-          })
+          }),
         )
         .subscribe((mapInfo) => {
           if (globalThis.document && mapInfo) {
@@ -117,12 +119,12 @@ export class MapScreenComponent extends SeoComponent {
               this.setResizeSub()
               this.mapService.setCoordinatesAndZoom(
                 this.map,
-                new URLSearchParams(globalThis.location.search)
+                new URLSearchParams(globalThis.location.search),
               )
             })
           }
         })
-    })
+    }),
   )
   zone = inject(NgZone)
   activeLayers: string[] = [
@@ -170,7 +172,7 @@ export class MapScreenComponent extends SeoComponent {
                   scrollStrategy: this.scrollStrategyOptions.noop(),
                 })
               })
-            })
+            }),
           )
           this.map.addControl(
             new BasemapControl(this.i18nStore, () => {
@@ -179,7 +181,7 @@ export class MapScreenComponent extends SeoComponent {
                   scrollStrategy: this.scrollStrategyOptions.noop(),
                 })
               })
-            })
+            }),
           )
           this.map.on("load", () => {
             this.mapStore.initFilters(this.mapInfo)
@@ -248,7 +250,7 @@ export class MapScreenComponent extends SeoComponent {
           this.map.setLayoutProperty(
             this.activeLayers[1],
             "visibility",
-            "visible"
+            "visible",
           )
         }
       }
@@ -277,11 +279,15 @@ export class MapScreenComponent extends SeoComponent {
               measurements[0].lat,
               measurements[0].long,
             ]) as [number, number]
-            this.popupService.addPopup(this.map, measurements, {
-              lat: coordinates[1],
-              lon: coordinates[0],
-            })
-          })
+            this.popupService.addPopup(
+              this.map,
+              this.popupContent.getPopupContent(measurements),
+              {
+                lat: coordinates[1],
+                lon: coordinates[0],
+              },
+            )
+          }),
         )
         .subscribe()
     }

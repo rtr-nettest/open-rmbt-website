@@ -10,6 +10,7 @@ import { LOC_FORMAT } from "../../../shared/pipes/lonlat.pipe"
 import dayjs from "dayjs"
 import { RESULT_DATE_FORMAT } from "../../../test/constants/strings"
 import { getMobileNetworkTechnology } from "../../constants/network-technology"
+import { roundToSignificantDigits } from "../../../shared/util/math"
 
 @Component({
   selector: "app-fences-details",
@@ -30,16 +31,15 @@ export class FencesDetailsComponent extends ShowDetailsComponent<IFenceItem> {
     {
       columnDef: "technology_id",
       header: "Technology",
-      transformValue: (row) =>
-        getMobileNetworkTechnology(row.technology_id) || "N/A",
+      transformValue: (row) => getMobileNetworkTechnology(row.technology_id),
     },
     {
       columnDef: "avg_ping_ms",
       header: "Ping",
       transformValue: (row) =>
         row.avg_ping_ms
-          ? `${Math.round(row.avg_ping_ms)} ${this.i18nStore.translate("millis")}`
-          : "N/A",
+          ? `${roundToSignificantDigits(row.avg_ping_ms)} ${this.i18nStore.translate("millis")}`
+          : "-",
     },
     {
       columnDef: "offset_ms",
@@ -47,7 +47,7 @@ export class FencesDetailsComponent extends ShowDetailsComponent<IFenceItem> {
       transformValue: (row) =>
         row.offset_ms
           ? `${Math.round(row.offset_ms / 1e3)} ${this.i18nStore.translate("s")}`
-          : "N/A",
+          : "-",
     },
     {
       columnDef: "duration_ms",
@@ -55,7 +55,7 @@ export class FencesDetailsComponent extends ShowDetailsComponent<IFenceItem> {
       transformValue: (row) =>
         row.duration_ms
           ? `${Math.round(row.duration_ms / 1e3)} ${this.i18nStore.translate("s")}`
-          : "N/A",
+          : "-",
     },
     {
       columnDef: "radius",
@@ -63,7 +63,7 @@ export class FencesDetailsComponent extends ShowDetailsComponent<IFenceItem> {
       transformValue: (row) =>
         row.radius
           ? `${Math.round(row.radius)} ${this.i18nStore.translate("m")}`
-          : "N/A",
+          : "-",
     },
     {
       columnDef: "position",
@@ -71,23 +71,21 @@ export class FencesDetailsComponent extends ShowDetailsComponent<IFenceItem> {
       transformValue: (row) =>
         row.latitude && row.longitude
           ? formatcoords(row.latitude, row.longitude).format(LOC_FORMAT)
-          : "N/A",
+          : "-",
       getNgClass: () => "app-cell--20",
     },
     {
       columnDef: "fence_time",
       header: "Fence time",
       transformValue: (row) =>
-        row.fence_time
-          ? dayjs(row.fence_time).format(RESULT_DATE_FORMAT)
-          : "N/A",
+        row.fence_time ? dayjs(row.fence_time).format(RESULT_DATE_FORMAT) : "-",
       getNgClass: () => "app-cell--20",
     },
     {
       columnDef: "signal",
       header: "Signal",
       transformValue: (row) =>
-        row.signal ? `${Math.round(row.signal)} dBm` : "N/A",
+        row.signal ? `${row.signal} ${this.i18nStore.translate("dBm")}` : "-",
     },
   ]
   override tableClassNames: string[] = [
