@@ -9,6 +9,7 @@ import formatcoords from "formatcoords"
 import { LOC_FORMAT } from "../../../shared/pipes/lonlat.pipe"
 import dayjs from "dayjs"
 import { RESULT_DATE_FORMAT } from "../../../test/constants/strings"
+import { getMobileNetworkTechnology } from "../../constants/network-technology"
 
 @Component({
   selector: "app-fences-details",
@@ -27,8 +28,10 @@ export class FencesDetailsComponent extends ShowDetailsComponent<IFenceItem> {
       header: "ID",
     },
     {
-      columnDef: "technology",
+      columnDef: "technology_id",
       header: "Technology",
+      transformValue: (row) =>
+        getMobileNetworkTechnology(row.technology_id) || "N/A",
     },
     {
       columnDef: "avg_ping_ms",

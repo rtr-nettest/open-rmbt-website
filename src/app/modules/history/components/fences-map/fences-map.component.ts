@@ -3,6 +3,7 @@ import { Subject, Subscription, takeUntil } from "rxjs"
 import { IFenceItem } from "../../interfaces/open-test-response"
 import { Map, NavigationControl } from "maplibre-gl"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
+import { MobileNetworkColorMap } from "../../constants/network-technology"
 
 @Component({
   selector: "app-fences-map",
@@ -23,6 +24,18 @@ export class FencesMapComponent {
   map!: Map
   params = input.required<URLSearchParams>()
   resizeSub!: Subscription
+  lat = computed(() => {
+    const lat = this.params().get("lat")
+    return lat ? +lat : null
+  })
+  lon = computed(() => {
+    const lon = this.params().get("long")
+    return lon ? +lon : null
+  })
+  accuracy = computed(() => {
+    const acc = this.params().get("loc_accuracy")
+    return acc ? +acc : null
+  })
   pathMarkers: maplibregl.Marker[] = []
 
   constructor(private readonly mapService: MapService) {}
@@ -32,6 +45,7 @@ export class FencesMapComponent {
       this.setSize()
       this.setMap()
       this.setResizeSub()
+      this.addMarker()
       this.mapService.setCoordinatesAndZoom(this.map, this.params())
     }
   }
@@ -56,7 +70,7 @@ export class FencesMapComponent {
     this.mapService
       .createMap({
         container: this.mapId,
-        style: this.mapService.getLineStyle(this.path()),
+        style: this.mapService.getLineStyle(this.path(), this.locations()),
         center: DEFAULT_CENTER,
       })
       .pipe(takeUntil(this.destroyed$))
@@ -69,6 +83,15 @@ export class FencesMapComponent {
       })
   }
 
+  private addMarker() {
+    this.mapService.addMarker(this.map, {
+      lon: this.lon(),
+      lat: this.lat(),
+      diameter: 24,
+      zIndex: 1,
+    })
+  }
+
   private addPath() {
     if (!this.map) {
       return
@@ -79,11 +102,15 @@ export class FencesMapComponent {
     this.pathMarkers = this.mapService.addPathMarkers(this.map, this.path())
     this.mapService.addLineLayer(this.map, {
       linePaint: {
-        "line-color": "#863876",
-        "line-width": 2,
+        "line-opacity": 0,
       },
       pointPaint: {
-        "circle-color": "#863876",
+        "circle-color": [
+          "match",
+          ["get", "technology_id"],
+          ...[...MobileNetworkColorMap.entries()].flat(),
+          "#d9d9d9",
+        ] as any,
         "circle-radius": 6,
       },
     })

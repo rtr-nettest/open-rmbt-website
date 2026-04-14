@@ -412,7 +412,10 @@ export class MapService {
     }
   }
 
-  getLineStyle(coordinates: [number, number][]): StyleSpecification {
+  getLineStyle(
+    coordinates: [number, number][],
+    pointProperties: Record<string, any> = {},
+  ): StyleSpecification {
     return {
       ...this.defaultStyle(),
       sources: {
@@ -432,9 +435,9 @@ export class MapService {
           type: "geojson",
           data: {
             type: "FeatureCollection",
-            features: coordinates.map((coord) => ({
+            features: coordinates.map((coord, i) => ({
               type: "Feature",
-              properties: {},
+              properties: pointProperties[i] || {},
               geometry: {
                 type: "Point",
                 coordinates: coord,
