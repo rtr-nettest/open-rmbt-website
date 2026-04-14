@@ -101,7 +101,6 @@
                   [id]="fencesMapContainerId"
                   style="margin-top: 24px"
                 >
-                  <h4>{{ "Fences" | translate }}</h4>
                   <app-fences-map
                     [params]="mapParams()"
                     [mapContainerId]="fencesMapContainerId"
@@ -115,7 +114,9 @@
                 </div>
               }
             }
-            <h3 class="app-title">{{ "Speed curve" | translate }}</h3>
+            @if (!hideSpeedCurveTitle()) {
+              <h3 class="app-title">{{ "Speed curve" | translate }}</h3>
+            }
             <div class="app-charts">
               @if (!hidePing()) {
                 <div class="app-charts-row">
@@ -168,7 +169,11 @@
                     class="app-charts-row__base"
                     [attr.aria-hidden]="true"
                   >
-                    <h4>{{ "Signal" | translate }}</h4>
+                    @if (!hideSpeedCurveTitle()) {
+                      <h4>{{ "Signal" | translate }}</h4>
+                    } @else {
+                      <h3>{{ "Signal" | translate }}</h3>
+                    }
                     <app-signal-chart
                       [signal]="signalTable()"
                       [phaseDurations]="phaseDurations()"

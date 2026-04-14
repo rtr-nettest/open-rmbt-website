@@ -197,6 +197,7 @@ export class ResultScreenComponent extends SeoComponent {
   hidePing = signal<boolean>(false)
   hideDownload = signal<boolean>(false)
   hideUpload = signal<boolean>(false)
+  hideSpeedCurveTitle = signal<boolean>(false)
 
   private readonly classification = inject(ClassificationService)
   private readonly exporter = inject(HistoryExportService)
@@ -273,6 +274,7 @@ export class ResultScreenComponent extends SeoComponent {
             this.hidePing.set(true)
             this.hideDownload.set(true)
             this.hideUpload.set(true)
+            this.hideSpeedCurveTitle.set(true)
           }
         } else if (result && result.openTestResponse?.["error"] == true) {
           this.failedDetailedResults.set(this.getDetailedResults(result))
