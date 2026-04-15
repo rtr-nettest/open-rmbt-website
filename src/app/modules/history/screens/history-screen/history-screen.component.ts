@@ -86,7 +86,7 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
   loopResults = false
   actionButtonsPosition: ActionButtonsPosition = "header"
   nextRoute = ERoutes.HISTORY
-  showHistoryFilter = environment.features.history_filter ?? false
+  showHistoryFilter = environment.features.show_failed_in_history ?? false
   includeFailed = model(false)
 
   actionButtons: IMainMenuItem[] = [
@@ -127,7 +127,7 @@ export class HistoryScreenComponent extends LoadOnScrollComponent {
       this.service.getFullMeasurementHistory({
         paginator: this.store.paginator(),
         includeFailed: this.store.includeFailed(),
-      })
+      }),
     )
     this.store.paginator.set({
       offset: this.store.paginator().offset + this.dataLimit,

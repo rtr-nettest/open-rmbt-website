@@ -262,7 +262,7 @@ export class ResultScreenComponent extends SeoComponent {
           this.detailedResults.set(this.getDetailedResults(result))
           this.qoeResults.set(this.getQoeResults(result))
           if (
-            environment.features.fences_enabled &&
+            environment.features.show_fences_in_details &&
             result.openTestResponse?.is_fences
           ) {
             this.fencesResults.set(

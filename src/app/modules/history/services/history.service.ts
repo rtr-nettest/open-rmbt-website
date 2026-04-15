@@ -82,7 +82,7 @@ export class HistoryService {
         )
         this.processDetails(historyResult, response)
         if (
-          environment.features.fences_enabled &&
+          environment.features.show_fences_in_details &&
           historyResult?.openTestResponse?.is_fences
         ) {
           this.validateResult(

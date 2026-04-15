@@ -23,9 +23,10 @@ export const environment: IEnvironment = {
     disable_graphics: true,
   },
   features: {
-    fences_enabled: true,
-    history_filter: true,
+    show_fences_in_details: true,
+    show_failed_in_history: true,
     show_fences_tile: true,
     show_server_selection: true,
+    show_fences_in_history: true,
   },
 }

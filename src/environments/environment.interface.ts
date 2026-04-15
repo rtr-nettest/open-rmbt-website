@@ -21,9 +21,10 @@ export interface IEnvironment {
     disable_graphics: boolean
   }
   features: {
-    fences_enabled?: boolean
-    history_filter: boolean
     ip_check_interval_ms?: number
+    show_failed_in_history: boolean
+    show_fences_in_details?: boolean
+    show_fences_in_history?: boolean
     show_fences_tile?: boolean
     show_server_selection: boolean
   }

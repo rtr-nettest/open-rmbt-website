@@ -84,9 +84,10 @@ export class HistoryRepositoryService {
       timezone: dayjs.tz.guess(),
       uuid,
       result_offset: paginator?.offset,
-      include_failed_tests: environment.features.history_filter
+      include_failed_tests: environment.features.show_failed_in_history
         ? includeFailed
         : true,
+      include_coverage_fences: environment.features.show_fences_in_history,
     }
     if (paginator?.limit) {
       body["result_limit"] = paginator.limit
