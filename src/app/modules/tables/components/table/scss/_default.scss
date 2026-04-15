@@ -44,7 +44,6 @@
 
     .mat-row {
       &--group-header {
-        min-height: rem(40);
         mat-cell:not(.mat-column-groupArrowIndicator) {
           display: none;
         }
@@ -75,12 +74,21 @@
       padding: 0;
     }
 
-    .mat-row--hidden {
-      height: 0 !important;
-    }
-
-    .mat-row--visible:has(+ :not(.mat-row--visible)) mat-cell {
-      border-bottom: none !important;
+    .mat-row {
+      &--hidden {
+        height: 0 !important;
+      }
+      &--visible {
+        &:has(+ :not(.mat-row--visible)) mat-cell {
+          border-bottom: none !important;
+        }
+        mat-cell::before {
+          color: rgba(0, 0, 0, 0.2);
+          content: "\2022";
+          font-size: rem(16);
+          margin: 0 0.7rem;
+        }
+      }
     }
 
     .mat-mdc-cell.app-cell {
