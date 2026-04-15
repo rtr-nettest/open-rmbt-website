@@ -15,11 +15,16 @@ $color-border: rgba(0, 0, 0, 0.1);
     }
     &.mat-row--group-header {
       background-color: #ecf3e5;
+      position: relative;
 
       &.mat-row--expanded {
         mat-cell {
           border-bottom: 1px solid rgba(0, 0, 0, 0.2);
         }
+      }
+
+      .mat-column-groupArrowIndicator {
+        height: 100%;
       }
     }
 
@@ -122,6 +127,19 @@ $color-border: rgba(0, 0, 0, 0.1);
       width: 30%;
     }
   }
+
+  &__label-with-subtext {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    span {
+      &:last-child {
+        font-size: rem(12);
+        color: rgba(0, 0, 0, 0.6);
+      }
+    }
+  }
 }
 
 mat-paginator {
@@ -144,6 +162,19 @@ mat-paginator {
     height: rem(48) !important;
     min-height: rem(48) !important;
     transition: all 100ms ease-in;
+
+    .mat-column-groupArrowIndicator {
+      display: flex;
+      flex-basis: rem(31);
+      justify-content: end;
+      position: static;
+
+      &::after {
+        color: rgba(0, 0, 0, 0.2);
+        content: "\2022";
+        font-size: rem(16);
+      }
+    }
   }
 
   &--group-header,

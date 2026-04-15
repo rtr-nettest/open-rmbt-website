@@ -84,7 +84,7 @@ export class HistoryRepositoryService {
       timezone: dayjs.tz.guess(),
       uuid,
       result_offset: paginator?.offset,
-      include_failed_tests: environment.features.show_failed_in_history
+      include_failed_tests: environment.features.show_history_filter
         ? includeFailed
         : true,
       include_coverage_fences: environment.features.show_fences_in_history,

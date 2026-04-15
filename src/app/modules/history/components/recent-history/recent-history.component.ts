@@ -15,7 +15,6 @@ import {
 import { ISort } from "../../../tables/interfaces/sort.interface"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { HistoryStore } from "../../../history/store/history.store"
-import { DatePipe } from "@angular/common";
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { ISimpleHistoryResult } from "../../interfaces/simple-history-result.interface"
@@ -94,13 +93,13 @@ export class RecentHistoryComponent implements OnChanges {
       }))
   })
   footerColumns = computed(() =>
-    this.addMedian() ? this.columns().map((c) => c.columnDef) : []
+    this.addMedian() ? this.columns().map((c) => c.columnDef) : [],
   )
   data = computed(() => {
     const result = this.result()
     return {
       content: result.content.map(
-        this.historyItemToRow(this.i18nStore.translations)
+        this.historyItemToRow(this.i18nStore.translations),
       ),
       totalElements: result.totalElements,
     }
@@ -118,10 +117,9 @@ export class RecentHistoryComponent implements OnChanges {
 
   constructor(
     private classification: ClassificationService,
-    private datePipe: DatePipe,
     private i18nStore: I18nStore,
     private router: Router,
-    private store: HistoryStore
+    private store: HistoryStore,
   ) {}
 
   ngOnChanges(): void {
@@ -143,7 +141,7 @@ export class RecentHistoryComponent implements OnChanges {
       if (this.interruptsTests()) {
         window.open(
           `${window.location.origin}/${this.i18nStore.activeLang}/${ERoutes.RESULT}?test_uuid=${row.id}`,
-          "_blank"
+          "_blank",
         )
       } else {
         this.router.navigate([this.i18nStore.activeLang, ERoutes.RESULT], {
@@ -162,7 +160,7 @@ export class RecentHistoryComponent implements OnChanges {
     }
     window.open(
       `${window.location.origin}/${this.i18nStore.activeLang}/${ERoutes.RESULT}?test_uuid=${row.id}`,
-      "_blank"
+      "_blank",
     )
   }
 
@@ -189,6 +187,22 @@ export class RecentHistoryComponent implements OnChanges {
           groupHeader: hi.groupHeader,
           download: " ",
           upload: " ",
+          ping: " ",
+        }
+      }
+      if (
+        hi.openTestResponse?.["isCoverageFences"] &&
+        hi.openTestResponse?.["fencesCount"] != null
+      ) {
+        return {
+          ...hi,
+          id: hi.testUuid!,
+          openUuid: hi.openTestResponse?.["openTestUuid"],
+          device: hi.openTestResponse?.["device"],
+          networkType: hi.openTestResponse?.["networkType"],
+          download: " ",
+          upload:
+            hi.openTestResponse?.["fencesCount"].toString() + " " + t["fences"],
           ping: " ",
         }
       }
@@ -246,7 +260,7 @@ export class RecentHistoryComponent implements OnChanges {
       klass: number
       phase: Phase
       units: "Mbps" | "millis"
-    }
+    },
   ) {
     if (value === null) {
       return this.i18nStore.translate("Test failed")
@@ -262,16 +276,16 @@ export class RecentHistoryComponent implements OnChanges {
 
   private getFooterValueByColumnName(
     col: ITableColumn<IHistoryRow>,
-    data: IBasicResponse<IHistoryRow>
+    data: IBasicResponse<IHistoryRow>,
   ) {
     const medianForField = (field: ChartPhase) =>
       median(
         data.content
           .filter(
             (c) =>
-              c.intValues?.[field] != undefined && c.intValues?.[field] != null
+              c.intValues?.[field] != undefined && c.intValues?.[field] != null,
           )
-          .map((c) => c.intValues?.[field] || 0)
+          .map((c) => c.intValues?.[field] || 0),
       )
     let med = 0
     switch (col.columnDef) {
@@ -281,7 +295,7 @@ export class RecentHistoryComponent implements OnChanges {
           klass: this.classification.classify(
             med,
             THRESHOLD_DOWNLOAD,
-            "biggerBetter"
+            "biggerBetter",
           ),
           phase: "down",
           units: "Mbps",
@@ -292,7 +306,7 @@ export class RecentHistoryComponent implements OnChanges {
           klass: this.classification.classify(
             med,
             THRESHOLD_UPLOAD,
-            "biggerBetter"
+            "biggerBetter",
           ),
           phase: "up",
           units: "Mbps",
@@ -303,7 +317,7 @@ export class RecentHistoryComponent implements OnChanges {
           klass: this.classification.classify(
             med,
             THRESHOLD_PING,
-            "smallerBetter"
+            "smallerBetter",
           ),
           phase: "ping",
           units: "millis",

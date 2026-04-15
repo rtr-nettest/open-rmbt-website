@@ -91,6 +91,8 @@ export class SimpleHistoryResult implements ISimpleHistoryResult {
         device: response?.model,
         networkType: response?.network_type,
         status: response?.status,
+        fencesCount: response?.fencesCount,
+        isCoverageFences: response?.isCoverageFences,
       },
     )
   }

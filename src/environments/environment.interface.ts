@@ -22,7 +22,7 @@ export interface IEnvironment {
   }
   features: {
     ip_check_interval_ms?: number
-    show_failed_in_history: boolean
+    show_history_filter: boolean
     show_fences_in_details?: boolean
     show_fences_in_history?: boolean
     show_fences_tile?: boolean

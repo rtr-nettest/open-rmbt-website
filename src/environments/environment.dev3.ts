@@ -24,7 +24,7 @@ export const environment: IEnvironment = {
   },
   features: {
     show_server_selection: true,
-    show_failed_in_history: true,
+    show_history_filter: true,
   },
   matomo: {
     trackerUrl: "https://piwik.netztest.at",
