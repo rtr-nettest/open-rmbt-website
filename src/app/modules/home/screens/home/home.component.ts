@@ -32,6 +32,7 @@ import { FullscreenControl, NavigationControl } from "maplibre-gl"
 import { FullScreenService } from "../../../map/services/full-screen.service"
 import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 import { LiveService } from "../../../opendata/services/live.service"
+import { environment } from "../../../../../environments/environment"
 
 @Component({
   selector: "app-landing",
@@ -103,6 +104,7 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   })
   platform = inject(PlatformService)
   router = inject(Router)
+  readonly showFencesTile = environment.features.show_fences_tile
   private fullScreen = inject(FullScreenService)
 
   ngAfterViewInit(): void {

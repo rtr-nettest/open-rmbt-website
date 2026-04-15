@@ -21,10 +21,11 @@ export interface IEnvironment {
     disable_graphics: boolean
   }
   features: {
-    show_server_selection: boolean
+    fences_enabled?: boolean
     history_filter: boolean
     ip_check_interval_ms?: number
-    fences_enabled?: boolean
+    show_fences_tile?: boolean
+    show_server_selection: boolean
   }
   matomo?: {
     trackerUrl: string

@@ -7,23 +7,23 @@
     <div class="app-row app-row--main">
       <div class="app-col app-col--padded">
         @if (mobileLink(); as mobileLink) {
-        <app-card-button
-          iconImage="/assets/images/start-button-icon.svg"
-          smallText="Start test"
-          title="Start RTR-NetTest"
-          [primary]="true"
-          [mobileLink]="mobileLink"
-          tabindex="-1"
-        ></app-card-button>
+          <app-card-button
+            iconImage="/assets/images/start-button-icon.svg"
+            smallText="Start test"
+            title="Start RTR-NetTest"
+            [primary]="true"
+            [mobileLink]="mobileLink"
+            tabindex="-1"
+          ></app-card-button>
         } @else {
-        <app-card-button
-          iconImage="/assets/images/start-button-icon.svg"
-          smallText="Start test"
-          title="Start RTR-NetTest"
-          [primary]="true"
-          [routerLink]="eRoutes.TEST"
-          tabindex="-1"
-        ></app-card-button>
+          <app-card-button
+            iconImage="/assets/images/start-button-icon.svg"
+            smallText="Start test"
+            title="Start RTR-NetTest"
+            [primary]="true"
+            [routerLink]="eRoutes.TEST"
+            tabindex="-1"
+          ></app-card-button>
         }
       </div>
       <div class="app-col app-col--padded">
@@ -82,6 +82,16 @@
             tabindex="-1"
           ></app-card-button>
         </div>
+        @if (showFencesTile) {
+          <div class="app-col app-col--padded">
+            <app-card-button
+              smallText="Fences Lorem Ipsumen"
+              title="Fences heading"
+              url="/redirect/fences"
+              tabindex="-1"
+            ></app-card-button>
+          </div>
+        }
         <div class="app-col app-col--padded">
           <app-card-button smallText="Your IP address">
             <app-ip-info></app-ip-info>
@@ -90,34 +100,34 @@
       </div>
       <div class="app-col app-col--main app-col--padded" style="display: block">
         <h4>{{ "Recent tests" | translate }}</h4>
-        @defer () {
-        <div class="app-map-container">
-          <button
-            type="button"
-            class="app-button--sr-only"
-            (click)="mapDisabled.set(true)"
-          >
-            {{ "Disable map" | translate }}
-          </button>
-          @if (!mapDisabled()) {
-          <app-map
-            [controls]="mapControls"
-            [measurements]="recentMeasurements()"
-            [mapContainerId]="mapContainerId"
-          ></app-map>
-          }
-        </div>
+        @defer {
+          <div class="app-map-container">
+            <button
+              type="button"
+              class="app-button--sr-only"
+              (click)="mapDisabled.set(true)"
+            >
+              {{ "Disable map" | translate }}
+            </button>
+            @if (!mapDisabled()) {
+              <app-map
+                [controls]="mapControls"
+                [measurements]="recentMeasurements()"
+                [mapContainerId]="mapContainerId"
+              ></app-map>
+            }
+          </div>
         }
         <div style="margin-top: 24px">
-          @if(tableData()) {
-          <app-table
-            [data]="tableData()!"
-            [columns]="tableColumns"
-            [sort]="{ active: 'time', direction: 'desc' }"
-            [rowsAreCLickable]="true"
-            (onRowClick)="goToResult($event)"
-            style="width: 100%"
-          ></app-table>
+          @if (tableData()) {
+            <app-table
+              [data]="tableData()!"
+              [columns]="tableColumns"
+              [sort]="{ active: 'time', direction: 'desc' }"
+              [rowsAreCLickable]="true"
+              (onRowClick)="goToResult($event)"
+              style="width: 100%"
+            ></app-table>
           }
         </div>
       </div>

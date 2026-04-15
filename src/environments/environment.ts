@@ -23,8 +23,9 @@ export const environment: IEnvironment = {
     disable_graphics: true,
   },
   features: {
-    show_server_selection: true,
-    history_filter: true,
     fences_enabled: true,
+    history_filter: true,
+    show_fences_tile: true,
+    show_server_selection: true,
   },
 }
