@@ -562,6 +562,7 @@ export class MapService {
               lte_rsrp: m.measurement_result.lte_rsrp,
               platform: m.network_info.network_type_label,
               provider_name: m.network_info.provider_name,
+              fences_count: m.measurement_result.fences_count,
             }),
           ),
         ),

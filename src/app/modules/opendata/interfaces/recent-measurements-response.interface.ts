@@ -21,6 +21,7 @@ export interface IRecentMeasurement {
   loc_accuracy?: number
   download_classification?: number
   signal_classification?: number
+  fences_count?: number
 }
 
 export interface IRecentStats {
