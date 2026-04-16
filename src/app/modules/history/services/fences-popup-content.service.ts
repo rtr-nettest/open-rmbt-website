@@ -5,11 +5,9 @@ import {
 } from "../../map/services/popup-content.service"
 import {
   GSM_CONNECTION_TYPES,
-  LTE_CONNECTION_TYPES,
   THRESHOLD_PING,
   THRESHOLD_SIGNAL_GSM,
   THRESHOLD_SIGNAL_LTE,
-  THRESHOLD_SIGNAL_WLAN,
 } from "../../shared/services/classification.service"
 import { getMobileNetworkTechnology } from "../constants/network-technology"
 import { RESULT_DATE_FORMAT } from "../../test/constants/strings"
@@ -17,6 +15,7 @@ import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
 import { roundToSignificantDigits } from "../../shared/util/math"
+import { firstValueFrom } from "rxjs"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -37,13 +36,7 @@ type PopupData = {
   providedIn: "root",
 })
 export class FencesPopupContentService extends PopupContentService {
-  override loadTemplate() {
-    this.i18nStore.getLocalizedHtml("fences-map-popup").subscribe((html) => {
-      this.tpl = html
-    })
-  }
-
-  override getSingleMeasurement(measurement: Record<string, any>): string {
+  override async getSingleMeasurement(measurement: Record<string, any>) {
     const t = this.i18nStore.translate.bind(this.i18nStore)
     const technology = getMobileNetworkTechnology(measurement["technology_id"])
     const signal = measurement["signal"]
@@ -87,15 +80,12 @@ export class FencesPopupContentService extends PopupContentService {
         ? `${Math.round(measurement["radius"])} ${t("m")}`
         : t(UNKNOWN),
     }
-    let tpl = this.tpl
-    for (const [key, val] of Object.entries(data)) {
-      if (val) {
-        tpl = tpl.replace(`{{${key}}}`, val.toString())
-      }
-    }
-    if (tpl.includes("{{signal}}")) {
-      tpl = tpl.replace(`id="popupSignalRow"`, `style="display:none;"`)
-    }
+    let tpl = await firstValueFrom(this.i18nStore.getLocalizedHtml("map-popup"))
+    tpl = this.hydrate(tpl, data)
+    tpl = tpl.replace(
+      `id="moreInfoButton"`,
+      `id="moreInfoButton" style="display:none;"`,
+    )
     return tpl
   }
 }

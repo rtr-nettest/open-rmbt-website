@@ -41,21 +41,29 @@ type PopupData = {
 
 export const UNKNOWN = "Unknown"
 
+export const POPUP_IDS_MAP: Record<string, string> = {
+  popupTimeRow: "{{time}}",
+  popupDownloadRow: "{{download}}",
+  popupUploadRow: "{{upload}}",
+  popupPingRow: "{{ping}}",
+  popupSignalRow: "{{signal}}",
+  popupOffsetRow: "{{offset}}",
+  popupDurationRow: "{{duration}}",
+  popupRadiusRow: "{{radius}}",
+  popupConnectionRow: "{{connection}}",
+  popupOperatorRow: "{{operator}}",
+}
+
 @Injectable({
   providedIn: "root",
 })
 export class PopupContentService {
-  protected tpl!: string
   protected readonly i18nStore = inject(I18nStore)
   protected readonly classification = inject(ClassificationService)
 
-  constructor() {
-    this.loadTemplate()
-  }
-
-  getPopupContent(measurements: Record<string, any>[]) {
-    const retVal = measurements.map((measurement) =>
-      this.getSingleMeasurement(measurement),
+  async getPopupContent(measurements: Record<string, any>[]) {
+    const retVal = await Promise.all(
+      measurements.map((measurement) => this.getSingleMeasurement(measurement)),
     )
     return (
       "<div class='app-popup-wrapper'>" +
@@ -66,14 +74,10 @@ export class PopupContentService {
     )
   }
 
-  protected loadTemplate() {
-    this.i18nStore.getLocalizedHtml("map-popup").subscribe((html) => {
-      this.tpl = html
-    })
-  }
-
-  protected getSingleMeasurement(measurement: Record<string, any>): string {
-    const t = this.i18nStore.translations
+  protected async getSingleMeasurement(
+    measurement: Record<string, any>,
+  ): Promise<string> {
+    const t = this.i18nStore.translate.bind(this.i18nStore)
     const signal = measurement["signal_strength"] ?? measurement["lte_rsrp"]
     let signalThreshold = THRESHOLD_SIGNAL_WLAN
     for (const ct of GSM_CONNECTION_TYPES) {
@@ -97,28 +101,28 @@ export class PopupContentService {
         "biggerBetter",
       ),
       download: measurement["download_kbit"]
-        ? `${roundToSignificantDigits(measurement["download_kbit"] / 1000)} ${
-            t["Mbps"]
-          }`
-        : t[UNKNOWN],
+        ? `${roundToSignificantDigits(measurement["download_kbit"] / 1000)} ${t(
+            "Mbps",
+          )}`
+        : t(UNKNOWN),
       uploadClass: this.classification.classify(
         measurement["upload_kbit"],
         THRESHOLD_UPLOAD,
         "biggerBetter",
       ),
       upload: measurement["upload_kbit"]
-        ? `${roundToSignificantDigits(measurement["upload_kbit"] / 1000)} ${
-            t["Mbps"]
-          }`
-        : t[UNKNOWN],
+        ? `${roundToSignificantDigits(measurement["upload_kbit"] / 1000)} ${t(
+            "Mbps",
+          )}`
+        : t(UNKNOWN),
       pingClass: this.classification.classify(
         measurement["ping_ms"],
         THRESHOLD_PING,
         "smallerBetter",
       ),
       ping: measurement["ping_ms"]
-        ? `${roundToSignificantDigits(measurement["ping_ms"])} ${t["millis"]}`
-        : t[UNKNOWN],
+        ? `${roundToSignificantDigits(measurement["ping_ms"])} ${t("millis")}`
+        : t(UNKNOWN),
       ...(signal
         ? {
             signalClass: this.classification.classify(
@@ -128,29 +132,40 @@ export class PopupContentService {
             ),
           }
         : {}),
-      signal: signal ? `${signal} ${t["dBm"]}` : "",
+      signal: signal ? `${signal} ${t("dBm")}` : "",
       connection: measurement["platform"]
         ? measurement["platform"].trim()
-        : t[UNKNOWN],
-      operator: measurement["provider_name"] ?? t[UNKNOWN],
+        : t(UNKNOWN),
+      operator: measurement["provider_name"] ?? t(UNKNOWN),
     }
-    let tpl = this.tpl
+    const tpl = await firstValueFrom(
+      this.i18nStore.getLocalizedHtml("map-popup"),
+    )
+    return this.hydrate(tpl, data)
+  }
+
+  protected hydrate(
+    tpl: string,
+    data: Record<string, string | number | undefined>,
+  ) {
+    const t = this.i18nStore.translate.bind(this.i18nStore)
     for (const [key, val] of Object.entries(data)) {
-      if (val) {
+      if (val && val.toString() !== t(UNKNOWN)) {
         tpl = tpl.replace(`{{${key}}}`, val.toString())
-      }
-      if (key === "operator" && val?.toString() === t[UNKNOWN]) {
-        tpl = tpl.replace(`id="popupOperatorRow"`, `style="display:none;"`)
-      }
-      if (key === "detailsUrl") {
-        tpl = tpl.replace(
-          `id="moreInfoButton"`,
-          `onclick="window.open('${val.toString()}', '_blank')"`,
-        )
+
+        if (key === "detailsUrl") {
+          tpl = tpl.replace(
+            `id="moreInfoButton"`,
+            `id="moreInfoButton" onclick="window.open('${val.toString()}', '_blank')"`,
+          )
+        }
       }
     }
-    if (tpl.includes("{{signal}}")) {
-      tpl = tpl.replace(`id="popupSignalRow"`, `style="display:none;"`)
+
+    for (const [id, placeholder] of Object.entries(POPUP_IDS_MAP)) {
+      if (tpl.includes(placeholder)) {
+        tpl = tpl.replace(`id="${id}"`, `id="${id}" style="display:none;"`)
+      }
     }
     return tpl
   }

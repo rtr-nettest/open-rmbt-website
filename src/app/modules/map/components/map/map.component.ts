@@ -138,14 +138,7 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
               m.lat != this.lastPopupLonLat?.[1])
           ) {
             this.popup.removePopup()
-            this.popup.addPopup(
-              this.map,
-              this.popupContent.getPopupContent([m]),
-              {
-                lon: m.long,
-                lat: m.lat,
-              },
-            )
+            this.popup.addPopup(this.map, [m], this.popupContent)
           }
           if (i == 0) {
             this.lastPopupLonLat = [m.long, m.lat]
@@ -156,14 +149,8 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {
             diameter: i == 0 ? 24 : 18,
             classification: m.download_classification,
             onClick: () => {
-              this.popup.addPopup(
-                this.map,
-                this.popupContent.getPopupContent([m]),
-                {
-                  lon: m.long,
-                  lat: m.lat,
-                },
-              )
+              this.popup.removePopup()
+              this.popup.addPopup(this.map, [m], this.popupContent)
             },
           })
         })

@@ -90,14 +90,10 @@ export class FencesMapComponent {
           })
           const fencesAtPoint = features.map((f) => f.properties as IFenceItem)
           if (fencesAtPoint.length) {
-            this.popup.addPopup(
-              this.map,
-              this.popupContent.getPopupContent(fencesAtPoint),
-              {
-                lon: e.lngLat.lng,
-                lat: e.lngLat.lat,
-              },
-            )
+            this.popup.addPopup(this.map, fencesAtPoint, this.popupContent, {
+              lon: e.lngLat.lng,
+              lat: e.lngLat.lat,
+            })
           }
         })
       })

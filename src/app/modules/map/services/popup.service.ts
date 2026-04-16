@@ -3,6 +3,7 @@ import { Popup, Map } from "maplibre-gl"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
+import { PopupContentService } from "./popup-content.service"
 
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -13,19 +14,22 @@ dayjs.extend(tz)
 export class PopupService {
   private popup!: Popup
 
-  async addPopup(
+  async addPopup<T extends PopupContentService>(
     mapContainer: Map,
-    content: string,
-    at: {
+    measurements: Record<string, any>[],
+    contentService: T,
+    at?: {
       lon: number
       lat: number
     },
   ) {
+    const content = await contentService.getPopupContent(measurements)
     if (!this.popup) {
       this.popup = new Popup()
     }
 
-    const { lon, lat } = at
+    const lon = at?.lon ?? measurements[0]["long"]
+    const lat = at?.lat ?? measurements[0]["lat"]
     this.popup.setLngLat([lon, lat]).addTo(mapContainer).setHTML(content)
   }
 

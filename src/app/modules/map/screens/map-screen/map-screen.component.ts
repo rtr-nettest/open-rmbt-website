@@ -281,7 +281,8 @@ export class MapScreenComponent extends SeoComponent {
             ]) as [number, number]
             this.popupService.addPopup(
               this.map,
-              this.popupContent.getPopupContent(measurements),
+              measurements,
+              this.popupContent,
               {
                 lat: coordinates[1],
                 lon: coordinates[0],

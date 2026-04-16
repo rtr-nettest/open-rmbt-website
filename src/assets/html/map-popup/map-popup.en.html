@@ -1,5 +1,5 @@
 <table class="app-popup">
-  <tr class="app-popup-row">
+  <tr id="popupTimeRow" class="app-popup-row">
     <th class="app-popup-cell" colspan="2">{{time}}</th>
     <td class="app-popup-cell">
       <button type="button" id="moreInfoButton" class="app-link" role="link">
@@ -7,26 +7,26 @@
       </button>
     </td>
   </tr>
-  <tr class="app-popup-row">
+  <tr id="popupMeasurementTitleRow" class="app-popup-row">
     <th class="app-popup-cell app-popup-group-title" colspan="3">
       Measurement
     </th>
   </tr>
-  <tr class="app-popup-row">
+  <tr id="popupDownloadRow" class="app-popup-row">
     <td class="app-popup-cell">Download</td>
     <td class="app-popup-cell">
       <i class="app-popup-icon app-popup-icon--{{downloadClass}}"></i>
     </td>
     <td class="app-popup-cell">{{download}}</td>
   </tr>
-  <tr class="app-popup-row">
+  <tr id="popupUploadRow" class="app-popup-row">
     <td class="app-popup-cell">Upload</td>
     <td class="app-popup-cell">
       <i class="app-popup-icon app-popup-icon--{{uploadClass}}"></i>
     </td>
     <td class="app-popup-cell">{{upload}}</td>
   </tr>
-  <tr class="app-popup-row">
+  <tr id="popupPingRow" class="app-popup-row">
     <td class="app-popup-cell">Ping</td>
     <td class="app-popup-cell">
       <i class="app-popup-icon app-popup-icon--{{pingClass}}"></i>
@@ -40,10 +40,31 @@
     </td>
     <td class="app-popup-cell">{{signal}}</td>
   </tr>
-  <tr class="app-popup-row">
+  <tr id="popupOffsetRow" class="app-popup-row">
+    <td class="app-popup-cell">Offset</td>
+    <td class="app-popup-cell">
+      <i class="app-popup-icon"></i>
+    </td>
+    <td class="app-popup-cell">{{offset}}</td>
+  </tr>
+  <tr id="popupDurationRow" class="app-popup-row">
+    <td class="app-popup-cell">Duration</td>
+    <td class="app-popup-cell">
+      <i class="app-popup-icon"></i>
+    </td>
+    <td class="app-popup-cell">{{duration}}</td>
+  </tr>
+  <tr id="popupRadiusRow" class="app-popup-row">
+    <td class="app-popup-cell">Radius</td>
+    <td class="app-popup-cell">
+      <i class="app-popup-icon"></i>
+    </td>
+    <td class="app-popup-cell">{{radius}}</td>
+  </tr>
+  <tr id="popupNetworkTitleRow" class="app-popup-row">
     <th class="app-popup-cell app-popup-group-title" colspan="3">Net</th>
   </tr>
-  <tr class="app-popup-row">
+  <tr id="popupConnectionRow" class="app-popup-row">
     <td class="app-popup-cell" colspan="2">Connection</td>
     <td class="app-popup-cell">{{connection}}</td>
   </tr>
