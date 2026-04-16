@@ -37,6 +37,7 @@ type PopupData = {
   signal?: string
   connection: string
   operator: string
+  fencesCount?: number | string
 }
 
 export const UNKNOWN = "Unknown"
@@ -52,6 +53,7 @@ export const POPUP_IDS_MAP: Record<string, string> = {
   popupRadiusRow: "{{radius}}",
   popupConnectionRow: "{{connection}}",
   popupOperatorRow: "{{operator}}",
+  popupFencesCountRow: "{{fencesCount}}",
 }
 
 @Injectable({
@@ -137,6 +139,7 @@ export class PopupContentService {
         ? measurement["platform"].trim()
         : t(UNKNOWN),
       operator: measurement["provider_name"] ?? t(UNKNOWN),
+      fencesCount: measurement["fences_count"] ?? t(UNKNOWN),
     }
     const tpl = await firstValueFrom(
       this.i18nStore.getLocalizedHtml("map-popup"),
