@@ -28,8 +28,9 @@ type PopupData = {
   pingClass: number
   ping: string
   signalClass?: number
-  signal?: string
+  signal: string
   connection: string
+  operator: string
 }
 
 @Injectable({
@@ -79,6 +80,7 @@ export class FencesPopupContentService extends PopupContentService {
       radius: measurement["radius"]
         ? `${Math.round(measurement["radius"])} ${t("m")}`
         : t(UNKNOWN),
+      operator: measurement["provider_name"] ?? t(UNKNOWN),
     }
     let tpl = await firstValueFrom(this.i18nStore.getLocalizedHtml("map-popup"))
     tpl = this.hydrate(tpl, data)

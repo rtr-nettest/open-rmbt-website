@@ -32,6 +32,7 @@ export interface IOpenTestResponse extends Record<string, any> {
   is_fences?: boolean
   lte_rsrp?: number
   ping_ms?: number
+  provider_name?: string
   public_ip_as_name?: string
   qoe_classification?: IQoeItem[]
   server_name?: string

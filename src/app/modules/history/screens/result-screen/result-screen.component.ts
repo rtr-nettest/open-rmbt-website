@@ -266,7 +266,12 @@ export class ResultScreenComponent extends SeoComponent {
             result.openTestResponse?.is_fences
           ) {
             this.fencesResults.set(
-              result.openTestResponse?.speed_curve?.fences || null,
+              result.openTestResponse?.speed_curve?.fences
+                ? result.openTestResponse.speed_curve.fences.map((f) => ({
+                    ...f,
+                    provider_name: result.openTestResponse?.provider_name,
+                  }))
+                : null,
             )
             this.hideBasicReults.set(true)
             this.hideQoEResults.set(true)
