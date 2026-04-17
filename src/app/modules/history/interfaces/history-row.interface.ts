@@ -8,6 +8,7 @@ export interface IHistoryRow extends IHistoryGroupItem {
   networkType?: string
   openUuid?: string
   intValues?: Record<string, number>
+  isFences?: boolean
 }
 
 export interface IHistoryGroupItem {

@@ -71,18 +71,31 @@ export class RecentHistoryComponent implements OnChanges {
         key: "download",
         header: "Download",
         isHtml: true,
+        getNgClass: (row) => {
+          return row.isFences ? "app-cell--hidden-on-mobile" : ""
+        },
       },
       {
         columnDef: "up",
         key: "upload",
         header: "Upload",
         isHtml: true,
+        getMobileHeader: (row) =>
+          row.isFences
+            ? this.i18nStore.translate("Points")
+            : this.i18nStore.translate("Upload"),
+        getNgClass: (row) => {
+          return row.isFences ? "app-cell--fences" : ""
+        },
       },
       {
         columnDef: "latency",
         key: "ping",
         header: "Ping",
         isHtml: true,
+        getNgClass: (row) => {
+          return row.isFences ? "app-cell--hidden-on-mobile" : ""
+        },
       },
     ]
     return cols
@@ -202,8 +215,9 @@ export class RecentHistoryComponent implements OnChanges {
           networkType: hi.openTestResponse?.["networkType"],
           download: " ",
           upload:
-            hi.openTestResponse?.["fencesCount"].toString() + " " + t["fences"],
+            hi.openTestResponse?.["fencesCount"].toString() + " " + t["points"],
           ping: " ",
+          isFences: true,
         }
       }
       const down =

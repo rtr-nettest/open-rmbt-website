@@ -100,4 +100,10 @@
       display: none;
     }
   }
+
+  .app-cell {
+    &--hidden-on-mobile {
+      display: none;
+    }
+  }
 }

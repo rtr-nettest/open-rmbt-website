@@ -42,7 +42,8 @@
               [ngClass]="column.getNgClass?.(element, column)"
             >
               <span class="app-table__mobile-label">{{
-                column.header | translate
+                column.getMobileHeader?.(element, column) || column.header
+                  | translate
               }}</span>
               @if (column.isExpandable) {
                 <div [@expandVertically]="isElementExpanded(element.id)">
@@ -64,7 +65,8 @@
               [ngClass]="column.getNgClass?.(element, column)"
             >
               <span class="app-table__mobile-label">{{
-                column.header | translate
+                column.getMobileHeader?.(element, column) || column.header
+                  | translate
               }}</span>
               <div
                 class="app-flex-wrapper"
@@ -78,7 +80,8 @@
               [ngClass]="column.getNgClass?.(element, column)"
             >
               <span class="app-table__mobile-label">{{
-                column.header | translate
+                column.getMobileHeader?.(element, column) || column.header
+                  | translate
               }}</span>
               <div class="app-flex-wrapper" [style]="justify(column)">
                 <i [ngClass]="column.getIconClass(element, column)"></i
@@ -109,7 +112,10 @@
               [attr.data-value]="getDefaultValue(column, element, i)"
             >
               <span class="app-table__mobile-label">
-                {{ column.header | translate }}
+                {{
+                  column.getMobileHeader?.(element, column) || column.header
+                    | translate
+                }}
               </span>
               @if (!shouldShowText(column, element)) {
                 <a

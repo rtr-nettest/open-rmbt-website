@@ -22,6 +22,11 @@ export interface ITableColumn<T = any> {
   getTooltip?: (value: T, column: ITableColumn<T>, ...args: any[]) => string
   footer?: string | number
   header: string
+  getMobileHeader?: (
+    value: T,
+    column: ITableColumn<T>,
+    ...args: any[]
+  ) => string
   isSortable?: boolean
   isHtml?: boolean
   isDate?: boolean
