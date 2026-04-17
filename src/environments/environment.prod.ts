@@ -25,6 +25,8 @@ export const environment: IEnvironment = {
   features: {
     show_server_selection: false,
     show_history_filter: true,
+    show_fences_in_details: true,
+    show_fences_in_history: true,
   },
   matomo: {
     trackerUrl: "https://matomo.netztest.at",
