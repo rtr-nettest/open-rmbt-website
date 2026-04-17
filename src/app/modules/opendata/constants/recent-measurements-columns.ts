@@ -76,9 +76,9 @@ export const truncatePlatform = (value: IRecentMeasurement) => {
   return retVal
 }
 
-export const RECENT_MEASUREMENTS_COLUMNS: Array<
-  ITableColumn<IRecentMeasurement>
-> = [
+export const getRecentMeasurementsColumns = (
+  t: (key: string) => string,
+): Array<ITableColumn<IRecentMeasurement>> => [
   {
     columnDef: "date_time",
     header: "Time",
@@ -99,7 +99,8 @@ export const RECENT_MEASUREMENTS_COLUMNS: Array<
   },
   {
     columnDef: "download",
-    getNgClass: () => "app-cell app-cell--flex-10",
+    getNgClass: (value) =>
+      `app-cell app-cell--12 ${value.isFences ? "app-cell--hidden-on-mobile" : ""}`,
     header: "Down (Mbps)",
     transformValue: (value) => {
       return roundToSignificantDigits(value.download_kbit / 1000)
@@ -108,8 +109,10 @@ export const RECENT_MEASUREMENTS_COLUMNS: Array<
   },
   {
     columnDef: "upload",
-    getNgClass: () => "app-cell app-cell--flex-10",
+    getNgClass: (value) =>
+      `app-cell app-cell--12 ${value.isFences ? "app-cell--fences" : ""}`,
     header: "Up (Mbps)",
+    getMobileHeader: (value) => (value.isFences ? t("Points") : ""),
     transformValue: (value) => {
       return roundToSignificantDigits(value.upload_kbit / 1000)
     },
@@ -117,7 +120,8 @@ export const RECENT_MEASUREMENTS_COLUMNS: Array<
   },
   {
     columnDef: "ping",
-    getNgClass: () => "app-cell app-cell--flex-10",
+    getNgClass: (value) =>
+      `app-cell app-cell--12 ${value.isFences ? "app-cell--hidden-on-mobile" : ""}`,
     header: "Ping (ms)",
     transformValue: (value) => {
       return roundToSignificantDigits(value.ping_ms)
@@ -126,7 +130,7 @@ export const RECENT_MEASUREMENTS_COLUMNS: Array<
   },
   {
     columnDef: "signal_strength",
-    getNgClass: () => "app-cell app-cell--flex-10",
+    getNgClass: () => "app-cell app-cell--12",
     header: "Signal (dBm)",
     justify: "flex-end",
   },

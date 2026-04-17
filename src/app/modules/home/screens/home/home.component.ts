@@ -27,7 +27,7 @@ import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatButtonModule } from "@angular/material/button"
 import { Router, RouterModule } from "@angular/router"
-import { RECENT_MEASUREMENTS_COLUMNS } from "../../../opendata/constants/recent-measurements-columns"
+import { getRecentMeasurementsColumns } from "../../../opendata/constants/recent-measurements-columns"
 import { FullscreenControl, NavigationControl } from "maplibre-gl"
 import { FullScreenService } from "../../../map/services/full-screen.service"
 import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
@@ -90,7 +90,9 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
   eRoutes = ERoutes
   liveService = inject(LiveService)
   recentMeasurements = this.liveService.recentMeasurements
-  tableColumns: ITableColumn<IRecentMeasurement>[] = RECENT_MEASUREMENTS_COLUMNS
+  tableClassNames = ["app-table--home-screen", "app-table--default"]
+  tableColumns: ITableColumn<IRecentMeasurement>[] =
+    getRecentMeasurementsColumns((key) => this.i18nStore.translate(key))
   tableData = this.liveService.tableData
   mapDisabled = signal(false)
   mobileLink = computed(() => {

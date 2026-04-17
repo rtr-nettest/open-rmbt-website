@@ -19,7 +19,7 @@ import { FiltersComponent } from "../../components/filters/filters.component"
 import { LoadingOverlayComponent } from "../../../shared/components/loading-overlay/loading-overlay.component"
 import { ExpansionPanelComponent } from "../../../shared/components/expansion-panel/expansion-panel.component"
 import { IOpendataFilters } from "../../interfaces/opendata-filters.interface"
-import { RECENT_MEASUREMENTS_COLUMNS } from "../../constants/recent-measurements-columns"
+import { getRecentMeasurementsColumns } from "../../constants/recent-measurements-columns"
 import { formatTime } from "../../../shared/adapters/app-date.adapter"
 import { MapComponent } from "../../../map/components/map/map.component"
 import { HistogramComponent } from "../../components/histogram/histogram.component"
@@ -85,7 +85,7 @@ export class OpendataScreenComponent
   opendataStoreService = inject(OpendataStoreService)
   opendataService = inject(OpendataService)
   router = inject(Router)
-  columns = RECENT_MEASUREMENTS_COLUMNS
+  columns = getRecentMeasurementsColumns((key) => this.i18nStore.translate(key))
   data$ = toObservable(this.opendataStoreService.data).pipe(
     map((data) => ({
       content: data,
