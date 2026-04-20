@@ -99,7 +99,12 @@
                 <span class="app-table__mobile-label">
                   <span class="app-table__label-with-subtext">
                     <span>{{ element.groupHeader | translate }}</span>
-                    <span>{{ "Loop mode series" | translate }}</span>
+                    <span>{{
+                      (element.isFences
+                        ? "Coverage series"
+                        : "Loop mode series"
+                      ) | translate
+                    }}</span>
                   </span>
                 </span>
               }
@@ -131,7 +136,10 @@
               ) {
                 <div class="app-table__label-with-subtext">
                   <span>{{ getDefaultValue(column, element, i) }}</span>
-                  <span>{{ "Loop mode series" | translate }}</span>
+                  <span>{{
+                    (element.isFences ? "Coverage series" : "Loop mode series")
+                      | translate
+                  }}</span>
                 </div>
               } @else {
                 <span

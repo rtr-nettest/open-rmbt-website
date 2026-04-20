@@ -161,6 +161,7 @@
   "country_geoip": "Staat der IP",
   "country_location": "Staat des Standorts",
   "Coverage": "Versorgungsdaten",
+  "Coverage series": "Versorgungsdatenreihe",
   "csv_interface": "Download-Schnittstelle",
   "csv": "CSV",
   "current_test": "Aktuelle Messung",

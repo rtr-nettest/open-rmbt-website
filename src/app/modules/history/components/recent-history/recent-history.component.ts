@@ -201,6 +201,7 @@ export class RecentHistoryComponent implements OnChanges {
           download: " ",
           upload: " ",
           ping: " ",
+          isFences: hi.openTestResponse?.["isCoverageFences"],
         }
       }
       if (
