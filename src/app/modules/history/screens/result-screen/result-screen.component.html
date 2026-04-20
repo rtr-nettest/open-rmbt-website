@@ -40,7 +40,7 @@
         }
       </div>
       @if (basicResults(); as basicResults) {
-        @if (basicResults.content.length && !hideBasicReults()) {
+        @if (basicResults.content.length && !hideBasicResults()) {
           <div class="app-container">
             <app-table
               [columns]="columns"
@@ -220,10 +220,12 @@
               </button>
             }
           </div>
-          <div class="app-container">
-            <h4>{{ "Share" | translate }}</h4>
-            <app-share-result [result]="result"></app-share-result>
-          </div>
+          @if (!hideShareSection()) {
+            <div class="app-container">
+              <h4>{{ "Share" | translate }}</h4>
+              <app-share-result [result]="result"></app-share-result>
+            </div>
+          }
         }
       }
       @if (failedDetailedResults(); as failedDetailedResults) {
