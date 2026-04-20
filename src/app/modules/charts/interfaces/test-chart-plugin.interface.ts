@@ -2,7 +2,7 @@ import { EChartColor } from "../dto/test-chart-dataset"
 
 export interface ITestChartPluginOptions {
   id: string
-  color?: EChartColor
+  color?: EChartColor | string
   x: number
   y?: number
   duration?: number
