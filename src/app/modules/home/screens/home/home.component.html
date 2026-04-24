@@ -126,6 +126,7 @@
               [sort]="{ active: 'time', direction: 'desc' }"
               [rowsAreCLickable]="true"
               (onRowClick)="goToResult($event)"
+              [tableClassNames]="tableClassNames"
               style="width: 100%"
             ></app-table>
           }

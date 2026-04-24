@@ -1,0 +1,13 @@
+@include screen-md {
+  .app-table--home-screen {
+    mat-cell,
+    mat-header-cell,
+    mat-footer-cell {
+      padding: 0 12px;
+
+      &:first-of-type {
+        padding-left: 12px;
+      }
+    }
+  }
+}

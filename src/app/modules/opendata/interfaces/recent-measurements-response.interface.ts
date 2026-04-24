@@ -22,6 +22,7 @@ export interface IRecentMeasurement {
   download_classification?: number
   signal_classification?: number
   fences_count?: number
+  isFences?: boolean
 }
 
 export interface IRecentStats {

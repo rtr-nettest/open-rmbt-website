@@ -191,13 +191,14 @@ export class ResultScreenComponent extends SeoComponent {
   phaseDurations = signal<PhaseDurations>({})
   loading = signal<boolean>(true)
   showMeasurementPath = signal<boolean>(false)
-  hideBasicReults = signal<boolean>(false)
+  hideBasicResults = signal<boolean>(false)
   hideQoEResults = signal<boolean>(false)
   hidePosition = signal<boolean>(false)
   hidePing = signal<boolean>(false)
   hideDownload = signal<boolean>(false)
   hideUpload = signal<boolean>(false)
   hideSpeedCurveTitle = signal<boolean>(false)
+  hideShareSection = signal<boolean>(false)
 
   private readonly classification = inject(ClassificationService)
   private readonly exporter = inject(HistoryExportService)
@@ -273,13 +274,14 @@ export class ResultScreenComponent extends SeoComponent {
                   }))
                 : null,
             )
-            this.hideBasicReults.set(true)
+            this.hideBasicResults.set(true)
             this.hideQoEResults.set(true)
             this.hidePosition.set(true)
             this.hidePing.set(true)
             this.hideDownload.set(true)
             this.hideUpload.set(true)
             this.hideSpeedCurveTitle.set(true)
+            this.hideShareSection.set(true)
           }
         } else if (result && result.openTestResponse?.["error"] == true) {
           this.failedDetailedResults.set(this.getDetailedResults(result))

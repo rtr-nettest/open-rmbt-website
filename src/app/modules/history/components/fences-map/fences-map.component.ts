@@ -26,18 +26,6 @@ export class FencesMapComponent {
   map!: Map
   params = input.required<URLSearchParams>()
   resizeSub!: Subscription
-  lat = computed(() => {
-    const lat = this.params().get("lat")
-    return lat ? +lat : null
-  })
-  lon = computed(() => {
-    const lon = this.params().get("long")
-    return lon ? +lon : null
-  })
-  accuracy = computed(() => {
-    const acc = this.params().get("loc_accuracy")
-    return acc ? +acc : null
-  })
   pathMarkers: maplibregl.Marker[] = []
 
   mapService = inject(MapService)
@@ -49,7 +37,6 @@ export class FencesMapComponent {
       this.setSize()
       this.setMap()
       this.setResizeSub()
-      this.addMarker()
       this.mapService.setCoordinatesAndZoom(this.map, this.params())
     }
   }
@@ -97,15 +84,6 @@ export class FencesMapComponent {
           }
         })
       })
-  }
-
-  private addMarker() {
-    this.mapService.addMarker(this.map, {
-      lon: this.lon(),
-      lat: this.lat(),
-      diameter: 24,
-      zIndex: 1,
-    })
   }
 
   private addPath() {

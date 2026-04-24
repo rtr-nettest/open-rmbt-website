@@ -161,6 +161,7 @@
   "country_geoip": "Country of IP",
   "country_location": "Country of location",
   "Coverage": "Coverage",
+  "Coverage series": "Coverage series",
   "csv_interface": "Download interface",
   "csv": "CSV",
   "current_test": "Current measurement",
