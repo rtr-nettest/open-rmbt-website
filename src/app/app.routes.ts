@@ -27,6 +27,7 @@ import { OptionsScreenComponent } from "./modules/options/screens/options-screen
 import { clearStoreGuard } from "./modules/certified/guards/clear-store.guard"
 import { SitemapComponent } from "./modules/sitemap/screens/sitemap/sitemap.component"
 import { LiveScreenComponent } from "./modules/map/screens/live-screen/live-screen.component"
+import { UsageScreenComponent } from "./modules/usage/screens/usage-screen/usage-screen.component"
 
 export const routes: Routes = [
   {
@@ -232,6 +233,14 @@ export const routes: Routes = [
         resolve: [localeResolver],
         data: {
           title: "Live",
+        },
+      },
+      {
+        path: ERoutes.USAGE,
+        component: UsageScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Usage report",
         },
       },
       {

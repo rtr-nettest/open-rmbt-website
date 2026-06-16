@@ -21,6 +21,7 @@
 /result
 /terms-and-conditions
 /sitemap
+/usage-report
 /de/
 /de/history
 /de/iframe
@@ -44,6 +45,7 @@
 /de/result
 /de/terms-and-conditions
 /de/sitemap
+/de/usage-report
 /en/
 /en/history
 /en/iframe
@@ -67,3 +69,4 @@
 /en/result
 /en/terms-and-conditions
 /en/sitemap
+/en/usage-report

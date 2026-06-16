@@ -1,0 +1,30 @@
+<section class="app-usage-section">
+  <h3>{{ title() | translate }}</h3>
+
+  @if (vm(); as vm) {
+    @if (kpis().length) {
+      <div class="app-usage-section__kpis">
+        @for (kpi of kpis(); track kpi.label) {
+          <div class="app-usage-section__kpi">
+            <span class="app-usage-section__kpi-value">{{ kpi.value }}</span>
+            <span class="app-usage-section__kpi-label">{{ kpi.label }}</span>
+          </div>
+        }
+      </div>
+    }
+
+    <div class="app-usage-section__chart">
+      <canvas [id]="id()"></canvas>
+    </div>
+
+    <app-table
+      [data]="tableData()"
+      [columns]="columns()"
+      [sort]="sort"
+    ></app-table>
+  } @else {
+    <p class="app-usage-section__empty">
+      {{ "No data available for the selected period." | translate }}
+    </p>
+  }
+</section>

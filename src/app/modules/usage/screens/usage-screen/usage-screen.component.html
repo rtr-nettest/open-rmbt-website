@@ -1,0 +1,64 @@
+@if (!hideMenu) {
+<app-header></app-header>
+<app-top-nav></app-top-nav>
+<app-breadcrumbs></app-breadcrumbs>
+}
+<app-main-content>
+  <div class="app-wrapper">
+    <h1>{{ "Usage report" | translate }}</h1>
+
+    <div class="app-usage-filters">
+      <div class="app-col">
+        <span class="app-label">{{ "Year" | translate }}</span>
+        <mat-select
+          class="app-select"
+          panelWidth=""
+          [value]="year()"
+          (valueChange)="onYearChange($event)"
+        >
+          @for (y of years; track y) {
+            <mat-option class="app-option" [value]="y">{{ y }}</mat-option>
+          }
+        </mat-select>
+      </div>
+      <div class="app-spacer--small"></div>
+      <div class="app-col">
+        <span class="app-label">{{ "Month" | translate }}</span>
+        <mat-select
+          class="app-select"
+          panelWidth=""
+          [value]="month()"
+          (valueChange)="onMonthChange($event)"
+        >
+          @for (m of months(); track m.value) {
+            <mat-option class="app-option" [value]="m.value">{{
+              m.label
+            }}</mat-option>
+          }
+        </mat-select>
+      </div>
+    </div>
+
+    @for (section of sections; track section.key) {
+      <app-usage-section
+        [id]="'usage-chart-' + section.key"
+        [title]="section.title"
+        [data]="sectionData(section.key)"
+        [chartKind]="section.chartKind"
+        [stacked]="section.stacked"
+        [showShare]="section.showShare"
+        [fields]="section.fields ?? null"
+        [kpiFields]="section.kpiFields ?? null"
+        [labelMap]="section.labelMap ?? null"
+      ></app-usage-section>
+    }
+  </div>
+</app-main-content>
+@if (loading()) {
+<app-loading-overlay></app-loading-overlay>
+}
+@if (!hideMenu) {
+<div style="margin-top: 40px">
+  <app-footer></app-footer>
+</div>
+}
