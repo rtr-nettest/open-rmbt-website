@@ -83,14 +83,13 @@ export class UsageScreenComponent extends SeoComponent implements OnInit {
       kpiFields: ["tests", "finished", "aborted", "clients"],
       labelMap: USAGE_LABELS,
     },
-    { key: "platforms", title: "Platforms", chartKind: "bar", stacked: true, showShare: true },
-    { key: "platforms_loopmode", title: "Platforms (loop mode)", chartKind: "bar", stacked: true, showShare: true },
-    { key: "platforms_qos", title: "Platforms (QoS)", chartKind: "bar", stacked: true, showShare: true },
-    { key: "network_group_names", title: "Network type", chartKind: "bar", stacked: true, showShare: true },
-    { key: "network_group_types", title: "Network technology", chartKind: "bar", stacked: true, showShare: true },
-    { key: "versions_ios", title: "Versions iOS", chartKind: "bar", stacked: true, showShare: true },
-    { key: "versions_android", title: "Versions Android", chartKind: "bar", stacked: true, showShare: true },
-    { key: "versions_applet", title: "Versions Applet", chartKind: "bar", stacked: true, showShare: true },
+    { key: "platforms", title: "Platforms", chartKind: "line", stacked: false, showShare: true },
+    { key: "platforms_loopmode", title: "Platforms (loop mode)", chartKind: "line", stacked: false, showShare: true },
+    { key: "platforms_qos", title: "Platforms (QoS)", chartKind: "line", stacked: false, showShare: true },
+    { key: "network_group_names", title: "Network type", chartKind: "line", stacked: false, showShare: true },
+    { key: "network_group_types", title: "Network technology", chartKind: "line", stacked: false, showShare: true },
+    { key: "versions_ios", title: "Versions iOS", chartKind: "line", stacked: false, showShare: true },
+    { key: "versions_android", title: "Versions Android", chartKind: "line", stacked: false, showShare: true },
   ]
 
   ngOnInit(): void {

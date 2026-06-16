@@ -1,8 +1,7 @@
 import {
-  afterNextRender,
+  afterRenderEffect,
   Component,
   computed,
-  effect,
   inject,
   input,
   OnDestroy,
@@ -16,7 +15,7 @@ import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { ISort } from "../../../tables/interfaces/sort.interface"
 import { IUsageSection } from "../../interfaces/usage.interface"
 
-const TOP_N = 8
+const TOP_N = 12
 const OTHER = "Other"
 
 // distinct, accessible palette reused across the categorical charts
@@ -29,6 +28,10 @@ const PALETTE = [
   "#1f9e89",
   "#d94f70",
   "#8d6e63",
+  "#b58900",
+  "#16a085",
+  "#9b59b6",
+  "#34495e",
 ]
 const OTHER_COLOR = "#9e9e9e"
 // semantic colors for the classic usage metrics
@@ -116,8 +119,9 @@ export class UsageSectionComponent implements OnDestroy {
   sort: ISort = { active: "count", direction: "desc" }
 
   constructor() {
-    afterNextRender(() => this.renderChart())
-    effect(() => {
+    // runs after the DOM is updated, and re-runs whenever vm() changes, so the
+    // <canvas> from the @if block is guaranteed to exist before we draw
+    afterRenderEffect(() => {
       this.vm()
       this.renderChart()
     })
@@ -174,15 +178,25 @@ export class UsageSectionComponent implements OnDestroy {
       return map
     })
 
-    const datasets: ChartDataset[] = mainFields.map((field, i) => ({
-      label: this.label(field),
-      data: dayMaps.map((m) => m.get(field) ?? 0),
-      backgroundColor: this.color(field, i),
-      borderColor: this.color(field, i),
-      ...(this.chartKind() === "line"
-        ? { fill: false, tension: 0.3, pointRadius: 0, borderWidth: 2 }
-        : {}),
-    }))
+    const datasets: ChartDataset[] = mainFields.map((field, i) => {
+      const color = this.color(field, i)
+      return {
+        label: this.label(field),
+        data: dayMaps.map((m) => m.get(field) ?? 0),
+        backgroundColor: color,
+        borderColor: color,
+        ...(this.chartKind() === "line"
+          ? {
+              fill: false,
+              tension: 0.2,
+              borderWidth: 1.5,
+              pointRadius: 2.5,
+              pointHoverRadius: 4,
+              pointBackgroundColor: color,
+            }
+          : {}),
+      }
+    })
 
     if (hasOther) {
       datasets.push({

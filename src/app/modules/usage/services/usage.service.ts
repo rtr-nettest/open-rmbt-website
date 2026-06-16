@@ -12,7 +12,6 @@ const ALL_STATISTICS: TUsageStatistic[] = [
   "network_group_types",
   "versions_ios",
   "versions_android",
-  "versions_applet",
 ]
 
 @Injectable({
