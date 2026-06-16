@@ -22,4 +22,5 @@ export enum ERoutes {
   RESULT = "result",
   TERMS = "terms-and-conditions",
   SITEMAP = "sitemap",
+  SERVER_STATUS = "server-status",
 }

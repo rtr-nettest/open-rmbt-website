@@ -27,6 +27,7 @@ import { OptionsScreenComponent } from "./modules/options/screens/options-screen
 import { clearStoreGuard } from "./modules/certified/guards/clear-store.guard"
 import { SitemapComponent } from "./modules/sitemap/screens/sitemap/sitemap.component"
 import { LiveScreenComponent } from "./modules/map/screens/live-screen/live-screen.component"
+import { ServerStatusScreenComponent } from "./modules/server-status/screens/server-status-screen/server-status-screen.component"
 
 export const routes: Routes = [
   {
@@ -232,6 +233,14 @@ export const routes: Routes = [
         resolve: [localeResolver],
         data: {
           title: "Live",
+        },
+      },
+      {
+        path: ERoutes.SERVER_STATUS,
+        component: ServerStatusScreenComponent,
+        resolve: [localeResolver],
+        data: {
+          title: "Server status",
         },
       },
       {

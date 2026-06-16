@@ -1,0 +1,48 @@
+@if (!hideMenu) {
+<app-header></app-header>
+<app-top-nav></app-top-nav>
+<app-breadcrumbs></app-breadcrumbs>
+}
+<app-main-content>
+  <div class="app-wrapper">
+    <h1>{{ "Server status" | translate }}</h1>
+
+    <!-- triggers the request; rendering is driven by the signals below -->
+    @if (serverStatus$ | async) {}
+
+    @if (data(); as data) {
+      @if (data.totalElements) {
+        <p
+          class="app-server-status__summary"
+          [class.app-server-status--offline]="!allReachable()"
+          [class.app-server-status--online]="allReachable()"
+        >
+          @if (allReachable()) {
+            <i class="fa-solid fa-circle-check"></i>
+            {{ "All test servers are reachable." | translate }}
+          } @else {
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            {{ reachableCount() }} / {{ totalCount() }}
+            {{ "test servers are reachable." | translate }}
+          }
+        </p>
+
+        <app-table
+          [data]="data"
+          [columns]="columns"
+          [sort]="sort"
+        ></app-table>
+      } @else if (!loading()) {
+        <p>{{ "No server status information is available." | translate }}</p>
+      }
+    }
+  </div>
+</app-main-content>
+@if (loading()) {
+<app-loading-overlay></app-loading-overlay>
+}
+@if (!hideMenu) {
+<div style="margin-top: 40px">
+  <app-footer></app-footer>
+</div>
+}
