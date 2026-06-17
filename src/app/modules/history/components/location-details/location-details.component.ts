@@ -20,26 +20,37 @@ import { ISimpleHistoryTestLocation } from '../../interfaces/simple-history-resu
 })
 export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistoryTestLocation> {
   expand = output<boolean>()
+  // this table has many columns (incl. the wide lat/long position), so use the
+  // full available width instead of the narrow default cap
+  override width = "100%"
   override columns: ITableColumn<ISimpleHistoryTestLocation>[] = [
     {
       columnDef: "time_elapsed",
       header: "Time",
       transformValue: (row) =>
-        `${roundMs(row.time_elapsed / 1e3)} ${this.i18nStore.translate("s")}`,
-      getNgClass: () => "app-cell--20",
+        row.time_elapsed != null
+          ? `${roundMs(row.time_elapsed / 1e3)} ${this.i18nStore.translate(
+              "s"
+            )}`
+          : "",
+      getNgClass: () => "app-cell--10",
     },
     {
       columnDef: "position",
       header: "Position",
       transformValue: (row) =>
-        formatcoords(row.lat, row.long).format(LOC_FORMAT),
+        row.lat != null && row.long != null
+          ? formatcoords(row.lat, row.long).format(LOC_FORMAT)
+          : "",
     },
     {
       columnDef: "loc_accuracy",
       header: "Accuracy",
       transformValue: (row) =>
-        `+/-${row.loc_accuracy.toFixed(1)} ${this.i18nStore.translate("m")}`,
-      getNgClass: () => "app-cell--25",
+        row.loc_accuracy != null
+          ? `+/-${row.loc_accuracy.toFixed(1)} ${this.i18nStore.translate("m")}`
+          : "",
+      getNgClass: () => "app-cell--12",
     },
     {
       columnDef: "speed",
@@ -49,7 +60,8 @@ export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistor
           ? `${(row.speed * 3.6).toFixed(2)} ${this.i18nStore.translate(
               "km/h"
             )}`
-          : "-",
+          : "",
+      getNgClass: () => "app-cell--12",
     },
     {
       columnDef: "altitude",
@@ -57,18 +69,21 @@ export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistor
       transformValue: (row) =>
         row.altitude != null
           ? `${Math.round(row.altitude)} ${this.i18nStore.translate("m")}`
-          : "-",
+          : "",
+      getNgClass: () => "app-cell--10",
     },
     {
       columnDef: "bearing",
       header: "bearing",
       transformValue: (row) =>
-        row.bearing != null ? `${Math.round(row.bearing)}°` : "-",
+        row.bearing != null ? `${Math.round(row.bearing)}°` : "",
+      getNgClass: () => "app-cell--10",
     },
     {
       columnDef: "loc_src",
       header: "Source",
-      transformValue: (row) => row.loc_src || "-",
+      transformValue: (row) => row.loc_src ?? "",
+      getNgClass: () => "app-cell--10",
     },
   ]
 
