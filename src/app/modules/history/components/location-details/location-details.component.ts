@@ -50,7 +50,10 @@ export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistor
       header: "Accuracy",
       transformValue: (row) =>
         row.loc_accuracy != null
-          ? `+/-${row.loc_accuracy.toFixed(1)} ${this.i18nStore.translate("m")}`
+          ? `+/-${row.loc_accuracy.toLocaleString(this.i18nStore.activeLang, {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            })} ${this.i18nStore.translate("m")}`
           : "",
       getNgClass: () => "app-cell--12",
     },
@@ -59,9 +62,10 @@ export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistor
       header: "Speed",
       transformValue: (row) =>
         row.speed != null
-          ? `${(row.speed * 3.6).toFixed(2)} ${this.i18nStore.translate(
-              "km/h"
-            )}`
+          ? `${(row.speed * 3.6).toLocaleString(this.i18nStore.activeLang, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })} ${this.i18nStore.translate("km/h")}`
           : "",
       getNgClass: () => "app-cell--12",
     },
@@ -70,7 +74,9 @@ export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistor
       header: "altitude",
       transformValue: (row) =>
         row.altitude != null
-          ? `${Math.round(row.altitude)} ${this.i18nStore.translate("m")}`
+          ? `${Math.round(row.altitude).toLocaleString(
+              this.i18nStore.activeLang
+            )} ${this.i18nStore.translate("m")}`
           : "",
       getNgClass: () => "app-cell--10",
     },
@@ -78,7 +84,11 @@ export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistor
       columnDef: "bearing",
       header: "bearing",
       transformValue: (row) =>
-        row.bearing != null ? `${Math.round(row.bearing)}°` : "",
+        row.bearing != null
+          ? `${Math.round(row.bearing).toLocaleString(
+              this.i18nStore.activeLang
+            )}°`
+          : "",
       getNgClass: () => "app-cell--10",
     },
     {
