@@ -58,6 +58,13 @@
       }
     }
 
+    // neutralise desktop column-width helpers so each cell spans the full row
+    .mat-mdc-cell[class*="app-cell--"],
+    .mat-mdc-footer-cell[class*="app-cell--"] {
+      flex: auto !important;
+      width: 100% !important;
+    }
+
     .app-table__mobile-label {
       display: inline-block;
       font-weight: 700 !important;

@@ -23,6 +23,8 @@ export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistor
   // this table has many columns (incl. the wide lat/long position), so use the
   // full available width instead of the narrow default cap
   override width = "100%"
+  // on mobile, swap the wide multi-column layout into stacked label/value rows
+  override tableClassNames = ["app-table--vertical"]
   override columns: ITableColumn<ISimpleHistoryTestLocation>[] = [
     {
       columnDef: "time_elapsed",
