@@ -1,10 +1,6 @@
 .app-table--vertical {
-  // keep header/footer plain, but leave data rows to the base alternating
-  // white/green striping
-  mat-header-row:nth-child(n),
-  mat-footer-row:nth-child(n) {
-    background-color: white;
-  }
+  // leave row backgrounds to the base styles (green header + alternating
+  // white/green data rows) so this table matches the others on the page
 
   mat-cell,
   mat-header-cell,
