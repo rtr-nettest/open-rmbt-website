@@ -7,7 +7,7 @@ import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
 import { roundMs } from "../../../shared/util/math"
 import formatcoords from "formatcoords"
 import { LOC_FORMAT } from "../../../shared/pipes/lonlat.pipe"
-import { ISimpleHistoryTestLocation } from "../../../history/interfaces/simple-history-result.interface"
+import { ISimpleHistoryTestLocation } from '../../interfaces/simple-history-result.interface'
 
 @Component({
   selector: "app-location-details",
@@ -38,8 +38,37 @@ export class LocationDetailsComponent extends ShowDetailsComponent<ISimpleHistor
       columnDef: "loc_accuracy",
       header: "Accuracy",
       transformValue: (row) =>
-        `+/-${Math.round(row.loc_accuracy)} ${this.i18nStore.translate("m")}`,
+        `+/-${row.loc_accuracy.toFixed(1)} ${this.i18nStore.translate("m")}`,
       getNgClass: () => "app-cell--25",
+    },
+    {
+      columnDef: "speed",
+      header: "Speed",
+      transformValue: (row) =>
+        row.speed != null
+          ? `${(row.speed * 3.6).toFixed(2)} ${this.i18nStore.translate(
+              "km/h"
+            )}`
+          : "-",
+    },
+    {
+      columnDef: "altitude",
+      header: "altitude",
+      transformValue: (row) =>
+        row.altitude != null
+          ? `${Math.round(row.altitude)} ${this.i18nStore.translate("m")}`
+          : "-",
+    },
+    {
+      columnDef: "bearing",
+      header: "bearing",
+      transformValue: (row) =>
+        row.bearing != null ? `${Math.round(row.bearing)}°` : "-",
+    },
+    {
+      columnDef: "loc_src",
+      header: "Source",
+      transformValue: (row) => row.loc_src || "-",
     },
   ]
 
