@@ -33,6 +33,7 @@ import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interfa
 import { OpendataExportService } from "../../services/opendata-export.service"
 import { ActionButtonsComponent } from "../../../history/components/action-buttons/action-buttons.component"
 import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
+import { environment } from "../../../../../environments/environment"
 
 export const AUTOREFRESH_INTERVAL = 15_000
 
@@ -113,6 +114,9 @@ export class OpendataScreenComponent
   startMs = Date.now()
 
   private lastRefreshDurationMs = 0
+  private readonly showFencesInOpenData = Boolean(
+    environment.features.show_fences_in_open_data,
+  )
 
   protected override get dataLimit(): number {
     return OPEN_DATA_LIMIT
@@ -123,13 +127,13 @@ export class OpendataScreenComponent
     const cursor = this.opendataStoreService.cursor()
     const newFilters = { ...DEFAULT_FILTERS, ...filters, cursor }
     return firstValueFrom(
-      this.opendataService.search(newFilters).pipe(
+      this.opendataService.search(newFilters, this.showFencesInOpenData).pipe(
         map((response) => {
           const { results, next_cursor } = response
           results.forEach((item) => {
             formatTime(item)
           })
-          results.forEach((item) => this.ensureSignal(item))
+          results.forEach((item) => this.prepareMeasurement(item))
           this.opendataStoreService.cursor.set(next_cursor)
           this.opendataStoreService.data.set([
             ...this.opendataStoreService.data(),
@@ -199,6 +203,13 @@ export class OpendataScreenComponent
     return measurement
   }
 
+  private prepareMeasurement(measurement: IRecentMeasurement) {
+    this.ensureSignal(measurement)
+    measurement.isFences =
+      this.showFencesInOpenData && measurement.fences_count != null
+    return measurement
+  }
+
   private updateFilterCount(filters: IOpendataFilters) {
     const filtersCount = Object.keys(filters).filter(
       (k) =>
@@ -227,14 +238,17 @@ export class OpendataScreenComponent
     }
     const filters = this.opendataStoreService.filters()
     const resp = await firstValueFrom(
-      this.opendataService.search({ ...DEFAULT_FILTERS, ...filters }),
+      this.opendataService.search(
+        { ...DEFAULT_FILTERS, ...filters },
+        this.showFencesInOpenData,
+      ),
     )
     const oldContent = this.opendataStoreService.data()
     let newContent = resp?.results?.length ? resp.results : []
     newContent.forEach((item) => {
       formatTime(item)
     })
-    newContent.forEach((item) => this.ensureSignal(item))
+    newContent.forEach((item) => this.prepareMeasurement(item))
     const lastTestUuid = newContent[newContent.length - 1]?.open_test_uuid
     const lastOldItemIndex = oldContent.findIndex(
       (item) => item.open_test_uuid === lastTestUuid,

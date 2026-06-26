@@ -34,7 +34,7 @@ export class OpendataService {
     private readonly mainStore: MainStore,
     private readonly store: OpendataStoreService,
     private readonly http: HttpClient,
-    private readonly router: Router
+    private readonly router: Router,
   ) {}
 
   initFilters() {
@@ -52,7 +52,7 @@ export class OpendataService {
     this.router.navigateByUrl(
       `/${this.i18nStore.activeLang}/${
         ERoutes.OPEN_DATA
-      }?${this.getSearchFromFilters(filters)}`
+      }?${this.getSearchFromFilters(filters)}`,
     )
   }
 
@@ -64,7 +64,7 @@ export class OpendataService {
         this.mainStore.api().url_web_statistic_server
       }/opentests/histogram?measurement=${phase}${addFilters ? "&" : ""}${
         addFilters ? this.getSearchFromFilters(filters!) : ""
-      }`
+      }`,
     )
   }
 
@@ -73,29 +73,32 @@ export class OpendataService {
     return this.http.get<IIntradayResponseItem[]>(
       `${this.mainStore.api().url_web_statistic_server}/opentests/intraday${
         addFilters ? "?" : ""
-      }${addFilters ? this.getSearchFromFilters(filters!) : ""}`
+      }${addFilters ? this.getSearchFromFilters(filters!) : ""}`,
     )
   }
 
   getRecentStats() {
     return this.http.get<IRecentStats>(
-      `${this.mainStore.api().url_web_statistic_server}/opentests/statistics`
+      `${this.mainStore.api().url_web_statistic_server}/opentests/statistics`,
     )
   }
 
-  search(filters?: IOpendataFilters) {
+  search(filters?: IOpendataFilters, includeCoverageFences = false) {
+    const includeCoverageFencesParam = includeCoverageFences
+      ? "&include_fences=true"
+      : ""
     return this.http.get<IRecentMeasurementsResponse>(
       `${
         this.mainStore.api().url_web_statistic_server
       }/opentests/search?${this.getSearchFromFilters({
         ...(filters || {}),
-      })}&_=${Date.now()}`
+      })}&_=${Date.now()}${includeCoverageFencesParam}`,
     )
   }
 
   getRecentMeasurements() {
     return this.http.get<IRecentMeasurementsResponse>(
-      `${this.mainStore.api().url_web_recent_server}?_=${Date.now()}`
+      `${this.mainStore.api().url_web_recent_server}?_=${Date.now()}`,
     )
   }
 
