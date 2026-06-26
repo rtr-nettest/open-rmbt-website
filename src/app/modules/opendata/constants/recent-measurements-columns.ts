@@ -103,6 +103,9 @@ export const getRecentMeasurementsColumns = (
       `app-cell app-cell--12 ${value.isFences ? "app-cell--hidden-on-mobile" : ""}`,
     header: "Down (Mbps)",
     transformValue: (value) => {
+      if (value.isFences) {
+        return ""
+      }
       return roundToSignificantDigits(value.download_kbit / 1000)
     },
     justify: "flex-end",
@@ -114,6 +117,9 @@ export const getRecentMeasurementsColumns = (
     header: "Up (Mbps)",
     getMobileHeader: (value) => (value.isFences ? t("Points") : ""),
     transformValue: (value) => {
+      if (value.isFences) {
+        return value.fences_count ?? ""
+      }
       return roundToSignificantDigits(value.upload_kbit / 1000)
     },
     justify: "flex-end",
@@ -124,6 +130,9 @@ export const getRecentMeasurementsColumns = (
       `app-cell app-cell--12 ${value.isFences ? "app-cell--hidden-on-mobile" : ""}`,
     header: "Ping (ms)",
     transformValue: (value) => {
+      if (value.isFences) {
+        return ""
+      }
       return roundToSignificantDigits(value.ping_ms)
     },
     justify: "flex-end",
