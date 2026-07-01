@@ -1,7 +1,4 @@
 import { inject, Injectable } from "@angular/core"
-import { Popup, Map } from "maplibre-gl"
-import { IRecentMeasurement } from "../../opendata/interfaces/recent-measurements-response.interface"
-import { environment } from "../../../../environments/environment"
 import { I18nStore } from "../../i18n/store/i18n.store"
 import { firstValueFrom } from "rxjs"
 import {
@@ -26,6 +23,7 @@ dayjs.extend(tz)
 
 type PopupData = {
   time: string
+  title: string
   detailsUrl: string
   downloadClass: number
   download: string
@@ -96,6 +94,7 @@ export class PopupContentService {
     }
     const data: PopupData = {
       time: measurement["time"],
+      title: t("Measurement"),
       detailsUrl: `/${this.i18nStore.activeLang}/${ERoutes.OPEN_RESULT}?open_test_uuid=${measurement["open_test_uuid"]}`,
       downloadClass: this.classification.classify(
         measurement["download_kbit"],
