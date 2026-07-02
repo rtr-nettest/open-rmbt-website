@@ -90,7 +90,7 @@ export class FencesMapComponent {
     if (!this.map) {
       return
     }
-    if (this.path().length < 2) {
+    if (this.path().length < 1) {
       return
     }
     this.pathMarkers = this.mapService.addPathMarkers(this.map, this.path())

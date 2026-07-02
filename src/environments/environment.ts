@@ -26,6 +26,7 @@ export const environment: IEnvironment = {
     show_history_filter: true,
     show_fences_in_details: true,
     show_fences_in_history: true,
+    show_fences_in_open_data: true,
     show_fences_on_start_page: true,
     show_fences_tile: true,
     show_server_selection: true,

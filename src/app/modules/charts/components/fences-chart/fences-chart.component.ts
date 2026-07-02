@@ -6,10 +6,14 @@ import {
 } from "@angular/core"
 import dayjs from "dayjs"
 import { I18nStore } from "../../../i18n/store/i18n.store"
-import { getMobileNetworkColor } from "../../../history/constants/network-technology"
+import {
+  getMobileNetworkColor,
+  getMobileNetworkTechnology,
+} from "../../../history/constants/network-technology"
 import { IFenceItem } from "../../../history/interfaces/open-test-response"
 import { TestChartDataset } from "../../dto/test-chart-dataset"
 import { FenceLinePlugin } from "../../plugins/fence-line"
+import { TimeIntervalNamePlugin } from "../../plugins/time-interval-name"
 import { TestSignalChart } from "../signal-chart/settings/signal-chart"
 import { TestSignalChartOptions } from "../signal-chart/settings/signal-chart-options"
 
@@ -44,7 +48,7 @@ export class FencesChartComponent implements AfterViewInit {
         this.i18nStore,
         datasets,
         options,
-        plugins
+        plugins,
       )
     }
   }
@@ -54,13 +58,7 @@ export class FencesChartComponent implements AfterViewInit {
   }
 
   private getMinSignal() {
-    const signals = this.fences()
-      .filter((fence) => fence.signal !== undefined)
-      .map((fence) => fence.signal!)
-
-    if (!signals.length) {
-      return 120
-    }
+    const signals = this.fences().map((fence) => fence.signal ?? 120)
 
     let minSignal = Math.min(...signals)
     minSignal = Math.abs(minSignal - (minSignal % 25) - 50)
@@ -71,12 +69,12 @@ export class FencesChartComponent implements AfterViewInit {
     const dataset = new TestChartDataset("signal")
 
     for (const fence of this.fences()) {
-      if (fence.offset_ms === undefined || fence.signal === undefined) {
+      if (fence.offset_ms === undefined) {
         continue
       }
       dataset.data.push({
         x: this.getX(fence.offset_ms),
-        y: minSignal - Math.abs(fence.signal),
+        y: minSignal - Math.abs(fence.signal ?? 120),
       })
     }
 
@@ -85,6 +83,7 @@ export class FencesChartComponent implements AfterViewInit {
 
   private getPlugins() {
     const plugins: any[] = []
+    let currentTechnologyId: number | undefined
 
     for (const fence of this.fences()) {
       if (fence.offset_ms === undefined) {
@@ -95,10 +94,28 @@ export class FencesChartComponent implements AfterViewInit {
           id: `fence-${fence.fence_id}`,
           x: fence.offset_ms,
           color: getMobileNetworkColor(fence.technology_id),
-        })
+        }),
       )
+      if (fence.technology_id !== currentTechnologyId) {
+        currentTechnologyId = fence.technology_id
+        plugins.push(
+          new TimeIntervalNamePlugin({
+            id: `fence-tech-${fence.fence_id}`,
+            text: this.getTechnologyLabel(fence),
+            x: fence.offset_ms,
+            y: 12,
+          }),
+        )
+      }
     }
 
     return plugins
+  }
+
+  private getTechnologyLabel(fence: IFenceItem) {
+    if (fence.technology?.toUpperCase() === "OFFLINE") {
+      return "OFFLINE"
+    }
+    return getMobileNetworkTechnology(fence.technology_id)
   }
 }

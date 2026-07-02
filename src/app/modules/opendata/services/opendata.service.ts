@@ -83,23 +83,24 @@ export class OpendataService {
     )
   }
 
-  search(filters?: IOpendataFilters) {
+  search(filters?: IOpendataFilters, includeCoverageFences = false) {
     return this.http.get<IRecentMeasurementsResponse>(
       `${
         this.mainStore.api().url_web_statistic_server
       }/opentests/search?${this.getSearchFromFilters({
         ...(filters || {}),
-      })}&_=${Date.now()}`,
+      })}&_=${Date.now()}${this.includeFencesParam(includeCoverageFences)}`,
     )
   }
 
   getRecentMeasurements(includeCoverageFences = false) {
-    const includeCoverageFencesParam = includeCoverageFences
-      ? "&include_fences=true"
-      : ""
     return this.http.get<IRecentMeasurementsResponse>(
-      `${this.mainStore.api().url_web_recent_server}?_=${Date.now()}${includeCoverageFencesParam}`,
+      `${this.mainStore.api().url_web_recent_server}?_=${Date.now()}${this.includeFencesParam(includeCoverageFences)}`,
     )
+  }
+
+  private includeFencesParam(includeCoverageFences: boolean) {
+    return includeCoverageFences ? "&include_fences=true" : ""
   }
 
   private getSearchFromFilters(filters: IOpendataFilters) {

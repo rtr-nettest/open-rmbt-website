@@ -281,7 +281,13 @@ export class MapService {
 
   fitBounds(map: Map, coordinates: [number, number][]) {
     this.zone.runOutsideAngular(() => {
+      if (!coordinates?.length) {
+        return
+      }
       if (coordinates.length < 2) {
+        map.panTo(coordinates[0], {
+          zoom: 16,
+        })
         return
       }
       const line = lineString(coordinates)
