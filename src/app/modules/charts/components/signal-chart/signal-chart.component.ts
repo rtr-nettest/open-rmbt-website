@@ -5,8 +5,6 @@ import {
   input,
 } from "@angular/core"
 import { ISimpleHistorySignal } from "../../../history/interfaces/simple-history-result.interface"
-import { IFenceItem } from "../../../history/interfaces/open-test-response"
-import { getMobileNetworkColor } from "../../../history/constants/network-technology"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { EChartColor, TestChartDataset } from "../../dto/test-chart-dataset"
 import dayjs from "dayjs"
@@ -15,7 +13,6 @@ import { TestSignalChart } from "./settings/signal-chart"
 import { TestSignalChartOptions } from "./settings/signal-chart-options"
 import { TimeIntervalFillPlugin } from "../../plugins/time-interval-fill"
 import { TimeIntervalNamePlugin } from "../../plugins/time-interval-name"
-import { FenceLinePlugin } from "../../plugins/fence-line"
 
 export type PhaseDurations = {
   downStart?: number
@@ -36,7 +33,6 @@ export type PhaseDurations = {
 export class SignalChartComponent implements AfterViewInit {
   id = "signal_chart"
   signal = input<ISimpleHistorySignal[]>([])
-  fences = input<IFenceItem[] | null>(null)
   phaseDurations = input<PhaseDurations | null>(null)
   chart!: TestSignalChart
 
@@ -251,19 +247,6 @@ export class SignalChartComponent implements AfterViewInit {
           y: 72,
         })
       )
-    }
-    if (this.fences()?.length) {
-      for (const fence of this.fences()!) {
-        if (fence.offset_ms !== undefined) {
-          plugins.push(
-            new FenceLinePlugin({
-              id: `fence-${fence.fence_id}`,
-              x: fence.offset_ms,
-              color: getMobileNetworkColor(fence.technology_id),
-            })
-          )
-        }
-      }
     }
     return plugins
   }

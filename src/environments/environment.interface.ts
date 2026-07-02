@@ -25,6 +25,7 @@ export interface IEnvironment {
     show_history_filter: boolean
     show_fences_in_details?: boolean
     show_fences_in_history?: boolean
+    show_fences_on_start_page?: boolean
     show_fences_tile?: boolean
     show_server_selection: boolean
   }

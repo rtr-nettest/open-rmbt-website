@@ -60,6 +60,7 @@ import { environment } from "../../../../../environments/environment"
 import { IFenceItem } from "../../interfaces/open-test-response"
 import { FencesMapComponent } from "../../components/fences-map/fences-map.component"
 import { FencesDetailsComponent } from "../../components/fences-details/fences-details.component"
+import { FencesChartComponent } from "../../../charts/components/fences-chart/fences-chart.component"
 
 @Component({
   selector: "app-result-screen",
@@ -70,6 +71,7 @@ import { FencesDetailsComponent } from "../../components/fences-details/fences-d
     DatePipe,
     FencesDetailsComponent,
     FencesMapComponent,
+    FencesChartComponent,
     HeaderComponent,
     MainContentComponent,
     MatButtonModule,
@@ -163,6 +165,7 @@ export class ResultScreenComponent extends SeoComponent {
     signal<IBasicResponse<IDetailedHistoryResultItem> | null>(null)
   qoeResults = signal<IBasicResponse<IDetailedHistoryResultItem> | null>(null)
   fencesResults = signal<IFenceItem[] | null>(null)
+  hasFencesResults = computed(() => Boolean(this.fencesResults()?.length))
   fencesMapContainerId = "fencesMapContainer"
 
   downloadTable = signal<IOverallResult[]>([])

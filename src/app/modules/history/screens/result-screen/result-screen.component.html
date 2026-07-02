@@ -163,7 +163,7 @@
                   ></app-speed-details>
                 </div>
               }
-              @if (signalTable().length) {
+              @if (signalTable().length || hasFencesResults()) {
                 <div class="app-charts-row">
                   <header
                     class="app-charts-row__base"
@@ -174,16 +174,28 @@
                     } @else {
                       <h3>{{ "Signal" | translate }}</h3>
                     }
-                    <app-signal-chart
-                      [signal]="signalTable()"
-                      [fences]="fencesResults()"
-                      [phaseDurations]="phaseDurations()"
-                    ></app-signal-chart>
+                    @if (hasFencesResults()) {
+                      <app-fences-chart
+                        [fences]="fencesResults() ?? []"
+                      ></app-fences-chart>
+                    } @else {
+                      <app-signal-chart
+                        [signal]="signalTable()"
+                        [phaseDurations]="phaseDurations()"
+                      ></app-signal-chart>
+                    }
                   </header>
-                  <app-signal-details
-                    [details]="signalTableGrouped()"
-                    a11yTitle="Signal details"
-                  ></app-signal-details>
+                  @if (hasFencesResults()) {
+                    <app-fences-details
+                      [details]="fencesResults() ?? []"
+                      a11yTitle="Signal details"
+                    ></app-fences-details>
+                  } @else {
+                    <app-signal-details
+                      [details]="signalTableGrouped()"
+                      a11yTitle="Signal details"
+                    ></app-signal-details>
+                  }
                 </div>
               }
             </div>
