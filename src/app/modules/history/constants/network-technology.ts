@@ -1,10 +1,11 @@
 export enum EMNT {
-  T_UNKNOWN = "Mobile",
+  T_UNKNOWN = "Unknown",
   T_2G = "2G",
   T_3G = "3G",
   T_4G = "4G",
   T_5G_SA = "5G (SA)",
   T_5G_NSA = "5G (NSA)",
+  T_OFFLINE = "Offline",
 }
 
 export const MobileNetworkTechnologyMap: Map<number, EMNT> = new Map([
@@ -33,6 +34,7 @@ export const MobileNetworkTechnologyMap: Map<number, EMNT> = new Map([
   [22, EMNT.T_5G_NSA], // NR_AVAILABLE
   [40, EMNT.T_4G], // LTE_NR
   [41, EMNT.T_5G_NSA], // NR_NSA
+  [1000, EMNT.T_OFFLINE], // OFFLINE
 ])
 
 export const MobileNetworkColorMap: Map<number, string> = new Map([
@@ -61,6 +63,7 @@ export const MobileNetworkColorMap: Map<number, string> = new Map([
   [22, "#8e24aa"], // NR_AVAILABLE
   [40, "#b12a90"], // LTE_NR
   [41, "#8e24aa"], // NR_NSA
+  [1000, "#d9d9d9"], // OFFLINE
 ])
 
 export function getMobileNetworkTechnology(technologyId: number = 0): string {
