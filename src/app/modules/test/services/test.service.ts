@@ -186,7 +186,10 @@ export class TestService {
   private startGeoTracking() {
     this.geoTrackerService.startGeoTracking(
       (error) => {
-        this.testStore.locationPermissionDenied.set(true)
+        const permissionDenied =
+          error.code === error.PERMISSION_DENIED || error.code === 1
+
+        this.testStore.locationPermissionDenied.set(permissionDenied)
         console.error("Geotracking error:", error)
       },
       (data) => {
