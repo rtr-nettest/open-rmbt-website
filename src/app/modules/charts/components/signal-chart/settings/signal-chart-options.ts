@@ -69,7 +69,18 @@ export class TestSignalChartOptions {
   }
   plugins = {
     legend: {
-      display: false,
+      display: true,
+      position: "top" as const,
+      labels: {
+        color: EColors.SECONDARY_50,
+        boxWidth: 12,
+        boxHeight: 12,
+        font: {
+          size: 12,
+        },
+        // hide helper datasets (e.g. the trailing ping anchor) that have no label
+        filter: (item: { text?: string }) => !!item.text,
+      },
     },
     tooltip: {
       enabled: false,

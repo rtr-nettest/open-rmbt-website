@@ -16,10 +16,22 @@ export enum EChartColor {
   SIGNAL_BORDER = "rgba(209, 144, 16, 1)",
   PING_BORDER = "transparent",
   PING_SEMI = "rgba(39, 177, 220, 0.33)",
+  // Per-technology signal lines (fill / border)
+  GEN_2G = "rgba(255, 222, 0, 0.33)", // #FFDE00
+  GEN_2G_BORDER = "rgba(255, 222, 0, 1)",
+  GEN_3G = "rgba(239, 255, 0, 0.33)", // #EFFF00
+  GEN_3G_BORDER = "rgba(239, 255, 0, 1)",
+  GEN_4G = "rgba(0, 222, 255, 0.33)", // #00DEFF
+  GEN_4G_BORDER = "rgba(0, 222, 255, 1)",
+  GEN_5G_SA = "rgba(94, 0, 255, 0.33)", // #5E00FF
+  GEN_5G_SA_BORDER = "rgba(94, 0, 255, 1)",
+  GEN_5G_NSA = "rgba(0, 145, 255, 0.33)", // #0091FF
+  GEN_5G_NSA_BORDER = "rgba(0, 145, 255, 1)",
 }
 
 export class TestChartDataset {
   fill = true
+  label?: string
   backgroundColor!: string
   borderColor!: string
   borderCapStyle: "round" = "round"

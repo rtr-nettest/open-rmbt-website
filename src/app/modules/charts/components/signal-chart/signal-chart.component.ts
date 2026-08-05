@@ -8,7 +8,7 @@ import { ISimpleHistorySignal } from "../../../history/interfaces/simple-history
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { EChartColor, TestChartDataset } from "../../dto/test-chart-dataset"
 import dayjs from "dayjs"
-import { ITestChartPluginOptions } from "../../interfaces/test-chart-plugin.interface"
+import { EMNT } from "../../../history/constants/network-technology"
 import { TestSignalChart } from "./settings/signal-chart"
 import { TestSignalChartOptions } from "./settings/signal-chart-options"
 import { TimeIntervalFillPlugin } from "../../plugins/time-interval-fill"
@@ -45,11 +45,9 @@ export class SignalChartComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const ctx = this.canvas?.getContext("2d")
     if (ctx) {
-      const ltePeriods: ITestChartPluginOptions[] = []
-      const networkChanges: ITestChartPluginOptions[] = []
       const minSignal = this.getMinSignal()
-      const datasets = this.getDatasets(minSignal, ltePeriods, networkChanges)
-      const plugins = this.getPlugins(ltePeriods, networkChanges)
+      const datasets = this.getDatasets(minSignal)
+      const plugins = this.getPlugins()
       const options = new TestSignalChartOptions(this.i18nStore, minSignal)
       this.chart = new TestSignalChart(
         ctx,
@@ -67,133 +65,122 @@ export class SignalChartComponent implements AfterViewInit {
 
   private getMinSignal() {
     let containsLTE = false
-    let minSignal = Math.min(
-      ...this.signal().map((signal) => {
-        if (signal.network_type === "LTE" || signal.network_type === "LTE CA") {
-          containsLTE = true
-        }
-        return signal.lte_rsrp
-          ? signal.lte_rsrp
-          : signal.nr_rsrp
-          ? signal.nr_rsrp
-          : signal.signal_strength
-      })
-    )
+    const values: number[] = []
+    for (const signal of this.signal()) {
+      if (signal.lte_rsrp != null) {
+        containsLTE = true
+        values.push(signal.lte_rsrp)
+      }
+      if (signal.nr_rsrp != null) {
+        values.push(signal.nr_rsrp)
+      }
+      if (signal.lte_rsrp == null && signal.nr_rsrp == null) {
+        values.push(signal.signal_strength)
+      }
+    }
+    let minSignal = Math.min(...values)
     minSignal = Math.abs(minSignal - (minSignal % 25) - 50)
     return Math.min(minSignal, containsLTE ? 140 : 120)
   }
 
-  private getDatasets(
-    minSignal: number,
-    ltePeriods: ITestChartPluginOptions[],
-    networkChanges: ITestChartPluginOptions[]
-  ) {
+  /**
+   * Builds one line per technology present in the test so that 4G (LTE RSRP)
+   * and 5G (NR RSRP) are drawn as separate, distinctly coloured lines. During
+   * NSA operation a single sample carries both `lte_rsrp` and `nr_rsrp`, so it
+   * contributes a point to both lines at the same time.
+   */
+  private getDatasets(minSignal: number) {
     const datasets: TestChartDataset[] = []
-    let currentNetworkType = ""
-    let currentDataset: TestChartDataset | undefined
-    for (const signal of this.signal()) {
-      if (signal.network_type != currentNetworkType) {
-        currentNetworkType = signal.network_type
-        currentDataset = new TestChartDataset("signal")
-        networkChanges.push({
-          id: `network-${signal.time_elapsed}`,
-          x: signal.time_elapsed - 20,
-          duration: 20,
-          color: EChartColor.SIGNAL_BORDER,
-          text:
-            signal.network_type === "LTE" || signal.network_type === "LTE CA"
-              ? "LTE\nRSRP"
-              : signal.network_type,
-        })
-        datasets.push(currentDataset)
-        if (signal.network_type === "LTE" || signal.network_type === "LTE CA") {
-          ltePeriods.push({
-            id: `lte-${signal.time_elapsed}`,
-            x: signal.time_elapsed,
-            color: EChartColor.SIGNAL,
-          })
-        } else if (
-          currentNetworkType === "LTE" ||
-          currentNetworkType === "LTE CA"
-        ) {
-          ltePeriods[ltePeriods.length - 1].duration =
-            signal.time_elapsed - ltePeriods[ltePeriods.length - 1].x
-        }
+    const seriesByKey = new Map<string, TestChartDataset>()
+    const getY = (value: number) => minSignal - Math.abs(value)
+
+    const addPoint = (
+      key: string,
+      label: string,
+      borderColor: string,
+      backgroundColor: string,
+      x: number,
+      value: number
+    ) => {
+      let dataset = seriesByKey.get(key)
+      if (!dataset) {
+        dataset = new TestChartDataset("signal")
+        dataset.label = label
+        dataset.borderColor = borderColor
+        dataset.backgroundColor = backgroundColor
+        seriesByKey.set(key, dataset)
+        datasets.push(dataset)
       }
-      const y =
-        minSignal -
-        Math.abs(
-          signal.lte_rsrp
-            ? signal.lte_rsrp
-            : signal.nr_rsrp
-            ? signal.nr_rsrp
-            : signal.signal_strength
-        )
-      const x = this.getX(signal.time_elapsed)
-      currentDataset!.data.push({
-        x,
-        y,
-      })
+      dataset.data.push({ x, y: getY(value) })
     }
+
+    // 5G is Non-Standalone when any sample carries both an LTE anchor
+    // (lte_rsrp) and an NR reading (nr_rsrp); otherwise it is Standalone.
+    const is5gNsa = this.signal().some(
+      (signal) => signal.lte_rsrp != null && signal.nr_rsrp != null
+    )
+    for (const signal of this.signal()) {
+      const x = this.getX(signal.time_elapsed)
+      if (signal.lte_rsrp != null) {
+        addPoint(
+          EMNT.T_4G,
+          EMNT.T_4G,
+          EChartColor.GEN_4G_BORDER,
+          EChartColor.GEN_4G,
+          x,
+          signal.lte_rsrp
+        )
+      }
+      if (signal.nr_rsrp != null) {
+        addPoint(
+          is5gNsa ? EMNT.T_5G_NSA : EMNT.T_5G_SA,
+          is5gNsa ? EMNT.T_5G_NSA : EMNT.T_5G_SA,
+          is5gNsa ? EChartColor.GEN_5G_NSA_BORDER : EChartColor.GEN_5G_SA_BORDER,
+          is5gNsa ? EChartColor.GEN_5G_NSA : EChartColor.GEN_5G_SA,
+          x,
+          signal.nr_rsrp
+        )
+      }
+      if (signal.lte_rsrp == null && signal.nr_rsrp == null) {
+        // 2G/3G (or otherwise unclassified) carry only signal_strength
+        const is3g = !!signal.cell_info_3G
+        addPoint(
+          is3g ? EMNT.T_3G : EMNT.T_2G,
+          is3g ? EMNT.T_3G : EMNT.T_2G,
+          is3g ? EChartColor.GEN_3G_BORDER : EChartColor.GEN_2G_BORDER,
+          is3g ? EChartColor.GEN_3G : EChartColor.GEN_2G,
+          x,
+          signal.signal_strength
+        )
+      }
+    }
+
     if (this.phaseDurations()?.upStart && this.phaseDurations()?.upDuration) {
-      // draw the chart until the end of the upload phase
+      // draw the signal lines until the end of the upload phase
       const lastX = this.getX(
         this.phaseDurations()!.upStart! + this.phaseDurations()!.upDuration!
       )
-      const lastSignal = currentDataset?.data[currentDataset.data.length - 1]
-      if (lastSignal?.x && lastSignal.x < lastX) {
-        currentDataset?.data.push({
-          x: lastX,
-          y: lastSignal.y,
-        })
+      for (const dataset of seriesByKey.values()) {
+        const lastSignal = dataset.data[dataset.data.length - 1]
+        if (lastSignal?.x != null && lastSignal.x < lastX) {
+          dataset.data.push({
+            x: lastX,
+            y: lastSignal.y,
+          })
+        }
       }
-      currentDataset = new TestChartDataset("ping")
-      currentDataset.data.push({
+      const pingDataset = new TestChartDataset("ping")
+      pingDataset.data.push({
         x: lastX,
         y: 0,
       })
-      datasets.push(currentDataset)
+      datasets.push(pingDataset)
     }
     return datasets
   }
 
-  private getPlugins(
-    ltePeriods: ITestChartPluginOptions[],
-    networkChanges: ITestChartPluginOptions[]
-  ) {
+  private getPlugins() {
     const plugins: any[] = []
-    if (networkChanges.length) {
-      for (const p of networkChanges) {
-        plugins.push(
-          new TimeIntervalFillPlugin({
-            id: p.id,
-            color: p.color,
-            x: p.x,
-            duration: p.duration,
-          })
-        )
-        plugins.push(
-          new TimeIntervalNamePlugin({
-            id: `text-${p.id}`,
-            text: p.text,
-            x: p.x,
-            y: 12,
-          })
-        )
-      }
-    }
-    if (ltePeriods.length) {
-      for (const p of ltePeriods) {
-        plugins.push(
-          new TimeIntervalFillPlugin({
-            id: p.id,
-            color: p.color,
-            x: p.x,
-            duration: p.duration,
-          })
-        )
-      }
-    }
     if (this.phaseDurations()?.downStart) {
       plugins.push(
         new TimeIntervalFillPlugin({
