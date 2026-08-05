@@ -201,7 +201,7 @@ export class CellInfoComponent
       signalRow +=
         signal.lte_rsrp +
         " " +
-        this.i18nStore.translate("dB") +
+        this.i18nStore.translate("dBm") +
         (nrNsa ? " (4G)" : "")
     }
     if (signal.timing_advance !== null) {
