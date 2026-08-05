@@ -37,8 +37,10 @@ export const MobileNetworkTechnologyMap: Map<number, EMNT> = new Map([
   [1000, EMNT.T_OFFLINE], // OFFLINE
 ])
 
+export const OFFLINE_GRAY = "#A0A0A0"
+
 export const MobileNetworkColorMap: Map<number, string> = new Map([
-  [0, "#d9d9d9"],
+  [0, OFFLINE_GRAY],
   [1, "#fca636"], // GPRS
   [2, "#fca636"], // EDGE
   [3, "#e16462"], // UMTS
@@ -63,7 +65,7 @@ export const MobileNetworkColorMap: Map<number, string> = new Map([
   [22, "#8e24aa"], // NR_AVAILABLE
   [40, "#b12a90"], // LTE_NR
   [41, "#8e24aa"], // NR_NSA
-  [1000, "#d9d9d9"], // OFFLINE
+  [1000, OFFLINE_GRAY], // OFFLINE
 ])
 
 export function getMobileNetworkTechnology(technologyId: number = 0): string {
@@ -71,5 +73,5 @@ export function getMobileNetworkTechnology(technologyId: number = 0): string {
 }
 
 export function getMobileNetworkColor(technologyId: number = 0): string {
-  return MobileNetworkColorMap.get(technologyId) || "#d9d9d9"
+  return MobileNetworkColorMap.get(technologyId) || OFFLINE_GRAY
 }
