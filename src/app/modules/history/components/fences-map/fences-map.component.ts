@@ -3,7 +3,10 @@ import { Subject, Subscription, takeUntil } from "rxjs"
 import { IFenceItem } from "../../interfaces/open-test-response"
 import { Map, NavigationControl } from "maplibre-gl"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
-import { MobileNetworkColorMap } from "../../constants/network-technology"
+import {
+  MobileNetworkColorMap,
+  OFFLINE_GRAY,
+} from "../../constants/network-technology"
 import { PopupService } from "../../../map/services/popup.service"
 import { FencesPopupContentService } from "../../services/fences-popup-content.service"
 
@@ -100,10 +103,15 @@ export class FencesMapComponent {
       },
       pointPaint: {
         "circle-color": [
-          "match",
-          ["get", "technology_id"],
-          ...[...MobileNetworkColorMap.entries()].flat(),
-          "#d9d9d9",
+          "case",
+          ["==", ["get", "avg_ping_ms"], null],
+          OFFLINE_GRAY,
+          [
+            "match",
+            ["get", "technology_id"],
+            ...[...MobileNetworkColorMap.entries()].flat(),
+            OFFLINE_GRAY,
+          ],
         ] as any,
         "circle-radius": 6,
       },
