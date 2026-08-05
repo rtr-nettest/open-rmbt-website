@@ -241,7 +241,7 @@ export class CellInfoComponent
       signalRow +=
         signal.nr_rsrp +
         " " +
-        this.i18nStore.translate("dB") +
+        this.i18nStore.translate("dBm") +
         (nrNsa ? " (5G)" : "")
     }
     if (signal.nr_rsrq !== null) {

@@ -8,7 +8,7 @@ The site has been in production since September 11, 2025. It replaced the origin
 More information and other components of Open RMBT can be found here: https://github.com/rtr-nettest/open-rmbt
 
 This project uses [Angular CLI](https://github.com/angular/angular-cli). Many thanks to
-[Specure](https://specure.com/), especially [Polina](npmhttps://github.com/polylina) for the development of this code.
+[Specure](https://specure.com/), especially [Polina](https://github.com/polylina) for the development of this code.
 
 ## Open Source License
 
