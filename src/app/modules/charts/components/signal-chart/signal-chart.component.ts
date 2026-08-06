@@ -9,6 +9,7 @@ import { I18nStore } from "../../../i18n/store/i18n.store"
 import { EChartColor, TestChartDataset } from "../../dto/test-chart-dataset"
 import dayjs from "dayjs"
 import { EMNT } from "../../../history/constants/network-technology"
+import { ITestChartPluginOptions } from "../../interfaces/test-chart-plugin.interface"
 import { TestSignalChart } from "./settings/signal-chart"
 import { TestSignalChartOptions } from "./settings/signal-chart-options"
 import { TimeIntervalFillPlugin } from "../../plugins/time-interval-fill"
@@ -45,9 +46,10 @@ export class SignalChartComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const ctx = this.canvas?.getContext("2d")
     if (ctx) {
+      const techLabels: ITestChartPluginOptions[] = []
       const minSignal = this.getMinSignal()
-      const datasets = this.getDatasets(minSignal)
-      const plugins = this.getPlugins()
+      const datasets = this.getDatasets(minSignal, techLabels)
+      const plugins = this.getPlugins(techLabels)
       const options = new TestSignalChartOptions(this.i18nStore, minSignal)
       this.chart = new TestSignalChart(
         ctx,
@@ -88,8 +90,15 @@ export class SignalChartComponent implements AfterViewInit {
    * and 5G (NR RSRP) are drawn as separate, distinctly coloured lines. During
    * NSA operation a single sample carries both `lte_rsrp` and `nr_rsrp`, so it
    * contributes a point to both lines at the same time.
+   *
+   * For every technology a text label is collected in `techLabels`, positioned
+   * at the moment the technology first appears, so the chart keeps naming the
+   * displayed technologies as it did before.
    */
-  private getDatasets(minSignal: number) {
+  private getDatasets(
+    minSignal: number,
+    techLabels: ITestChartPluginOptions[]
+  ) {
     const datasets: TestChartDataset[] = []
     const seriesByKey = new Map<string, TestChartDataset>()
     const getY = (value: number) => minSignal - Math.abs(value)
@@ -99,7 +108,7 @@ export class SignalChartComponent implements AfterViewInit {
       label: string,
       borderColor: string,
       backgroundColor: string,
-      x: number,
+      timeElapsed: number,
       value: number
     ) => {
       let dataset = seriesByKey.get(key)
@@ -110,8 +119,15 @@ export class SignalChartComponent implements AfterViewInit {
         dataset.backgroundColor = backgroundColor
         seriesByKey.set(key, dataset)
         datasets.push(dataset)
+        // stack labels of concurrent technologies so they do not overlap
+        techLabels.push({
+          id: `tech-${key}`,
+          x: timeElapsed,
+          y: 12 + techLabels.length * 16,
+          text: label,
+        })
       }
-      dataset.data.push({ x, y: getY(value) })
+      dataset.data.push({ x: this.getX(timeElapsed), y: getY(value) })
     }
 
     // 5G is Non-Standalone when any sample carries both an LTE anchor
@@ -120,14 +136,13 @@ export class SignalChartComponent implements AfterViewInit {
       (signal) => signal.lte_rsrp != null && signal.nr_rsrp != null
     )
     for (const signal of this.signal()) {
-      const x = this.getX(signal.time_elapsed)
       if (signal.lte_rsrp != null) {
         addPoint(
           EMNT.T_4G,
           EMNT.T_4G,
           EChartColor.GEN_4G_BORDER,
           EChartColor.GEN_4G,
-          x,
+          signal.time_elapsed,
           signal.lte_rsrp
         )
       }
@@ -137,7 +152,7 @@ export class SignalChartComponent implements AfterViewInit {
           is5gNsa ? EMNT.T_5G_NSA : EMNT.T_5G_SA,
           is5gNsa ? EChartColor.GEN_5G_NSA_BORDER : EChartColor.GEN_5G_SA_BORDER,
           is5gNsa ? EChartColor.GEN_5G_NSA : EChartColor.GEN_5G_SA,
-          x,
+          signal.time_elapsed,
           signal.nr_rsrp
         )
       }
@@ -149,7 +164,7 @@ export class SignalChartComponent implements AfterViewInit {
           is3g ? EMNT.T_3G : EMNT.T_2G,
           is3g ? EChartColor.GEN_3G_BORDER : EChartColor.GEN_2G_BORDER,
           is3g ? EChartColor.GEN_3G : EChartColor.GEN_2G,
-          x,
+          signal.time_elapsed,
           signal.signal_strength
         )
       }
@@ -179,8 +194,18 @@ export class SignalChartComponent implements AfterViewInit {
     return datasets
   }
 
-  private getPlugins() {
+  private getPlugins(techLabels: ITestChartPluginOptions[]) {
     const plugins: any[] = []
+    for (const label of techLabels) {
+      plugins.push(
+        new TimeIntervalNamePlugin({
+          id: label.id,
+          text: label.text,
+          x: label.x,
+          y: label.y,
+        })
+      )
+    }
     if (this.phaseDurations()?.downStart) {
       plugins.push(
         new TimeIntervalFillPlugin({
