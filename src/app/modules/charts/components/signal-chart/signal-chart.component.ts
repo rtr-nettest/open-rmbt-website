@@ -8,6 +8,7 @@ import { ISimpleHistorySignal } from "../../../history/interfaces/simple-history
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { EChartColor, TestChartDataset } from "../../dto/test-chart-dataset"
 import dayjs from "dayjs"
+import { EMNT } from "../../../history/constants/network-technology"
 import { ITestChartPluginOptions } from "../../interfaces/test-chart-plugin.interface"
 import { TestSignalChart } from "./settings/signal-chart"
 import { TestSignalChartOptions } from "./settings/signal-chart-options"
@@ -45,11 +46,10 @@ export class SignalChartComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const ctx = this.canvas?.getContext("2d")
     if (ctx) {
-      const ltePeriods: ITestChartPluginOptions[] = []
-      const networkChanges: ITestChartPluginOptions[] = []
+      const techLabels: ITestChartPluginOptions[] = []
       const minSignal = this.getMinSignal()
-      const datasets = this.getDatasets(minSignal, ltePeriods, networkChanges)
-      const plugins = this.getPlugins(ltePeriods, networkChanges)
+      const datasets = this.getDatasets(minSignal, techLabels)
+      const plugins = this.getPlugins(techLabels)
       const options = new TestSignalChartOptions(this.i18nStore, minSignal)
       this.chart = new TestSignalChart(
         ctx,
@@ -67,132 +67,284 @@ export class SignalChartComponent implements AfterViewInit {
 
   private getMinSignal() {
     let containsLTE = false
-    let minSignal = Math.min(
-      ...this.signal().map((signal) => {
-        if (signal.network_type === "LTE" || signal.network_type === "LTE CA") {
-          containsLTE = true
-        }
-        return signal.lte_rsrp
-          ? signal.lte_rsrp
-          : signal.nr_rsrp
-          ? signal.nr_rsrp
-          : signal.signal_strength
-      })
-    )
+    const values: number[] = []
+    for (const signal of this.signal()) {
+      if (signal.lte_rsrp != null) {
+        containsLTE = true
+        values.push(signal.lte_rsrp)
+      }
+      if (signal.nr_rsrp != null) {
+        values.push(signal.nr_rsrp)
+      }
+      if (signal.lte_rsrp == null && signal.nr_rsrp == null) {
+        values.push(signal.signal_strength)
+      }
+    }
+    let minSignal = Math.min(...values)
     minSignal = Math.abs(minSignal - (minSignal % 25) - 50)
     return Math.min(minSignal, containsLTE ? 140 : 120)
   }
 
+  /** Readings within this many ms are treated as the same moment. */
+  private static readonly SAMPLE_MERGE_TOLERANCE_MS = 5
+
+  /**
+   * Merges signal samples whose timestamps are within
+   * `SAMPLE_MERGE_TOLERANCE_MS` of each other into one. This folds a 4G reading
+   * and a separately reported 5G-SA reading taken at (nearly) the same time into
+   * a single sample carrying both `lte_rsrp` and `nr_rsrp` - so that 5G is
+   * treated as NSA (an LTE anchor is present) instead of Standalone, and the 4G
+   * line does not fragment across the interleaved rows.
+   */
+  private mergeSamplesByTimestamp(
+    samples: ISimpleHistorySignal[]
+  ): ISimpleHistorySignal[] {
+    const tolerance = SignalChartComponent.SAMPLE_MERGE_TOLERANCE_MS
+    const groups: ISimpleHistorySignal[] = []
+    for (const sample of samples) {
+      const existing = groups.find(
+        (group) => Math.abs(group.time_elapsed - sample.time_elapsed) <= tolerance
+      )
+      if (!existing) {
+        groups.push({ ...sample })
+        continue
+      }
+      existing.lte_rsrp = existing.lte_rsrp ?? sample.lte_rsrp
+      existing.nr_rsrp = existing.nr_rsrp ?? sample.nr_rsrp
+      existing.cell_info_2G = existing.cell_info_2G ?? sample.cell_info_2G
+      existing.cell_info_3G = existing.cell_info_3G ?? sample.cell_info_3G
+      existing.cell_info_4G = existing.cell_info_4G ?? sample.cell_info_4G
+      existing.cell_info_5G = existing.cell_info_5G ?? sample.cell_info_5G
+    }
+    return groups
+  }
+
+  /**
+   * Builds one line per technology present in the test (4G, 5G NSA, 5G SA, 3G,
+   * 2G), each drawn in its own colour. A line only connects consecutive samples
+   * of the same technology; a technology change breaks the line, and lines are
+   * never extended before the first or after the last real sample.
+   *
+   * During NSA a sample carries both `lte_rsrp` and `nr_rsrp`, so it feeds both
+   * the 4G line (the LTE anchor) and the 5G-NSA line at once. A single stray
+   * pure-4G sample does not end the 5G-NSA line - only two or more consecutive
+   * pure-4G samples do (`nsaGapTolerance`).
+   *
+   * For every technology a text label is collected in `techLabels`, positioned
+   * where the technology first appears, so the chart keeps naming the displayed
+   * technologies as it did before.
+   */
   private getDatasets(
     minSignal: number,
-    ltePeriods: ITestChartPluginOptions[],
-    networkChanges: ITestChartPluginOptions[]
+    techLabels: ITestChartPluginOptions[]
   ) {
     const datasets: TestChartDataset[] = []
-    let currentNetworkType = ""
-    let currentDataset: TestChartDataset | undefined
-    for (const signal of this.signal()) {
-      if (signal.network_type != currentNetworkType) {
-        currentNetworkType = signal.network_type
-        currentDataset = new TestChartDataset("signal")
-        networkChanges.push({
-          id: `network-${signal.time_elapsed}`,
-          x: signal.time_elapsed - 20,
-          duration: 20,
-          color: EChartColor.SIGNAL_BORDER,
-          text:
-            signal.network_type === "LTE" || signal.network_type === "LTE CA"
-              ? "LTE\nRSRP"
-              : signal.network_type,
-        })
-        datasets.push(currentDataset)
-        if (signal.network_type === "LTE" || signal.network_type === "LTE CA") {
-          ltePeriods.push({
-            id: `lte-${signal.time_elapsed}`,
-            x: signal.time_elapsed,
-            color: EChartColor.SIGNAL,
-          })
-        } else if (
-          currentNetworkType === "LTE" ||
-          currentNetworkType === "LTE CA"
-        ) {
-          ltePeriods[ltePeriods.length - 1].duration =
-            signal.time_elapsed - ltePeriods[ltePeriods.length - 1].x
-        }
+    const signals = this.mergeSamplesByTimestamp(this.signal())
+    const getY = (value: number) => minSignal - Math.abs(value)
+
+    const has4G = (s: ISimpleHistorySignal) => s.lte_rsrp != null
+    const has5G = (s: ISimpleHistorySignal) => s.nr_rsrp != null
+
+    // Samples whose NR reading counts as NSA (an LTE anchor is present).
+    const nsaSamples = new Set<ISimpleHistorySignal>()
+    for (const signal of signals) {
+      if (has5G(signal) && has4G(signal)) {
+        nsaSamples.add(signal)
       }
-      const y =
-        minSignal -
-        Math.abs(
-          signal.lte_rsrp
-            ? signal.lte_rsrp
-            : signal.nr_rsrp
-            ? signal.nr_rsrp
-            : signal.signal_strength
-        )
-      const x = this.getX(signal.time_elapsed)
-      currentDataset!.data.push({
-        x,
-        y,
-      })
     }
+    // Hack: a single 5G-SA sample at the very start that is immediately followed
+    // by a genuine 5G-NSA sample is treated as NSA too (the LTE anchor was just
+    // not reported yet), so it takes the NSA colour and connects to the NSA
+    // line. Several SA samples at the start are a real SA->NSA transition and
+    // are left untouched.
+    if (signals.length >= 2) {
+      const [first, second] = signals
+      if (
+        has5G(first) &&
+        !has4G(first) &&
+        has5G(second) &&
+        has4G(second)
+      ) {
+        nsaSamples.add(first)
+      }
+    }
+    const is5gNsa = (s: ISimpleHistorySignal) => nsaSamples.has(s)
+
+    // Build the segmented line for a single technology. Consecutive present
+    // samples are connected; a run of absent samples longer than `gapTolerance`
+    // breaks the line into a new segment. Segments of one technology share the
+    // colour and label but only the first contributes a chart label.
+    const addLine = (
+      key: string,
+      label: string,
+      borderColor: string,
+      backgroundColor: string,
+      present: (s: ISimpleHistorySignal) => boolean,
+      value: (s: ISimpleHistorySignal) => number,
+      gapTolerance: number
+    ) => {
+      let segment: TestChartDataset | undefined
+      let gapRun = 0
+      let labelled = false
+      for (const signal of signals) {
+        if (!present(signal)) {
+          gapRun++
+          continue
+        }
+        if (segment && gapRun > gapTolerance) {
+          // the preceding absence was long enough to end the current segment
+          segment = undefined
+        }
+        if (!segment) {
+          segment = new TestChartDataset("signal")
+          segment.label = label
+          segment.borderColor = borderColor
+          segment.backgroundColor = backgroundColor
+          // dot marker on every real signal sample of this line
+          segment.pointRadius = 2
+          segment.pointBackgroundColor = borderColor
+          segment.pointBorderColor = borderColor
+          datasets.push(segment)
+          if (!labelled) {
+            // stack labels of concurrent technologies so they do not overlap
+            techLabels.push({
+              id: `tech-${key}`,
+              x: signal.time_elapsed,
+              y: 12 + techLabels.length * 16,
+              text: label,
+              color: borderColor,
+            })
+            labelled = true
+          }
+        }
+        segment.data.push({
+          x: this.getX(signal.time_elapsed),
+          y: getY(value(signal)),
+        })
+        gapRun = 0
+      }
+    }
+
+    // 4G: LTE anchor, present for both pure-4G and NSA samples. Breaks as soon
+    // as LTE is gone (e.g. a 5G-SA sample); an NSA sample never ends it.
+    addLine(
+      EMNT.T_4G,
+      EMNT.T_4G,
+      EChartColor.GEN_4G_BORDER,
+      EChartColor.GEN_4G,
+      (s) => has4G(s),
+      (s) => s.lte_rsrp!,
+      0
+    )
+    // 5G NSA: NR alongside an LTE anchor. Tolerates a single stray pure-4G
+    // sample; two or more consecutive pure-4G samples end it.
+    addLine(
+      EMNT.T_5G_NSA,
+      "5G",
+      EChartColor.GEN_5G_NSA_BORDER,
+      EChartColor.GEN_5G_NSA,
+      (s) => has5G(s) && is5gNsa(s),
+      (s) => s.nr_rsrp!,
+      1
+    )
+    // 5G SA: NR without an LTE anchor.
+    addLine(
+      EMNT.T_5G_SA,
+      "5G",
+      EChartColor.GEN_5G_SA_BORDER,
+      EChartColor.GEN_5G_SA,
+      (s) => has5G(s) && !is5gNsa(s),
+      (s) => s.nr_rsrp!,
+      0
+    )
+    // 3G / 2G: no RSRP, only signal_strength.
+    addLine(
+      EMNT.T_3G,
+      EMNT.T_3G,
+      EChartColor.GEN_3G_BORDER,
+      EChartColor.GEN_3G,
+      (s) => !has4G(s) && !has5G(s) && !!s.cell_info_3G,
+      (s) => s.signal_strength,
+      0
+    )
+    addLine(
+      EMNT.T_2G,
+      EMNT.T_2G,
+      EChartColor.GEN_2G_BORDER,
+      EChartColor.GEN_2G,
+      (s) => !has4G(s) && !has5G(s) && !s.cell_info_3G,
+      (s) => s.signal_strength,
+      0
+    )
+
     if (this.phaseDurations()?.upStart && this.phaseDurations()?.upDuration) {
-      // draw the chart until the end of the upload phase
+      // The diagram spans from its left edge (time 0) through the upload/ping
+      // phases on the right.
+      const beginningX = this.getX(0)
       const lastX = this.getX(
         this.phaseDurations()!.upStart! + this.phaseDurations()!.upDuration!
       )
-      const lastSignal = currentDataset?.data[currentDataset.data.length - 1]
-      if (lastSignal?.x && lastSignal.x < lastX) {
-        currentDataset?.data.push({
-          x: lastX,
-          y: lastSignal.y,
-        })
+      const firstSampleX = signals.length
+        ? this.getX(signals[0].time_elapsed)
+        : null
+      const lastSampleX = signals.length
+        ? this.getX(signals[signals.length - 1].time_elapsed)
+        : null
+      // Extend every line that is active at the first/last sample flat to the
+      // beginning/end of the diagram, holding its first/last value. In NSA both
+      // the 4G and the 5G line reach the edges and are extended; a line that
+      // started later or ended earlier is left untouched.
+      for (const dataset of datasets) {
+        const firstPoint = dataset.data[0]
+        const lastPoint = dataset.data[dataset.data.length - 1]
+        let extendedStart = false
+        let extendedEnd = false
+        if (
+          lastPoint?.x != null &&
+          lastPoint.x === lastSampleX &&
+          lastPoint.x < lastX
+        ) {
+          dataset.data.push({ x: lastX, y: lastPoint.y })
+          extendedEnd = true
+        }
+        if (
+          firstPoint?.x != null &&
+          firstPoint.x === firstSampleX &&
+          firstPoint.x > beginningX
+        ) {
+          dataset.data.unshift({ x: beginningX, y: firstPoint.y })
+          extendedStart = true
+        }
+        if (extendedStart || extendedEnd) {
+          // no dot marker on the synthetic edge points - they only hold values
+          const radii = dataset.data.map(() => 2)
+          if (extendedStart) radii[0] = 0
+          if (extendedEnd) radii[radii.length - 1] = 0
+          dataset.pointRadius = radii
+        }
       }
-      currentDataset = new TestChartDataset("ping")
-      currentDataset.data.push({
-        x: lastX,
-        y: 0,
-      })
-      datasets.push(currentDataset)
+      // Invisible anchor so the axis still spans the phases even if no line was
+      // active at the very last sample.
+      const axisAnchor = new TestChartDataset("ping")
+      axisAnchor.data.push({ x: lastX, y: 0 })
+      datasets.push(axisAnchor)
     }
+
     return datasets
   }
 
-  private getPlugins(
-    ltePeriods: ITestChartPluginOptions[],
-    networkChanges: ITestChartPluginOptions[]
-  ) {
+  private getPlugins(techLabels: ITestChartPluginOptions[]) {
     const plugins: any[] = []
-    if (networkChanges.length) {
-      for (const p of networkChanges) {
-        plugins.push(
-          new TimeIntervalFillPlugin({
-            id: p.id,
-            color: p.color,
-            x: p.x,
-            duration: p.duration,
-          })
-        )
-        plugins.push(
-          new TimeIntervalNamePlugin({
-            id: `text-${p.id}`,
-            text: p.text,
-            x: p.x,
-            y: 12,
-          })
-        )
-      }
-    }
-    if (ltePeriods.length) {
-      for (const p of ltePeriods) {
-        plugins.push(
-          new TimeIntervalFillPlugin({
-            id: p.id,
-            color: p.color,
-            x: p.x,
-            duration: p.duration,
-          })
-        )
-      }
+    for (const label of techLabels) {
+      plugins.push(
+        new TimeIntervalNamePlugin({
+          id: label.id,
+          text: label.text,
+          x: label.x,
+          y: label.y,
+          color: label.color,
+        })
+      )
     }
     if (this.phaseDurations()?.downStart) {
       plugins.push(
