@@ -210,7 +210,7 @@ export class SignalChartComponent implements AfterViewInit {
     // sample; two or more consecutive pure-4G samples end it.
     addLine(
       EMNT.T_5G_NSA,
-      EMNT.T_5G_NSA,
+      "5G",
       EChartColor.GEN_5G_NSA_BORDER,
       EChartColor.GEN_5G_NSA,
       (s) => has5G(s) && has4G(s),
@@ -220,7 +220,7 @@ export class SignalChartComponent implements AfterViewInit {
     // 5G SA: NR without an LTE anchor.
     addLine(
       EMNT.T_5G_SA,
-      EMNT.T_5G_SA,
+      "5G",
       EChartColor.GEN_5G_SA_BORDER,
       EChartColor.GEN_5G_SA,
       (s) => has5G(s) && !has4G(s),
