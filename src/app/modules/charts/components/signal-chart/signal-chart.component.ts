@@ -86,6 +86,35 @@ export class SignalChartComponent implements AfterViewInit {
   }
 
   /**
+   * Merges signal samples that share the exact same timestamp into one. This
+   * folds a 4G reading and a separately reported 5G-SA reading at the same time
+   * into a single sample carrying both `lte_rsrp` and `nr_rsrp` - so that 5G is
+   * treated as NSA (an LTE anchor is present) instead of Standalone, and the 4G
+   * line does not fragment across the interleaved rows.
+   */
+  private mergeSamplesByTimestamp(
+    samples: ISimpleHistorySignal[]
+  ): ISimpleHistorySignal[] {
+    const byTime = new Map<number, ISimpleHistorySignal>()
+    const order: number[] = []
+    for (const sample of samples) {
+      const existing = byTime.get(sample.time_elapsed)
+      if (!existing) {
+        byTime.set(sample.time_elapsed, { ...sample })
+        order.push(sample.time_elapsed)
+        continue
+      }
+      existing.lte_rsrp = existing.lte_rsrp ?? sample.lte_rsrp
+      existing.nr_rsrp = existing.nr_rsrp ?? sample.nr_rsrp
+      existing.cell_info_2G = existing.cell_info_2G ?? sample.cell_info_2G
+      existing.cell_info_3G = existing.cell_info_3G ?? sample.cell_info_3G
+      existing.cell_info_4G = existing.cell_info_4G ?? sample.cell_info_4G
+      existing.cell_info_5G = existing.cell_info_5G ?? sample.cell_info_5G
+    }
+    return order.map((time) => byTime.get(time)!)
+  }
+
+  /**
    * Builds one line per technology present in the test (4G, 5G NSA, 5G SA, 3G,
    * 2G), each drawn in its own colour. A line only connects consecutive samples
    * of the same technology; a technology change breaks the line, and lines are
@@ -105,7 +134,7 @@ export class SignalChartComponent implements AfterViewInit {
     techLabels: ITestChartPluginOptions[]
   ) {
     const datasets: TestChartDataset[] = []
-    const signals = this.signal()
+    const signals = this.mergeSamplesByTimestamp(this.signal())
     const getY = (value: number) => minSignal - Math.abs(value)
 
     const has4G = (s: ISimpleHistorySignal) => s.lte_rsrp != null
@@ -153,6 +182,7 @@ export class SignalChartComponent implements AfterViewInit {
               x: signal.time_elapsed,
               y: 12 + techLabels.length * 16,
               text: label,
+              color: borderColor,
             })
             labelled = true
           }
@@ -243,6 +273,7 @@ export class SignalChartComponent implements AfterViewInit {
           text: label.text,
           x: label.x,
           y: label.y,
+          color: label.color,
         })
       )
     }
