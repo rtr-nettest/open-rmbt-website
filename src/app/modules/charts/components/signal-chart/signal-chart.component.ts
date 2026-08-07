@@ -85,23 +85,28 @@ export class SignalChartComponent implements AfterViewInit {
     return Math.min(minSignal, containsLTE ? 140 : 120)
   }
 
+  /** Readings within this many ms are treated as the same moment. */
+  private static readonly SAMPLE_MERGE_TOLERANCE_MS = 5
+
   /**
-   * Merges signal samples that share the exact same timestamp into one. This
-   * folds a 4G reading and a separately reported 5G-SA reading at the same time
-   * into a single sample carrying both `lte_rsrp` and `nr_rsrp` - so that 5G is
+   * Merges signal samples whose timestamps are within
+   * `SAMPLE_MERGE_TOLERANCE_MS` of each other into one. This folds a 4G reading
+   * and a separately reported 5G-SA reading taken at (nearly) the same time into
+   * a single sample carrying both `lte_rsrp` and `nr_rsrp` - so that 5G is
    * treated as NSA (an LTE anchor is present) instead of Standalone, and the 4G
    * line does not fragment across the interleaved rows.
    */
   private mergeSamplesByTimestamp(
     samples: ISimpleHistorySignal[]
   ): ISimpleHistorySignal[] {
-    const byTime = new Map<number, ISimpleHistorySignal>()
-    const order: number[] = []
+    const tolerance = SignalChartComponent.SAMPLE_MERGE_TOLERANCE_MS
+    const groups: ISimpleHistorySignal[] = []
     for (const sample of samples) {
-      const existing = byTime.get(sample.time_elapsed)
+      const existing = groups.find(
+        (group) => Math.abs(group.time_elapsed - sample.time_elapsed) <= tolerance
+      )
       if (!existing) {
-        byTime.set(sample.time_elapsed, { ...sample })
-        order.push(sample.time_elapsed)
+        groups.push({ ...sample })
         continue
       }
       existing.lte_rsrp = existing.lte_rsrp ?? sample.lte_rsrp
@@ -111,7 +116,7 @@ export class SignalChartComponent implements AfterViewInit {
       existing.cell_info_4G = existing.cell_info_4G ?? sample.cell_info_4G
       existing.cell_info_5G = existing.cell_info_5G ?? sample.cell_info_5G
     }
-    return order.map((time) => byTime.get(time)!)
+    return groups
   }
 
   /**
