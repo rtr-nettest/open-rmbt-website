@@ -145,6 +145,31 @@ export class SignalChartComponent implements AfterViewInit {
     const has4G = (s: ISimpleHistorySignal) => s.lte_rsrp != null
     const has5G = (s: ISimpleHistorySignal) => s.nr_rsrp != null
 
+    // Samples whose NR reading counts as NSA (an LTE anchor is present).
+    const nsaSamples = new Set<ISimpleHistorySignal>()
+    for (const signal of signals) {
+      if (has5G(signal) && has4G(signal)) {
+        nsaSamples.add(signal)
+      }
+    }
+    // Hack: a single 5G-SA sample at the very start that is immediately followed
+    // by a genuine 5G-NSA sample is treated as NSA too (the LTE anchor was just
+    // not reported yet), so it takes the NSA colour and connects to the NSA
+    // line. Several SA samples at the start are a real SA->NSA transition and
+    // are left untouched.
+    if (signals.length >= 2) {
+      const [first, second] = signals
+      if (
+        has5G(first) &&
+        !has4G(first) &&
+        has5G(second) &&
+        has4G(second)
+      ) {
+        nsaSamples.add(first)
+      }
+    }
+    const is5gNsa = (s: ISimpleHistorySignal) => nsaSamples.has(s)
+
     // Build the segmented line for a single technology. Consecutive present
     // samples are connected; a run of absent samples longer than `gapTolerance`
     // breaks the line into a new segment. Segments of one technology share the
@@ -218,7 +243,7 @@ export class SignalChartComponent implements AfterViewInit {
       "5G",
       EChartColor.GEN_5G_NSA_BORDER,
       EChartColor.GEN_5G_NSA,
-      (s) => has5G(s) && has4G(s),
+      (s) => has5G(s) && is5gNsa(s),
       (s) => s.nr_rsrp!,
       1
     )
@@ -228,7 +253,7 @@ export class SignalChartComponent implements AfterViewInit {
       "5G",
       EChartColor.GEN_5G_SA_BORDER,
       EChartColor.GEN_5G_SA,
-      (s) => has5G(s) && !has4G(s),
+      (s) => has5G(s) && !is5gNsa(s),
       (s) => s.nr_rsrp!,
       0
     )
