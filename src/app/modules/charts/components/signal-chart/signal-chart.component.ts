@@ -86,111 +86,151 @@ export class SignalChartComponent implements AfterViewInit {
   }
 
   /**
-   * Builds one line per technology present in the test so that 4G (LTE RSRP)
-   * and 5G (NR RSRP) are drawn as separate, distinctly coloured lines. During
-   * NSA operation a single sample carries both `lte_rsrp` and `nr_rsrp`, so it
-   * contributes a point to both lines at the same time.
+   * Builds one line per technology present in the test (4G, 5G NSA, 5G SA, 3G,
+   * 2G), each drawn in its own colour. A line only connects consecutive samples
+   * of the same technology; a technology change breaks the line, and lines are
+   * never extended before the first or after the last real sample.
+   *
+   * During NSA a sample carries both `lte_rsrp` and `nr_rsrp`, so it feeds both
+   * the 4G line (the LTE anchor) and the 5G-NSA line at once. A single stray
+   * pure-4G sample does not end the 5G-NSA line - only two or more consecutive
+   * pure-4G samples do (`nsaGapTolerance`).
    *
    * For every technology a text label is collected in `techLabels`, positioned
-   * at the moment the technology first appears, so the chart keeps naming the
-   * displayed technologies as it did before.
+   * where the technology first appears, so the chart keeps naming the displayed
+   * technologies as it did before.
    */
   private getDatasets(
     minSignal: number,
     techLabels: ITestChartPluginOptions[]
   ) {
     const datasets: TestChartDataset[] = []
-    const seriesByKey = new Map<string, TestChartDataset>()
+    const signals = this.signal()
     const getY = (value: number) => minSignal - Math.abs(value)
 
-    const addPoint = (
+    const has4G = (s: ISimpleHistorySignal) => s.lte_rsrp != null
+    const has5G = (s: ISimpleHistorySignal) => s.nr_rsrp != null
+
+    // Build the segmented line for a single technology. Consecutive present
+    // samples are connected; a run of absent samples longer than `gapTolerance`
+    // breaks the line into a new segment. Segments of one technology share the
+    // colour and label but only the first contributes a chart label.
+    const addLine = (
       key: string,
       label: string,
       borderColor: string,
       backgroundColor: string,
-      timeElapsed: number,
-      value: number
+      present: (s: ISimpleHistorySignal) => boolean,
+      value: (s: ISimpleHistorySignal) => number,
+      gapTolerance: number
     ) => {
-      let dataset = seriesByKey.get(key)
-      if (!dataset) {
-        dataset = new TestChartDataset("signal")
-        dataset.label = label
-        dataset.borderColor = borderColor
-        dataset.backgroundColor = backgroundColor
-        seriesByKey.set(key, dataset)
-        datasets.push(dataset)
-        // stack labels of concurrent technologies so they do not overlap
-        techLabels.push({
-          id: `tech-${key}`,
-          x: timeElapsed,
-          y: 12 + techLabels.length * 16,
-          text: label,
-        })
-      }
-      dataset.data.push({ x: this.getX(timeElapsed), y: getY(value) })
-    }
-
-    // 5G is Non-Standalone when any sample carries both an LTE anchor
-    // (lte_rsrp) and an NR reading (nr_rsrp); otherwise it is Standalone.
-    const is5gNsa = this.signal().some(
-      (signal) => signal.lte_rsrp != null && signal.nr_rsrp != null
-    )
-    for (const signal of this.signal()) {
-      if (signal.lte_rsrp != null) {
-        addPoint(
-          EMNT.T_4G,
-          EMNT.T_4G,
-          EChartColor.GEN_4G_BORDER,
-          EChartColor.GEN_4G,
-          signal.time_elapsed,
-          signal.lte_rsrp
-        )
-      }
-      if (signal.nr_rsrp != null) {
-        addPoint(
-          is5gNsa ? EMNT.T_5G_NSA : EMNT.T_5G_SA,
-          is5gNsa ? EMNT.T_5G_NSA : EMNT.T_5G_SA,
-          is5gNsa ? EChartColor.GEN_5G_NSA_BORDER : EChartColor.GEN_5G_SA_BORDER,
-          is5gNsa ? EChartColor.GEN_5G_NSA : EChartColor.GEN_5G_SA,
-          signal.time_elapsed,
-          signal.nr_rsrp
-        )
-      }
-      if (signal.lte_rsrp == null && signal.nr_rsrp == null) {
-        // 2G/3G (or otherwise unclassified) carry only signal_strength
-        const is3g = !!signal.cell_info_3G
-        addPoint(
-          is3g ? EMNT.T_3G : EMNT.T_2G,
-          is3g ? EMNT.T_3G : EMNT.T_2G,
-          is3g ? EChartColor.GEN_3G_BORDER : EChartColor.GEN_2G_BORDER,
-          is3g ? EChartColor.GEN_3G : EChartColor.GEN_2G,
-          signal.time_elapsed,
-          signal.signal_strength
-        )
-      }
-    }
-
-    if (this.phaseDurations()?.upStart && this.phaseDurations()?.upDuration) {
-      // draw the signal lines until the end of the upload phase
-      const lastX = this.getX(
-        this.phaseDurations()!.upStart! + this.phaseDurations()!.upDuration!
-      )
-      for (const dataset of seriesByKey.values()) {
-        const lastSignal = dataset.data[dataset.data.length - 1]
-        if (lastSignal?.x != null && lastSignal.x < lastX) {
-          dataset.data.push({
-            x: lastX,
-            y: lastSignal.y,
-          })
+      let segment: TestChartDataset | undefined
+      let gapRun = 0
+      let labelled = false
+      for (const signal of signals) {
+        if (!present(signal)) {
+          gapRun++
+          continue
         }
+        if (segment && gapRun > gapTolerance) {
+          // the preceding absence was long enough to end the current segment
+          segment = undefined
+        }
+        if (!segment) {
+          segment = new TestChartDataset("signal")
+          segment.label = label
+          segment.borderColor = borderColor
+          segment.backgroundColor = backgroundColor
+          // dot marker on every real signal sample of this line
+          segment.pointRadius = 2
+          segment.pointBackgroundColor = borderColor
+          segment.pointBorderColor = borderColor
+          datasets.push(segment)
+          if (!labelled) {
+            // stack labels of concurrent technologies so they do not overlap
+            techLabels.push({
+              id: `tech-${key}`,
+              x: signal.time_elapsed,
+              y: 12 + techLabels.length * 16,
+              text: label,
+            })
+            labelled = true
+          }
+        }
+        segment.data.push({
+          x: this.getX(signal.time_elapsed),
+          y: getY(value(signal)),
+        })
+        gapRun = 0
       }
-      const pingDataset = new TestChartDataset("ping")
-      pingDataset.data.push({
-        x: lastX,
+    }
+
+    // 4G: LTE anchor, present for both pure-4G and NSA samples. Breaks as soon
+    // as LTE is gone (e.g. a 5G-SA sample); an NSA sample never ends it.
+    addLine(
+      EMNT.T_4G,
+      EMNT.T_4G,
+      EChartColor.GEN_4G_BORDER,
+      EChartColor.GEN_4G,
+      (s) => has4G(s),
+      (s) => s.lte_rsrp!,
+      0
+    )
+    // 5G NSA: NR alongside an LTE anchor. Tolerates a single stray pure-4G
+    // sample; two or more consecutive pure-4G samples end it.
+    addLine(
+      EMNT.T_5G_NSA,
+      EMNT.T_5G_NSA,
+      EChartColor.GEN_5G_NSA_BORDER,
+      EChartColor.GEN_5G_NSA,
+      (s) => has5G(s) && has4G(s),
+      (s) => s.nr_rsrp!,
+      1
+    )
+    // 5G SA: NR without an LTE anchor.
+    addLine(
+      EMNT.T_5G_SA,
+      EMNT.T_5G_SA,
+      EChartColor.GEN_5G_SA_BORDER,
+      EChartColor.GEN_5G_SA,
+      (s) => has5G(s) && !has4G(s),
+      (s) => s.nr_rsrp!,
+      0
+    )
+    // 3G / 2G: no RSRP, only signal_strength.
+    addLine(
+      EMNT.T_3G,
+      EMNT.T_3G,
+      EChartColor.GEN_3G_BORDER,
+      EChartColor.GEN_3G,
+      (s) => !has4G(s) && !has5G(s) && !!s.cell_info_3G,
+      (s) => s.signal_strength,
+      0
+    )
+    addLine(
+      EMNT.T_2G,
+      EMNT.T_2G,
+      EChartColor.GEN_2G_BORDER,
+      EChartColor.GEN_2G,
+      (s) => !has4G(s) && !has5G(s) && !s.cell_info_3G,
+      (s) => s.signal_strength,
+      0
+    )
+
+    // Keep the time axis spanning the whole test (through the upload/ping
+    // phases) so the phase bands stay aligned - the signal lines themselves end
+    // at their last real sample, but this invisible anchor holds the axis end.
+    if (this.phaseDurations()?.upStart && this.phaseDurations()?.upDuration) {
+      const axisAnchor = new TestChartDataset("ping")
+      axisAnchor.data.push({
+        x: this.getX(
+          this.phaseDurations()!.upStart! + this.phaseDurations()!.upDuration!
+        ),
         y: 0,
       })
-      datasets.push(pingDataset)
+      datasets.push(axisAnchor)
     }
+
     return datasets
   }
 
