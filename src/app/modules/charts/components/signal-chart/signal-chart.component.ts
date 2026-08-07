@@ -252,17 +252,56 @@ export class SignalChartComponent implements AfterViewInit {
       0
     )
 
-    // Keep the time axis spanning the whole test (through the upload/ping
-    // phases) so the phase bands stay aligned - the signal lines themselves end
-    // at their last real sample, but this invisible anchor holds the axis end.
     if (this.phaseDurations()?.upStart && this.phaseDurations()?.upDuration) {
+      // The diagram spans from its left edge (time 0) through the upload/ping
+      // phases on the right.
+      const beginningX = this.getX(0)
+      const lastX = this.getX(
+        this.phaseDurations()!.upStart! + this.phaseDurations()!.upDuration!
+      )
+      const firstSampleX = signals.length
+        ? this.getX(signals[0].time_elapsed)
+        : null
+      const lastSampleX = signals.length
+        ? this.getX(signals[signals.length - 1].time_elapsed)
+        : null
+      // Extend every line that is active at the first/last sample flat to the
+      // beginning/end of the diagram, holding its first/last value. In NSA both
+      // the 4G and the 5G line reach the edges and are extended; a line that
+      // started later or ended earlier is left untouched.
+      for (const dataset of datasets) {
+        const firstPoint = dataset.data[0]
+        const lastPoint = dataset.data[dataset.data.length - 1]
+        let extendedStart = false
+        let extendedEnd = false
+        if (
+          lastPoint?.x != null &&
+          lastPoint.x === lastSampleX &&
+          lastPoint.x < lastX
+        ) {
+          dataset.data.push({ x: lastX, y: lastPoint.y })
+          extendedEnd = true
+        }
+        if (
+          firstPoint?.x != null &&
+          firstPoint.x === firstSampleX &&
+          firstPoint.x > beginningX
+        ) {
+          dataset.data.unshift({ x: beginningX, y: firstPoint.y })
+          extendedStart = true
+        }
+        if (extendedStart || extendedEnd) {
+          // no dot marker on the synthetic edge points - they only hold values
+          const radii = dataset.data.map(() => 2)
+          if (extendedStart) radii[0] = 0
+          if (extendedEnd) radii[radii.length - 1] = 0
+          dataset.pointRadius = radii
+        }
+      }
+      // Invisible anchor so the axis still spans the phases even if no line was
+      // active at the very last sample.
       const axisAnchor = new TestChartDataset("ping")
-      axisAnchor.data.push({
-        x: this.getX(
-          this.phaseDurations()!.upStart! + this.phaseDurations()!.upDuration!
-        ),
-        y: 0,
-      })
+      axisAnchor.data.push({ x: lastX, y: 0 })
       datasets.push(axisAnchor)
     }
 

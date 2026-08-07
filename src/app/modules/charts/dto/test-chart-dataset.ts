@@ -35,7 +35,7 @@ export class TestChartDataset {
   backgroundColor!: string
   borderColor!: string
   borderCapStyle: "round" = "round"
-  pointRadius?: number
+  pointRadius?: number | number[]
   pointBackgroundColor = "transparent"
   pointBorderColor = "transparent"
   pointHoverBackgroundColor = "transparent"
