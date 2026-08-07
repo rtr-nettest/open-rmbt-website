@@ -76,6 +76,7 @@ export class TestSignalChartOptions {
     },
   }
 
+
   constructor(private t: I18nStore, private minSignal: number) {
     if (this.minSignal >= 140) {
       this.scales.y.max = 100
