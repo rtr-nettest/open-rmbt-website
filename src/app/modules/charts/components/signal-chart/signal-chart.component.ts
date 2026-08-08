@@ -8,7 +8,7 @@ import { ISimpleHistorySignal } from "../../../history/interfaces/simple-history
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { EChartColor, TestChartDataset } from "../../dto/test-chart-dataset"
 import dayjs from "dayjs"
-import { EMNT } from "../../../history/constants/network-technology"
+import { EMNTech } from "../../../history/constants/network-technology"
 import { ITestChartPluginOptions } from "../../interfaces/test-chart-plugin.interface"
 import { TestSignalChart } from "./settings/signal-chart"
 import { TestSignalChartOptions } from "./settings/signal-chart-options"
@@ -56,7 +56,7 @@ export class SignalChartComponent implements AfterViewInit {
         this.i18nStore,
         datasets,
         options,
-        plugins
+        plugins,
       )
     }
   }
@@ -97,13 +97,14 @@ export class SignalChartComponent implements AfterViewInit {
    * line does not fragment across the interleaved rows.
    */
   private mergeSamplesByTimestamp(
-    samples: ISimpleHistorySignal[]
+    samples: ISimpleHistorySignal[],
   ): ISimpleHistorySignal[] {
     const tolerance = SignalChartComponent.SAMPLE_MERGE_TOLERANCE_MS
     const groups: ISimpleHistorySignal[] = []
     for (const sample of samples) {
       const existing = groups.find(
-        (group) => Math.abs(group.time_elapsed - sample.time_elapsed) <= tolerance
+        (group) =>
+          Math.abs(group.time_elapsed - sample.time_elapsed) <= tolerance,
       )
       if (!existing) {
         groups.push({ ...sample })
@@ -136,7 +137,7 @@ export class SignalChartComponent implements AfterViewInit {
    */
   private getDatasets(
     minSignal: number,
-    techLabels: ITestChartPluginOptions[]
+    techLabels: ITestChartPluginOptions[],
   ) {
     const datasets: TestChartDataset[] = []
     const signals = this.mergeSamplesByTimestamp(this.signal())
@@ -159,12 +160,7 @@ export class SignalChartComponent implements AfterViewInit {
     // are left untouched.
     if (signals.length >= 2) {
       const [first, second] = signals
-      if (
-        has5G(first) &&
-        !has4G(first) &&
-        has5G(second) &&
-        has4G(second)
-      ) {
+      if (has5G(first) && !has4G(first) && has5G(second) && has4G(second)) {
         nsaSamples.add(first)
       }
     }
@@ -181,7 +177,7 @@ export class SignalChartComponent implements AfterViewInit {
       backgroundColor: string,
       present: (s: ISimpleHistorySignal) => boolean,
       value: (s: ISimpleHistorySignal) => number,
-      gapTolerance: number
+      gapTolerance: number,
     ) => {
       let segment: TestChartDataset | undefined
       let gapRun = 0
@@ -228,53 +224,53 @@ export class SignalChartComponent implements AfterViewInit {
     // 4G: LTE anchor, present for both pure-4G and NSA samples. Breaks as soon
     // as LTE is gone (e.g. a 5G-SA sample); an NSA sample never ends it.
     addLine(
-      EMNT.T_4G,
-      EMNT.T_4G,
+      EMNTech.T_4G,
+      EMNTech.T_4G,
       EChartColor.GEN_4G_BORDER,
       EChartColor.GEN_4G,
       (s) => has4G(s),
       (s) => s.lte_rsrp!,
-      0
+      0,
     )
     // 5G NSA: NR alongside an LTE anchor. Tolerates a single stray pure-4G
     // sample; two or more consecutive pure-4G samples end it.
     addLine(
-      EMNT.T_5G_NSA,
+      EMNTech.T_5G_NSA,
       "5G",
       EChartColor.GEN_5G_NSA_BORDER,
       EChartColor.GEN_5G_NSA,
       (s) => has5G(s) && is5gNsa(s),
       (s) => s.nr_rsrp!,
-      1
+      1,
     )
     // 5G SA: NR without an LTE anchor.
     addLine(
-      EMNT.T_5G_SA,
+      EMNTech.T_5G_SA,
       "5G",
       EChartColor.GEN_5G_SA_BORDER,
       EChartColor.GEN_5G_SA,
       (s) => has5G(s) && !is5gNsa(s),
       (s) => s.nr_rsrp!,
-      0
+      0,
     )
     // 3G / 2G: no RSRP, only signal_strength.
     addLine(
-      EMNT.T_3G,
-      EMNT.T_3G,
+      EMNTech.T_3G,
+      EMNTech.T_3G,
       EChartColor.GEN_3G_BORDER,
       EChartColor.GEN_3G,
       (s) => !has4G(s) && !has5G(s) && !!s.cell_info_3G,
       (s) => s.signal_strength,
-      0
+      0,
     )
     addLine(
-      EMNT.T_2G,
-      EMNT.T_2G,
+      EMNTech.T_2G,
+      EMNTech.T_2G,
       EChartColor.GEN_2G_BORDER,
       EChartColor.GEN_2G,
       (s) => !has4G(s) && !has5G(s) && !s.cell_info_3G,
       (s) => s.signal_strength,
-      0
+      0,
     )
 
     if (this.phaseDurations()?.upStart && this.phaseDurations()?.upDuration) {
@@ -282,7 +278,7 @@ export class SignalChartComponent implements AfterViewInit {
       // phases on the right.
       const beginningX = this.getX(0)
       const lastX = this.getX(
-        this.phaseDurations()!.upStart! + this.phaseDurations()!.upDuration!
+        this.phaseDurations()!.upStart! + this.phaseDurations()!.upDuration!,
       )
       const firstSampleX = signals.length
         ? this.getX(signals[0].time_elapsed)
@@ -343,7 +339,7 @@ export class SignalChartComponent implements AfterViewInit {
           x: label.x,
           y: label.y,
           color: label.color,
-        })
+        }),
       )
     }
     if (this.phaseDurations()?.downStart) {
@@ -353,7 +349,7 @@ export class SignalChartComponent implements AfterViewInit {
           color: EChartColor.DOWNLOAD,
           x: this.phaseDurations()!.downStart!,
           duration: this.phaseDurations()!.downDuration,
-        })
+        }),
       )
       plugins.push(
         new TimeIntervalNamePlugin({
@@ -361,7 +357,7 @@ export class SignalChartComponent implements AfterViewInit {
           text: this.i18nStore.translate("Download"),
           x: this.phaseDurations()!.downStart!,
           y: 84,
-        })
+        }),
       )
     }
     if (this.phaseDurations()?.upStart) {
@@ -371,7 +367,7 @@ export class SignalChartComponent implements AfterViewInit {
           color: EChartColor.UPLOAD,
           x: this.phaseDurations()!.upStart!,
           duration: this.phaseDurations()!.upDuration,
-        })
+        }),
       )
       plugins.push(
         new TimeIntervalNamePlugin({
@@ -379,7 +375,7 @@ export class SignalChartComponent implements AfterViewInit {
           text: this.i18nStore.translate("Upload"),
           x: this.phaseDurations()!.upStart!,
           y: 84,
-        })
+        }),
       )
     }
     if (this.phaseDurations()?.pingStart) {
@@ -389,7 +385,7 @@ export class SignalChartComponent implements AfterViewInit {
           color: EChartColor.PING,
           x: this.phaseDurations()!.pingStart!,
           duration: this.phaseDurations()!.pingDuration,
-        })
+        }),
       )
       plugins.push(
         new TimeIntervalNamePlugin({
@@ -397,7 +393,7 @@ export class SignalChartComponent implements AfterViewInit {
           text: this.i18nStore.translate("Ping"),
           x: this.phaseDurations()!.pingStart!,
           y: 72,
-        })
+        }),
       )
     }
     return plugins
