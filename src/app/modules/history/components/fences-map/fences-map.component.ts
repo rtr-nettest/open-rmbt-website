@@ -5,10 +5,13 @@ import { Map, NavigationControl } from "maplibre-gl"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
 import {
   MobileNetworkColorMap,
-  OFFLINE_GRAY,
+  EMNTechColor,
 } from "../../constants/network-technology"
 import { PopupService } from "../../../map/services/popup.service"
 import { FencesPopupContentService } from "../../services/fences-popup-content.service"
+
+const MIN_SIGNAL = -125
+const MAX_SIGNAL = -85
 
 @Component({
   selector: "app-fences-map",
@@ -104,13 +107,30 @@ export class FencesMapComponent {
       pointPaint: {
         "circle-color": [
           "case",
-          ["==", ["get", "avg_ping_ms"], null],
-          OFFLINE_GRAY,
+          [
+            "any",
+            ["==", ["get", "avg_ping_ms"], null],
+            ["==", ["get", "signal"], null],
+          ],
+          EMNTechColor.T_OFFLINE,
           [
             "match",
             ["get", "technology_id"],
-            ...[...MobileNetworkColorMap.entries()].flat(),
-            OFFLINE_GRAY,
+            ...[...MobileNetworkColorMap.entries()].flatMap(
+              ([technologyId, networkColor]) => [
+                technologyId,
+                [
+                  "interpolate",
+                  ["linear"],
+                  ["get", "signal"],
+                  MIN_SIGNAL,
+                  EMNTechColor.T_OFFLINE,
+                  MAX_SIGNAL,
+                  networkColor,
+                ],
+              ],
+            ),
+            EMNTechColor.T_OFFLINE,
           ],
         ] as any,
         "circle-radius": 6,
