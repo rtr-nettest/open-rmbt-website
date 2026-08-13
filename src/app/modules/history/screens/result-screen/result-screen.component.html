@@ -105,12 +105,8 @@
                     [params]="mapParams()"
                     [mapContainerId]="fencesMapContainerId"
                     [locations]="fencesResults"
+                    [selectedFence]="selectedFence()"
                   ></app-fences-map>
-                  <app-fences-details
-                    [details]="fencesResults"
-                    style="display: block; margin-top: 24px"
-                    a11yTitle="Fences details"
-                  ></app-fences-details>
                 </div>
               }
             }
@@ -189,6 +185,8 @@
                     <app-fences-details
                       [details]="fencesResults() ?? []"
                       a11yTitle="Signal details"
+                      [rowsAreClickable]="true"
+                      (rowSelected)="handleFenceRowSelected($event)"
                     ></app-fences-details>
                   } @else {
                     <app-signal-details

@@ -22,6 +22,8 @@ import { IBasicResponse } from "../../../tables/interfaces/basic-response.interf
 import { ICoverage } from "../../interfaces/coverage.interface"
 import { ISimpleHistoryTestLocation } from "../../interfaces/simple-history-result.interface"
 
+const MAP_CONTAINER_HEIGHT_PX = 420
+
 @Component({
   selector: "app-map",
   imports: [MatButtonModule, TranslatePipe],
@@ -129,7 +131,7 @@ export class MapComponent implements AfterViewInit {
     }
     document
       .getElementById(this.mapId)!
-      .setAttribute("style", `height:350px;width:100%`)
+      .setAttribute("style", `height:${MAP_CONTAINER_HEIGHT_PX}px;width:100%`)
   }
 
   private setMap() {
