@@ -105,6 +105,7 @@
                     [params]="mapParams()"
                     [mapContainerId]="fencesMapContainerId"
                     [locations]="fencesResults"
+                    [selectedFence]="selectedFence()"
                   ></app-fences-map>
                 </div>
               }
@@ -184,6 +185,8 @@
                     <app-fences-details
                       [details]="fencesResults() ?? []"
                       a11yTitle="Signal details"
+                      [rowsAreClickable]="true"
+                      (rowSelected)="handleFenceRowSelected($event)"
                     ></app-fences-details>
                   } @else {
                     <app-signal-details
