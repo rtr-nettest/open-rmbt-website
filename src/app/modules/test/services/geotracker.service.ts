@@ -17,6 +17,8 @@ export class GeoTrackerService {
     onData: (data: ICoords) => void,
     isPermissionDenied: () => boolean,
   ) {
+    this.stopGeoTracking()
+
     const onSuccess = (position: any, precise = false) => {
       if (!position || !position.coords) {
         onError({
@@ -87,7 +89,7 @@ export class GeoTrackerService {
   }
 
   stopGeoTracking() {
-    if (navigator.geolocation && this._watcher) {
+    if (navigator.geolocation && this._watcher !== null) {
       navigator.geolocation.clearWatch(this._watcher)
       this._watcher = null
     }
