@@ -38,6 +38,8 @@ testem.log
 /typings
 index.dev.html
 src/app/app.routes.simplified.ts
+src/git-info.json
+src/prerender-routes.txt
 mock-data*
 
 # System files

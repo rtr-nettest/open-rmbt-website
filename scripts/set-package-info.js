@@ -1,28 +1,35 @@
 const fs = require("fs")
-const pack = require("../package.json")
-
+const path = require("path")
 const { execSync } = require("child_process")
 
-function main() {
-  // Semantic version derived from the git tag, including the commit hash so a
-  // build can always be traced back to an exact commit (e.g. "2.10.1-3-gabc1234").
-  const describe = (prefix = "") =>
-    execSync(`${prefix}git describe --tags --long --always --dirty`)
-      .toString()
-      .trim()
-      .replace(/^v/, "")
+// Build-time git info is written to this GIT-IGNORED file (not package.json),
+// so a build never modifies a tracked file - otherwise `git describe --dirty`
+// would see the change and falsely report the version as "-dirty".
+// Read by src/app/modules/shared/store/main.store.ts.
+const OUTPUT = path.resolve(__dirname, "../src/git-info.json")
 
-  pack.gitInfo = {
-    hash: execSync("git rev-parse HEAD").toString().trim(),
-    branch: execSync("git rev-parse --abbrev-ref HEAD").toString().trim(),
+function run(cmd, fallback = "") {
+  try {
+    return execSync(cmd).toString().trim()
+  } catch {
+    return fallback
+  }
+}
+
+// Semantic version from the git tag incl. the commit hash, e.g. "2.11.0-0-gba53ab3a".
+const describe = (prefix = "") =>
+  run(`${prefix}git describe --tags --long --always --dirty`).replace(/^v/, "")
+
+function main() {
+  const gitInfo = {
+    hash: run("git rev-parse HEAD"),
+    branch: run("git rev-parse --abbrev-ref HEAD"),
     version: describe(),
-    rmbtwsHash: execSync("cd rmbtws && git rev-parse HEAD").toString().trim(),
-    rmbtwsBranch: execSync("cd rmbtws && git rev-parse --abbrev-ref HEAD")
-      .toString()
-      .trim(),
+    rmbtwsHash: run("cd rmbtws && git rev-parse HEAD"),
+    rmbtwsBranch: run("cd rmbtws && git rev-parse --abbrev-ref HEAD"),
     rmbtwsVersion: describe("cd rmbtws && "),
   }
-  fs.writeFileSync("package.json", JSON.stringify(pack, null, 2))
+  fs.writeFileSync(OUTPUT, JSON.stringify(gitInfo, null, 2) + "\n")
 }
 
 main()

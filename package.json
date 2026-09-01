@@ -20,7 +20,7 @@
     "set-prerender-routes": "npx ts-node scripts/set-prerender-routes.ts",
     "prepare": "husky",
     "preinstall": "git submodule init && git submodule update",
-    "postinstall": "npm run build:rmbtws",
+    "postinstall": "npm run build:rmbtws && node scripts/set-package-info.js",
     "prestart": "node scripts/set-package-info.js",
     "prebuild": "node scripts/set-package-info.js"
   },
@@ -87,6 +87,5 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.9.2"
-  },
-  "gitInfo": {}
+  }
 }

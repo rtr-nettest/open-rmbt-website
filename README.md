@@ -42,6 +42,24 @@ The semantic version of both the web page and rmbtws is derived from their git t
 at build time and shown on the website under [Options](https://www.netztest.at/en/options), alongside the
 git branch and commit fingerprint.
 
+## Prerender routes
+
+Deployment needs a plain list of all routes (every path × every i18n locale) to configure
+server-side routing. This list is generated from the `ERoutes` enum and the locale files in
+`src/assets/i18n/`, and is not committed — it is a build artifact you might produce on demand:
+
+```
+npm run set-prerender-routes
+```
+
+This writes `src/prerender-routes.txt`. Deployment then consumes it (see `/deployment`), e.g.:
+
+```
+cat src/prerender-routes.txt | python deployment/make_routes_config.py
+```
+
+Regenerate it whenever you add or change a route or a locale. It is not used by `ng build`.
+
 ## Deployment
 
 Information regarding the deployment of this page can be found under `/deployment`.
