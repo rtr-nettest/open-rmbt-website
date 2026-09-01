@@ -67,3 +67,25 @@ Information regarding the deployment of this page can be found under `/deploymen
 ## Dependencies
 
 Run `npm run compile-deps-info` to compile a list of the project's dependencies with such info as licenses and authors in `dependencies.json`.
+
+### Installing and updating the lockfile
+
+`package-lock.json` is committed and must always be **in sync** with `package.json`.
+
+* **Normal install (CI and reproducible local installs):** `npm ci`. It installs strictly
+  from `package-lock.json` and **never modifies it**, so the working tree stays clean and the
+  git-tag version is not falsely reported as `-dirty`. This is what the GitHub workflow runs.
+  It fails fast if the lockfile is out of sync with `package.json`.
+
+* **Intentionally changing dependencies** (adding, removing or bumping a package, or changing an
+  entry under `overrides`):
+  1. Edit `package.json`.
+  2. Run `npm install` — this updates both `node_modules` and `package-lock.json` (and runs the
+     `postinstall` rmbtws build). To refresh only the lockfile without a full install, use
+     `npm install --package-lock-only`.
+  3. Commit `package.json` **and** `package-lock.json` **together** in the same commit. Committing
+     one without the other leaves the lockfile out of sync and breaks `npm ci` in CI.
+
+Note: the rmbtws submodule is a local file dependency pinned to the placeholder version
+`0.0.0-dev` (its real version is derived from its git tag at build time), so bumping rmbtws does
+**not** require a lockfile update.

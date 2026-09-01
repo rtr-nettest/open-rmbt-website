@@ -31,7 +31,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - run: npm i
+      # `npm ci` installs strictly from package-lock.json and never rewrites it,
+      # so the build leaves the working tree clean and `git describe --dirty`
+      # (used by set-package-info.js) does not falsely report "-dirty".
+      - run: npm ci
       - run: |
           npm audit || echo "npm audit failed, but proceeding"
       - run: npm run ng analytics off
