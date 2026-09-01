@@ -7,8 +7,10 @@ import { AnnouncerMessage } from "../components/announcer/announcer.component"
 export type GitInfo = {
   branch: string
   hash: string
+  version: string
   rmbtwsBranch: string
   rmbtwsHash: string
+  rmbtwsVersion: string
 }
 
 @Injectable({

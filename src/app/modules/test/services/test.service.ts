@@ -85,6 +85,14 @@ export class TestService {
     config["doPingIntervalMilliseconds"] = PING_INTERVAL_MILLISECONDS
     config["additionalRegistrationParameters"] = {}
 
+    // Report the web app's own version (git tag + hash) to the backend instead
+    // of the rmbtws library default. Populated at build time by
+    // scripts/set-package-info.js; absent in unbuilt dev checkouts.
+    const appVersion = this.mainStore.gitInfo?.version
+    if (appVersion) {
+      config["client_software_version"] = appVersion
+    }
+
     if (this.loopStore.isLoopModeEnabled()) {
       config["additionalRegistrationParameters"] = {
         loopmode_info: {

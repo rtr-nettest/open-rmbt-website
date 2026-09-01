@@ -14,11 +14,13 @@
     "build:stage": "ng build --configuration=stage",
     "build:dev3": "ng build --configuration=dev3",
     "build:dev": "ng build --configuration=dev",
+    "build:rmbtws": "cd rmbtws && npm install && npm run build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "set-prerender-routes": "npx ts-node scripts/set-prerender-routes.ts",
     "prepare": "husky",
     "preinstall": "git submodule init && git submodule update",
+    "postinstall": "npm run build:rmbtws",
     "prestart": "node scripts/set-package-info.js",
     "prebuild": "node scripts/set-package-info.js"
   },

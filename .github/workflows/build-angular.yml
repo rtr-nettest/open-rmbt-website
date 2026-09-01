@@ -20,7 +20,14 @@ jobs:
     env:
       CI: ""
     steps:
+      # Full history + tags (incl. submodule) so set-package-info.js and the
+      # rmbtws build can derive versions via `git describe --tags`. The rmbtws
+      # dist is no longer committed - `npm i` builds it via the postinstall hook.
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          fetch-tags: true
       - uses: actions/setup-node@v4
         with:
           node-version: 24

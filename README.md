@@ -24,10 +24,23 @@ Run `npm run start:prod` to launch a prod version of the application on a local 
 
 ## Build
 
-The code depends on  [rmbtws](https://github.com/rtr-nettest/rmbtws), this code is included as a submodule by executing
-`git submodule update --init --recursive`. The GIT fingerprint of `rmbtws` can found on the website under [Options](https://www.netztest.at/en/options).
+The code depends on [rmbtws](https://github.com/rtr-nettest/rmbtws), included as a git submodule. It is
+initialised automatically on `npm install` (via the `preinstall` hook). Its compiled `dist/` is **not
+committed** — instead the `postinstall` hook builds it locally with `npm run build:rmbtws`
+(`cd rmbtws && npm install && npm run build`). A fresh `npm install` therefore produces `rmbtws/dist`
+before any Angular build.
+
+If you change the rmbtws sources during local development, rebuild the submodule with:
+
+```
+npm run build:rmbtws
+```
 
 Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
+
+The semantic version of both the web page and rmbtws is derived from their git tags (`git describe --tags`)
+at build time and shown on the website under [Options](https://www.netztest.at/en/options), alongside the
+git branch and commit fingerprint.
 
 ## Deployment
 
