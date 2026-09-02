@@ -20,7 +20,8 @@ Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The 
 
 ## Production server
 
-Run `npm run start:prod` to launch a prod version of the application on a local server. The application will automatically open in the default browser and reload if you change any of the source files.
+Run `npm run start:prod` to launch a prod version of the application on a local server. The application will 
+automatically open in the default browser and reload if you change any of the source files.
 
 ## Build
 
