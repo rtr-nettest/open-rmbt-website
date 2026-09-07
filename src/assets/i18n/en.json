@@ -78,6 +78,8 @@
   "client_software_version": "Software version",
   "client_type": "RMBT type",
   "client_version": "RMBT version",
+  "device": "Device",
+  "rmbt_server_version": "RMBT server version",
   "client_uuid": "Client UUID",
   "Client-UUID": "Client UUID",
   "Close": "Close",
