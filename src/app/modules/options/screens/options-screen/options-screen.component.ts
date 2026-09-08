@@ -87,8 +87,7 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
   secretString = ""
   secret = "showall"
   showServerSelection = signal<boolean>(
-    environment.features.show_server_selection ||
-      globalThis.location.hash === "#showAll",
+    environment.features.show_server_selection || this.isShowAllHash(),
   )
   showServerSelection$ = toObservable(this.showServerSelection)
   text$ = this.i18nStore.getLocalizedHtml("options")
@@ -117,6 +116,19 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
         this.store.preferredServer.set(this.form.value.preferredServer)
       }
       this.message.openSnackbar("The configuration has been saved.")
+    }
+  }
+
+  private isShowAllHash(): boolean {
+    return globalThis.location.hash.toLowerCase() === "#showall"
+  }
+
+  // React to fragment changes so the server selection appears without a reload
+  // when the "#showAll" hash is added to the URL while already on this page.
+  @HostListener("window:hashchange")
+  onHashChange() {
+    if (this.isShowAllHash()) {
+      this.showServerSelection.set(true)
     }
   }
 
