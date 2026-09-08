@@ -9,5 +9,7 @@
     [sort]="sort"
     [tableClassNames]="tableClassNames"
     [style]="{ width: width }"
+    [rowsAreClickable]="rowsAreClickable()"
+    (onRowClick)="rowSelected.emit($event)"
   ></app-table>
 </app-expansion-panel>

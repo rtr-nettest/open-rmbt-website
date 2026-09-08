@@ -1,11 +1,18 @@
-import { Component, computed, inject, input } from "@angular/core"
+import { Component, computed, effect, inject, input } from "@angular/core"
 import { Subject, Subscription, takeUntil } from "rxjs"
 import { IFenceItem } from "../../interfaces/open-test-response"
 import { Map, NavigationControl } from "maplibre-gl"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
-import { MobileNetworkColorMap } from "../../constants/network-technology"
+import {
+  MobileNetworkColorMap,
+  EMNTechColor,
+} from "../../constants/network-technology"
 import { PopupService } from "../../../map/services/popup.service"
 import { FencesPopupContentService } from "../../services/fences-popup-content.service"
+
+const MIN_SIGNAL = -125
+const MAX_SIGNAL = -85
+const MAP_CONTAINER_HEIGHT_PX = 420
 
 @Component({
   selector: "app-fences-map",
@@ -16,6 +23,7 @@ import { FencesPopupContentService } from "../../services/fences-popup-content.s
 export class FencesMapComponent {
   destroyed$ = new Subject<void>()
   locations = input.required<IFenceItem[]>()
+  selectedFence = input<IFenceItem | null>(null)
   path = computed(() =>
     this.locations().map(
       (loc) => [loc.longitude, loc.latitude] as [number, number],
@@ -31,6 +39,15 @@ export class FencesMapComponent {
   mapService = inject(MapService)
   popup = inject(PopupService)
   popupContent = inject(FencesPopupContentService)
+
+  constructor() {
+    effect(() => {
+      const fence = this.selectedFence()
+      if (this.map && fence) {
+        this.focusFence(fence)
+      }
+    })
+  }
 
   ngAfterViewInit(): void {
     if (globalThis.document) {
@@ -54,7 +71,7 @@ export class FencesMapComponent {
     }
     document
       .getElementById(this.mapId)!
-      .setAttribute("style", `height:350px;width:100%`)
+      .setAttribute("style", `height:${MAP_CONTAINER_HEIGHT_PX}px;width:100%`)
   }
 
   private setMap() {
@@ -70,6 +87,7 @@ export class FencesMapComponent {
         this.map.addControl(new NavigationControl())
         this.map.on("load", () => {
           this.addPath()
+          this.focusFence(this.selectedFence())
         })
         this.map.on("click", (e) => {
           const features = this.map.queryRenderedFeatures(e.point, {
@@ -86,11 +104,30 @@ export class FencesMapComponent {
       })
   }
 
+  private focusFence(fence: IFenceItem | null) {
+    if (!this.map || !fence) {
+      return
+    }
+
+    const latitude = Number(fence.latitude)
+    const longitude = Number(fence.longitude)
+    if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+      return
+    }
+
+    this.popup.removePopup()
+    this.map.flyTo({ center: [longitude, latitude], zoom: 14, essential: true })
+    this.popup.addPopup(this.map, [fence], this.popupContent, {
+      lon: longitude,
+      lat: latitude,
+    })
+  }
+
   private addPath() {
     if (!this.map) {
       return
     }
-    if (this.path().length < 2) {
+    if (this.path().length < 1) {
       return
     }
     this.pathMarkers = this.mapService.addPathMarkers(this.map, this.path())
@@ -100,10 +137,32 @@ export class FencesMapComponent {
       },
       pointPaint: {
         "circle-color": [
-          "match",
-          ["get", "technology_id"],
-          ...[...MobileNetworkColorMap.entries()].flat(),
-          "#d9d9d9",
+          "case",
+          [
+            "any",
+            ["==", ["get", "avg_ping_ms"], null],
+            ["==", ["get", "signal"], null],
+          ],
+          EMNTechColor.T_OFFLINE,
+          [
+            "match",
+            ["get", "technology_id"],
+            ...[...MobileNetworkColorMap.entries()].flatMap(
+              ([technologyId, networkColor]) => [
+                technologyId,
+                [
+                  "interpolate",
+                  ["linear"],
+                  ["get", "signal"],
+                  MIN_SIGNAL,
+                  EMNTechColor.T_OFFLINE,
+                  MAX_SIGNAL,
+                  networkColor,
+                ],
+              ],
+            ),
+            EMNTechColor.T_OFFLINE,
+          ],
         ] as any,
         "circle-radius": 6,
       },

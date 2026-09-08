@@ -111,7 +111,10 @@ export class HomeComponent extends SeoComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     if (globalThis.document) {
-      this.liveService.watchMeasurements()
+      this.liveService.watchMeasurements(
+        true,
+        Boolean(environment.features.show_fences_on_start_page),
+      )
       const testCard = document.querySelector(
         `a[href*="${ERoutes.TEST}"].app-card`,
       ) as HTMLAnchorElement

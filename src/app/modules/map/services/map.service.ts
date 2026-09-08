@@ -57,6 +57,10 @@ const DUMMY_STYLE = {
   sources: {},
   layers: [],
 }
+const ROUTE_SOURCE_ID = "route"
+const POINTS_SOURCE_ID = "routePoints"
+const ROUTE_LAYER_ID = "route"
+const POINTS_LAYER_ID = "route-points"
 
 declare const maplibregl: any
 
@@ -281,7 +285,13 @@ export class MapService {
 
   fitBounds(map: Map, coordinates: [number, number][]) {
     this.zone.runOutsideAngular(() => {
+      if (!coordinates?.length) {
+        return
+      }
       if (coordinates.length < 2) {
+        map.panTo(coordinates[0], {
+          zoom: 16,
+        })
         return
       }
       const line = lineString(coordinates)
@@ -420,7 +430,7 @@ export class MapService {
       ...this.defaultStyle(),
       sources: {
         ...this.defaultStyle().sources,
-        route: {
+        [ROUTE_SOURCE_ID]: {
           type: "geojson",
           data: {
             type: "Feature",
@@ -431,7 +441,7 @@ export class MapService {
             },
           },
         },
-        routePoints: {
+        [POINTS_SOURCE_ID]: {
           type: "geojson",
           data: {
             type: "FeatureCollection",
@@ -456,7 +466,7 @@ export class MapService {
       pointPaint?: LayerSpecification["paint"]
     },
   ) {
-    if (map.getLayer("route")) {
+    if (map.getLayer(ROUTE_LAYER_ID)) {
       return
     }
     const linePaint = options?.linePaint ?? {
@@ -464,9 +474,9 @@ export class MapService {
       "line-width": 2,
     }
     map.addLayer({
-      id: "route",
+      id: ROUTE_LAYER_ID,
       type: "line",
-      source: "route" as unknown as SourceSpecification,
+      source: ROUTE_SOURCE_ID as unknown as SourceSpecification,
       layout: {
         "line-join": "round",
         "line-cap": "round",
@@ -478,19 +488,19 @@ export class MapService {
       "circle-radius": 4,
     }
     map.addLayer({
-      id: "route-points",
+      id: POINTS_LAYER_ID,
       type: "circle",
-      source: "routePoints" as unknown as SourceSpecification,
+      source: POINTS_SOURCE_ID as unknown as SourceSpecification,
       paint: pointPaint,
     })
   }
 
   removeLineLayer(map: Map) {
-    if (!map.getLayer("route")) {
+    if (!map.getLayer(ROUTE_LAYER_ID)) {
       return
     }
-    map.removeLayer("route")
-    map.removeLayer("route-points")
+    map.removeLayer(ROUTE_LAYER_ID)
+    map.removeLayer(POINTS_LAYER_ID)
   }
 
   private getIconByClass(classification?: number) {

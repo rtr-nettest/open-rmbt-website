@@ -1,14 +1,16 @@
 import { computed, Injectable, signal } from "@angular/core"
 import { BehaviorSubject } from "rxjs"
 import { IUserSetingsResponse } from "../../test/interfaces/user-settings-response.interface"
-import * as pack from "../../../../../package.json"
+import gitInfo from "../../../../git-info.json"
 import { AnnouncerMessage } from "../components/announcer/announcer.component"
 
 export type GitInfo = {
   branch: string
   hash: string
+  version: string
   rmbtwsBranch: string
   rmbtwsHash: string
+  rmbtwsVersion: string
 }
 
 @Injectable({
@@ -67,6 +69,6 @@ export class MainStore {
   announcerMessage = signal<AnnouncerMessage | null>(null)
 
   get gitInfo() {
-    return pack.gitInfo as GitInfo
+    return gitInfo as GitInfo
   }
 }

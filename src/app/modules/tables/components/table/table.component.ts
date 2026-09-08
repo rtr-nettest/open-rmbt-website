@@ -54,7 +54,7 @@ import { deHtmlize } from "../../../shared/util/string"
 })
 export class TableComponent implements OnInit, OnChanges {
   @Input() action?: (...ars: any[]) => any
-  @Input() rowsAreCLickable = false
+  @Input() rowsAreClickable = false
   @Input({ required: true }) columns: ITableColumn[] = []
   @Input({ required: true }) data?: IBasicResponse<any>
   @Input() expandableColumns: string[] = []

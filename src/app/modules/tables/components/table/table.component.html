@@ -267,7 +267,7 @@
       <mat-row
         *matRowDef="let row; columns: displayedColumnDefs"
         [id]="getRowId(0, row)"
-        [class.mat-row--clickable]="rowsAreCLickable === true"
+        [class.mat-row--clickable]="rowsAreClickable === true"
         [class.mat-row--collapsed]="
           row.groupHeader ? !isElementExpanded(row.id) : null
         "

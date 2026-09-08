@@ -22,6 +22,7 @@ dayjs.extend(tz)
 
 type PopupData = {
   time: string
+  title: string
   offset: string
   duration: string
   radius: string
@@ -52,6 +53,7 @@ export class FencesPopupContentService extends PopupContentService {
       time: measurement["fence_time"]
         ? dayjs(measurement["fence_time"]).format(RESULT_DATE_FORMAT)
         : t(UNKNOWN),
+      title: t("Signal measurement"),
       pingClass: this.classification.classify(
         measurement["avg_ping_ms"],
         THRESHOLD_PING,

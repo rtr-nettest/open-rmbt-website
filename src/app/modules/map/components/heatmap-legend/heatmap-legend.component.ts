@@ -51,7 +51,9 @@ export class HeatmapLegendComponent {
   captions: string[] = []
   unit = computed(() => {
     const mapType = this.mapType()
-    if (mapType.includes("download") || mapType.includes("upload")) {
+    if (mapType.includes("fences")) {
+      return ""
+    } else if (mapType.includes("download") || mapType.includes("upload")) {
       return this.i18nStore.translate("Mbps")
     } else if (mapType.includes("ping")) {
       return this.i18nStore.translate("millis")

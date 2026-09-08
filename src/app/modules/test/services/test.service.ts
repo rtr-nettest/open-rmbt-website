@@ -85,6 +85,17 @@ export class TestService {
     config["doPingIntervalMilliseconds"] = PING_INTERVAL_MILLISECONDS
     config["additionalRegistrationParameters"] = {}
 
+    // Report the web app's own version (git tag + hash) to the backend as the
+    // "device", prefixed with "Webpage " (e.g. "Webpage 2.11.1-0-g7553d1f8").
+    // client_software_version is left untouched so it keeps carrying the rmbtws
+    // library version (derived from the rmbtws git tag at build time).
+    // gitInfo is populated at build time by scripts/set-package-info.js; absent
+    // in unbuilt dev checkouts.
+    const appVersion = this.mainStore.gitInfo?.version
+    if (appVersion) {
+      config["device"] = `Webpage ${appVersion}`
+    }
+
     if (this.loopStore.isLoopModeEnabled()) {
       config["additionalRegistrationParameters"] = {
         loopmode_info: {
@@ -186,7 +197,10 @@ export class TestService {
   private startGeoTracking() {
     this.geoTrackerService.startGeoTracking(
       (error) => {
-        this.testStore.locationPermissionDenied.set(true)
+        const permissionDenied =
+          error.code === error.PERMISSION_DENIED || error.code === 1
+
+        this.testStore.locationPermissionDenied.set(permissionDenied)
         console.error("Geotracking error:", error)
       },
       (data) => {
