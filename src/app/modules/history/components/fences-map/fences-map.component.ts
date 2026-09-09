@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, input } from "@angular/core"
 import { Subject, Subscription, takeUntil } from "rxjs"
 import { IFenceItem } from "../../interfaces/open-test-response"
-import { Map, NavigationControl } from "maplibre-gl"
+import { Map, Marker, NavigationControl } from "maplibre-gl"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
 import {
   MobileNetworkColorMap,
@@ -34,7 +34,7 @@ export class FencesMapComponent {
   map!: Map
   params = input.required<URLSearchParams>()
   resizeSub!: Subscription
-  pathMarkers: maplibregl.Marker[] = []
+  pathMarkers: Marker[] = []
 
   mapService = inject(MapService)
   popup = inject(PopupService)

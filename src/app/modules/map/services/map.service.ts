@@ -62,8 +62,6 @@ const POINTS_SOURCE_ID = "routePoints"
 const ROUTE_LAYER_ID = "route"
 const POINTS_LAYER_ID = "route-points"
 
-declare const maplibregl: any
-
 @Injectable({
   providedIn: "root",
 })
@@ -167,8 +165,7 @@ export class MapService {
     return this.i18nStore.getTranslations().pipe(
       map((translations) => {
         options.locale = translations
-        // Using the UMD version of maplibre-gl as the NPM version can not draw the lines on the map
-        return new maplibregl.Map(options) as Map
+        return new Map(options)
       }),
     )
   }
