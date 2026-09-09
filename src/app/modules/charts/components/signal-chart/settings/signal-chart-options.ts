@@ -76,10 +76,19 @@ export class TestSignalChartOptions {
     },
   }
 
-  constructor(private t: I18nStore, private minSignal: number) {
+  constructor(
+    private t: I18nStore,
+    private minSignal: number,
+    hideSignalScale = false
+  ) {
     if (this.minSignal >= 140) {
       this.scales.y.max = 100
       this.scales.y.ticks.stepSize = 25
+    }
+    if (hideSignalScale) {
+      // "Technologies" flavor: no signal line and no signal scale,
+      // only the per-technology intervals are shown.
+      ;(this.scales.y as any).display = false
     }
   }
 }

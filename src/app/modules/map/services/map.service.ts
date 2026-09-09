@@ -7,6 +7,7 @@ import {
   Map,
   MapOptions,
   Marker,
+  setWorkerUrl,
   SourceSpecification,
   StyleSpecification,
 } from "maplibre-gl"
@@ -159,7 +160,18 @@ export class MapService {
     private readonly i18nStore: I18nStore,
     private readonly mainStore: MainStore,
     private readonly zone: NgZone,
-  ) {}
+  ) {
+    // maplibre-gl v6 loads its worker from a bundler-relative URL
+    // (`new URL("maplibre-gl-worker.mjs", import.meta.url)`), which esbuild
+    // does not rewrite: it 404s under the dev server (vite deps path) and
+    // depends on output layout in production. Pin it to the copy we emit at
+    // the site root (see angular.json assets) so it loads consistently.
+    // Without the worker, GeoJSON sources never finish loading and the map's
+    // "load" event never fires (e.g. the fence points would never appear).
+    if (typeof document !== "undefined") {
+      setWorkerUrl("/maplibre-gl-worker.mjs")
+    }
+  }
 
   createMap(options: MapOptions) {
     return this.i18nStore.getTranslations().pipe(

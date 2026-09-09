@@ -28,6 +28,10 @@ import { TestSignalChartOptions } from "../signal-chart/settings/signal-chart-op
 export class FencesChartComponent implements AfterViewInit {
   id = "fences_chart"
   fences = input<IFenceItem[]>([])
+  // "Technologies" flavor (iOS measurements, or Android with the
+  // "Technology only" toggle on): show the technology intervals but no
+  // signal line and no signal scale.
+  technologyOnly = input<boolean>(false)
   chart!: TestSignalChart
 
   get canvas() {
@@ -41,7 +45,11 @@ export class FencesChartComponent implements AfterViewInit {
     if (ctx) {
       const minSignal = this.getMinSignal()
       const datasets = this.getDatasets(minSignal)
-      const options = new TestSignalChartOptions(this.i18nStore, minSignal)
+      const options = new TestSignalChartOptions(
+        this.i18nStore,
+        minSignal,
+        this.technologyOnly(),
+      )
       const plugins = this.getPlugins()
       this.chart = new TestSignalChart(
         ctx,
@@ -76,6 +84,16 @@ export class FencesChartComponent implements AfterViewInit {
         x: this.getX(fence.offset_ms),
         y: minSignal - Math.abs(fence.signal ?? 120),
       })
+    }
+
+    if (this.technologyOnly()) {
+      // Keep the data points so the time (x) axis still spans the whole
+      // measurement (the technology intervals are positioned against it),
+      // but draw no visible signal line/area.
+      dataset.fill = false
+      dataset.backgroundColor = "transparent"
+      dataset.borderColor = "transparent"
+      dataset.pointRadius = 0
     }
 
     return [dataset]

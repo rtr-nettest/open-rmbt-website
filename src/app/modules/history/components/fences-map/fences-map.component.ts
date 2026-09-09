@@ -9,10 +9,17 @@ import {
 } from "../../constants/network-technology"
 import { PopupService } from "../../../map/services/popup.service"
 import { FencesPopupContentService } from "../../services/fences-popup-content.service"
+import { THRESHOLD_PING } from "../../../shared/services/classification.service"
 
 const MIN_SIGNAL = -125
 const MAX_SIGNAL = -85
 const MAP_CONTAINER_HEIGHT_PX = 420
+// Worst still-acceptable average ping (ms) for a fence to count as covered
+// in "technology only" mode, where no signal value is available.
+// NB: ClassificationService.classify() sorts THRESHOLD_PING in place, so the
+// array order is not reliable here — take the max explicitly.
+const ACCEPTABLE_PING_MS = Math.max(...THRESHOLD_PING)
+const POINTS_LAYER_ID = "route-points"
 
 @Component({
   selector: "app-fences-map",
@@ -24,6 +31,9 @@ export class FencesMapComponent {
   destroyed$ = new Subject<void>()
   locations = input.required<IFenceItem[]>()
   selectedFence = input<IFenceItem | null>(null)
+  // "Technology only": colour points by technology + acceptable ping
+  // (full colour if covered, grey otherwise) instead of by signal strength.
+  technologyOnly = input<boolean>(false)
   path = computed(() =>
     this.locations().map(
       (loc) => [loc.longitude, loc.latitude] as [number, number],
@@ -45,6 +55,13 @@ export class FencesMapComponent {
       const fence = this.selectedFence()
       if (this.map && fence) {
         this.focusFence(fence)
+      }
+    })
+    effect(() => {
+      // React to the "Technology only" toggle without rebuilding the map.
+      const circleColor = this.getCircleColor(this.technologyOnly())
+      if (this.map?.getLayer(POINTS_LAYER_ID)) {
+        this.map.setPaintProperty(POINTS_LAYER_ID, "circle-color", circleColor)
       }
     })
   }
@@ -136,37 +153,46 @@ export class FencesMapComponent {
         "line-opacity": 0,
       },
       pointPaint: {
-        "circle-color": [
-          "case",
-          [
-            "any",
-            ["==", ["get", "avg_ping_ms"], null],
-            ["==", ["get", "signal"], null],
-          ],
-          EMNTechColor.T_OFFLINE,
-          [
-            "match",
-            ["get", "technology_id"],
-            ...[...MobileNetworkColorMap.entries()].flatMap(
-              ([technologyId, networkColor]) => [
-                technologyId,
-                [
-                  "interpolate",
-                  ["linear"],
-                  ["get", "signal"],
-                  MIN_SIGNAL,
-                  EMNTechColor.T_OFFLINE,
-                  MAX_SIGNAL,
-                  networkColor,
-                ],
-              ],
-            ),
-            EMNTechColor.T_OFFLINE,
-          ],
-        ] as any,
+        "circle-color": this.getCircleColor(this.technologyOnly()),
         "circle-radius": 6,
       },
     })
     this.mapService.fitBounds(this.map, this.path())
+  }
+
+  private getCircleColor(technologyOnly: boolean): any {
+    const technologyMatch = [
+      "match",
+      ["get", "technology_id"],
+      ...[...MobileNetworkColorMap.entries()].flatMap(
+        ([technologyId, networkColor]) => [
+          technologyId,
+          technologyOnly
+            ? // No signal available: use the full technology colour.
+              networkColor
+            : // Fade the technology colour towards grey by signal strength.
+              [
+                "interpolate",
+                ["linear"],
+                ["get", "signal"],
+                MIN_SIGNAL,
+                EMNTechColor.T_OFFLINE,
+                MAX_SIGNAL,
+                networkColor,
+              ],
+        ],
+      ),
+      EMNTechColor.T_OFFLINE,
+    ]
+    // Grey ("offline") when there is no coverage: no ping (or no acceptable
+    // ping) or no technology. Android additionally requires a signal value.
+    const offlineConditions: any[] = [
+      "any",
+      ["==", ["get", "avg_ping_ms"], null],
+      technologyOnly
+        ? [">", ["get", "avg_ping_ms"], ACCEPTABLE_PING_MS]
+        : ["==", ["get", "signal"], null],
+    ]
+    return ["case", offlineConditions, EMNTechColor.T_OFFLINE, technologyMatch]
   }
 }

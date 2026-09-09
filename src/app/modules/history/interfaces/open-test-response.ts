@@ -21,6 +21,8 @@ export interface IFenceItem {
   radius?: number
   longitude?: number
   latitude?: number
+  altitude?: number
+  speed?: number
   fence_time?: number
   signal?: number
 }

@@ -17,6 +17,7 @@ import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interfa
 import { MainStore } from "../../../shared/store/main.store"
 import { TestChartComponent } from "../../../charts/components/test-chart/test-chart.component"
 import { MatButtonModule } from "@angular/material/button"
+import { MatSlideToggleModule } from "@angular/material/slide-toggle"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { roundToSignificantDigits } from "../../../shared/util/math"
 import { MapComponent } from "../../components/map/map.component"
@@ -75,6 +76,7 @@ import { FencesChartComponent } from "../../../charts/components/fences-chart/fe
     HeaderComponent,
     MainContentComponent,
     MatButtonModule,
+    MatSlideToggleModule,
     RouterModule,
     TableComponent,
     TestChartComponent,
@@ -167,6 +169,23 @@ export class ResultScreenComponent extends SeoComponent {
   fencesResults = signal<IFenceItem[] | null>(null)
   selectedFence = signal<IFenceItem | null>(null)
   hasFencesResults = computed(() => Boolean(this.fencesResults()?.length))
+  // A measurement is an Android signal measurement when at least one fence
+  // carries a signal value; iOS measurements have technology (and ping) only.
+  hasFenceSignal = computed(() =>
+    (this.fencesResults() ?? []).some((f) => f.signal != null),
+  )
+  // User toggle ("Technology only"), only meaningful for Android measurements.
+  technologyOnlyToggle = signal<boolean>(false)
+  // iOS measurements are always technology-only; Android follows the toggle.
+  isTechnologyOnly = computed(
+    () =>
+      this.hasFencesResults() &&
+      (!this.hasFenceSignal() || this.technologyOnlyToggle()),
+  )
+  // The toggle is only offered when there is a signal to hide (Android).
+  canShowTechnologyToggle = computed(
+    () => this.hasFencesResults() && this.hasFenceSignal(),
+  )
   fencesMapContainerId = "fencesMapContainer"
 
   downloadTable = signal<IOverallResult[]>([])

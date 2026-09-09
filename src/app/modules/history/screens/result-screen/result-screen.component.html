@@ -38,6 +38,14 @@
             {{ "Run test again" | translate }}
           </a>
         }
+        @if (canShowTechnologyToggle()) {
+          <mat-slide-toggle
+            class="app-technology-only-toggle"
+            [checked]="technologyOnlyToggle()"
+            (change)="technologyOnlyToggle.set($event.checked)"
+            >{{ "Technology only" | translate }}</mat-slide-toggle
+          >
+        }
       </div>
       @if (basicResults(); as basicResults) {
         @if (basicResults.content.length && !hideBasicResults()) {
@@ -106,6 +114,7 @@
                     [mapContainerId]="fencesMapContainerId"
                     [locations]="fencesResults"
                     [selectedFence]="selectedFence()"
+                    [technologyOnly]="isTechnologyOnly()"
                   ></app-fences-map>
                 </div>
               }
@@ -165,15 +174,29 @@
                     class="app-charts-row__base"
                     [attr.aria-hidden]="true"
                   >
+                    @let signalTitle =
+                      hasFencesResults()
+                        ? (isTechnologyOnly()
+                          ? "Technology"
+                          : "Signal and technology")
+                        : "Signal";
                     @if (!hideSpeedCurveTitle()) {
-                      <h4>{{ "Signal" | translate }}</h4>
+                      <h4>{{ signalTitle | translate }}</h4>
                     } @else {
-                      <h3>{{ "Signal" | translate }}</h3>
+                      <h3>{{ signalTitle | translate }}</h3>
                     }
                     @if (hasFencesResults()) {
-                      <app-fences-chart
-                        [fences]="fencesResults() ?? []"
-                      ></app-fences-chart>
+                      @if (isTechnologyOnly()) {
+                        <app-fences-chart
+                          [fences]="fencesResults() ?? []"
+                          [technologyOnly]="true"
+                        ></app-fences-chart>
+                      } @else {
+                        <app-fences-chart
+                          [fences]="fencesResults() ?? []"
+                          [technologyOnly]="false"
+                        ></app-fences-chart>
+                      }
                     } @else {
                       <app-signal-chart
                         [signal]="signalTable()"
@@ -182,12 +205,23 @@
                     }
                   </header>
                   @if (hasFencesResults()) {
-                    <app-fences-details
-                      [details]="fencesResults() ?? []"
-                      a11yTitle="Signal details"
-                      [rowsAreClickable]="true"
-                      (rowSelected)="handleFenceRowSelected($event)"
-                    ></app-fences-details>
+                    @if (isTechnologyOnly()) {
+                      <app-fences-details
+                        [details]="fencesResults() ?? []"
+                        a11yTitle="Signal details"
+                        [rowsAreClickable]="true"
+                        [technologyOnly]="true"
+                        (rowSelected)="handleFenceRowSelected($event)"
+                      ></app-fences-details>
+                    } @else {
+                      <app-fences-details
+                        [details]="fencesResults() ?? []"
+                        a11yTitle="Signal details"
+                        [rowsAreClickable]="true"
+                        [technologyOnly]="false"
+                        (rowSelected)="handleFenceRowSelected($event)"
+                      ></app-fences-details>
+                    }
                   } @else {
                     <app-signal-details
                       [details]="signalTableGrouped()"
