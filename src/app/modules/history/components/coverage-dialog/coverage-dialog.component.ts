@@ -174,15 +174,13 @@ export class CoverageDialogComponent implements AfterViewInit, OnDestroy {
 
   private setSize() {
     this.zone.runOutsideAngular(() => {
-      if (!this.mapContainerId) {
+      const container = document.getElementById(this.mapContainerId)
+      const mapEl = document.getElementById(this.mapId)
+      if (!container || !mapEl) {
         return
       }
-      let containerWidth = document
-        .getElementById(this.mapContainerId)!
-        .getBoundingClientRect().width
-      document
-        .getElementById(this.mapId)!
-        .setAttribute("style", `height:250px;width:${containerWidth - 16}px`)
+      const containerWidth = container.getBoundingClientRect().width
+      mapEl.setAttribute("style", `height:250px;width:${containerWidth - 16}px`)
     })
   }
 

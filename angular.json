@@ -30,7 +30,19 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/assets"],
+            "assets": [
+              "src/assets",
+              {
+                "glob": "maplibre-gl-worker.mjs",
+                "input": "node_modules/maplibre-gl/dist",
+                "output": "."
+              },
+              {
+                "glob": "maplibre-gl-shared.mjs",
+                "input": "node_modules/maplibre-gl/dist",
+                "output": "."
+              }
+            ],
             "styles": ["src/styles.scss"],
             "scripts": [],
             "server": "src/main.server.ts",
