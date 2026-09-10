@@ -38,12 +38,12 @@
             {{ "Run test again" | translate }}
           </a>
         }
-        @if (canShowTechnologyToggle()) {
+        @if (canShowSignalToggle()) {
           <mat-slide-toggle
             class="app-technology-only-toggle"
-            [checked]="technologyOnlyToggle()"
-            (change)="technologyOnlyToggle.set($event.checked)"
-            >{{ "Technology only" | translate }}</mat-slide-toggle
+            [checked]="showSignalToggle()"
+            (change)="showSignalToggle.set($event.checked)"
+            >{{ "Show signal" | translate }}</mat-slide-toggle
           >
         }
       </div>

@@ -174,16 +174,17 @@ export class ResultScreenComponent extends SeoComponent {
   hasFenceSignal = computed(() =>
     (this.fencesResults() ?? []).some((f) => f.signal != null),
   )
-  // User toggle ("Technology only"), only meaningful for Android measurements.
-  technologyOnlyToggle = signal<boolean>(false)
+  // User toggle ("Show signal"), on by default, only meaningful for Android
+  // measurements. Turning it off collapses the view to technology only.
+  showSignalToggle = signal<boolean>(true)
   // iOS measurements are always technology-only; Android follows the toggle.
   isTechnologyOnly = computed(
     () =>
       this.hasFencesResults() &&
-      (!this.hasFenceSignal() || this.technologyOnlyToggle()),
+      (!this.hasFenceSignal() || !this.showSignalToggle()),
   )
-  // The toggle is only offered when there is a signal to hide (Android).
-  canShowTechnologyToggle = computed(
+  // The toggle is only offered when there is a signal to show/hide (Android).
+  canShowSignalToggle = computed(
     () => this.hasFencesResults() && this.hasFenceSignal(),
   )
   fencesMapContainerId = "fencesMapContainer"
@@ -196,7 +197,7 @@ export class ResultScreenComponent extends SeoComponent {
   signalTableGrouped = computed(() => {
     const signalTable = this.signalTable()
     const out: ISimpleHistorySignal[] = []
-    let currentHeader: string | undefined
+    let currentHeader: string | undefined = undefined
     for (const signal of signalTable) {
       out.push(signal)
       const newHeader =

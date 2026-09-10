@@ -41,7 +41,7 @@ export class FencesDetailsComponent
     },
     {
       columnDef: "fence_time",
-      header: "Fence time",
+      header: "Time",
       // Two lines: date, then time of day.
       isHtml: true,
       transformValue: (row) =>
@@ -55,7 +55,8 @@ export class FencesDetailsComponent
     {
       columnDef: "position",
       header: "Position",
-      // Three lines: latitude, longitude, altitude (when available).
+      // Three lines: latitude, longitude, altitude with accuracy (when
+      // available), e.g. "153 m (+/- 5m)".
       isHtml: true,
       transformValue: (row) => {
         if (!row.latitude || !row.longitude) {
@@ -65,30 +66,49 @@ export class FencesDetailsComponent
           LOC_FORMAT,
           { latLonSeparator: "<br>" },
         )
-        return row.altitude != null
-          ? `${coords}<br>${Math.round(row.altitude)} ${this.i18nStore.translate("m")}`
-          : coords
+        const m = this.i18nStore.translate("m")
+        if (row.altitude == null) {
+          return coords
+        }
+        const accuracy =
+          row.accuracy != null ? ` (+/- ${Math.round(row.accuracy)} ${m})` : ""
+        return `${coords}<br>${Math.round(row.altitude)} ${m}${accuracy}`
       },
-      getNgClass: () => "app-cell--20",
+      getNgClass: () => "app-cell--12",
+    },
+    {
+      columnDef: "duration_ms",
+      header: "At point",
+      // Time spent in the fence and its radius, e.g. "3 s / 15m".
+      transformValue: (row) => {
+        const duration = row.duration_ms
+          ? `${Math.round(row.duration_ms / 1e3)} ${this.i18nStore.translate("s")}`
+          : null
+        const radius =
+          row.radius != null
+            ? `${Math.round(row.radius)} ${this.i18nStore.translate("m")}`
+            : null
+        const parts = [duration, radius].filter(Boolean)
+        return parts.length ? parts.join(" / ") : "-"
+      },
     },
     {
       columnDef: "speed",
       header: "Velocity",
-      transformValue: (row) =>
-        row.speed != null
-          ? `${(row.speed * 3.6).toLocaleString(this.i18nStore.activeLang, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })} ${this.i18nStore.translate("km/h")}`
-          : "-",
-    },
-    {
-      columnDef: "duration_ms",
-      header: "Duration",
-      transformValue: (row) =>
-        row.duration_ms
-          ? `${Math.round(row.duration_ms / 1e3)} ${this.i18nStore.translate("s")}`
-          : "-",
+      // Two lines: velocity, then bearing (heading in degrees).
+      isHtml: true,
+      transformValue: (row) => {
+        if (row.speed == null) {
+          return "-"
+        }
+        const velocity = `${(row.speed * 3.6).toLocaleString(
+          this.i18nStore.activeLang,
+          { minimumFractionDigits: 1, maximumFractionDigits: 1 },
+        )} ${this.i18nStore.translate("km/h")}`
+        return row.bearing != null
+          ? `${velocity}<br>${Math.round(row.bearing)}°`
+          : velocity
+      },
     },
     {
       columnDef: "technology_id",

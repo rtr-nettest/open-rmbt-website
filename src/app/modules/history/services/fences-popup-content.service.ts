@@ -38,6 +38,22 @@ type PopupData = {
   providedIn: "root",
 })
 export class FencesPopupContentService extends PopupContentService {
+  // "At point": time spent in the fence and its radius, e.g. "3 s / 15m".
+  private getAtPoint(
+    measurement: Record<string, any>,
+    t: (key: string) => string,
+  ) {
+    const duration = measurement["duration_ms"]
+      ? `${Math.round(measurement["duration_ms"] / 1e3)} ${t("s")}`
+      : null
+    const radius =
+      measurement["radius"] != null
+        ? `${Math.round(measurement["radius"])} ${t("m")}`
+        : null
+    const parts = [duration, radius].filter(Boolean)
+    return parts.length ? parts.join(" / ") : t(UNKNOWN)
+  }
+
   override async getSingleMeasurement(measurement: Record<string, any>) {
     const t = this.i18nStore.translate.bind(this.i18nStore)
     const technology = getMobileNetworkTechnology(measurement["technology_id"])
@@ -76,14 +92,12 @@ export class FencesPopupContentService extends PopupContentService {
       offset: measurement["offset_ms"]
         ? `${Math.round(measurement["offset_ms"] / 1e3)} ${t("s")}`
         : t(UNKNOWN),
-      duration: measurement["duration_ms"]
-        ? `${Math.round(measurement["duration_ms"] / 1e3)} ${t("s")}`
-        : t(UNKNOWN),
+      duration: this.getAtPoint(measurement, t),
       speed:
         measurement["speed"] != null
           ? `${(measurement["speed"] * 3.6).toLocaleString(
               this.i18nStore.activeLang,
-              { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+              { minimumFractionDigits: 1, maximumFractionDigits: 1 },
             )} ${t("km/h")}`
           : t(UNKNOWN),
       operator: measurement["provider_name"] ?? t(UNKNOWN),

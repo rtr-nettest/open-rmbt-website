@@ -22,7 +22,9 @@ export interface IFenceItem {
   longitude?: number
   latitude?: number
   altitude?: number
+  accuracy?: number
   speed?: number
+  bearing?: number
   fence_time?: number
   signal?: number
 }
