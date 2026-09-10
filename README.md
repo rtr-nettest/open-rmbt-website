@@ -18,6 +18,43 @@ This project is licensed under the terms of the Apache License 2.0. See the [LIC
 
 Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
+`npm run start` launches **two** processes concurrently (see the `start` script): the Angular dev
+server on port `4200`, and the backend proxy (`node proxy`) on port `3000` — see below.
+
+## Backend proxy
+
+During local development the app talks to a remote RMBT backend (control server, statistic server,
+settings, map tiles). Calling that backend directly from `http://localhost:4200` fails: the browser
+blocks the cross-origin requests, and the backend rejects requests whose `Origin`/`Referer` do not
+match. `proxy.js` is a small Express server that sits in between and removes that friction.
+
+How it works:
+
+* It listens on `http://localhost:3000` (override with the `PORT` env var) and forwards every request
+  to the backend host defined by the `host` constant in `proxy.js` (default `dev2.netztest.at`).
+* On the way out it rewrites the `Host`, `Origin` and `Referer` headers so the backend accepts the
+  request; on the way back it adds permissive `Access-Control-Allow-*` headers so the browser accepts
+  the response.
+* The app is wired to it through `src/environments/environment.ts`, where `api.baseUrl` is
+  `http://localhost:3000`. So the browser only ever talks to the proxy (same-origin-ish), and the
+  proxy talks to the real backend.
+
+Usage:
+
+* Normally you do **not** start it separately — `npm run start` already runs it alongside `ng serve`.
+* To run it on its own: `node proxy` (optionally `PORT=3001 node proxy`).
+* Browse the app at `http://localhost:4200/`, **not** at `http://localhost:3000/` — port 3000 is the
+  API proxy, and opening it directly just forwards you to the backend site (which may be password
+  protected).
+
+Pointing at a different backend:
+
+* Edit the `host` constant at the top of `proxy.js` (e.g. change `dev2.netztest.at` to another RMBT
+  environment) and restart the proxy.
+* The environment that a `ng serve --configuration=<env>` run targets is instead controlled by the
+  matching `src/environments/environment.<env>.ts` (those set `api.baseUrl` to a real host and bypass
+  the proxy). The proxy only matters for the default `npm run start` / `environment.ts` setup.
+
 ## Production server
 
 Run `npm run start:prod` to launch a prod version of the application on a local server. The application will 
