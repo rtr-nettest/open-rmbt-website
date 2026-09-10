@@ -40,7 +40,7 @@ export enum EMNTech {
 export enum EMNTechColor {
   T_2G = "#FFDE00",
   T_3G = "#EFFF00",
-  T_4G = "#00BFFF",
+  T_4G = "#00DEFF",
   T_5G_NSA = "#0091FF",
   T_5G_SA = "#5E00FF",
   T_OFFLINE = "#A0A0A0",

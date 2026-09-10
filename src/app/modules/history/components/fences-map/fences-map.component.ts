@@ -9,16 +9,10 @@ import {
 } from "../../constants/network-technology"
 import { PopupService } from "../../../map/services/popup.service"
 import { FencesPopupContentService } from "../../services/fences-popup-content.service"
-import { THRESHOLD_PING } from "../../../shared/services/classification.service"
 
 const MIN_SIGNAL = -125
 const MAX_SIGNAL = -85
 const MAP_CONTAINER_HEIGHT_PX = 420
-// Worst still-acceptable average ping (ms) for a fence to count as covered
-// in "technology only" mode, where no signal value is available.
-// NB: ClassificationService.classify() sorts THRESHOLD_PING in place, so the
-// array order is not reliable here — take the max explicitly.
-const ACCEPTABLE_PING_MS = Math.max(...THRESHOLD_PING)
 const POINTS_LAYER_ID = "route-points"
 
 @Component({
@@ -184,14 +178,13 @@ export class FencesMapComponent {
       ),
       EMNTechColor.T_OFFLINE,
     ]
-    // Grey ("offline") when there is no coverage: no ping (or no acceptable
-    // ping) or no technology. Android additionally requires a signal value.
+    // Grey ("offline") when there is no coverage: no ping (a bad ping is still
+    // a valid ping) or no technology. Android additionally greys a missing
+    // signal value; the signal-fade above handles a very weak signal.
     const offlineConditions: any[] = [
       "any",
       ["==", ["get", "avg_ping_ms"], null],
-      technologyOnly
-        ? [">", ["get", "avg_ping_ms"], ACCEPTABLE_PING_MS]
-        : ["==", ["get", "signal"], null],
+      ...(technologyOnly ? [] : [["==", ["get", "signal"], null]]),
     ]
     return ["case", offlineConditions, EMNTechColor.T_OFFLINE, technologyMatch]
   }
