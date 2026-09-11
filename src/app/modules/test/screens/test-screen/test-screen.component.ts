@@ -31,6 +31,7 @@ import { ITestVisualizationState } from "../../interfaces/test-visualization-sta
 import {
   ERROR_OCCURED,
   ERROR_OCCURED_SENDING_RESULTS,
+  RMBT_STATUS_MESSAGES,
   TERMS_VERSION,
   TEST_FINISHED_ANNOUNCEMENT,
 } from "../../constants/strings"
@@ -179,7 +180,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
       distinctUntilChanged(),
       map(([state, error]) => {
         if (error) {
-          this.openErrorDialog(state)
+          this.openErrorDialog(state, error)
         } else if (state.currentPhaseName === EMeasurementStatus.END) {
           this.goToResult(state)
         }
@@ -189,10 +190,16 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
     this.service.triggerNextTest()
   }
 
-  protected openErrorDialog(state: ITestVisualizationState) {
+  protected openErrorDialog(state: ITestVisualizationState, error?: unknown) {
     this.message.closeAllDialogs()
+    // Map the rmbtws status (delivered on error$) 1:1 to a message; fall back to
+    // the phase-specific / generic message for anything not listed.
+    const mapped =
+      typeof error === "string" ? RMBT_STATUS_MESSAGES[error] : undefined
     let message = ERROR_OCCURED
-    if (state.currentPhaseName === EMeasurementStatus.SUBMITTING_RESULTS) {
+    if (mapped) {
+      message = mapped
+    } else if (state.currentPhaseName === EMeasurementStatus.SUBMITTING_RESULTS) {
       message = ERROR_OCCURED_SENDING_RESULTS
     }
     this.stopped$.next()
