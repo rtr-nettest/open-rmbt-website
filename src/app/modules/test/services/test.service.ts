@@ -88,7 +88,7 @@ export class TestService {
     // Report the web app's own version (git tag + hash) to the backend as the
     // "device", prefixed with "Webpage " (e.g. "Webpage 2.11.1-0-g7553d1f8").
     // client_software_version is left untouched so it keeps carrying the rmbtws
-    // library version (derived from the rmbtws git tag at build time).
+    // server version.
     // gitInfo is populated at build time by scripts/set-package-info.js; absent
     // in unbuilt dev checkouts.
     const appVersion = this.mainStore.gitInfo?.version
