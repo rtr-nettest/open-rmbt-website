@@ -6,6 +6,7 @@ import { MatButtonModule } from "@angular/material/button"
 
 export type ConfirmDialogOpts = {
   canCancel: boolean
+  title?: string
   proceedButtonText?: string
   cancelButtonText?: string
   okButtonText?: string
@@ -21,6 +22,10 @@ export type ConfirmDialogOpts = {
 export class ConfirmDialogComponent {
   get text() {
     return this.data.text
+  }
+
+  get title() {
+    return this.data.title
   }
 
   get canCancel() {

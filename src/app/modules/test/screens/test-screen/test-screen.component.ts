@@ -31,6 +31,8 @@ import { ITestVisualizationState } from "../../interfaces/test-visualization-sta
 import {
   ERROR_OCCURED,
   ERROR_OCCURED_SENDING_RESULTS,
+  PROXY_BLOCK_TEXT,
+  PROXY_BLOCK_TITLE,
   RMBT_STATUS_MESSAGES,
   TERMS_VERSION,
   TEST_FINISHED_ANNOUNCEMENT,
@@ -58,6 +60,7 @@ import { CertifiedBreadcrumbsComponent } from "../../../certified/components/cer
 import { ConnectivityService } from "../../services/connectivity.service"
 import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
 import { AnnouncerService } from "../../../shared/services/announcer.service"
+import { IpService } from "../../../shared/services/ip.service"
 
 export const imports = [
   AsyncPipe,
@@ -102,6 +105,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   )
   estimatedEndTime = signal<Date | null>(null)
   historyService = inject(HistoryService)
+  ipService = inject(IpService)
   router = inject(Router)
   mainStore = inject(MainStore)
   message = inject(MessageService)
@@ -148,7 +152,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
           this.handleOnline()
         }
       })
-    firstValueFrom(this.settingsService.getSettings()).then((settings) => {
+    firstValueFrom(this.settingsService.getSettings()).then(async (settings) => {
       if (
         settings.settings[0].terms_and_conditions.version.toString() !=
         localStorage.getItem(TERMS_VERSION)
@@ -158,9 +162,42 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
         })
         return
       }
+      // A measurement over a proxy (e.g. Apple iCloud Relay) produces incorrect
+      // results, so block it before the test is registered.
+      if (await this.isBehindProxy()) {
+        this.showProxyBlockedDialog()
+        return
+      }
       this.initVisualization()
       return
     })
+  }
+
+  /**
+   * Authoritative (fresh) proxy check: the IpService signals are only kept
+   * up to date while the home page's ip-info component is mounted, so query
+   * both stacks directly. Either stack being behind a proxy blocks the test.
+   */
+  private async isBehindProxy(): Promise<boolean> {
+    const [v4, v6] = await Promise.all([
+      this.ipService.getIpV4(),
+      this.ipService.getIpV6(),
+    ])
+    return v4?.is_proxy === true || v6?.is_proxy === true
+  }
+
+  private showProxyBlockedDialog() {
+    this.message.closeAllDialogs()
+    this.message.openConfirmDialog(
+      PROXY_BLOCK_TEXT,
+      () => this.router.navigate([this.i18nStore.activeLang, ERoutes.HOME]),
+      {
+        canCancel: false,
+        title: PROXY_BLOCK_TITLE,
+        okButtonText: "Close",
+        disableClose: true,
+      }
+    )
   }
 
   override ngOnDestroy(): void {
