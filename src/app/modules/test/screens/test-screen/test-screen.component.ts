@@ -194,7 +194,7 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
     this.message.closeAllDialogs()
     this.message.openConfirmDialog(
       PROXY_BLOCK_TEXT,
-      () => this.router.navigate([this.i18nStore.activeLang, ERoutes.HOME]),
+      () => this.router.navigate(["/", this.i18nStore.activeLang]),
       {
         canCancel: false,
         title: PROXY_BLOCK_TITLE,
