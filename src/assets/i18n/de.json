@@ -1,4 +1,5 @@
 {
+  "- via proxy": "- über Proxy",
   "Source": "Quelle",
   "km/h": "km/h",
   "1 month": "1 Monat",
@@ -89,7 +90,9 @@
   "rmbt_server_version": "Version RMBT-Server",
   "client_uuid": "Client UUID",
   "Client-UUID": "Client UUID",
-  "Close": "Close",
+  "Close": "Schließen",
+  "Measurement not possible": "Messung nicht möglich",
+  "A measurement via a proxy (e.g. Apple iCloud Relay) leads to incorrect results and thus is not possible": "Eine Messung über einen Proxy (z.B. Apple iCloud Relay) führt zu verfälschten Ergebnissen und ist daher nicht möglich. Bitte deaktivieren Sie den Proxy.",
   "cloud": "Cloud",
   "Code is required": "Code ist erforderlich",
   "code": "Code",

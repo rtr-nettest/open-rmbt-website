@@ -1,4 +1,5 @@
 {
+  "- via proxy": "- via proxy",
   "Source": "Source",
   "km/h": "km/h",
   "1 month": "1 month",
@@ -90,6 +91,8 @@
   "client_uuid": "Client UUID",
   "Client-UUID": "Client UUID",
   "Close": "Close",
+  "Measurement not possible": "Measurement not possible",
+  "A measurement via a proxy (e.g. Apple iCloud Relay) leads to incorrect results and thus is not possible": "A measurement via a proxy (e.g. Apple iCloud Relay) leads to incorrect results and thus is not possible. Please deactivate the proxy.",
   "cloud": "Cloud",
   "Code is required": "Code is required",
   "code": "Code",

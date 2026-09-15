@@ -14,6 +14,8 @@ import { TestStore } from "../../test/store/test.store"
 export class IpService {
   ipV4 = signal<string | null>(null)
   ipV6 = signal<string | null>(null)
+  ipV4IsProxy = signal<boolean>(false)
+  ipV6IsProxy = signal<boolean>(false)
   ipV4Loading = signal<boolean>(false)
   ipV6Loading = signal<boolean>(false)
   private readonly mainStore: MainStore = inject(MainStore)
@@ -35,6 +37,7 @@ export class IpService {
 
   private setIPv4 = (r: IpResponse | null) => {
     this.ipV4.set(r ? r.ip : NOT_AVAILABLE)
+    this.ipV4IsProxy.set(r?.is_proxy === true)
     this.ipV4Loading.set(false)
     if (!r) {
       this.optionsStore.disableIpVersion("ipv4")
@@ -43,6 +46,7 @@ export class IpService {
 
   private setIPv6 = (r: IpResponse | null) => {
     this.ipV6.set(r ? r.ip : NOT_AVAILABLE)
+    this.ipV6IsProxy.set(r?.is_proxy === true)
     this.ipV6Loading.set(false)
     if (!r) {
       this.optionsStore.disableIpVersion("ipv6")

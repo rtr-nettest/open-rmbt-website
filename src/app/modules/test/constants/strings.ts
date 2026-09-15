@@ -17,6 +17,11 @@ export const ERROR_SOCKET_INIT_FAILED =
 export const ERROR_REGISTRATION_FAILED =
   "The registration of the measurement failed."
 export const ERROR_NOT_SUPPORTED = "Websockets are not supported."
+// Shown (and the measurement is blocked) when the client reaches us through a
+// proxy (is_proxy on the IPv4 or IPv6 check), which falsifies the results.
+export const PROXY_BLOCK_TITLE = "Measurement not possible"
+export const PROXY_BLOCK_TEXT =
+  "A measurement via a proxy (e.g. Apple iCloud Relay) leads to incorrect results and thus is not possible"
 // Keys are the exact `RMBTError` values emitted by rmbtws
 // (see rmbtws/src/WebsockettestDatastructures.js). Unlisted values → ERROR_OCCURED.
 export const RMBT_STATUS_MESSAGES: Record<string, string> = {
