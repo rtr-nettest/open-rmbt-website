@@ -25,6 +25,9 @@ export const unloadOnlyFor: (
     const connectivity = inject(ConnectivityService)
     if (
       !nextState.url ||
+      // Don't show dialog when no measurement is running (e.g. it was blocked
+      // before it could start, such as when the client is behind a proxy)
+      !testStore.isRunning() ||
       // Don't show dialog when it is allowed for the next state
       allowedPaths.some((path) => nextState.url.includes(path)) ||
       // Don't show dialog when there's an error

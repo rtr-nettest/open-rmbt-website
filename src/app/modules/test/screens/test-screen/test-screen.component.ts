@@ -187,6 +187,10 @@ export class TestScreenComponent extends SeoComponent implements OnInit {
   }
 
   private showProxyBlockedDialog() {
+    // The test was never registered, so it isn't running: this lets the
+    // deactivation guard skip its "leave / abort measurement" prompt when the
+    // dialog navigates back to the start page.
+    this.store.isRunning.set(false)
     this.message.closeAllDialogs()
     this.message.openConfirmDialog(
       PROXY_BLOCK_TEXT,
