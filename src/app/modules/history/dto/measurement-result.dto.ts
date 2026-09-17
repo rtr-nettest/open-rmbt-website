@@ -57,9 +57,9 @@ export class MeasurementResult implements IMeasurementResult {
   ) {
     this.client_language = registrationRequest.language
     this.client_name = registrationRequest.client
-    this.client_version = registrationRequest.app_version
-    // client_software_version is the version of the RMBT server (from server greeting)
-    this.client_software_version = threadResults[0]?.client_version ?? ""
+    // client_version carries the RMBT server version (from the server greeting)
+    this.client_version = threadResults[0]?.client_version ?? ""
+    this.client_software_version = registrationRequest.app_version
     this.client_uuid = registrationRequest.uuid ?? ""
     this.model = registrationRequest.model ?? ""
     this.num_threads_ul = threadResults.reduce(
