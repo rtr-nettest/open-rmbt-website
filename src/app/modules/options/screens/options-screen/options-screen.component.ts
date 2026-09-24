@@ -87,7 +87,11 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
   secretString = ""
   secret = "showall"
   showServerSelection = signal<boolean>(
-    environment.features.show_server_selection || this.isShowAllHash(),
+    environment.features.show_server_selection ||
+      this.isShowAllHash() ||
+      // Keep the selection visible once a non-default server has been chosen,
+      // so the choice stays reversible without re-adding "#showAll" to the URL.
+      this.store.preferredServer() !== "default",
   )
   showServerSelection$ = toObservable(this.showServerSelection)
   text$ = this.i18nStore.getLocalizedHtml("options")
