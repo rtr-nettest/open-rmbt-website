@@ -25,6 +25,9 @@ import {
 } from "../../store/options-store.service"
 import { MatButtonModule } from "@angular/material/button"
 import { MatRadioModule } from "@angular/material/radio"
+import { MatSlideToggleModule } from "@angular/material/slide-toggle"
+import { MatFormFieldModule } from "@angular/material/form-field"
+import { MatInputModule } from "@angular/material/input"
 import { UUID } from "../../../test/constants/strings"
 import { IpService } from "../../../shared/services/ip.service"
 import { AsyncPipe } from "@angular/common"
@@ -48,6 +51,9 @@ import { MainContentComponent } from "../../../shared/components/main-content/ma
     ReactiveFormsModule,
     MatRadioModule,
     MatButtonModule,
+    MatSlideToggleModule,
+    MatFormFieldModule,
+    MatInputModule,
     MainContentComponent,
   ],
   templateUrl: "./options-screen.component.html",
@@ -118,9 +124,43 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
       this.store.ipVersion.set(this.form.value.ipVersion)
       if (this.showServerSelection()) {
         this.store.preferredServer.set(this.form.value.preferredServer)
+        this.saveMapServerOverride()
       }
       this.message.openSnackbar("The configuration has been saved.")
     }
+  }
+
+  // Persist the map-server override. If enabled but the host is empty or not a
+  // plausible hostname (spaces, comma, or missing dot), clear it and turn the
+  // toggle off, syncing both the form and the store.
+  private saveMapServerOverride(): void {
+    if (!this.form) {
+      return
+    }
+    let override = this.form.value.overrideMapServer === true
+    const host = (this.form.value.mapServerHost || "").trim()
+    if (override && !this.isValidMapServerHost(host)) {
+      override = false
+      this.form.get("overrideMapServer")?.setValue(false)
+      this.form.get("mapServerHost")?.setValue("")
+      this.store.overrideMapServer.set(false)
+      this.store.mapServerHost.set("")
+      return
+    }
+    this.form.get("mapServerHost")?.setValue(host)
+    this.store.overrideMapServer.set(override)
+    this.store.mapServerHost.set(host)
+  }
+
+  private isValidMapServerHost(host: string): boolean {
+    if (!host) {
+      return false
+    }
+    // Reject obvious non-hostnames: whitespace, comma, or no dot at all.
+    if (/\s/.test(host) || host.includes(",") || !host.includes(".")) {
+      return false
+    }
+    return true
   }
 
   private isShowAllHash(): boolean {
@@ -158,6 +198,14 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
           this.form?.addControl(
             "preferredServer",
             new FormControl(this.store.preferredServer() || "default"),
+          )
+          this.form?.addControl(
+            "overrideMapServer",
+            new FormControl(this.store.overrideMapServer()),
+          )
+          this.form?.addControl(
+            "mapServerHost",
+            new FormControl(this.store.mapServerHost()),
           )
         }
       })

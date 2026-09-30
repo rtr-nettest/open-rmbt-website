@@ -49,6 +49,29 @@
             }
           </mat-radio-group>
         }
+        @if (form.get("overrideMapServer")) {
+          <h3>{{ "Map server" | translate }}</h3>
+          <div>
+            <mat-slide-toggle
+              class="app-option"
+              formControlName="overrideMapServer"
+              >{{ "Override map server" | translate }}</mat-slide-toggle
+            >
+          </div>
+          @if (form.get("overrideMapServer")?.value) {
+            <mat-form-field appearance="outline" style="margin-top: 1rem">
+              <mat-label>{{ "Map server hostname" | translate }}</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="mapServerHost"
+                name="mapServerHost"
+                autocomplete="off"
+                placeholder="m-cloud.netztest.at"
+              />
+            </mat-form-field>
+          }
+        }
         <p style="margin-top: 2rem">
           <button
             mat-flat-button
