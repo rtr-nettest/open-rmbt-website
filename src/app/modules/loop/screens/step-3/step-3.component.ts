@@ -118,11 +118,13 @@ export class Step3Component extends TestScreenComponent {
     )
     this.service.triggerNextTest({
       beforeStart: () => {
+        this.loopService.notifyTestStarted()
         clearInterval(this.waitingTimer)
         this.loopStore.lastTestFinishedAt.set(0)
         this.lastState = undefined
       },
       afterFinish: () => {
+        this.loopService.notifyTestFinished()
         clearInterval(this.waitingTimer)
         this.loopStore.lastTestFinishedAt.set(Date.now())
         this.waitingTimer = setInterval(() => {

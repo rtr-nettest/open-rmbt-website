@@ -80,6 +80,19 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
     },
   ]
   disabledIpVersions = computed(() => this.store.disabledIpVersions())
+  // Hostname of the map server from the settings response, used as the override
+  // input's placeholder so the user sees the actual default (not a hardcoded one).
+  defaultMapServerHost = computed(() => {
+    const url = this.mainStore.settings()?.settings?.[0]?.urls?.url_map_server
+    if (!url) {
+      return ""
+    }
+    try {
+      return new URL(url).hostname
+    } catch {
+      return ""
+    }
+  })
   form?: FormGroup
   uuid = computed(() => {
     const uuid = localStorage.getItem(UUID)

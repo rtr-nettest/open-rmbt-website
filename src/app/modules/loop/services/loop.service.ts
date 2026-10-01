@@ -46,6 +46,18 @@ export class LoopService {
     this.isLoopPaused = false
   }
 
+  // The main thread reports when each test actually starts/finishes so the
+  // timer worker can schedule the next test relative to the real finish time
+  // (finish + 5s / start + interval), instead of firing on a free-running
+  // interval that overlaps slow tests.
+  notifyTestStarted() {
+    this.worker?.postMessage({ type: "testStarted" })
+  }
+
+  notifyTestFinished() {
+    this.worker?.postMessage({ type: "testFinished" })
+  }
+
   pauseLoop() {
     if (this.isLoopPaused) return
     this.isLoopPaused = true
