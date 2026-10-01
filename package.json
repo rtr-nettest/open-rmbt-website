@@ -27,7 +27,9 @@
   "private": true,
   "overrides": {
     "@babel/core": "7.29.7",
-    "undici": "7.29.0",
+    "undici": "7.30.0",
+    "piscina": "5.3.2",
+    "serialize-javascript": "7.1.2",
     "@hono/node-server": "^2.0.12",
     "hono": "^4.13.7",
     "fast-uri": "^3.1.7",
