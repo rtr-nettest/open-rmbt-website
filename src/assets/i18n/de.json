@@ -354,6 +354,7 @@
   "Map server hostname": "Kartenserver-Hostname",
   "Map type": "Kartentyp",
   "Map view": "Karte",
+  "Override loop mode limits": "Wiederholungsmodus-Grenzen überschreiben",
   "Override map server": "Kartenserver überschreiben",
   "Map with test results": "Karte mit Testergebnissen",
   "map_key": "Legende",

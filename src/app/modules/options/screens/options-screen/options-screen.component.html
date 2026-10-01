@@ -72,6 +72,16 @@
             </mat-form-field>
           }
         }
+        @if (form.get("overrideLoopLimits")) {
+          <h3>{{ "Loop mode" | translate }}</h3>
+          <div>
+            <mat-slide-toggle
+              class="app-option"
+              formControlName="overrideLoopLimits"
+              >{{ "Override loop mode limits" | translate }}</mat-slide-toggle
+            >
+          </div>
+        }
         <p style="margin-top: 2rem">
           <button
             mat-flat-button

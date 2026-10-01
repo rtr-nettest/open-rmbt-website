@@ -138,6 +138,9 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
       if (this.showServerSelection()) {
         this.store.preferredServer.set(this.form.value.preferredServer)
         this.saveMapServerOverride()
+        this.store.overrideLoopLimits.set(
+          this.form.value.overrideLoopLimits === true,
+        )
       }
       this.message.openSnackbar("The configuration has been saved.")
     }
@@ -219,6 +222,10 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
           this.form?.addControl(
             "mapServerHost",
             new FormControl(this.store.mapServerHost()),
+          )
+          this.form?.addControl(
+            "overrideLoopLimits",
+            new FormControl(this.store.overrideLoopLimits()),
           )
         }
       })
