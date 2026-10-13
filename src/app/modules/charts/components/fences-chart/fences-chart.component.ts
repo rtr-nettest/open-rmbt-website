@@ -27,6 +27,9 @@ import { TestSignalChartOptions } from "../signal-chart/settings/signal-chart-op
 })
 export class FencesChartComponent implements AfterViewInit {
   id = "fences_chart"
+  // Never draw more than this many fence lines; with more fences we draw only
+  // every Nth one (see getPlugins) to keep the chart legible.
+  private readonly MAX_FENCE_LINES = 50
   fences = input<IFenceItem[]>([])
   // "Technologies" flavor (iOS measurements, or Android with the
   // "Technology only" toggle on): show the technology intervals but no
@@ -103,17 +106,33 @@ export class FencesChartComponent implements AfterViewInit {
     const plugins: any[] = []
     let currentTechnologyId: number | undefined
 
+    // Cap the number of dashed fence lines: when there are more than
+    // MAX_FENCE_LINES fences, compute an integer scaling factor so only every
+    // Nth fence line is drawn (e.g. 75 fences -> factor 2 -> every 2nd line).
+    // Technology-interval labels below are unaffected.
+    const drawableFences = this.fences().filter(
+      (fence) => fence.offset_ms !== undefined,
+    )
+    const scaleFactor = Math.max(
+      1,
+      Math.ceil(drawableFences.length / this.MAX_FENCE_LINES),
+    )
+
+    let drawableIndex = 0
     for (const fence of this.fences()) {
       if (fence.offset_ms === undefined) {
         continue
       }
-      plugins.push(
-        new FenceLinePlugin({
-          id: `fence-${fence.fence_id}`,
-          x: fence.offset_ms,
-          color: getMobileNetworkColor(fence.technology_id),
-        }),
-      )
+      if (drawableIndex % scaleFactor === 0) {
+        plugins.push(
+          new FenceLinePlugin({
+            id: `fence-${fence.fence_id}`,
+            x: fence.offset_ms,
+            color: getMobileNetworkColor(fence.technology_id),
+          }),
+        )
+      }
+      drawableIndex++
       if (fence.technology_id !== currentTechnologyId) {
         currentTechnologyId = fence.technology_id
         plugins.push(
