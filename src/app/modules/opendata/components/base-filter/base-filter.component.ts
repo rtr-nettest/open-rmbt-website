@@ -1,4 +1,4 @@
-ar import { Component, Input, OnDestroy, ChangeDetectionStrategy } from "@angular/core"
+import { Component, Input, OnDestroy, ChangeDetectionStrategy } from "@angular/core"
 import { FormControl, FormGroup } from "@angular/forms"
 import { FiltersForm } from "../../interfaces/filters-form"
 import { Subject } from "rxjs"
