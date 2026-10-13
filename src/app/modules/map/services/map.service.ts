@@ -31,7 +31,7 @@ import { NetworkMeasurementType } from "../constants/network-measurement-type"
 import { IMarkerRequest } from "../interfaces/marker-request.interface"
 import { IMarkerResponse } from "../interfaces/marker-response.interface"
 import { IRecentMeasurement } from "../../opendata/interfaces/recent-measurements-response.interface"
-import { formatTime } from "../../shared/adapters/app-date.adapter"
+import { formatEpochMs } from "../../shared/adapters/app-date.adapter"
 import { Coordinate } from "ol/coordinate"
 import { lineString } from "@turf/helpers"
 import bbox from "@turf/bbox"
@@ -565,11 +565,13 @@ export class MapService {
       )
       .pipe(
         map((res) =>
-          res.measurements.map((m) =>
-            formatTime({
+          res.measurements.map((m) => ({
               open_uuid: "",
               open_test_uuid: m.open_test_uuid,
-              time: new Date(m.time).toString(),
+              // `m.time` is a Unix epoch (ms, UTC); format it in the viewer's
+              // local time zone instead of the deprecated preformatted
+              // `m.time_string` (which uses the measuring device's time zone).
+              time: formatEpochMs(m.time),
               lat: m.lat,
               long: m.lon,
               download_classification:
