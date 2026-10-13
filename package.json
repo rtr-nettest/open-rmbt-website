@@ -25,6 +25,9 @@
     "prebuild": "node scripts/set-package-info.js"
   },
   "private": true,
+  "engines": {
+    "node": "^24.15.0"
+  },
   "overrides": {
     "@babel/core": "7.29.7",
     "undici": "7.30.0",
@@ -85,7 +88,7 @@
     "@types/google.maps": "^3.58.1",
     "@types/jasmine": "~5.1.0",
     "@types/js-cookie": "^3.0.6",
-    "@types/node": "^18.18.0",
+    "@types/node": "^24.15.0",
     "baseline-browser-mapping": "^2.9.19",
     "concurrently": "^9.2.1",
     "http-proxy-middleware": "^3.0.5",
