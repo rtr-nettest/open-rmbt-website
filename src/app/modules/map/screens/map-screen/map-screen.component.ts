@@ -1,4 +1,4 @@
-import { Component, inject, NgZone, signal } from "@angular/core"
+import { Component, inject, NgZone, signal, ChangeDetectionStrategy } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import {
   DEFAULT_CENTER,
@@ -62,6 +62,7 @@ export const POINTS_HEATMAP_SWITCH_LEVEL = 12
     MainContentComponent,
   ],
   templateUrl: "./map-screen.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./map-screen.component.scss",
 })
 export class MapScreenComponent extends SeoComponent {

@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input } from "@angular/core"
+import { Component, computed, effect, inject, input, ChangeDetectionStrategy } from "@angular/core"
 import { Subject, Subscription, takeUntil } from "rxjs"
 import { IFenceItem } from "../../interfaces/open-test-response"
 import { Map, Marker, NavigationControl } from "maplibre-gl"
@@ -19,6 +19,7 @@ const POINTS_LAYER_ID = "route-points"
   selector: "app-fences-map",
   imports: [],
   templateUrl: "./fences-map.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./fences-map.component.scss",
 })
 export class FencesMapComponent {

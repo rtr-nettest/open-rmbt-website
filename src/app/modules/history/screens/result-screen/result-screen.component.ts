@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from "@angular/core"
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
@@ -93,6 +93,7 @@ import { FencesChartComponent } from "../../../charts/components/fences-chart/fe
     FencesDetailsComponent,
   ],
   templateUrl: "./result-screen.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./result-screen.component.scss",
 })
 export class ResultScreenComponent extends SeoComponent {

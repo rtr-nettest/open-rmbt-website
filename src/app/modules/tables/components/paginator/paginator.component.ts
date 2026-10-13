@@ -4,6 +4,7 @@ import {
   Input,
   Output,
   ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   MatPaginator,
@@ -15,6 +16,7 @@ import {
     selector: 'app-paginator',
     templateUrl: './paginator.component.html',
     styleUrls: ['./paginator.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatPaginatorModule]
 })
 export class PaginatorComponent {

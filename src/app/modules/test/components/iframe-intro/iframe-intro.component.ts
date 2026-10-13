@@ -1,4 +1,4 @@
-import { Component, inject, output } from "@angular/core"
+import { Component, inject, output, ChangeDetectionStrategy } from "@angular/core"
 import {
   FormBuilder,
   FormControl,
@@ -26,6 +26,7 @@ import Cookies from "js-cookie"
     TranslatePipe,
   ],
   templateUrl: "./iframe-intro.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./iframe-intro.component.scss",
 })
 export class IframeIntroComponent {

@@ -19,14 +19,14 @@
               *matHeaderCellDef
               mat-sort-header
               [style]="justify(column)"
-              [ngClass]="column.getNgClass?.('', column)"
+              [ngClass]="$safeNavigationMigration(column.getNgClass?.('', column))"
               ><span>{{ column.header | translate }}</span></mat-header-cell
             >
           } @else {
             <mat-header-cell
               *matHeaderCellDef
               [style]="justify(column)"
-              [ngClass]="column.getNgClass?.('', column)"
+              [ngClass]="$safeNavigationMigration(column.getNgClass?.('', column))"
             >
               <div class="sah-table__cell--ellipsis">
                 {{ column.header | translate }}
@@ -39,7 +39,7 @@
             <mat-cell
               *matCellDef="let element; let i = dataIndex"
               [style]="justify(column)"
-              [ngClass]="column.getNgClass?.(element, column)"
+              [ngClass]="$safeNavigationMigration(column.getNgClass?.(element, column))"
             >
               <span class="app-table__mobile-label">{{
                 column.getMobileHeader?.(element, column) || column.header
@@ -62,7 +62,7 @@
           } @else if (column.isHtml) {
             <mat-cell
               *matCellDef="let element; let i = dataIndex"
-              [ngClass]="column.getNgClass?.(element, column)"
+              [ngClass]="$safeNavigationMigration(column.getNgClass?.(element, column))"
             >
               <span class="app-table__mobile-label">{{
                 column.getMobileHeader?.(element, column) || column.header
@@ -77,7 +77,7 @@
           } @else if (column.getIconClass) {
             <mat-cell
               *matCellDef="let element; let i = dataIndex"
-              [ngClass]="column.getNgClass?.(element, column)"
+              [ngClass]="$safeNavigationMigration(column.getNgClass?.(element, column))"
             >
               <span class="app-table__mobile-label">{{
                 column.getMobileHeader?.(element, column) || column.header
@@ -113,7 +113,7 @@
             <mat-cell
               *matCellDef="let element; let i = dataIndex"
               [style]="justify(column)"
-              [ngClass]="column.getNgClass?.(element, column)"
+              [ngClass]="$safeNavigationMigration(column.getNgClass?.(element, column))"
               [attr.data-value]="getDefaultValue(column, element, i)"
             >
               <span class="app-table__mobile-label">
@@ -124,7 +124,7 @@
               </span>
               @if (!shouldShowText(column, element)) {
                 <a
-                  [href]="column.getLink?.(element, column)"
+                  [href]="$safeNavigationMigration(column.getLink?.(element, column))"
                   [matTooltip]="column.getTooltip?.(element, column) ?? ''"
                   [class.app-table__cell--sortable]="column.isSortable"
                   class="app-link"
@@ -227,7 +227,7 @@
           <mat-footer-cell
             *matFooterCellDef
             [style]="justify(column)"
-            [ngClass]="column.getNgClass?.('', column)"
+            [ngClass]="$safeNavigationMigration(column.getNgClass?.('', column))"
           >
             @if (column.footer) {
               <span class="app-table__mobile-label">{{

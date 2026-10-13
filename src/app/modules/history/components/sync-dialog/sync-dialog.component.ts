@@ -1,4 +1,4 @@
-import { Component, Inject, model, signal } from "@angular/core"
+import { Component, Inject, model, signal, ChangeDetectionStrategy } from "@angular/core"
 import { MatButtonModule } from "@angular/material/button"
 import {
   MAT_DIALOG_DATA,
@@ -34,6 +34,7 @@ import { MainStore } from "../../../shared/store/main.store"
     TranslatePipe
 ],
   templateUrl: "./sync-dialog.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./sync-dialog.component.scss",
 })
 export class SyncDialogComponent {

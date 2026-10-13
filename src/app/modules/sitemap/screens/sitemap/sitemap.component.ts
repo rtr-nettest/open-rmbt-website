@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core"
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { SitemapService } from "../../services/sitemap.service"
 import { MainContentComponent } from "../../../shared/components/main-content/main-content.component"
@@ -24,6 +24,7 @@ import { RouterModule } from "@angular/router"
     NgTemplateOutlet,
   ],
   templateUrl: "./sitemap.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./sitemap.component.scss",
 })
 export class SitemapComponent extends SeoComponent {

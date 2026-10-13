@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core"
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input"
@@ -15,6 +15,7 @@ import { BaseFilterComponent } from "../base-filter/base-filter.component"
     TranslatePipe,
   ],
   templateUrl: "./ranges-filter.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./ranges-filter.component.scss",
 })
 export class RangesFilterComponent extends BaseFilterComponent {

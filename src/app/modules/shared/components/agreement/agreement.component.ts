@@ -1,4 +1,4 @@
-import { Component, input, OnInit, output } from "@angular/core"
+import { Component, input, OnInit, output, ChangeDetectionStrategy } from "@angular/core"
 import { MatButtonModule } from "@angular/material/button"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { ScrollBottomComponent } from "../scroll-bottom/scroll-bottom.component"
@@ -9,6 +9,7 @@ import { RMBTTermsV6 } from "../../../test/constants/strings"
   selector: "app-agreement",
   imports: [MatButtonModule, TranslatePipe, ScrollBottomComponent],
   templateUrl: "./agreement.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./agreement.component.scss",
 })
 export class AgreementComponent implements OnInit {

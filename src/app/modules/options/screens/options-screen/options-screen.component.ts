@@ -5,6 +5,7 @@ import {
   inject,
   OnInit,
   signal,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
@@ -57,6 +58,7 @@ import { MainContentComponent } from "../../../shared/components/main-content/ma
     MainContentComponent,
   ],
   templateUrl: "./options-screen.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./options-screen.component.scss",
 })
 export class OptionsScreenComponent extends SeoComponent implements OnInit {

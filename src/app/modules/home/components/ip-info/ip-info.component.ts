@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, signal } from "@angular/core"
+import { Component, inject, OnDestroy, signal, ChangeDetectionStrategy } from "@angular/core"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 import { IpService } from "../../../shared/services/ip.service"
@@ -7,6 +7,7 @@ import { IpService } from "../../../shared/services/ip.service"
   selector: "app-ip-info",
   imports: [MatProgressSpinnerModule, TranslatePipe],
   templateUrl: "./ip-info.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./ip-info.component.scss",
 })
 export class IpInfoComponent implements OnDestroy {

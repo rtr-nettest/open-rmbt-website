@@ -1,4 +1,4 @@
-import { Component } from "@angular/core"
+import { Component, ChangeDetectionStrategy } from "@angular/core"
 import { ERoutes } from "../../../shared/constants/routes.enum"
 import { imports } from "../../../test/screens/test-screen/test-screen.component"
 import { Step3Component as LoopScreenComponent } from "../../../loop/screens/step-3/step-3.component"
@@ -12,6 +12,7 @@ import { ECertifiedSteps } from "../../constants/certified-steps.enum"
   standalone: true,
   imports,
   templateUrl: "../../../test/screens/test-screen/test-screen.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "../../../test/screens/test-screen/test-screen.component.scss",
 })
 export class Step4Component extends LoopScreenComponent {

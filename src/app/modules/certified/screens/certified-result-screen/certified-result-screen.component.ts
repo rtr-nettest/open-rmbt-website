@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject } from "@angular/core"
+import { AfterViewInit, Component, inject, ChangeDetectionStrategy } from "@angular/core"
 import {
   ActionButtonsPosition,
   historyImports,
@@ -16,6 +16,7 @@ import { ECertifiedSteps } from "../../constants/certified-steps.enum"
   imports: historyImports,
   templateUrl:
     "../../../history/screens/history-screen/history-screen.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: [
     "../../../history/screens/history-screen/history-screen.component.scss",
   ],

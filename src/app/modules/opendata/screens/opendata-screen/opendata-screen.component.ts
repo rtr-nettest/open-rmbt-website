@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from "@angular/core"
+import { Component, computed, inject, OnInit, signal, ChangeDetectionStrategy } from "@angular/core"
 import {
   DEFAULT_FILTERS,
   OPEN_DATA_LIMIT,
@@ -59,6 +59,7 @@ export const AUTOREFRESH_INTERVAL = 15_000
     MainContentComponent,
   ],
   templateUrl: "./opendata-screen.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./opendata-screen.component.scss",
 })
 export class OpendataScreenComponent

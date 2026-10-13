@@ -5,6 +5,7 @@ import {
   inject,
   model,
   signal,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { TERMS_VERSION, UUID } from "../../../test/constants/strings"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
@@ -67,6 +68,7 @@ export type ActionButtonsPosition = "header" | "html-wrapper"
   selector: "app-history-screen",
   imports: [...historyImports],
   templateUrl: "./history-screen.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./history-screen.component.scss",
 })
 export class HistoryScreenComponent extends LoadOnScrollComponent {

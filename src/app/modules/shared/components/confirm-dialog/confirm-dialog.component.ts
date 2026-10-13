@@ -1,5 +1,5 @@
 
-import { Component, Inject } from "@angular/core"
+import { Component, Inject, ChangeDetectionStrategy } from "@angular/core"
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { MatButtonModule } from "@angular/material/button"
@@ -17,6 +17,7 @@ export type ConfirmDialogOpts = {
   selector: "app-confirm-dialog",
   templateUrl: "./confirm-dialog.component.html",
   styleUrls: ["./confirm-dialog.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatButtonModule, TranslatePipe],
 })
 export class ConfirmDialogComponent {

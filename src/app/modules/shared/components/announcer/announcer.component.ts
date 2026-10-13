@@ -1,4 +1,4 @@
-import { Component, inject, input } from "@angular/core"
+import { Component, inject, input, ChangeDetectionStrategy } from "@angular/core"
 import { MainStore } from "../../store/main.store"
 import { toObservable } from "@angular/core/rxjs-interop"
 import { AsyncPipe } from "@angular/common"
@@ -12,6 +12,7 @@ export type AnnouncerMessage = {
 @Component({
   selector: "app-announcer",
   imports: [AsyncPipe, TranslatePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./announcer.component.html",
 })
 export class AnnouncerComponent {

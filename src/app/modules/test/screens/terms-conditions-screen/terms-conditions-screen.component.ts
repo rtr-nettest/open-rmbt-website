@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from "@angular/core"
+import { Component, inject, OnInit, ChangeDetectionStrategy } from "@angular/core"
 import { Router } from "@angular/router"
 import { Observable } from "rxjs"
 import { AsyncPipe } from "@angular/common"
@@ -17,6 +17,7 @@ import { SkipLinkComponent } from "../../../shared/components/skip-link/skip-lin
   selector: "app-terms-conditions-screen",
   templateUrl: "./terms-conditions-screen.component.html",
   styleUrls: ["./terms-conditions-screen.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     AgreementComponent,
     AsyncPipe,

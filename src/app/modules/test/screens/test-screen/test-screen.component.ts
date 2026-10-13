@@ -6,6 +6,7 @@ import {
   NgZone,
   OnInit,
   signal,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { Router } from "@angular/router"
@@ -89,6 +90,7 @@ export const imports = [
   standalone: true,
   imports,
   templateUrl: "./test-screen.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./test-screen.component.scss",
 })
 export class TestScreenComponent extends SeoComponent implements OnInit {

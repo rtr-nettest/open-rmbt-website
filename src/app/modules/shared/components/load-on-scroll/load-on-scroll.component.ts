@@ -1,9 +1,10 @@
-import { Component, HostListener, signal } from "@angular/core"
+import { Component, HostListener, signal, ChangeDetectionStrategy } from "@angular/core"
 import { SeoComponent } from "../seo/seo.component"
 
 @Component({
   selector: "app-load-on-scroll",
   imports: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: "",
 })
 export class LoadOnScrollComponent extends SeoComponent {

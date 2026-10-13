@@ -4,6 +4,7 @@ import {
   HostListener,
   inject,
   signal,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
@@ -28,6 +29,7 @@ import { MessageService } from "../../../shared/services/message.service"
     MatDialogModule,
   ],
   templateUrl: "./live-screen.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./live-screen.component.scss",
 })
 export class LiveScreenComponent extends SeoComponent implements AfterViewInit {

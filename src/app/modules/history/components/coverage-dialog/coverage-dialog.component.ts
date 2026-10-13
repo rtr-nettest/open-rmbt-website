@@ -4,6 +4,7 @@ import {
   Inject,
   NgZone,
   OnDestroy,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { map, Observable, Subject, Subscription, takeUntil } from "rxjs"
@@ -45,6 +46,7 @@ import { CloseDialogHeaderComponent } from "../../../shared/components/close-dia
     TranslatePipe,
   ],
   templateUrl: "./coverage-dialog.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./coverage-dialog.component.scss",
 })
 export class CoverageDialogComponent implements AfterViewInit, OnDestroy {
