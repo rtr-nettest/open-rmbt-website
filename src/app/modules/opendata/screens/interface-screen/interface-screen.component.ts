@@ -1,4 +1,4 @@
-import { Component, computed, inject, model } from "@angular/core"
+import { Component, computed, inject, model, ChangeDetectionStrategy } from "@angular/core"
 import { HtmlWrapperComponent } from "../../../shared/components/html-wrapper/html-wrapper.component"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { AsyncPipe } from "@angular/common"
@@ -31,6 +31,7 @@ import { MainContentComponent } from "../../../shared/components/main-content/ma
     MainContentComponent,
   ],
   templateUrl: "./interface-screen.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./interface-screen.component.scss",
 })
 export class InterfaceScreenComponent extends SeoComponent {

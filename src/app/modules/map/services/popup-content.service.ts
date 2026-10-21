@@ -48,7 +48,7 @@ export const POPUP_IDS_MAP: Record<string, string> = {
   popupSignalRow: "{{signal}}",
   popupOffsetRow: "{{offset}}",
   popupDurationRow: "{{duration}}",
-  popupRadiusRow: "{{radius}}",
+  popupSpeedRow: "{{speed}}",
   popupConnectionRow: "{{connection}}",
   popupOperatorRow: "{{operator}}",
   popupFencesCountRow: "{{fencesCount}}",

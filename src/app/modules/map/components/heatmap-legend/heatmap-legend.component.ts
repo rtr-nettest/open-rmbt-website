@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from "@angular/core"
+import { Component, computed, inject, input, ChangeDetectionStrategy } from "@angular/core"
 import { IMapInfo } from "../../interfaces/map-info.interface"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { NetworkMeasurementType } from "../../constants/network-measurement-type"
@@ -10,6 +10,7 @@ import { I18nStore } from "../../../i18n/store/i18n.store"
     selector: "app-heatmap-legend",
     imports: [TranslatePipe],
     templateUrl: "./heatmap-legend.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: "./heatmap-legend.component.scss"
 })
 export class HeatmapLegendComponent {

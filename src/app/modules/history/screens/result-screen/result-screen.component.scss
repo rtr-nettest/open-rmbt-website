@@ -45,6 +45,11 @@ h2 {
   margin-bottom: rem(48);
 }
 
+.app-technology-only-toggle {
+  margin-left: rem(16);
+  white-space: nowrap;
+}
+
 @media print {
   .app-separator {
     height: rem(48);

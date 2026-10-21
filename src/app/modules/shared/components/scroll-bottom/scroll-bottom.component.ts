@@ -1,5 +1,5 @@
 
-import { Component, Input } from "@angular/core"
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core"
 import { MatButtonModule } from "@angular/material/button"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
@@ -7,6 +7,7 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
     selector: "app-scroll-bottom",
     templateUrl: "./scroll-bottom.component.html",
     styleUrls: ["./scroll-bottom.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatButtonModule, TranslatePipe]
 })
 export class ScrollBottomComponent {

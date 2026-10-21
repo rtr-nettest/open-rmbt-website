@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from "@angular/core"
+import { Component, computed, inject, OnInit, signal, ChangeDetectionStrategy } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import { StatisticsService } from "../../services/statistics.service"
 import { AsyncPipe } from "@angular/common"
@@ -50,6 +50,7 @@ import { MainContentComponent } from "../../../shared/components/main-content/ma
     MainContentComponent,
   ],
   templateUrl: "./statistics-screen.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./statistics-screen.component.scss",
 })
 export class StatisticsScreenComponent extends SeoComponent implements OnInit {

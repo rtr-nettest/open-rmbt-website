@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core"
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core"
 import { ReactiveFormsModule } from "@angular/forms"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
@@ -17,6 +17,7 @@ import { MatSelectModule } from "@angular/material/select"
     TranslatePipe
 ],
   templateUrl: "./selects-filter.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./selects-filter.component.scss",
 })
 export class SelectsFilterComponent extends BaseFilterComponent {

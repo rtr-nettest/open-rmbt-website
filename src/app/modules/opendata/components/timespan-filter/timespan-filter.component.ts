@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core"
+import { Component, Input, OnInit, ChangeDetectionStrategy } from "@angular/core"
 import { BaseFilterComponent } from "../base-filter/base-filter.component"
 
 import { ReactiveFormsModule } from "@angular/forms"
@@ -21,6 +21,7 @@ import dayjs from "dayjs"
     TranslatePipe,
   ],
   templateUrl: "./timespan-filter.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./timespan-filter.component.scss",
 })
 export class TimespanFilterComponent

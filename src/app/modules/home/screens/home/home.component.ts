@@ -5,6 +5,7 @@ import {
   HostListener,
   inject,
   signal,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
@@ -53,6 +54,7 @@ import { environment } from "../../../../../environments/environment"
     TranslatePipe,
   ],
   templateUrl: "./home.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./home.component.scss",
 })
 export class HomeComponent extends SeoComponent implements AfterViewInit {

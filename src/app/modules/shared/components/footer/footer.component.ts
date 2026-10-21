@@ -1,4 +1,4 @@
-import { Component } from "@angular/core"
+import { Component, ChangeDetectionStrategy } from "@angular/core"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { AsyncPipe, UpperCasePipe } from "@angular/common"
 import { map, Observable } from "rxjs"
@@ -20,6 +20,7 @@ import { RouterModule } from "@angular/router"
     TranslatePipe,
   ],
   templateUrl: "./footer.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./footer.component.scss",
 })
 export class FooterComponent {

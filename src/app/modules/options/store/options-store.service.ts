@@ -10,12 +10,28 @@ export class OptionsStoreService {
   ipVersion = signal<IpVersion>("default")
   disabledIpVersions = signal<IpVersion[]>([])
   preferredServer = signal<string>("default")
+  // Optional override of the map server host. When enabled with a valid host,
+  // MainStore.api() rewrites the hostname of url_map_server accordingly.
+  overrideMapServer = signal<boolean>(false)
+  mapServerHost = signal<string>("")
+  // When enabled (advanced/#showAll option), the loop-mode config form relaxes
+  // its interval/count limits: values of 0 and above are accepted, no upper cap.
+  overrideLoopLimits = signal<boolean>(false)
 
   constructor() {
     if (globalThis.localStorage) {
-      const { ipVersion, preferredServer } = this.getOptions() || {}
+      const {
+        ipVersion,
+        preferredServer,
+        overrideMapServer,
+        mapServerHost,
+        overrideLoopLimits,
+      } = this.getOptions() || {}
       this.ipVersion.set((ipVersion as IpVersion) || "default")
       this.preferredServer.set(preferredServer || "default")
+      this.overrideMapServer.set(overrideMapServer === true)
+      this.mapServerHost.set(mapServerHost || "")
+      this.overrideLoopLimits.set(overrideLoopLimits === true)
 
       effect(() => {
         this.setOptions()
@@ -43,6 +59,9 @@ export class OptionsStoreService {
       JSON.stringify({
         ipVersion: this.ipVersion(),
         preferredServer: this.preferredServer(),
+        overrideMapServer: this.overrideMapServer(),
+        mapServerHost: this.mapServerHost(),
+        overrideLoopLimits: this.overrideLoopLimits(),
       })
     )
   }

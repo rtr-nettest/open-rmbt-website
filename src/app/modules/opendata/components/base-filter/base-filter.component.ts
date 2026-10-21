@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from "@angular/core"
+import { Component, Input, OnDestroy, ChangeDetectionStrategy } from "@angular/core"
 import { FormControl, FormGroup } from "@angular/forms"
 import { FiltersForm } from "../../interfaces/filters-form"
 import { Subject } from "rxjs"
@@ -6,6 +6,7 @@ import { Subject } from "rxjs"
 @Component({
   selector: "app-base-filter",
   imports: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: "",
 })
 export class BaseFilterComponent implements OnDestroy {

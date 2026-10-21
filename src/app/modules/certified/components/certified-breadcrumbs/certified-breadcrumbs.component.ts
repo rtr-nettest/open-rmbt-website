@@ -1,4 +1,4 @@
-import { Component, input } from "@angular/core"
+import { Component, input, ChangeDetectionStrategy } from "@angular/core"
 import { RouterModule } from "@angular/router"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
@@ -8,6 +8,7 @@ import { IBreadcrumb } from "../../../shared/interfaces/breadcrumb.interface"
   selector: "app-certified-breadcrumbs",
   imports: [RouterModule, TranslatePipe],
   templateUrl: "./certified-breadcrumbs.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./certified-breadcrumbs.component.scss",
 })
 export class CertifiedBreadcrumbsComponent {

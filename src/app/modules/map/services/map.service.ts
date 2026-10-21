@@ -7,6 +7,7 @@ import {
   Map,
   MapOptions,
   Marker,
+  setWorkerUrl,
   SourceSpecification,
   StyleSpecification,
 } from "maplibre-gl"
@@ -30,7 +31,7 @@ import { NetworkMeasurementType } from "../constants/network-measurement-type"
 import { IMarkerRequest } from "../interfaces/marker-request.interface"
 import { IMarkerResponse } from "../interfaces/marker-response.interface"
 import { IRecentMeasurement } from "../../opendata/interfaces/recent-measurements-response.interface"
-import { formatTime } from "../../shared/adapters/app-date.adapter"
+import { formatEpochMs } from "../../shared/adapters/app-date.adapter"
 import { Coordinate } from "ol/coordinate"
 import { lineString } from "@turf/helpers"
 import bbox from "@turf/bbox"
@@ -61,8 +62,6 @@ const ROUTE_SOURCE_ID = "route"
 const POINTS_SOURCE_ID = "routePoints"
 const ROUTE_LAYER_ID = "route"
 const POINTS_LAYER_ID = "route-points"
-
-declare const maplibregl: any
 
 @Injectable({
   providedIn: "root",
@@ -161,14 +160,24 @@ export class MapService {
     private readonly i18nStore: I18nStore,
     private readonly mainStore: MainStore,
     private readonly zone: NgZone,
-  ) {}
+  ) {
+    // maplibre-gl v6 loads its worker from a bundler-relative URL
+    // (`new URL("maplibre-gl-worker.mjs", import.meta.url)`), which esbuild
+    // does not rewrite: it 404s under the dev server (vite deps path) and
+    // depends on output layout in production. Pin it to the copy we emit at
+    // the site root (see angular.json assets) so it loads consistently.
+    // Without the worker, GeoJSON sources never finish loading and the map's
+    // "load" event never fires (e.g. the fence points would never appear).
+    if (typeof document !== "undefined") {
+      setWorkerUrl("/maplibre-gl-worker.mjs")
+    }
+  }
 
   createMap(options: MapOptions) {
     return this.i18nStore.getTranslations().pipe(
       map((translations) => {
         options.locale = translations
-        // Using the UMD version of maplibre-gl as the NPM version can not draw the lines on the map
-        return new maplibregl.Map(options) as Map
+        return new Map(options)
       }),
     )
   }
@@ -556,11 +565,13 @@ export class MapService {
       )
       .pipe(
         map((res) =>
-          res.measurements.map((m) =>
-            formatTime({
+          res.measurements.map((m) => ({
               open_uuid: "",
               open_test_uuid: m.open_test_uuid,
-              time: new Date(m.time).toString(),
+              // `m.time` is a Unix epoch (ms, UTC); format it in the viewer's
+              // local time zone instead of the deprecated preformatted
+              // `m.time_string` (which uses the measuring device's time zone).
+              time: formatEpochMs(m.time),
               lat: m.lat,
               long: m.lon,
               download_classification:

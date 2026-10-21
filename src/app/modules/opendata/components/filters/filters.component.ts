@@ -5,6 +5,7 @@ import {
   inject,
   OnDestroy,
   signal,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import {
   FormBuilder,
@@ -120,6 +121,7 @@ const ALL_FIELDS = [
     TimespanFilterComponent,
   ],
   templateUrl: "./filters.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./filters.component.scss",
 })
 export class FiltersComponent implements OnDestroy {

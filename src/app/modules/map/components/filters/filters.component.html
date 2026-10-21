@@ -175,12 +175,12 @@
         @for (option of item.options; track $index) {
           <mat-radio-button
             name="networkMeasurementType"
-            [value]="option.params?.map_options"
+            [value]="$safeNavigationMigration(option.params?.map_options)"
         [checked]="
           this.form.controls.networkMeasurementType.value ==
           option.params?.map_options
         "
-            (change)="changeNetworkMeasurementType(option.params?.map_options)"
+            (change)="changeNetworkMeasurementType($safeNavigationMigration(option.params?.map_options))"
             >{{ option.title }}</mat-radio-button
             >
           }
@@ -194,7 +194,7 @@
                 formControlName="statistical_method"
                 >
                 @for (item of statisticalOptions!.options; track $index) {
-                  <mat-radio-button [value]="item.params?.statistical_method">{{
+                  <mat-radio-button [value]="$safeNavigationMigration(item.params?.statistical_method)">{{
                     item.title
                   }}</mat-radio-button>
                 }
@@ -207,7 +207,7 @@
                 formControlName="provider"
                 >
                 @for (item of providerOptions!.options; track $index) {
-                  <mat-radio-button [value]="item.params?.provider">{{
+                  <mat-radio-button [value]="$safeNavigationMigration(item.params?.provider)">{{
                     item.title
                   }}</mat-radio-button>
                 }
@@ -220,7 +220,7 @@
                 formControlName="operator"
                 >
                 @for (item of operatorOptions!.options; track $index) {
-                  <mat-radio-button [value]="item.params?.operator">{{
+                  <mat-radio-button [value]="$safeNavigationMigration(item.params?.operator)">{{
                     item.title
                   }}</mat-radio-button>
                 }
@@ -233,7 +233,7 @@
                 formControlName="period"
                 >
                 @for (item of periodOptions!.options; track $index) {
-                  <mat-radio-button [value]="item.params?.period">{{
+                  <mat-radio-button [value]="$safeNavigationMigration(item.params?.period)">{{
                     item.title
                   }}</mat-radio-button>
                 }
@@ -246,7 +246,7 @@
                 formControlName="technology"
                 >
                 @for (item of technologyOptions?.options; track $index) {
-                  <mat-radio-button [value]="item.params?.technology">{{
+                  <mat-radio-button [value]="$safeNavigationMigration(item.params?.technology)">{{
                     item.title
                   }}</mat-radio-button>
                 }

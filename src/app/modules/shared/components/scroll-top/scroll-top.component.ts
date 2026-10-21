@@ -1,10 +1,11 @@
-import { Component, HostListener } from "@angular/core"
+import { Component, HostListener, ChangeDetectionStrategy } from "@angular/core"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 
 @Component({
     selector: "app-scroll-top",
     templateUrl: "./scroll-top.component.html",
     styleUrls: ["./scroll-top.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [TranslatePipe]
 })
 export class ScrollTopComponent {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from "@angular/core"
+import { Component, OnDestroy, ChangeDetectionStrategy } from "@angular/core"
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog"
 import { MatIconModule } from "@angular/material/icon"
 import { Subject, takeUntil } from "rxjs"
@@ -32,6 +32,7 @@ type BasemapPickerForm = {
     TranslatePipe,
   ],
   templateUrl: "./basemap-picker.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./basemap-picker.component.scss",
 })
 export class BasemapPickerComponent implements OnDestroy {

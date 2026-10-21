@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core"
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core"
 import {
   historyImports,
   HistoryScreenComponent,
@@ -14,6 +14,7 @@ import { firstValueFrom } from "rxjs"
   imports: historyImports,
   templateUrl:
     "../../../history/screens/history-screen/history-screen.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: [
     "../../../history/screens/history-screen/history-screen.component.scss",
   ],

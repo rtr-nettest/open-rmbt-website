@@ -1,4 +1,4 @@
-import { Component, computed, input, output, signal } from "@angular/core"
+import { Component, computed, input, output, signal, ChangeDetectionStrategy } from "@angular/core"
 import { TableComponent } from "../../../tables/components/table/table.component"
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { ITableColumn } from "../../../tables/interfaces/table-column.interface"
@@ -12,6 +12,7 @@ export const imports = [ExpansionPanelComponent, TableComponent]
   selector: "app-show-details",
   imports,
   templateUrl: "./show-details.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./show-details.component.scss",
 })
 export class ShowDetailsComponent<T> {

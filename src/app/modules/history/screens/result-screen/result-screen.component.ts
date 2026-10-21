@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from "@angular/core"
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
 import { FooterComponent } from "../../../shared/components/footer/footer.component"
@@ -17,6 +17,7 @@ import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interfa
 import { MainStore } from "../../../shared/store/main.store"
 import { TestChartComponent } from "../../../charts/components/test-chart/test-chart.component"
 import { MatButtonModule } from "@angular/material/button"
+import { MatSlideToggleModule } from "@angular/material/slide-toggle"
 import { BreadcrumbsComponent } from "../../../shared/components/breadcrumbs/breadcrumbs.component"
 import { roundToSignificantDigits } from "../../../shared/util/math"
 import { MapComponent } from "../../components/map/map.component"
@@ -75,6 +76,7 @@ import { FencesChartComponent } from "../../../charts/components/fences-chart/fe
     HeaderComponent,
     MainContentComponent,
     MatButtonModule,
+    MatSlideToggleModule,
     RouterModule,
     TableComponent,
     TestChartComponent,
@@ -91,6 +93,7 @@ import { FencesChartComponent } from "../../../charts/components/fences-chart/fe
     FencesDetailsComponent,
   ],
   templateUrl: "./result-screen.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./result-screen.component.scss",
 })
 export class ResultScreenComponent extends SeoComponent {
@@ -167,6 +170,24 @@ export class ResultScreenComponent extends SeoComponent {
   fencesResults = signal<IFenceItem[] | null>(null)
   selectedFence = signal<IFenceItem | null>(null)
   hasFencesResults = computed(() => Boolean(this.fencesResults()?.length))
+  // A measurement is an Android signal measurement when at least one fence
+  // carries a signal value; iOS measurements have technology (and ping) only.
+  hasFenceSignal = computed(() =>
+    (this.fencesResults() ?? []).some((f) => f.signal != null),
+  )
+  // User toggle ("Show signal"), on by default, only meaningful for Android
+  // measurements. Turning it off collapses the view to technology only.
+  showSignalToggle = signal<boolean>(true)
+  // iOS measurements are always technology-only; Android follows the toggle.
+  isTechnologyOnly = computed(
+    () =>
+      this.hasFencesResults() &&
+      (!this.hasFenceSignal() || !this.showSignalToggle()),
+  )
+  // The toggle is only offered when there is a signal to show/hide (Android).
+  canShowSignalToggle = computed(
+    () => this.hasFencesResults() && this.hasFenceSignal(),
+  )
   fencesMapContainerId = "fencesMapContainer"
 
   downloadTable = signal<IOverallResult[]>([])
@@ -177,7 +198,7 @@ export class ResultScreenComponent extends SeoComponent {
   signalTableGrouped = computed(() => {
     const signalTable = this.signalTable()
     const out: ISimpleHistorySignal[] = []
-    let currentHeader: string | undefined
+    let currentHeader: string | undefined = undefined
     for (const signal of signalTable) {
       out.push(signal)
       const newHeader =

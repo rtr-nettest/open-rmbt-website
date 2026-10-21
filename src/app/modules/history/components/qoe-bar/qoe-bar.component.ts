@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core"
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core"
 import { IDynamicComponent } from "../../../shared/interfaces/dynamic-component.interface"
 import { IQoeItem } from "../../interfaces/qoe-item.interface"
 import { IDetailedHistoryResultItem } from "../../interfaces/detailed-history-result-item.interface"
@@ -9,6 +9,7 @@ const BAR_COUNT = 12
   selector: "app-qoe-bar",
   imports: [],
   templateUrl: "./qoe-bar.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./qoe-bar.component.scss",
 })
 export class QoeBarComponent

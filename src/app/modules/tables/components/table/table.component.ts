@@ -10,6 +10,7 @@ import {
   output,
   Output,
   ViewChild,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { MatSortModule, Sort } from "@angular/material/sort"
 import { MatTable, MatTableModule } from "@angular/material/table"
@@ -39,6 +40,7 @@ import { deHtmlize } from "../../../shared/util/string"
   templateUrl: "./table.component.html",
   styleUrls: ["./table.component.scss"],
   animations: [arrowRotate, expandVertically],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     DynamicComponentDirective,
     NgClass,

@@ -4,6 +4,7 @@ import {
   Inject,
   NgZone,
   OnDestroy,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { map, Observable, Subject, Subscription, takeUntil } from "rxjs"
@@ -45,6 +46,7 @@ import { CloseDialogHeaderComponent } from "../../../shared/components/close-dia
     TranslatePipe,
   ],
   templateUrl: "./coverage-dialog.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./coverage-dialog.component.scss",
 })
 export class CoverageDialogComponent implements AfterViewInit, OnDestroy {
@@ -174,15 +176,13 @@ export class CoverageDialogComponent implements AfterViewInit, OnDestroy {
 
   private setSize() {
     this.zone.runOutsideAngular(() => {
-      if (!this.mapContainerId) {
+      const container = document.getElementById(this.mapContainerId)
+      const mapEl = document.getElementById(this.mapId)
+      if (!container || !mapEl) {
         return
       }
-      let containerWidth = document
-        .getElementById(this.mapContainerId)!
-        .getBoundingClientRect().width
-      document
-        .getElementById(this.mapId)!
-        .setAttribute("style", `height:250px;width:${containerWidth - 16}px`)
+      const containerWidth = container.getBoundingClientRect().width
+      mapEl.setAttribute("style", `height:250px;width:${containerWidth - 16}px`)
     })
   }
 

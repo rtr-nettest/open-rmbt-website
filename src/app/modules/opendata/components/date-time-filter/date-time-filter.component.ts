@@ -5,6 +5,7 @@ import {
   input,
   model,
   OnInit,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { BaseFilterComponent } from "../base-filter/base-filter.component"
 import { MatFormFieldModule } from "@angular/material/form-field"
@@ -30,6 +31,7 @@ import { takeUntil } from "rxjs"
     TranslatePipe,
   ],
   templateUrl: "./date-time-filter.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./date-time-filter.component.scss",
 })
 export class DateTimeFilterComponent

@@ -9,7 +9,7 @@ import {
 } from "@angular/core"
 import { firstValueFrom, Subject, Subscription, takeUntil } from "rxjs"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
-import { Map, NavigationControl } from "maplibre-gl"
+import { Map, Marker, NavigationControl } from "maplibre-gl"
 import { MatButtonModule } from "@angular/material/button"
 import { MatDialog } from "@angular/material/dialog"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
@@ -56,7 +56,7 @@ export class MapComponent implements AfterViewInit {
     return acc ? +acc : null
   })
   showPath = input<boolean>(false)
-  pathMarkers: maplibregl.Marker[] = []
+  pathMarkers: Marker[] = []
 
   get href() {
     const search = [

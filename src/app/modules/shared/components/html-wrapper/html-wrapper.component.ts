@@ -1,9 +1,10 @@
-import { Component, Input } from "@angular/core"
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core"
 
 @Component({
     selector: "app-html-wrapper",
     imports: [],
     templateUrl: "./html-wrapper.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: "./html-wrapper.component.scss"
 })
 export class HtmlWrapperComponent {

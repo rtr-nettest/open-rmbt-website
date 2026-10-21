@@ -4,6 +4,7 @@ import {
   Input,
   OnDestroy,
   afterEveryRender,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { Title } from "@angular/platform-browser"
 import { I18nStore } from "../../../i18n/store/i18n.store"
@@ -16,6 +17,7 @@ const SEP = " | "
 @Component({
   selector: "app-seo",
   imports: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: "",
 })
 export class SeoComponent implements OnDestroy {

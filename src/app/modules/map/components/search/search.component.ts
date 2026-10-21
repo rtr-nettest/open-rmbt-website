@@ -4,6 +4,7 @@ import {
   Input,
   NgZone,
   OnDestroy,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { MatFormFieldModule } from "@angular/material/form-field"
@@ -36,6 +37,7 @@ import { MatButtonModule } from "@angular/material/button"
     TranslatePipe,
   ],
   templateUrl: "./search.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./search.component.scss",
 })
 export class SearchComponent implements OnDestroy {

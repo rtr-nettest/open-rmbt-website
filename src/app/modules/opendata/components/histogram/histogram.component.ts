@@ -5,6 +5,7 @@ import {
   effect,
   input,
   signal,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import {
   HistogramMetric,
@@ -28,6 +29,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
   selector: "app-histogram",
   imports: [MatProgressSpinnerModule],
   templateUrl: "./histogram.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./histogram.component.scss",
 })
 export class HistogramComponent implements AfterViewInit {

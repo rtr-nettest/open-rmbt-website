@@ -5,6 +5,7 @@ import {
   effect,
   input,
   signal,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 import { IIntradayResponseItem } from "../../interfaces/intraday-response.interface"
@@ -21,6 +22,7 @@ import { Point } from "chart.js"
   selector: "app-intraday",
   imports: [MatProgressSpinnerModule],
   templateUrl: "./intraday.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./intraday.component.scss",
 })
 export class IntradayComponent implements AfterViewInit {

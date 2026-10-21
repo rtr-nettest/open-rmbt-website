@@ -1,4 +1,7 @@
 <div class="app-dialog">
+  @if (title) {
+    <h2 class="app-dialog__title">{{ title | translate }}</h2>
+  }
   <p [innerHTML]="text | translate"></p>
   <footer class="app-footer">
     @if (canCancel) {

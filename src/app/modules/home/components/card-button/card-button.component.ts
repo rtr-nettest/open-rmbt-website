@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core"
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { RouterModule } from "@angular/router"
 import { NgTemplateOutlet } from "@angular/common"
@@ -7,6 +7,7 @@ import { NgTemplateOutlet } from "@angular/common"
   selector: "app-card-button",
   templateUrl: "./card-button.component.html",
   styleUrls: ["./card-button.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe, NgTemplateOutlet, RouterModule],
 })
 export class CardButtonComponent {

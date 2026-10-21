@@ -1,4 +1,4 @@
-import { Component, input, model, output, ViewChild } from "@angular/core"
+import { Component, input, model, output, ViewChild, ChangeDetectionStrategy } from "@angular/core"
 import {
   MatExpansionModule,
   MatExpansionPanel,
@@ -11,6 +11,7 @@ import { MatIconModule } from "@angular/material/icon"
   selector: "app-expansion-panel",
   imports: [MatExpansionModule, MatButtonModule, MatIconModule, TranslatePipe],
   templateUrl: "./expansion-panel.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./expansion-panel.component.scss",
 })
 export class ExpansionPanelComponent {

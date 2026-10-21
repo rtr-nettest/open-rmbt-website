@@ -1,7 +1,12 @@
 const express = require("express")
 const { createProxyMiddleware } = require("http-proxy-middleware")
 
-const host = "dev2.netztest.at"
+const host = process.env.PROXY_HOST || "dev2.netztest.at"
+// Origin/Referer sent upstream. Defaults to the target host (works for dev2,
+// which serves frontend + control server on the same host). Production splits
+// them: the control server (c01) only allows the frontend origin (www), so set
+// PROXY_ORIGIN=https://www.netztest.at when PROXY_HOST=c01.netztest.at.
+const origin = process.env.PROXY_ORIGIN || `https://${host}`
 const app = express()
 
 app.use(
@@ -13,8 +18,8 @@ app.use(
     on: {
       proxyReq: (proxyReq, req, res) => {
         proxyReq.setHeader("Host", host)
-        proxyReq.setHeader("Origin", `https://${host}`)
-        proxyReq.setHeader("Referer", `https://${host}/`)
+        proxyReq.setHeader("Origin", origin)
+        proxyReq.setHeader("Referer", `${origin}/`)
       },
       error: (err, req, res) => {
         console.error("Proxy error:", err)
