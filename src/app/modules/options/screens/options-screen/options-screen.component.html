@@ -100,6 +100,7 @@
     }
     @if (showAdmin()) {
       <h2>{{ "Admin" | translate }}</h2>
+      <p>ControlServer: {{ controlServerUrl }}</p>
       <ul class="app-admin-links">
         @for (link of adminLinks; track link.route) {
           <li>
