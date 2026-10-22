@@ -1,3 +1,19 @@
+.app-server-status--online {
+  color: #2f5f00;
+
+  i {
+    margin-right: rem(8);
+  }
+}
+
+.app-server-status--offline {
+  color: #c0182d;
+
+  i {
+    margin-right: rem(8);
+  }
+}
+
 .app-icon {
   align-items: center;
   background-position: center;

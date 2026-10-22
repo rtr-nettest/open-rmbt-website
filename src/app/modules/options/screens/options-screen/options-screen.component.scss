@@ -1,3 +1,16 @@
 .app-title {
   margin-bottom: 3rem;
 }
+
+// The global reset zeroes <ul> padding, which pushes the outside bullet markers
+// off the left edge of the content column. Restore an indent and keep the
+// markers inside the text column.
+.app-admin-links {
+  list-style-position: outside;
+  margin: 0;
+  padding-left: 1.5rem;
+
+  li {
+    margin-bottom: 0.25rem;
+  }
+}

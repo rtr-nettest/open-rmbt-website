@@ -24,6 +24,8 @@ import {
   IpVersion,
   OptionsStoreService,
 } from "../../store/options-store.service"
+import { RouterModule } from "@angular/router"
+import { ERoutes } from "../../../shared/constants/routes.enum"
 import { MatButtonModule } from "@angular/material/button"
 import { MatRadioModule } from "@angular/material/radio"
 import { MatSlideToggleModule } from "@angular/material/slide-toggle"
@@ -56,6 +58,7 @@ import { MainContentComponent } from "../../../shared/components/main-content/ma
     MatFormFieldModule,
     MatInputModule,
     MainContentComponent,
+    RouterModule,
   ],
   templateUrl: "./options-screen.component.html",
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -108,14 +111,28 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
   secretString = ""
   secret = "showall"
   showServerSelection = signal<boolean>(
-    environment.features.show_server_selection ||
-      this.isShowAllHash() ||
+    this.isShowAllHash() ||
       // Keep the selection visible once a non-default server has been chosen,
       // so the choice stays reversible without re-adding "#showAll" to the URL.
       this.store.preferredServer() !== "default",
   )
   showServerSelection$ = toObservable(this.showServerSelection)
   text$ = this.i18nStore.getLocalizedHtml("options")
+
+  // Optional admin links, shown at the very bottom of the page only when the
+  // "#showAll" hash is present in the URL.
+  showAdmin = signal<boolean>(this.isShowAllHash())
+  adminLinks: { label: string; route: ERoutes }[] = [
+    { label: "Server status", route: ERoutes.SERVER_STATUS },
+    { label: "Usage report", route: ERoutes.USAGE },
+  ]
+  // Pre-configured control server URL for this build; a handy proxy for telling
+  // which environment the app was built for.
+  controlServerUrl = environment.api.baseUrl
+
+  get activeLang() {
+    return this.i18nStore.activeLang
+  }
 
   get gitInfo() {
     return this.mainStore.gitInfo
@@ -191,6 +208,7 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
   onHashChange() {
     if (this.isShowAllHash()) {
       this.showServerSelection.set(true)
+      this.showAdmin.set(true)
     }
   }
 
@@ -201,6 +219,7 @@ export class OptionsScreenComponent extends SeoComponent implements OnInit {
       if (this.secretString === this.secret) {
         this.secretString = ""
         this.showServerSelection.set(true)
+        this.showAdmin.set(true)
         globalThis.location.hash = "#showAll"
       } else {
         this.secretString = this.secretString.slice(1)
