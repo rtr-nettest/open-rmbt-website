@@ -7,6 +7,7 @@ import {
   OnChanges,
   output,
   Output,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import {
   IHistoryGroupItem,
@@ -36,6 +37,7 @@ import { ChartPhase } from "../../../charts/dto/test-chart-dataset"
   selector: "app-recent-history",
   templateUrl: "./recent-history.component.html",
   styleUrls: ["./recent-history.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TableComponent, TranslatePipe],
 })
 export class RecentHistoryComponent implements OnChanges {

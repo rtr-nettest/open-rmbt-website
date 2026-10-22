@@ -18,6 +18,10 @@ export interface ISimpleHistoryTestLocation {
   loc_accuracy: number
   long: number
   time_elapsed: number
+  speed?: number
+  altitude?: number
+  bearing?: number
+  loc_src?: string
 }
 
 export interface ISimpleHistorySignal {

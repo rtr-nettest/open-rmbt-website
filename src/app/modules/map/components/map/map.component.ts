@@ -7,6 +7,7 @@ import {
   OnChanges,
   OnDestroy,
   SimpleChanges,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { IRecentMeasurement } from "../../../opendata/interfaces/recent-measurements-response.interface"
 import { Subject, Subscription, takeUntil } from "rxjs"
@@ -21,6 +22,7 @@ import { PopupContentService } from "../../services/popup-content.service"
 @Component({
   selector: "app-map",
   templateUrl: "./map.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./map.component.scss",
 })
 export class MapComponent implements AfterViewInit, OnDestroy, OnChanges {

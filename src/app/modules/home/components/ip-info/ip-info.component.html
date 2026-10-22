@@ -2,15 +2,21 @@
   <li class="app-li">
     {{ "IPv4" | translate }}: @if (ipV4Loading()) {
     <mat-spinner></mat-spinner>
+    } @else { @if (ipV4IsProxy()) {
+    <span class="app-ip app-ip--proxy">{{ ipV4() | translate }}</span>
+    <span class="app-ip__proxy-note">{{ "- via proxy" | translate }}</span>
     } @else {
     {{ ipV4() | translate }}
-    }
+    } }
   </li>
   <li class="app-li">
     {{ "IPv6" | translate }}: @if(ipV6Loading()) {
     <mat-spinner></mat-spinner>
+    } @else { @if (ipV6IsProxy()) {
+    <span class="app-ip app-ip--proxy">{{ ipV6() | translate }}</span>
+    <span class="app-ip__proxy-note">{{ "- via proxy" | translate }}</span>
     } @else {
     {{ ipV6() | translate }}
-    }
+    } }
   </li>
 </ul>

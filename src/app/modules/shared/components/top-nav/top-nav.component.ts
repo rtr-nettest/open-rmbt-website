@@ -1,4 +1,4 @@
-import { Component, computed, HostListener, inject } from "@angular/core"
+import { Component, computed, HostListener, inject, ChangeDetectionStrategy } from "@angular/core"
 import { map, Observable } from "rxjs"
 import { ILink } from "../../interfaces/link.interface"
 import { I18nStore } from "../../../i18n/store/i18n.store"
@@ -28,6 +28,7 @@ import { TestStore } from "../../../test/store/test.store"
     TranslatePipe,
   ],
   templateUrl: "./top-nav.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./top-nav.component.scss",
 })
 export class TopNavComponent {

@@ -4,6 +4,12 @@
   max-width: rem(480);
   padding: rem(30) rem(20) rem(20);
   white-space: pre-line;
+
+  &__title {
+    margin: 0 0 rem(12);
+    font-size: rem(20);
+    font-weight: 700;
+  }
 }
 
 .app-footer {

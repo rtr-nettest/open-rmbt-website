@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core"
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core"
 import { IDynamicComponent } from "../../../shared/interfaces/dynamic-component.interface"
 import { ISimpleHistorySignal } from "../../interfaces/simple-history-result.interface"
 import { I18nStore } from "../../../i18n/store/i18n.store"
@@ -8,6 +8,7 @@ import { ERoutes } from "../../../shared/constants/routes.enum"
   selector: "app-cell-info",
   imports: [],
   templateUrl: "./cell-info.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./cell-info.component.scss",
 })
 export class CellInfoComponent
@@ -201,7 +202,7 @@ export class CellInfoComponent
       signalRow +=
         signal.lte_rsrp +
         " " +
-        this.i18nStore.translate("dB") +
+        this.i18nStore.translate("dBm") +
         (nrNsa ? " (4G)" : "")
     }
     if (signal.timing_advance !== null) {
@@ -241,7 +242,7 @@ export class CellInfoComponent
       signalRow +=
         signal.nr_rsrp +
         " " +
-        this.i18nStore.translate("dB") +
+        this.i18nStore.translate("dBm") +
         (nrNsa ? " (5G)" : "")
     }
     if (signal.nr_rsrq !== null) {

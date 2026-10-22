@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnDestroy } from "@angular/core"
+import { ChangeDetectorRef, Component, inject, OnDestroy, ChangeDetectionStrategy } from "@angular/core"
 import { FormBuilder, FormControl, ReactiveFormsModule } from "@angular/forms"
 import { MatButtonModule } from "@angular/material/button"
 import { MatNativeDateModule, MatOptionModule } from "@angular/material/core"
@@ -50,6 +50,7 @@ type FiltersForm = {
     TranslatePipe,
   ],
   templateUrl: "./filters.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./filters.component.scss",
 })
 export class FiltersComponent implements OnDestroy {

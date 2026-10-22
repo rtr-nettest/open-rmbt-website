@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core"
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core"
 import { BehaviorSubject } from "rxjs"
 import { IMainMenuItem } from "../../../shared/interfaces/main-menu-item.interface"
 import { AsyncPipe } from "@angular/common";
@@ -9,6 +9,7 @@ import { MatButtonModule } from "@angular/material/button"
     selector: "app-action-buttons",
     templateUrl: "./action-buttons.component.html",
     styleUrls: ["./action-buttons.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AsyncPipe, TranslatePipe, MatButtonModule]
 })
 export class ActionButtonsComponent {

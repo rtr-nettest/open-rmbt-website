@@ -1,21 +1,34 @@
-import { Component, computed, inject, input } from "@angular/core"
+import { Component, computed, effect, inject, input, ChangeDetectionStrategy } from "@angular/core"
 import { Subject, Subscription, takeUntil } from "rxjs"
 import { IFenceItem } from "../../interfaces/open-test-response"
-import { Map, NavigationControl } from "maplibre-gl"
+import { Map, Marker, NavigationControl } from "maplibre-gl"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
-import { MobileNetworkColorMap } from "../../constants/network-technology"
+import {
+  MobileNetworkColorMap,
+  EMNTechColor,
+} from "../../constants/network-technology"
 import { PopupService } from "../../../map/services/popup.service"
 import { FencesPopupContentService } from "../../services/fences-popup-content.service"
+
+const MIN_SIGNAL = -125
+const MAX_SIGNAL = -85
+const MAP_CONTAINER_HEIGHT_PX = 420
+const POINTS_LAYER_ID = "route-points"
 
 @Component({
   selector: "app-fences-map",
   imports: [],
   templateUrl: "./fences-map.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./fences-map.component.scss",
 })
 export class FencesMapComponent {
   destroyed$ = new Subject<void>()
   locations = input.required<IFenceItem[]>()
+  selectedFence = input<IFenceItem | null>(null)
+  // "Technology only": colour points by technology + acceptable ping
+  // (full colour if covered, grey otherwise) instead of by signal strength.
+  technologyOnly = input<boolean>(false)
   path = computed(() =>
     this.locations().map(
       (loc) => [loc.longitude, loc.latitude] as [number, number],
@@ -26,11 +39,27 @@ export class FencesMapComponent {
   map!: Map
   params = input.required<URLSearchParams>()
   resizeSub!: Subscription
-  pathMarkers: maplibregl.Marker[] = []
+  pathMarkers: Marker[] = []
 
   mapService = inject(MapService)
   popup = inject(PopupService)
   popupContent = inject(FencesPopupContentService)
+
+  constructor() {
+    effect(() => {
+      const fence = this.selectedFence()
+      if (this.map && fence) {
+        this.focusFence(fence)
+      }
+    })
+    effect(() => {
+      // React to the "Technology only" toggle without rebuilding the map.
+      const circleColor = this.getCircleColor(this.technologyOnly())
+      if (this.map?.getLayer(POINTS_LAYER_ID)) {
+        this.map.setPaintProperty(POINTS_LAYER_ID, "circle-color", circleColor)
+      }
+    })
+  }
 
   ngAfterViewInit(): void {
     if (globalThis.document) {
@@ -54,7 +83,7 @@ export class FencesMapComponent {
     }
     document
       .getElementById(this.mapId)!
-      .setAttribute("style", `height:350px;width:100%`)
+      .setAttribute("style", `height:${MAP_CONTAINER_HEIGHT_PX}px;width:100%`)
   }
 
   private setMap() {
@@ -70,6 +99,7 @@ export class FencesMapComponent {
         this.map.addControl(new NavigationControl())
         this.map.on("load", () => {
           this.addPath()
+          this.focusFence(this.selectedFence())
         })
         this.map.on("click", (e) => {
           const features = this.map.queryRenderedFeatures(e.point, {
@@ -86,11 +116,30 @@ export class FencesMapComponent {
       })
   }
 
+  private focusFence(fence: IFenceItem | null) {
+    if (!this.map || !fence) {
+      return
+    }
+
+    const latitude = Number(fence.latitude)
+    const longitude = Number(fence.longitude)
+    if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+      return
+    }
+
+    this.popup.removePopup()
+    this.map.flyTo({ center: [longitude, latitude], zoom: 14, essential: true })
+    this.popup.addPopup(this.map, [fence], this.popupContent, {
+      lon: longitude,
+      lat: latitude,
+    })
+  }
+
   private addPath() {
     if (!this.map) {
       return
     }
-    if (this.path().length < 2) {
+    if (this.path().length < 1) {
       return
     }
     this.pathMarkers = this.mapService.addPathMarkers(this.map, this.path())
@@ -99,15 +148,45 @@ export class FencesMapComponent {
         "line-opacity": 0,
       },
       pointPaint: {
-        "circle-color": [
-          "match",
-          ["get", "technology_id"],
-          ...[...MobileNetworkColorMap.entries()].flat(),
-          "#d9d9d9",
-        ] as any,
+        "circle-color": this.getCircleColor(this.technologyOnly()),
         "circle-radius": 6,
       },
     })
     this.mapService.fitBounds(this.map, this.path())
+  }
+
+  private getCircleColor(technologyOnly: boolean): any {
+    const technologyMatch = [
+      "match",
+      ["get", "technology_id"],
+      ...[...MobileNetworkColorMap.entries()].flatMap(
+        ([technologyId, networkColor]) => [
+          technologyId,
+          technologyOnly
+            ? // No signal available: use the full technology colour.
+              networkColor
+            : // Fade the technology colour towards grey by signal strength.
+              [
+                "interpolate",
+                ["linear"],
+                ["get", "signal"],
+                MIN_SIGNAL,
+                EMNTechColor.T_OFFLINE,
+                MAX_SIGNAL,
+                networkColor,
+              ],
+        ],
+      ),
+      EMNTechColor.T_OFFLINE,
+    ]
+    // Grey ("offline") when there is no coverage: no ping (a bad ping is still
+    // a valid ping) or no technology. Android additionally greys a missing
+    // signal value; the signal-fade above handles a very weak signal.
+    const offlineConditions: any[] = [
+      "any",
+      ["==", ["get", "avg_ping_ms"], null],
+      ...(technologyOnly ? [] : [["==", ["get", "signal"], null]]),
+    ]
+    return ["case", offlineConditions, EMNTechColor.T_OFFLINE, technologyMatch]
   }
 }

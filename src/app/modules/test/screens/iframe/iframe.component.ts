@@ -4,6 +4,7 @@ import {
   HostListener,
   inject,
   signal,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
@@ -17,6 +18,7 @@ import { EMeasurementStatus } from "../../constants/measurement-status.enum"
   selector: "app-iframe",
   imports: [IframeIntroComponent, IframeTestComponent, TranslatePipe],
   templateUrl: "./iframe.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./iframe.component.scss",
 })
 export class IframeComponent extends SeoComponent {

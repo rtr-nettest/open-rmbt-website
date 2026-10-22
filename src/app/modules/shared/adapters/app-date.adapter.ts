@@ -58,3 +58,11 @@ export function formatTime(value: IRecentMeasurement) {
     .format(APP_DATE_TIME_FORMAT)
   return value
 }
+
+// Formats a Unix epoch timestamp (milliseconds, UTC) in the viewer's local time
+// zone, using the same APP_DATE_TIME_FORMAT shown elsewhere. Map markers carry
+// an absolute epoch (`time`); dayjs(ms) is that instant and format() renders it
+// in local time, so each viewer sees the measurement in their own time zone.
+export function formatEpochMs(ms: number): string {
+  return dayjs(ms).format(APP_DATE_TIME_FORMAT)
+}

@@ -57,7 +57,7 @@ export class HistoryService {
       from(this.repo.getResult(params)).pipe(
         switchMap((response) => {
           params.openTestUuid = response.open_test_uuid
-          if (response.status !== "finished") {
+          if (!this.measurementIsFinished(response)) {
             return forkJoin([of(response), of(null)])
           }
           return forkJoin([of(response), this.repo.getOpenResult(params)])
@@ -131,12 +131,22 @@ export class HistoryService {
     }
   }
 
+  private measurementIsFinished(response: any) {
+    return (
+      response &&
+      (response.status === "finished" || response.status === "coverage")
+    )
+  }
+
   private validateResult(
     historyResult: SimpleHistoryResult,
     response: any,
     allSpeedCurvesEmpty?: boolean,
   ) {
-    if (response && (response.status !== "finished" || allSpeedCurvesEmpty)) {
+    if (
+      response &&
+      (!this.measurementIsFinished(response) || allSpeedCurvesEmpty)
+    ) {
       historyResult.openTestResponse = {
         external_ip: response.external_ip,
         time: dayjs(response.time).format(RESULT_DATE_FORMAT),

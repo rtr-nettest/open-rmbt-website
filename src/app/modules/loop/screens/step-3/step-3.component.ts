@@ -1,4 +1,4 @@
-import { Component, HostListener, inject } from "@angular/core"
+import { Component, HostListener, inject, ChangeDetectionStrategy } from "@angular/core"
 import {
   imports,
   TestScreenComponent,
@@ -29,6 +29,7 @@ import { IBasicNetworkInfo } from "../../../test/interfaces/basic-network-info.i
   standalone: true,
   imports,
   templateUrl: "../../../test/screens/test-screen/test-screen.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "../../../test/screens/test-screen/test-screen.component.scss",
 })
 export class Step3Component extends TestScreenComponent {
@@ -118,11 +119,13 @@ export class Step3Component extends TestScreenComponent {
     )
     this.service.triggerNextTest({
       beforeStart: () => {
+        this.loopService.notifyTestStarted()
         clearInterval(this.waitingTimer)
         this.loopStore.lastTestFinishedAt.set(0)
         this.lastState = undefined
       },
       afterFinish: () => {
+        this.loopService.notifyTestFinished()
         clearInterval(this.waitingTimer)
         this.loopStore.lastTestFinishedAt.set(Date.now())
         this.waitingTimer = setInterval(() => {

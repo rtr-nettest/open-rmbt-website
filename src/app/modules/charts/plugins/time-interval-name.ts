@@ -19,9 +19,9 @@ export class TimeIntervalNamePlugin {
       },
       ctx,
     } = chart
-    const { x, y, text } = this.options
+    const { x, y, text, color } = this.options
     ctx.font = "12px 'Open Sans'"
-    ctx.fillStyle = EColors.SECONDARY_60
+    ctx.fillStyle = color || EColors.SECONDARY_60
     const fullTime = max - min
     const timeFromStartPercent = x / fullTime
     const xLeft = left + timeFromStartPercent * width + 4

@@ -1,4 +1,4 @@
-import { Component, HostListener } from "@angular/core"
+import { Component, HostListener, ChangeDetectionStrategy } from "@angular/core"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { MatIconModule } from "@angular/material/icon"
 import { MatButtonModule } from "@angular/material/button"
@@ -22,6 +22,7 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
     TranslatePipe,
   ],
   templateUrl: "./header.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./header.component.scss",
 })
 export class HeaderComponent {

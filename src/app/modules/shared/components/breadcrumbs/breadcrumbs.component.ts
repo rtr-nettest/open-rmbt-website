@@ -1,4 +1,4 @@
-import { Component, input } from "@angular/core"
+import { Component, input, ChangeDetectionStrategy } from "@angular/core"
 import {
   ActivatedRoute,
   Route,
@@ -18,6 +18,7 @@ import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
   selector: "app-breadcrumbs",
   imports: [AsyncPipe, RouterModule, TranslatePipe],
   templateUrl: "./breadcrumbs.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./breadcrumbs.component.scss",
 })
 export class BreadcrumbsComponent {

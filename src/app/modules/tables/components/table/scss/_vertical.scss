@@ -1,9 +1,6 @@
 .app-table--vertical {
-  mat-row:nth-child(n),
-  mat-header-row:nth-child(n),
-  mat-footer-row:nth-child(n) {
-    background-color: white;
-  }
+  // leave row backgrounds to the base styles (green header + alternating
+  // white/green data rows) so this table matches the others on the page
 
   mat-cell,
   mat-header-cell,
@@ -56,6 +53,13 @@
       &:last-child {
         margin-bottom: rem(24);
       }
+    }
+
+    // neutralise desktop column-width helpers so each cell spans the full row
+    .mat-mdc-cell[class*="app-cell--"],
+    .mat-mdc-footer-cell[class*="app-cell--"] {
+      flex: auto !important;
+      width: 100% !important;
     }
 
     .app-table__mobile-label {

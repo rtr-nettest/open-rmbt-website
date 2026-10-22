@@ -1,10 +1,11 @@
-import { Component, Input } from "@angular/core"
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core"
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 
 @Component({
     selector: "app-loading-overlay",
     imports: [MatProgressSpinnerModule],
     templateUrl: "./loading-overlay.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: "./loading-overlay.component.scss"
 })
 export class LoadingOverlayComponent {

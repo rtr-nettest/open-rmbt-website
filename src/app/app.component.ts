@@ -1,4 +1,4 @@
-import { Component, inject, signal } from "@angular/core"
+import { Component, inject, signal, ChangeDetectionStrategy } from "@angular/core"
 import { RouterOutlet } from "@angular/router"
 import { MainStore } from "./modules/shared/store/main.store"
 import { Observable, retry, tap, timer } from "rxjs"
@@ -21,6 +21,7 @@ import { SkipLinkComponent } from "./modules/shared/components/skip-link/skip-li
     SkipLinkComponent,
   ],
   templateUrl: "./app.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./app.component.scss",
 })
 export class AppComponent {

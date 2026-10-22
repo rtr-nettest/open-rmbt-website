@@ -17,14 +17,16 @@ export class LiveService {
   private intervalSub: Subscription | null = null
   private isInitialized = false
   private isReplaying = false
+  private includeFences = false
 
   constructor(private readonly measurements: OpendataService) {}
 
-  watchMeasurements(watch = true) {
+  watchMeasurements(watch = true, includeFences = false) {
     if (this.intervalSub) {
       this.intervalSub.unsubscribe()
       this.intervalSub = null
     }
+    this.includeFences = includeFences
     if (!watch) {
       return
     }
@@ -39,8 +41,12 @@ export class LiveService {
   }
 
   private setMeasurements() {
-    firstValueFrom(this.measurements.getRecentMeasurements()).then((resp) => {
-      const content = (resp?.results ?? []).map((r) => formatTime(r))
+    firstValueFrom(
+      this.measurements.getRecentMeasurements(this.includeFences),
+    ).then((resp) => {
+      const content = (resp?.results ?? []).map((r) =>
+        this.formatMeasurement(r),
+      )
       this.tableData.set({
         content: content.slice(0, 5),
         totalElements: 5,
@@ -55,9 +61,13 @@ export class LiveService {
     if (this.isReplaying) {
       return
     }
-    firstValueFrom(this.measurements.getRecentMeasurements()).then((resp) => {
+    firstValueFrom(
+      this.measurements.getRecentMeasurements(this.includeFences),
+    ).then((resp) => {
       this.isReplaying = true
-      const content = (resp?.results ?? []).map((r) => formatTime(r))
+      const content = (resp?.results ?? []).map((r) =>
+        this.formatMeasurement(r),
+      )
       const forMap = content.filter((m) => m.lat && m.long)
       this.recentMeasurements.set(forMap.slice(3, 23))
       this.tableData.set({
@@ -88,5 +98,11 @@ export class LiveService {
         this.isReplaying = false
       }, 10000)
     })
+  }
+
+  private formatMeasurement(measurement: IRecentMeasurement) {
+    const formatted = formatTime(measurement)
+    formatted.isFences = this.includeFences && formatted.fences_count != null
+    return formatted
   }
 }

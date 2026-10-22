@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from "@angular/core"
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from "@angular/core"
 import { SeoComponent } from "../../../shared/components/seo/seo.component"
 import {
   ECertifiedLocationType,
@@ -54,6 +54,7 @@ import { MainContentComponent } from "../../../shared/components/main-content/ma
     FooterComponent,
   ],
   templateUrl: "./step-3.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./step-3.component.scss",
 })
 export class Step3Component extends SeoComponent implements OnInit {

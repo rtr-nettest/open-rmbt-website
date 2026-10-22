@@ -10,6 +10,7 @@ import {
   output,
   Output,
   ViewChild,
+  ChangeDetectionStrategy
 } from "@angular/core"
 import { MatSortModule, Sort } from "@angular/material/sort"
 import { MatTable, MatTableModule } from "@angular/material/table"
@@ -39,6 +40,7 @@ import { deHtmlize } from "../../../shared/util/string"
   templateUrl: "./table.component.html",
   styleUrls: ["./table.component.scss"],
   animations: [arrowRotate, expandVertically],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     DynamicComponentDirective,
     NgClass,
@@ -54,7 +56,7 @@ import { deHtmlize } from "../../../shared/util/string"
 })
 export class TableComponent implements OnInit, OnChanges {
   @Input() action?: (...ars: any[]) => any
-  @Input() rowsAreCLickable = false
+  @Input() rowsAreClickable = false
   @Input({ required: true }) columns: ITableColumn[] = []
   @Input({ required: true }) data?: IBasicResponse<any>
   @Input() expandableColumns: string[] = []

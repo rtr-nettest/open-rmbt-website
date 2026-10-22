@@ -38,6 +38,14 @@
             {{ "Run test again" | translate }}
           </a>
         }
+        @if (canShowSignalToggle()) {
+          <mat-slide-toggle
+            class="app-technology-only-toggle"
+            [checked]="showSignalToggle()"
+            (change)="showSignalToggle.set($event.checked)"
+            >{{ "Show signal" | translate }}</mat-slide-toggle
+          >
+        }
       </div>
       @if (basicResults(); as basicResults) {
         @if (basicResults.content.length && !hideBasicResults()) {
@@ -105,12 +113,9 @@
                     [params]="mapParams()"
                     [mapContainerId]="fencesMapContainerId"
                     [locations]="fencesResults"
+                    [selectedFence]="selectedFence()"
+                    [technologyOnly]="isTechnologyOnly()"
                   ></app-fences-map>
-                  <app-fences-details
-                    [details]="fencesResults"
-                    style="display: block; margin-top: 24px"
-                    a11yTitle="Fences details"
-                  ></app-fences-details>
                 </div>
               }
             }
@@ -163,27 +168,66 @@
                   ></app-speed-details>
                 </div>
               }
-              @if (signalTable().length) {
+              @if (signalTable().length || hasFencesResults()) {
                 <div class="app-charts-row">
                   <header
                     class="app-charts-row__base"
                     [attr.aria-hidden]="true"
                   >
+                    @let signalTitle =
+                      hasFencesResults()
+                        ? (isTechnologyOnly()
+                          ? "Technology"
+                          : "Signal and technology")
+                        : "Signal";
                     @if (!hideSpeedCurveTitle()) {
-                      <h4>{{ "Signal" | translate }}</h4>
+                      <h4>{{ signalTitle | translate }}</h4>
                     } @else {
-                      <h3>{{ "Signal" | translate }}</h3>
+                      <h3>{{ signalTitle | translate }}</h3>
                     }
-                    <app-signal-chart
-                      [signal]="signalTable()"
-                      [fences]="fencesResults()"
-                      [phaseDurations]="phaseDurations()"
-                    ></app-signal-chart>
+                    @if (hasFencesResults()) {
+                      @if (isTechnologyOnly()) {
+                        <app-fences-chart
+                          [fences]="fencesResults() ?? []"
+                          [technologyOnly]="true"
+                        ></app-fences-chart>
+                      } @else {
+                        <app-fences-chart
+                          [fences]="fencesResults() ?? []"
+                          [technologyOnly]="false"
+                        ></app-fences-chart>
+                      }
+                    } @else {
+                      <app-signal-chart
+                        [signal]="signalTable()"
+                        [phaseDurations]="phaseDurations()"
+                      ></app-signal-chart>
+                    }
                   </header>
-                  <app-signal-details
-                    [details]="signalTableGrouped()"
-                    a11yTitle="Signal details"
-                  ></app-signal-details>
+                  @if (hasFencesResults()) {
+                    @if (isTechnologyOnly()) {
+                      <app-fences-details
+                        [details]="fencesResults() ?? []"
+                        a11yTitle="Signal details"
+                        [rowsAreClickable]="true"
+                        [technologyOnly]="true"
+                        (rowSelected)="handleFenceRowSelected($event)"
+                      ></app-fences-details>
+                    } @else {
+                      <app-fences-details
+                        [details]="fencesResults() ?? []"
+                        a11yTitle="Signal details"
+                        [rowsAreClickable]="true"
+                        [technologyOnly]="false"
+                        (rowSelected)="handleFenceRowSelected($event)"
+                      ></app-fences-details>
+                    }
+                  } @else {
+                    <app-signal-details
+                      [details]="signalTableGrouped()"
+                      a11yTitle="Signal details"
+                    ></app-signal-details>
+                  }
                 </div>
               }
             </div>

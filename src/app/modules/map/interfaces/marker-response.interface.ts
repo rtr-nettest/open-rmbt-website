@@ -15,5 +15,4 @@ export interface IMarkerResponseItem {
   }
   open_test_uuid: string
   time: number
-  time_string: string
 }

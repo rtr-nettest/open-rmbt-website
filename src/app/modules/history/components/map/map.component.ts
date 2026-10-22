@@ -9,7 +9,7 @@ import {
 } from "@angular/core"
 import { firstValueFrom, Subject, Subscription, takeUntil } from "rxjs"
 import { DEFAULT_CENTER, MapService } from "../../../map/services/map.service"
-import { Map, NavigationControl } from "maplibre-gl"
+import { Map, Marker, NavigationControl } from "maplibre-gl"
 import { MatButtonModule } from "@angular/material/button"
 import { MatDialog } from "@angular/material/dialog"
 import { TranslatePipe } from "../../../i18n/pipes/translate.pipe"
@@ -21,6 +21,8 @@ import { HistoryRepositoryService } from "../../repository/history-repository.se
 import { IBasicResponse } from "../../../tables/interfaces/basic-response.interface"
 import { ICoverage } from "../../interfaces/coverage.interface"
 import { ISimpleHistoryTestLocation } from "../../interfaces/simple-history-result.interface"
+
+const MAP_CONTAINER_HEIGHT_PX = 420
 
 @Component({
   selector: "app-map",
@@ -54,7 +56,7 @@ export class MapComponent implements AfterViewInit {
     return acc ? +acc : null
   })
   showPath = input<boolean>(false)
-  pathMarkers: maplibregl.Marker[] = []
+  pathMarkers: Marker[] = []
 
   get href() {
     const search = [
@@ -129,7 +131,7 @@ export class MapComponent implements AfterViewInit {
     }
     document
       .getElementById(this.mapId)!
-      .setAttribute("style", `height:350px;width:100%`)
+      .setAttribute("style", `height:${MAP_CONTAINER_HEIGHT_PX}px;width:100%`)
   }
 
   private setMap() {

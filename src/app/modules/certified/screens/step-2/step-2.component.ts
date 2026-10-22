@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from "@angular/core"
+import { Component, inject, OnInit, ChangeDetectionStrategy } from "@angular/core"
 import { HeaderComponent } from "../../../shared/components/header/header.component"
 import { MatButtonModule } from "@angular/material/button"
 import { TopNavComponent } from "../../../shared/components/top-nav/top-nav.component"
@@ -48,6 +48,7 @@ import { MainContentComponent } from "../../../shared/components/main-content/ma
     FooterComponent,
   ],
   templateUrl: "./step-2.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./step-2.component.scss",
 })
 export class Step2Component extends SeoComponent implements OnInit {

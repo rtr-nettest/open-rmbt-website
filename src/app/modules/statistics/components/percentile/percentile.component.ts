@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from "@angular/core"
+import { Component, Input, ViewChild, ChangeDetectionStrategy } from "@angular/core"
 import { IDynamicComponent } from "../../../shared/interfaces/dynamic-component.interface"
 import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu"
 import { I18nStore } from "../../../i18n/store/i18n.store"
@@ -18,6 +18,7 @@ export type PercentileParametes = {
   selector: "app-percentile",
   imports: [MatMenuModule, TranslatePipe],
   templateUrl: "./percentile.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./percentile.component.scss",
 })
 export class PercentileComponent

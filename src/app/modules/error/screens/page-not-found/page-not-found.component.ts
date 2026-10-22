@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core"
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core"
 import { I18nStore } from "../../../i18n/store/i18n.store"
 import { MatButtonModule } from "@angular/material/button"
 import { RouterModule } from "@angular/router"
@@ -9,6 +9,7 @@ import { SeoComponent } from "../../../shared/components/seo/seo.component"
   selector: "app-page-not-found",
   imports: [MatButtonModule, RouterModule],
   templateUrl: "./page-not-found.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./page-not-found.component.scss",
 })
 export class PageNotFoundComponent extends SeoComponent {
