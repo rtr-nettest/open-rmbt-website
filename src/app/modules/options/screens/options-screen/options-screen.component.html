@@ -98,6 +98,18 @@
     @if (text$ | async; as text) {
       <div [innerHTML]="text" style="margin: 40px 0"></div>
     }
+    @if (showAdmin()) {
+      <h2>{{ "Admin" | translate }}</h2>
+      <ul>
+        @for (link of adminLinks; track link.route) {
+          <li>
+            <a [routerLink]="'/' + activeLang + '/' + link.route">{{
+              link.label | translate
+            }}</a>
+          </li>
+        }
+      </ul>
+    }
   </div>
 </app-main-content>
 <app-footer></app-footer>

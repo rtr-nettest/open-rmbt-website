@@ -97,10 +97,6 @@ export class TopNavComponent {
           route: this.localiseRoute(ERoutes.OPTIONS),
         },
         {
-          label: v["Server status"],
-          route: this.localiseRoute(ERoutes.SERVER_STATUS),
-        },
-        {
           label: v["Help"],
           url: v["https://www.netztest.at/redirect/en/help"],
         },
