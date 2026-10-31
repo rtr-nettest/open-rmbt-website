@@ -12,6 +12,11 @@ export interface IUserSettings {
   servers_ws?: IServer[]
   urls?: {
     url_ipv6_check: string
+    // Optional extra IP-check servers; when present, the start page queries
+    // these in addition to url_ipv4_check / url_ipv6_check to detect a varying
+    // (e.g. load-balanced or proxied) client IP.
+    url_alternative_ipv4_check?: string[]
+    url_alternative_ipv6_check?: string[]
     control_ipv4_only: string
     open_data_prefix: string
     url_ipv4_check: string
