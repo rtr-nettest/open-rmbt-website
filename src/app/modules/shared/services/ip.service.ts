@@ -40,7 +40,7 @@ export class IpService {
   // Query the primary IP-check server plus any url_alternative_ipv4_check
   // servers in parallel, keeping only the servers that responded. The primary
   // URL is kept first so its response wins when picking the proxy flag.
-  async getIpV4All(): Promise<IpResponse[]> {
+  async getIpV4All(): Promise<(IpResponse | null)[]> {
     const api = this.mainStore.api()
     return this.getAllIps([
       api.url_ipv4_check,
@@ -48,7 +48,7 @@ export class IpService {
     ])
   }
 
-  async getIpV6All(): Promise<IpResponse[]> {
+  async getIpV6All(): Promise<(IpResponse | null)[]> {
     const api = this.mainStore.api()
     return this.getAllIps([
       api.url_ipv6_check,
@@ -56,45 +56,52 @@ export class IpService {
     ])
   }
 
-  private async getAllIps(urls: (string | undefined)[]): Promise<IpResponse[]> {
-    const responses = await Promise.all(urls.map((url) => this.getIp(url)))
-    return responses.filter((r): r is IpResponse => r !== null)
+  // Query every URL in parallel and keep the results in order (null = no
+  // response). The order is preserved so the primary URL stays at index 0.
+  private async getAllIps(
+    urls: (string | undefined)[],
+  ): Promise<(IpResponse | null)[]> {
+    return Promise.all(urls.map((url) => this.getIp(url)))
   }
 
   // Build the string shown on the start page from the servers that responded:
-  // a single IP when they agree, or "<varying>: <ip> <ip> …" (distinct IPs,
-  // sorted for a stable order) when they differ.
-  private resolveIpDisplay(responses: IpResponse[]): {
+  // a single IP when they agree, or "<Varying>: <ip> <ip> …" (distinct IPs,
+  // sorted for a stable order) when they differ. The "via proxy" marker follows
+  // the primary server (index 0) only — alternative servers never set it.
+  private resolveIpDisplay(responses: (IpResponse | null)[]): {
     display: string
     isProxy: boolean
   } {
-    if (!responses.length) {
+    const primary = responses[0] ?? null
+    const valid = responses.filter((r): r is IpResponse => r !== null)
+    if (!valid.length) {
       return { display: NOT_AVAILABLE, isProxy: false }
     }
-    const distinctIps = [...new Set(responses.map((r) => r.ip))].sort()
+    const isProxy = primary?.is_proxy === true
+    const distinctIps = [...new Set(valid.map((r) => r.ip))].sort()
     if (distinctIps.length === 1) {
-      return { display: distinctIps[0], isProxy: responses[0].is_proxy === true }
+      return { display: distinctIps[0], isProxy }
     }
     const label = this.i18nStore.translate("varying")
-    return { display: `${label}: ${distinctIps.join(" ")}`, isProxy: false }
+    return { display: `${label}: ${distinctIps.join(" ")}`, isProxy }
   }
 
-  private setIPv4 = (responses: IpResponse[]) => {
+  private setIPv4 = (responses: (IpResponse | null)[]) => {
     const { display, isProxy } = this.resolveIpDisplay(responses)
     this.ipV4.set(display)
     this.ipV4IsProxy.set(isProxy)
     this.ipV4Loading.set(false)
-    if (!responses.length) {
+    if (!responses.some((r) => r !== null)) {
       this.optionsStore.disableIpVersion("ipv4")
     }
   }
 
-  private setIPv6 = (responses: IpResponse[]) => {
+  private setIPv6 = (responses: (IpResponse | null)[]) => {
     const { display, isProxy } = this.resolveIpDisplay(responses)
     this.ipV6.set(display)
     this.ipV6IsProxy.set(isProxy)
     this.ipV6Loading.set(false)
-    if (!responses.length) {
+    if (!responses.some((r) => r !== null)) {
       this.optionsStore.disableIpVersion("ipv6")
     }
   }
